@@ -5,6 +5,15 @@ import path from 'node:path'
 const appRoot = path.resolve(process.cwd(), '..')
 const dataDir = path.join(appRoot, 'data')
 
+async function pathExists(pth) {
+  try {
+    await fs.access(pth)
+    return true
+  } catch(err) {
+    return false
+  }
+}
+
 async function showTree(dir, level = 0) {
 
   const entries = await fs.readdir(dir, { withFileTypes: true })
@@ -26,8 +35,6 @@ async function showTree(dir, level = 0) {
 
 }
 
-
-
 test('un projet démo minimal complet est créé et affiché', async ({ page }) => {
 
   console.log('\n=== TEST PROJET DÉMO MINIMAL ===')
@@ -36,9 +43,14 @@ test('un projet démo minimal complet est créé et affiché', async ({ page }) 
   console.log(`Dossier data     : ${dataDir}`)
 
   console.log('\n-> destruction du dossier data')
-  await fs.rm(dataDir, { recursive: true, force: true })
+
+  await fs.rm(
+    dataDir,
+    { recursive: true, force: true }
+  )
 
   console.log('\n-> ouverture application')
+
   const response = await page.goto('/')
 
   expect(response.ok()).toBe(true)
@@ -49,53 +61,101 @@ test('un projet démo minimal complet est créé et affiché', async ({ page }) 
 
   console.log('=== FIN ARBORESCENCE DATA ===\n')
 
+  const projectsFile = path.join(
+    dataDir,
+    'projects.json'
+  )
 
+  const projectFile = path.join(
+    dataDir,
+    'projects',
+    'demo.json'
+  )
+
+  const projectFolder = path.join(
+    dataDir,
+    'projects',
+    'demo'
+  )
+
+  const brinsFile = path.join(
+    projectFolder,
+    '__brins.json'
+  )
+
+  const persosFile = path.join(
+    projectFolder,
+    '__persos.json'
+  )
+
+  const eventsFile = path.join(
+    projectFolder,
+    '__items.json'
+  )
 
   console.log('\n-> vérification structure minimale')
 
-  const projectsFile = path.join(dataDir, 'projects.json')
-  const projectFile  = path.join(dataDir, 'projects', 'demo.json')
-
-  const brinsFile  = path.join(dataDir, 'projects', 'demo', '__brins.json')
-  const persosFile = path.join(dataDir, 'projects', 'demo', '__persos.json')
-  const eventsFile = path.join(dataDir, 'projects', 'demo', '__items.json')
-
-  await expect(async () => {
-    await fs.access(projectsFile)
-  }).not.toThrow()
+  expect(
+    await pathExists(projectsFile)
+  ).toBe(true)
 
   console.log('-> projects.json OK')
 
-  await expect(async () => {
-    await fs.access(projectFile)
-  }).not.toThrow()
+  expect(
+    await pathExists(projectFile)
+  ).toBe(true)
 
-  console.log('-> demo.json OK')
+  console.log('-> projects/demo.json OK')
 
-  await expect(async () => {
-    await fs.access(brinsFile)
-  }).not.toThrow()
+  const errors = []
+
+if (!(await pathExists(projectFolder))) {
+  errors.push('Le dossier projects/demo est absent')
+}
+
+if (!(await pathExists(brinsFile))) {
+  errors.push('__brins.json absent')
+}
+
+if (!(await pathExists(persosFile))) {
+  errors.push('__persos.json absent')
+}
+
+if (!(await pathExists(eventsFile))) {
+  errors.push('__items.json absent')
+}
+
+expect(errors).toEqual([])
+  console.log('-> dossier projects/demo OK')
+
+  expect(
+    await pathExists(brinsFile)
+  ).toBe(true)
 
   console.log('-> __brins.json OK')
 
-  await expect(async () => {
-    await fs.access(persosFile)
-  }).not.toThrow()
+  expect(
+    await pathExists(persosFile)
+  ).toBe(true)
 
   console.log('-> __persos.json OK')
 
-  await expect(async () => {
-    await fs.access(eventsFile)
-  }).not.toThrow()
+  expect(
+    await pathExists(eventsFile)
+  ).toBe(true)
 
   console.log('-> __items.json OK')
 
   console.log('\n-> vérification DOM')
 
-  await expect(page.locator('body')).toContainText('Projet modèle')
+  await expect(
+    page.locator('body')
+  ).toContainText('Projet modèle')
 
   console.log('-> projet affiché dans le DOM')
 
-  console.log('\n=== FIN TEST PROJET DÉMO MINIMAL ===\n')
+  console.log(
+    '\n=== FIN TEST PROJET DÉMO MINIMAL ===\n'
+  )
 
 })
