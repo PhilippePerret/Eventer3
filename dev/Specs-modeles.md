@@ -26,13 +26,21 @@ Ils seront utilisés pour :
 
 `Project` < `Item`
 
-#### Les évènemenciers 
+#### Les évènemenciers
 
 *(« évènemenciers » au sens strict du terme)*
 
 `EventLister` < `Lister`
 
 `Event` < `Item`
+
+##### Affichage
+
+Sur une ligne
+
+à gauche : `title` 
+
+à droite : `badge`s des brins + `badge`s des persos à droite + menu `state`
 
 #### Les brins
 
@@ -57,6 +65,7 @@ classDiagram
 		+boolean active
 		+string type
 		// Parmi "project", "eventer", "manuscript"
+		+string nature // parmi 'roman', 'film', 'none'
 		+Scale scale
 		+string[] item_ids
 		+string[] brin_ids
@@ -109,14 +118,61 @@ classDiagram
 		+string id
 		+string title
 		+boolean hasLister
+		+Type[] type
 		+string color
 		+boolean checked
 		+number pos
+		+State state
 		+number duration
 		+string path
 		+Date created_at
 		+Date updated_at
+		//--- seulement brin ---
+		+string badge // 3 capitales
+		//--- seulement perso ---
+		+string badge // 2 capitales
+		+string patronyme
+		+Fonction fonction
 	}
+	
+	class State {
+    0 : "---"
+    1 : "ébauche"
+    2 : "développement"
+    3 : "premier jet"
+    4 : "réécriture"
+    5 : "achèvement"
+    6 : "à corriger"
+    7 : "correction"
+    8 : "à relire"
+    9 : "achevé"
+  }
+	
+	class Type {
+		<<selon class fille>>
+		Classe fille Event
+			dia : "Dialogue"
+			act : "Action"
+			des : "Description"
+		Classe fille Brin
+			mint : "Intrigue principale"
+			aint : "Intrigue amoureuse"
+			// à poursuivre
+	}
+	
+	class Fonction {
+    // (valeurs preset + custom)
+    prot		: "Protagoniste"
+    anta		: "Antagoniste"
+    adju		: "Adjuvant/allié"
+    ment		: "Mentor"
+    spre		: "Sprechhund"
+    // (à poursuivre)
+	}
+	
+	Item --> State
+	Item --> Type
+	Item --> Fonction
 	
 
 ~~~
@@ -134,6 +190,8 @@ classDiagram
 **`duration`** est la durée en secondes.
 
 **`path`** est un chemin d’accès relatif (par rapport au dossier du projet) ou absolu qui conduit au fichier de l’item (pour le décrire, le travailler, etc.).
+
+**`title`** pour les `Perso`s sert de « pseudo », c’est-à-dire la valeur par défaut pour l’affichage.
 
 ---
 
