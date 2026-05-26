@@ -26,21 +26,29 @@ Un évènement a une échelle déterminé (`scale`). Par exemple, l’échelle d
 
 `Lister` et `Item` sont à la base de tout dans l’application. Il suffit de bien décrire leur comportement pour gérer l’ensemble des types d’éléments, *projets*, *évènemenciers*, *brins* et *personnages* (pour le moment). Mais ce sont **des classes abstraites** dont vont hériter les autres classes.
 
-Ils seront utilisés pour :
+IL EST CAPITALE DE BIEN COMPRENDRE CE QUI EST DIT CI-DESSUS, que **`Lister`** et **`Item`** sont le cœur et que tout le reste n'est que classes spécialisées.
 
-#### Les projets
+* Les projets (`ProjectLister`) est une classe spécialisée de `Lister` qui affiche les projets au départ.
 
-`ProjectListerer` < `Lister`
+  Chaque projet (`Project`) est une classe spécialisée de `Item` pour gérer chaque projet individuellement.
 
-`Project` < `Item`
+* Les évènemenciers (`EventLister`) est une classe spécialisée de `Lister` qui gère les évènemenciers (imbriqués ou non)
 
-#### Les évènemenciers
+  Chaque évènemencier (`Event`) est une classe spécialisée de `Item` pour gérer chaque évènement (event).
 
-*(« évènemenciers » au sens strict du terme)*
+* Les brins (`BrinLister`) est une classe spécialisée de `Lister` qui gère les brins (brins-groupe ou brins seuls)
 
-`EventLister` < `Lister`
+  Chaque brin seul (ou brin-groupe) (`Brin`) est une classe spécialisée de `Item` pour gérer chaque brin.
 
-`Event` < `Item`
+* Les personnages (`PersoLister`) est une classe spécialisée de `Lister` qui gère les personnages (personnages-groupe ? ou personnages seuls)
+
+  Chaque personnage seul (ou personnage-groupe ?) (`Brin`) est une classe spécialisée de `Item` pour gérer chaque personnage.
+
+> Les brins-groupe et les personnages-groupe viennent simplement du fait que puisque toutes les listes peuvent être imbriquées, on peut avoir des imbrications aussi dans les brins et les personnages. Un brin ne serait pas un brin mais possèderait un lister de brins, donc deviendrait un « brin-groupe », par exemple le brin-groupe « Personnages » qui s’occuperait de chaque personnage — attention la confusion ici : aucun rapport entre ces personnages et les personnages de `PersoLister`).
+>
+> C’est plus difficile de l’imaginer pour les personnages, même si on pourrait très bien avoir un personnage-groupe « Protagonistes » avec tous les personnages qui aident le protagoniste, un personnage-groupe « Antagonistes » avec les antagonistes et un personnage-groupe « Ambivalents » avec ceux qui sont adjuvants et antagonistes.
+
+TODO : Définir l’affichage propre à chaque type d’élément (note : c’est déjà fait dans le programme avec les projets).
 
 ##### Affichage
 

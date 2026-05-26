@@ -2,6 +2,7 @@
   "id": "projects",
   "title": "Liste des projets",
   "hasLister": true,
+  "type": "project",
   "items": [
     "demo"
   ],

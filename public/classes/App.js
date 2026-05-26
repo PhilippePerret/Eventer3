@@ -1,4 +1,5 @@
 import Lister from './models/Lister.js'
+import Project from './models/Project.js'
 
 export default class App {
 
@@ -19,6 +20,7 @@ export default class App {
     console.log("-> données projects :", data)
 
     const projects = new Lister(data)
+    projects.itemClass = Project
 
     console.log("-> item_ids :", projects.item_ids)
 

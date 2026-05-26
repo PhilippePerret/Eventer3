@@ -29,6 +29,14 @@ export default class Lister {
     })
   }
 
+  get itemClass() {
+    return this._itemClass || null
+  }
+
+  set itemClass(value) {
+    this._itemClass = value
+  }
+  
   async loadItems() {
 
     this.items = []
@@ -41,8 +49,17 @@ export default class Lister {
 
       const itemData = await response.json()
 
-      this.items.push(itemData)
+      const ItemClass = this.itemClass
 
+      this.items.push(
+
+        ItemClass
+
+          ? new ItemClass(itemData)
+
+          : itemData
+
+      )
     }
 
     this.items = this.sortItems(this.items)
@@ -50,33 +67,37 @@ export default class Lister {
   }
 
   render() {
-
     const listing = document.createElement('div')
 
-    listing.classList.add('listing')
-
-    if (this.type) {
-      listing.classList.add(this.type)
-    }
+    listing.classList.add(`${this.type}-listing`)
 
     this.items.forEach(item => {
-
       const div = document.createElement('div')
 
       div.classList.add('item')
+      div.classList.add(`${this.type}-listing__item`)
 
-      if (item.type) {
-        div.classList.add(item.type)
+      if (typeof item.render === 'function') {
+        item.render(div)
+      } else {
+        this.renderItemContent(div, item)
       }
-
-      div.innerText = item.title
-
+      
       listing.appendChild(div)
-
     })
 
-    return listing
+    const mainPanel = document.querySelector('#main-panel')
 
+    mainPanel.classList.add(
+      `${this.type}s-listing`
+    )
+
+    return listing
   }
 
+  // Doit être surclassé par chaque classe spécialisée, 
+  // à savoir Project, Event, Brin, Perso.
+  renderItemContent(div, item) {
+    div.innerText = item.title
+  }
 }
