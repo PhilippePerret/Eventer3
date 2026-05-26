@@ -4,7 +4,8 @@
   "scripts": {
     "test": "playwright test",
     "test:headed": "playwright test --headed",
-    "test:ui": "playwright test --ui"
+    "test:unit": "node --test specs/unit/**/*.test.js",
+    "test:e2e": "playwright test specs/e2e/**/*.spec.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.49.1"
