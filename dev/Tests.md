@@ -10,7 +10,7 @@
 
 - [ ] S’assurer, en cas de données minimales manquantes, qu’un projet démo est bien créé, avec un brin minimal, un personnage minimal et un event minimal. S’assurer de ça en testant le DOM, ce projet doit être affiché.
 
-- [ ] S’assurer que la liste des projets s’affiche (après en avoir créé 3)
+- [ ] S’assurer que la liste des projets s’affiche après en avoir créé 3.
 
 - [ ] S’assurer que le style du listing des projets et propre à ce `Lister` et cet`Lister` seulement
 

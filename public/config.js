@@ -8,7 +8,7 @@ window.APP_UI_MODES = {
     ['⌦', 'supprimer'],
     ['→', 'ouvrir']
   ],
-  collectionRoot: [
+  listerRoot: [
     ['↑ ↓', 'choisir'],
     ['⏎', 'éditer'],
     ['n', 'nouveau'],

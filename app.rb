@@ -22,6 +22,17 @@ before do
   log "======================\n", false
 end
 
+
+get '/data/*' do |requested_path|
+  filepath = File.join(
+    DATA_DIR,
+    requested_path
+  )
+  halt 404 unless File.exist?(filepath)
+  content_type :json
+  File.read(filepath)
+end
+
 get '/' do
   content_type :html
   send_file File.join(settings.public_folder, 'index.html')
