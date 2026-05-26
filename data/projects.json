@@ -1,9 +1,12 @@
 {
   "id": "projects",
   "title": "Liste des projets",
+  "hasLister": true,
   "items": [
     "demo"
   ],
+  "brins": [],
+  "persos": [],
   "lasts_id": {
     "item": 1
   }

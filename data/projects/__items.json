@@ -1,3 +1,10 @@
 [
-  "demo"
+  {
+    "id": "demo",
+    "title": "Projet en démo",
+    "hasLister": true,
+    "pos": 100,
+    "created_at": "2026-05-26T16:42:31+02:00",
+    "updated_at": "2026-05-26T16:42:31+02:00"
+  }
 ]
