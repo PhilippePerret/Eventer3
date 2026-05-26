@@ -6,9 +6,9 @@
 
 - [x] S’assurer que la méthode `Lister.sortItems` existe et qu’elle classe bien les items fournis
 
-- [ ] S’assurer que des données minimales existent toujours (un dossier `data` qui peut avoir été détruit — ne pas le créer après l’avoir mis de côté avec son contenu en production pour qu’il n’existe pas au début)
+- [x] S’assurer que des données minimales existent toujours (un dossier `data` qui peut avoir été détruit — ne pas le créer après l’avoir mis de côté avec son contenu en production pour qu’il n’existe pas au début)
 
-- [ ] S’assure, en cas de données minimales manquantes, qu’un projet démo est bien créé, avec un brin minimal, un personnage minimal et un event minimal.
+- [ ] S’assurer, en cas de données minimales manquantes, qu’un projet démo est bien créé, avec un brin minimal, un personnage minimal et un event minimal. S’assurer de ça en testant le DOM, ce projet doit être affiché.
 
 - [ ] S’assurer que la liste des projets s’affiche (après en avoir créé 3)
 

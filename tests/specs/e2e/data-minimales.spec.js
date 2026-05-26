@@ -6,17 +6,44 @@ const appRoot = path.resolve(process.cwd(), '..')
 const dataDir = path.join(appRoot, 'data')
 
 test('des données minimales existent toujours à chaque requête serveur', async ({ page }) => {
+
+  console.log('\n=== TEST DONNÉES MINIMALES ===')
+
+  console.log(`Application root : ${appRoot}`)
+  console.log(`Dossier data     : ${dataDir}`)
+
+  console.log('\n-> destruction du dossier data')
   await fs.rm(dataDir, { recursive: true, force: true })
 
-  await expect(async () => {
-    await fs.access(dataDir)
-  }).rejects.toThrow()
+  let dataExists = true
 
+  try {
+    await fs.access(dataDir)
+  } catch(err) {
+    dataExists = false
+  }
+
+  console.log(`-> data existe avant requête : ${dataExists}`)
+
+  expect(dataExists).toBe(false)
+
+  console.log('\n-> requête GET /')
   const response = await page.goto('/')
+
+  console.log(`-> réponse serveur : ${response.status()}`)
 
   expect(response.ok()).toBe(true)
 
-  await expect(async () => {
+  console.log('\n-> vérification recréation dossier data')
+
+  try {
     await fs.access(dataDir)
-  }).not.toThrow()
+    console.log('-> dossier data recréé')
+  } catch(err) {
+    console.log('-> dossier data INTROUVABLE')
+    throw err
+  }
+
+  console.log('\n=== FIN TEST DONNÉES MINIMALES ===\n')
+
 })

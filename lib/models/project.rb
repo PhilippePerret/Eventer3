@@ -7,10 +7,12 @@ class Project < Item
 
     def minimal_data(id, pos = 100)
       super.merge(
+        hasLister: false,
+        items: ['i1'],
         brins: ['b1'],
         persos: ['p1'],
         lasts_id: {
-          item: 0,
+          item: 1,
           brin: 1,
           perso: 1
         }
