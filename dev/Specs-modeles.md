@@ -1,6 +1,14 @@
 # Eventer(3)
 
-## Description 
+
+
+[TOC]
+
+
+
+---
+
+## Description
 
 Eventer est une application qui permet de gérer les **évènemenciers** de projets de film ou de roman. 
 
@@ -293,6 +301,10 @@ data/
 ~~~
 
 **Les imbrications sont infinies et fonctionnent toutes de la même façon** : un `Item` (défini dans le fichier `__items.json` d’un `Lister` quelconque) qui possède par exemple l’`id` `e2133` pourra toujours posséder un `Lister` qui aura pour nom `e2133.json` et pour dossier `e2133` (pour contenir la définition de ses propres `Item`s — dans `__items.json` — et des `Lister`s de ses `Item`s) etc.
+
+---
+
+## Données minimales
 
 
 

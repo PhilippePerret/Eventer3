@@ -1,8 +1,16 @@
 # Eventer - tests à faire
 
-- [ ] S’assurer que la classe JS `Lister` existe et qu’on peut instancier un objet d’une classe qui en hérite.
+- [x] S’assurer que la classe JS `Lister` existe et qu’on peut instancier un objet d’une classe qui en hérite.
 
-- [ ] S’assurer que la classe JS `Item` existe et qu’on peut instancier un objet d’une classe qui en hérite.
+- [x] S’assurer que la classe JS `Item` existe et qu’on peut instancier un objet d’une classe qui en hérite.
+
+- [x] S’assurer que la méthode `Lister.sortItems` existe et qu’elle classe bien les items fournis
+
+- [ ] S’assurer que des données minimales existent toujours (un dossier `data` qui peut avoir été détruit — ne pas le créer après l’avoir mis de côté avec son contenu en production pour qu’il n’existe pas au début)
+
+- [ ] S’assure, en cas de données minimales manquantes, qu’un projet démo est bien créé, avec un brin minimal, un personnage minimal et un event minimal.
+
+- [ ] S’assurer que la liste des projets s’affiche (après en avoir créé 3)
 
 - [ ] S’assurer que le style du listing des projets et propre à ce `Lister` et cet`Lister` seulement
 

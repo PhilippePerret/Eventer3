@@ -23,5 +23,5 @@ test('Lister peut classer les items', () => {
   const itC = new Item({id:'i3', title: "Troisième", pos: 300})
   var itemsIni = [itB, itC, itA]
   const newOrder = obj.sortItems(itemsIni)
-  assert.equal(newOrder, [itA, itB, itC] )
+  assert.deepEqual(newOrder, [itA, itB, itC] )
 })

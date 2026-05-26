@@ -3,7 +3,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
-ZIP_PATH="$ROOT_DIR/eventer3-app.zip"
+ZIP_PATH="$ROOT_DIR/eventer3-light.zip"
 
 cd "$ROOT_DIR"
 
@@ -14,8 +14,10 @@ zip -r "$ZIP_PATH" \
   dev \
   lib \
   public \
+  tests \
   README.md \
   -x "*.DS_Store" \
-  -x "__MACOSX/*"
+  -x "__MACOSX/*" \
+  -x "*node_modules"
 
 echo "ZIP créé : $ZIP_PATH"
