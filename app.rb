@@ -10,8 +10,6 @@ set :public_folder, 'public'
 DATA_DIR = File.expand_path('data', __dir__)
 DEFAULT_PROJECT = 'demo'
 
-helpers AppHelpers
-
 before do
   Bootstrap.ensure_initial_data!(DATA_DIR)
 end
