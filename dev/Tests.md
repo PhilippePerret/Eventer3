@@ -10,9 +10,11 @@
 
 - [x] S’assurer, en cas de données minimales manquantes, qu’un projet démo est bien créé, avec un brin minimal, un personnage minimal et un event minimal. S’assurer de ça en testant le DOM, ce projet doit être affiché.
 
-- [ ] S’assurer que la classe du listing des projets, dans la fenêtre, s’affiche bien (bonnes classes `item` + `project`).
+- [ ] S’assurer que les classes CSS soient bien affectées pour la liste des projets (bonnes classes `item` + `project_listing`, il y a `#main-panel.projects-listing .project-listing` à affecter, et `.project-listing__item `, `.project-listing__title`, `.project-listing__id`).
 
-- [ ] S’assurer que la liste des projets s’affiche après en avoir créé 3.
+- [ ] S’assurer que pour un projet (Project < Item), seul le titre (`title`) et l’identifiant (`id`) soient affichés dans la ligne de l’item (dans le DOM).
+
+- [ ] S’assurer que la liste complète des projets s’affiche après en avoir créé 3 actifs et 1 non actif qui ne doit pas s’afficher.
 
 - [ ] S’assurer que le style du listing des projets et propre à ce `Lister` et cet`Lister` seulement
 
