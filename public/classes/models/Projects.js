@@ -6,44 +6,18 @@ import LOG from '../../system/LOG.js'
 export default class Projects extends Lister {
 
   static async init() {
-
     LOG.m(1, 'Init projects')
-
-    const response =
-      await fetch('/data/projects.json')
-
-    const projectsData =
-      await response.json()
-
-    const keyboardController =
-      new KeyboardController()
-
+    const response = await fetch('/data/projects.json')
+    const projectsData = await response.json()
+    const keyboardController = new KeyboardController()
     keyboardController.observe()
-
-    const projects =
-      new Projects({
-        ...projectsData,
-        keyboardController
-      })
-
+    const projects = new Projects({ ...projectsData, keyboardController })
     await projects.loadItems()
-
-    const projectsListElement =
-      projects.render()
-
-    const mainPanel =
-      document.querySelector(
-        '#main-panel'
-      )
-
-    mainPanel.appendChild(
-      projectsListElement
-    )
-
+    const projectsListElement = projects.render()
+    const mainPanel = document.querySelector('#main-panel')
+    mainPanel.appendChild(projectsListElement)
     LOG.m(1, 'Projects ready')
-
     return projects
-
   }
 
   constructor(data = {}) {

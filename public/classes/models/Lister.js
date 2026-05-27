@@ -1,3 +1,5 @@
+import Item from './Item.js'
+
 export default class Lister {
 
   constructor(data = {}) {
@@ -23,7 +25,7 @@ export default class Lister {
   }
 
   get itemClass() {
-    return this._itemClass || null
+    return this._itemClass || Item
   }
 
   set itemClass(value) {
@@ -46,9 +48,7 @@ export default class Lister {
       if (!response.ok) continue
       const itemData = await response.json()
       if (itemData.active === false) continue
-      const ItemClass = this.itemClass
-      const item = ItemClass ? new ItemClass(itemData) : itemData
-      this.items.push(item)
+      this.items.push(new this.itemClass(itemData))
     }
     this.items = this.sortItems(this.items)
   }
@@ -108,17 +108,13 @@ export default class Lister {
     this.domItems.splice(currentIndex, 1)
     this.items.splice(targetIndex, 0, movedItem)
     this.domItems.splice(targetIndex, 0, movedItemElement)
-    if (direction > 0) {
-      targetItemElement.after(movedItemElement)
-    } else {
-      targetItemElement.before(movedItemElement)
-    }
+    if (direction > 0) targetItemElement.after(movedItemElement)
+    else targetItemElement.before(movedItemElement)
     this.selectedIndex = targetIndex
   }
 
   createNewItem() {
-    const ItemClass = this.itemClass
-    const newItem = ItemClass.createEmpty()
+    const newItem = this.itemClass.createEmpty()
     const newItemElement = newItem.createEditorElement(this.type)
     const insertionIndex = this.selectedIndex
     const currentItemElement = this.domItems[insertionIndex]
