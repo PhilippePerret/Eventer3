@@ -1,40 +1,15 @@
-import Lister from './models/Lister.js'
-import Project from './models/Project.js'
+import Projects from './models/Projects.js'
+import LOG from '../system/LOG.js'
 
 export default class App {
 
-  constructor() {
-    this.mainPanel = document.querySelector('#main-panel')
-  }
-
   async start() {
 
-    console.log("-> démarrage de l'application")
+    LOG.m(1, 'Start application')
 
-    const response = await fetch('/data/projects.json')
+    await Projects.init()
 
-    console.log("-> réponse projects.json :", response.status)
-
-    const data = await response.json()
-
-    console.log("-> données projects :", data)
-
-    const projects = new Lister(data)
-    projects.itemClass = Project
-
-    console.log("-> item_ids :", projects.item_ids)
-
-    await projects.loadItems()
-
-    console.log("-> items chargés :", projects.items)
-
-    const rendered = projects.render()
-
-    console.log("-> DOM listing :", rendered.outerHTML)
-
-    this.mainPanel.appendChild(rendered)
-
-    console.log("-> DOM injecté")
+    LOG.m(1, 'Application started, projets affichés')
 
   }
 

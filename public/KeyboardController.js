@@ -3,11 +3,12 @@ import LOG from './system/LOG.js'
 export default class KeyboardController {
 
   constructor() {
-    this.currentLister = null
+    this.activeLister = null
   }
 
-  setCurrentLister(lister) {
-    this.currentLister = lister
+  register(lister) {
+    LOG.m(2, 'Register lister', lister)
+    this.activeLister = lister
   }
 
   observe() {
@@ -16,21 +17,21 @@ export default class KeyboardController {
 
   onKeyDown(event) {
 
-    if (!this.currentLister) return
+    if (!this.activeLister) return
 
-    LOG.m(3, 'Keyboard event', event.key)
+    LOG.m(3, 'Keyboard event key', event.key, 'meta', event.metaKey, 'maj', event.shiftKey, 'ctrl', event.controlKey)
 
     switch (event.key) {
 
       case 'ArrowDown':
-        LOG.m(2, 'Select next item')
-        this.currentLister.selectNextItem()
+        LOG.m("[KeyboardController.js] Demande de sélection de l'item suivant")
+        this.activeLister.selectNextItem()
         event.preventDefault()
         break
 
       case 'ArrowUp':
-        LOG.m(2, 'Select previous item')
-        this.currentLister.selectPreviousItem()
+        LOG.m("[KeyboardController.js] Demande de sélection de l'item précédent")
+        this.activeLister.selectPreviousItem()
         event.preventDefault()
         break
 
