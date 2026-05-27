@@ -72,36 +72,40 @@ export default class Lister {
   }
 
   render() {
-    const listing = document.createElement('div')
 
-    listing.classList.add(`${this.type}-listing`)
+    const list = document.createElement('div')
+
+    list.classList.add(`${this.type}-list`)
 
     this.items.forEach(item => {
-      const div = document.createElement('div')
 
-      div.classList.add('item')
-      div.classList.add(`${this.type}-listing__item`)
+      const itemElement = document.createElement('div')
+
+      itemElement.classList.add(
+        `${this.type}-item`
+      )
+
+      itemElement.classList.add('item')
 
       if (typeof item.render === 'function') {
-        item.render(div)
+        item.render(itemElement)
       } else {
-        this.renderItemContent(div, item)
+        this.renderItemContent(itemElement, item)
       }
-      
-      listing.appendChild(div)
+
+      list.appendChild(itemElement)
+
     })
 
     const mainPanel = document.querySelector('#main-panel')
 
     mainPanel.classList.add(
-      `${this.type}s-listing`
+      `${this.type}-list`
     )
 
-    return listing
+    return list
   }
 
-  // Doit être surclassé par chaque classe spécialisée, 
-  // à savoir Project, Event, Brin, Perso.
   renderItemContent(div, item) {
     div.innerText = item.title
   }
