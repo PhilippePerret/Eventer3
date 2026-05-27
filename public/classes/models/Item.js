@@ -65,6 +65,7 @@ export default class Item {
     if (typeof keyboardController.enterItemEdition !== 'function') throw new Error('Item.createEditorElement: keyboardController.enterItemEdition missing')
     const itemElement = this.createElement(type)
     if (typeof this.render === 'function') this.render(itemElement)
+    LOG.m(3, 'Editor itemElement', itemElement.outerHTML)
     const fields = this.getEditorFields(type, itemElement)
     const inputs = fields.map(field => this.createEditorInput(itemElement, field))
     keyboardController.enterItemEdition({ defaultInput: inputs[0], onKeyDown: (event, controller) => this.handleEditionKeyDown(event, controller, itemElement, fields, inputs) })
