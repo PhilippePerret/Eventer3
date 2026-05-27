@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { test, expect } from '@playwright/test'
 
-test.only('la touche Escape après n annule complètement la création du projet', async ({ page }) => {
+test('la touche Escape après n annule complètement la création du projet', async ({ page }) => {
 
   console.log('\n=== TEST ANNULATION NOUVEAU PROJET ===\n')
 

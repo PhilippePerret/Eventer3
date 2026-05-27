@@ -1,0 +1,54 @@
+import fs from 'fs'
+
+import path from 'path'
+
+import { test, expect } from '@playwright/test'
+
+test.only('la saisie du titre d’un nouveau projet crée automatiquement son identifiant logique', async ({ page }) => {
+
+  page.on('console', msg => console.log(msg.text()))
+
+  console.log('\n=== TEST AUTO ID PROJET ===\n')
+
+  const projectsPath = path.resolve('../data/projects.json')
+
+  console.log('-> ouverture application')
+
+  await page.goto('/')
+
+  console.log('-> création nouveau projet')
+
+  await page.locator('body').click()
+  await page.keyboard.press('n')
+
+  console.log(await page.locator('#main-panel').innerHTML())
+
+  const inputs = page.locator('input')
+
+  console.log('-> vérification présence champs édition')
+
+  await expect(inputs).toHaveCount(2)
+
+  console.log('-> saisie titre projet : "Ça c’est un Été Super !"')
+
+  await inputs.nth(0).fill('Ça c’est un Été Super !')
+
+  console.log('-> vérification id auto généré')
+
+  await expect(inputs.nth(1)).toHaveValue('ca-cest-un-ete-super')
+
+  console.log('-> validation création')
+
+  await page.keyboard.press('Enter')
+
+  console.log('-> lecture backend')
+
+  const projects = JSON.parse(fs.readFileSync(projectsPath, 'utf8'))
+
+  console.log('-> vérification persistance')
+
+  expect(projects.some(project => project.id === 'ca-cest-un-ete-super')).toBeTruthy()
+
+  console.log('\n=== FIN TEST AUTO ID PROJET ===\n')
+
+})
