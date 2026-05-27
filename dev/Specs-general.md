@@ -1,5 +1,9 @@
 # Eventer3
 
+[TOC]
+
+---
+
 ## Philosophie
 
 - outil local
@@ -8,6 +12,7 @@
 - priorité absolue à la fluidité
 - zéro sensation “base de données”
 - développement en TDD
+- entièrement pilotable au clavier, zéro souris
 
 ---
 
@@ -18,6 +23,7 @@
 * tout clavier, presque rien à la souris
 * sauvegarde en JSON
 * identifiants les plus courts possible
+* produire du code verbeux (comme le mode verbose, `--verbose`, des commandes unix) pour pouvoir suivre le message. Mais désactivable facilement.
 
 
 
@@ -127,6 +133,14 @@ Contient :
 <a name="interactions"></a>
 
 # Interactions
+
+Comme défini tout en haut, l’application est 100 % pilotable au clavier (jusqu’au placement de la fenêtre, si possible).
+
+D’après ChatGPT, le mieux pour ça est de centraliser les traitements dans un `KeyboardManager`.
+
+
+
+---
 
 ## Clavier
 

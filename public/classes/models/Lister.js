@@ -19,7 +19,11 @@ export default class Lister {
     this.updated_at  = data.updated_at ?? null
 
     this.items       = []
+    // --------------------
+    this.selectedIndex = 0
+    this.domItems      = []
   }
+
 
   sortItems(items = []) {
     return items.sort((itemA, itemB) => {
@@ -72,30 +76,23 @@ export default class Lister {
   }
 
   render() {
-
     const list = document.createElement('div')
-
     list.classList.add(`${this.type}-list`)
-
+    this.domItems = []
     this.items.forEach((item, index) => {
-
       const itemElement = document.createElement('div')
-
       itemElement.classList.add('item')
       itemElement.classList.add(`${this.type}-item`)
-
       if (index === 0) {
         itemElement.classList.add('selected')
       }
-
       if (typeof item.render === 'function') {
         item.render(itemElement)
       } else {
         this.renderItemContent(itemElement, item)
       }
-
       list.appendChild(itemElement)
-
+      list.appendChild(itemElement)
     })
 
     const mainPanel = document.querySelector('#main-panel')
@@ -110,4 +107,5 @@ export default class Lister {
   renderItemContent(div, item) {
     div.innerText = item.title
   }
+
 }

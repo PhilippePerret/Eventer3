@@ -1,0 +1,42 @@
+import { installFixtures } from '../../helpers/install-fixtures'
+installFixtures('many-projects')
+
+import { test, expect } from '@playwright/test'
+
+test.only(
+  'les flèches haut/bas permettent de naviguer dans un Lister',
+  async ({ page }) => {
+
+    await page.goto('/')
+
+    const items = page.locator('.project-item')
+
+    await expect(items.nth(0))
+      .toHaveClass(/selected/)
+
+    await page.keyboard.press('ArrowDown')
+
+    await expect(items.nth(0))
+      .not.toHaveClass(/selected/)
+
+    await expect(items.nth(1))
+      .toHaveClass(/selected/)
+
+    await page.keyboard.press('ArrowDown')
+
+    await expect(items.nth(1))
+      .not.toHaveClass(/selected/)
+
+    await expect(items.nth(2))
+      .toHaveClass(/selected/)
+
+    await page.keyboard.press('ArrowUp')
+
+    await expect(items.nth(2))
+      .not.toHaveClass(/selected/)
+
+    await expect(items.nth(1))
+      .toHaveClass(/selected/)
+
+  }
+)
