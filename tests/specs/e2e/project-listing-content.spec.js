@@ -9,7 +9,7 @@ test('la liste affiche uniquement les projets actifs', async ({ page }) => {
 
   const listing = page.locator('#main-panel > .project-list')
 
-  await expect(listings).toHaveCount(3)
+  await expect(listing.locator('.project-item')).toHaveCount(3)
 
   await expect(page.locator('text=project-a')).toBeVisible()
   await expect(page.locator('text=project-b')).toBeVisible()

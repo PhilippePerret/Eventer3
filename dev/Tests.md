@@ -30,7 +30,11 @@
 
 - [x] S’assurer que Cmd-flèche haut/bas permet de déplacer les projets (comportement de `Lister`).
 
-- [ ] S’assurer que la touche « n » permet de créer (provisoirement juste dans le DOM) un nouveau projet SOUS la sélection (LIRE LES FICHIERS DE SPECS POUR VOIR LES CARACTÉRISTIQUES DES CRÉATIONS D’UN ITEM, RADICALEMENT DIFFÉRENT ENTRE LES PROJETS ET LES EVENTS, BRINS OU PERSOS).
+- [x] S’assurer que la touche « n » permet de créer (provisoirement juste dans le DOM) un nouveau projet SOUS la sélection (LIRE LES FICHIERS DE SPECS POUR VOIR LES CARACTÉRISTIQUES DES CRÉATIONS D’UN ITEM, RADICALEMENT DIFFÉRENT ENTRE LES PROJETS ET LES EVENTS, BRINS OU PERSOS).
+
+- [ ] S’assurer que la touche « n » suivi de la touche Escape ne crée rien au final ni d’élément DOM, ni de projet en backend (données persistantes)
+
+- [ ] S’assurer que la touche « n » suivi de la touche Entrer sans avoir entré aucun title ne crée rien au final ni d’élément DOM, ni de projet en backend (données persistantes)
 
 - [ ] S’assurer que la flèche droite permet de RENTRER dans le projet (c’est-à-dire de voir son premier évènemencier — qui correspond à ses `events`) (idem = valable pour n’importe quel lister)
 
