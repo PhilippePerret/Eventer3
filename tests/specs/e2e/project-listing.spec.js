@@ -1,0 +1,22 @@
+import { test, expect } from '@playwright/test'
+
+test('la liste des projets possède les bonnes classes CSS', async ({ page }) => {
+  console.log('\n=== TEST CLASSES CSS PROJECT LISTING ===')
+  await page.goto('/')
+  const mainPanel = page.locator('#main-panel')
+  const listing = page.locator('.project-list')
+  const item = page.locator('.project-item')
+  const title = page.locator('.project-item__title')
+  const pid = page.locator('.project-item__id')
+  console.log('-> vérification #main-panel.project-list')
+  await expect(mainPanel).toHaveClass(/project-list/)
+  console.log('-> vérification .project-list')
+  await expect(listing).toHaveCount(1)
+  console.log('-> vérification .project-item')
+  await expect(item).toHaveCount(1)
+  console.log('-> vérification .project-item__title')
+  await expect(title).toContainText('Projet modèle')
+  console.log('-> vérification .project-item__id')
+  await expect(pid).toContainText('demo')
+  console.log('\n=== FIN TEST CLASSES CSS PROJECT LISTING ===\n')
+})

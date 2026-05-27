@@ -49,9 +49,9 @@ Pas de baratin. Du code.
 
 Pas de justification. Du code.
 
-### LOI 2.2
+#### LOI 2.1.3
 
-Aucun commentaire sur rien du tout. Tu n'expliques rien. Si je ne comprends pas quelque chose, je demanderai.
+Pas de commentaires. Du code.
 
 ### LOI 2.3
 

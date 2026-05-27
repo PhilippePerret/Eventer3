@@ -4,8 +4,7 @@ export default class KeyboardController {
 
   constructor() {
     this.activeLister = null
-    this.mode = 'navigation'
-    this.editor = null
+    this.modeStack = []
   }
 
   register(lister) {
@@ -17,22 +16,44 @@ export default class KeyboardController {
     document.addEventListener('keydown', this.onKeyDown.bind(this))
   }
 
-  enterEditorMode(editor) {
-    LOG.m(2, 'Enter editor mode')
-    this.mode = 'editor'
-    this.editor = editor
+  pushMode(mode) {
+    LOG.m(2, 'KeyboardController.pushMode', mode)
+    this.modeStack.push(mode)
   }
 
-  exitEditorMode() {
-    LOG.m(2, 'Exit editor mode')
-    this.mode = 'navigation'
-    this.editor = null
+  popMode() {
+    LOG.m(2, 'KeyboardController.popMode')
+    this.modeStack.pop()
+  }
+
+  getCurrentMode() {
+    return this.modeStack[this.modeStack.length - 1] ?? null
+  }
+
+  enterItemEdition({ defaultInput = null, onKeyDown }) {
+
+    this.pushMode({
+      type: 'item-edition',
+      onKeyDown
+    })
+
+    requestAnimationFrame(() => {
+
+      if (!defaultInput) return
+
+      defaultInput.focus()
+      defaultInput.select()
+
+    })
+
   }
 
   onKeyDown(event) {
 
-    if (this.mode === 'editor') {
-      this.editor.onKeyDown(event)
+    const currentMode = this.getCurrentMode()
+
+    if (currentMode) {
+      currentMode.onKeyDown(event, this)
       return
     }
 
