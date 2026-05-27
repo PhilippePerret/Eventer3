@@ -1,0 +1,21 @@
+import { installFixtures } from '../../helpers/install-fixtures'
+installFixtures('many-projects')
+
+import { test, expect } from '@playwright/test'
+
+test(
+  'le premier item du listing est sélectionné',
+  async ({ page }) => {
+
+    await page.goto('/')
+
+    const items = page.locator('.project-item')
+
+    await expect(items).toHaveCount(3)
+
+    await expect(items.nth(0)).toHaveClass(/selected/)
+    await expect(items.nth(1)).not.toHaveClass(/selected/)
+    await expect(items.nth(2)).not.toHaveClass(/selected/)
+
+  }
+)

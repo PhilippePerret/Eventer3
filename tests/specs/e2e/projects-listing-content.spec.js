@@ -3,7 +3,7 @@ installFixtures('many-projects')
 
 import { test, expect } from '@playwright/test'
 
-test.only('la liste affiche uniquement les projets actifs', async ({ page }) => {
+test('la liste affiche uniquement les projets actifs', async ({ page }) => {
 
   await page.goto('/')
 

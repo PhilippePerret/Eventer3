@@ -20,13 +20,13 @@
 
 - [x] S’assurer que pour un projet (Project < Item), seul le titre (`title`) et l’identifiant (`id`) soient affichés dans la ligne de l’item (dans le DOM).
 
-- [ ] S’assurer que la liste complète des projets s’affiche après en avoir créé 3 actifs et 1 non actif qui ne doit pas s’afficher.
+- [x] S’assurer que la liste complète des projets s’affiche après en avoir créé 3 actifs et 1 non actif qui ne doit pas s’afficher.
 
-- [ ] S’assurer que le style du listing des projets est propre à ce `Lister` et cet`Lister` seulement
+- [x] S’assurer que le style du listing des projets est propre à ce `Lister` et cet`Lister` seulement
 
-- [ ] S’assurer que le premier projet (en haut du listing — faire trois projets pour ce test) est bien sélectionné
+- [x] S’assurer que le premier projet (en haut du listing — faire trois projets pour ce test) est bien sélectionné
 
-- [ ] S’assurer que les flèches haut/bas permettent de passer d’un projet à l’autre (Ça doit être le cas pour tous les listers, pour tous leurs events, donc => ne pas implémenter un comportement qui ne fonctionnerait que pour les projets !!!!)
+- [ ] S’assurer que les flèches haut/bas permettent de passer d’un projet à l’autre (Ça doit être le cas **pour tous les `Lister`s**, donc => ne pas implémenter un comportement qui ne fonctionnerait que pour les projets !!!!)
 
 - [ ] S’assurer que la flèche droite permet de RENTRER dans le projet (c’est-à-dire de voir son premier évènemencier — qui correspond à ses `events`) (idem = valable pour n’importe quel lister)
 

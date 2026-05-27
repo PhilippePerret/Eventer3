@@ -77,15 +77,16 @@ export default class Lister {
 
     list.classList.add(`${this.type}-list`)
 
-    this.items.forEach(item => {
+    this.items.forEach((item, index) => {
 
       const itemElement = document.createElement('div')
 
-      itemElement.classList.add(
-        `${this.type}-item`
-      )
-
       itemElement.classList.add('item')
+      itemElement.classList.add(`${this.type}-item`)
+
+      if (index === 0) {
+        itemElement.classList.add('selected')
+      }
 
       if (typeof item.render === 'function') {
         item.render(itemElement)
