@@ -1,0 +1,12 @@
+{
+  "id": "project-a",
+  "active": true,
+  "type": "project",
+  "title": "Projet A",
+  "description": "Projet actif A",
+  "pos": 100,
+  "color": "#FFCC00",
+  "path": "/projects/project-a",
+  "created_at": "2026-05-27T10:00:00Z",
+  "updated_at": "2026-05-27T10:00:00Z"
+}

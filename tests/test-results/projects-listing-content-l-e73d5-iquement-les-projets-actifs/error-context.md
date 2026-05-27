@@ -7,7 +7,7 @@
 # Test info
 
 - Name: projects-listing-content.spec.js >> la liste affiche uniquement les projets actifs
-- Location: specs/e2e/projects-listing-content.spec.js:3:1
+- Location: specs/e2e/projects-listing-content.spec.js:6:6
 
 # Error details
 
@@ -41,22 +41,25 @@ Call log:
 # Test source
 
 ```ts
-  1  | import { test, expect } from '@playwright/test'
-  2  | 
-  3  | test('la liste affiche uniquement les projets actifs', async ({ page }) => {
-  4  | 
-  5  |   await page.goto('/')
-  6  | 
-  7  |   const listings = page.locator('.project-listing')
-  8  | 
-> 9  |   await expect(listings).toHaveCount(3)
+  1  | import { installFixtures } from '../../helpers/install-fixtures'
+  2  | installFixtures('many-projects')
+  3  | 
+  4  | import { test, expect } from '@playwright/test'
+  5  | 
+  6  | test.only('la liste affiche uniquement les projets actifs', async ({ page }) => {
+  7  | 
+  8  |   await page.goto('/')
+  9  | 
+  10 |   const listings = page.locator('.project-listing')
+  11 | 
+> 12 |   await expect(listings).toHaveCount(3)
      |                          ^ Error: expect(locator).toHaveCount(expected) failed
-  10 | 
-  11 |   await expect(page.locator('text=project-a')).toBeVisible()
-  12 |   await expect(page.locator('text=project-b')).toBeVisible()
-  13 |   await expect(page.locator('text=project-c')).toBeVisible()
-  14 | 
-  15 |   await expect(page.locator('text=project-hidden')).toHaveCount(0)
-  16 | 
-  17 | })
+  13 | 
+  14 |   await expect(page.locator('text=project-a')).toBeVisible()
+  15 |   await expect(page.locator('text=project-b')).toBeVisible()
+  16 |   await expect(page.locator('text=project-c')).toBeVisible()
+  17 | 
+  18 |   await expect(page.locator('text=project-hidden')).toHaveCount(0)
+  19 | 
+  20 | })
 ```

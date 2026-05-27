@@ -1,3 +1,6 @@
+import { installFixtures } from '../../helpers/install-fixtures'
+installFixtures('many-projects')
+
 import { test, expect } from '@playwright/test'
 
 test.only('la liste affiche uniquement les projets actifs', async ({ page }) => {
