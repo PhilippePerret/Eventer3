@@ -26,21 +26,21 @@
 
 - [x] S’assurer que le premier projet (en haut du listing — faire trois projets pour ce test) est bien sélectionné
 
-- [ ] S’assurer que les flèches haut/bas permettent de passer d’un projet à l’autre (Ça doit être le cas **pour tous les `Lister`s**, donc => ne pas implémenter un comportement qui ne fonctionnerait que pour les projets !!!!)
+- [x] S’assurer que les flèches haut/bas permettent de passer d’un projet à l’autre (Ça doit être le cas **pour tous les `Lister`s**, donc => ne pas implémenter un comportement qui ne fonctionnerait que pour les projets !!!!)
+
+- [x] S’assurer que Cmd-flèche haut/bas permet de déplacer les projets (comportement de `Lister`).
+
+- [ ] S’assurer que la touche « n » permet de créer (provisoirement juste dans le DOM) un nouveau projet SOUS la sélection (LIRE LES FICHIERS DE SPECS POUR VOIR LES CARACTÉRISTIQUES DES CRÉATIONS D’UN ITEM, RADICALEMENT DIFFÉRENT ENTRE LES PROJETS ET LES EVENTS, BRINS OU PERSOS).
 
 - [ ] S’assurer que la flèche droite permet de RENTRER dans le projet (c’est-à-dire de voir son premier évènemencier — qui correspond à ses `events`) (idem = valable pour n’importe quel lister)
 
 - [ ] S’assurer que la flèche gauche permet de revenir à la liste des projets (idem = valable pour n’importe quel lister)
-
-- [ ] S’assurer que Cmd-flèche haut/bas permet de déplacer les projets (idem = valable pour n’importe quel lister)
 
 - [ ] S’assurer que le déplacement des projets est persistant (idem = valable pour n’importe quel lister)
 
 - [ ] S’assurer que la touche Enter permet de modifier le titre du projet courant ((idem = valable pour n’importe quel lister))
 
 - [ ] S’assurer que la modification du titre est bien persistante (Ça doit être le cas pour tous les lister)
-
-- [ ] S’assurer que la touche « n » permet de créer (provisoirement juste dans le DOM) un nouveau projet SOUS la sélection — ATTENTION, CONTRAIREMENT AUX ÉVÈNEMENCIERS « NORMAUX », LES PROJETS, QUI NÉCESSITERONT DE FAIRE DES FICHIERS ET DOSSERS DANS LE FINDER, REPORTERONT À UNE VRAIE CRÉATION LA CRÉATION, SEULEMENT SI UN NOM DE PROJET EST BIEN DONNÉ)
 
 - [ ] 
 

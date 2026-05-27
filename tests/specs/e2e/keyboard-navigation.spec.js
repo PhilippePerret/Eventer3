@@ -3,7 +3,7 @@ installFixtures('many-projects')
 
 import { test, expect } from '@playwright/test'
 
-test.only(
+test(
   'les flèches haut/bas permettent de naviguer dans un Lister',
   async ({ page }) => {
 

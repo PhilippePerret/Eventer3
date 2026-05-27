@@ -2,15 +2,21 @@
   "id": "demo",
   "type": "project",
   "title": "PROJET EN DÉMO",
-  "items": ["i1"],
-  "brins": ["b1"],
-  "persos": ["p1"],
+  "items": [
+    "i1"
+  ],
+  "brins": [
+    "b1"
+  ],
+  "persos": [
+    "p1"
+  ],
   "lasts_id": {
     "item": 1,
     "brin": 1,
     "perso": 1
   },
-  "pos": 100,
+  "pos": 225,
   "created_at": "2026-05-26T16:00:55+02:00",
-  "updated_at": "2026-05-26T16:00:55+02:00"
+  "updated_at": "2026-05-27T07:40:20Z"
 }

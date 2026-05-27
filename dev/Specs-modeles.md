@@ -223,7 +223,7 @@ L’ordre des `Item`s dans l’affichage d’un `Lister` se gère avec leur prop
  i3			300
 ~~~
 
-En partant du prince où `nextItem` est l’item qui se retrouvera après l’élément à déplacer après le déplacement et que `prevItem` est l’item qui se retrouvera avant l’élément après déplacement, le calcul de la nouvelle position est : 
+En partant du principe où `nextItem` est l’item qui se retrouvera après l’élément à déplacer après le déplacement et que `prevItem` est l’item qui se retrouvera avant l’élément après déplacement, le calcul de la nouvelle position est : 
 
 ~~~javascript
 

@@ -21,6 +21,25 @@ export default class KeyboardController {
 
     LOG.m(3, 'Keyboard event key', event.key, 'meta', event.metaKey, 'maj', event.shiftKey, 'ctrl', event.controlKey)
 
+  if (event.metaKey) {
+
+      switch (event.key) {
+
+        case 'ArrowDown':
+          LOG.m("[KeyboardController.js] Demande de déplacement vers le bas")
+          this.activeLister.moveSelectedItemDown()
+          event.preventDefault()
+          return
+
+        case 'ArrowUp':
+          LOG.m("[KeyboardController.js] Demande de déplacement vers le haut")
+          this.activeLister.moveSelectedItemUp()
+          event.preventDefault()
+          return
+
+      }
+
+    }
     switch (event.key) {
 
       case 'ArrowDown':

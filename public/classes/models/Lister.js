@@ -13,20 +13,13 @@ export default class Lister {
     this.options = data.options ?? { colorizeItemsWithFirstBrin: false }
     this.breadcrumbs = data.breadcrumbs ?? []
     this.path = data.path ?? null
-    this.created_at = data.created_at ?? null
+    this.created_at = data.updated_at ?? null
     this.updated_at = data.updated_at ?? null
     this.keyboardController = data.keyboardController ?? null
     this.items = []
-    this.selectedIndex = 0
     this.domItems = []
-  }
-
-  sortItems(items = []) {
-    return items.sort((itemA, itemB) => {
-      const posA = Number(itemA?.pos ?? 0)
-      const posB = Number(itemB?.pos ?? 0)
-      return posA - posB
-    })
+    this.selectedIndex = 0
+    this.saveTimers = {}
   }
 
   get itemClass() {
@@ -37,11 +30,18 @@ export default class Lister {
     this._itemClass = value
   }
 
+  get dataFolder() {
+    return this.breadcrumbs.length ? `${this.breadcrumbs.join('/')}/${this.id}` : this.id
+  }
+
+  sortItems(items = []) {
+    return items.sort((itemA, itemB) => Number(itemA?.pos ?? 0) - Number(itemB?.pos ?? 0))
+  }
+
   async loadItems() {
     this.items = []
-    const folder = this.breadcrumbs.length ? `${this.breadcrumbs.join('/')}/${this.id}/` : `${this.id}/`
     for (const itemId of this.item_ids) {
-      const response = await fetch(`/data/${folder}${itemId}.json`)
+      const response = await fetch(`/data/${this.dataFolder}/${itemId}.json`)
       if (!response.ok) continue
       const itemData = await response.json()
       if (itemData.active === false) continue
@@ -53,33 +53,33 @@ export default class Lister {
   }
 
   render() {
-    const list = document.createElement('div')
-    list.classList.add(`${this.type}-list`)
+    const listElement = document.createElement('div')
+    listElement.classList.add(`${this.type}-list`)
     this.domItems = []
-    this.items.forEach((item, index) => {
+    this.items.forEach((item, itemIndex) => {
       const itemElement = document.createElement('div')
       itemElement.classList.add('item')
       itemElement.classList.add(`${this.type}-item`)
-      if (index === this.selectedIndex) itemElement.classList.add('selected')
+      if (itemIndex === this.selectedIndex) itemElement.classList.add('selected')
       if (typeof item.render === 'function') item.render(itemElement)
       else this.renderItemContent(itemElement, item)
       this.domItems.push(itemElement)
-      list.appendChild(itemElement)
+      listElement.appendChild(itemElement)
     })
     const mainPanel = document.querySelector('#main-panel')
     mainPanel.classList.add(`${this.type}-list`)
     if (this.keyboardController) this.keyboardController.register(this)
-    return list
+    return listElement
   }
 
-  selectItemAt(index) {
-    if (index < 0) return
-    if (index >= this.domItems.length) return
-    const currentItem = this.domItems[this.selectedIndex]
-    const nextItem = this.domItems[index]
-    if (currentItem) currentItem.classList.remove('selected')
-    nextItem.classList.add('selected')
-    this.selectedIndex = index
+  selectItemAt(itemIndex) {
+    if (itemIndex < 0) return
+    if (itemIndex >= this.domItems.length) return
+    const currentItemElement = this.domItems[this.selectedIndex]
+    const nextItemElement = this.domItems[itemIndex]
+    if (currentItemElement) currentItemElement.classList.remove('selected')
+    nextItemElement.classList.add('selected')
+    this.selectedIndex = itemIndex
   }
 
   selectNextItem() {
@@ -88,6 +88,64 @@ export default class Lister {
 
   selectPreviousItem() {
     this.selectItemAt(this.selectedIndex - 1)
+  }
+
+  moveSelectedItemDown() {
+    this.moveSelectedItem(1)
+  }
+
+  moveSelectedItemUp() {
+    this.moveSelectedItem(-1)
+  }
+
+  moveSelectedItem(direction) {
+    const currentIndex = this.selectedIndex
+    const targetIndex = currentIndex + direction
+    if (targetIndex < 0) return
+    if (targetIndex >= this.items.length) return
+    const movedItem = this.items[currentIndex]
+    const movedItemElement = this.domItems[currentIndex]
+    const targetItemElement = this.domItems[targetIndex]
+    this.items.splice(currentIndex, 1)
+    this.domItems.splice(currentIndex, 1)
+    this.items.splice(targetIndex, 0, movedItem)
+    this.domItems.splice(targetIndex, 0, movedItemElement)
+    if (direction > 0) targetItemElement.after(movedItemElement)
+    else targetItemElement.before(movedItemElement)
+    movedItem.pos = this.positionForItemAt(targetIndex)
+    this.selectedIndex = targetIndex
+    this.saveItemLater(movedItem)
+  }
+
+  positionForItemAt(itemIndex) {
+    const previousItem = this.items[itemIndex - 1] ?? null
+    const nextItem = this.items[itemIndex + 1] ?? null
+    let previousPosition
+    let nextPosition
+    if (!previousItem) {
+      previousPosition = 0
+      nextPosition = Number(nextItem.pos)
+    } else if (!nextItem) {
+      previousPosition = Number(previousItem.pos)
+      nextPosition = previousPosition + 50
+    } else {
+      previousPosition = Number(previousItem.pos)
+      nextPosition = Number(nextItem.pos)
+    }
+    return (previousPosition + nextPosition) / 2
+  }
+
+  saveItemLater(item) {
+    if (this.saveTimers[item.id]) clearTimeout(this.saveTimers[item.id])
+    this.saveTimers[item.id] = setTimeout(() => this.saveItem(item), 500)
+  }
+
+  saveItem(item) {
+    fetch(`/data/${this.dataFolder}/${item.id}.json`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pos: item.pos })
+    })
   }
 
   renderItemContent(itemElement, item) {
