@@ -80,6 +80,14 @@ export default class Item {
     return input
   }
 
+  cancelEditor(keyboardController, itemElement) {
+    const lister = keyboardController.activeLister
+    keyboardController.popMode()
+    itemElement.remove()
+    lister.selectItemAt(this.previousSelectedIndex)
+    LOG.m(2, 'Item.creation.cancelled')
+  }
+
   handleEditionKeyDown(event, keyboardController, itemElement, fields, inputs) {
     LOG.m(3, 'Item.handleEditionKeyDown', { key: event.key, item: this.id })
     switch (event.key) {
@@ -89,16 +97,18 @@ export default class Item {
         return
       case 'Escape':
         event.preventDefault()
-        keyboardController.popMode()
-        itemElement.remove()
-        LOG.m(2, 'Item.edition.cancelled')
+        this.cancelEditor(keyboardController, itemElement)
         return
       case 'Enter':
         event.preventDefault()
+        if (!inputs[0].value.trim()) {
+          this.cancelEditor(keyboardController, itemElement)
+          LOG.m(2, 'Item.creation.cancelled.emptyTitle')
+          return
+        }
         this.commitEdition(itemElement, fields, inputs)
         const lister = keyboardController.activeLister
         const insertionIndex = lister.selectedIndex
-
         if (this.__isTemporary) {
           delete this.__isTemporary
           lister.items.splice(insertionIndex, 0, this)
@@ -118,6 +128,7 @@ export default class Item {
   }
 
   commitEdition(itemElement, fields, inputs) {
+    LOG.m(2, 'Item.commitEdition', { title: this.title, id: this.id })
     fields.forEach((field, index) => this[field.property] = inputs[index].value.trim())
     itemElement.innerHTML = ''
     if (typeof this.render === 'function') this.render(itemElement)

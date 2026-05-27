@@ -122,12 +122,9 @@ export default class Lister {
     const insertionIndex = this.selectedIndex
     const currentItemElement = this.domItems[insertionIndex]
     newItem.__isTemporary = true
-    /*
-    this.items.splice(insertionIndex, 0, newItem)
-    this.domItems.splice(insertionIndex, 0, newItemElement)
-    */
     if (currentItemElement) currentItemElement.before(newItemElement)
     else document.querySelector(`#main-panel .${this.type}-list`).appendChild(newItemElement)
+    newItem.previousSelectedIndex = this.selectedIndex
     this.clearSelection()
     this.selectItemAt(insertionIndex)
     LOG.m(2, 'Lister.createNewItem.done', { items: this.items.length, domItems: this.domItems.length })
