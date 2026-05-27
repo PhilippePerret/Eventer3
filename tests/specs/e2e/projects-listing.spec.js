@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test.only('la liste des projets possède les bonnes classes CSS', async ({ page }) => {
+test('la liste des projets possède les bonnes classes CSS', async ({ page }) => {
 
   console.log('\n=== TEST CLASSES CSS PROJECT LISTING ===')
 

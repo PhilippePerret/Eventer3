@@ -4,7 +4,8 @@
   "hasLister": true,
   "type": "project",
   "items": [
-    "demo"
+    "demo",
+    "digest"
   ],
   "brins": [],
   "persos": [],

@@ -9,6 +9,7 @@ class Projects < Lister
       {
         id: 'projects',
         title: 'Liste des projets',
+        type: 'project',
         items: ['demo'],
         lasts_id: { item: 1 }
       }
