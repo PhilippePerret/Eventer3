@@ -3,7 +3,7 @@ export default class Lister {
 
   constructor(data = {}) {
     this.id          = data.id ?? null
-    this.title       = data.title ?? ''
+    this.title       = data.title ?? '---titre manquant---'
     this.active      = data.active ?? true
     this.type        = data.type ?? null
     this.nature      = data.nature ?? 'none'
@@ -41,25 +41,30 @@ export default class Lister {
 
     this.items = []
 
+    const folder = this.breadcrumbs.length
+      ? `${this.breadcrumbs.join('/')}/${this.id}/`
+      : `${this.id}/`
+
     for (const itemId of this.item_ids) {
 
       const response = await fetch(
-        `/data/${this.id}/${itemId}.json`
+        `/data/${folder}${itemId}.json`
       )
+
+      if (!response.ok) continue
 
       const itemData = await response.json()
 
+      if (itemData.active === false) continue
+
       const ItemClass = this.itemClass
 
-      this.items.push(
+      const item = ItemClass
+        ? new ItemClass(itemData)
+        : itemData
 
-        ItemClass
+      this.items.push(item)
 
-          ? new ItemClass(itemData)
-
-          : itemData
-
-      )
     }
 
     this.items = this.sortItems(this.items)

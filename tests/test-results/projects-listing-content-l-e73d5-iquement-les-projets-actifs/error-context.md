@@ -32,10 +32,17 @@ Call log:
 ```yaml
 - generic [active] [ref=e1]:
   - main [ref=e2]:
-    - generic [ref=e4]:
-      - generic [ref=e5]: Projet modèle
-      - generic [ref=e6]: demo
-  - contentinfo "Raccourcis clavier" [ref=e7]
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]: Projet A
+        - generic [ref=e6]: project-a
+      - generic [ref=e7]:
+        - generic [ref=e8]: Projet B
+        - generic [ref=e9]: project-b
+      - generic [ref=e10]:
+        - generic [ref=e11]: Projet C
+        - generic [ref=e12]: project-c
+  - contentinfo "Raccourcis clavier" [ref=e13]
 ```
 
 # Test source

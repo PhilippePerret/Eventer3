@@ -9,7 +9,13 @@ export function installFixtures(fixtureName) {
   )
 
   const dataFolder = path.resolve(
-    'public/data/projects'
+    '..',
+    'data'
+  )
+
+  const projectsFolder = path.join(
+    dataFolder,
+    'projects'
   )
 
   fs.rmSync(dataFolder, {
@@ -17,19 +23,24 @@ export function installFixtures(fixtureName) {
     force: true
   })
 
-  fs.mkdirSync(dataFolder, {
+  fs.mkdirSync(projectsFolder, {
     recursive: true
   })
 
+  fs.copyFileSync(
+    path.join(fixturesFolder, 'projects.json'),
+    path.join(dataFolder, 'projects.json')
+  )
+
   const files = fs.readdirSync(fixturesFolder)
 
-  files.forEach(filename => {
-
-    fs.copyFileSync(
-      path.join(fixturesFolder, filename),
-      path.join(dataFolder, filename)
-    )
-
-  })
+  files
+    .filter(filename => filename !== 'projects.json')
+    .forEach(filename => {
+      fs.copyFileSync(
+        path.join(fixturesFolder, filename),
+        path.join(projectsFolder, filename)
+      )
+    })
 
 }
