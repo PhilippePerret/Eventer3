@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { test, expect } from '@playwright/test'
 
-test.only('la touche Entrée sans titre annule complètement la création du projet', async ({ page }) => {
+test('la touche Entrée sans titre annule complètement la création du projet', async ({ page }) => {
 
   console.log('\n=== TEST VALIDATION VIDE NOUVEAU PROJET ===\n')
 

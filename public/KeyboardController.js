@@ -53,7 +53,7 @@ export default class KeyboardController {
     const currentMode = this.getCurrentMode()
 
     if (currentMode) {
-      currentMode.onKeyDown(event, this)
+      void currentMode.onKeyDown(event, this)      
       return
     }
 

@@ -6,9 +6,28 @@ export default class Item {
     return 'Titre du nouvel item'
   }
 
+  static create({ type, lister, keyboardController, insertionIndex, currentItemElement }) {
+    const item = this.createEmpty()
+    item.__isTemporary = true
+    item.previousSelectedIndex = insertionIndex
+    const itemElement = item.createEditorElement(type, keyboardController)
+
+    if (currentItemElement) currentItemElement.before(itemElement)
+    else document.querySelector(`#main-panel .${type}-list`).appendChild(itemElement)
+
+    lister.clearSelection()
+    lister.selectItemAt(insertionIndex)
+
+    const domItem = itemElement
+    domItem.classList.add('selected')
+
+    return item
+  }
+
   static createEmpty() {
     return new this({ id: '', title: '' })
   }
+
 
   constructor(data = {}) {
     this.id = data.id ?? null
@@ -88,7 +107,7 @@ export default class Item {
     LOG.m(2, 'Item.creation.cancelled')
   }
 
-  handleEditionKeyDown(event, keyboardController, itemElement, fields, inputs) {
+  async handleEditionKeyDown(event, keyboardController, itemElement, fields, inputs) {
     LOG.m(3, 'Item.handleEditionKeyDown', { key: event.key, item: this.id })
     switch (event.key) {
       case 'Tab':
@@ -114,6 +133,9 @@ export default class Item {
           lister.items.splice(insertionIndex, 0, this)
           lister.domItems.splice(insertionIndex, 0, itemElement)
         }
+        LOG.m(1, 'Item.beforeSave', { insertionIndex, itemId: this.id, itemsLength: lister.items.length })
+        if (typeof lister.save === 'function') await lister.save()
+        LOG.m(1, 'Item.saved', { items: lister.items.map(item => item.id) })
         keyboardController.popMode()
         LOG.m(2, 'Item.edition.committed', { id: this.id, title: this.title })
         return

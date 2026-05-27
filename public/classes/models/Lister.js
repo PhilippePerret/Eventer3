@@ -117,16 +117,15 @@ export default class Lister {
   createNewItem() {
     LOG.m(2, 'Lister.createNewItem', { lister: this.id, type: this.type, selectedIndex: this.selectedIndex, hasKeyboardController: Boolean(this.keyboardController) })
     if (!this.keyboardController) throw new Error('Lister.createNewItem: keyboardController missing')
-    const newItem = this.itemClass.createEmpty()
-    const newItemElement = newItem.createEditorElement(this.type, this.keyboardController)
     const insertionIndex = this.selectedIndex
     const currentItemElement = this.domItems[insertionIndex]
-    newItem.__isTemporary = true
-    if (currentItemElement) currentItemElement.before(newItemElement)
-    else document.querySelector(`#main-panel .${this.type}-list`).appendChild(newItemElement)
-    newItem.previousSelectedIndex = this.selectedIndex
-    this.clearSelection()
-    this.selectItemAt(insertionIndex)
+    this.itemClass.create({
+      type: this.type,
+      lister: this,
+      keyboardController: this.keyboardController,
+      insertionIndex,
+      currentItemElement
+    })
     LOG.m(2, 'Lister.createNewItem.done', { items: this.items.length, domItems: this.domItems.length })
   }
 
