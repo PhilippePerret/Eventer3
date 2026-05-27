@@ -42,7 +42,7 @@
 
 - [ ] S’assurer que la modification du titre est bien persistante (Ça doit être le cas pour tous les lister)
 
-- [ ] 
+- [ ] S’assurer que lorsqu’un item ne peut pas être placer entre deux items de `pos` consécutifs (ex : `pos:123` et `pos:124`), tous les `pos` (où seulement ceux qui posent problème ?) sont re-initialisés à une valeur correcte.
 
 ## Évènemencier
 

@@ -3,9 +3,7 @@ installFixtures('many-projects')
 
 import { test, expect } from '@playwright/test'
 
-test.only(
-  'Cmd+flèche permet de déplacer les items',
-  async ({ page }) => {
+test('Cmd+flèche permet de déplacer les items', async ({ page }) => {
 
     await page.goto('/')
 

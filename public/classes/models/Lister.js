@@ -1,4 +1,5 @@
 export default class Lister {
+
   constructor(data = {}) {
     this.id = data.id ?? null
     this.title = data.title ?? '---titre manquant---'
@@ -13,13 +14,12 @@ export default class Lister {
     this.options = data.options ?? { colorizeItemsWithFirstBrin: false }
     this.breadcrumbs = data.breadcrumbs ?? []
     this.path = data.path ?? null
-    this.created_at = data.updated_at ?? null
+    this.created_at = data.created_at ?? null
     this.updated_at = data.updated_at ?? null
     this.keyboardController = data.keyboardController ?? null
     this.items = []
     this.domItems = []
     this.selectedIndex = 0
-    this.saveTimers = {}
   }
 
   get itemClass() {
@@ -31,7 +31,8 @@ export default class Lister {
   }
 
   get dataFolder() {
-    return this.breadcrumbs.length ? `${this.breadcrumbs.join('/')}/${this.id}` : this.id
+    if (this.breadcrumbs.length === 0) return this.id
+    return `${this.breadcrumbs.join('/')}/${this.id}`
   }
 
   sortItems(items = []) {
@@ -57,12 +58,9 @@ export default class Lister {
     listElement.classList.add(`${this.type}-list`)
     this.domItems = []
     this.items.forEach((item, itemIndex) => {
-      const itemElement = document.createElement('div')
-      itemElement.classList.add('item')
-      itemElement.classList.add(`${this.type}-item`)
+      const itemElement = item.createElement(this.type)
       if (itemIndex === this.selectedIndex) itemElement.classList.add('selected')
       if (typeof item.render === 'function') item.render(itemElement)
-      else this.renderItemContent(itemElement, item)
       this.domItems.push(itemElement)
       listElement.appendChild(itemElement)
     })
@@ -110,45 +108,24 @@ export default class Lister {
     this.domItems.splice(currentIndex, 1)
     this.items.splice(targetIndex, 0, movedItem)
     this.domItems.splice(targetIndex, 0, movedItemElement)
-    if (direction > 0) targetItemElement.after(movedItemElement)
-    else targetItemElement.before(movedItemElement)
-    movedItem.pos = this.positionForItemAt(targetIndex)
-    this.selectedIndex = targetIndex
-    this.saveItemLater(movedItem)
-  }
-
-  positionForItemAt(itemIndex) {
-    const previousItem = this.items[itemIndex - 1] ?? null
-    const nextItem = this.items[itemIndex + 1] ?? null
-    let previousPosition
-    let nextPosition
-    if (!previousItem) {
-      previousPosition = 0
-      nextPosition = Number(nextItem.pos)
-    } else if (!nextItem) {
-      previousPosition = Number(previousItem.pos)
-      nextPosition = previousPosition + 50
+    if (direction > 0) {
+      targetItemElement.after(movedItemElement)
     } else {
-      previousPosition = Number(previousItem.pos)
-      nextPosition = Number(nextItem.pos)
+      targetItemElement.before(movedItemElement)
     }
-    return (previousPosition + nextPosition) / 2
+    this.selectedIndex = targetIndex
   }
 
-  saveItemLater(item) {
-    if (this.saveTimers[item.id]) clearTimeout(this.saveTimers[item.id])
-    this.saveTimers[item.id] = setTimeout(() => this.saveItem(item), 500)
+  createNewItem() {
+    const ItemClass = this.itemClass
+    const newItem = ItemClass.createEmpty()
+    const newItemElement = newItem.createEditorElement(this.type)
+    const insertionIndex = this.selectedIndex
+    const currentItemElement = this.domItems[insertionIndex]
+    this.items.splice(insertionIndex, 0, newItem)
+    this.domItems.splice(insertionIndex, 0, newItemElement)
+    currentItemElement.before(newItemElement)
+    this.selectItemAt(insertionIndex)
   }
 
-  saveItem(item) {
-    fetch(`/data/${this.dataFolder}/${item.id}.json`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pos: item.pos })
-    })
-  }
-
-  renderItemContent(itemElement, item) {
-    itemElement.innerText = item.title
-  }
 }
