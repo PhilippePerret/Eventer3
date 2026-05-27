@@ -1,5 +1,6 @@
 import Item from './Item.js'
 import LOG from '../../system/LOG.js'
+import raise from '../../system/raise.js'
 
 export default class Lister {
 
@@ -10,9 +11,9 @@ export default class Lister {
     this.type = data.type ?? null
     this.nature = data.nature ?? 'none'
     this.scale = data.scale ?? null
-    this.item_ids = data.item_ids ?? data.items ?? []
-    this.brin_ids = data.brin_ids ?? data.brins ?? []
-    this.perso_ids = data.perso_ids ?? data.persos ?? []
+    this.item_ids = data.item_ids || raise('Lister: data.item_ids missing', data)
+    this.brin_ids = data.brin_ids || raise('Lister: data.brin_ids missing', data)
+    this.perso_ids = data.perso_ids || raise('Lister: data.perso_ids missing', data)
     this.lasts_id = data.lasts_id ?? { item: 0, brin: 0, perso: 0 }
     this.options = data.options ?? { colorizeItemsWithFirstBrin: false }
     this.breadcrumbs = data.breadcrumbs ?? []

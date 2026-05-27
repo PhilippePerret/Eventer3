@@ -2,15 +2,15 @@
   "id": "digest",
   "type": "project",
   "title": "Digest / MD5",
-  "items": [
+  "item_ids": [
     "i1",
     "i2",
     "i3"
   ],
-  "brins": [
+  "brin_ids": [
     "b1"
   ],
-  "persos": [
+  "perso_ids": [
     "p1"
   ],
   "lasts_id": {

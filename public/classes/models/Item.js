@@ -131,6 +131,7 @@ export default class Item {
         if (this.__isTemporary) {
           delete this.__isTemporary
           lister.items.splice(insertionIndex, 0, this)
+          lister.item_ids.splice(insertionIndex, 0, this.id)
           lister.domItems.splice(insertionIndex, 0, itemElement)
         }
         LOG.m(1, 'Item.beforeSave', { insertionIndex, itemId: this.id, itemsLength: lister.items.length })

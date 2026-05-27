@@ -3,12 +3,12 @@
   "title": "Liste des projets",
   "hasLister": true,
   "type": "project",
-  "items": [
+  "item_ids": [
     "demo",
     "digest"
   ],
-  "brins": [],
-  "persos": [],
+  "brin_ids": [],
+  "perso_ids": [],
   "lasts_id": {
     "item": 1
   }
