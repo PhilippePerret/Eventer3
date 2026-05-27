@@ -29,16 +29,19 @@ export default class LOG {
 
     if (messageLevel > this.level) return
 
-    const prefix = `[LOG ${messageLevel}]`
-
-    if (messagePayload.length === 0) {
-      console.log(prefix, message)
-      return
-
-    }
-
-    console.log(prefix, message, ...messagePayload)
+    console.log(`[LOG ${messageLevel}]`, message, ...messagePayload)
 
   }
 
+static warn(...args) {
+    console.warn(
+      '%c[WARN]',
+      'color:red;font-weight:bold;',
+      ...args
+    )
+  }
+
+  static w(...args) {
+    this.warn(...args)
+  }
 }

@@ -1,26 +1,37 @@
+import LOG from './system/LOG.js'
+
 export default class KeyboardController {
 
-  constructor(lister) {
-    this.lister = lister
+  constructor() {
+    this.currentLister = null
+  }
+
+  setCurrentLister(lister) {
+    this.currentLister = lister
   }
 
   observe() {
-    document.addEventListener(
-      'keydown',
-      this.onKeyDown.bind(this)
-    )
+    document.addEventListener('keydown', this.onKeyDown.bind(this))
   }
 
   onKeyDown(event) {
 
-    switch(event.key) {
+    if (!this.currentLister) return
+
+    LOG.m(3, 'Keyboard event', event.key)
+
+    switch (event.key) {
 
       case 'ArrowDown':
-        this.lister.selectNextItem()
+        LOG.m(2, 'Select next item')
+        this.currentLister.selectNextItem()
+        event.preventDefault()
         break
 
       case 'ArrowUp':
-        this.lister.selectPreviousItem()
+        LOG.m(2, 'Select previous item')
+        this.currentLister.selectPreviousItem()
+        event.preventDefault()
         break
 
     }
