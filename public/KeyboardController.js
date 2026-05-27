@@ -4,7 +4,8 @@ export default class KeyboardController {
 
   constructor() {
     this.activeLister = null
-    this.modeStack = []
+    this.mode = 'navigation'
+    this.editor = null
   }
 
   register(lister) {
@@ -13,29 +14,27 @@ export default class KeyboardController {
   }
 
   observe() {
-    document.addEventListener('keydown', event => {
-      const mode = this.getCurrentMode()
-      if (mode) {
-        mode.onKeyDown(event)
-        return
-      }
-      this.onKeyDown(event)
-    })
+    document.addEventListener('keydown', this.onKeyDown.bind(this))
   }
 
-  pushMode(mode) {
-    this.modeStack.push(mode)
+  enterEditorMode(editor) {
+    LOG.m(2, 'Enter editor mode')
+    this.mode = 'editor'
+    this.editor = editor
   }
 
-  popMode() {
-    this.modeStack.pop()
-  }
-
-  getCurrentMode() {
-    return this.modeStack[this.modeStack.length - 1]
+  exitEditorMode() {
+    LOG.m(2, 'Exit editor mode')
+    this.mode = 'navigation'
+    this.editor = null
   }
 
   onKeyDown(event) {
+
+    if (this.mode === 'editor') {
+      this.editor.onKeyDown(event)
+      return
+    }
 
     if (!this.activeLister) return
 
@@ -44,6 +43,7 @@ export default class KeyboardController {
     switch (event.key) {
 
       case 'n':
+        LOG.m(2, 'Create new item')
         this.activeLister.createNewItem()
         event.preventDefault()
         return

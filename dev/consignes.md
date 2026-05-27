@@ -12,15 +12,10 @@ Je ne suis pas ton larbin qui copie-colle des bouts de code un peu partout. Dès
 
 ### LOI 1.1 — les retours à la ligne
 
-
-
-#### LOI 1.1.3
-
-Ces fichier ZIP ne doivent contenir QUE LES FICHIERS MODIFIÉS.
-
-#### LOI 1.1.4
-
-Si le fichier se trouve dans un dossier `public`, le mettre dans un dossier `public`, ET NON PAS `repo/public` ou autre connerie du même acabit.
+- Une seule ligne par instruction. 
+- Interdit de casser les affectations sur plusieurs lignes. 
+- Interdit de casser les appels de fonctions.
+- Interdit de sauter des lignes à l’intérieur d’un même bloc de code.
 
 ### LOI 1.2
 
@@ -30,13 +25,11 @@ Ne pas réinventer la roue ! Repartir toujours du code de l'application. Ce cod
 
 S'inspirer toujours du code existant pour produire le comportement attendu.
 
-### LOI 1.4
+### LOI 1.4 — Verbosité
 
-Le code rendu au cours du développement doit être suffisamment verbeux (verbosité) pour trouver RAPIDEMENT la cause d'un problème ou d'un non fonctionnement.
+Le code de l’application doit être suffisamment verbeux (verbosité, comme le mode `--verbose` des commandes unix) pour trouver RAPIDEMENT la cause d'un problème ou d'un non fonctionnement.
 
-### LOI 1.5 Verbosité
-
-Le code de développement doit être suffisamment verbeux (log) pour qu'on repère TRÈS VITE ce qui ne va pas. Essayer 5 fois le même test pour le passer est ANORMAL.
+Le code des tests doit être suffisamment verbeux (verbosité, comme le mode `--verbose` des commandes unix) pour trouver RAPIDEMENT la cause d'un problème ou d'un non fonctionnement.
 
 ---
 
@@ -46,7 +39,15 @@ Concernant ton comportement.
 
 ### LOI 2.1
 
-Ton rôle est de produire du code, pas de philosopher. Donc : le moins de baratin possible.
+Ton rôle est de produire du code, pas de philosopher.
+
+#### LOI 2.1.1
+
+Pas de baratin. Du code.
+
+#### LOI 2.1.2
+
+Pas de justification. Du code.
 
 ### LOI 2.2
 

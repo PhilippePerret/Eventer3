@@ -1,3 +1,5 @@
+import LOG from '../../system/LOG.js'
+
 export default class Item {
 
   static get newItemPlaceholder() {
@@ -9,21 +11,21 @@ export default class Item {
   }
 
   constructor(data = {}) {
-    this.id         = data.id ?? null
-    this.title      = data.title ?? ''
-    this.hasLister  = data.hasLister ?? false
-    this.type       = data.type ?? []
-    this.color      = data.color ?? null
-    this.checked    = data.checked ?? false
-    this.pos        = data.pos ?? 0
-    this.state      = data.state ?? 0
-    this.duration   = data.duration ?? null
-    this.path       = data.path ?? null
+    this.id = data.id ?? null
+    this.title = data.title ?? ''
+    this.hasLister = data.hasLister ?? false
+    this.type = data.type ?? []
+    this.color = data.color ?? null
+    this.checked = data.checked ?? false
+    this.pos = data.pos ?? 0
+    this.state = data.state ?? 0
+    this.duration = data.duration ?? null
+    this.path = data.path ?? null
     this.created_at = data.created_at ?? null
     this.updated_at = data.updated_at ?? null
-    this.badge      = data.badge ?? null
-    this.patronyme  = data.patronyme ?? null
-    this.fonction   = data.fonction ?? null
+    this.badge = data.badge ?? null
+    this.patronyme = data.patronyme ?? null
+    this.fonction = data.fonction ?? null
   }
 
   createElement(type) {
@@ -33,71 +35,83 @@ export default class Item {
     return itemElement
   }
 
+  getEditorFields(type, itemElement) {
+    return [{ name: 'title', property: 'title', selector: `.${type}-item__title`, placeholder: this.constructor.newItemPlaceholder }]
+  }
+
+  createInputFromElement(element, field) {
+    const input = document.createElement('input')
+    input.name = field.name
+    input.type = 'text'
+    input.className = element.className
+    input.value = this[field.property] ?? ''
+    input.placeholder = field.placeholder ?? ''
+    input.style.border = '0'
+    input.style.outline = '0'
+    input.style.background = 'transparent'
+    input.style.color = 'inherit'
+    input.style.font = 'inherit'
+    input.style.padding = '0'
+    input.style.margin = '0'
+    input.style.width = '100%'
+    input.style.minWidth = '0'
+    input.style.appearance = 'none'
+    return input
+  }
+
   createEditorElement(type, keyboardController) {
-
+    LOG.m(2, 'Item.createEditorElement', { type, hasKeyboardController: Boolean(keyboardController) })
+    if (!keyboardController) throw new Error('Item.createEditorElement: keyboardController missing')
+    if (typeof keyboardController.enterItemEdition !== 'function') throw new Error('Item.createEditorElement: keyboardController.enterItemEdition missing')
     const itemElement = this.createElement(type)
-
-    const titleElement = document.createElement('span')
-    titleElement.className = `${type}-listing__title`
-    titleElement.textContent = this.title
-
-    const idElement = document.createElement('span')
-    idElement.className = `${type}-listing__id`
-    idElement.textContent = this.id
-
-    const titleInput = document.createElement('input')
-    titleInput.className = titleElement.className
-    titleInput.value = this.title || ''
-    titleInput.placeholder = this.constructor.newItemPlaceholder
-
-    const idInput = document.createElement('input')
-    idInput.className = idElement.className
-    idInput.value = this.id || ''
-    idInput.placeholder = 'identifiant'
-
-    itemElement.appendChild(titleInput)
-    itemElement.appendChild(idInput)
-
-    keyboardController.pushMode({
-
-      onKeyDown: event => {
-
-        switch (event.key) {
-
-          case 'Tab':
-            event.preventDefault()
-            if (document.activeElement === titleInput) idInput.focus()
-            else titleInput.focus()
-            return
-
-          case 'Escape':
-            keyboardController.popMode()
-            itemElement.remove()
-            return
-
-          case 'Enter':
-            this.title = titleInput.value.trim()
-            this.id = idInput.value.trim()
-            titleElement.textContent = this.title
-            idElement.textContent = this.id
-            titleInput.replaceWith(titleElement)
-            idInput.replaceWith(idElement)
-            keyboardController.popMode()
-            return
-
-        }
-
-      }
-
-    })
-
-    requestAnimationFrame(() => {
-      titleInput.focus()
-      titleInput.select()
-    })
-
+    if (typeof this.render === 'function') this.render(itemElement)
+    const fields = this.getEditorFields(type, itemElement)
+    const inputs = fields.map(field => this.createEditorInput(itemElement, field))
+    keyboardController.enterItemEdition({ defaultInput: inputs[0], onKeyDown: (event, controller) => this.handleEditionKeyDown(event, controller, itemElement, fields, inputs) })
     return itemElement
+  }
 
+  createEditorInput(itemElement, field) {
+    const element = itemElement.querySelector(field.selector)
+    if (!element) throw new Error(`Item.createEditorInput: ${field.selector} missing`)
+    const input = this.createInputFromElement(element, field)
+    element.replaceWith(input)
+    return input
+  }
+
+  handleEditionKeyDown(event, keyboardController, itemElement, fields, inputs) {
+    LOG.m(3, 'Item.handleEditionKeyDown', { key: event.key, item: this.id })
+    switch (event.key) {
+      case 'Tab':
+        event.preventDefault()
+        this.focusNextEditionInput(inputs)
+        return
+      case 'Escape':
+        event.preventDefault()
+        keyboardController.popMode()
+        itemElement.remove()
+        LOG.m(2, 'Item.edition.cancelled')
+        return
+      case 'Enter':
+        event.preventDefault()
+        this.commitEdition(itemElement, fields, inputs)
+        keyboardController.popMode()
+        LOG.m(2, 'Item.edition.committed', { id: this.id, title: this.title })
+        return
+    }
+  }
+
+  focusNextEditionInput(inputs) {
+    const currentIndex = inputs.indexOf(document.activeElement)
+    const nextIndex = currentIndex < 0 || currentIndex === inputs.length - 1 ? 0 : currentIndex + 1
+    inputs[nextIndex].focus()
+    inputs[nextIndex].select()
+  }
+
+  commitEdition(itemElement, fields, inputs) {
+    fields.forEach((field, index) => this[field.property] = inputs[index].value.trim())
+    itemElement.innerHTML = ''
+    if (typeof this.render === 'function') this.render(itemElement)
   }
 
 }

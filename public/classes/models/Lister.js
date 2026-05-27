@@ -1,4 +1,5 @@
 import Item from './Item.js'
+import LOG from '../../system/LOG.js'
 
 export default class Lister {
 
@@ -114,18 +115,23 @@ export default class Lister {
   }
 
   createNewItem() {
-    LOG.m(2, 'Create new item')
+    LOG.m(2, 'Lister.createNewItem', { lister: this.id, type: this.type, selectedIndex: this.selectedIndex, hasKeyboardController: Boolean(this.keyboardController) })
+    if (!this.keyboardController) throw new Error('Lister.createNewItem: keyboardController missing')
     const newItem = this.itemClass.createEmpty()
-    LOG.m(3, 'New item instance', newItem)
     const newItemElement = newItem.createEditorElement(this.type, this.keyboardController)
-    LOG.m(3, 'New item element', newItemElement)
     const insertionIndex = this.selectedIndex
     const currentItemElement = this.domItems[insertionIndex]
     this.items.splice(insertionIndex, 0, newItem)
     this.domItems.splice(insertionIndex, 0, newItemElement)
     if (currentItemElement) currentItemElement.before(newItemElement)
     else document.querySelector(`#main-panel .${this.type}-list`).appendChild(newItemElement)
+    this.clearSelection()
     this.selectItemAt(insertionIndex)
+    LOG.m(2, 'Lister.createNewItem.done', { items: this.items.length, domItems: this.domItems.length })
+  }
+
+  clearSelection() {
+    this.domItems.forEach(itemElement => itemElement.classList.remove('selected'))
   }
 
 }
