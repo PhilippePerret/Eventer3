@@ -1,30 +1,54 @@
-// import fs from 'fs'
-// import path from 'path'
-// import { test, expect } from '@playwright/test'
+import fs from 'fs'
+import path from 'path'
+import { test, expect } from '@playwright/test'
 
-// test.only('la touche Escape après n annule complètement la création du projet', async ({ page }) => {
+test.only('la touche Escape après n annule complètement la création du projet', async ({ page }) => {
 
-//   const projectsPath = path.resolve('data/projects.json')
+  console.log('\n=== TEST ANNULATION NOUVEAU PROJET ===\n')
 
-//   await page.goto('/')
+  const projectsPath = path.resolve('../data/projects.json')
 
-//   const itemsBefore = page.locator('.project-item')
+  console.log('-> ouverture application')
+  await page.goto('/')
 
-//   await expect(itemsBefore).toHaveCount(3)
+  const itemsBefore = page.locator('.project-item')
 
-//   const projectsBefore = JSON.parse(fs.readFileSync(projectsPath, 'utf8'))
+  console.log('-> vérification nombre initial projets')
+  await expect(itemsBefore).toHaveCount(3)
 
-//   await page.keyboard.press('n')
-//   await page.keyboard.press('Escape')
+  console.log('-> vérification sélection initiale')
+  await expect(itemsBefore.nth(0)).toHaveClass(/selected/)
+  await expect(itemsBefore.nth(1)).not.toHaveClass(/selected/)
+  await expect(itemsBefore.nth(2)).not.toHaveClass(/selected/)
 
-//   const itemsAfter = page.locator('.project-item')
+  console.log('-> lecture backend avant création')
+  const projectsBefore = JSON.parse(fs.readFileSync(projectsPath, 'utf8'))
 
-//   await expect(itemsAfter).toHaveCount(3)
+  console.log('-> création nouveau projet')
+  await page.keyboard.press('n')
 
-//   await expect(page.locator('input')).toHaveCount(0)
+  console.log('-> annulation création')
+  await page.keyboard.press('Escape')
 
-//   const projectsAfter = JSON.parse(fs.readFileSync(projectsPath, 'utf8'))
+  const itemsAfter = page.locator('.project-item')
 
-//   expect(projectsAfter).toEqual(projectsBefore)
+  console.log('-> vérification nombre final projets')
+  await expect(itemsAfter).toHaveCount(3)
 
-// })
+  console.log('-> vérification disparition inputs')
+  await expect(page.locator('input')).toHaveCount(0)
+
+  console.log('-> vérification restauration sélection')
+  await expect(itemsAfter.nth(0)).toHaveClass(/selected/)
+  await expect(itemsAfter.nth(1)).not.toHaveClass(/selected/)
+  await expect(itemsAfter.nth(2)).not.toHaveClass(/selected/)
+
+  console.log('-> lecture backend après annulation')
+  const projectsAfter = JSON.parse(fs.readFileSync(projectsPath, 'utf8'))
+
+  console.log('-> vérification backend inchangé')
+  expect(projectsAfter).toEqual(projectsBefore)
+
+  console.log('\n=== FIN TEST ANNULATION NOUVEAU PROJET ===\n')
+
+})

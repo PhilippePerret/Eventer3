@@ -121,8 +121,11 @@ export default class Lister {
     const newItemElement = newItem.createEditorElement(this.type, this.keyboardController)
     const insertionIndex = this.selectedIndex
     const currentItemElement = this.domItems[insertionIndex]
+    newItem.__isTemporary = true
+    /*
     this.items.splice(insertionIndex, 0, newItem)
     this.domItems.splice(insertionIndex, 0, newItemElement)
+    */
     if (currentItemElement) currentItemElement.before(newItemElement)
     else document.querySelector(`#main-panel .${this.type}-list`).appendChild(newItemElement)
     this.clearSelection()

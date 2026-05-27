@@ -96,6 +96,14 @@ export default class Item {
       case 'Enter':
         event.preventDefault()
         this.commitEdition(itemElement, fields, inputs)
+        const lister = keyboardController.activeLister
+        const insertionIndex = lister.selectedIndex
+
+        if (this.__isTemporary) {
+          delete this.__isTemporary
+          lister.items.splice(insertionIndex, 0, this)
+          lister.domItems.splice(insertionIndex, 0, itemElement)
+        }
         keyboardController.popMode()
         LOG.m(2, 'Item.edition.committed', { id: this.id, title: this.title })
         return
