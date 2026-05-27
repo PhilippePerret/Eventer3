@@ -2,7 +2,7 @@
 
 DOSSIER="/Users/philippeperret/Programmes/Eventer3"
 
-OPEN_FINDER_WINDOWS=true
+OPEN_FINDER_WINDOWS=false
 PREPARE_TERMINAL_WINDOWS=true
 OPEN_EVENTER_SITE=true
 

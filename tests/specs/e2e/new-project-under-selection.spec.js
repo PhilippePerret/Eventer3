@@ -3,7 +3,7 @@ installFixtures('many-projects')
 
 import { test, expect } from '@playwright/test'
 
-test.only('la touche n crée un nouveau projet vide au-dessus de la sélection', async ({ page }) => {
+test('la touche n crée un nouveau projet vide au-dessus de la sélection', async ({ page }) => {
   await page.goto('/')
 
   const items = page.locator('.project-item')

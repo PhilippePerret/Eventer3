@@ -114,13 +114,17 @@ export default class Lister {
   }
 
   createNewItem() {
+    LOG.m(2, 'Create new item')
     const newItem = this.itemClass.createEmpty()
-    const newItemElement = newItem.createEditorElement(this.type)
+    LOG.m(3, 'New item instance', newItem)
+    const newItemElement = newItem.createEditorElement(this.type, this.keyboardController)
+    LOG.m(3, 'New item element', newItemElement)
     const insertionIndex = this.selectedIndex
     const currentItemElement = this.domItems[insertionIndex]
     this.items.splice(insertionIndex, 0, newItem)
     this.domItems.splice(insertionIndex, 0, newItemElement)
-    currentItemElement.before(newItemElement)
+    if (currentItemElement) currentItemElement.before(newItemElement)
+    else document.querySelector(`#main-panel .${this.type}-list`).appendChild(newItemElement)
     this.selectItemAt(insertionIndex)
   }
 

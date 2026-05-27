@@ -4,6 +4,7 @@ export default class KeyboardController {
 
   constructor() {
     this.activeLister = null
+    this.modeStack = []
   }
 
   register(lister) {
@@ -12,7 +13,26 @@ export default class KeyboardController {
   }
 
   observe() {
-    document.addEventListener('keydown', this.onKeyDown.bind(this))
+    document.addEventListener('keydown', event => {
+      const mode = this.getCurrentMode()
+      if (mode) {
+        mode.onKeyDown(event)
+        return
+      }
+      this.onKeyDown(event)
+    })
+  }
+
+  pushMode(mode) {
+    this.modeStack.push(mode)
+  }
+
+  popMode() {
+    this.modeStack.pop()
+  }
+
+  getCurrentMode() {
+    return this.modeStack[this.modeStack.length - 1]
   }
 
   onKeyDown(event) {
@@ -24,7 +44,6 @@ export default class KeyboardController {
     switch (event.key) {
 
       case 'n':
-        LOG.m(2, 'Create new item')
         this.activeLister.createNewItem()
         event.preventDefault()
         return
@@ -38,7 +57,6 @@ export default class KeyboardController {
         }
 
         event.preventDefault()
-
         return
 
       case 'ArrowUp':
@@ -50,7 +68,6 @@ export default class KeyboardController {
         }
 
         event.preventDefault()
-
         return
 
     }

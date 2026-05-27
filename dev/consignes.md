@@ -6,17 +6,13 @@
 
 Concernant le code rendu.
 
-### LOI 1.1 — Fichier zip
+### LOI 1.1
 
-Le code doit être impérativement rendu dans un fichier ZIP qui contiendra des FICHIERS ENTIERS, COMPLETS.
+Je ne suis pas ton larbin qui copie-colle des bouts de code un peu partout. Dès qu’il y en a deux, tu redonnes l’intégralité du code du fichier.
 
-#### LOI 1.1.1
+### LOI 1.1 — les retours à la ligne
 
-Les fichiers concernant les tests doivent IMPÉRATIVEMENT être mis dans un fichier de nom **tests.zip**.
 
-#### LOI 1.1.2
-
-Les fichiers concernant l’application doivent IMPÉRATIVEMENT être mis dans un fichier de nom **app.zip**.
 
 #### LOI 1.1.3
 
