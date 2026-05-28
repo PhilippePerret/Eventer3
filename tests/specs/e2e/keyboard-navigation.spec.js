@@ -1,7 +1,7 @@
 import { installFixtures } from '../../helpers/install-fixtures'
 installFixtures('many-projects')
 
-import { test, expect } from '@playwright/test'
+import { test, expect } from './__setup__.js'
 
 test(
   'les flèches haut/bas permettent de naviguer dans un Lister',

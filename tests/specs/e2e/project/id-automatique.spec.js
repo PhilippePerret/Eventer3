@@ -4,7 +4,7 @@ import { test, expect } from '../../e2e/__setup__.js'
 
 test('la saisie du titre d’un nouveau projet crée automatiquement son identifiant logique', async ({ page }) => {
   console.log('\n=== TEST AUTO ID PROJET ===\n')
-  const projectsPath = path.resolve('../data/projects.json')
+  const projectsPath = path.resolve('../data/lof-projects.json')
   console.log('-> ouverture application')
   await page.goto('/')
   console.log(await page.content())

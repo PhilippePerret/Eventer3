@@ -1,0 +1,111 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: project/new-project-cancelled.spec.js >> la touche Escape après n annule complètement la création du projet
+- Location: specs/e2e/project/new-project-cancelled.spec.js:5:1
+
+# Error details
+
+```
+Error: expect(locator).toHaveCount(expected) failed
+
+Locator:  locator('.project-item')
+Expected: 3
+Received: 5
+Timeout:  5000ms
+
+Call log:
+  - Expect "toHaveCount" with timeout 5000ms
+  - waiting for locator('.project-item')
+    14 × locator resolved to 5 elements
+       - unexpected value "5"
+
+```
+
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]: Ça c’est un Été Super !
+      - generic [ref=e5]: ca-cest-un-ete-super
+    - generic [ref=e6]:
+      - generic [ref=e7]: project-a
+      - generic [ref=e8]: project-a
+    - generic [ref=e9]:
+      - generic [ref=e10]: project-b
+      - generic [ref=e11]: project-b
+    - generic [ref=e12]:
+      - generic [ref=e13]: project-c
+      - generic [ref=e14]: project-c
+    - generic [ref=e15]:
+      - generic [ref=e16]: Projet caché
+      - generic [ref=e17]: project-hidden
+  - contentinfo "Raccourcis clavier" [ref=e18]
+```
+
+# Test source
+
+```ts
+  1  | import fs from 'fs'
+  2  | import path from 'path'
+  3  | import { test, expect } from '../../e2e/__setup__.js'
+  4  | 
+  5  | test('la touche Escape après n annule complètement la création du projet', async ({ page }) => {
+  6  | 
+  7  |   console.log('\n=== TEST ANNULATION NOUVEAU PROJET ===\n')
+  8  | 
+  9  |   const projectsPath = path.resolve('../data/lof-projects.json')
+  10 | 
+  11 |   console.log('-> ouverture application')
+  12 |   await page.goto('/')
+  13 | 
+  14 |   const itemsBefore = page.locator('.project-item')
+  15 | 
+  16 |   console.log('-> vérification nombre initial projets')
+> 17 |   await expect(itemsBefore).toHaveCount(3)
+     |                             ^ Error: expect(locator).toHaveCount(expected) failed
+  18 | 
+  19 |   console.log('-> vérification sélection initiale')
+  20 |   await expect(itemsBefore.nth(0)).toHaveClass(/selected/)
+  21 |   await expect(itemsBefore.nth(1)).not.toHaveClass(/selected/)
+  22 |   await expect(itemsBefore.nth(2)).not.toHaveClass(/selected/)
+  23 | 
+  24 |   console.log('-> lecture backend avant création')
+  25 |   const projectsBefore = JSON.parse(fs.readFileSync(projectsPath, 'utf8'))
+  26 | 
+  27 |   console.log('-> création nouveau projet')
+  28 |   await page.keyboard.press('n')
+  29 | 
+  30 |   console.log('-> annulation création')
+  31 |   await page.keyboard.press('Escape')
+  32 | 
+  33 |   const itemsAfter = page.locator('.project-item')
+  34 | 
+  35 |   console.log('-> vérification nombre final projets')
+  36 |   await expect(itemsAfter).toHaveCount(3)
+  37 | 
+  38 |   console.log('-> vérification disparition inputs')
+  39 |   await expect(page.locator('input')).toHaveCount(0)
+  40 | 
+  41 |   console.log('-> vérification restauration sélection')
+  42 |   await expect(itemsAfter.nth(0)).toHaveClass(/selected/)
+  43 |   await expect(itemsAfter.nth(1)).not.toHaveClass(/selected/)
+  44 |   await expect(itemsAfter.nth(2)).not.toHaveClass(/selected/)
+  45 | 
+  46 |   console.log('-> lecture backend après annulation')
+  47 |   const projectsAfter = JSON.parse(fs.readFileSync(projectsPath, 'utf8'))
+  48 | 
+  49 |   console.log('-> vérification backend inchangé')
+  50 |   expect(projectsAfter).toEqual(projectsBefore)
+  51 | 
+  52 |   console.log('\n=== FIN TEST ANNULATION NOUVEAU PROJET ===\n')
+  53 | 
+  54 | })
+```

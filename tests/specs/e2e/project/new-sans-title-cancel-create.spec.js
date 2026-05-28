@@ -1,12 +1,12 @@
 import fs from 'fs'
 import path from 'path'
-import { test, expect } from '@playwright/test'
+import { test, expect } from '../../e2e/__setup__.js'
 
 test('la touche Entrée sans titre annule complètement la création du projet', async ({ page }) => {
 
   console.log('\n=== TEST VALIDATION VIDE NOUVEAU PROJET ===\n')
 
-  const projectsPath = path.resolve('../data/projects.json')
+  const projectsPath = path.resolve('../data/lof-projects.json')
 
   console.log('-> ouverture application')
   await page.goto('/')

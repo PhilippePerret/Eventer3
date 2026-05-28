@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './__setup__.js'
 
 test('la liste des projets possède les bonnes classes CSS', async ({ page }) => {
 

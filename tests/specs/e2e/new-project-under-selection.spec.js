@@ -1,7 +1,7 @@
 import { installFixtures } from '../../helpers/install-fixtures'
 installFixtures('many-projects')
 
-import { test, expect } from '@playwright/test'
+import { test, expect } from './__setup__.js'
 
 test('la touche n crée un nouveau projet vide au-dessus de la sélection', async ({ page }) => {
   await page.goto('/')
