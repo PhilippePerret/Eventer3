@@ -18,9 +18,6 @@ test('Lister peut être utilisé comme classe abstraite', () => {
 test('Lister peut classer les items', () => {
   class TestLister extends Lister {}
   const obj = new TestLister()
-  const itA = new Item({id:'i1', title: "Premier", pos: 100})
-  const itB = new Item({id:'i2', title: "Second", pos: 200})
-  const itC = new Item({id:'i3', title: "Troisième", pos: 300})
   var itemsIni = [itB, itC, itA]
   const newOrder = obj.sortItems(itemsIni)
   assert.deepEqual(newOrder, [itA, itB, itC] )

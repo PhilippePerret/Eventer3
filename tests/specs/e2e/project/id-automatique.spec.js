@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { test, expect } from '@playwright/test'
 
-test.only('la saisie du titre d’un nouveau projet crée automatiquement son identifiant logique', async ({ page }) => {
+test('la saisie du titre d’un nouveau projet crée automatiquement son identifiant logique', async ({ page }) => {
   page.on('console', msg => console.log(msg.text()))
   console.log('\n=== TEST AUTO ID PROJET ===\n')
   const projectsPath = path.resolve('../data/projects.json')

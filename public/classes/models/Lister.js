@@ -39,10 +39,6 @@ export default class Lister {
     return `${this.breadcrumbs.join('/')}/${this.id}`
   }
 
-  sortItems(items = []) {
-    return items.sort((itemA, itemB) => Number(itemA?.pos ?? 0) - Number(itemB?.pos ?? 0))
-  }
-
   async loadItems() {
     this.items = []
     for (const itemId of this.item_ids) {
@@ -52,7 +48,6 @@ export default class Lister {
       if (itemData.active === false) continue
       this.items.push(new this.itemClass(itemData))
     }
-    this.items = this.sortItems(this.items)
   }
 
   render() {
@@ -113,6 +108,13 @@ export default class Lister {
     if (direction > 0) targetItemElement.after(movedItemElement)
     else targetItemElement.before(movedItemElement)
     this.selectedIndex = targetIndex
+    this.scheduleItemsSave() // voir plus tard, mais certainement que ce sont les données du Lister seulement qu'il faudra sauver
+  }
+
+
+  scheduleItemsSave() {
+    clearTimeout(this.itemsSaveTimer)
+    this.itemsSaveTimer = setTimeout(() => { void this.saveItems() }, 300)
   }
 
   createNewItem() {
@@ -140,8 +142,8 @@ export default class Lister {
     this.item_ids.splice(insertionIndex, 0, item.id)
     LOG.m(2, 'Lister.commitNewItem.afterInsert', { after: [...this.item_ids] })
     this.domItems.splice(insertionIndex, 0, itemElement)
-    await item.save()
-    await this.save()
+    await ListerRepository.saveItems(this)
+    await ListerRepository.save(this)
     LOG.m(2, 'Lister.commitNewItem.saved', { item_ids: [...this.item_ids] })
   }
 

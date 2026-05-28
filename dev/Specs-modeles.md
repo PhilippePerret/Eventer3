@@ -140,7 +140,6 @@ classDiagram
 		+Type[] type
 		+string color
 		+boolean checked
-		+number pos
 		+State state
 		+number duration
 		+string path
@@ -202,8 +201,6 @@ classDiagram
 
 **`color`** est la couleur hexadécimale de fond de l’item (qui déterminera aussi une couleur de police adaptée). sera surtout utile pour les brins dans un premier temps, mais devra être applicable à toutes les autres classes (Projets, Personnages, etc.).
 
-**`pos`** permet de gérer l’ordre des éléments. Voir [gestion de l’ordre](#gestion-ordre).
-
 **`checked`** permet de cocher l’item (coche en regard à gauche du title de l’item). C’est une donnée persistante.
 
 **`duration`** est la durée en secondes.
@@ -212,66 +209,113 @@ classDiagram
 
 **`title`** pour les `Perso`s sert de « pseudo », c’est-à-dire la valeur par défaut pour l’affichage.
 
+
+
+---
+
+## Architecture de persistance
+
+*(rédigé à la base par ChatGPT d’après mon explication, puis arrangé par moi)*
+
+`Lister` et `Item` sont le cœur du système.
+
+Un `Lister` contient des `Item`.
+ Un `Item` peut lui-même posséder un `Lister` ou pas. Quand un Item possède un `Lister`, il possède un fichier `<id item>.json` qui décrit son `Lister`. Sinon, il ne possède pas ce fichier.
+ L’application fonctionne donc comme une ***arborescence récursive***.
+
+<span style="color:red;font-weight:bold;">IMPORTANT :</span>
+
+- **les chemins de persistance NE SONT PAS des données persistantes ;**
+- **aucun objet ne stocke de `breadcrumbs` ;**
+- **aucun objet ne stocke son chemin disque ;**
+- **le chemin est TOUJOURS déduit du contexte runtime courant.**
+
+Le principe fondamental est :
+
+**à tout moment, l’application se trouve quelque part dans l’arborescence.**
+
+Le contexte courant détermine donc automatiquement où lire et écrire les données.
+
+Exemple :
+
+Et ainsi de suite récursivement.
+
+Donc :
+
+- le lister racine `projects` (existe toujours, avec un premier projet modèle)
+   → fichier :
+   `/data/projects.json`
+   
+- un item `mon-premier-projet` est créé
+  
+   → son id est trouve dans `projects.json` dans `item_ids`
+   → ses données persistantes se trouve dans `/data/projects/__items.js` (qui est une liste Array qui contient TOUS les Items de l’élément courant, donc de `projects`.
+   → IL NE POSSÈDE PAS ENCORE DE FICHIER .json Lister
+   
+- on « rentre » pour la première fois dans `mon-premier-projet` (flèche droite)
+  
+   SI on revient tout de suite dans `projects` (flèche gauche), il ne se passe rien, on revient juste en arrière.
+   
+   Mais SI on crée un premier Item dans ce nouveau Lister, ALORS : 
+   → `mon-premier-projet` devient un Item qui possède un Lister
+   → ce Lister est enregistré dans :
+   `/data/projects/mon-premier-projet.json`
+   → les Items de ce Lister sont consignés dans :
+   `/data/projects/mon-premier-projet/__items.json`
+   (comme pour `projects`, c’est EXACTEMENT la même chose)
+   
+- donc, imaginons qu’on crée pour `mon-premier-projet` un item `acte-i`
+  
+   → on met `acte-i` dans `item_ids` de `mon-premier-projet.json`
+   → on met les données de `acte-i` dans :
+   `/data/projects/mon-premier-projet/__items.json`
+   → comme il est juste un Item pour le moment, il n’y a PAS de fichier `acte-i.json` dans `/data/projects/mon-premier-projet/`
+   
+- si on « entre » dans `acte-i` (flèche droite) et qu’on crée un premier Item, `acte-i` possède lui aussi son Lister
+   → le fichier de son Lister est créé :
+   
+   `/data/projects/mon-premier-projet/acte-i.json`
+   
+   → ses Items sont persistés dans
+   ``/data/projects/mon-premier-projet/acte-i/__items.json`
+   → les `id`s de ses Items sont consignés dans `item_ids` de `acte-i.json`
+   
+- etc. etc. dans une imbrication INFINIE
+
+- un `Item` connait donc implicitement son emplacement ;
+- non pas grâce à une donnée persistée ;
+- mais grâce au contexte runtime du `Lister` courant.
+
+Note importante : l’ordre des items est maintenu par l’ordre nature dans la liste Array des items, dans les fichiers `__items.json` (cf. [Gestion de l’ordre](#gestion-ordre) ci-dessous).
+
+Conséquence architecturale :
+
+AUCUN code ne doit :
+
+- reconstruire naïvement des chemins ;
+- concaténer arbitrairement des fragments ;
+- stocker des breadcrumbs persistants ;
+- inventer des chemins techniques locaux.
+
+Le chemin de persistance doit toujours être résolu à partir :
+
+- du contexte courant ;
+- du lister actif ;
+- et de la hiérarchie runtime réelle.
+
+
+
+<a name="gestion-ordre"></a>
+
 ---
 
 ## Gestion de l’ordre
 
-L’ordre des `Item`s dans l’affichage d’un `Lister` se gère avec leur propriété `pos` en utilisant le *Lexicographic ordering*. On donne des positions de 100 en 100 au départ.
-
-~~~
- id    	pos
----------------
- i1 		100
- i2			200
- i3			300
-~~~
-
-En partant du principe où `nextItem` est l’item qui se retrouvera après l’élément à déplacer après le déplacement et que `prevItem` est l’item qui se retrouvera avant l’élément après déplacement, le calcul de la nouvelle position est : 
-
-~~~javascript
-
-let prevPos, nextPos
-
-if ( !prevItem ) {
-  prevPos = 0
-  nextPos = nextItem.pos
-} else if ( !nextItem ) {
-  prevPos = prevItem.pos
-  nextPos = prevItem.pos + 50
-} else {
-  prevPos = prevItem.pos
-  nextPos = nextItem.pos
-}
-
-// En cas d'espace insuffisant
-if ( Math.abs(nextPos - prevPos) < 2 ) {
-	// TODO Il faut rationnaliser les pos
-  //      et revenir ici.
-  return // ?
-}
-
-let newPos = ( prevPos + nextPos ) / 2
-~~~
-
-Par exemple, si on veut placer `i2` avant `i1` : 
-
-~~~javascript
-prevPos = 0 // pas de prevItem
-nextPos = 100
-/* => */ newPos  = (0 + 100) / 2
-~~~
-
-Si on veut déplacer `i1` après `i2` :
-
-~~~javascript
-prevPos = i2.pos = 200
-nextPos = i3.pos = 300
-/* => */ newPos  = (200 + 300) / 2 = 250
-~~~
+L’ordre des `Item`s dans l’affichage d’un `Lister` se gère maintenant par l’ordre naturel dans les fichier `__items.json` qui consignent les données de tous les items du Lister 
 
 ### Différer l’enregistrement
 
-Pour ne pas multiplier les enregistrement en cas de déplacement en rafale, on différera l’enregistrement persistant de la nouvelle position de l’item.
+Pour ne pas multiplier les enregistrement massif en cas de déplacement en rafale, on différera l’enregistrement persistant des items.
 
 ---
 

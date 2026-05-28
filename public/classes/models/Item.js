@@ -1,5 +1,7 @@
 import LOG from '../../system/LOG.js'
 import Texte from '../../system/Texte.js'
+import {ItemDataMapper} from '../repositories/Mapper.js'
+
 
 export default class Item {
 
@@ -31,13 +33,13 @@ export default class Item {
 
 
   constructor(data = {}) {
+    data = ItemDataMapper.toRuntime(data)
     this.id = data.id ?? null
     this.title = data.title ?? ''
     this.hasLister = data.hasLister ?? false
     this.type = data.type ?? []
     this.color = data.color ?? null
     this.checked = data.checked ?? false
-    this.pos = data.pos ?? 0
     this.state = data.state ?? 0
     this.duration = data.duration ?? null
     this.path = data.path ?? null
