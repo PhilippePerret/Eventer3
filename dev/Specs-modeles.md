@@ -88,7 +88,6 @@ classDiagram
 		+string[] perso_ids
 		+LastsId   lasts_id
 		+Options options
-		+Object[] breadcrumbs
 		+string path
 		+Date created_at
 		+Date updated_at
@@ -124,7 +123,11 @@ classDiagram
 
 `active` ne sert que pour les projets, pour les activer et les activer. Pour les autres *Lister*, ils sont toujours actifs
 
-**`path`** est le chemin d’accès absolu au lister, pour le décrire plus précisément. ATTENTION : pour les *Lister* de type `project`, ça correspond au chemin d’accès au dossier principal du projet. Tous les autres `path` (de *Lister* ou d’*Item*) pourront être estimé par rapport à lui.
+**`path`** est le chemin d’accès absolu au lister, pour le décrire plus précisément. 
+
+<span style="color:#FF0000;">**ATTENTION : CE CHEMIN N’A RIEN À VOIR AVEC LE CHEMIN D’ACCÈS AU FICHIER DANS `/data` !!!! C’EST UN FICHIER QUELCONQUE, N’IMPORTE OÙ, DÉFINI OU PAS, QUI CONTIENT DES RENSEIGNEMENTS SUPPLÉMENTAIRES SUR L’ITEM. **</span>
+
+ATTENTION : pour les *Lister* de type `project`, ça correspond au chemin d’accès au dossier principal du projet. Tous les autres `path` (de *Lister* ou d’*Item*) pourront être estimé par rapport à lui.
 
 ### Item
 

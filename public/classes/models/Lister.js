@@ -17,7 +17,6 @@ export default class Lister {
     this.perso_ids = data.perso_ids || raise('Lister: data.perso_ids missing', data)
     this.lasts_id = data.lasts_id ?? { item: 0, brin: 0, perso: 0 }
     this.options = data.options ?? { colorizeItemsWithFirstBrin: false }
-    this.breadcrumbs = data.breadcrumbs ?? []
     this.path = data.path ?? null
     this.created_at = data.created_at ?? null
     this.updated_at = data.updated_at ?? null
