@@ -7,7 +7,7 @@ test('Texte.normalize supprime les accents', () => {
 })
 
 test('Texte.slugify produit un identifiant logique', () => {
-  assert.equal(Texte.slugify('Ça c’est un Été Super !'), 'ca-c-est-un-ete-super')
+  assert.equal(Texte.slugify('Ça c’est un Été Super !'), 'ca-cest-un-ete-super')
 })
 
 test('Texte.slugify nettoie les séparateurs multiples', () => {

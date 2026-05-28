@@ -1,6 +1,6 @@
 import Item from './Item.js'
 import LOG from '../../system/LOG.js'
-import raise from '../../system/raise.js'
+import { raise } from '../../system/Error.js'
 
 export default class Lister {
 

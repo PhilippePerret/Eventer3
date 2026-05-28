@@ -7,8 +7,13 @@ export default class Projects extends Lister {
 
   static async init() {
     LOG.m(1, 'Init projects')
-    const response = await fetch('/data/projects.json')
-    const projectsData = await response.json()
+    let projectsData = {}
+    try {
+      const response = await fetch('/data/projects.json')
+      if (response.ok) projectsData = await response.json()
+    } catch(error) {
+      projectsData = {}
+    }
     const keyboardController = new KeyboardController()
     keyboardController.observe()
     const projects = new Projects({ ...projectsData, keyboardController })

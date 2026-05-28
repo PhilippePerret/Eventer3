@@ -8,6 +8,7 @@ test.only('la saisie du titre d’un nouveau projet crée automatiquement son id
   const projectsPath = path.resolve('../data/projects.json')
   console.log('-> ouverture application')
   await page.goto('/')
+  console.log(await page.content())
   console.log('-> création nouveau projet')
   await page.locator('body').click()
   await page.keyboard.press('n')
