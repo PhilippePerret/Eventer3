@@ -1,9 +1,8 @@
 import fs from 'fs'
 import path from 'path'
-import { test, expect } from '@playwright/test'
+import { test, expect } from '../../e2e/__setup__.js'
 
 test('la saisie du titre d’un nouveau projet crée automatiquement son identifiant logique', async ({ page }) => {
-  page.on('console', msg => console.log(msg.text()))
   console.log('\n=== TEST AUTO ID PROJET ===\n')
   const projectsPath = path.resolve('../data/projects.json')
   console.log('-> ouverture application')

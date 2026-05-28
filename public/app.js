@@ -1,5 +1,5 @@
+window.addEventListener('error', event => console.error(event.error))
 console.log("-> app.js")
 import App from './classes/App.js'
 
-const app = new App()
-app.start()
+new App().start()

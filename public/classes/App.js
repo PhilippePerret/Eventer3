@@ -4,11 +4,11 @@ import LOG from '../system/LOG.js'
 export default class App {
 
   async start() {
-    LOG.on(3)
+    LOG.on(4)
 
     LOG.m(1, 'Start application')
 
-    await Projects.init()
+    // await Projects.init()
 
     LOG.m(1, 'Application started, projets affichés')
 

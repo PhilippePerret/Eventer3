@@ -43,9 +43,11 @@ export default class Lister {
 
   async loadItems() {
     this.items = []
+    LOG.m(3, 'LOAD ITEMS URL', `/data/${this.contextPath}/__items.json`)
     const response = await fetch(`/data/${this.contextPath}/__items.json`)
     if (!response.ok) return
     const itemsData = await response.json()
+    LOG.m(1, 'ITEMS DATA', itemsData)
     itemsData.forEach(itemData => this.items.push(new this.itemClass(itemData)))
   }
   

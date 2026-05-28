@@ -68,6 +68,31 @@ Eventer2/
 
 ---
 
+# Tests
+
+## Infrastructure Playwright
+
+**Tous les tests Playwright doivent importer :**
+
+~~~js
+# Régler "../.." en fonction de la profondeur
+import { test, expect } from '../../e2e/__setup__.js'
+~~~
+
+et jamais directement depuis '@playwright/test'.
+
+Le fichier __setup__.js centralise :
+- remontée console navigateur
+- hooks globaux
+- instrumentation Playwright
+- futures extensions runtime de test
+
+---
+
+
+
+
+
 # Backend
 
 
