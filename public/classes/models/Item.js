@@ -1,4 +1,5 @@
 import LOG from '../../system/LOG.js'
+import Texte from '../../system/Texte.js'
 
 export default class Item {
 
@@ -119,6 +120,7 @@ export default class Item {
         this.cancelEditor(keyboardController, itemElement)
         return
       case 'Enter':
+        LOG.m(2, 'ENTER VALIDATION', { id: this.id, title: this.title, temporary: this.__isTemporary })
         event.preventDefault()
         if (!inputs[0].value.trim()) {
           this.cancelEditor(keyboardController, itemElement)
@@ -130,13 +132,8 @@ export default class Item {
         const insertionIndex = lister.selectedIndex
         if (this.__isTemporary) {
           delete this.__isTemporary
-          lister.items.splice(insertionIndex, 0, this)
-          lister.item_ids.splice(insertionIndex, 0, this.id)
-          lister.domItems.splice(insertionIndex, 0, itemElement)
+          await lister.commitNewItem(this, itemElement, insertionIndex)
         }
-        LOG.m(1, 'Item.beforeSave', { insertionIndex, itemId: this.id, itemsLength: lister.items.length })
-        if (typeof lister.save === 'function') await lister.save()
-        LOG.m(1, 'Item.saved', { items: lister.items.map(item => item.id) })
         keyboardController.popMode()
         LOG.m(2, 'Item.edition.committed', { id: this.id, title: this.title })
         return

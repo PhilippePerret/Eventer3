@@ -1,6 +1,7 @@
-import Item from './Item.js'
 import LOG from '../../system/LOG.js'
 import { raise } from '../../system/Error.js'
+import Item from './Item.js'
+import ListerRepository from '../repositories/ListerRepository.js'
 
 export default class Lister {
 
@@ -128,6 +129,21 @@ export default class Lister {
       currentItemElement
     })
     LOG.m(2, 'Lister.createNewItem.done', { items: this.items.length, domItems: this.domItems.length })
+  }
+
+  async save() {
+    await ListerRepository.save(this)
+  }
+
+  async commitNewItem(item, itemElement, insertionIndex) {
+    LOG.m(2, 'Lister.commitNewItem', { itemId: item.id, insertionIndex, before: [...this.item_ids] })
+    this.items.splice(insertionIndex, 0, item)
+    this.item_ids.splice(insertionIndex, 0, item.id)
+    LOG.m(2, 'Lister.commitNewItem.afterInsert', { after: [...this.item_ids] })
+    this.domItems.splice(insertionIndex, 0, itemElement)
+    await item.save()
+    await this.save()
+    LOG.m(2, 'Lister.commitNewItem.saved', { item_ids: [...this.item_ids] })
   }
 
   clearSelection() {

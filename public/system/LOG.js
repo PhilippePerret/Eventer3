@@ -29,7 +29,12 @@ export default class LOG {
 
     if (messageLevel > this.level) return
 
-    console.log(`[LOG ${messageLevel}]`, message, ...messagePayload)
+    const len = 4 - messageLevel
+    var pref = '🥁'
+    if ( len > 0 ) {
+      while ( pref.length < len ) pref = pref + '🥁'
+    }
+    console.log(`${pref}`, message, ...messagePayload)
 
   }
 
