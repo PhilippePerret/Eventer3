@@ -7,10 +7,10 @@
 ## Philosophie
 
 - outil local
-- aucune complexité inutile
+- aucune complexité inutile (=> cf. « tout basé sur `Lister`  et `Item`)
 - interface silencieuse
 - priorité absolue à la fluidité
-- zéro sensation “base de données”
+- zéro sensation « base de données »
 - développement en TDD
 - entièrement pilotable au clavier, zéro souris
 
@@ -20,7 +20,7 @@
 
 * Application ruby Sinatra (cf. app.rb)
 * l’enregistrement est automatique, transparent
-* tout clavier, presque rien à la souris
+* tout clavier, (presque) rien à la souris
 * sauvegarde en JSON
 * identifiants les plus courts possible
 * produire du code verbeux (comme le mode verbose, `--verbose`, des commandes unix) pour pouvoir suivre le message. Mais désactivable facilement.
@@ -91,9 +91,9 @@ Le fichier __setup__.js centralise :
 
 
 
-
-
 # Backend
+
+Le backend est minimal, il sert principalement à enregistrer les informations transmises par le front.
 
 
 ---

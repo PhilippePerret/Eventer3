@@ -13,15 +13,13 @@ export default class Lister {
     this.nature = data.nature ?? 'none'
     this.scale = data.scale ?? null
     this.item_ids = data.item_ids || raise('Lister: data.item_ids missing', data)
-    this.brin_ids = data.brin_ids || raise('Lister: data.brin_ids missing', data)
-    this.perso_ids = data.perso_ids || raise('Lister: data.perso_ids missing', data)
+    this.brin_ids = data.brin_ids || []
+    this.perso_ids = data.perso_ids || []
     this.lasts_id = data.lasts_id ?? { item: 0, brin: 0, perso: 0 }
     this.options = data.options ?? { colorizeItemsWithFirstBrin: false }
-    this.path = data.path ?? null
     this.created_at = data.created_at ?? null
     this.updated_at = data.updated_at ?? null
     this.keyboardController = data.keyboardController ?? null
-    // -- Ajouté au runtime --
     this.parentItem = data.parentItem ?? null
     this.items = []
     this.domItems = []
@@ -38,33 +36,42 @@ export default class Lister {
 
   get contextPath() {
     if (this.parentItem) return this.parentItem.contextPath
-    return `lof-${this.id}`
+    return this.id
+  }
+
+  get jsonPath() {
+    return `${this.contextPath}.json`
+  }
+
+  get itemsPath() {
+    return `${this.contextPath}/__items.json`
   }
 
   async loadItems() {
     this.items = []
-    LOG.m(3, 'LOAD ITEMS URL', `/data/${this.contextPath}/__items.json`)
-    const response = await fetch(`/data/${this.contextPath}/__items.json`)
+    LOG.m(3, 'LOAD ITEMS URL', `/data/${this.itemsPath}`)
+    const response = await fetch(`/data/${this.itemsPath}`)
     if (!response.ok) return
     const itemsData = await response.json()
     LOG.m(1, 'ITEMS DATA', itemsData)
-    itemsData.forEach(itemData => this.items.push(new this.itemClass(itemData)))
+    itemsData.forEach(itemData => this.items.push(new this.itemClass({ ...itemData, parentLister: this })))
   }
   
   render() {
-    const mainPanel = document.querySelector('#main-panel')
-    mainPanel.innerHTML = ''
-    mainPanel.classList.add(`${this.type}-list`)
+    const listElement = document.createElement('div')
+    listElement.classList.add(`${this.type}-list`)
     this.domItems = []
     this.items.forEach((item, itemIndex) => {
       const itemElement = item.createElement(this.type)
       if (itemIndex === this.selectedIndex) itemElement.classList.add('selected')
       if (typeof item.render === 'function') item.render(itemElement)
       this.domItems.push(itemElement)
-      mainPanel.appendChild(itemElement)
+      listElement.appendChild(itemElement)
     })
+    const mainPanel = document.querySelector('#main-panel')
+    mainPanel.classList.add(`${this.type}-list`)
     if (this.keyboardController) this.keyboardController.register(this)
-    return mainPanel
+    return listElement
   }
 
   selectItemAt(itemIndex) {
@@ -108,9 +115,9 @@ export default class Lister {
     if (direction > 0) targetItemElement.after(movedItemElement)
     else targetItemElement.before(movedItemElement)
     this.selectedIndex = targetIndex
-    this.scheduleItemsSave() // voir plus tard, mais certainement que ce sont les données du Lister seulement qu'il faudra sauver
+    this.item_ids = this.items.map(item => item.id)
+    this.scheduleItemsSave()
   }
-
 
   scheduleItemsSave() {
     clearTimeout(this.itemsSaveTimer)
@@ -122,13 +129,7 @@ export default class Lister {
     if (!this.keyboardController) throw new Error('Lister.createNewItem: keyboardController missing')
     const insertionIndex = this.selectedIndex
     const currentItemElement = this.domItems[insertionIndex]
-    this.itemClass.create({
-      type: this.type,
-      lister: this,
-      keyboardController: this.keyboardController,
-      insertionIndex,
-      currentItemElement
-    })
+    this.itemClass.create({ type: this.type, lister: this, keyboardController: this.keyboardController, insertionIndex, currentItemElement })
     LOG.m(2, 'Lister.createNewItem.done', { items: this.items.length, domItems: this.domItems.length })
   }
 
@@ -136,8 +137,14 @@ export default class Lister {
     await ListerRepository.save(this)
   }
 
+  async saveItems() {
+    await ListerRepository.saveItems(this)
+    await ListerRepository.save(this)
+  }
+
   async commitNewItem(item, itemElement, insertionIndex) {
     LOG.m(2, 'Lister.commitNewItem', { itemId: item.id, insertionIndex, before: [...this.item_ids] })
+    item.parentLister = this
     this.items.splice(insertionIndex, 0, item)
     this.item_ids.splice(insertionIndex, 0, item.id)
     LOG.m(2, 'Lister.commitNewItem.afterInsert', { after: [...this.item_ids] })

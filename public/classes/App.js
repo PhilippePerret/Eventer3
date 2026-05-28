@@ -8,7 +8,7 @@ export default class App {
 
     LOG.m(1, 'Start application')
 
-    // await Projects.init()
+    await Projects.init()
 
     LOG.m(1, 'Application started, projets affichés')
 

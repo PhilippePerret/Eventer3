@@ -4,7 +4,7 @@ import { raise } from '../../system/Error.js'
 export default class ListerRepository {
 
   static async save(lister) {
-    const response = await fetch(`/data/${lister.contextPath}.json`, {
+    const response = await fetch(`/data/${lister.jsonPath}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ item_ids: lister.item_ids })
@@ -14,7 +14,7 @@ export default class ListerRepository {
 
   static async saveItems(lister) {
     const items = lister.items.map(item => ItemDataMapper.toPersistence(item))
-    const response = await fetch(`/data/${lister.contextPath}/__items.json`, {
+    const response = await fetch(`/data/${lister.itemsPath}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(items)

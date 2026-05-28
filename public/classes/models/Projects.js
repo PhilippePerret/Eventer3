@@ -9,7 +9,7 @@ export default class Projects extends Lister {
     LOG.m(1, 'Init projects')
     let projectsData = {}
     try {
-      const response = await fetch('/data/projects.json')
+      const response = await fetch('/data/lof-projects.json')
       if (response.ok) projectsData = await response.json()
     } catch(error) {
       projectsData = {}
@@ -20,9 +20,7 @@ export default class Projects extends Lister {
     LOG.m(1, 'BEFORE LOAD ITEMS')
     await projects.loadItems()
     LOG.m(1, 'ITEMS', projects.items)
-    const projectsListElement = projects.render()
-    const mainPanel = document.querySelector('#main-panel')
-    mainPanel.appendChild(projectsListElement)
+    projects.render()
     LOG.m(1, 'Projects ready')
     return projects
   }

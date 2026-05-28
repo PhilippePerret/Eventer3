@@ -215,12 +215,12 @@ classDiagram
 
 ## Architecture de persistance
 
-*(rédigé à la base par ChatGPT d’après mon explication, puis arrangé par moi)*
+*(rédigé à la base par ChatGPT d’après mon explication, puis arrangé conséquemment par moi)*
 
 `Lister` et `Item` sont le cœur du système.
 
 Un `Lister` contient des `Item`.
- Un `Item` peut lui-même posséder un `Lister` ou pas. Quand un Item possède un `Lister`, il possède un fichier `<id item>.json` qui décrit son `Lister`. Sinon, il ne possède pas ce fichier.
+ Un `Item` peut lui-même posséder un `Lister` ou pas. Quand un Item possède un `Lister`, il possède un fichier `lof-<id item>.json` qui décrit son `Lister` (**`lof`** pour « lister of »).  Sinon, il ne possède pas ce fichier.
  L’application fonctionne donc comme une ***arborescence récursive***.
 
 <span style="color:red;font-weight:bold;">IMPORTANT :</span>
@@ -244,12 +244,12 @@ Donc :
 
 - le lister racine `projects` (existe toujours, avec un premier projet modèle)
    → fichier :
-   `/data/projects.json`
+   `/data/lof-projects.json`
    
 - un item `mon-premier-projet` est créé
   
-   → son id est trouve dans `projects.json` dans `item_ids`
-   → ses données persistantes se trouve dans `/data/projects/__items.js` (qui est une liste Array qui contient TOUS les Items de l’élément courant, donc de `projects`.
+   → son id est trouve dans `lof-projects.json` dans `item_ids`
+   → ses données persistantes se trouve dans `/data/lof-projects/__items.js` (qui est une liste Array qui contient TOUS les Items de l’élément courant, donc de `projects`.
    → IL NE POSSÈDE PAS ENCORE DE FICHIER .json Lister
    
 - on « rentre » pour la première fois dans `mon-premier-projet` (flèche droite)
@@ -259,26 +259,26 @@ Donc :
    Mais SI on crée un premier Item dans ce nouveau Lister, ALORS : 
    → `mon-premier-projet` devient un Item qui possède un Lister
    → ce Lister est enregistré dans :
-   `/data/projects/mon-premier-projet.json`
+   `/data/lof-projects/lof-mon-premier-projet.json`
    → les Items de ce Lister sont consignés dans :
-   `/data/projects/mon-premier-projet/__items.json`
+   `/data/lof-projects/lof-mon-premier-projet/__items.json`
    (comme pour `projects`, c’est EXACTEMENT la même chose)
    
 - donc, imaginons qu’on crée pour `mon-premier-projet` un item `acte-i`
   
-   → on met `acte-i` dans `item_ids` de `mon-premier-projet.json`
+   → on met `acte-i` dans `item_ids` de `lof-mon-premier-projet.json`
    → on met les données de `acte-i` dans :
-   `/data/projects/mon-premier-projet/__items.json`
-   → comme il est juste un Item pour le moment, il n’y a PAS de fichier `acte-i.json` dans `/data/projects/mon-premier-projet/`
+   `/data/lof-projects/lof-mon-premier-projet/__items.json`
+   → comme il est juste un Item pour le moment, il n’y a PAS de fichier `lof-acte-i.json` dans `/data/lof-projects/lof-mon-premier-projet/`
    
 - si on « entre » dans `acte-i` (flèche droite) et qu’on crée un premier Item, `acte-i` possède lui aussi son Lister
    → le fichier de son Lister est créé :
    
-   `/data/projects/mon-premier-projet/acte-i.json`
+   `/data/lof-projects/lof-mon-premier-projet/lof-acte-i.json`
    
    → ses Items sont persistés dans
-   ``/data/projects/mon-premier-projet/acte-i/__items.json`
-   → les `id`s de ses Items sont consignés dans `item_ids` de `acte-i.json`
+   ``/data/lof-projects/lof-mon-premier-projet/lof-acte-i/__items.json`
+   → les `id`s de ses Items sont consignés dans `item_ids` de `lof-acte-i.json`
    
 - etc. etc. dans une imbrication INFINIE
 
@@ -311,11 +311,21 @@ Le chemin de persistance doit toujours être résolu à partir :
 
 ## Gestion de l’ordre
 
-L’ordre des `Item`s dans l’affichage d’un `Lister` se gère maintenant par l’ordre naturel dans les fichier `__items.json` qui consignent les données de tous les items du Lister 
+~~L’ordre des `Item`s dans l’affichage d’un `Lister` se gère maintenant par l’ordre naturel dans les fichier `__items.json` qui consignent les données de tous les items du Lister~~ 
+
+NON : Maintenant, l’ordre se gère dans la donnée `item_ids` des données du Lister.
+
+Et plus tard : dans __items.json, il y aura un Hash/Object avec en clé l’identifiant de l’Item et en valeur ses données. Ce qui fera : 
+
+1)  retrouver les données en parcourant `item_ids` sera un jeu d’enfant
+2) enregistrer les modifications d’un Item pourra se faire simplement en envoyant les nouvelles données (ou même : les seules propriétés changeantes  !) et en backend, le programme se chargera de : 
+   1) lire le fichier `__items.json` complet
+   2) modifier les données de l’Item à corriger
+   3) enregistrer le `__items.json` modifié.
 
 ### Différer l’enregistrement
 
-Pour ne pas multiplier les enregistrement massif en cas de déplacement en rafale, on différera l’enregistrement persistant des items.
+Pour ne pas multiplier les enregistrement massif **en cas de déplacement en rafale**, on différera l’enregistrement persistant des items.
 
 ---
 

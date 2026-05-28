@@ -1,15 +1,15 @@
 {
   "id": "projects",
   "title": "Liste des projets",
+  "hasLister": true,
   "type": "project",
   "item_ids": [
-    "model"
+    "demo",
+    "digest"
   ],
-  "perso_ids": [],
   "brin_ids": [],
+  "perso_ids": [],
   "lasts_id": {
-    "item": 1,
-    "brin": 0,
-    "perso": 0
+    "item": 1
   }
 }

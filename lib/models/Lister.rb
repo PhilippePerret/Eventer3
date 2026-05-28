@@ -5,56 +5,48 @@ class Lister
 
   class << self
 
-    def create_minimal_data(data_dir)
+    def create_minimal_data
       lister = new(minimal_data)
-      lister.save(data_dir)
-      lister.create_minimal_items(data_dir)
-    end
-
-    def sublist_keys
-      []
+      lister.save
+      lister.create_minimal_items
     end
 
   end
 
   attr_reader :data
 
-  def initialize(data)
+  def initialize(data, parent_context_path: nil)
     @data = data
+    @parent_context_path = parent_context_path
   end
 
   def id
     data[:id]
   end
 
-  def folder_path(data_dir)
-    File.join(data_dir, id)
+  def context_path
+    [@parent_context_path, "lof-#{id}"].compact.join('/')
   end
 
-  def json_path(data_dir)
-    File.join(data_dir, "#{id}.json")
+  def folder_path
+    File.join(DATA_DIR, context_path)
   end
 
-  def save(data_dir)
-    FileUtils.mkdir_p(folder_path(data_dir))
-
-    File.write(
-      json_path(data_dir),
-      JSON.pretty_generate(data)
-    )
-
-    write_sublist(data_dir, :items)
-
-    self.class.sublist_keys.each do |key|
-      write_sublist(data_dir, key)
-    end
+  def json_path
+    File.join(DATA_DIR, "#{context_path}.json")
   end
 
-  def write_sublist(data_dir, key)
-    File.write(
-      File.join(folder_path(data_dir), "__#{key}.json"),
-      JSON.pretty_generate(data[key] || [])
-    )
+  def save
+    FileUtils.mkdir_p(folder_path)
+    File.write(json_path, JSON.pretty_generate(data))
+  end
+
+  def save_items(items)
+    File.write(File.join(folder_path, '__items.json'), JSON.pretty_generate(items))
+  end
+
+  def create_minimal_items
+    save_items([])
   end
 
 end
