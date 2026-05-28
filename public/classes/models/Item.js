@@ -48,6 +48,8 @@ export default class Item {
     this.badge = data.badge ?? null
     this.patronyme = data.patronyme ?? null
     this.fonction = data.fonction ?? null
+    // -- ajouté au runtime --
+    this.parentLister = data.parentLister ?? null
   }
 
   createElement(type) {

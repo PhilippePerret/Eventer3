@@ -21,6 +21,8 @@ export default class Lister {
     this.created_at = data.created_at ?? null
     this.updated_at = data.updated_at ?? null
     this.keyboardController = data.keyboardController ?? null
+    // -- Ajouté au runtime --
+    this.parentItem = data.parentItem ?? null
     this.items = []
     this.domItems = []
     this.selectedIndex = 0
@@ -34,22 +36,19 @@ export default class Lister {
     this._itemClass = value
   }
 
-  get dataFolder() {
-    if (this.breadcrumbs.length === 0) return this.id
-    return `${this.breadcrumbs.join('/')}/${this.id}`
+  get contextPath() {
+    if (this.parentItem) return this.parentItem.contextPath
+    return this.id
   }
 
   async loadItems() {
     this.items = []
-    for (const itemId of this.item_ids) {
-      const response = await fetch(`/data/${this.dataFolder}/${itemId}.json`)
-      if (!response.ok) continue
-      const itemData = await response.json()
-      if (itemData.active === false) continue
-      this.items.push(new this.itemClass(itemData))
-    }
+    const response = await fetch(`/data/${this.contextPath}/__items.json`)
+    if (!response.ok) return
+    const itemsData = await response.json()
+    itemsData.forEach(itemData => this.items.push(new this.itemClass(itemData)))
   }
-
+  
   render() {
     const listElement = document.createElement('div')
     listElement.classList.add(`${this.type}-list`)
