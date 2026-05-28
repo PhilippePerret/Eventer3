@@ -55,14 +55,18 @@ export default class Lister {
     const mainPanel = document.querySelector('#main-panel')
     mainPanel.innerHTML = ''
     mainPanel.classList.add(`${this.type}-list`)
+    const container = document.createElement('div')
+    container.classList.add(`${this.type}-list`)
     this.domItems = []
-    this.items.forEach((item, itemIndex) => {
+    const activeItems = this.items.filter(item => item.active !== false)
+    activeItems.forEach((item, itemIndex) => {
       const itemElement = item.createElement(this.type)
       if (itemIndex === this.selectedIndex) itemElement.classList.add('selected')
       if (typeof item.render === 'function') item.render(itemElement)
       this.domItems.push(itemElement)
-      mainPanel.appendChild(itemElement)
+      container.appendChild(itemElement)
     })
+    mainPanel.appendChild(container)
     if (this.keyboardController) this.keyboardController.register(this)
     return mainPanel
   }
@@ -97,7 +101,7 @@ export default class Lister {
     const currentIndex = this.selectedIndex
     const targetIndex = currentIndex + direction
     if (targetIndex < 0) return
-    if (targetIndex >= this.items.length) return
+    if (targetIndex >= this.domItems.length) return
     const movedItem = this.items[currentIndex]
     const movedItemElement = this.domItems[currentIndex]
     const targetItemElement = this.domItems[targetIndex]

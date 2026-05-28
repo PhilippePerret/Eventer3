@@ -315,7 +315,7 @@ Le chemin de persistance doit toujours être résolu à partir :
 
 NON : Maintenant, l’ordre se gère dans la donnée `item_ids` des données du Lister.
 
-Et plus tard : dans __items.json, il y aura un Hash/Object avec en clé l’identifiant de l’Item et en valeur ses données. Ce qui fera : 
+À IMPLÉMENTER RAPIDEMENT : dans __items.json, il y aura un Hash/Object avec en clé l’identifiant de l’Item et en valeur ses données. Ce qui fera : 
 
 1)  retrouver les données en parcourant `item_ids` sera un jeu d’enfant
 2) enregistrer les modifications d’un Item pourra se faire simplement en envoyant les nouvelles données (ou même : les seules propriétés changeantes  !) et en backend, le programme se chargera de : 
@@ -366,10 +366,6 @@ data/
 ~~~
 
 **Les imbrications sont infinies et fonctionnent toutes de la même façon** : un `Item` (défini dans le fichier `__items.json` d’un `Lister` quelconque) qui possède par exemple l’`id` `e2133` pourra toujours posséder un `Lister` qui aura pour nom `e2133.json` et pour dossier `e2133` (pour contenir la définition de ses propres `Item`s — dans `__items.json` — et des `Lister`s de ses `Item`s) etc.
-
----
-
-## Données minimales
 
 
 

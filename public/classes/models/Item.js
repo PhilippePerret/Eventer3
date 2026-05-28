@@ -36,6 +36,7 @@ export default class Item {
     data = ItemDataMapper.toRuntime(data)
     this.id = data.id ?? null
     this.title = data.title ?? ''
+    this.active = data.active ?? true
     this.hasLister = data.hasLister ?? false
     this.type = data.type ?? []
     this.color = data.color ?? null

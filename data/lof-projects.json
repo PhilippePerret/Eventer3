@@ -1,8 +1,13 @@
 {
   "id": "projects",
+  "title": "Liste des projets",
   "type": "project",
-  "item_ids": ["project-a", "project-b", "project-c", "project-hidden"],
-  "brin_ids": [],
+  "item_ids": [],
   "perso_ids": [],
-  "lasts_id": { "item": 4, "brin": 0, "perso": 0 }
+  "brin_ids": [],
+  "lasts_id": {
+    "item": 0,
+    "brin": 0,
+    "perso": 0
+  }
 }

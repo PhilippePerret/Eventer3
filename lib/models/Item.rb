@@ -12,11 +12,12 @@ class Item
     def minimal_data(id)
       {
         id: id,
-        type: 'project',
-        title: 'Projet modèle',
-        hasLister: false,
-        created_at: Time.now.iso8601,
-        updated_at: Time.now.iso8601
+        ty: 'project',
+        tt: 'Projet modèle',
+        hl: false,
+        co: null,
+        ca: Time.now.iso8601,
+        ua: Time.now.iso8601
       }
     end
 

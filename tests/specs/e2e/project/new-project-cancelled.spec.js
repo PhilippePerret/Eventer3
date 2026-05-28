@@ -1,5 +1,7 @@
 import fs from 'fs'
 import path from 'path'
+import { installFixtures } from '../../../helpers/install-fixtures'
+installFixtures('many-projects')
 import { test, expect } from '../../e2e/__setup__.js'
 
 test('la touche Escape après n annule complètement la création du projet', async ({ page }) => {

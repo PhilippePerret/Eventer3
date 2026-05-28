@@ -1,7 +1,7 @@
 [
   {
     "id": "project-a",
-    "title": "project-a",
+    "title": "Projet A",
     "type": "project",
     "active": true,
     "hasLister": false,
@@ -10,7 +10,7 @@
   },
   {
     "id": "project-b",
-    "title": "project-b",
+    "title": "Projet B",
     "type": "project",
     "active": true,
     "hasLister": false,
@@ -19,7 +19,7 @@
   },
   {
     "id": "project-c",
-    "title": "project-c",
+    "title": "Projet C",
     "type": "project",
     "active": true,
     "hasLister": false,

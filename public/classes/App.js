@@ -4,7 +4,7 @@ import LOG from '../system/LOG.js'
 export default class App {
 
   async start() {
-    LOG.on(4)
+    LOG.on(0)
 
     LOG.m(1, 'Start application')
 
