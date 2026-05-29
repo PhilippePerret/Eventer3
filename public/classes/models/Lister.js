@@ -121,6 +121,7 @@ export default class Lister {
   createNewItem() {
     LOG.m(2, 'Lister.createNewItem', { lister: this.id, type: this.type, selectedIndex: this.selectedIndex, hasKeyboardController: Boolean(this.keyboardController) })
     if (!this.keyboardController) throw new Error('Lister.createNewItem: keyboardController missing')
+    this.clearSelection()
     const insertionIndex = this.selectedIndex
     const currentItemElement = this.domItems[insertionIndex]
     this.itemClass.create({

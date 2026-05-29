@@ -35,6 +35,29 @@ if $OPEN_FINDER_WINDOWS; then
   open_list_window "$DOSSIER" "{813, 665, 2646, 1197}" "none"
 fi
 
+
+ouvre_iterm_with() {
+  local BOUNDS="$1"
+  local COMMAND="$2"
+
+  osascript <<EOF
+    tell application "iTerm2"
+      if (count of windows) = 0 then
+        create window with default profile
+      end if
+      tell current session of current window
+        write text "$COMMAND"
+      end tell
+    end tell
+
+    delay 0.2
+
+    tell front window
+        set bounds to $BOUNDS
+    end tell
+
+  EOF
+}
 # Exemple :
 # ouvre_terminal_with "1200 100 800 600" "ls -la"
 
@@ -60,11 +83,13 @@ EOF
 if $PREPARE_TERMINAL_WINDOWS; then
   # ouvre_terminal_with "{2615, 1065, 3413, 1440}" "cd '$DOSSIER';\nzsh xcreate_zip.sh"
 
-  # -- Claude Code --
-  ouvre_terminal_with "{1043, 682, 2413, 1357}" "cd '$DOSSIER';\nclaude"
+  # -- Claude Code (avec iTerm2) --
+  ouvre_iterm_with "{1043, 682, 2413, 1357}" "cd '$DOSSIER';\nclaude"
+  
   # -- Serveur --
   ouvre_terminal_with "{151, 30, 1249, 751}" "cd '$DOSSIER';\nruby ./app.rb"
   sleep 2
+  
   # -- Tests --
   ouvre_terminal_with "{2433, 30, 3432, 951}" "cd '$DOSSIER/tests';\nclear;clear;npm run test:unit;npm run test:e2e"
 fi
