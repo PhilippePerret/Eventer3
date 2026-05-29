@@ -10,10 +10,7 @@ test('l’application démarre correctement', async ({ page }) => {
   page.on('pageerror', error => console.error(error))
 
   console.log('\n-> destruction du dossier data')
-  await fs.rm(
-    dataDir,
-    { recursive: true, force: true }
-  )
+  await fs.rm(dataDir, { recursive: true, force: true })
 
   await page.goto('/')
   await expect(page.locator('#main-panel')).toHaveCount(1)

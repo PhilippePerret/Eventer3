@@ -58,10 +58,15 @@ EOF
 
 # Pour obtenir le zip du code complet
 if $PREPARE_TERMINAL_WINDOWS; then
-  ouvre_terminal_with "{2615, 1065, 3413, 1440}" "cd '$DOSSIER';\nzsh xcreate_zip.sh"
+  # ouvre_terminal_with "{2615, 1065, 3413, 1440}" "cd '$DOSSIER';\nzsh xcreate_zip.sh"
+
+  # -- Claude Code --
+  ouvre_terminal_with "{1043, 682, 2413, 1357}" "cd '$DOSSIER';\nclaude"
+  # -- Serveur --
   ouvre_terminal_with "{151, 30, 1249, 751}" "cd '$DOSSIER';\nruby ./app.rb"
   sleep 2
-  ouvre_terminal_with "{2129, 30, 3227, 951}" "cd '$DOSSIER/tests';\nclear;clear;npm run test:unit;npm run test:e2e"
+  # -- Tests --
+  ouvre_terminal_with "{2433, 30, 3432, 951}" "cd '$DOSSIER/tests';\nclear;clear;npm run test:unit;npm run test:e2e"
 fi
 
 # Pour lancer la Wep App Safari qui pointe sur le localhost

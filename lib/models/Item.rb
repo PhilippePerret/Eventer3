@@ -15,7 +15,7 @@ class Item
         ty: 'project',
         tt: 'Projet modèle',
         hl: false,
-        co: null,
+        co: nil,
         ca: Time.now.iso8601,
         ua: Time.now.iso8601
       }

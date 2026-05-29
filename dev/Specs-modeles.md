@@ -26,9 +26,9 @@ Un évènement a une échelle déterminé (`scale`). Par exemple, l’échelle d
 
 `Lister` et `Item` sont à la base de tout dans l’application. Il suffit de bien décrire leur comportement pour gérer l’ensemble des types d’éléments, *projets*, *évènemenciers*, *brins* et *personnages* (pour le moment). Mais ce sont **des classes abstraites** dont vont hériter les autres classes.
 
-IL EST CAPITALE DE BIEN COMPRENDRE CE QUI EST DIT CI-DESSUS, que **`Lister`** et **`Item`** sont le cœur et que tout le reste n'est que classes spécialisées.
+IL EST CAPITALE DE BIEN COMPRENDRE CE QUI EST DIT CI-DESSUS, que **`Lister`** et **`Item`** sont ***le cœur*** et que tout le reste n'est que classes spécialisées.
 
-* Les projets (`ProjectLister`) est une classe spécialisée de `Lister` qui affiche les projets au départ.
+* La *liste des projets* (`ProjectLister`) affichée au lancement de l’application est une classe spécialisée de `Lister` qui affiche les projets au départ.
 
   Chaque projet (`Project`) est une classe spécialisée de `Item` pour gérer chaque projet individuellement.
 
