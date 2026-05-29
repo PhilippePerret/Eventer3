@@ -453,6 +453,8 @@ SI on tape un `title` et qu’on `Enter` => on crée vraiment l’évènement (I
 
 Attention : un brin appartient toujours au projet (`Project < Item`) et jamais à rien d’autre (=> il faut toujours garder la trace de ce projet). Il est donc *toujours* enregistré dans `/data/lof-projects/lof-mon-id-projet/__brins.json).
 
+Pour le reste, le fonctionnement est le même que pour le reste : pour que le brin soit réellement créé, il faut qu’il ait au moins un `title` (non vide).
+
 ### Création d’un nouveau personnage
 
 Note importante : Contrairement à un *brin* (cf. ci-dessus), un personnage peut appartenir à n’importe quoi sauf à un personnage : un projet, un évènemencier ou un brin.
@@ -461,6 +463,8 @@ Mais le personnage est TOUJOURS créé dans le fichier `__persos.json` du projet
 	**`/data/lof-projects/lof-mon-id-projet/__persos.json`**.
 
 La place la plus logique d’un personnage est dans un brin. Quand le brin est sélectionné, dans sa fenêtre, la touche « p » permet de choisir/créer un personnage.
+
+Pour le reste, le fonctionnement est le même que pour le reste : pour que le personnage soit réellement créé, il faut qu’il ait au moins un `title` (non vide) qui correspond à son *pseudo*.
 
 
 

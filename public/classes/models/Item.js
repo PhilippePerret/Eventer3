@@ -16,7 +16,7 @@ export default class Item {
     const itemElement = item.createEditorElement(type, keyboardController)
 
     if (currentItemElement) currentItemElement.before(itemElement)
-    else document.querySelector(`#main-panel .${type}-list`).appendChild(itemElement)
+    else lister.domContainer.appendChild(itemElement)
 
     lister.selectElement(itemElement)
 

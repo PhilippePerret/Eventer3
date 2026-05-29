@@ -775,3 +775,40 @@ main {
   font-size: 0.82rem;
   opacity: 0.72;
 }
+
+
+/* Event items */
+
+.event-list {
+  display: grid;
+  gap: 2px;
+}
+
+.event-item {
+  display: flex !important;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 18px;
+  background: transparent !important;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  cursor: default;
+}
+
+.event-item:hover {
+  background: rgba(236,230,218,.45) !important;
+}
+
+.event-item.selected {
+  background: var(--selected) !important;
+  color: white !important;
+  border-top: 1px solid rgba(255,255,255,.18) !important;
+  border-bottom: 1px solid rgba(255,255,255,.18) !important;
+}
+
+.event-item__title {
+  flex: 1;
+  font-size: 20px;
+}

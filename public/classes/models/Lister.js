@@ -65,25 +65,25 @@ export default class Lister {
       keyboardController: this.keyboardController,
       parentItem: item
     })
-    await childLister.loadItems()
+    if (item.hasLister) await childLister.loadItems()
     childLister.render()
   }
   
   render() {
-    const mainPanel = document.querySelector('#main-panel')
-    mainPanel.innerHTML = ''
-    mainPanel.className = `${this.itemClass.name.toLowerCase()}-list`
+    this.domContainer = document.querySelector('#main-panel')
+    this.domContainer.innerHTML = ''
+    this.domContainer.className = `${this.itemClass.name.toLowerCase()}-list`
     this.domItems = []
     const activeItems = this.items.filter(item => item.active !== false)
     activeItems.forEach((item, itemIndex) => {
-      const itemElement = item.createElement(this.type)
+      const itemElement = item.createElement(this.itemClass.name.toLowerCase())
       if (itemIndex === this.selectedIndex) itemElement.classList.add('selected')
       if (typeof item.render === 'function') item.render(itemElement)
       this.domItems.push(itemElement)
-      mainPanel.appendChild(itemElement)
+      this.domContainer.appendChild(itemElement)
     })
     if (this.keyboardController) this.keyboardController.register(this)
-    return mainPanel
+    return this.domContainer
   }
 
   selectItemAt(itemIndex) {
@@ -142,7 +142,7 @@ export default class Lister {
     const insertionIndex = this.selectedIndex
     const currentItemElement = this.domItems[insertionIndex]
     this.itemClass.create({
-      type: this.type,
+      type: this.itemClass.name.toLowerCase(),
       lister: this,
       keyboardController: this.keyboardController,
       insertionIndex,

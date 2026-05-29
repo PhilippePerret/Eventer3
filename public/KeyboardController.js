@@ -13,7 +13,7 @@ export default class KeyboardController {
   }
 
   observe() {
-    document.addEventListener('keydown', this.onKeyDown.bind(this))
+    window.addEventListener('keydown', this.onKeyDown.bind(this))
   }
 
   pushMode(mode) {
@@ -49,8 +49,6 @@ export default class KeyboardController {
   }
 
   onKeyDown(event) {
-
-    LOG.m(1, 'KBD onKeyDown', event.key, { mode: this.getCurrentMode()?.type ?? null, lister: this.activeLister?.id ?? null })
 
     const currentMode = this.getCurrentMode()
 

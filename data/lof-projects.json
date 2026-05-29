@@ -3,6 +3,7 @@
   "title": "Liste des projets",
   "type": "project",
   "item_ids": [
+    "modele", 
     "mon-nouveau-projet",
     "un-autre-encore"
   ],

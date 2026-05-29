@@ -40,7 +40,17 @@
 
 - [x] S’assurer que le fait de taper un titre de projet, lorsqu’il est nouveau (ET SEULEMENT DANS CE CAS), crée en même temps l’identifiant logique et le met dans le champ visible. Attention : ça n’est valable QUE pour les Item de type Project, pas les autres.
 
-- [ ] S’assurer que la flèche droite permet de RENTRER dans le projet (c’est-à-dire de voir son premier évènemencier — qui correspond à ses `events`) (idem = valable pour n’importe quel lister)
+- [x] S’assurer que la flèche droite permet de RENTRER dans le projet (c’est-à-dire de voir son premier évènemencier — qui correspond à ses `events`) (idem = valable pour n’importe quel lister)
+
+- [ ] S’assurer que dans un EventLister, la touche « n » permet de créer un nouvel Event (avant celui sélectionné).
+
+- [ ] S’assurer que dans un EventLister, la combinaison «  Cmd-n » permet de créer un nouvel Event APRÈS celui sélectionné.
+
+- [ ] S’assurer que l’aide footer s’affiche conformément aux modes et aux définitions de config.js. Les tester toutes précisément.
+
+- [ ] S’assurer que lorsque l’Item n’a pas de Lister, quand on fait →, un premier Item fictif soit bien créé dans le Lister fictif. Le faire pour un Item Projet (dans e2e/projet). Le faire pour un Item Event (dans e2e/event). Le faire pour un item Brin (dans e2e/brin). Le faire pour un Item Perso (dans e2e/perso).
+
+- [ ] S’assurer qu’une **fichier** Lister ne soit créé avant que ce lister ait vraiment un Item. Le faire pour un ProjectLister. Le faire pour un EventLister.
 
 - [ ] S’assurer qu’un nouveau projet créé entraine bien aussi la création d’un premier évènemencier (`i1`), un premier brin (`b1` de title « Intrigue principale ») et un premier personnage (`p1` de title « Protagoniste »).
 
@@ -54,6 +64,8 @@
 
 - [ ] S’assurer que lorsqu’un item ne peut pas être placer entre deux items de `pos` consécutifs (ex : `pos:123` et `pos:124`), tous les `pos` (où seulement ceux qui posent problème ?) sont re-initialisés à une valeur correcte.
 
+- [ ] S’assurer que la destruction d’un projet qui a un évènemencier détruise bien cet évènemencier aussi. Idem pour un `Event` (on doit détruire aussi le fichier de son `Lister` s’il en a un)
+
 ## Évènemencier
 
 - [ ] S'assurer qu'un évènemencier s'affiche bien en fonction des `pos` de ses items.
@@ -63,3 +75,7 @@
 - [ ] S'assurer que la coche est persistante (cocher plusieurs évènements et recharger l'évènemencier : les mêmes évènements doivent être cochés)
 - [ ] Création d'un nouvel item. S'assurer que "n" permet de mettre un nouvel évènement en édition (sans le créer vraiment encore). Puis taper du texte et s'assurer que Enter permet de créer vraiment l'item. S'assurer que la donnée est bien enregistrée.
 - [ ] Annulation de la création d'un nouvel item. S'assurer que "n", pause, Enter, ne crée pas un nouvel item.
+
+## Options application
+
+- [ ] S’assurer que si l’option `open-with-project-list` est active, c’est la liste des projets qui est affichée. S’assurer que si l’option `open-with-project-list` est `false`, c’est la dernier évènemencier qui est ouvert OU la liste des projets si aucun dernier évènemencier n’est défini.
