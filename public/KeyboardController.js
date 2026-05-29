@@ -74,6 +74,12 @@ export default class KeyboardController {
         event.preventDefault()
         return
 
+      case 'ArrowLeft':
+        LOG.m(2, 'Leave current lister')
+        this.activeLister.leaveToParent()
+        event.preventDefault()
+        return
+
       case 'ArrowDown':
 
         if (event.metaKey) {

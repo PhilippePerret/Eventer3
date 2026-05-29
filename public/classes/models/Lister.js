@@ -66,6 +66,12 @@ export default class Lister {
     })
   }
 
+  leaveToParent() {
+    LOG.m(2, 'Lister.leaveToParent', { hasParentItem: Boolean(this.parentItem) })
+    if (!this.parentItem) return
+    this.parentItem.parentLister.render()
+  }
+
   async enterSelectedItem() {
     if (!this.childListerClass) return
     const item = this.items[this.selectedIndex]

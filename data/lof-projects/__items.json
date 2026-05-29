@@ -1,11 +1,1 @@
-{
-  "modele": {
-    "id": "modele",
-    "ty": "project",
-    "tt": "Projet modèle",
-    "hl": false,
-    "co": null,
-    "ca": "2026-05-29T11:12:23+02:00",
-    "ua": "2026-05-29T11:12:23+02:00"
-  }
-}
+{"un-autre-projet":{"ac":true,"bg":null,"ca":null,"ch":false,"co":null,"du":null,"fn":null,"hl":true,"id":"un-autre-projet","pa":null,"pt":null,"st":0,"tt":"Un autre projet","ty":[],"ua":null},"modele":{"ac":true,"bg":null,"ca":"2026-05-29T11:12:23+02:00","ch":false,"co":null,"du":null,"fn":null,"hl":false,"id":"modele","pa":null,"pt":null,"st":0,"tt":"Projet modèle","ty":"project","ua":"2026-05-29T11:12:23+02:00"}}

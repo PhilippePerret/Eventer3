@@ -44,11 +44,17 @@
 
 - [x] S’assurer que dans un EventLister, la touche « n » permet de créer un nouvel Event (avant celui sélectionné).
 
-- [ ] S’assurer que tout de suite après avoir créer le tout premier event d’un EventLister, on puisse faire « n » pour en créer un nouveau.
+- [x] S’assurer que tout de suite après avoir créer le tout premier event d’un EventLister, on puisse faire « n » pour en créer un nouveau.
 
-- [ ] S’assurer que la touche ← permette de revenir dans le « parent » (note : « revenir dans le parent » signifie revenir à l’EventLister supérieur et sélectionner l’Item du Lister dont on vient). Par exemple : si on est dans le tout premier EventLister d’un projet, la touche ← doit faire revenir à la liste des projets avec le projet en question sélectionné. Si on est dans le Lister d’un Event (donc dans l’évènemencier d’un Event qui appartient à l’évènemencier parent), la touche ← doit faire revenir à l’évènemencier parent, avec l’event sélectionné. Faire ces deux tests dans le fichier.
+- [x] S’assurer que la touche ← permette de revenir dans le « parent » (note : « revenir dans le parent » signifie revenir à l’EventLister supérieur et sélectionner l’Item du Lister dont on vient). Par exemple : si on est dans le tout premier EventLister d’un projet, la touche ← doit faire revenir à la liste des projets avec le projet en question sélectionné. Si on est dans le Lister d’un Event (donc dans l’évènemencier d’un Event qui appartient à l’évènemencier parent), la touche ← doit faire revenir à l’évènemencier parent, avec l’event sélectionné. Faire ces deux tests dans le fichier.
 
-- [ ] S’assurer que dans un EventLister, la combinaison «  Cmd-n » permet de créer un nouvel Event APRÈS celui sélectionné.
+(reprendre les styles avant)
+
+- [ ] S’assurer que la touche Enter (quand on est en affichage de l’EventLister) permet de passer l’élément en édition (attention, « passer en édition » veut dire des choses différentes suivant la classe spécialisée, chaque classe possède ses propres attributs éditables — mais on commence toujours par `title`, la base de ton `item` — Project : `title` et `id`, Event : `title`, `state`, Brin : `title`, `badge` (automatique 3 lettres d’après title), `color`, Perso : `title`, `badge` (automatique sur title).
+
+- [ ] S’assurer que la touche Space permet de checker (cocher) l’event. Et que cette donnée est persistante. 
+
+- [ ] S’assurer que dans un EventLister quelconque, la combinaison «  Cmd-n » permet de créer un nouvel Event APRÈS celui sélectionné.
 
 - [ ] S’assurer que l’aide footer s’affiche conformément aux modes et aux définitions de config.js. Les tester toutes précisément.
 
@@ -72,13 +78,10 @@
 
 ## Évènemencier
 
-- [ ] S'assurer qu'un évènemencier s'affiche bien en fonction des `pos` de ses items.
 - [ ] S'assurer que le premier item d'un évènemencier est toujours sélectionné
 - [ ] S'assurer que les flèches haut/bas permettent de sélectionner les évènements successifs
 - [ ] S'assurer que la touche Space permette de cocher plusieurs évènement.
 - [ ] S'assurer que la coche est persistante (cocher plusieurs évènements et recharger l'évènemencier : les mêmes évènements doivent être cochés)
-- [ ] Création d'un nouvel item. S'assurer que "n" permet de mettre un nouvel évènement en édition (sans le créer vraiment encore). Puis taper du texte et s'assurer que Enter permet de créer vraiment l'item. S'assurer que la donnée est bien enregistrée.
-- [ ] Annulation de la création d'un nouvel item. S'assurer que "n", pause, Enter, ne crée pas un nouvel item.
 
 ## Options application
 

@@ -4,6 +4,7 @@ window.APP_UI_MODES = {
     ['↑ ↓', 'choisir'],
     ['⏎', 'renommer'],
     ['n', 'nouveau projet'],
+    ['⌥n', 'nouveau projet sous le projet courant'],
     ['⌘↑ ⌘↓', 'déplacer'],
     ['⌦', 'supprimer'],
     ['→', 'ouvrir']
@@ -12,6 +13,7 @@ window.APP_UI_MODES = {
     ['↑ ↓', 'choisir'],
     ['⏎', 'éditer'],
     ['n', 'nouveau'],
+    ['⌥n', 'nouveau sous le courant'],
     ['⌘c', 'copier'],
     ['⌘x', 'couper'],
     ['⌘v', 'coller avant'],
