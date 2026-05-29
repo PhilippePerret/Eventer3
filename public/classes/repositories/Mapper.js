@@ -1,6 +1,7 @@
 export class ItemDataMapper {
 
   static TO_RUNTIME = {
+    ac: 'active',
     bg: 'badge',
     ca: 'created_at',
     ch: 'checked',
@@ -25,9 +26,11 @@ export class ItemDataMapper {
     return runtimeData
   }
 
-  static toPersistence(data) {
+  static toPersistence(item) {
     const persistenceData = {}
-    Object.entries(data).forEach(([key, value]) => persistenceData[this.TO_PERSISTENCE[key] || key] = value)
+    Object.entries(this.TO_PERSISTENCE).forEach(([longKey, shortKey]) => {
+      if (item[longKey] !== undefined) persistenceData[shortKey] = item[longKey]
+    })
     return persistenceData
   }
 

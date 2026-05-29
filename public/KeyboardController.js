@@ -50,10 +50,12 @@ export default class KeyboardController {
 
   onKeyDown(event) {
 
+    LOG.m(1, 'KBD onKeyDown', event.key, { mode: this.getCurrentMode()?.type ?? null, lister: this.activeLister?.id ?? null })
+
     const currentMode = this.getCurrentMode()
 
     if (currentMode) {
-      void currentMode.onKeyDown(event, this)      
+      void currentMode.onKeyDown(event, this)
       return
     }
 
@@ -66,6 +68,11 @@ export default class KeyboardController {
       case 'n':
         LOG.m(2, 'Create new item')
         this.activeLister.createNewItem()
+        event.preventDefault()
+        return
+
+      case 'ArrowRight':
+        this.activeLister.enterSelectedItem().catch(err => console.error('enterSelectedItem:', err))
         event.preventDefault()
         return
 

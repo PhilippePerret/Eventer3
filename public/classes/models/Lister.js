@@ -13,7 +13,7 @@ export default class Lister {
     this.nature = data.nature ?? 'none'
     this.scale = data.scale ?? null
     this.item_ids = data.item_ids || raise('Lister: data.item_ids missing', data)
-    this.brin_ids = data.brin_ids || raise('Lister: data.brin_ids missing', data)
+    this.brin_ids = data.brin_ids ?? []
     this.perso_ids = data.perso_ids || raise('Lister: data.perso_ids missing', data)
     this.lasts_id = data.lasts_id ?? { item: 0, brin: 0, perso: 0 }
     this.options = data.options ?? { colorizeItemsWithFirstBrin: false }
@@ -37,8 +37,12 @@ export default class Lister {
   }
 
   get contextPath() {
-    if (this.parentItem) return this.parentItem.contextPath
+    if (this.parentItem) return `${this.parentItem.parentLister.contextPath}/lof-${this.parentItem.id}`
     return `lof-${this.id}`
+  }
+
+  get childListerClass() {
+    return null
   }
 
   async loadItems() {
@@ -48,13 +52,27 @@ export default class Lister {
     if (!response.ok) return
     const itemsData = await response.json()
     LOG.m(1, 'ITEMS DATA', itemsData)
-    itemsData.forEach(itemData => this.items.push(new this.itemClass(itemData)))
+    itemsData.forEach(itemData => this.items.push(new this.itemClass({ ...itemData, parentLister: this })))
+  }
+
+  async enterSelectedItem() {
+    if (!this.childListerClass) return
+    const item = this.items[this.selectedIndex]
+    if (!item) return
+    const childLister = new this.childListerClass({
+      item_ids: [],
+      perso_ids: [],
+      keyboardController: this.keyboardController,
+      parentItem: item
+    })
+    await childLister.loadItems()
+    childLister.render()
   }
   
   render() {
     const mainPanel = document.querySelector('#main-panel')
     mainPanel.innerHTML = ''
-    mainPanel.classList.add(`${this.type}-list`)
+    mainPanel.className = `${this.itemClass.name.toLowerCase()}-list`
     this.domItems = []
     const activeItems = this.items.filter(item => item.active !== false)
     activeItems.forEach((item, itemIndex) => {
@@ -121,7 +139,6 @@ export default class Lister {
   createNewItem() {
     LOG.m(2, 'Lister.createNewItem', { lister: this.id, type: this.type, selectedIndex: this.selectedIndex, hasKeyboardController: Boolean(this.keyboardController) })
     if (!this.keyboardController) throw new Error('Lister.createNewItem: keyboardController missing')
-    this.clearSelection()
     const insertionIndex = this.selectedIndex
     const currentItemElement = this.domItems[insertionIndex]
     this.itemClass.create({
@@ -138,6 +155,10 @@ export default class Lister {
     await ListerRepository.save(this)
   }
 
+  async saveItems() {
+    await ListerRepository.saveItems(this)
+  }
+
   async commitNewItem(item, itemElement, insertionIndex) {
     LOG.m(2, 'Lister.commitNewItem', { itemId: item.id, insertionIndex, before: [...this.item_ids] })
     this.items.splice(insertionIndex, 0, item)
@@ -147,6 +168,12 @@ export default class Lister {
     await ListerRepository.saveItems(this)
     await ListerRepository.save(this)
     LOG.m(2, 'Lister.commitNewItem.saved', { item_ids: [...this.item_ids] })
+  }
+
+  selectElement(domElement) {
+    const current = this.domItems[this.selectedIndex]
+    if (current) current.classList.remove('selected')
+    domElement.classList.add('selected')
   }
 
   clearSelection() {

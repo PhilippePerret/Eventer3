@@ -1,5 +1,6 @@
 import Lister from './Lister.js'
 import Project from './Project.js'
+import EventLister from './EventLister.js'
 import KeyboardController from '../../KeyboardController.js'
 import LOG from '../../system/LOG.js'
 
@@ -28,6 +29,10 @@ export default class Projects extends Lister {
   constructor(data = {}) {
     super(data)
     this.itemClass = Project
+  }
+
+  get childListerClass() {
+    return EventLister
   }
 
 }

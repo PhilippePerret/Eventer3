@@ -213,6 +213,49 @@ classDiagram
 
 ---
 
+
+## Les quatre Contextes Lister
+
+Il n'existe que QUATRE CONTEXTES LISTER dans Eventer. Tous les autres affichages sont des panneaux isolés.
+
+
+| Contexte | Classe Lister | Classe Item | Description |
+|----------|---------------|-------------|-------------|
+| **c1** | `ProjectLister` | `Project` | La liste des projets (affiché au démarrage) |
+| **c2** | `EventLister` | `Event` | Un évènemencier (liste d'évènements) |
+| **c3** | `BrinLister` | `Brin` | Une liste de brins (intrigues) |
+| **c4** | `PersoLister` | `Perso` | Une liste de personnages |
+
+Chaque Contexte Lister est indissociable de sa classe Item : un `ProjectLister` contient exclusivement des `Project`, un `EventLister` exclusivement des `Event`, etc.
+
+### Lister enfant d'un Item
+
+Un `Item` peut posséder au plus un Lister enfant. Ce Lister enfant est **toujours du même type que le contexte courant**, sauf pour c1 :
+
+- Depuis **c1** (`ProjectLister`) → le Lister enfant est toujours un **`EventLister`** (c2). C'est l'évènemencier du projet.
+- Depuis **c2** (`EventLister`) → le Lister enfant est toujours un **`EventLister`** (c2). Un acte contient des séquences, une séquence contient des scènes, etc. — à la discrétion de l'auteur.
+- Depuis **c3** (`BrinLister`) → le Lister enfant est toujours un **`BrinLister`** (c3).
+- Depuis **c4** (`PersoLister`) → le Lister enfant est toujours un **`PersoLister`** (c4).
+
+La nature du domaine rend cette règle intuitive : l'enfant d'un projet est son évènemencier, l'enfant d'un évènement est un évènemencier plus précis. Il serait absurde qu'un acte enfante un projet ou une liste de personnages.
+
+**Il n'y a aucune contrainte sur la profondeur d'imbrication ni sur le découpage.** Un auteur peut mettre ses 3000 évènements dans un seul `EventLister` de premier niveau, ou les imbriquer à dix niveaux de profondeur — c'est son choix.
+
+### Contextes courants
+
+Il y a **deux contextesprincipaux**  qui sont exclusifs (navigation principale) :
+- c1 : ProjectLister (liste des projets)
+- c2 : EventLister (un évènemencier quelconque)
+
+Et il y a **deux contextes secondaires** (*panneaux qui s'ouvrent par-dessus un EventLister, liés à l'item sélectionné*) :
+- c3 : BrinLister — les **brins** (aka intrigues) de cet Event précis
+- c4 : PersoLister — les **persos** (aka personnages) de cet Event précis
+
+> Bien noter que c3 et c4 ne sont pas des navigations indépendantes : ils sont relatifs au contexte c2 actif et à l'item qui y est sélectionné. L'EventLister reste le contexte de fond.
+
+
+---
+
 ## Architecture de persistance
 
 *(rédigé à la base par ChatGPT d’après mon explication, puis arrangé conséquemment par moi)*
@@ -380,6 +423,74 @@ Voilà les différents comportement :
 
 ### Création d’un nouveau projet
 
-« n » amorce la création d’un nouveau projet.
+« n » dans le panneau de la liste des projets (contexte Lister `ProjectLister`) amorce la création d’un nouveau projet.
 
-L’application ajoute un 
+L’application ajoute un élément DOM, mais ne crée pas véritablement le projet.
+
+Si on annule (Escape), on retourne à l’état précédent sans rien faire.
+Si on tape `Enter` sur un texte vide, idem, on retourne à l’état précédent.
+Si on tape un titre et qu’on fait `Enter` => Ça crée vraiment le projet (en cache et dans le finder). Donc, un enregistrement dans `/data/lof-projects/__items.json` et l’identifiant (défini par l’user à partir du titre) dans `item_ids` de `/data/lof-projects.json`.
+
+### Création d’un nouvel évènemencier
+
+Se fait en jouant la flèche `→` à partir d’un titre de projet OU d’un évènement (`Event < Item`) d’un évènemencier (`EventLister).
+
+Voir ci-dessous [Fonctionnement spécial de « l’entrée dans »](#fonctionnement-entrer-dans).
+
+### Création d’un nouvel évènement
+
+*(donc dans un évènemencier affiché)*
+
+« n » fonctionne de la même manière : 
+
+On crée l’élément (Event) en mode édition, puis : 
+
+SI on `Escape`, on supprime l’élément du DOM.
+SI on ne tape aucun texte (`title`) et qu’on `Enter`, idem
+SI on tape un `title` et qu’on `Enter` => on crée vraiment l’évènement (Item seulement bien entendu)
+
+### Création d’un nouveau brin
+
+Attention : un brin appartient toujours au projet (`Project < Item`) et jamais à rien d’autre (=> il faut toujours garder la trace de ce projet). Il est donc *toujours* enregistré dans `/data/lof-projects/lof-mon-id-projet/__brins.json).
+
+### Création d’un nouveau personnage
+
+Note importante : Contrairement à un *brin* (cf. ci-dessus), un personnage peut appartenir à n’importe quoi sauf à un personnage : un projet, un évènemencier ou un brin.
+
+Mais le personnage est TOUJOURS créé dans le fichier `__persos.json` du projet, qui se trouve dans : 
+	**`/data/lof-projects/lof-mon-id-projet/__persos.json`**.
+
+La place la plus logique d’un personnage est dans un brin. Quand le brin est sélectionné, dans sa fenêtre, la touche « p » permet de choisir/créer un personnage.
+
+
+
+
+
+
+
+
+
+<a name="fonctionnement-entrer-dans"></a>
+
+--
+
+## Fonctionnement spécial de « l’entrée dans »
+
+La fonction `EntrerDans` correspond à l’utilisation de la touche `→`. L’action est différente selon les contextes (LA liste des projets `ProjectLister`, UN évènemencier `EventLister`, UNE liste de brins `BrinLister` ou UNE Liste des personnages `PersoLister`).
+
+```mermaid
+flowchart TD
+    A[Touche →] --> B{Contexte ?}
+    B -->|Contexte ProjectList| C{EventLister existe ?}
+    B -->|"Contexte EventLister\nou BrinLister\nou PersoLister"| D{Lister de même classe existe ?}
+
+    C -->|Oui| E[Afficher EventLister de l'item Project]
+    C -->|Non| F[Initialiser le Lister\nsans le créer]
+
+    D -->|Oui| G[Afficher le Lister de l'Item]
+    D -->|Non| F
+
+    F --> H{Item créé\navec texte ?}
+    H -->|Oui| I[Créer vraiment Lister]
+    H -->|Non| J[Rester en attente]
+```

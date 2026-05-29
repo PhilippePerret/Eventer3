@@ -18,11 +18,7 @@ export default class Item {
     if (currentItemElement) currentItemElement.before(itemElement)
     else document.querySelector(`#main-panel .${type}-list`).appendChild(itemElement)
 
-    lister.clearSelection()
-    lister.selectItemAt(insertionIndex)
-
-    const domItem = itemElement
-    domItem.classList.add('selected')
+    lister.selectElement(itemElement)
 
     return item
   }
