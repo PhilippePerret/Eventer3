@@ -53,8 +53,9 @@ test('un projet démo minimal complet est créé et affiché', async ({ page }) 
   console.log('-> lof-projects/__items.json OK')
 
   const itemsContent = JSON.parse(await fs.readFile(lofProjectsItems, 'utf8'))
-  expect(Array.isArray(itemsContent) && itemsContent.length > 0).toBe(true)
-  console.log(`-> __items.json contient ${itemsContent.length} item(s) OK`)
+  const itemsCount = Object.keys(itemsContent).length
+  expect(typeof itemsContent === 'object' && !Array.isArray(itemsContent) && itemsCount > 0).toBe(true)
+  console.log(`-> __items.json contient ${itemsCount} item(s) OK`)
 
   console.log('\n-> vérification DOM')
   await expect(page.locator('body')).toContainText('Projet modèle')

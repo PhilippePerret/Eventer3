@@ -16,7 +16,7 @@ class Bootstrap
       begin
         lister_data = JSON.parse(File.read(lof_json))
         items       = JSON.parse(File.read(items_json))
-        valid = lister_data['item_ids'].is_a?(Array) && items.is_a?(Array) && !items.empty?
+        valid = lister_data['item_ids'].is_a?(Array) && items.is_a?(Hash) && !items.empty?
         log "Données valides ? #{valid}"
         return if valid
       rescue => e

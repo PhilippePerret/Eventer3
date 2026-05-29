@@ -6,7 +6,7 @@ class Item
   class << self
 
     def minimal_data_items
-      [minimal_data('modele')]
+      { 'modele' => minimal_data('modele') }
     end
 
     def minimal_data(id)

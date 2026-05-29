@@ -3,23 +3,47 @@ import { raise } from '../../system/Error.js'
 
 export default class ListerRepository {
 
+  static async create(lister) {
+    const response = await fetch(`/data/${lister.contextPath}.json`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ item_ids: [], perso_ids: [] })
+    })
+    if (!response.ok) raise(`Impossible de créer ${lister.contextPath}`)
+  }
+
   static async save(lister) {
     const response = await fetch(`/data/${lister.contextPath}.json`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ item_ids: lister.item_ids })
+      body: JSON.stringify({ item_ids: lister.item_ids, lasts_id: lister.lasts_id })
     })
     if (!response.ok) raise(`Impossible de sauver ${lister.id}`)
   }
 
   static async saveItems(lister) {
-    const items = lister.items.map(item => ItemDataMapper.toPersistence(item))
+    const hash = {}
+    lister.items.forEach(item => { hash[item.id] = ItemDataMapper.toPersistence(item) })
     const response = await fetch(`/data/${lister.contextPath}/__items.json`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(items)
+      body: JSON.stringify(hash)
     })
-    if (!response.ok) raise(`Impossible de sauver les items de ${lister.id}`)
+    if (!response.ok) raise(`Impossible de sauver les items de ${lister.contextPath}`)
+  }
+
+  static async saveItem(item, fields) {
+    const payload = { id: item.id }
+    Object.entries(fields).forEach(([longKey, value]) => {
+      const shortKey = ItemDataMapper.TO_PERSISTENCE[longKey]
+      if (shortKey) payload[shortKey] = value
+    })
+    const response = await fetch(`/data/${item.parentLister.contextPath}/__items.json`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    if (!response.ok) raise(`Impossible de sauver l'item ${item.id}`)
   }
 
 }

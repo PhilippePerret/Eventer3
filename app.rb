@@ -30,7 +30,7 @@ end
 
 put '/data/*' do |requested_path|
   filepath = File.join(DATA_DIR, requested_path)
-  halt 404 unless File.exist?(File.dirname(filepath))
+  FileUtils.mkdir_p(File.dirname(filepath))
   File.write(filepath, request.body.read)
   content_type :json
   JSON.generate(ok: true)
@@ -41,8 +41,15 @@ patch '/data/*' do |requested_path|
   halt 404 unless File.exist?(filepath)
   payload = JSON.parse(request.body.read)
   data = JSON.parse(File.read(filepath))
-  payload.each { |key, value| data[key] = value }
-  data['updated_at'] = Time.now.utc.iso8601
+  if requested_path.end_with?('__items.json') && payload.key?('id')
+    item_id = payload.delete('id')
+    data[item_id] ||= {}
+    payload.each { |key, value| data[item_id][key] = value }
+    data[item_id]['ua'] = Time.now.utc.iso8601
+  else
+    payload.each { |key, value| data[key] = value }
+    data['updated_at'] = Time.now.utc.iso8601
+  end
   File.write(filepath, JSON.pretty_generate(data))
   content_type :json
   JSON.generate(ok: true)

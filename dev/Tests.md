@@ -42,13 +42,17 @@
 
 - [x] S’assurer que la flèche droite permet de RENTRER dans le projet (c’est-à-dire de voir son premier évènemencier — qui correspond à ses `events`) (idem = valable pour n’importe quel lister)
 
-- [ ] S’assurer que dans un EventLister, la touche « n » permet de créer un nouvel Event (avant celui sélectionné).
+- [x] S’assurer que dans un EventLister, la touche « n » permet de créer un nouvel Event (avant celui sélectionné).
+
+- [ ] S’assurer que tout de suite après avoir créer le tout premier event d’un EventLister, on puisse faire « n » pour en créer un nouveau.
+
+- [ ] S’assurer que la touche ← permette de revenir dans le « parent » (note : « revenir dans le parent » signifie revenir à l’EventLister supérieur et sélectionner l’Item du Lister dont on vient). Par exemple : si on est dans le tout premier EventLister d’un projet, la touche ← doit faire revenir à la liste des projets avec le projet en question sélectionné. Si on est dans le Lister d’un Event (donc dans l’évènemencier d’un Event qui appartient à l’évènemencier parent), la touche ← doit faire revenir à l’évènemencier parent, avec l’event sélectionné. Faire ces deux tests dans le fichier.
 
 - [ ] S’assurer que dans un EventLister, la combinaison «  Cmd-n » permet de créer un nouvel Event APRÈS celui sélectionné.
 
 - [ ] S’assurer que l’aide footer s’affiche conformément aux modes et aux définitions de config.js. Les tester toutes précisément.
 
-- [ ] S’assurer que lorsque l’Item n’a pas de Lister, quand on fait →, un premier Item fictif soit bien créé dans le Lister fictif. Le faire pour un Item Projet (dans e2e/projet). Le faire pour un Item Event (dans e2e/event). Le faire pour un item Brin (dans e2e/brin). Le faire pour un Item Perso (dans e2e/perso).
+- [ ] S’assurer que lorsque l’Item n’a pas de Lister, quand on fait →, un premier Item fictif soit bien créé dans le Lister fictif. Le faire  — peut-être déjà fait — pour un Item Projet (dans e2e/projet). Le faire pour un Item Event (dans e2e/event). Le faire pour un item Brin (dans e2e/brin). Le faire pour un Item Perso (dans e2e/perso).
 
 - [ ] S’assurer qu’une **fichier** Lister ne soit créé avant que ce lister ait vraiment un Item. Le faire pour un ProjectLister. Le faire pour un EventLister.
 

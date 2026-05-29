@@ -46,7 +46,7 @@ class Lister
   end
 
   def create_minimal_items
-    save_items([])
+    save_items({})
   end
 
 end

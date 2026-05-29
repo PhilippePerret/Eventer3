@@ -1,0 +1,4 @@
+{
+  "project-a": { "id": "project-a", "tt": "Projet A", "ac": true, "hl": true  },
+  "project-b": { "id": "project-b", "tt": "Projet B", "ac": true, "hl": false }
+}

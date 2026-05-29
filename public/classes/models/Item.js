@@ -9,6 +9,10 @@ export default class Item {
     return 'Titre du nouvel item'
   }
 
+  static get idPrefix() {
+    return null
+  }
+
   static create({ type, lister, keyboardController, insertionIndex, currentItemElement }) {
     const item = this.createEmpty()
     item.__isTemporary = true

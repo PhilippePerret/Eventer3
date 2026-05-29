@@ -6,6 +6,10 @@ export default class Event extends Item {
     return 'Titre du nouvel évènement'
   }
 
+  static get idPrefix() {
+    return 'e'
+  }
+
   render(div) {
     div.innerHTML = `<span class="event-item__title">${this.title}</span>`
   }

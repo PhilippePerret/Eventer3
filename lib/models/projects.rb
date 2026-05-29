@@ -10,7 +10,7 @@ class Projects < Lister
         id: 'projects',
         title: 'Liste des projets',
         type: 'project',
-        item_ids: [],
+        item_ids: ['modele'],
         perso_ids: [],
         brin_ids: [],
         lasts_id: { item: 0, brin: 0, perso: 0 }

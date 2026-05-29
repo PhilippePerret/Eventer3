@@ -1,1 +1,11 @@
-[{"id":"modele","tt":"Projet modèle","active":true,"hl":false,"ty":"project","co":null,"ch":false,"st":0,"du":null,"pt":null,"ca":"2026-05-28T17:53:33+02:00","ua":"2026-05-28T17:53:33+02:00","bg":null,"pa":null,"fn":null,"parentLister":null},{"id":"un-autre-encore","tt":"un autre encore","active":true,"hl":false,"ty":[],"co":null,"ch":false,"st":0,"du":null,"pt":null,"ca":null,"ua":null,"bg":null,"pa":null,"fn":null,"parentLister":null,"previousSelectedIndex":1},{"id":"mon-nouveau-projet","tt":"mon nouveau projet","active":true,"hl":false,"ty":[],"co":null,"ch":false,"st":0,"du":null,"pt":null,"ca":null,"ua":null,"bg":null,"pa":null,"fn":null,"parentLister":null,"previousSelectedIndex":0}]
+{
+  "modele": {
+    "id": "modele",
+    "ty": "project",
+    "tt": "Projet modèle",
+    "hl": false,
+    "co": null,
+    "ca": "2026-05-29T11:12:23+02:00",
+    "ua": "2026-05-29T11:12:23+02:00"
+  }
+}

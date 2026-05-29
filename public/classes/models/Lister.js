@@ -45,6 +45,14 @@ export default class Lister {
     return null
   }
 
+  async loadDefinition() {
+    const response = await fetch(`/data/${this.contextPath}.json`)
+    if (!response.ok) return
+    const data = await response.json()
+    if (data.item_ids) this.item_ids = data.item_ids
+    if (data.perso_ids) this.perso_ids = data.perso_ids
+  }
+
   async loadItems() {
     this.items = []
     LOG.m(3, 'LOAD ITEMS URL', `/data/${this.contextPath}/__items.json`)
@@ -52,7 +60,10 @@ export default class Lister {
     if (!response.ok) return
     const itemsData = await response.json()
     LOG.m(1, 'ITEMS DATA', itemsData)
-    itemsData.forEach(itemData => this.items.push(new this.itemClass({ ...itemData, parentLister: this })))
+    this.item_ids.forEach(id => {
+      const itemData = itemsData[id]
+      if (itemData) this.items.push(new this.itemClass({ ...itemData, parentLister: this }))
+    })
   }
 
   async enterSelectedItem() {
@@ -65,8 +76,14 @@ export default class Lister {
       keyboardController: this.keyboardController,
       parentItem: item
     })
-    if (item.hasLister) await childLister.loadItems()
+    if (item.hasLister) {
+      await childLister.loadDefinition()
+      await childLister.loadItems()
+    } else {
+      childLister.__isVirtual = true
+    }
     childLister.render()
+    if (childLister.__isVirtual) childLister.createNewItem()
   }
   
   render() {
@@ -160,11 +177,21 @@ export default class Lister {
   }
 
   async commitNewItem(item, itemElement, insertionIndex) {
+    if (!item.id && this.itemClass.idPrefix !== null) {
+      this.lasts_id.item += 1
+      item.id = `${this.itemClass.idPrefix}${this.lasts_id.item}`
+    }
     LOG.m(2, 'Lister.commitNewItem', { itemId: item.id, insertionIndex, before: [...this.item_ids] })
     this.items.splice(insertionIndex, 0, item)
     this.item_ids.splice(insertionIndex, 0, item.id)
     LOG.m(2, 'Lister.commitNewItem.afterInsert', { after: [...this.item_ids] })
     this.domItems.splice(insertionIndex, 0, itemElement)
+    if (this.__isVirtual) {
+      await ListerRepository.create(this)
+      this.parentItem.hasLister = true
+      await ListerRepository.saveItems(this.parentItem.parentLister)
+      delete this.__isVirtual
+    }
     await ListerRepository.saveItems(this)
     await ListerRepository.save(this)
     LOG.m(2, 'Lister.commitNewItem.saved', { item_ids: [...this.item_ids] })

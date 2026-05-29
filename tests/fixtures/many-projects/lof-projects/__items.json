@@ -1,38 +1,6 @@
-[
-  {
-    "id": "project-a",
-    "title": "Projet A",
-    "type": "project",
-    "active": true,
-    "hasLister": false,
-    "created_at": "2026-05-27T10:00:00Z",
-    "updated_at": "2026-05-27T10:00:00Z"
-  },
-  {
-    "id": "project-b",
-    "title": "Projet B",
-    "type": "project",
-    "active": true,
-    "hasLister": false,
-    "created_at": "2026-05-27T10:00:00Z",
-    "updated_at": "2026-05-27T10:00:00Z"
-  },
-  {
-    "id": "project-c",
-    "title": "Projet C",
-    "type": "project",
-    "active": true,
-    "hasLister": false,
-    "created_at": "2026-05-27T10:00:00Z",
-    "updated_at": "2026-05-27T10:00:00Z"
-  },
-  {
-    "id": "project-hidden",
-    "title": "Projet caché",
-    "type": "project",
-    "active": false,
-    "hasLister": false,
-    "created_at": "2026-05-27T10:00:00Z",
-    "updated_at": "2026-05-27T10:00:00Z"
-  }
-]
+{
+  "project-a": { "id": "project-a", "tt": "Projet A",      "ac": true, "hl": false },
+  "project-b": { "id": "project-b", "tt": "Projet B",      "ac": true, "hl": false },
+  "project-c": { "id": "project-c", "tt": "Projet C",      "ac": true, "hl": false },
+  "project-hidden": { "id": "project-hidden", "tt": "Projet caché", "ac": false, "hl": false }
+}
