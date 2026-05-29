@@ -28,7 +28,7 @@ Un évènement a une échelle déterminé (`scale`). Par exemple, l’échelle d
 
 IL EST CAPITALE DE BIEN COMPRENDRE CE QUI EST DIT CI-DESSUS, que **`Lister`** et **`Item`** sont ***le cœur*** et que tout le reste n'est que classes spécialisées.
 
-* La *liste des projets* (`ProjectLister`) affichée au lancement de l’application est une classe spécialisée de `Lister` qui affiche les projets au départ.
+* La *liste des projets* (`ProjectLister`) affichée au lancement de l’application est une classe spécialisée de `Lister` (`ProjectLister`) qui affiche les projets au départ.
 
   Chaque projet (`Project`) est une classe spécialisée de `Item` pour gérer chaque projet individuellement.
 
@@ -209,7 +209,7 @@ classDiagram
 
 **`title`** pour les `Perso`s sert de « pseudo », c’est-à-dire la valeur par défaut pour l’affichage.
 
-
+> Afin de réduire la taille des fichier `__items.json` qui consigne les données des items d’un Lister, un mapping est effectué sur les clés. Dans le fichier, elles sont toutes sur deux lettres seulement. Cf. le fichier `Mapper.js`
 
 ---
 
@@ -311,9 +311,7 @@ Le chemin de persistance doit toujours être résolu à partir :
 
 ## Gestion de l’ordre
 
-~~L’ordre des `Item`s dans l’affichage d’un `Lister` se gère maintenant par l’ordre naturel dans les fichier `__items.json` qui consignent les données de tous les items du Lister~~ 
-
-NON : Maintenant, l’ordre se gère dans la donnée `item_ids` des données du Lister.
+L’ordre des items d’un Lister se gère exclusivement dans la propriété `item_ids` des data du Lister.
 
 À IMPLÉMENTER RAPIDEMENT : dans __items.json, il y aura un Hash/Object avec en clé l’identifiant de l’Item et en valeur ses données. Ce qui fera : 
 
@@ -323,9 +321,9 @@ NON : Maintenant, l’ordre se gère dans la donnée `item_ids` des données du 
    2) modifier les données de l’Item à corriger
    3) enregistrer le `__items.json` modifié.
 
-### Différer l’enregistrement
+### Différer l’enregistrement en cas de déplacement
 
-Pour ne pas multiplier les enregistrement massif **en cas de déplacement en rafale**, on différera l’enregistrement persistant des items.
+Pour ne pas multiplier les enregistrement massif **en cas de déplacement en rafale** des items, on différera l’enregistrement persistant des items.
 
 ---
 
@@ -369,3 +367,19 @@ data/
 
 
 
+---
+
+## Fonctionnement spécial de la création
+
+Il faut bien comprendre le fonctionnement de la création des nouveaux éléments (Item) qui 
+
+1) ne doivent jamais être créés tout de suite
+2) crée des choses différentes en fonction de la classe spécialisée (`ProjectLister`, items `Project`, `EventLister`, items `Event`, `BrinLister`, items `Brin`, `PersoLister`, items `Perso`)
+
+Voilà les différents comportement :
+
+### Création d’un nouveau projet
+
+« n » amorce la création d’un nouveau projet.
+
+L’application ajoute un 

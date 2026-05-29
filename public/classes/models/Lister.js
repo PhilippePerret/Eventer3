@@ -55,8 +55,6 @@ export default class Lister {
     const mainPanel = document.querySelector('#main-panel')
     mainPanel.innerHTML = ''
     mainPanel.classList.add(`${this.type}-list`)
-    const container = document.createElement('div')
-    container.classList.add(`${this.type}-list`)
     this.domItems = []
     const activeItems = this.items.filter(item => item.active !== false)
     activeItems.forEach((item, itemIndex) => {
@@ -64,9 +62,8 @@ export default class Lister {
       if (itemIndex === this.selectedIndex) itemElement.classList.add('selected')
       if (typeof item.render === 'function') item.render(itemElement)
       this.domItems.push(itemElement)
-      container.appendChild(itemElement)
+      mainPanel.appendChild(itemElement)
     })
-    mainPanel.appendChild(container)
     if (this.keyboardController) this.keyboardController.register(this)
     return mainPanel
   }

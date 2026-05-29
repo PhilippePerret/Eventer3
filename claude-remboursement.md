@@ -23,3 +23,13 @@ Deux tentatives d'écriture rejetées avant la version correcte — parce que j'
 Tokens : **inconnu**
 
 ---
+
+## 2026-05-29 — Régression `Lister.js render()` réintroduite par une session Claude précédente
+
+Une session Claude antérieure avait réintroduit un container interne `<div class="project-list">` dans `Lister.js render()`, écrasant une correction déjà faite dans le commit `d3f0bda`. Le bug était présent dans le commit `b331859` ("Après travail de Claude sans vérifications").
+
+Cette session a passé du temps à diagnostiquer et recorriger ce bug — travail qui n'aurait pas dû être nécessaire.
+
+Tokens : **15 000**
+
+---

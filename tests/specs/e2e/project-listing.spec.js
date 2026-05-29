@@ -7,7 +7,7 @@ test('la liste des projets possède les bonnes classes CSS', async ({ page }) =>
   await page.goto('/')
 
   const mainPanel = page.locator('#main-panel')
-  const listing = page.locator('#main-panel > .project-list').first()
+  const listing = page.locator('#main-panel.project-list').first()
   const item = page.locator('.project-item')
   const title = page.locator('.project-item__title')
   const pid = page.locator('.project-item__id')
