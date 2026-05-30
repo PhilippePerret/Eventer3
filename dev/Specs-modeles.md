@@ -1,4 +1,4 @@
-# Eventer(3)
+#  Eventer(3)
 
 
 
@@ -79,8 +79,8 @@ classDiagram
 	class Lister {
 		+string id
 		+boolean active
-		+string type
-		// Parmi "project", "eventer", "manuscript"
+		+string type (todo: changer pour "mode")
+		// Parmi "project", "event", "script", "brin", "mode"
 		+string nature // parmi 'roman', 'film', 'none'
 		+Scale scale
 		+string[] item_ids
@@ -140,17 +140,10 @@ classDiagram
 		+Type[] type
 		+string color
 		+boolean checked
-		+State state
 		+number duration
 		+string path
 		+Date created_at
 		+Date updated_at
-		//--- seulement brin ---
-		+string badge // 3 capitales
-		//--- seulement perso ---
-		+string badge // 2 capitales
-		+string patronyme
-		+Fonction fonction
 	}
 	
 	class State {
@@ -166,31 +159,81 @@ classDiagram
     9 : "achevé"
   }
 	
-	class Type {
-		<<selon class fille>>
-		Classe fille Event
-			dia : "Dialogue"
-			act : "Action"
-			des : "Description"
-		Classe fille Brin
+	class BrinType {
 			mint : "Intrigue principale"
 			aint : "Intrigue amoureuse"
 			// à poursuivre
 	}
+
+	class EventType {
+			dia : "Dialogue"
+			act : "Action"
+			des : "Description"
+	}
 	
 	class Fonction {
     // (valeurs preset + custom)
-    prot		: "Protagoniste"
-    anta		: "Antagoniste"
-    adju		: "Adjuvant/allié"
-    ment		: "Mentor"
-    spre		: "Sprechhund"
+    pro		: "Protagoniste"
+    ant		: "Antagoniste"
+    adj		: "Adjuvant/allié"
+    men		: "Mentor"
+    spr		: "Sprechhund"
     // (à poursuivre)
 	}
 	
-	Item --> State
+	class Effet {
+		j: jour
+		m: matin
+		o: midi
+		s: soir
+		n: nuit
+	}
+	
+	class Event {
+		+EventType type
+		+string meteo
+		+Effet effet 
+		+string dyndate
+		+State state
+		+boolean isScript // version finale
+	}
+	
+	class Project {
+		+State state	
+	}
+	
+	class Perso {
+		+PersoType type
+		+string2 badge // caps
+		+string patronyme
+		+string avatar
+		+Fonction fonction	
+	}
+	
+	class PersoType {
+		p: "Protagonistes, Adjuvant…"
+		a: "Antagonistes"
+		b: "Ambivalent"
+	}
+	
+	class Brin {
+		+BrinType type
+		+string3 badge // caps	
+	}
+	
+
 	Item --> Type
-	Item --> Fonction
+	Item --> Perso
+	Perso --> Fonction
+	Perso --> PersoType
+	Event --> State
+	Event --> EventType
+  Item --> Brin
+  Brin --> BrinType
+	Item --> Project
+	Project --> State
+	Item --> Event 
+	Event --> Effet
 	
 
 ~~~
@@ -205,9 +248,15 @@ classDiagram
 
 **`duration`** est la durée en secondes.
 
-**`path`** est un chemin d’accès relatif (par rapport au dossier du projet) ou absolu qui conduit au fichier de l’item (pour le décrire, le travailler, etc.).
+**`path`** est un chemin d’accès relatif (par rapport au dossier du projet) ou absolu qui conduit au fichier de l’item (pour le décrire, le travailler, etc.). Attention : ça n’a RIEN à voir avec le fichier dans lequel les données de l’item sont enregistrées dans le dossier `data`.
 
 **`title`** pour les `Perso`s sert de « pseudo », c’est-à-dire la valeur par défaut pour l’affichage.
+
+**`meteo`**. Donnée propre aux évènements qui permet de définir la météo, c’est-à-dire le temps particulier qu’il fait au moment de l’event, si cela doit joue. Fonctionne de paire avec l’`effet` pour produire par exemple une couleur de fond.
+
+**`effet`**. Comme dans un intitulé de scénario, le « nuit » ou « jour », étendu à « matin », « midi », « soir ».
+
+**`dyndate`**. La *date dynamique* pour pouvoir gérer les dates dans l’histoire. Permet de définir des dates comme « trois jours après l’explosion » ou « D1 + 10d ». À l’heure où ces lignes sont écrites, le format n’est pas encore défini, mais il y a de fortes chances que ce soit défini par « D1 = 30/05/2026 » puis des choses comme `D1-10d` ou `explosion=29/05/2026` puis `explosion+2w` (pour « deux semaines après l’explosion ».
 
 > Afin de réduire la taille des fichier `__items.json` qui consigne les données des items d’un Lister, un mapping est effectué sur les clés. Dans le fichier, elles sont toutes sur deux lettres seulement. Cf. le fichier `Mapper.js`
 
@@ -216,7 +265,7 @@ classDiagram
 
 ## Les quatre Contextes Lister
 
-Il n'existe que QUATRE CONTEXTES LISTER dans Eventer. Tous les autres affichages sont des panneaux isolés.
+Il n'existe que CINQ CONTEXTES LISTER dans Eventer. Tous les autres affichages sont des panneaux isolés.
 
 
 | Contexte | Classe Lister | Classe Item | Description |
@@ -225,12 +274,13 @@ Il n'existe que QUATRE CONTEXTES LISTER dans Eventer. Tous les autres affichages
 | **c2** | `EventLister` | `Event` | Un évènemencier (liste d'évènements) |
 | **c3** | `BrinLister` | `Brin` | Une liste de brins (intrigues) |
 | **c4** | `PersoLister` | `Perso` | Une liste de personnages |
+| **c5** | `ScriptLister` | `ScriptItem` | Le texte final, roman ou scénario. |
 
 Chaque Contexte Lister est indissociable de sa classe Item : un `ProjectLister` contient exclusivement des `Project`, un `EventLister` exclusivement des `Event`, etc.
 
 ### Lister enfant d'un Item
 
-Un `Item` peut posséder au plus un Lister enfant. Ce Lister enfant est **toujours du même type que le contexte courant**, sauf pour c1 :
+Un `Item` peut posséder au plus UN Lister enfant. Ce Lister enfant est **toujours du même type que le contexte courant**, sauf pour c1 :
 
 - Depuis **c1** (`ProjectLister`) → le Lister enfant est toujours un **`EventLister`** (c2). C'est l'évènemencier du projet.
 - Depuis **c2** (`EventLister`) → le Lister enfant est toujours un **`EventLister`** (c2). Un acte contient des séquences, une séquence contient des scènes, etc. — à la discrétion de l'auteur.
@@ -239,19 +289,21 @@ Un `Item` peut posséder au plus un Lister enfant. Ce Lister enfant est **toujou
 
 La nature du domaine rend cette règle intuitive : l'enfant d'un projet est son évènemencier, l'enfant d'un évènement est un évènemencier plus précis. Il serait absurde qu'un acte enfante un projet ou une liste de personnages.
 
-**Il n'y a aucune contrainte sur la profondeur d'imbrication ni sur le découpage.** Un auteur peut mettre ses 3000 évènements dans un seul `EventLister` de premier niveau, ou les imbriquer à dix niveaux de profondeur — c'est son choix.
+**Il n'y a aucune contrainte sur la profondeur d'imbrication ni sur le découpage.** Un auteur peut mettre ses 3000 évènements dans un seul `EventLister` de premier niveau, ou les imbriquer à trente niveaux de profondeur — c'est son choix.
 
 ### Contextes courants
 
-Il y a **deux contextesprincipaux**  qui sont exclusifs (navigation principale) :
+Il y a **deux contextes principaux**  qui sont exclusifs (navigation principale) :
 - c1 : ProjectLister (liste des projets)
 - c2 : EventLister (un évènemencier quelconque)
+
+> On pourrait aussi ajouter le contexte **C5** du `ScriptLister` du mode final d’écriture.
 
 Et il y a **deux contextes secondaires** (*panneaux qui s'ouvrent par-dessus un EventLister, liés à l'item sélectionné*) :
 - c3 : BrinLister — les **brins** (aka intrigues) de cet Event précis
 - c4 : PersoLister — les **persos** (aka personnages) de cet Event précis
 
-> Bien noter que c3 et c4 ne sont pas des navigations indépendantes : ils sont relatifs au contexte c2 actif et à l'item qui y est sélectionné. L'EventLister reste le contexte de fond.
+> Bien noter que c3 et c4 ne sont pas des navigations indépendantes : ils sont relatifs au contexte c2 actif et à l'item qui y est sélectionné. L'EventLister (ou le ScriptLister) reste le contexte de fond.
 
 
 ---
@@ -468,15 +520,46 @@ Pour le reste, le fonctionnement est le même que pour le reste : pour que le pe
 
 
 
+---
+
+### Édition des éléments
+
+Chaque type d’Item a ses propres valeurs éditables (valeurs de base qu’on peut éditer avec `Enter`.
+
+Quel que soit le cas, la première valeur est toujours `tittle` (qui est le pseudo pour les personnages.
+
+| Type         | Édition                                                      |
+| ------------ | ------------------------------------------------------------ |
+| `Project`    | `title`  →  (custom) `id`<br />Un premier ’id` est calculé automatiquement à partir du titre entré<br />Un fois l’identifiant fixé, on ne le touche plus. |
+| `Event`      | `title` → `state`                                            |
+| `Brin`       | `title`  → `badge` (éditable, première version calculée d’après les trois premières lettres capitalisées du title) → `type` → `color` |
+| `Perso`      | `title` → `badge` (2 lettres majuscules max, première version proposée automatiquement par title) → `Patronyme` → `avatar` → `fonction` |
+| `ScriptItem` | `title` (le texte) → `state` → `nature`                      |
 
 
 
+---
+
+## Type, nature, genre et mode
+
+Une réflexion doit être menée concenant ces propriétés qui sont pour le moment utilisées un peu n’importe comment. On va essayer de faire une table pour rationnaliser ça.
+
+| Item      | propriété   | Description et valeurs                                       |
+| --------- | ----------- | ------------------------------------------------------------ |
+| `Event`   |             |                                                              |
+| `Project` | **`type`**  | Un projet ne peut-être que de deux types : scénario ou roman. Cela détermine comment sera traité le `ScriptLister` final. |
+| `Brin`    | **`type`**  | Un brin peut être de type « intrigue », « accessoire », « thématique », « personnage » en fonction de la chose sur laquelle il se focalise. Ces types sont consignés dans la constante `BrinTypes`. |
+| `Perso`   | **`type`**  | Un personnage peut être de 3 types différents, du côté du protagonisme, du côté de l’antagonisme, ou ambivalent (un peu des deux). |
+|           | **`genre`** | Correspond vraiment au *genre*, donc femme, homme, non binaire ou autre. |
+|           |             |                                                              |
+|           |             |                                                              |
+|           |             |                                                              |
 
 
 
 <a name="fonctionnement-entrer-dans"></a>
 
---
+---
 
 ## Fonctionnement spécial de « l’entrée dans »
 
@@ -498,3 +581,30 @@ flowchart TD
     H -->|Oui| I[Créer vraiment Lister]
     H -->|Non| J[Rester en attente]
 ```
+
+---
+
+## Propriétés
+
+*(cette section essaie de rassembler les propriétés de chaque classe)*
+
+### Propriétés communes à tous les Items
+
+| Propriété   | Description                                                  | Valeurs |
+| ----------- | ------------------------------------------------------------ | ------- |
+| **`id`**    | Identifiant unique pour le projet. Custom pour les Project (en fonction du titre) et première lettre classe spécialisée + indice pour Perso, Brin et Event. |         |
+| **`title`** | Toujours la valeur par défaut. Le titre du Project, le titre du Brin, le pseudo du personnage, le nom de l’Eventq. |         |
+|             | qq                                                           |         |
+|             |                                                              |         |
+
+
+
+### Personnage / `Perso`
+
+| **`avatar`**/`av`    | Emoji ou image                                               |      |
+| -------------------- | ------------------------------------------------------------ | ---- |
+| **`fonctions`**/`fn` | Fonctions du personnage. Liste de valeurs, avec des choix proposés et des valeurs custom possibles. |      |
+|                      |                                                              |      |
+|                      |                                                              |      |
+|                      |                                                              |      |
+

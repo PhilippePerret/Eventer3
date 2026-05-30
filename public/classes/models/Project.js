@@ -8,7 +8,9 @@ export default class Project extends Item {
   }
 
   getEditorFields(type, itemElement) {
-    return [{ name: 'title', property: 'title', selector: `.${type}-item__title`, placeholder: this.constructor.newItemPlaceholder }, { name: 'id', property: 'id', selector: `.${type}-item__id`, placeholder: 'identifiant' }]
+    const titleField = { name: 'title', property: 'title', selector: `.${type}-item__title`, placeholder: this.constructor.newItemPlaceholder }
+    if (this.hasLister) return [titleField]
+    return [titleField, { name: 'id', property: 'id', selector: `.${type}-item__id`, placeholder: 'identifiant' }]
   }
 
   render(div) {

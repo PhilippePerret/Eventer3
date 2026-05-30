@@ -92,11 +92,17 @@ export default class Lister {
     if (childLister.__isVirtual) childLister.createNewItem()
   }
   
+  renderHeader() {
+    return null
+  }
+
   render() {
     this.domContainer = document.querySelector('#main-panel')
     this.domContainer.innerHTML = ''
     this.domContainer.className = `${this.itemClass.name.toLowerCase()}-list`
     this.domItems = []
+    const header = this.renderHeader()
+    if (header) this.domContainer.appendChild(header)
     const activeItems = this.items.filter(item => item.active !== false)
     activeItems.forEach((item, itemIndex) => {
       const itemElement = item.createElement(this.itemClass.name.toLowerCase())
@@ -157,6 +163,13 @@ export default class Lister {
   scheduleItemsSave() {
     clearTimeout(this.itemsSaveTimer)
     this.itemsSaveTimer = setTimeout(() => { void this.saveItems() }, 300)
+  }
+
+  editSelectedItem() {
+    const item = this.items[this.selectedIndex]
+    const itemElement = this.domItems[this.selectedIndex]
+    if (!item || !itemElement) return
+    item.enterEdition(this.itemClass.name.toLowerCase(), this.keyboardController, itemElement)
   }
 
   createNewItem() {

@@ -17,6 +17,7 @@ export default class Projects extends Lister {
     }
     const keyboardController = new KeyboardController()
     keyboardController.observe()
+    window.__keyboardController = keyboardController
     const projects = new Projects({ ...projectsData, keyboardController })
     LOG.m(1, 'BEFORE LOAD ITEMS')
     await projects.loadItems()
@@ -33,6 +34,13 @@ export default class Projects extends Lister {
 
   get childListerClass() {
     return EventLister
+  }
+
+  renderHeader() {
+    const h1 = document.createElement('h1')
+    h1.className = 'project-screen-title'
+    h1.textContent = 'Liste des projets'
+    return h1
   }
 
 }

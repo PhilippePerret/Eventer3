@@ -42,10 +42,16 @@ patch '/data/*' do |requested_path|
   payload = JSON.parse(request.body.read)
   data = JSON.parse(File.read(filepath))
   if requested_path.end_with?('__items.json') && payload.key?('id')
-    item_id = payload.delete('id')
-    data[item_id] ||= {}
-    payload.each { |key, value| data[item_id][key] = value }
-    data[item_id]['ua'] = Time.now.utc.iso8601
+    new_id = payload.delete('id')
+    old_id = payload.delete('old_id') { new_id }
+    if old_id != new_id && data.key?(old_id)
+      data[new_id] = data.delete(old_id)
+      data[new_id]['id'] = new_id
+    else
+      data[new_id] ||= {}
+    end
+    payload.each { |key, value| data[new_id][key] = value }
+    data[new_id]['ua'] = Time.now.utc.iso8601
   else
     payload.each { |key, value| data[key] = value }
     data['updated_at'] = Time.now.utc.iso8601

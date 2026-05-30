@@ -4,6 +4,14 @@
 
 ---
 
+## But
+
+Le but premier d’Eventer est de permettre à l’autrice ou l’auteur, la ou le scénariste, de développer en toute agilité **la structure de son histoire** et de la mettre même au cœur de son processus d’écriture.
+
+Elle ou il peut s’en servir uniquement pour construire l’histoire, donc définir la structure seulement ou alors s’en servir complètement jusqu’au texte final, roman ou scénario, ou tout autre document intermédiaire comme le synopsis complet.
+
+---
+
 ## Philosophie
 
 - outil local
@@ -95,6 +103,8 @@ Le fichier __setup__.js centralise :
 
 Le backend est minimal, il sert principalement à enregistrer les informations transmises par le front.
 
+IL gère également tout ce qui relève de l’export, c’est-à-dire de la (re)construction des évènemenciers et des document finaux (manuscrit et scénario).
+
 
 ---
 
@@ -138,20 +148,13 @@ Voir le fichier [Specs](Specs-modeles.md).
 
 Le premier panneau quand on lance l’application est le **panneau des projets**.
 
-Ensuite, une fois le projet choisi, le panneau des évènements (*Lister* courant) est toujours affiché. Les panneaux des brins et des personnages s’affichent au besoin, en modal, au-dessus de lui).
+Ensuite, une fois le projet choisi, le panneau des évènements (appartenant au *Lister* courant) est toujours affiché. Les panneaux des brins et des personnages s’affichent au besoin, en modal, au-dessus de lui).
 
 Tous ces panneaux, quels qu’ils soient, sont des `Lister`s et fonctionnent donc de la même façon. Cf. les [Interactions](#interactions).
 
----
+### Autres panneaux
 
-# Ligne évènement
-
-Contient :
-
-- texte (`Event.text`)
-- badges de brins (`Brin.badge`)
-- avatar ou lettres de personnages (`Perso.avatar` ou `Perso.badge`)
-- durée si définie (`Event.duration`)
+D’autres panneaux ponctuels permettent de régler les options ou les valeurs particulières des diffférents éléments.
 
 ---
 
@@ -180,10 +183,12 @@ Note : Ci-dessous, lorsqu’on parle d’*élément*, on parle évidemment d’o
 | Choisir les brins (=> afficher panneau modal) | b |
 | Choisir les personnages (=> afficher panneau modal) | p |
 | Mise en édition de l’élément (principalement `title` + autres fonctions en fonction du type de l’élément) | ↩︎ |
-| Déplacement de propriété en propriété lorsque l’élément est en mode édition. | ⇥ |
+| Déplacement de propriété en propriété lorsque l’élément est en édition. | ⇥ |
 | Fin de l’édition de l’élément (enregistrement) | ↩︎ |
 | Fermeture du panneau (seulement pour Brins et Characters) | ⌘ ↩︎ |
 | Annulation de l’édition de l’élément. | ␛ |
+| « Entrer » dans le projet ou le « Lister » de l’Item courant | → |
+| Revenir à l’Item parent. | ← |
 
 ---
 

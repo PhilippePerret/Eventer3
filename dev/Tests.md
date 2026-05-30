@@ -48,9 +48,9 @@
 
 - [x] S’assurer que la touche ← permette de revenir dans le « parent » (note : « revenir dans le parent » signifie revenir à l’EventLister supérieur et sélectionner l’Item du Lister dont on vient). Par exemple : si on est dans le tout premier EventLister d’un projet, la touche ← doit faire revenir à la liste des projets avec le projet en question sélectionné. Si on est dans le Lister d’un Event (donc dans l’évènemencier d’un Event qui appartient à l’évènemencier parent), la touche ← doit faire revenir à l’évènemencier parent, avec l’event sélectionné. Faire ces deux tests dans le fichier.
 
-(reprendre les styles avant)
+- [x] La touche `Enter` met l’édition en route et permet d’éditer le `title`. La couche `Escape`permet d’annuler l’édition.
 
-- [ ] S’assurer que la touche Enter (quand on est en affichage de l’EventLister) permet de passer l’élément en édition (attention, « passer en édition » veut dire des choses différentes suivant la classe spécialisée, chaque classe possède ses propres attributs éditables — mais on commence toujours par `title`, la base de ton `item` — Project : `title` et `id`, Event : `title`, `state`, Brin : `title`, `badge` (automatique 3 lettres d’après title), `color`, Perso : `title`, `badge` (automatique sur title).
+  S’assurer que la touche Enter (quand on est en affichage de l’EventLister) permet de passer l’élément en édition (attention, « passer en édition » veut dire des choses différentes suivant la classe spécialisée, chaque classe possède ses propres attributs éditables — mais on commence toujours par `title`, la base de ton `item` — Project : `title` et `id`, Event : `title`, `state`, Brin : `title`, `badge` (automatique 3 lettres d’après title), `color`, Perso : `title`, `badge` (automatique sur title).
 
 - [ ] S’assurer que la touche Space permet de checker (cocher) l’event. Et que cette donnée est persistante. 
 
@@ -82,6 +82,21 @@
 - [ ] S'assurer que les flèches haut/bas permettent de sélectionner les évènements successifs
 - [ ] S'assurer que la touche Space permette de cocher plusieurs évènement.
 - [ ] S'assurer que la coche est persistante (cocher plusieurs évènements et recharger l'évènemencier : les mêmes évènements doivent être cochés)
+
+## Event
+
+- [ ] Un event peut définir sa météo (`meteo` ☀️🌤️🌦️☁️💨⛈️🌪️🌨️) dans un mini panneau qui contient aussi l’effet.
+- [ ] Un event peut définir son effet (`effet`) pami « jour », « nuit, etc. Voir les valeus possibles et les vraies valeurs dans la données `EFFETS`.
+- [ ] La météo et l’effet d’un event influence son apparence (si la bonne option est choisie)
+- [ ] Un event peut définir sa date `dyndate` de façon fixe (en lui donnant un nom fixe).
+- [ ] Test unitaire du calcul de la date dynamique.
+- [ ] Un event peut définir sa date `dyndate`de façon dynamique.
+
+
+
+### Project
+
+- [ ] On ne peut plus redéfinir un `id` de projet une fois qu’il a été défini(i.e. une fois que son `Lister` existe (et donc une fois que son dossier `lof` existe.
 
 ## Options application
 

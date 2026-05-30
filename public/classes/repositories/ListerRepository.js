@@ -32,8 +32,9 @@ export default class ListerRepository {
     if (!response.ok) raise(`Impossible de sauver les items de ${lister.contextPath}`)
   }
 
-  static async saveItem(item, fields) {
+  static async saveItem(item, fields, { oldId } = {}) {
     const payload = { id: item.id }
+    if (oldId && oldId !== item.id) payload.old_id = oldId
     Object.entries(fields).forEach(([longKey, value]) => {
       const shortKey = ItemDataMapper.TO_PERSISTENCE[longKey]
       if (shortKey) payload[shortKey] = value

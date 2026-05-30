@@ -63,6 +63,11 @@ export default class KeyboardController {
 
     switch (event.key) {
 
+      case 'Enter':
+        this.activeLister.editSelectedItem()
+        event.preventDefault()
+        return
+
       case 'n':
         LOG.m(2, 'Create new item')
         this.activeLister.createNewItem()
