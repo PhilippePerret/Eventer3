@@ -52,10 +52,23 @@ export default class KeyboardController {
 
   onKeyDown(event) {
 
-    const currentMode = this.getCurrentMode()
+    // Règle globale : Cmd+Enter ferme le lister courant (sauf exception dans close())
+    if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+      event.preventDefault()
+      this.activeLister?.close()
+      return
+    }
 
+    // Modes spéciaux (popup-select…)
+    const currentMode = this.getCurrentMode()
     if (currentMode) {
       void currentMode.onKeyDown(event, this)
+      return
+    }
+
+    // Édition contentEditable en cours
+    if (this.activeLister?.editing) {
+      this.activeLister._handleEditingKeyDown(event)
       return
     }
 
@@ -73,6 +86,11 @@ export default class KeyboardController {
       case 'n':
         LOG.m(2, 'Create new item')
         this.activeLister.createNewItem()
+        event.preventDefault()
+        return
+
+      case ' ':
+        this.activeLister.toggleSelectedItemChecked?.()
         event.preventDefault()
         return
 
@@ -95,24 +113,19 @@ export default class KeyboardController {
         return
 
       case 'ArrowDown':
-
-        if (event.metaKey) {
-          this.activeLister.moveSelectedItemDown()
-        } else {
-          this.activeLister.selectNextItem()
-        }
-
+        if (event.metaKey) this.activeLister.moveSelectedItemDown()
+        else this.activeLister.selectNextItem()
         event.preventDefault()
         return
 
       case 'ArrowUp':
+        if (event.metaKey) this.activeLister.moveSelectedItemUp()
+        else this.activeLister.selectPreviousItem()
+        event.preventDefault()
+        return
 
-        if (event.metaKey) {
-          this.activeLister.moveSelectedItemUp()
-        } else {
-          this.activeLister.selectPreviousItem()
-        }
-
+      case 'Escape':
+        this.activeLister.close()
         event.preventDefault()
         return
 

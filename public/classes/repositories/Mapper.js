@@ -3,10 +3,12 @@ export class ItemDataMapper {
   static TO_RUNTIME = {
     ac: 'active',
     bg: 'badge',
+    bi: 'brin_ids',
     ca: 'created_at',
     ch: 'checked',
     co: 'color',
     du: 'duration',
+    fi: 'file',
     fn: 'fonction',
     hl: 'hasLister',
     id: 'id',

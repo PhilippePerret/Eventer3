@@ -1,11 +1,12 @@
 {
   "b2": {
     "ac": true,
-    "bg": null,
+    "bg": "UNB",
     "ca": null,
     "ch": false,
-    "co": null,
+    "co": "#d9c8a9",
     "du": null,
+    "fi": "",
     "fn": null,
     "hl": false,
     "id": "b2",
@@ -13,16 +14,17 @@
     "pt": null,
     "st": 0,
     "tt": "Un nouveau brin",
-    "ty": [],
-    "ua": "2026-05-31T08:48:20Z"
+    "ty": "",
+    "ua": "2026-05-31T14:07:21Z"
   },
   "b1": {
     "ac": true,
-    "bg": null,
+    "bg": "IP",
     "ca": null,
     "ch": true,
-    "co": null,
+    "co": "#c8d9a9",
     "du": null,
+    "fi": "",
     "fn": null,
     "hl": false,
     "id": "b1",
@@ -30,7 +32,7 @@
     "pt": null,
     "st": 0,
     "tt": "Intrigue principale",
-    "ty": [],
+    "ty": "",
     "ua": null
   }
 }

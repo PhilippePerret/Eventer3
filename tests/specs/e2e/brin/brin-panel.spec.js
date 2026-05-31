@@ -74,6 +74,26 @@ test("les brins cochés (ch:true) ont la classe checked", async ({ page }) => {
   await expect(page.locator('.brin-item').nth(1)).toHaveClass(/checked/)
 })
 
+test("seuls les brins de l'event sélectionné sont cochés à l'ouverture", async ({ page }) => {
+  // e1 sélectionné : seul b2 coché (e1 a bi=["b2"])
+  await goToEventLister(page)
+  await page.keyboard.press('b')
+  await expect(page.locator('.brin-item').nth(0)).not.toHaveClass(/checked/)
+  await expect(page.locator('.brin-item').nth(1)).toHaveClass(/checked/)
+  await page.keyboard.press('Escape')
+  // e2 sélectionné : aucun brin coché (e2 n'a pas de bi)
+  await page.keyboard.press('ArrowDown')
+  await page.keyboard.press('b')
+  await expect(page.locator('.brin-item').nth(0)).not.toHaveClass(/checked/)
+  await expect(page.locator('.brin-item').nth(1)).not.toHaveClass(/checked/)
+  await page.keyboard.press('Escape')
+  // retour à e1 : b2 doit de nouveau être coché (pas de stale state)
+  await page.keyboard.press('ArrowUp')
+  await page.keyboard.press('b')
+  await expect(page.locator('.brin-item').nth(0)).not.toHaveClass(/checked/)
+  await expect(page.locator('.brin-item').nth(1)).toHaveClass(/checked/)
+})
+
 test("le premier brin est sélectionné à l'ouverture", async ({ page }) => {
   await openBrinPanel(page)
   await expect(page.locator('.brin-item').nth(0)).toHaveClass(/selected/)
@@ -151,6 +171,41 @@ test("Enter édite le brin sélectionné (input title focalisé avec valeur cour
   const titleInput = page.locator('.brin-item.selected input[name="title"]')
   await expect(titleInput).toBeFocused()
   await expect(titleInput).toHaveValue('Mon brin')
+})
+
+test("Tab en édition passe du titre au badge", async ({ page }) => {
+  await openBrinPanel(page)
+  await page.keyboard.press('Enter')
+  await expect(page.locator('.brin-item.selected input[name="title"]')).toBeFocused()
+  await page.keyboard.press('Tab')
+  const badgeInput = page.locator('.brin-item.selected input[name="badge"]')
+  await expect(badgeInput).toBeFocused()
+  await expect(badgeInput).toHaveValue('MON')
+})
+
+test("Tab depuis la couleur revient au titre (cycle complet)", async ({ page }) => {
+  await openBrinPanel(page)
+  await page.keyboard.press('Enter')
+  // title → badge → type → color
+  await page.keyboard.press('Tab')
+  await page.keyboard.press('Tab')
+  await page.keyboard.press('Tab')
+  await expect(page.locator('.brin-item.selected input[data-property="color"]')).toBeFocused()
+  // color → title (wrap-around)
+  await page.keyboard.press('Tab')
+  await expect(page.locator('.brin-item.selected input[name="title"]')).toBeFocused()
+})
+
+test("Tab en édition cycle sur les 4 champs : title → badge → type → color", async ({ page }) => {
+  await openBrinPanel(page)
+  await page.keyboard.press('Enter')
+  await expect(page.locator('.brin-item.selected input[name="title"]')).toBeFocused()
+  await page.keyboard.press('Tab')
+  await expect(page.locator('.brin-item.selected input[name="badge"]')).toBeFocused()
+  await page.keyboard.press('Tab')
+  await expect(page.locator('.brin-item.selected select[data-property="type"]')).toBeFocused()
+  await page.keyboard.press('Tab')
+  await expect(page.locator('.brin-item.selected input[data-property="color"]')).toBeFocused()
 })
 
 test("édition : modifier le titre puis Enter met à jour l'affichage", async ({ page }) => {

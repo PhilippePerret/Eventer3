@@ -1,16 +1,16 @@
 {
   "item_ids": [
-    "e1",
     "e1"
   ],
   "perso_ids": [],
   "lasts_id": {
     "item": 1,
-    "brin": 1,
+    "brin": 2,
     "perso": 0
   },
-  "updated_at": "2026-05-31T08:37:21Z",
+  "updated_at": "2026-05-31T09:18:03Z",
   "brin_ids": [
+    "b2",
     "b1"
   ]
 }

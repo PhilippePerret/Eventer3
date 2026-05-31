@@ -49,6 +49,7 @@ export default class Item {
     this.created_at = data.created_at ?? null
     this.updated_at = data.updated_at ?? null
     this.badge = data.badge ?? null
+    this.brin_ids = data.brin_ids ?? []
     this.patronyme = data.patronyme ?? null
     this.fonction = data.fonction ?? null
     // -- ajouté au runtime --
@@ -102,6 +103,7 @@ export default class Item {
     if (field.type === 'popup-select') return this.createPopupSelectTrigger(itemElement, field)
     const element = itemElement.querySelector(field.selector)
     if (!element) throw new Error(`Item.createEditorInput: ${field.selector} missing`)
+    if (field.type === 'native') return element
     const input = this.createInputFromElement(element, field)
     element.replaceWith(input)
     return input

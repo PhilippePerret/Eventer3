@@ -1,4 +1,4 @@
 {
-  "e1": { "id": "e1", "tt": "Évènement un"   },
+  "e1": { "id": "e1", "tt": "Évènement un", "bi": ["b2"] },
   "e2": { "id": "e2", "tt": "Évènement deux"  }
 }

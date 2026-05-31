@@ -185,6 +185,10 @@ body {
   cursor: default;
 }
 
+.event-state:empty {
+  display: none;
+}
+
 .event-state:focus,
 .event-state.editing-select {
   outline: 3px solid rgba(10, 100, 255, .85);
@@ -236,6 +240,9 @@ body {
 
 .badge.brin {
   background: var(--brin);
+  width: 36px;
+  min-width: 36px;
+  padding: 0;
 }
 
 .badge.perso {
@@ -322,7 +329,7 @@ body {
 
 #panel,
 .brin-panel__inner {
-  width: 760px;
+  width: min(95vw, 1020px);
   max-height: 80vh;
   overflow: auto;
   background: #f6f3ee;

@@ -2,6 +2,13 @@ import Item from './Item.js'
 
 export default class Event extends Item {
 
+  constructor(data = {}) {
+    super(data)
+    // bi is the persistence key for brin_ids (mapped in Mapper, but data here is still raw)
+    this.brin_ids = data.bi ?? data.brin_ids ?? []
+  }
+
+
   static get newItemPlaceholder() {
     return 'Titre du nouvel évènement'
   }

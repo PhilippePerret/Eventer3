@@ -458,7 +458,7 @@ data/
     └── <id item>.json
 ~~~
 
-**Les imbrications sont infinies et fonctionnent toutes de la même façon** : un `Item` (défini dans le fichier `__items.json` d’un `Lister` quelconque) qui possède par exemple l’`id` `e2133` pourra toujours posséder un `Lister` qui aura pour nom `e2133.json` et pour dossier `e2133` (pour contenir la définition de ses propres `Item`s — dans `__items.json` — et des `Lister`s de ses `Item`s) etc.
+**Les imbrications sont infinies et fonctionnent toutes de la même façon** : un `Item` (défini dans le fichier `__items.json` d’un `Lister` quelconque) qui possède par exemple l’`id` `e2133` pourra toujours posséder un `Lister` qui aura pour nom `lof-e2133.json` et pour dossier `lof-e2133` (pour contenir la définition de ses propres `Item`s — dans `__items.json` — et des `Lister`s de ses `Item`s) etc.
 
 
 
@@ -469,9 +469,24 @@ data/
 Il faut bien comprendre le fonctionnement de la création des nouveaux éléments (Item) qui 
 
 1) ne doivent jamais être créés tout de suite
-2) crée des choses différentes en fonction de la classe spécialisée (`ProjectLister`, items `Project`, `EventLister`, items `Event`, `BrinLister`, items `Brin`, `PersoLister`, items `Perso`)
+2) crée des choses différentes en fonction de la classe spécialisée (`ProjectLister` avec items `Project`, `EventLister` avec items `Event`, `BrinLister` avec items `Brin`, `PersoLister` avec items `Perso`)
 
 Voilà les différents comportement :
+
+
+
+#### Propriétés éditées en fonction des classes spécialisées
+
+*Une fois l’item mis en édition, la touche `Tab` doit permettre de passer de champ en champ pour les modifier avec le clavier.*
+
+| Classe spécialisée | Liste des propriétés modifiables (Tab)                       |
+| ------------------ | ------------------------------------------------------------ |
+| `Project`          | `title` → `id`                                               |
+| `Event`            | `title` → `state`                                            |
+| `Brin`             | `title` → `badge` → `type` → `color`                         |
+| `Perso`            | `title`  (pseudo) → `badge`  → `patronyme` → `type` → `fonction` |
+
+
 
 ### Création d’un nouveau projet
 

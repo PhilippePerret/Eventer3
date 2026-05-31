@@ -6,7 +6,7 @@
 
 ## But
 
-Le but premier d’Eventer est de permettre à l’autrice ou l’auteur, la ou le scénariste, de développer en toute agilité **la structure de son histoire** et de la mettre même au cœur de son processus d’écriture.
+Le but premier d’Eventer est de permettre à l’autrice ou l’auteur, la ou le scénariste, de développer en toute agilité **la structure de son histoire** et de mettre cette structure au cœur même de son processus d’écriture.
 
 Elle ou il peut s’en servir uniquement pour construire l’histoire, donc définir la structure seulement ou alors s’en servir complètement jusqu’au texte final, roman ou scénario, ou tout autre document intermédiaire comme le synopsis complet.
 
@@ -28,7 +28,7 @@ Elle ou il peut s’en servir uniquement pour construire l’histoire, donc déf
 
 * Application ruby Sinatra (cf. app.rb)
 * l’enregistrement est automatique, transparent
-* tout clavier, (presque) rien à la souris
+* tout clavier, rien à la souris
 * sauvegarde en JSON
 * identifiants les plus courts possible
 * produire du code verbeux (comme le mode verbose, `--verbose`, des commandes unix) pour pouvoir suivre le message. Mais désactivable facilement.
@@ -37,9 +37,7 @@ Elle ou il peut s’en servir uniquement pour construire l’histoire, donc déf
 
 ---
 
-## Architecture
-
-**ATTENTION, CETTE ARCHITECTURE N’EST PAS À PRENDRE AU PIED DE LA LETTRE, ELLE EST PUREMENT INDICATIVE ET NE TIENT PAS COMPTE DES DERNIÈRES AVANCÉES.**
+## Architecture générale
 
 ```text
 Eventer2/
@@ -57,19 +55,15 @@ Eventer2/
 │		├── classes/
 │		│		(les classes utiles)
 │		│		├── App.js
-│		│		├── models/
-│		│		├── views/
-│		│		├── controllers/
-│		│		├── repositories/
-│		│		├── EditableText.js  (???)
+│		│		├── etc.
 │		│		├── Texte.js  (gestion des textes)
 │		│
 │   ├── index.html
 │   └── style.css
 │
-├── tests/
+├── tests/ (tout, vraiment tout ce qui concerne les tests)
 │
-└── exports/
+└── exports/ (servira pour les exportations)
 ```
 
 
@@ -189,6 +183,11 @@ Note : Ci-dessous, lorsqu’on parle d’*élément*, on parle évidemment d’o
 | Annulation de l’édition de l’élément. | ␛ |
 | « Entrer » dans le projet ou le « Lister » de l’Item courant | → |
 | Revenir à l’Item parent. | ← |
+| Suppression de l’item sélectionné | `Delete` |
+| Suppression des items cochés (et pas le sélectionné s’il n’est pas coché) | `Shift`+`Delete` |
+| Copie de l’item sélectionné (toutes ses propriétés sauf l’identifiant) | ⌘ `c` |
+| Couper l’item sélectionné (toutes ses propriétés même l’identifiant) | ⌘ `x` |
+| Coller l’item ou les items copiés/collés à la place de l’item sélectionné. | ⌘ `v` |
 
 ---
 

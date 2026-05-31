@@ -26,6 +26,11 @@ export default class Lister {
     this.items = []
     this.domItems = []
     this.selectedIndex = 0
+    // -- Édition contentEditable --
+    this.editing = false
+    this.editingElement = null
+    this.editingItem = null
+    this.editingPropertyIndex = 0
   }
 
   get itemClass() {
@@ -162,9 +167,20 @@ export default class Lister {
     if (direction > 0) targetItemElement.after(movedItemElement)
     else targetItemElement.before(movedItemElement)
     this.selectedIndex = targetIndex
-    this.scheduleItemsSave() // voir plus tard, mais certainement que ce sont les données du Lister seulement qu'il faudra sauver
+    this._syncIdsOnMove(currentIndex, targetIndex)
+    this.scheduleSave()
   }
 
+  _syncIdsOnMove(currentIndex, targetIndex) {
+    const movedId = this.item_ids[currentIndex]
+    this.item_ids.splice(currentIndex, 1)
+    this.item_ids.splice(targetIndex, 0, movedId)
+  }
+
+  scheduleSave() {
+    clearTimeout(this.saveTimer)
+    this.saveTimer = setTimeout(() => { void this.save() }, 300)
+  }
 
   scheduleItemsSave() {
     clearTimeout(this.itemsSaveTimer)
@@ -177,6 +193,99 @@ export default class Lister {
     if (!item || !itemElement) return
     item.enterEdition(this.itemClass.name.toLowerCase(), this.keyboardController, itemElement)
   }
+
+  startEditing(property = null) {
+    const item = this.items[this.selectedIndex]
+    const el = this.domItems[this.selectedIndex]
+    if (!item || !el) return
+    const props = item.editableProperties?.() ?? []
+    const prop = property ?? props[0]
+    if (!prop) return
+    const propIdx = Math.max(0, props.indexOf(prop))
+    const target = el.querySelector(`[data-property="${prop}"]`)
+    if (!target) return
+    this.editing = true
+    this.editingElement = target
+    this.editingItem = item
+    this.editingPropertyIndex = propIdx
+    if (target.tagName === 'SELECT' || target.tagName === 'INPUT') {
+      target.focus()
+      return
+    }
+    target.contentEditable = 'true'
+    target.spellcheck = false
+    target.focus()
+    const range = document.createRange()
+    const sel = window.getSelection()
+    range.selectNodeContents(target)
+    range.collapse(false)
+    sel.removeAllRanges()
+    sel.addRange(range)
+  }
+
+  stopEditing(shouldSave = true) {
+    if (!this.editing) return
+    const target = this.editingElement
+    const item = this.editingItem
+    if (target && item) {
+      const prop = target.dataset.property
+      if (target.tagName === 'SELECT' || target.tagName === 'INPUT') {
+        if (shouldSave) item[prop] = target.value
+        else target.value = item[prop] ?? ''
+      } else {
+        if (shouldSave) item[prop] = target.textContent.trim()
+        else target.textContent = item[prop] ?? ''
+        target.contentEditable = 'false'
+      }
+      if (shouldSave) this.onAfterStopEditing(item, prop)
+    }
+    this.editing = false
+    this.editingElement = null
+    this.editingItem = null
+    if (shouldSave) void this.saveItems()
+  }
+
+  onAfterStopEditing(item, prop) {}
+
+  editNextProperty() {
+    const item = this.items[this.selectedIndex]
+    const props = item?.editableProperties?.() ?? []
+    this.stopEditing(true)
+    this.editingPropertyIndex = (this.editingPropertyIndex + 1) % props.length
+    this.startEditing(props[this.editingPropertyIndex])
+  }
+
+  _handleEditingKeyDown(event) {
+    if (event.key === 'Tab') {
+      event.preventDefault()
+      this.editNextProperty()
+      return
+    }
+    if (event.key === 'Enter' || event.key === 'Escape') {
+      event.preventDefault()
+      const item = this.editingItem
+      const wasNew = item?.__isNew
+      const selectedIdx = this.selectedIndex
+      const shouldSave = event.key === 'Enter'
+      this.stopEditing(shouldSave)
+      if (wasNew) {
+        if (shouldSave) {
+          item.__isNew = false
+          void this.save()
+        } else {
+          this.items.splice(selectedIdx, 1)
+          this.domItems[selectedIdx]?.remove()
+          this.domItems.splice(selectedIdx, 1)
+          this.selectedIndex = Math.max(0, selectedIdx - 1)
+          this._onCancelNewItem(selectedIdx)
+        }
+      }
+    }
+  }
+
+  _onCancelNewItem(idx) {}
+
+  close() {}
 
   createNewItem() {
     LOG.m(2, 'Lister.createNewItem', { lister: this.id, type: this.type, selectedIndex: this.selectedIndex, hasKeyboardController: Boolean(this.keyboardController) })
@@ -206,6 +315,7 @@ export default class Lister {
       this.lasts_id.item += 1
       item.id = `${this.itemClass.idPrefix}${this.lasts_id.item}`
     }
+    item.parentLister = this
     LOG.m(2, 'Lister.commitNewItem', { itemId: item.id, insertionIndex, before: [...this.item_ids] })
     this.items.splice(insertionIndex, 0, item)
     this.item_ids.splice(insertionIndex, 0, item.id)

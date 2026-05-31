@@ -3,8 +3,8 @@
   "title": "Liste des projets",
   "type": "project",
   "item_ids": [
-    "un-autre-projet",
-    "modele"
+    "modele",
+    "un-autre-projet"
   ],
   "perso_ids": [],
   "brin_ids": [],
@@ -13,5 +13,5 @@
     "brin": 0,
     "perso": 0
   },
-  "updated_at": "2026-05-29T09:26:42Z"
+  "updated_at": "2026-05-31T14:05:28Z"
 }

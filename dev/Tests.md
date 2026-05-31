@@ -6,7 +6,13 @@
 
 - [x] S’assurer que la classe JS `Item` existe et qu’on peut instancier un objet d’une classe qui en hérite.
 
-- [x] S’assurer que la méthode `Lister.sortItems` existe et qu’elle classe bien les items fournis
+- [x] S’assurer que la méthode `Lister.sortItems` existe et qu’elle classe bien les items fournis.
+
+- [ ] Dans un lister quelconque, on peut cocher les éléments (Projets, Brins, Events, Persos…). Mais quand on fait un couper ou un coller, il y a deux comportemen différents : SI des éléments sont cochés, ce sont eux ET SEULEMENT EUX (pas l’item sélectionné) qui sont considérés. SI en revanche aucun item n’est coché, c’est l’item sélectionné qui est considéré/traité. Faire l’essai par exemple avec couper-coller
+
+- [ ] En revanche, supprimer (`Delete` sans la touche `Shift`) supprime seulement l’item sélectionné. Deux essais : 1) `Delete` seul => supprimer l’item sélectionné. 2)  `Shift`+`Delete` => supprime les items cochés (mais PAS celui sélectionné, SAUF s’il est coché, évidemment !
+
+- [ ] La touche ← permet de revenir au Lister « parent » (s’il existe évidemment, donc un test avec un Lister qui a un parent et un avec un Lister qui n’a pas de parent.
 
 ---
 
@@ -85,6 +91,13 @@
 
 ## Event
 
+- [ ] On doit pouvoir mettre un Event en édition pour modifier de façon persistante sont `title` et son `state`.
+- [ ] La combinaison ⌘+`c` permet de copier l’item (toutes ses propriétés SAUF son id)
+- [ ] La combinaison ⌘+`x` permet de couper l’item (toutes ses propriétés MÊME son id)
+- [ ] La combinaison ⇧+⌘+`c` permet de copier tous les items cochés (toutes leurs propriétés sauf leur id). Faire un test avec l’élément sélectionné coché (il est pris aussi) et un test avec l’élément sélectionné non coché (il n’est pas pris).
+- [ ] La combinaison ⇧+⌘+`x` permet de couper tous les items cochés (toutes leurs propriétés MÊME leur id). Faire un test avec l’élément sélectionné coché (il est coupé aussi et pris) et un test avec l’élément sélectionné non coché (il n’est pas considéré.
+- [ ] La combinaison ⌘+`v` permet de coller l’item (toutes ses propriétés MÊME son id) au-dessus de l’item sélectionné. Faire aussi le test avec **plusieurs** items copiés ou coupés.
+- [ ] La combinaison ⌘+`v` permet de coller l’item au-dessus de l’item sélectionné **même dans un autre panneau** (essayer forcément avec les évènemenciers). Faire aussi le test avec **plusieurs** items copiés ou coupés.
 - [ ] Un event peut définir sa météo (`meteo` ☀️🌤️🌦️☁️💨⛈️🌪️🌨️) dans un mini panneau qui contient aussi l’effet.
 - [ ] Un event peut définir son effet (`effet`) pami « jour », « nuit, etc. Voir les valeus possibles et les vraies valeurs dans la données `EFFETS`.
 - [ ] La météo et l’effet d’un event influence son apparence (si la bonne option est choisie)
@@ -92,7 +105,14 @@
 - [ ] Test unitaire du calcul de la date dynamique.
 - [ ] Un event peut définir sa date `dyndate`de façon dynamique.
 
+### Brin
 
+- [ ] En édition, avec la touche `Tab`, on doit pouvoir modifier, dans l’ordre : le `title`, le `badge`, le `type` et la `color` du brin.
+- [ ] Le choix de la couleur du brin doit modifier l’affichage des events qui l’ont en premier brin si l’option de l’EventLister le demande (choix entre fond = premier brin ou fond = climat).
+
+### Panneau des brins
+
+- [ ] À l’ouverture du panneau, seuls les brins de l’event sélectionné devraient être cochés.
 
 ### Project
 
