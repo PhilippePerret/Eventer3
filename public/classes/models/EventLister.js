@@ -1,5 +1,6 @@
 import Lister from './Lister.js'
 import Event from './Event.js'
+import BrinLister from './BrinLister.js'
 
 export default class EventLister extends Lister {
 
@@ -10,6 +11,16 @@ export default class EventLister extends Lister {
 
   get childListerClass() {
     return EventLister
+  }
+
+  async commitNewItem(item, itemElement, insertionIndex) {
+    const wasVirtual = this.__isVirtual
+    await super.commitNewItem(item, itemElement, insertionIndex)
+    if (wasVirtual) await BrinLister.init(this)
+  }
+
+  async openBrinPanel() {
+    await BrinLister.open(this)
   }
 
   renderHeader() {

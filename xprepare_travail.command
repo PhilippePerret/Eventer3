@@ -56,8 +56,10 @@ ouvre_iterm_with() {
         set bounds to $BOUNDS
     end tell
 
-  EOF
+EOF
 }
+
+
 # Exemple :
 # ouvre_terminal_with "1200 100 800 600" "ls -la"
 

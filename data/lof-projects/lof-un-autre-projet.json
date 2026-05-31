@@ -6,8 +6,11 @@
   "perso_ids": [],
   "lasts_id": {
     "item": 1,
-    "brin": 0,
+    "brin": 1,
     "perso": 0
   },
-  "updated_at": "2026-05-29T10:04:58Z"
+  "updated_at": "2026-05-31T08:37:21Z",
+  "brin_ids": [
+    "b1"
+  ]
 }

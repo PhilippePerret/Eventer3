@@ -37,12 +37,14 @@ export default class KeyboardController {
       onKeyDown
     })
 
+    const initialValue = defaultInput?.value ?? ''
+
     requestAnimationFrame(() => {
 
       if (!defaultInput) return
 
       defaultInput.focus()
-      defaultInput.select()
+      if (initialValue) defaultInput.select()
 
     })
 
@@ -72,6 +74,13 @@ export default class KeyboardController {
         LOG.m(2, 'Create new item')
         this.activeLister.createNewItem()
         event.preventDefault()
+        return
+
+      case 'b':
+        if (typeof this.activeLister.openBrinPanel === 'function') {
+          this.activeLister.openBrinPanel().catch(err => console.error('openBrinPanel:', err))
+          event.preventDefault()
+        }
         return
 
       case 'ArrowRight':

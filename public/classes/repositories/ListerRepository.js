@@ -39,7 +39,8 @@ export default class ListerRepository {
       const shortKey = ItemDataMapper.TO_PERSISTENCE[longKey]
       if (shortKey) payload[shortKey] = value
     })
-    const response = await fetch(`/data/${item.parentLister.contextPath}/__items.json`, {
+    const filename = item.parentLister.itemsFilename ?? '__items.json'
+    const response = await fetch(`/data/${item.parentLister.contextPath}/${filename}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)

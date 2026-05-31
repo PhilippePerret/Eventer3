@@ -41,7 +41,7 @@ patch '/data/*' do |requested_path|
   halt 404 unless File.exist?(filepath)
   payload = JSON.parse(request.body.read)
   data = JSON.parse(File.read(filepath))
-  if requested_path.end_with?('__items.json') && payload.key?('id')
+  if (requested_path.end_with?('__items.json') || requested_path.end_with?('__brins.json')) && payload.key?('id')
     new_id = payload.delete('id')
     old_id = payload.delete('old_id') { new_id }
     if old_id != new_id && data.key?(old_id)

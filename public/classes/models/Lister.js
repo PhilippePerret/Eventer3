@@ -45,12 +45,18 @@ export default class Lister {
     return null
   }
 
+  get itemsFilename() {
+    return '__items.json'
+  }
+
   async loadDefinition() {
     const response = await fetch(`/data/${this.contextPath}.json`)
     if (!response.ok) return
     const data = await response.json()
     if (data.item_ids) this.item_ids = data.item_ids
+    if (data.brin_ids) this.brin_ids = data.brin_ids
     if (data.perso_ids) this.perso_ids = data.perso_ids
+    if (data.lasts_id) this.lasts_id = data.lasts_id
   }
 
   async loadItems() {

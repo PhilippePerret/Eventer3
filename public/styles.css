@@ -309,16 +309,19 @@ body {
 
 /* ─── Modal panel (Brins / Persos) ───────────────────────────── */
 
-#panel-overlay {
+#panel-overlay,
+#brin-panel {
   position: fixed;
   inset: 0;
   background: rgba(20, 20, 20, .10);
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 100;
 }
 
-#panel {
+#panel,
+.brin-panel__inner {
   width: 760px;
   max-height: 80vh;
   overflow: auto;
@@ -327,6 +330,14 @@ body {
   border-radius: 14px;
   padding: 18px;
   box-shadow: 0 24px 70px rgba(0, 0, 0, .22);
+}
+
+.panel-color-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--brin);
+  display: inline-block;
 }
 
 .hidden {
@@ -381,6 +392,29 @@ body {
 
 .panel-row.selected {
   background: rgba(0, 0, 0, .06);
+}
+
+.brin-row.selected {
+  background: var(--selected) !important;
+  color: white;
+}
+
+.brin-row .panel-check {
+  opacity: 0;
+}
+
+.brin-row.checked .panel-check {
+  opacity: 1;
+  color: #00a832;
+}
+
+.brin-row.selected.checked .panel-check {
+  opacity: 1;
+  color: white;
+}
+
+.brin-row.selected .panel-color-dot {
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .4);
 }
 
 .brin-row {
