@@ -9,6 +9,8 @@ export default class EventLister extends Lister {
     this.itemClass = Event
   }
 
+  get uiModes() { return ['listerRoot', 'eventsRoot'] }
+
   get childListerClass() {
     return EventLister
   }

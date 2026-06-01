@@ -1,5 +1,5 @@
-import { installFixtures } from '../../helpers/install-fixtures'
-import { test, expect } from './__setup__.js'
+import { installFixtures } from '../../../helpers/install-fixtures.js'
+import { test, expect } from '../__setup__.js'
 
 test.describe('Cmd+n dans la liste des projets', () => {
   test.beforeEach(() => installFixtures('many-projects'))
@@ -26,6 +26,7 @@ test.describe("Cmd+n dans un EventLister", () => {
 
   test("Cmd+n crée un event EN DESSOUS de l'event sélectionné", async ({ page }) => {
     await page.goto('/')
+    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
     await page.keyboard.press('ArrowRight')
     await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
 

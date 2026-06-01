@@ -2,6 +2,8 @@ import LOG from '../../system/LOG.js'
 import { raise } from '../../system/Error.js'
 import Item from './Item.js'
 import ListerRepository from '../repositories/ListerRepository.js'
+import FooterHelp from '../ui/FooterHelp.js'
+
 
 export default class Lister {
 
@@ -39,6 +41,8 @@ export default class Lister {
   set itemClass(value) {
     this._itemClass = value
   }
+
+  get uiModes() { return [] }
 
   get contextPath() {
     if (this.parentItem) return `${this.parentItem.parentLister.contextPath}/lof-${this.parentItem.id}`
@@ -112,6 +116,7 @@ export default class Lister {
       this.domItems.push(itemElement)
       this.domContainer.appendChild(itemElement)
     })
+    FooterHelp.update(this.uiModes)
     if (this.keyboardController) this.keyboardController.register(this)
     return this.domContainer
   }
@@ -308,6 +313,24 @@ export default class Lister {
       currentItemElement
     })
     LOG.m(2, 'Lister.createNewItem.done', { items: this.items.length, domItems: this.domItems.length })
+  }
+
+  createNewItemAfter() {
+    if (!this.keyboardController) throw new Error('Lister.createNewItemAfter: keyboardController missing')
+    const originalIndex = this.selectedIndex
+    const insertionIndex = originalIndex + 1
+    const currentEl = this.domItems[originalIndex]
+    if (currentEl) currentEl.classList.remove('selected')
+    const nextEl = this.domItems[insertionIndex] ?? null
+    this.selectedIndex = insertionIndex
+    const item = this.itemClass.create({
+      type: this.itemClass.name.toLowerCase(),
+      lister: this,
+      keyboardController: this.keyboardController,
+      insertionIndex,
+      currentItemElement: nextEl
+    })
+    item.previousSelectedIndex = originalIndex
   }
 
   async save() {

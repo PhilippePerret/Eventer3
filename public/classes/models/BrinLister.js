@@ -1,6 +1,7 @@
 import Lister from './Lister.js'
 import Brin from './Brin.js'
 import ListerRepository from '../repositories/ListerRepository.js'
+import FooterHelp from '../ui/FooterHelp.js'
 
 export default class BrinLister extends Lister {
 
@@ -38,6 +39,8 @@ export default class BrinLister extends Lister {
     this.itemClass = Brin
   }
 
+  get uiModes() { return ['listerRoot', 'modalPanel'] }
+
   get selectedEvent() { return this.eventLister.items[this.eventLister.selectedIndex] }
 
   async loadItems() {
@@ -72,18 +75,7 @@ export default class BrinLister extends Lister {
     header.appendChild(titleEl)
     card.appendChild(header)
 
-    const footer = document.querySelector('#shortcuts-footer')
-    if (footer) {
-      this._previousFooterHTML = footer.innerHTML
-      footer.innerHTML = `
-        <span><kbd>↑</kbd><kbd>↓</kbd> Choisir</span>
-        <span><kbd>Entrée</kbd> Éditer</span>
-        <span><kbd>⇥</kbd> Prop. suivante</span>
-        <span><kbd>n</kbd> Nouveau brin</span>
-        <span><kbd>Espace</kbd> Cocher</span>
-        <span><kbd>⌘Entrée</kbd> Fermer</span>
-      `
-    }
+    FooterHelp.update(this.uiModes)
 
     this.domContainer = card
     this.domItems = []
@@ -144,7 +136,9 @@ export default class BrinLister extends Lister {
     item.parentLister = this
     this.items.splice(insertionIndex, 0, item)
     this.item_ids.splice(insertionIndex, 0, item.id)
-    this.domItems.splice(insertionIndex, 0, itemElement)
+    const properEl = this._createItemElement(item, insertionIndex)
+    itemElement.replaceWith(properEl)
+    this.domItems.splice(insertionIndex, 0, properEl)
     await ListerRepository.save(this)
   }
 
@@ -194,8 +188,7 @@ export default class BrinLister extends Lister {
   close() {
     document.querySelector('#brin-panel').classList.add('hidden')
     document.querySelector('#brin-panel').innerHTML = ''
-    const footer = document.querySelector('#shortcuts-footer')
-    if (footer && this._previousFooterHTML !== undefined) footer.innerHTML = this._previousFooterHTML
+    FooterHelp.update(this.eventLister.uiModes)
     this.keyboardController.register(this.eventLister)
   }
 

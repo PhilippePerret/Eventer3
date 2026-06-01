@@ -1,7 +1,7 @@
-import { installFixtures } from '../../helpers/install-fixtures'
+import { installFixtures } from '../../../helpers/install-fixtures.js'
 installFixtures('many-projects')
 
-import { test, expect } from './__setup__.js'
+import { test, expect } from '../__setup__.js'
 
 test('Cmd+flèche permet de déplacer les items', async ({ page }) => {
 

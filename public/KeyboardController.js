@@ -84,8 +84,12 @@ export default class KeyboardController {
         return
 
       case 'n':
-        LOG.m(2, 'Create new item')
-        this.activeLister.createNewItem()
+        if (event.metaKey) {
+          this.activeLister.createNewItemAfter?.()
+        } else {
+          LOG.m(2, 'Create new item')
+          this.activeLister.createNewItem()
+        }
         event.preventDefault()
         return
 

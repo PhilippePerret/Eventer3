@@ -7,6 +7,7 @@ test.beforeEach(() => {
 
 async function openBrinPanel(page) {
   await page.goto('/')
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
   await page.keyboard.press('ArrowRight')
   await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
   await page.keyboard.press('b')

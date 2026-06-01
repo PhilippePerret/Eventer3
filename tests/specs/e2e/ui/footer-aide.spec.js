@@ -15,6 +15,7 @@ test("le footer affiche des raccourcis sur la liste des projets", async ({ page 
 
 test("le footer affiche des raccourcis dans un EventLister", async ({ page }) => {
   await page.goto('/')
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
   await page.keyboard.press('ArrowRight')
   await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
   const footer = page.locator('#shortcuts-footer')
@@ -31,6 +32,7 @@ test("le footer mentionne au moins la navigation (↑↓) dans la liste des proj
 
 test("le footer mentionne au moins la navigation (↑↓) dans un EventLister", async ({ page }) => {
   await page.goto('/')
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
   await page.keyboard.press('ArrowRight')
   const footer = page.locator('#shortcuts-footer')
   await expect(footer).toContainText('↑')

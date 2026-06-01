@@ -24,6 +24,8 @@ export default class Projects extends Lister {
     this.itemClass = Project
   }
 
+  get uiModes() { return ['projects'] }
+
   get childListerClass() {
     return EventLister
   }
