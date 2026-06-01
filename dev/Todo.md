@@ -2,10 +2,14 @@
 
 ### Bug
 
--  à l’ouverture du panneau des brins, spécificité : le brin de l’event doivent être cochés et seulement ceux-là => test
+-  
 
 ## Todo
 
+* GROSSE RÉFLEXION SUR LA FAÇON D’ENREGISTRER LES ITEMS. Je ne suis plus du tout sûr les enregistrer dans des fichier `__items.json` dans leur hiérarchie soit la vraie bonne solution. Pour deux raisons principales :
+  1. on doit pouvoir les changer de place facilement, or, tel que c’est pour le moment etc.
+  2. pour l’affichage de « panneaux de niveaux », ça oblige à ouvrir et gérer de nombreux fichiers, quand il suffirait de ne rien faire avec un id et une base de données.
+* Propriété `flag` pour les `Lister` — première option : le mode d’affichage des fond d’Event, soit par couleur de premier brin, soit par « climat » (météo + effet).
 * Définir l’option d’EventListener qui détermine si le fond des events doit être déterminé par son premier Brin ou par son « climat », constitué 1) de sa météo et 2) de son effet. 
 * ajouter la propriété `mode` de `Lister` qui permettra de définir si les items sont des projets, des évènements (event normaux ou event script), des brins ou des personnages.
 * S’assurer que les propriétés `created_at`/`ca` et `updated_at`/`ua` soient toujours enregisrées (backend)

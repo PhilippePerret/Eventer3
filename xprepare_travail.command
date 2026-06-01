@@ -41,19 +41,19 @@ ouvre_iterm_with() {
   local COMMAND="$2"
 
   osascript <<EOF
-    tell application "iTerm2"
+    tell application "iTerm"
       if (count of windows) = 0 then
         create window with default profile
       end if
       tell current session of current window
         write text "$COMMAND"
       end tell
-    end tell
 
-    delay 0.2
+      delay 0.2
 
-    tell front window
-        set bounds to $BOUNDS
+      tell front window
+          set bounds to $BOUNDS
+      end tell
     end tell
 
 EOF
@@ -89,11 +89,11 @@ if $PREPARE_TERMINAL_WINDOWS; then
   ouvre_iterm_with "{1043, 682, 2413, 1357}" "cd '$DOSSIER';\nclaude"
   
   # -- Serveur --
-  ouvre_terminal_with "{151, 30, 1249, 751}" "cd '$DOSSIER';\nruby ./app.rb"
+  # ouvre_terminal_with "{151, 30, 1249, 751}" "cd '$DOSSIER';\nruby ./app.rb"
   sleep 2
   
   # -- Tests --
-  ouvre_terminal_with "{2433, 30, 3432, 951}" "cd '$DOSSIER/tests';\nclear;clear;npm run test:unit;npm run test:e2e"
+  # ouvre_terminal_with "{2433, 30, 3432, 951}" "cd '$DOSSIER/tests';\nclear;clear;npm run test:unit;npm run test:e2e"
 fi
 
 # Pour lancer la Wep App Safari qui pointe sur le localhost

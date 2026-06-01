@@ -59,7 +59,7 @@ Eventer2/
 │		│		├── Texte.js  (gestion des textes)
 │		│
 │   ├── index.html
-│   └── style.css
+│   v── style.css
 │
 ├── tests/ (tout, vraiment tout ce qui concerne les tests)
 │

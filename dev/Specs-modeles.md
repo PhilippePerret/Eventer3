@@ -1,3 +1,5 @@
+
+
 #  Eventer(3)
 
 
@@ -569,6 +571,128 @@ Une réflexion doit être menée concenant ces propriétés qui sont pour le mom
 |           |             |                                                              |
 |           |             |                                                              |
 |           |             |                                                              |
+
+
+
+<a name="niveaux-imbrication"></a>
+
+---
+
+## Niveaux d'imbrication de mode par niveau
+
+Le *niveau d’imbrication* d’un item (pour le moment, seulement pour le `Item` de type `Event` dépend de sa profondeur à l’intérieur des `Lister`s du projet. Voilà ci-dessous un exemple de projet simple avec plusieurs imbrications :
+
+~~~
+projet
+	│
+	├── Act 1
+	│			│
+	│			├── Seq 1.1
+	│			│			│
+	│			│			├── v
+	│			│			│			│
+	│			│			│			├── BScen 1.1.1.1
+	│			│			│			└── BScen 1.1.1.2
+	│			│			│			
+	│			│			├── Scene 1.1.2
+	│			│			└── Scene 1.1.3
+	│			│
+	│			├── Seq 1.2
+	│			│			│
+	│			│			└── Scene 1.2.1
+	│			│
+	│			├── Seq 1.3
+	│			│			│
+	│			│			├── Scene 1.3.1
+	│			│			└── Scene 1.3.2
+	│			│
+	│			└── Seq 1.4
+	│
+	├── Act 2
+	│			│
+	│			├── Seq 2.1
+	│			│			│
+	│			│			└── Scene 2.1.1
+	│			│
+	│			└── Seq 2.2
+	│			 			│
+	│			 			└── Scene 2.2.1
+	│
+	├── Act 3
+	│			│
+	│			├── Seq 3.1
+	│			│			│
+	│			│			├── Scene 3.1.1
+	│			│			└── Scene 3.1.2
+	│			│
+	│			├── Seq 3.2
+	│			│
+	│			├── Seq 3.3
+	│			│			│
+	│			│			└── Scene 3.2.1
+	│			│
+	│			├── Seq 3.4
+	│			│
+	│			├── Seq 3.5
+
+~~~
+
+On déduit de ce projet que : 
+
+- tous les Actes (`Act x`) on un niveau d’imbrication de 1 (« premier niveau » d’imbrication)
+- toutes les séquences (`sequence x.y`) ont un niveau d’imbrication de 2.
+- tous les scènes (`scene x.y.z`) ont un niveau d’imbrication de 3.
+- etc.
+
+C’est simple comme ça parce qu’on a pris des noms évocateurs (acte, séquence, scène), mais on n’est obligé de rien dans ***Eventer***, on peut donc se retrouver avec des noms très différents de ceux-là.
+
+#### Affichage normal (ou « par imbrication »)
+
+Le mode d’affichage normal ou par imbrication fonctionne comme les dossiers et fichiers dans le Finder d’un Mac : on rentre dans un dossier et l’on voit ses éléments. Si un élément est un dossier, on peut alors entrer dedans de la même manière et l’on voit ses éléments.
+
+> Dans Eventer, on « rentre dedans » avec la touche → comme cela est décrit dans la section [Fonctionnement spécial de « l’entrée dans »](#fonctionnement-entrer-dans).
+
+#### Affichage en mode de niveau
+
+Contrairement au mode d’affichage normal décrit ci-dessus, le l’affichage par mode de niveau (ou simplement ***affichage par niveau***) affiche l’intégralité des items s’un même niveau d’imbrication, avec la règle suivante : 
+
+**RÈGLE : Si aucun item n’existe pour le niveau donné, c’est l’item du niveau supérieur (*) qui est affiché**
+
+*(\*) donc de numéro d’imbrication inférieur.*
+
+Cette règle est capitale pour que l’intégralité du projet soit représenté. 
+
+> Une marque sur l’affichage de l’item indiquera cette exception (un signe particulier au début du nom.)
+
+Par exemple, si nous reprenons le projet donné en exemple ci-dessus et que nous voulons afficher le Lister complet de niveau 3 (scène), nous obtiendrons la liste : 
+
+~~~
+Scene 1.1.1
+Scene 1.1.2
+Scene 1.1.3
+Scene 1.2.1
+Scene 1.2.1
+Scene 1.3.2
++Seq 1.4
+Scene 2.1.1
+Scene 2.2.1
+Scene 3.1.1
+Scene 3.1.2
++Seq 3.2
+Scene 3.2.1
++Seq 3.4
++Seq 3.5
+~~~
+
+#### Changement du mode d’affichage
+
+On bascule d’un mode d’affichage à l’autre avec le raccourci ⌘ `m` (« m » comme « mode »).
+
+Le mode est affiché en permanence dans la barre d’état en bas de fenêtre.
+
+
+
+
 
 
 

@@ -1,5 +1,7 @@
 # Eventer - tests à faire
 
+[TOC]
+
 ## Classe abstraite Lister
 
 - [x] S’assurer que la classe JS `Lister` existe et qu’on peut instancier un objet d’une classe qui en hérite.
@@ -91,6 +93,8 @@
 
 ## Event
 
+- [ ] Un event affiche : son `title`, les badges de ses brins, les badges de ses personnages (personnages propres + personnages de ses brins) et le menu `state`
+  \+ glisser la souris sur les badges (perso et brin) affiche leur `title` complet (avec un système propre à l’application, plus gros et plus rapide que l’attribut `title` de l’objet DOM.
 - [ ] On doit pouvoir mettre un Event en édition pour modifier de façon persistante sont `title` et son `state`.
 - [ ] La combinaison ⌘+`c` permet de copier l’item (toutes ses propriétés SAUF son id)
 - [ ] La combinaison ⌘+`x` permet de couper l’item (toutes ses propriétés MÊME son id)
@@ -100,7 +104,7 @@
 - [ ] La combinaison ⌘+`v` permet de coller l’item au-dessus de l’item sélectionné **même dans un autre panneau** (essayer forcément avec les évènemenciers). Faire aussi le test avec **plusieurs** items copiés ou coupés.
 - [ ] Un event peut définir sa météo (`meteo` ☀️🌤️🌦️☁️💨⛈️🌪️🌨️) dans un mini panneau qui contient aussi l’effet.
 - [ ] Un event peut définir son effet (`effet`) pami « jour », « nuit, etc. Voir les valeus possibles et les vraies valeurs dans la données `EFFETS`.
-- [ ] La météo et l’effet d’un event influence son apparence (si la bonne option est choisie)
+- [ ] La météo et l’effet d’un event influence son apparence (si l’option du Lister le demande => flag du Lister)
 - [ ] Un event peut définir sa date `dyndate` de façon fixe (en lui donnant un nom fixe).
 - [ ] Test unitaire du calcul de la date dynamique.
 - [ ] Un event peut définir sa date `dyndate`de façon dynamique.
@@ -114,6 +118,8 @@
 
 - [ ] À l’ouverture du panneau, seuls les brins de l’event sélectionné devraient être cochés.
 
+
+
 ### Project
 
 - [ ] On ne peut plus redéfinir un `id` de projet une fois qu’il a été défini(i.e. une fois que son `Lister` existe (et donc une fois que son dossier `lof` existe.
@@ -121,3 +127,25 @@
 ## Options application
 
 - [ ] S’assurer que si l’option `open-with-project-list` est active, c’est la liste des projets qui est affichée. S’assurer que si l’option `open-with-project-list` est `false`, c’est la dernier évènemencier qui est ouvert OU la liste des projets si aucun dernier évènemencier n’est défini.
+
+---
+
+## Affichage
+
+- [ ] Le mode d’affichage est toujours écrit dans la barre d’état en bas de fenêtre (mode « normal » ou « niveau »
+- [ ] Le raccourci ⌘+`m` permet de basculer du mode « normal » au mode par « niveau ». Le basculement change la liste affichée.
+
+---
+
+## Filtre
+
+- [ ] Le filtre s’applique toujours à la liste affichée (même si c’est une liste par niveau d’imbrication).
+
+- [ ] On peut filtrer la liste par `title` avec le raccourci `/`,`t` .
+
+- [ ] On peut filtrer la liste affichée par brin avec la combinaison `/`,`b`.
+
+  \+ la ligne en haut de colonne indique le badge des brins filtrés
+  \+ passer la souris sur le badge du brin fait apparaitre son `title` complet.
+
+- [ ] On peut annuler le filtrage avec la combinaison `/`,`/`, `a` (« a » comme « all », « tout »).
