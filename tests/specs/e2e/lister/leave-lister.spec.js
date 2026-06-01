@@ -60,7 +60,7 @@ test.describe('← depuis un sous-EventLister vers le EventLister parent', () =>
     await page.keyboard.press('ArrowRight')
     await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
     await expect(page.locator('.event-item')).toHaveCount(2)
-    await expect(page.locator('.event-item').nth(0)).toContainText('Sous-évènement un')
+    await expect(page.locator('.event-item').nth(0)).toContainText('Évènement e4')
 
     console.log('-> appui sur ←')
     await page.keyboard.press('ArrowLeft')

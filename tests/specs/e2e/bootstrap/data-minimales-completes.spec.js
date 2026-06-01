@@ -1,4 +1,4 @@
-import { test, expect } from './__setup__.js'
+import { test, expect } from '../__setup__.js'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
@@ -41,21 +41,12 @@ test('un projet démo minimal complet est créé et affiché', async ({ page }) 
   await showTree(dataDir)
   console.log('=== FIN ARBORESCENCE DATA ===\n')
 
-  const lofProjectsJson  = path.join(dataDir, 'lof-projects.json')
-  const lofProjectsItems = path.join(dataDir, 'lof-projects', '__items.json')
+  const eventerDb = path.join(dataDir, 'eventer.db')
 
   console.log('\n-> vérification structure minimale')
 
-  expect(await pathExists(lofProjectsJson)).toBe(true)
-  console.log('-> lof-projects.json OK')
-
-  expect(await pathExists(lofProjectsItems)).toBe(true)
-  console.log('-> lof-projects/__items.json OK')
-
-  const itemsContent = JSON.parse(await fs.readFile(lofProjectsItems, 'utf8'))
-  const itemsCount = Object.keys(itemsContent).length
-  expect(typeof itemsContent === 'object' && !Array.isArray(itemsContent) && itemsCount > 0).toBe(true)
-  console.log(`-> __items.json contient ${itemsCount} item(s) OK`)
+  expect(await pathExists(eventerDb)).toBe(true)
+  console.log('-> eventer.db OK')
 
   console.log('\n-> vérification DOM')
   await expect(page.locator('body')).toContainText('Projet modèle')

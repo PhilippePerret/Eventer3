@@ -108,6 +108,7 @@
 - [ ] Un event peut définir sa date `dyndate` de façon fixe (en lui donnant un nom fixe).
 - [ ] Test unitaire du calcul de la date dynamique.
 - [ ] Un event peut définir sa date `dyndate`de façon dynamique.
+- [ ] Si on choisit pour l’Event un personnage qui lui appartient déjà par le biais d’un brin, on signale une erreur et on ne le permet pas.
 
 ### Brin
 
@@ -124,6 +125,8 @@
 
 - [ ] On ne peut plus redéfinir un `id` de projet une fois qu’il a été défini(i.e. une fois que son `Lister` existe (et donc une fois que son dossier `lof` existe.
 
+
+
 ## Options application
 
 - [ ] S’assurer que si l’option `open-with-project-list` est active, c’est la liste des projets qui est affichée. S’assurer que si l’option `open-with-project-list` est `false`, c’est la dernier évènemencier qui est ouvert OU la liste des projets si aucun dernier évènemencier n’est défini.
@@ -132,8 +135,19 @@
 
 ## Affichage
 
-- [ ] Le mode d’affichage est toujours écrit dans la barre d’état en bas de fenêtre (mode « normal » ou « niveau »
 - [ ] Le raccourci ⌘+`m` permet de basculer du mode « normal » au mode par « niveau ». Le basculement change la liste affichée.
+
+### Page normale
+
+- [ ] La première page affiche la liste des projets si les options de l’application sont réglées comme ça). La première page affiche la liste du dernier évènemencier.
+
+### Barre d’état
+
+- [ ] Une barre d’état est bien affichée en bas de la fenêtre (sous l’aide footer)
+- [ ] La barre d’état affiche en tout premier le titre du projet.
+- [ ] La barre d’état affiche la profondeur d’imbrication courante dans le projet.
+- [ ] La barre d’état affiche le bon mode d’affichage (« NORMAL » ou « NIVEAU »).
+- [ ] La barre d’état affiche le niveau d’imbrication (en chiffre)
 
 ---
 
@@ -149,3 +163,9 @@
   \+ passer la souris sur le badge du brin fait apparaitre son `title` complet.
 
 - [ ] On peut annuler le filtrage avec la combinaison `/`,`/`, `a` (« a » comme « all », « tout »).
+
+---
+
+## Recherche
+
+- [ ] Les combinaisons avec la bouche `$` permettent de définir la recherche entièrement au clavier. L’aide Footer permet de visualiser les combinaisons.

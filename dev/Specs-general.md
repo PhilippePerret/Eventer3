@@ -29,7 +29,7 @@ Elle ou il peut s’en servir uniquement pour construire l’histoire, donc déf
 * Application ruby Sinatra (cf. app.rb)
 * l’enregistrement est automatique, transparent
 * tout clavier, rien à la souris
-* sauvegarde en JSON
+* ~~sauvegarde en JSON~~. Non, SQLite maintenant.
 * identifiants les plus courts possible
 * produire du code verbeux (comme le mode verbose, `--verbose`, des commandes unix) pour pouvoir suivre le message. Mais désactivable facilement.
 
@@ -225,9 +225,17 @@ Le DOM suffit largement.
 
 ---
 
-# Sauvegarde
+# Application
 
-- sauvegarde automatique discrète
-- un seul fichier JSON
-- export possible
+## Options
+
+Les options de l’application sont consignées dans le fichier JSON `/data/app_config.js` propre à chaque utilisateur.
+
+Ce fichier définit les options suivantes :
+
+| Option          | Description                                                  | valeurs                                                      |
+| --------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| `modeAffichage` | Mode d’affichage courant, entre :<br />*EST-CE VRAIMENT NÉCESSAIRE alors qu’il peut être changé très rapidement grâce au raccouci ⌘+`m`* ? | `normal` = par imbrication (comme le Finder)<br />`niveau` = par niveau |
+
+
 

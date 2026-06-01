@@ -12,10 +12,9 @@ export default class Lister {
     this.type = data.type ?? null
     this.nature = data.nature ?? 'none'
     this.scale = data.scale ?? null
-    this.item_ids = data.item_ids || raise('Lister: data.item_ids missing', data)
+    this.item_ids = data.item_ids ?? []
     this.brin_ids = data.brin_ids ?? []
-    this.perso_ids = data.perso_ids || raise('Lister: data.perso_ids missing', data)
-    this.lasts_id = data.lasts_id ?? { item: 0, brin: 0, perso: 0 }
+    this.perso_ids = data.perso_ids ?? []
     this.options = data.options ?? { colorizeItemsWithFirstBrin: false }
     this.path = data.path ?? null
     this.created_at = data.created_at ?? null
@@ -55,22 +54,12 @@ export default class Lister {
   }
 
   async loadDefinition() {
-    const response = await fetch(`/data/${this.contextPath}.json`)
-    if (!response.ok) return
-    const data = await response.json()
-    if (data.item_ids) this.item_ids = data.item_ids
-    if (data.brin_ids) this.brin_ids = data.brin_ids
-    if (data.perso_ids) this.perso_ids = data.perso_ids
-    if (data.lasts_id) this.lasts_id = data.lasts_id
+    await ListerRepository.loadDefinition(this)
   }
 
   async loadItems() {
     this.items = []
-    LOG.m(3, 'LOAD ITEMS URL', `/data/${this.contextPath}/__items.json`)
-    const response = await fetch(`/data/${this.contextPath}/__items.json`)
-    if (!response.ok) return
-    const itemsData = await response.json()
-    LOG.m(1, 'ITEMS DATA', itemsData)
+    const itemsData = await ListerRepository.loadItems(this)
     this.item_ids.forEach(id => {
       const itemData = itemsData[id]
       if (itemData) this.items.push(new this.itemClass({ ...itemData, parentLister: this }))
@@ -87,14 +76,15 @@ export default class Lister {
     if (!this.childListerClass) return
     const item = this.items[this.selectedIndex]
     if (!item) return
+    const listerData = await ListerRepository.loadItemLister(item.id)
     const childLister = new this.childListerClass({
-      item_ids: [],
-      perso_ids: [],
+      id: listerData?.id ?? null,
+      item_ids: listerData?.item_ids ?? [],
       keyboardController: this.keyboardController,
       parentItem: item
     })
-    if (item.hasLister) {
-      await childLister.loadDefinition()
+    if (listerData) {
+      if (listerData.brins_lister_id) childLister.brins_lister_id = listerData.brins_lister_id
       await childLister.loadItems()
     } else {
       childLister.__isVirtual = true
@@ -285,6 +275,24 @@ export default class Lister {
 
   _onCancelNewItem(idx) {}
 
+  toggleSelectedItemChecked() {
+    const item = this.items[this.selectedIndex]
+    const el = this.domItems[this.selectedIndex]
+    if (!item || !el) return
+    const isChecked = this._performToggleChecked(item)
+    el.classList.toggle('checked', isChecked)
+    void this._saveAfterToggle(item)
+  }
+
+  _performToggleChecked(item) {
+    item.checked = !item.checked
+    return item.checked
+  }
+
+  async _saveAfterToggle(item) {
+    await this.saveItems()
+  }
+
   close() {}
 
   createNewItem() {
@@ -311,23 +319,20 @@ export default class Lister {
   }
 
   async commitNewItem(item, itemElement, insertionIndex) {
-    if (!item.id && this.itemClass.idPrefix !== null) {
-      this.lasts_id.item += 1
-      item.id = `${this.itemClass.idPrefix}${this.lasts_id.item}`
-    }
-    item.parentLister = this
-    LOG.m(2, 'Lister.commitNewItem', { itemId: item.id, insertionIndex, before: [...this.item_ids] })
-    this.items.splice(insertionIndex, 0, item)
-    this.item_ids.splice(insertionIndex, 0, item.id)
-    LOG.m(2, 'Lister.commitNewItem.afterInsert', { after: [...this.item_ids] })
-    this.domItems.splice(insertionIndex, 0, itemElement)
     if (this.__isVirtual) {
-      await ListerRepository.create(this)
-      this.parentItem.hasLister = true
-      await ListerRepository.saveItems(this.parentItem.parentLister)
+      const newLister = await ListerRepository.createLister({ type: this.type, parent_item_id: this.parentItem.id })
+      this.id = newLister.id
       delete this.__isVirtual
     }
-    await ListerRepository.saveItems(this)
+    const payload = { title: item.title, type: item.type }
+    if (this.itemClass.idPrefix === null) payload.id = item.id
+    const created = await ListerRepository.createItem(this.id, payload)
+    if (this.itemClass.idPrefix !== null) item.id = created.id
+    item.parentLister = this
+    LOG.m(2, 'Lister.commitNewItem', { itemId: item.id, insertionIndex })
+    this.items.splice(insertionIndex, 0, item)
+    this.item_ids.splice(insertionIndex, 0, item.id)
+    this.domItems.splice(insertionIndex, 0, itemElement)
     await ListerRepository.save(this)
     LOG.m(2, 'Lister.commitNewItem.saved', { item_ids: [...this.item_ids] })
   }

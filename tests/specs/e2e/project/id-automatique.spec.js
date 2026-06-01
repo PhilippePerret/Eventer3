@@ -1,38 +1,45 @@
-import fs from 'fs'
-import path from 'path'
 import { installFixtures } from '../../../helpers/install-fixtures'
-installFixtures('many-projects')
-import { test, expect } from '../../e2e/__setup__.js'
+import { test, expect } from '../__setup__.js'
 
-test('la saisie du titre d’un nouveau projet crée automatiquement son identifiant logique', async ({ page }) => {
+test.beforeEach(() => {
+  installFixtures('many-projects')
+})
+
+test("la saisie du titre d'un nouveau projet crée automatiquement son identifiant logique", async ({ page }) => {
   console.log('\n=== TEST AUTO ID PROJET ===\n')
-  const projectsPath = path.resolve('../data/lof-projects.json')
-  console.log('-> ouverture application')
+
   await page.goto('/')
-  console.log(await page.content())
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(page.locator('.project-item').nth(0)).toHaveClass(/selected/)
+
   console.log('-> création nouveau projet')
-  await page.locator('body').click()
   await page.keyboard.press('n')
-  console.log(await page.locator('#main-panel').innerHTML())
-  const inputs = page.locator('input')
+
+  const titleInput = page.locator('.project-item.selected input[name="title"]')
+  const idInput    = page.locator('.project-item.selected input[name="id"]')
+
   console.log('-> vérification présence champs édition')
-  await expect(inputs).toHaveCount(2)
-  console.log('-> saisie titre projet : "Ça c’est un Été Super !"')
-  await inputs.nth(0).fill('Ça c’est un Été Super !')
-  await inputs.nth(0).press('a')
-  await inputs.nth(0).press('Backspace')
+  await expect(titleInput).toBeVisible()
+  await expect(idInput).toBeVisible()
+
+  console.log('-> saisie titre projet')
+  await titleInput.fill("Ça c'est un Été Super !")
+
   console.log('-> vérification id auto généré')
-  await expect(inputs.nth(1)).toHaveValue('ca-cest-un-ete-super')
+  await expect(idInput).toHaveValue('ca-cest-un-ete-super')
+
   console.log('-> validation création')
-  const patchDone = page.waitForResponse(resp =>
-    resp.url().includes('/data/lof-projects.json') && resp.request().method() === 'PATCH'
+  const savePromise = page.waitForResponse(resp =>
+    resp.url().includes('/api/listers/') && resp.request().method() === 'PATCH'
   )
   await page.keyboard.press('Enter')
-  await patchDone
-  console.log('-> lecture backend')
-  const projects = JSON.parse(fs.readFileSync(projectsPath, 'utf8'))
-  console.log(projects)
-  console.log('-> vérification persistance')
-  expect(projects.item_ids).toContain('ca-cest-un-ete-super')
+  await savePromise
+
+  console.log('-> vérification persistance via API')
+  const resp = await page.request.get('/api/listers/projects')
+  expect(resp.ok()).toBeTruthy()
+  const lister = await resp.json()
+  expect(lister.item_ids).toContain('ca-cest-un-ete-super')
+
   console.log('\n=== FIN TEST AUTO ID PROJET ===\n')
 })

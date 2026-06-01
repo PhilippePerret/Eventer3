@@ -8,20 +8,12 @@ export default class Projects extends Lister {
 
   static async init() {
     LOG.m(1, 'Init projects')
-    let projectsData = {}
-    try {
-      const response = await fetch('/data/lof-projects.json')
-      if (response.ok) projectsData = await response.json()
-    } catch(error) {
-      projectsData = {}
-    }
     const keyboardController = new KeyboardController()
     keyboardController.observe()
     window.__keyboardController = keyboardController
-    const projects = new Projects({ ...projectsData, keyboardController })
-    LOG.m(1, 'BEFORE LOAD ITEMS')
+    const projects = new Projects({ id: 'projects', keyboardController })
+    await projects.loadDefinition()
     await projects.loadItems()
-    LOG.m(1, 'ITEMS', projects.items)
     projects.render()
     LOG.m(1, 'Projects ready')
     return projects

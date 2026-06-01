@@ -89,7 +89,8 @@ classDiagram
 		+string[] brin_ids
 		+string[] perso_ids
 		+LastsId   lasts_id
-		+Options options
+		+Options options // OU flags
+		+Integer flags // OU options
 		+string path
 		+Date created_at
 		+Date updated_at
@@ -102,7 +103,8 @@ classDiagram
 	}
 	
 	class Options {
-		+boolean colorizeItemsWithFirstBrin
+		+boolean colorizeItemsWithFirstBrin // <= SUPPRIMER
+		+string colorizeItemsWith // 'brin'/'climat'
 	}
 	
 	class Scale {
@@ -318,81 +320,10 @@ Et il y a **deux contextes secondaires** (*panneaux qui s'ouvrent par-dessus un 
 
 Un `Lister` contient des `Item`.
  Un `Item` peut lui-même posséder un `Lister` ou pas. Quand un Item possède un `Lister`, il possède un fichier `lof-<id item>.json` qui décrit son `Lister` (**`lof`** pour « lister of »).  Sinon, il ne possède pas ce fichier.
- L’application fonctionne donc comme une ***arborescence récursive***.
 
-<span style="color:red;font-weight:bold;">IMPORTANT :</span>
+Depuis le 1er juin 2026, la persistance ne se fait plus en JSON mais dans une base de données SQLite (cf. [Schémas SQLite](Schema-SQLite.md)).
 
-- **les chemins de persistance NE SONT PAS des données persistantes ;**
-- **aucun objet ne stocke de `breadcrumbs` ;**
-- **aucun objet ne stocke son chemin disque ;**
-- **le chemin est TOUJOURS déduit du contexte runtime courant.**
-
-Le principe fondamental est :
-
-**à tout moment, l’application se trouve quelque part dans l’arborescence.**
-
-Le contexte courant détermine donc automatiquement où lire et écrire les données.
-
-Exemple :
-
-Et ainsi de suite récursivement.
-
-Donc :
-
-- le lister racine `projects` (existe toujours, avec un premier projet modèle)
-   → fichier :
-   `/data/lof-projects.json`
-   
-- un item `mon-premier-projet` est créé
-  
-   → son id est trouve dans `lof-projects.json` dans `item_ids`
-   → ses données persistantes se trouve dans `/data/lof-projects/__items.js` (qui est une liste Array qui contient TOUS les Items de l’élément courant, donc de `projects`.
-   → IL NE POSSÈDE PAS ENCORE DE FICHIER .json Lister
-   
-- on « rentre » pour la première fois dans `mon-premier-projet` (flèche droite)
-  
-   SI on revient tout de suite dans `projects` (flèche gauche), il ne se passe rien, on revient juste en arrière.
-   
-   Mais SI on crée un premier Item dans ce nouveau Lister, ALORS : 
-   → `mon-premier-projet` devient un Item qui possède un Lister
-   → ce Lister est enregistré dans :
-   `/data/lof-projects/lof-mon-premier-projet.json`
-   → les Items de ce Lister sont consignés dans :
-   `/data/lof-projects/lof-mon-premier-projet/__items.json`
-   (comme pour `projects`, c’est EXACTEMENT la même chose)
-   
-- donc, imaginons qu’on crée pour `mon-premier-projet` un item `acte-i`
-  
-   → on met `acte-i` dans `item_ids` de `lof-mon-premier-projet.json`
-   → on met les données de `acte-i` dans :
-   `/data/lof-projects/lof-mon-premier-projet/__items.json`
-   → comme il est juste un Item pour le moment, il n’y a PAS de fichier `lof-acte-i.json` dans `/data/lof-projects/lof-mon-premier-projet/`
-   
-- si on « entre » dans `acte-i` (flèche droite) et qu’on crée un premier Item, `acte-i` possède lui aussi son Lister
-   → le fichier de son Lister est créé :
-   
-   `/data/lof-projects/lof-mon-premier-projet/lof-acte-i.json`
-   
-   → ses Items sont persistés dans
-   ``/data/lof-projects/lof-mon-premier-projet/lof-acte-i/__items.json`
-   → les `id`s de ses Items sont consignés dans `item_ids` de `lof-acte-i.json`
-   
-- etc. etc. dans une imbrication INFINIE
-
-- un `Item` connait donc implicitement son emplacement ;
-- non pas grâce à une donnée persistée ;
-- mais grâce au contexte runtime du `Lister` courant.
-
-Note importante : l’ordre des items est maintenu par l’ordre nature dans la liste Array des items, dans les fichiers `__items.json` (cf. [Gestion de l’ordre](#gestion-ordre) ci-dessous).
-
-Conséquence architecturale :
-
-AUCUN code ne doit :
-
-- reconstruire naïvement des chemins ;
-- concaténer arbitrairement des fragments ;
-- stocker des breadcrumbs persistants ;
-- inventer des chemins techniques locaux.
+Note importante : l’ordre des items N’EST PAS maintenu par une propriété `position` ou autre, mais dans la données `item_ids` du Lister (cf. [Gestion de l’ordre](#gestion-ordre) ci-dessous).
 
 Le chemin de persistance doit toujours être résolu à partir :
 
@@ -400,23 +331,13 @@ Le chemin de persistance doit toujours être résolu à partir :
 - du lister actif ;
 - et de la hiérarchie runtime réelle.
 
-
-
 <a name="gestion-ordre"></a>
 
 ---
 
-## Gestion de l’ordre
+## Lister - Gestion de l’ordre
 
 L’ordre des items d’un Lister se gère exclusivement dans la propriété `item_ids` des data du Lister.
-
-À IMPLÉMENTER RAPIDEMENT : dans __items.json, il y aura un Hash/Object avec en clé l’identifiant de l’Item et en valeur ses données. Ce qui fera : 
-
-1)  retrouver les données en parcourant `item_ids` sera un jeu d’enfant
-2) enregistrer les modifications d’un Item pourra se faire simplement en envoyant les nouvelles données (ou même : les seules propriétés changeantes  !) et en backend, le programme se chargera de : 
-   1) lire le fichier `__items.json` complet
-   2) modifier les données de l’Item à corriger
-   3) enregistrer le `__items.json` modifié.
 
 ### Différer l’enregistrement en cas de déplacement
 
@@ -424,45 +345,21 @@ Pour ne pas multiplier les enregistrement massif **en cas de déplacement en raf
 
 ---
 
+## Lister - Options
+
+La propriété `flags` persiste les options des Lister. 
+
+Question : faut-il des options différentes pour chaque type de Lister ?
+
+Pour le moment, on a seulement :
+
+- mode d’affichage du fond des events dans un EventLister : soit la couleur du premier brin (ou pas de couleur), soit le « climat » de l’event qui est composé de la `meteo` et de l’`effet` (avec par défaut un temps clément de jour).
+
+---
+
 ### Interactions
 
 Voir [Interactions dans les Specs](Specs-general.md#interactions).
-
-
-
-## Persistance
-
-Les données sont enregistrées dans des fichiers `JSON` (pour permettre les modifications manuelles et les productions automatiques de projets).
-
-L’architecture de sauvegarde des données est la suivante :
-
-~~~bash
-data/
-  projects.json // <-- premier Lister
-  projects/
-    ├── __items.json 	// définitions des Items
-    ├── __brins.json	// définitions des brins
-    │									// seulement pour projet
-    ├── __persos.json // définitions des personnages
-    │									// seulement pour projet
-    //--- et ensuite, ci-dessous, les listers d’items
-    ├── <id item1>.json	// <-- lister de l’item 1
-    ├── <id item1>/
-          ├── __items.json 	// définitions des Items
-          │		//--- les lister des items
-          │		etc.
-    ├── <id item2>.json	//  <-- lister de l’item 2
-    ├── <id item2>/
-          ├── __items.json 	// définitions des Items
-          │		//--- les lister des items
-          │		etc.
-    │ 		etc.
-    └── <id item>.json
-~~~
-
-**Les imbrications sont infinies et fonctionnent toutes de la même façon** : un `Item` (défini dans le fichier `__items.json` d’un `Lister` quelconque) qui possède par exemple l’`id` `e2133` pourra toujours posséder un `Lister` qui aura pour nom `lof-e2133.json` et pour dossier `lof-e2133` (pour contenir la définition de ses propres `Item`s — dans `__items.json` — et des `Lister`s de ses `Item`s) etc.
-
-
 
 ---
 
@@ -472,10 +369,6 @@ Il faut bien comprendre le fonctionnement de la création des nouveaux élément
 
 1) ne doivent jamais être créés tout de suite
 2) crée des choses différentes en fonction de la classe spécialisée (`ProjectLister` avec items `Project`, `EventLister` avec items `Event`, `BrinLister` avec items `Brin`, `PersoLister` avec items `Perso`)
-
-Voilà les différents comportement :
-
-
 
 #### Propriétés éditées en fonction des classes spécialisées
 

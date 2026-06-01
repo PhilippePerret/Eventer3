@@ -134,7 +134,8 @@ Node built-in test runner (`node --test`). Files in `tests/specs/unit/`.
 
 ## Development Philosophy
 
-- TDD: write tests first (`dev/Tests.md` tracks what needs testing).
+- **TDD strict** : les tests sont écrits EN PREMIER, donc ils échouent intentionnellement. Un test qui échoue n'est PAS un bug à corriger immédiatement — c'est la phase RED normale du cycle RED→GREEN→REFACTOR. Ne jamais paniquer face à des tests rouges, ne jamais "corriger" un test qui échoue sans avoir d'abord compris qu'on est en phase RED. Implémenter le code pour faire passer les tests, pas l'inverse.
+- `dev/Tests.md` liste ce qui reste à tester.
 - Verbose logging: `LOG.on(level)` (1–4), `LOG.m(level, message, data)`. Currently set to level 4 in `App.start()`.
 - Keyboard-first: every action must be doable without a mouse.
 - No unnecessary complexity. If it can be handled by `Lister`/`Item`, don't add a new abstraction.

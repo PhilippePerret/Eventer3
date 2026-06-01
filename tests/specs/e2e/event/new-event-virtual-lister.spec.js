@@ -30,23 +30,28 @@ test("→ sur un projet sans lister : crée l'éditeur, Enter confirme, n crée 
 
   console.log('-> saisie du premier event et validation')
   await page.keyboard.type('Mon premier event')
+
+  const savePromise = page.waitForResponse(resp =>
+    resp.url().includes('/api/listers/') && resp.request().method() === 'PATCH'
+  )
   await page.keyboard.press('Enter')
+  await savePromise
 
   console.log('-> vérification : le premier event est créé dans le DOM')
   await expect(page.locator('.event-item')).toHaveCount(1)
   await expect(page.locator('.event-item').nth(0)).toContainText('Mon premier event')
 
   console.log('-> vérification : données persistées sur le serveur')
-  const itemsResp = await page.request.get('/data/lof-projects/lof-project-b/__items.json')
+  const listerResp = await page.request.get('/api/items/project-b/lister')
+  expect(listerResp.ok()).toBeTruthy()
+  const lister = await listerResp.json()
+  expect(lister.item_ids).toHaveLength(1)
+  const itemsResp = await page.request.get(`/api/listers/${lister.id}/items`)
   expect(itemsResp.ok()).toBeTruthy()
   const items = await itemsResp.json()
-  expect(Object.keys(items)).toHaveLength(1)
-  expect(Object.values(items)[0].tt).toBe('Mon premier event')
+  expect(items[lister.item_ids[0]].title).toBe('Mon premier event')
 
-  console.log('-> vérification : project-b a maintenant hasLister = true')
-  const projectsResp = await page.request.get('/data/lof-projects/__items.json')
-  const projects = await projectsResp.json()
-  expect(projects['project-b'].hl).toBe(true)
+  console.log('-> vérification : project-b a maintenant un lister')
 
   console.log('-> appui sur n : doit créer un second event au-dessus')
   await page.keyboard.press('n')

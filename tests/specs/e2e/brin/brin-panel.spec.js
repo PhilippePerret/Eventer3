@@ -186,9 +186,11 @@ test("Tab en édition passe du titre au badge", async ({ page }) => {
 test("Tab depuis la couleur revient au titre (cycle complet)", async ({ page }) => {
   await openBrinPanel(page)
   await page.keyboard.press('Enter')
-  // title → badge → type → color
+  await expect(page.locator('.brin-item.selected input[name="title"]')).toBeFocused()
   await page.keyboard.press('Tab')
+  await expect(page.locator('.brin-item.selected input[name="badge"]')).toBeFocused()
   await page.keyboard.press('Tab')
+  await expect(page.locator('.brin-item.selected select[data-property="type"]')).toBeFocused()
   await page.keyboard.press('Tab')
   await expect(page.locator('.brin-item.selected input[data-property="color"]')).toBeFocused()
   // color → title (wrap-around)

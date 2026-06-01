@@ -9,7 +9,6 @@ class Project < Item
       super.merge(
         type:       'project',
         title:      'Projet modèle',
-        type:       'project',
         active:     true,
         hasLister:  true,
         items:      ['i1'],

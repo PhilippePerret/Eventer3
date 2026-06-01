@@ -1,51 +1,78 @@
-import { ItemDataMapper } from '../repositories/Mapper.js'
 import { raise } from '../../system/Error.js'
 
 export default class ListerRepository {
 
-  static async create(lister) {
-    const response = await fetch(`/data/${lister.contextPath}.json`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ item_ids: [], perso_ids: [] })
-    })
-    if (!response.ok) raise(`Impossible de créer ${lister.contextPath}`)
+  static async loadDefinition(lister) {
+    const response = await fetch(`/api/listers/${lister.id}`)
+    if (!response.ok) return
+    const data = await response.json()
+    if (data.item_ids)       lister.item_ids       = data.item_ids
+    if (data.brins_lister_id) lister.brins_lister_id = data.brins_lister_id
+  }
+
+  static async loadItems(lister) {
+    const response = await fetch(`/api/listers/${lister.id}/items`)
+    if (!response.ok) return {}
+    return await response.json()
+  }
+
+  static async loadItemLister(itemId) {
+    const response = await fetch(`/api/items/${itemId}/lister`)
+    if (!response.ok) return null
+    return await response.json()
   }
 
   static async save(lister) {
-    const response = await fetch(`/data/${lister.contextPath}.json`, {
+    const response = await fetch(`/api/listers/${lister.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ item_ids: lister.item_ids, lasts_id: lister.lasts_id })
+      body: JSON.stringify({ item_ids: lister.item_ids })
     })
     if (!response.ok) raise(`Impossible de sauver ${lister.id}`)
   }
 
   static async saveItems(lister) {
-    const hash = {}
-    lister.items.forEach(item => { hash[item.id] = ItemDataMapper.toPersistence(item) })
-    const response = await fetch(`/data/${lister.contextPath}/__items.json`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(hash)
-    })
-    if (!response.ok) raise(`Impossible de sauver les items de ${lister.contextPath}`)
+    for (const item of lister.items) {
+      await ListerRepository.saveItem(item, {
+        title:    item.title,
+        type:     item.type,
+        color:    item.color,
+        checked:  item.checked,
+        duration: item.duration,
+        badge:    item.badge,
+        brin_ids: item.brin_ids,
+      })
+    }
   }
 
   static async saveItem(item, fields, { oldId } = {}) {
-    const payload = { id: item.id }
-    if (oldId && oldId !== item.id) payload.old_id = oldId
-    Object.entries(fields).forEach(([longKey, value]) => {
-      const shortKey = ItemDataMapper.TO_PERSISTENCE[longKey]
-      if (shortKey) payload[shortKey] = value
-    })
-    const filename = item.parentLister.itemsFilename ?? '__items.json'
-    const response = await fetch(`/data/${item.parentLister.contextPath}/${filename}`, {
+    const urlId = oldId ?? item.id
+    const response = await fetch(`/api/items/${urlId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(fields)
     })
-    if (!response.ok) raise(`Impossible de sauver l'item ${item.id}`)
+    if (!response.ok) raise(`Impossible de sauver l'item ${urlId}`)
+  }
+
+  static async createItem(listerId, fields) {
+    const response = await fetch(`/api/listers/${listerId}/items`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(fields)
+    })
+    if (!response.ok) raise(`Impossible de créer un item dans ${listerId}`)
+    return await response.json()
+  }
+
+  static async createLister(fields) {
+    const response = await fetch('/api/listers', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(fields)
+    })
+    if (!response.ok) raise(`Impossible de créer le lister`)
+    return await response.json()
   }
 
 }

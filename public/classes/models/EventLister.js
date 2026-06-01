@@ -5,7 +5,7 @@ import BrinLister from './BrinLister.js'
 export default class EventLister extends Lister {
 
   constructor(data = {}) {
-    super(data)
+    super({ type: 'events', ...data })
     this.itemClass = Event
   }
 

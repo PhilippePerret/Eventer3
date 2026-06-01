@@ -1,24 +1,16 @@
 require 'sinatra'
 require 'json'
 require 'fileutils'
-require 'securerandom'
 require 'time'
 require_relative './lib/bootstrap'
+require_relative './lib/db/repo'
 
 set :public_folder, 'public'
 
-DATA_DIR = File.expand_path('data', __dir__)
-DEFAULT_PROJECT = 'demo'
-
-def log(message, printit = true)
-  puts message if printit
-end
+DATA_DIR = ENV['EVENTER_DATA_DIR'] || File.expand_path('data', __dir__)
 
 before do
-  log "\n=== BEFORE SINATRA ===", false
-  log "DATA_DIR: #{DATA_DIR}", false
   Bootstrap.ensure_initial_data!(DATA_DIR)
-  log "======================\n", false
 end
 
 get '/data/*' do |requested_path|
@@ -59,6 +51,58 @@ patch '/data/*' do |requested_path|
   File.write(filepath, JSON.pretty_generate(data))
   content_type :json
   JSON.generate(ok: true)
+end
+
+get '/api/listers/:id' do
+  lister = DB::Repo.find_lister_by_id(DATA_DIR, params[:id])
+  halt 404 unless lister
+  content_type :json
+  JSON.generate(lister)
+end
+
+get '/api/items/:id/lister' do
+  lister = DB::Repo.find_item_lister(DATA_DIR, params[:id])
+  halt 404 unless lister
+  content_type :json
+  JSON.generate(lister)
+end
+
+patch '/api/listers/:id' do
+  payload = JSON.parse(request.body.read)
+  DB::Repo.update_lister(DATA_DIR, params[:id], payload)
+  content_type :json
+  JSON.generate(ok: true)
+end
+
+post '/api/listers' do
+  payload = JSON.parse(request.body.read)
+  halt 422 unless payload['type'] && payload['parent_item_id']
+  result = DB::Repo.create_lister(DATA_DIR, type: payload['type'], parent_item_id: payload['parent_item_id'])
+  content_type :json
+  status 201
+  JSON.generate(result)
+end
+
+get '/api/listers/:id/items' do
+  items = DB::Repo.find_items_by_lister_id(DATA_DIR, params[:id])
+  content_type :json
+  JSON.generate(items)
+end
+
+patch '/api/items/:id' do
+  payload = JSON.parse(request.body.read)
+  DB::Repo.update_item(DATA_DIR, params[:id], payload)
+  content_type :json
+  JSON.generate(ok: true)
+end
+
+post '/api/listers/:id/items' do
+  payload = JSON.parse(request.body.read)
+  item = DB::Repo.create_item(DATA_DIR, params[:id], payload)
+  halt 422 unless item
+  content_type :json
+  status 201
+  JSON.generate(item)
 end
 
 get '/' do

@@ -5,8 +5,8 @@ class Lister
 
   class << self
 
-    def create_minimal_data
-      lister = new(minimal_data)
+    def create_minimal_data(data_dir)
+      lister = new(minimal_data, data_dir: data_dir)
       lister.save
       lister.create_minimal_items
     end
@@ -15,8 +15,9 @@ class Lister
 
   attr_reader :data
 
-  def initialize(data, parent_context_path: nil)
+  def initialize(data, data_dir:, parent_context_path: nil)
     @data = data
+    @data_dir = data_dir
     @parent_context_path = parent_context_path
   end
 
@@ -29,11 +30,11 @@ class Lister
   end
 
   def folder_path
-    File.join(DATA_DIR, context_path)
+    File.join(@data_dir, context_path)
   end
 
   def json_path
-    File.join(DATA_DIR, "#{context_path}.json")
+    File.join(@data_dir, "#{context_path}.json")
   end
 
   def save

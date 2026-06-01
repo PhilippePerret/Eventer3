@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { test, expect } from '../../e2e/__setup__.js'
+import { test, expect } from '../__setup__.js'
 
 const appRoot = path.resolve(process.cwd(), '..')
 const dataDir = path.join(appRoot, 'data')

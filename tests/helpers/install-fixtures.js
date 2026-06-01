@@ -2,9 +2,11 @@ import fs from 'fs'
 import path from 'path'
 
 export function installFixtures(fixtureName) {
-  const fixturesFolder = path.resolve('fixtures', fixtureName)
-  const dataFolder = path.resolve('..', 'data')
+  const fixtureDb = path.resolve('fixtures', fixtureName, 'eventer.db')
+  const dataDir   = path.resolve('..', 'data')
+  const dataDb    = path.join(dataDir, 'eventer.db')
 
-  fs.rmSync(dataFolder, { recursive: true, force: true })
-  fs.cpSync(fixturesFolder, dataFolder, { recursive: true })
+  fs.mkdirSync(dataDir, { recursive: true })
+  fs.rmSync(dataDb, { force: true })
+  fs.copyFileSync(fixtureDb, dataDb)
 }

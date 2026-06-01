@@ -2,14 +2,11 @@
 
 ### Bug
 
--  
+-  Pas vraiment en bug, mais il y a vraiment trop de responsabilités qui ne sont pas là où elles devraient être. Je l’ai relevé pour les brins affectés à un event. C’est BrinLister qui s’occupait d’enregistrer les brins dans l’event ! (ALORS QUE C’EST l’event qui doit le faire !!!!) et qui s’occupait de cocher l’élément DOM (ALORS QUE C’EST À Lister DE LE FAIRE POUR TOUS LES TYPES DE Liste !!!). Je ne vois pas voir ce genre de chose. Il faut passer en revue tout le code et METTRE LES RESPONSABILITÉS LÀ OÙ ELLES DOIVENT SE TROUVER. À PARTIR D’UNE FONCTIONNALITÉ N’EST PAS PROPRE À UN Lister spécialisée, elle DOIT se trouver dans Lister, pas dans BrinLister, EvenLister ou quoi que ce soit !!!!
 
 ## Todo
 
-* GROSSE RÉFLEXION SUR LA FAÇON D’ENREGISTRER LES ITEMS. Je ne suis plus du tout sûr les enregistrer dans des fichier `__items.json` dans leur hiérarchie soit la vraie bonne solution. Pour deux raisons principales :
-  1. on doit pouvoir les changer de place facilement, or, tel que c’est pour le moment etc.
-  2. pour l’affichage de « panneaux de niveaux », ça oblige à ouvrir et gérer de nombreux fichiers, quand il suffirait de ne rien faire avec un id et une base de données.
-* Propriété `flag` pour les `Lister` — première option : le mode d’affichage des fond d’Event, soit par couleur de premier brin, soit par « climat » (météo + effet).
+* Propriété `flags` pour les `Lister` — première option : le mode d’affichage des fond d’Event, soit par couleur de premier brin, soit par « climat » (météo + effet).
 * Définir l’option d’EventListener qui détermine si le fond des events doit être déterminé par son premier Brin ou par son « climat », constitué 1) de sa météo et 2) de son effet. 
 * ajouter la propriété `mode` de `Lister` qui permettra de définir si les items sont des projets, des évènements (event normaux ou event script), des brins ou des personnages.
 * S’assurer que les propriétés `created_at`/`ca` et `updated_at`/`ua` soient toujours enregisrées (backend)
