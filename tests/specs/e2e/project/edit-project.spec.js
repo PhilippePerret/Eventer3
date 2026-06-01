@@ -26,6 +26,19 @@ async function startEditingSecondProject(page) {
   return titleInput
 }
 
+// --- Hauteur visuelle ---
+
+test("la hauteur du project-item reste identique en édition", async ({ page }) => {
+  await page.goto('/')
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  const item = page.locator('.project-item.selected')
+  const heightBefore = (await item.boundingBox()).height
+  await page.keyboard.press('Enter')
+  await expect(item.locator('input[name="title"]')).toBeFocused()
+  const heightAfter = (await item.boundingBox()).height
+  expect(heightAfter).toBe(heightBefore)
+})
+
 // --- Projet avec lister (id verrouillé) ---
 
 test("projet avec lister : seul le titre est éditable", async ({ page }) => {
