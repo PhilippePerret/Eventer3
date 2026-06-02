@@ -1,6 +1,0 @@
-{
-  "project-a": { "id": "project-a", "tt": "Projet A",      "ac": true, "hl": false },
-  "project-b": { "id": "project-b", "tt": "Projet B",      "ac": true, "hl": false },
-  "project-c": { "id": "project-c", "tt": "Projet C",      "ac": true, "hl": false },
-  "project-hidden": { "id": "project-hidden", "tt": "Projet caché", "ac": false, "hl": false }
-}

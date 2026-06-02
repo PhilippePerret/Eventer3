@@ -1,6 +1,0 @@
-{
-  "item_ids": ["e1", "e2"],
-  "brin_ids": ["b1", "b2"],
-  "perso_ids": [],
-  "lasts_id": { "item": 2, "brin": 2, "perso": 0 }
-}

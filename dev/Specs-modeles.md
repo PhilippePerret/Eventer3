@@ -88,18 +88,11 @@ classDiagram
 		+string[] item_ids
 		+string[] brin_ids
 		+string[] perso_ids
-		+LastsId   lasts_id
 		+Options options // OU flags
 		+Integer flags // OU options
 		+string path
 		+Date created_at
 		+Date updated_at
-	}
-	
-	class LastsId {
-		+number item
-		+number brin
-		+number perso
 	}
 	
 	class Options {
@@ -118,7 +111,6 @@ classDiagram
 		text
 	}
 	
-	Lister --> LastsId
 	Lister --> Options
 	Lister --> Scale
 ~~~
@@ -140,7 +132,7 @@ classDiagram
 	class Item {
 		+string id
 		+string title
-		+boolean hasLister
+		+string lister_id
 		+Type[] type
 		+string color
 		+boolean checked

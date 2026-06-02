@@ -1,8 +1,0 @@
-{
-  "id": "projects",
-  "type": "project",
-  "item_ids": ["project-a"],
-  "brin_ids": [],
-  "perso_ids": [],
-  "lasts_id": { "item": 1, "brin": 0, "perso": 0 }
-}

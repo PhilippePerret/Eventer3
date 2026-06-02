@@ -36,6 +36,7 @@ erDiagram
         INTEGER state
         INTEGER active
         INTEGER year
+        TEXT brin_ids
     }
 
     event_props {

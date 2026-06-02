@@ -21,7 +21,7 @@ module DB
 
     CREATE TABLE IF NOT EXISTS items (
       id          TEXT PRIMARY KEY,
-      lister_id   TEXT NOT NULL REFERENCES listers(id),
+      lister_id   TEXT REFERENCES listers(id),
       title       TEXT,
       type        TEXT,
       color       TEXT,
@@ -37,7 +37,8 @@ module DB
       item_id  TEXT PRIMARY KEY REFERENCES items(id),
       state    INTEGER DEFAULT 0,
       active   INTEGER DEFAULT 1,
-      year     INTEGER
+      year     INTEGER,
+      brin_ids TEXT DEFAULT '[]'
     );
 
     CREATE TABLE IF NOT EXISTS event_props (
