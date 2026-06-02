@@ -4,18 +4,18 @@ import EventLister from './EventLister.js'
 import KeyboardController from '../../KeyboardController.js'
 import LOG from '../../system/LOG.js'
 
-export default class Projects extends Lister {
+export default class ProjectLister extends Lister {
 
   static async init() {
     LOG.m(1, 'Init projects')
     const keyboardController = new KeyboardController()
     keyboardController.observe()
     window.__keyboardController = keyboardController
-    const projects = new Projects({ id: 'projects', keyboardController })
+    const projects = new ProjectLister({ id: 'projects', keyboardController })
     await projects.loadDefinition()
     await projects.loadItems()
     projects.render()
-    LOG.m(1, 'Projects ready')
+    LOG.m(1, 'ProjectLister ready')
     return projects
   }
 

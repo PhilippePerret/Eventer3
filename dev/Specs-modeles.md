@@ -284,16 +284,12 @@ Chaque Contexte Lister est indissociable de sa classe Item : un `ProjectLister` 
 
 ### Lister enfant d'un Item
 
-Un `Item` peut posséder au plus UN Lister enfant. Ce Lister enfant est **toujours du même type que le contexte courant**, sauf pour c1 :
+Un `Item` peut posséder au plus UN Lister enfant (on peut penser aux Listers comme aux dossiers dans le Finder ; un dossier dans le Finder, évidemment, ne possède évidemment qu’une et une liste liste de fichiers/dosssiers). Ce Lister enfant est **toujours du même type que le contexte courant**, sauf pour c1 :
 
 - Depuis **c1** (`ProjectLister`) → le Lister enfant est toujours un **`EventLister`** (c2). C'est l'évènemencier du projet.
 - Depuis **c2** (`EventLister`) → le Lister enfant est toujours un **`EventLister`** (c2). Un acte contient des séquences, une séquence contient des scènes, etc. — à la discrétion de l'auteur.
 - Depuis **c3** (`BrinLister`) → le Lister enfant est toujours un **`BrinLister`** (c3).
 - Depuis **c4** (`PersoLister`) → le Lister enfant est toujours un **`PersoLister`** (c4).
-
-La nature du domaine rend cette règle intuitive : l'enfant d'un projet est son évènemencier, l'enfant d'un évènement est un évènemencier plus précis. Il serait absurde qu'un acte enfante un projet ou une liste de personnages.
-
-**Il n'y a aucune contrainte sur la profondeur d'imbrication ni sur le découpage.** Un auteur peut mettre ses 3000 évènements dans un seul `EventLister` de premier niveau, ou les imbriquer à trente niveaux de profondeur — c'est son choix.
 
 ### Contextes courants
 
@@ -305,7 +301,7 @@ Il y a **deux contextes principaux**  qui sont exclusifs (navigation principale)
 
 Et il y a **deux contextes secondaires** (*panneaux qui s'ouvrent par-dessus un EventLister, liés à l'item sélectionné*) :
 - c3 : BrinLister — les **brins** (aka intrigues) de cet Event précis
-- c4 : PersoLister — les **persos** (aka personnages) de cet Event précis
+- c4 : PersoLister — les **persos** (aka personnages) de cet Event précis OU du brin (un personnage, de façon naturelle, appartient plutôt à un brin
 
 > Bien noter que c3 et c4 ne sont pas des navigations indépendantes : ils sont relatifs au contexte c2 actif et à l'item qui y est sélectionné. L'EventLister (ou le ScriptLister) reste le contexte de fond.
 

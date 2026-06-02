@@ -84,7 +84,8 @@ export default class KeyboardController {
         return
 
       case 'n':
-        if (event.metaKey) {
+        if (event.metaKey || event.ctrlKey) return
+        if (event.altKey) {
           this.activeLister.createNewItemAfter?.()
         } else {
           LOG.m(2, 'Create new item')

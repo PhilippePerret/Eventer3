@@ -4,6 +4,8 @@ require 'fileutils'
 require 'time'
 require_relative './lib/bootstrap'
 require_relative './lib/db/repo'
+require_relative './lib/system/log'
+# LOG.on(1)
 
 set :public_folder, 'public'
 
@@ -91,6 +93,7 @@ end
 
 patch '/api/items/:id' do
   payload = JSON.parse(request.body.read)
+  # LOG.m(1, "[PATCH /api/items/#{params[:id]}] payload=#{payload.inspect}")
   DB::Repo.update_item(DATA_DIR, params[:id], payload)
   content_type :json
   JSON.generate(ok: true)

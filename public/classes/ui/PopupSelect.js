@@ -52,7 +52,7 @@ export default class PopupSelect {
 
     const rect = anchorElement.getBoundingClientRect()
     popup.style.top = `${rect.bottom + 4}px`
-    popup.style.left = `${rect.left}px`
+    popup.style.left = `${rect.left}px`  // ajusté après rendu si débordement
 
     const search = document.createElement('input')
     search.type = 'text'
@@ -83,6 +83,18 @@ export default class PopupSelect {
     }
 
     this._renderOptions()
+
+    const popupRect = popup.getBoundingClientRect()
+
+    const overflowRight = popupRect.right - window.innerWidth
+    if (overflowRight > 0) {
+      popup.style.left = `${Math.max(8, rect.left - overflowRight - 8)}px`
+    }
+
+    const overflowBottom = popupRect.bottom - window.innerHeight
+    if (overflowBottom > 0) {
+      this.listElement.style.maxHeight = `${this.listElement.offsetHeight - overflowBottom - 8}px`
+    }
   }
 
   _renderOptions() {
@@ -103,7 +115,10 @@ export default class PopupSelect {
         li.appendChild(document.createTextNode(' ' + opt.label))
       } else {
         if (opt.value === this.currentValue) li.classList.add('current')
-        li.textContent = opt.label
+        const check = document.createElement('span')
+        check.className = 'popup-select__check'
+        li.appendChild(check)
+        li.appendChild(document.createTextNode(opt.label))
       }
 
       li.dataset.index = i

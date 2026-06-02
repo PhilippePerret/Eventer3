@@ -5,7 +5,7 @@
   --text: #2f2d29;
   --muted: #938c81;
   --line: #e3ddd2;
-  --selected: #0a64ff;
+  --selected: #4d9efe;
   --brin: #ddd4c3;
   --perso: #d8e0d5;
 }
@@ -543,7 +543,7 @@ body {
   list-style: none;
   margin: 0;
   padding: 4px 0;
-  max-height: 200px;
+  max-height: 70vh;
   overflow-y: auto;
 }
 
@@ -551,9 +551,10 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 12px;
+  padding: 7px 14px;
   font-size: 15px;
   cursor: default;
+  -webkit-font-smoothing: antialiased;
 }
 
 .popup-select__option.focused {
@@ -562,7 +563,7 @@ body {
 }
 
 .popup-select__option.current {
-  font-weight: 650;
+  font-weight: 600;
 }
 
 .popup-select__option.checked .popup-select__check {
@@ -594,6 +595,22 @@ body {
   border-color: rgba(255, 255, 255, .4);
   background: rgba(255, 255, 255, .15);
   color: white;
+}
+
+/* ─── Item en édition ─────────────────────────────────────────── */
+
+.project-item.editing {
+  background: #33bb60 !important;
+  border-color: #33bb60 !important;
+}
+
+.event-item.editing .event-body {
+  background: #33bb60;
+  border-color: rgba(255, 255, 255, .18);
+}
+
+.panel-row.editing {
+  background: #33bb60 !important;
 }
 
 /* ─── Footer shortcuts ────────────────────────────────────────── */

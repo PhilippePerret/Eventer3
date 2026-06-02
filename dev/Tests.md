@@ -38,7 +38,7 @@
 
 - [x] S’assurer que Cmd-flèche haut/bas permet de déplacer les projets (comportement de `Lister`).
 
-- [x] S’assurer que la touche « n » permet de créer (provisoirement juste dans le DOM) un nouveau projet SOUS la sélection (LIRE LES FICHIERS DE SPECS POUR VOIR LES CARACTÉRISTIQUES DES CRÉATIONS D’UN ITEM, RADICALEMENT DIFFÉRENT ENTRE LES PROJETS ET LES EVENTS, BRINS OU PERSOS).
+- [x] S’assurer que la touche « n » permet de créer (provisoirement juste dans le DOM) un nouveau projet SOUS la sélection.
 
 - [x] S’assurer que la touche « n » suivi de la touche Escape ne crée rien au final ni d’élément DOM, ni de projet en backend (données persistantes)
 
@@ -86,9 +86,9 @@
 
 ## Évènemencier
 
-- [ ] S'assurer que le premier item d'un évènemencier est toujours sélectionné
-- [ ] S'assurer que les flèches haut/bas permettent de sélectionner les évènements successifs
-- [ ] S'assurer que la touche Space permette de cocher plusieurs évènement.
+- [ ] S'assurer que le premier item d'un évènemencier est toujours sélectionné (déjà testé ?)
+- [ ] S'assurer que les flèches haut/bas permettent de sélectionner les évènements successifs (déjà testé ?)
+- [ ] S'assurer que la touche Space permette de cocher plusieurs évènement. (déjà testé ?)
 - [ ] S'assurer que la coche est persistante (cocher plusieurs évènements et recharger l'évènemencier : les mêmes évènements doivent être cochés)
 
 ## Event
@@ -106,11 +106,14 @@
 - [ ] Un event peut définir son effet (`effet`) pami « jour », « nuit, etc. Voir les valeus possibles et les vraies valeurs dans la données `EFFETS`.
 - [ ] La météo et l’effet d’un event influence son apparence (si l’option du Lister le demande => flag du Lister)
 - [ ] Un event peut définir sa date `dyndate` de façon fixe (en lui donnant un nom fixe).
+- [ ] Test de la suppression des Items cochés avec ⇧+ ⌦. Tester : un message de confirmation doit être validé (Enter). Tester : l’Item sélectionné n’est pas supprimé s’il n’est pas coché. NOTE : fonctionnement commun à TOUS LES TYPES D’ITEM.
 - [ ] Test unitaire du calcul de la date dynamique.
 - [ ] Un event peut définir sa date `dyndate`de façon dynamique.
 - [ ] Si on choisit pour l’Event un personnage qui lui appartient déjà par le biais d’un brin, on signale une erreur et on ne le permet pas.
 
-### Brin
+## Brin
+
+### Généralités
 
 - [ ] En édition, avec la touche `Tab`, on doit pouvoir modifier, dans l’ordre : le `title`, le `badge`, le `type` et la `color` du brin.
 - [ ] Le choix de la couleur du brin doit modifier l’affichage des events qui l’ont en premier brin si l’option de l’EventLister le demande (choix entre fond = premier brin ou fond = climat).
@@ -121,11 +124,11 @@
 
 
 
-### Project
+## Project
 
 - [ ] On ne peut plus redéfinir un `id` de projet une fois qu’il a été défini(i.e. une fois que son `Lister` existe (et donc une fois que son dossier `lof` existe.
 
-
+---
 
 ## Options application
 

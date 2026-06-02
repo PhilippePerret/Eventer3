@@ -15,12 +15,19 @@ export default class Item {
     return null
   }
 
-  static create({ type, lister, keyboardController, insertionIndex, currentItemElement }) {
+  static get minClass() {
+    return this.name.toLowerCase()
+  }
+
+  static get itemClasses() {
+    return ['item']
+  }
+
+  static create({ lister, keyboardController, insertionIndex, currentItemElement }) {
     const item = this.createEmpty()
-    item.type = type
     item.__isTemporary = true
     item.previousSelectedIndex = insertionIndex
-    const itemElement = item.createEditorElement(type, keyboardController)
+    const itemElement = item.createEditorElement(keyboardController)
 
     if (currentItemElement) currentItemElement.before(itemElement)
     else lister.domContainer.appendChild(itemElement)
@@ -57,15 +64,15 @@ export default class Item {
     this.parentLister = data.parentLister ?? null
   }
 
-  createElement(type) {
+  createElement() {
     const itemElement = document.createElement('div')
-    itemElement.classList.add('item')
-    itemElement.classList.add(`${type}-item`)
+    this.constructor.itemClasses.forEach(c => itemElement.classList.add(c))
+    itemElement.classList.add(`${this.constructor.minClass}-item`)
     return itemElement
   }
 
-  getEditorFields(type, itemElement) {
-    return [{ name: 'title', property: 'title', selector: `.${type}-item__title`, placeholder: this.constructor.newItemPlaceholder }]
+  getEditorFields(minClass, itemElement) {
+    return [{ name: 'title', property: 'title', selector: `.${minClass}-item__title`, placeholder: this.constructor.newItemPlaceholder }]
   }
 
   createInputFromElement(element, field) {
@@ -87,15 +94,17 @@ export default class Item {
     return input
   }
 
-  createEditorElement(type, keyboardController) {
-    LOG.m(2, 'Item.createEditorElement', { type, hasKeyboardController: Boolean(keyboardController) })
+  createEditorElement(keyboardController) {
+    const minClass = this.constructor.minClass
+    LOG.m(2, 'Item.createEditorElement', { minClass, hasKeyboardController: Boolean(keyboardController) })
     if (!keyboardController) throw new Error('Item.createEditorElement: keyboardController missing')
     if (typeof keyboardController.enterItemEdition !== 'function') throw new Error('Item.createEditorElement: keyboardController.enterItemEdition missing')
-    const itemElement = this.createElement(type)
+    const itemElement = this.createElement()
     if (typeof this.render === 'function') this.render(itemElement)
     LOG.m(3, 'Editor itemElement', itemElement.outerHTML)
-    const fields = this.getEditorFields(type, itemElement)
+    const fields = this.getEditorFields(minClass, itemElement)
     const inputs = fields.map(field => this.createEditorInput(itemElement, field))
+    itemElement.classList.add('editing')
     keyboardController.enterItemEdition({ defaultInput: inputs[0], onKeyDown: (event, controller) => this.handleEditionKeyDown(event, controller, itemElement, fields, inputs) })
     return itemElement
   }
@@ -152,6 +161,7 @@ export default class Item {
     const originalData = {}
     fields.forEach(field => { originalData[field.property] = this[field.property] })
     const inputs = fields.map(field => this.createEditorInput(itemElement, field))
+    itemElement.classList.add('editing')
     keyboardController.enterItemEdition({
       defaultInput: inputs[0],
       onKeyDown: (event, controller) => this.handleEditionKeyDown(event, controller, itemElement, fields, inputs, { originalData })
@@ -174,7 +184,7 @@ export default class Item {
         event.preventDefault()
         this.focusNextEditionInput(inputs)
         return
-      case ' ':
+      case 'ArrowDown':
         if (document.activeElement?.dataset.type === 'popup-select') {
           event.preventDefault()
           this._openPopupSelect(document.activeElement, fields, inputs, keyboardController)
@@ -186,6 +196,7 @@ export default class Item {
           this.cancelEditor(keyboardController, itemElement)
         } else {
           if (originalData) Object.assign(this, originalData)
+          itemElement.classList.remove('editing')
           itemElement.innerHTML = ''
           if (typeof this.render === 'function') this.render(itemElement)
           keyboardController.popMode()
@@ -194,10 +205,6 @@ export default class Item {
       case 'Enter':
         LOG.m(2, 'ENTER VALIDATION', { id: this.id, title: this.title, temporary: this.__isTemporary })
         event.preventDefault()
-        if (document.activeElement?.dataset.type === 'popup-select') {
-          this._openPopupSelect(document.activeElement, fields, inputs, keyboardController)
-          return
-        }
         if (!inputs[0].value.trim()) {
           this.cancelEditor(keyboardController, itemElement)
           LOG.m(2, 'Item.creation.cancelled.emptyTitle')
@@ -240,6 +247,7 @@ export default class Item {
       if (field.type !== 'popup-select') this[field.property] = inputs[index].value.trim()
       // popup-select values already updated via onSelect callback
     })
+    itemElement.classList.remove('editing')
     itemElement.innerHTML = ''
     if (typeof this.render === 'function') this.render(itemElement)
   }

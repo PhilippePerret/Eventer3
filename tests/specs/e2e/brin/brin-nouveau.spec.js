@@ -37,6 +37,14 @@ test("nouveau brin : il s'affiche avec les bonnes classes CSS (panel-row brin-ro
   await expect(newBrin).toHaveClass(/brin-row/)
 })
 
+test("en création, l'éditeur de brin a les classes CSS panel-row et brin-row", async ({ page }) => {
+  await openBrinPanel(page)
+  await page.keyboard.press('n')
+  const editor = page.locator('.brin-item.selected')
+  await expect(editor).toHaveClass(/panel-row/)
+  await expect(editor).toHaveClass(/brin-row/)
+})
+
 test("nouveau brin : sa couleur est différente de celle du brin précédent", async ({ page }) => {
   await openBrinPanel(page)
   // Récupérer la couleur du dernier brin existant (b2)

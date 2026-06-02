@@ -14,7 +14,7 @@ async function openStatePopup(page) {
   await expect(page.locator('.event-item.selected input[name="title"]')).toBeFocused()
   await page.keyboard.press('Tab')
   await expect(page.locator('.event-item.selected .popup-select-trigger')).toBeFocused()
-  await page.keyboard.press('Enter')
+  await page.keyboard.press('ArrowDown')
   await expect(page.locator('.popup-select')).toBeVisible()
 }
 

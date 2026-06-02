@@ -1,4 +1,4 @@
-import Projects from './models/Projects.js'
+import ProjectLister from './models/ProjectLister.js'
 import LOG from '../system/LOG.js'
 
 export default class App {
@@ -9,7 +9,7 @@ export default class App {
 
     LOG.m(1, 'Start application')
 
-    await Projects.init()
+    await ProjectLister.init()
 
     LOG.m(1, 'Application started, projets affichés')
 

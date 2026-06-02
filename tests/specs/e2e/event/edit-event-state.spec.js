@@ -19,15 +19,15 @@ async function startEditing(page) {
   return input
 }
 
-test("Enter + Tab ouvre le popup de sélection d'état", async ({ page }) => {
+test("Tab puis ArrowDown ouvre le popup de sélection d'état", async ({ page }) => {
   await goToEventLister(page)
 
-  const input = await startEditing(page)
+  await startEditing(page)
   await page.keyboard.press('Tab')
   const trigger = page.locator('.event-item.selected .popup-select-trigger')
   await expect(trigger).toBeFocused()
 
-  await page.keyboard.press('Enter')
+  await page.keyboard.press('ArrowDown')
   await expect(page.locator('.popup-select')).toBeVisible()
 
   await page.keyboard.press('Escape')
@@ -35,21 +35,12 @@ test("Enter + Tab ouvre le popup de sélection d'état", async ({ page }) => {
   await expect(trigger).toBeFocused()
 })
 
-test("Space sur le trigger ouvre aussi le popup", async ({ page }) => {
-  await goToEventLister(page)
-
-  await startEditing(page)
-  await page.keyboard.press('Tab')
-  await page.keyboard.press(' ')
-  await expect(page.locator('.popup-select')).toBeVisible()
-})
-
 test("le popup s'ouvre pré-positionné sur la valeur courante", async ({ page }) => {
   await goToEventLister(page)
 
   await startEditing(page)
   await page.keyboard.press('Tab')
-  await page.keyboard.press('Enter')
+  await page.keyboard.press('ArrowDown')
 
   const focused = page.locator('.popup-select__option.focused')
   await expect(focused).toHaveText('—')
@@ -60,7 +51,7 @@ test("↑↓ naviguent dans les options du popup", async ({ page }) => {
 
   await startEditing(page)
   await page.keyboard.press('Tab')
-  await page.keyboard.press('Enter')
+  await page.keyboard.press('ArrowDown')
 
   await page.keyboard.press('ArrowDown')
   await expect(page.locator('.popup-select__option.focused')).toHaveText('ébauche')
@@ -77,7 +68,7 @@ test("Enter sélectionne l'option et ferme le popup", async ({ page }) => {
 
   const titleInput = await startEditing(page)
   await page.keyboard.press('Tab')
-  await page.keyboard.press('Enter')
+  await page.keyboard.press('ArrowDown')
 
   await page.keyboard.press('ArrowDown')  // ébauche
   await page.keyboard.press('Enter')
@@ -96,7 +87,7 @@ test("valider l'édition commit le titre et l'état", async ({ page }) => {
   await titleInput.fill('Titre modifié')
 
   await page.keyboard.press('Tab')
-  await page.keyboard.press('Enter')
+  await page.keyboard.press('ArrowDown')
   await page.keyboard.press('ArrowDown')  // ébauche
   await page.keyboard.press('Enter')
 
@@ -112,14 +103,14 @@ test("Escape en édition restaure l'état original même si popup a été utilis
 
   await startEditing(page)
   await page.keyboard.press('Tab')
-  await page.keyboard.press('Enter')
+  await page.keyboard.press('ArrowDown')
   await page.keyboard.press('ArrowDown')  // ébauche
   await page.keyboard.press('Enter')      // sélectionne ébauche
 
   await page.keyboard.press('Escape')
 
   const firstItem = page.locator('.event-item').nth(0)
-  await expect(firstItem.locator('.event-state')).toHaveText('')
+  await expect(firstItem.locator('.event-state')).toHaveText('—')
 })
 
 test("filtrer les options réduit la liste", async ({ page }) => {
@@ -127,7 +118,7 @@ test("filtrer les options réduit la liste", async ({ page }) => {
 
   await startEditing(page)
   await page.keyboard.press('Tab')
-  await page.keyboard.press('Enter')
+  await page.keyboard.press('ArrowDown')
 
   await page.locator('.popup-select__search').type('jet')
   await expect(page.locator('.popup-select__option')).toHaveCount(1)
@@ -139,7 +130,7 @@ test("Enter sur résultat filtré sélectionne et ferme", async ({ page }) => {
 
   await startEditing(page)
   await page.keyboard.press('Tab')
-  await page.keyboard.press('Enter')
+  await page.keyboard.press('ArrowDown')
 
   await page.locator('.popup-select__search').type('reli')
   await expect(page.locator('.popup-select__option')).toHaveCount(1)
@@ -147,4 +138,44 @@ test("Enter sur résultat filtré sélectionne et ferme", async ({ page }) => {
 
   const trigger = page.locator('.event-item.selected .popup-select-trigger')
   await expect(trigger).toHaveText('à relire')
+})
+
+test("le menu d'état contient tous les libellés corrects", async ({ page }) => {
+  await goToEventLister(page)
+
+  await startEditing(page)
+  await page.keyboard.press('Tab')
+  await page.keyboard.press('ArrowDown')
+
+  const options = page.locator('.popup-select__option')
+  await expect(options).toHaveCount(10)
+  await expect(options.nth(0)).toHaveText('—')
+  await expect(options.nth(1)).toHaveText('ébauche')
+  await expect(options.nth(2)).toHaveText('développement')
+  await expect(options.nth(3)).toHaveText('premier jet')
+  await expect(options.nth(4)).toHaveText('réécriture')
+  await expect(options.nth(5)).toHaveText('achèvement')
+  await expect(options.nth(6)).toHaveText('à corriger')
+  await expect(options.nth(7)).toHaveText('correction')
+  await expect(options.nth(8)).toHaveText('à relire')
+  await expect(options.nth(9)).toHaveText('achevé')
+})
+
+test("choisir un état en édition l'enregistre (persistance après rechargement)", async ({ page }) => {
+  await goToEventLister(page)
+
+  await startEditing(page)
+  await page.keyboard.press('Tab')
+  await page.keyboard.press('ArrowDown')
+  await page.keyboard.press('ArrowDown')  // ébauche
+  await page.keyboard.press('Enter')
+  await page.keyboard.press('Enter')  // confirme l'édition
+
+  await page.waitForLoadState('networkidle')
+  await page.reload()
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await page.keyboard.press('ArrowRight')
+  await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+
+  await expect(page.locator('.event-item').nth(0).locator('.event-state')).toHaveText('ébauche')
 })

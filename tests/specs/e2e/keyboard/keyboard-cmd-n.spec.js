@@ -1,44 +1,40 @@
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect } from '../__setup__.js'
 
+// Alt+n crée en-dessous (voir keyboard-alt-n.spec.js)
+// Cmd+n n'a plus de rôle dans la création d'items
+
 test.describe('Cmd+n dans la liste des projets', () => {
   test.beforeEach(() => installFixtures('many-projects'))
 
-  test("Cmd+n crée un nouvel item EN DESSOUS de l'item sélectionné", async ({ page }) => {
+  test("Cmd+n ne crée PAS de nouvel item (c'est Alt+n qui le fait)", async ({ page }) => {
     await page.goto('/')
     await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
 
     const items = page.locator('.project-item')
-    await expect(items.nth(0)).toHaveClass(/selected/)
+    const countBefore = await items.count()
 
     await page.keyboard.press('Meta+n')
 
-    await expect(items).toHaveCount(4)
-    await expect(items.nth(0)).toContainText('Projet A')
-    await expect(items.nth(1)).toHaveClass(/selected/)
-    await expect(items.nth(1).locator('input[name="title"]')).toBeVisible()
-    await expect(items.nth(2)).toContainText('Projet B')
+    // Le nombre d'items ne doit pas avoir changé
+    await expect(items).toHaveCount(countBefore)
   })
 })
 
 test.describe("Cmd+n dans un EventLister", () => {
   test.beforeEach(() => installFixtures('many-events'))
 
-  test("Cmd+n crée un event EN DESSOUS de l'event sélectionné", async ({ page }) => {
+  test("Cmd+n ne crée PAS de nouvel event (c'est Alt+n qui le fait)", async ({ page }) => {
     await page.goto('/')
     await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
     await page.keyboard.press('ArrowRight')
     await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
 
     const items = page.locator('.event-item')
-    await expect(items.nth(0)).toHaveClass(/selected/)
+    const countBefore = await items.count()
 
     await page.keyboard.press('Meta+n')
 
-    // Le nouvel event est inséré APRÈS l'event sélectionné (index 1)
-    await expect(items.nth(0)).toContainText('Évènement un')
-    await expect(items.nth(1)).toHaveClass(/selected/)
-    await expect(items.nth(1).locator('input[name="title"]')).toBeVisible()
-    await expect(items.nth(2)).toContainText('Évènement deux')
+    await expect(items).toHaveCount(countBefore)
   })
 })

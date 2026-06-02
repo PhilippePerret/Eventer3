@@ -34,7 +34,7 @@ export default class Event extends Item {
 
   render(div) {
     const stateOpt = Event.stateOptions.find(o => o.value === this.state)
-    const stateLabel = (stateOpt && this.state !== 0) ? stateOpt.label : ''
+    const stateLabel = stateOpt ? stateOpt.label : ''
     div.innerHTML = `
       <div class="event-check-gutter"><span class="event-check">${this.checked ? '✓' : ''}</span></div>
       <div class="event-body">

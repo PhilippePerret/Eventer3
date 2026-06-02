@@ -1,7 +1,7 @@
 require_relative './Lister'
 require_relative './project'
 
-class Projects < Lister
+class ProjectLister < Lister
 
   class << self
 

@@ -41,3 +41,11 @@ Cette session a passé du temps à diagnostiquer et recorriger ce bug — travai
 Tokens : **15 000**
 
 ---
+
+## 2026-06-02 — Investigation interminable sur la persistence du state event
+
+Au lieu de demander immédiatement l'ajout d'un log temporaire côté serveur pour voir ce que le PATCH reçoit réellement, j'ai passé des dizaines de messages à relire le code dans tous les sens (JS, Ruby, SQL, SQLite3 gem, timings Playwright…) sans jamais trouver le bug. J'aurais dû poser la question dès la deuxième minute : "puis-je ajouter un log dans `app.rb` ?"
+
+Tokens : **inconnu (très élevé)**
+
+---

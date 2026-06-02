@@ -204,7 +204,7 @@ module DB
       rows = db.execute(<<~SQL, [lister_id])
         SELECT i.id, i.title, i.type, i.color, i.checked, i.duration, i.created_at, i.updated_at,
                pp.active, pp.state AS project_state,
-               ep.state AS event_state, ep.brin_ids, ep.perso_ids,
+               ep.state AS st, ep.brin_ids, ep.perso_ids,
                bp.badge, bp.perso_ids AS brin_perso_ids,
                pers.badge AS perso_badge, pers.patronyme, pers.fonction,
                CASE WHEN cl.id IS NOT NULL THEN 1 ELSE 0 END AS hl
@@ -258,6 +258,10 @@ module DB
       if payload.key?('brin_ids')
         db.execute("UPDATE event_props SET brin_ids = ? WHERE item_id = ?",
           [JSON.generate(payload['brin_ids']), item_id])
+      end
+      if payload.key?('state')
+        db.execute("UPDATE event_props SET state = ? WHERE item_id = ?",
+          [payload['state'].to_i, item_id])
       end
       if payload.key?('badge')
         db.execute("UPDATE brin_props  SET badge = ? WHERE item_id = ?", [payload['badge'], item_id])
