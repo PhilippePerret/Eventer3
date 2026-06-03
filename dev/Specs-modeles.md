@@ -12,7 +12,7 @@
 
 ## Description
 
-Eventer est une application qui permet de gérer les **évènemenciers** de projets de film ou de roman. 
+Eventer est une application qui permet de gérer les **évènemenciers** de projets de film ou de roman.
 
 ### Qu’est-ce un « évènemencier » ?
 
@@ -121,13 +121,11 @@ classDiagram
 
 **`path`** est le chemin d’accès absolu au lister, pour le décrire plus précisément. 
 
-<span style="color:#FF0000;">**ATTENTION : CE CHEMIN N’A RIEN À VOIR AVEC LE CHEMIN D’ACCÈS AU FICHIER DANS `/data` !!!! C’EST UN FICHIER QUELCONQUE, N’IMPORTE OÙ, DÉFINI OU PAS, QUI CONTIENT DES RENSEIGNEMENTS SUPPLÉMENTAIRES SUR L’ITEM. **</span>
-
 ATTENTION : pour les *Lister* de type `project`, ça correspond au chemin d’accès au dossier principal du projet. Tous les autres `path` (de *Lister* ou d’*Item*) pourront être estimé par rapport à lui.
 
 ### Item
 
-~~~mermaid
+~~~
 classDiagram
 	class Item {
 		+string id
@@ -236,6 +234,8 @@ classDiagram
 
 #### Notes sur les propriétés de Item
 
+Voir les [erreurs fréquentes](Erreurs-frequentes.md)
+
 **`id`** devra être le plus court possible : `b+x` pour les brins (`b1`, `b2` etc.), `c+x`  pour les personnages, `i+x` pour les items, `l+x` pour les listers, etc.
 
 **`color`** est la couleur hexadécimale de fond de l’item (qui déterminera aussi une couleur de police adaptée). sera surtout utile pour les brins dans un premier temps, mais devra être applicable à toutes les autres classes (Projets, Personnages, etc.).
@@ -243,8 +243,6 @@ classDiagram
 **`checked`** permet de cocher l’item (coche en regard à gauche du title de l’item). C’est une donnée persistante.
 
 **`duration`** est la durée en secondes.
-
-**`path`** est un chemin d’accès relatif (par rapport au dossier du projet) ou absolu qui conduit au fichier de l’item (pour le décrire, le travailler, etc.). Attention : ça n’a RIEN à voir avec le fichier dans lequel les données de l’item sont enregistrées dans le dossier `data`.
 
 **`title`** pour les `Perso`s sert de « pseudo », c’est-à-dire la valeur par défaut pour l’affichage.
 
@@ -434,7 +432,7 @@ Quel que soit le cas, la première valeur est toujours `tittle` (qui est le pseu
 | `Perso`      | `title` → `badge` (2 lettres majuscules max, première version proposée automatiquement par title) → `Patronyme` → `avatar` → `fonction` |
 | `ScriptItem` | `title` (le texte) → `state` → `nature`                      |
 
-
+<a name="item-types"></a>
 
 ---
 

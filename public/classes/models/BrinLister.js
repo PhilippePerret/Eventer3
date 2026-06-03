@@ -22,14 +22,17 @@ export default class BrinLister extends Lister {
       parent_item_id: eventLister.parentItem.id
     })
     eventLister.brins_lister_id = newLister.id
-    const badge = Brin.generateBadge('Intrigue principale')
-    const color = Brin.colorFor(1)
-    await ListerRepository.createItem(newLister.id, {
-      title: 'Intrigue principale',
-      type: 'brin',
-      badge,
-      color
-    })
+    const projectBrinIds = eventLister.parentItem.brin_ids ?? []
+    if (projectBrinIds.length === 0) {
+      const badge = Brin.generateBadge('Intrigue principale')
+      const color = Brin.colorFor(1)
+      await ListerRepository.createItem(newLister.id, {
+        title: 'Intrigue principale',
+        type: 'brin',
+        badge,
+        color
+      })
+    }
   }
 
   constructor({ eventLister, keyboardController }) {

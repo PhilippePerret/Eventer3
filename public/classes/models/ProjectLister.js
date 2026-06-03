@@ -11,7 +11,7 @@ export default class ProjectLister extends Lister {
     const keyboardController = new KeyboardController()
     keyboardController.observe()
     window.__keyboardController = keyboardController
-    const projects = new ProjectLister({ id: 'projects', keyboardController })
+    const projects = new ProjectLister({ id: 1, keyboardController })
     await projects.loadDefinition()
     await projects.loadItems()
     projects.render()

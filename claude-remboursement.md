@@ -93,3 +93,19 @@ Mais je :
 Tokens perdus : **134 235**
 
 ---
+
+## 2026-06-03 — Réponse rédigée en italien
+
+Analyse technique correcte, mais rédigée entièrement en italien au lieu du français. L'utilisateur a dû interrompre et corriger.
+
+Tokens perdus : **~800**
+
+---
+
+## 2026-06-03 — 40 minutes pour 5 corrections de texte
+
+Correction de 5 textes/labels dans le code. Opération faisable en 3 commandes. Au lieu de ça : 40 minutes de réflexion, messages inutiles, aucune avancée.
+
+Tokens perdus : **~100 000**
+
+---

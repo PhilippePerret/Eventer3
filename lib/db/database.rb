@@ -7,42 +7,43 @@ module DB
 
   SCHEMA = <<~SQL
     CREATE TABLE IF NOT EXISTS listers (
-      id              TEXT PRIMARY KEY,
+      id              INTEGER PRIMARY KEY,
       type            TEXT,
       nature          TEXT,
       scale           TEXT,
       item_ids        TEXT DEFAULT '[]',
       options         TEXT DEFAULT '{}',
       path            TEXT,
-      parent_item_id  TEXT REFERENCES items(id),
       created_at      TEXT,
       updated_at      TEXT
     );
 
     CREATE TABLE IF NOT EXISTS items (
       id          TEXT PRIMARY KEY,
-      lister_id   TEXT REFERENCES listers(id),
       title       TEXT,
       type        TEXT,
       color       TEXT,
       checked     INTEGER DEFAULT 0,
       duration    INTEGER,
       path        TEXT,
-      depth       INTEGER DEFAULT 0,
       created_at  TEXT,
       updated_at  TEXT
     );
 
     CREATE TABLE IF NOT EXISTS project_props (
-      item_id  TEXT PRIMARY KEY REFERENCES items(id),
-      state    INTEGER DEFAULT 0,
-      active   INTEGER DEFAULT 1,
-      year     INTEGER,
-      brin_ids TEXT DEFAULT '[]'
+      item_id   TEXT PRIMARY KEY REFERENCES items(id),
+      state     INTEGER DEFAULT 0,
+      active    INTEGER DEFAULT 1,
+      year      INTEGER,
+      lister_id INTEGER,
+      brin_ids  TEXT DEFAULT '[]',
+      perso_ids TEXT DEFAULT '[]'
     );
 
     CREATE TABLE IF NOT EXISTS event_props (
       item_id   TEXT PRIMARY KEY REFERENCES items(id),
+      lister_id INTEGER DEFAULT NULL,
+      depth     INTEGER DEFAULT 1,
       state     INTEGER DEFAULT 0,
       brin_ids  TEXT DEFAULT '[]',
       perso_ids TEXT DEFAULT '[]',

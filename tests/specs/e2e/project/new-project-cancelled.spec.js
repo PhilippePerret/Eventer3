@@ -19,7 +19,7 @@ test('la touche Escape après n annule complètement la création du projet', as
   await expect(items.nth(2)).not.toHaveClass(/selected/)
 
   console.log('-> lecture backend avant création')
-  const beforeResp = await page.request.get('/api/listers/projects')
+  const beforeResp = await page.request.get('/api/listers/1')
   const before = await beforeResp.json()
 
   console.log('-> création nouveau projet')
@@ -36,7 +36,7 @@ test('la touche Escape après n annule complètement la création du projet', as
   await expect(items.nth(2)).not.toHaveClass(/selected/)
 
   console.log('-> vérification backend inchangé')
-  const afterResp = await page.request.get('/api/listers/projects')
+  const afterResp = await page.request.get('/api/listers/1')
   const after = await afterResp.json()
   expect(after.item_ids).toEqual(before.item_ids)
 

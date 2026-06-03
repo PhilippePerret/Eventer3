@@ -79,7 +79,7 @@ end
 post '/api/listers' do
   payload = JSON.parse(request.body.read)
   halt 422 unless payload['type'] && payload['parent_item_id']
-  result = DB::Repo.create_lister(DATA_DIR, type: payload['type'], parent_item_id: payload['parent_item_id'])
+  result = DB::Repo.create_lister(DATA_DIR, type: payload['type'], parent_item_id: payload['parent_item_id'], item_ids: payload['item_ids'] || [])
   content_type :json
   status 201
   JSON.generate(result)

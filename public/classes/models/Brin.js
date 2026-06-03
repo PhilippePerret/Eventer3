@@ -2,6 +2,10 @@ import Item from './Item.js'
 
 export default class Brin extends Item {
 
+  static get itemClasses() {
+    return ['item', 'panel-row', 'brin-row']
+  }
+
   static get newItemPlaceholder() {
     return 'Titre du nouveau brin'
   }

@@ -149,6 +149,7 @@ export default class Lister {
 
   moveSelectedItem(direction) {
     const currentIndex = this.selectedIndex
+    if (currentIndex < 0) return
     const targetIndex = currentIndex + direction
     if (targetIndex < 0) return
     if (targetIndex >= this.domItems.length) return

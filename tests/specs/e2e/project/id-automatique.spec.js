@@ -36,7 +36,7 @@ test("la saisie du titre d'un nouveau projet crée automatiquement son identifia
   await savePromise
 
   console.log('-> vérification persistance via API')
-  const resp = await page.request.get('/api/listers/projects')
+  const resp = await page.request.get('/api/listers/1')
   expect(resp.ok()).toBeTruthy()
   const lister = await resp.json()
   expect(lister.item_ids).toContain('ca-cest-un-ete-super')

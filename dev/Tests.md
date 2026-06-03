@@ -95,21 +95,41 @@
 
 - [ ] Un event affiche : son `title`, les badges de ses brins, les badges de ses personnages (personnages propres + personnages de ses brins) et le menu `state`
   \+ glisser la souris sur les badges (perso et brin) affiche leur `title` complet (avec un système propre à l’application, plus gros et plus rapide que l’attribut `title` de l’objet DOM.
+  
 - [ ] On doit pouvoir mettre un Event en édition pour modifier de façon persistante sont `title` et son `state`.
+
 - [ ] La combinaison ⌘+`c` permet de copier l’item (toutes ses propriétés SAUF son id)
+
 - [ ] La combinaison ⌘+`x` permet de couper l’item (toutes ses propriétés MÊME son id)
+
 - [ ] La combinaison ⇧+⌘+`c` permet de copier tous les items cochés (toutes leurs propriétés sauf leur id). Faire un test avec l’élément sélectionné coché (il est pris aussi) et un test avec l’élément sélectionné non coché (il n’est pas pris).
+
 - [ ] La combinaison ⇧+⌘+`x` permet de couper tous les items cochés (toutes leurs propriétés MÊME leur id). Faire un test avec l’élément sélectionné coché (il est coupé aussi et pris) et un test avec l’élément sélectionné non coché (il n’est pas considéré.
+
 - [ ] La combinaison ⌘+`v` permet de coller l’item (toutes ses propriétés MÊME son id) au-dessus de l’item sélectionné. Faire aussi le test avec **plusieurs** items copiés ou coupés.
+
 - [ ] La combinaison ⌘+`v` permet de coller l’item au-dessus de l’item sélectionné **même dans un autre panneau** (essayer forcément avec les évènemenciers). Faire aussi le test avec **plusieurs** items copiés ou coupés.
+
 - [ ] Un event peut définir sa météo (`meteo` ☀️🌤️🌦️☁️💨⛈️🌪️🌨️) dans un mini panneau qui contient aussi l’effet.
+
 - [ ] Un event peut définir son effet (`effet`) pami « jour », « nuit, etc. Voir les valeus possibles et les vraies valeurs dans la données `EFFETS`.
+
 - [ ] La météo et l’effet d’un event influence son apparence (si l’option du Lister le demande => flag du Lister)
+
 - [ ] Un event peut définir sa date `dyndate` de façon fixe (en lui donnant un nom fixe).
+
 - [ ] Test de la suppression des Items cochés avec ⇧+ ⌦. Tester : un message de confirmation doit être validé (Enter). Tester : l’Item sélectionné n’est pas supprimé s’il n’est pas coché. NOTE : fonctionnement commun à TOUS LES TYPES D’ITEM.
+
 - [ ] Test unitaire du calcul de la date dynamique.
+
 - [ ] Un event peut définir sa date `dyndate`de façon dynamique.
-- [ ] Si on choisit pour l’Event un personnage qui lui appartient déjà par le biais d’un brin, on signale une erreur et on ne le permet pas.
+
+- [ ] Quand le panneau des personnages d’un event est ouvert (avec `p`), la liste des personnages de ses brins doivent être : 
+
+  - cochés
+  - grisé/non éditable (on ne peut pas les décocher)
+
+  De cette manière, il est impossible de choisir un personnage pour un event qui appartient déjà à un de ses brins.
 
 ## Brin
 
@@ -117,10 +137,18 @@
 
 - [ ] En édition, avec la touche `Tab`, on doit pouvoir modifier, dans l’ordre : le `title`, le `badge`, le `type` et la `color` du brin.
 - [ ] Le choix de la couleur du brin doit modifier l’affichage des events qui l’ont en premier brin si l’option de l’EventLister le demande (choix entre fond = premier brin ou fond = climat).
+- [ ] On ne doit pas pouvoir mettre un badge de plus de trois lettres. Et ça doit s’écrire toujours en capitales.
 
 ### Panneau des brins
 
+- [ ] Le panneau des brins ne devrait jamais être vide. <= Un projet devrait TOUJOURS avoir au moins un brin « modèle ».
 - [ ] À l’ouverture du panneau, seuls les brins de l’event sélectionné devraient être cochés.
+
+---
+
+### Panneau des personnages
+
+- [ ] Le panneau des personnages ne devrait jamais être vide. <= Un projet devrait TOUJOURS avoir au moins un personnage « modèle ».
 
 
 
@@ -172,3 +200,68 @@
 ## Recherche
 
 - [ ] Les combinaisons avec la bouche `$` permettent de définir la recherche entièrement au clavier. L’aide Footer permet de visualiser les combinaisons.
+
+---
+
+## Test total
+
+Ce test est censé passer tout en revue comme une seule visite. On met les différents fichiers tests dans un dossier `test-total` qui comportera des tests incrémentés de 100 en 100 pour pouvoir introduire des tests supplémentaires entre les tests déjà effectués.
+
+On détruit toute base de données (fichier `data/eventer.db`)
+
+- [ ] L’appel de l’application doit créer un premier projet modèle avec un brin, un personnage et un event. Vérifier dans la base de données.
+  Le projet modèle doit être doit être affiché dans le panneau des projets avec la bonne apparence.
+  Le panneau doit afficher « Liste des projets » 
+- [ ] La flèche → doit permettre d’entrer dans le premier évènemencier du projet par défaut
+- [ ] La flèche ← doit permettre de revenir à la liste des projets.
+- [ ] La touche « n » doit permettre de créer un nouveau projet. TESTER AUSSI : doit lui créer un event, un brin et un personnage. TESTER AUSSI : en édition, le fond doit être VERT.
+- [ ] Les flèches ↑ et ↓ doivent permettre de sélectionner (en boucle) les projets affichés.
+- [ ] Sélectionner le dernier projet et taper ⌥+`n`. Un nouveau projet doit se créer SOUS le dernier projet.  Puis : 
+
+  1. Lui donner le titre « Mon troisième projet ».
+
+  2. La touche `Tab` doit permettre de rejoindre le champ `id` et de le modifier.
+
+  3. La touche `Enter` doit permettre d’enregistrer le nouveau projet.
+
+     TESTER AUSSI : l’identifiant du projet doit se calculer automatiquement.
+
+     TESTER AUSSI : La donnée persistante est enregistrée.
+- [ ] La combinaison ⌘+↑ et ⌘+↓ doit permettre de remonter le dernier projet tout en haut puis de le mettre en deuxième position. Puis de remonter le dernier projet tout en haut. TESTER AUSSI : L’ordrer des projets doit être conservé en base de données, dans lister#1.
+- [ ] En relançant l’application, l’ordre des projets doit être conservé.
+- [ ] La touche `Enter` met le projet en édition. TESTER AUSSI : on ne doit pas pouvoir modifier l’identifiant du projet.
+- [ ] La flèche → permet d’entrer dans le premier évènemencier du premier projet.
+- [ ] La touche `Enter` permet de passer le premier event en édition (TESTER FOND EN VERT). Puis : 
+
+  1. On met « C’est l’incipit du roman en title ». 
+  2. La touche `Tab` doit permettre de choisir l’état (state). Choisir « ébauche ».
+  3. La touche `Enter` permet d’enregistrer (de façon persistane) les nouvelles données.
+- [ ] La touche ⌥+`n` permet de créer un nouvel event sous le premier. On lui donne le titre « Une séquence de poursuite » avec le state « premier jet ».
+- [ ] La touche `n` permet de créer un troisième event entre les deux autres, avec le titre « Une séquence de fouille » avec le state « ébauche ».
+
+### Brins
+
+- [ ] La touche `b` doit permettre d’ouvrir le panneau des brins, avec un seul brin pour le moment : le brin par défaut.
+- [ ] La touche `Enter` doit permettre de mettre le premier brin en édition (fond vert) puis :
+
+  1. on lui donne le titre « Mon enquête policière »
+  2. la touche ⇥ doit permettre de rejoindre le badge et de mettre « ENQ »
+  3. la touche ⇥ doit permettre de rejoindre le type et de choisir « Accessoire »
+  4. la touche ↩︎ permet de valider les données et de les enregistrer de façon persistante.
+- [ ] La touche ␣ permet de cocher le brin => Le brin s’ajoute à la liste des brins de l’event courant + son badge s’affiche en bout de ligne, avant le menu de l’état.
+  *Note : un débounce devrait permettre de retarder un peu l’enregistrement des données de l’event car cocher/décocher peut être fait rapidement*
+- [ ] La touche ␣ permet de décocher le brin => le brin se retire de la liste des brins de l’event courant + son badge est retiré de la ligne de l’event.
+- [ ] La touche `n` permet de créer un nouveau brin au-dessus (avec les données « Renoncement progressif », « RPE » en badge et « thème » pour le type. On l’enregistre.
+- [ ] On peut créer un autre brin avec les données « Le personnage étrange », de type « Personnages ». TESTER AUSSI : Le badge automatique doit être « LPE ».
+- [ ] On coche les deux nouveaux brins => Ils doivent s’afficher dans la ligne de l’event et s’enregistrer en persistant dans l’event (avec un débounce).
+- [ ] La touche ⌘+↩︎ permet de fermer la fenêtre des panneaux.
+- [ ] On revient sur le panneau des brins avec `b`. L’aide du footer doit afficher « ⌥ ↓/↑ = sélection des évènements ».
+- [ ] Les combinaisons ⌥ ↓ et ⌥ ↑ permettent de sélectionner les évènements en dessous. On doit voir : 
+
+  - la sélection de l’event courant changé (classe selected)
+  - les brins se cocher/décocher en fonction de l’évènement courant (un seul doit avec les deux derniers brins).
+
+  *(note développement : ça implique que la sélection d’un event règle le panneau des brins même lorsqu’il est caché.)*
+
+  On choisit
+- [ ] 

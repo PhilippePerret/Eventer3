@@ -10,8 +10,6 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
   await page.waitForTimeout(500)
 
   // Ouvrir brins pour e1 (doit avoir A et B cochés)
-  await page.press('body', 'ArrowDown')
-  await page.waitForTimeout(200)
   await page.press('body', 'b')
   await page.waitForTimeout(300)
 
@@ -104,6 +102,8 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
   await page.waitForTimeout(200)
   await page.press('body', 'ArrowUp')
   await page.waitForTimeout(200)
+  await page.press('body', 'ArrowRight')
+  await page.waitForTimeout(500)
   await page.press('body', 'b')
   await page.waitForTimeout(300)
 
