@@ -195,6 +195,68 @@ test.describe('⌘+x interdit sur le dernier projet (ProjectLister)', () => {
 
 })
 
+// ─── COPY + PASTE DANS PROJECTLISTER ────────────────────────────────────────
+// many-projects : Projet A, Projet B, Projet C
+
+test.describe('⌘+c + ⌘+v dans ProjectLister', () => {
+
+  test.beforeEach(() => installFixtures('many-projects'))
+
+  test('⌘+c + ⌘+v ajoute un projet au-dessus de la sélection', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    const items = page.locator('.project-item')
+    const countBefore = await items.count()
+    const selectedTitle = await page.locator('.project-item.selected .project-item__title').textContent()
+    await page.keyboard.press('Meta+c')
+    await page.keyboard.press('Meta+v')
+    await expect(items).toHaveCount(countBefore + 1)
+    await expect(items.nth(0).locator('.project-item__title')).toHaveText(selectedTitle.trim())
+  })
+
+  test('⌘+c + ⌘+v : l\'item collé est sélectionné', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    await page.keyboard.press('Meta+c')
+    await page.keyboard.press('Meta+v')
+    await expect(page.locator('.project-item').nth(0)).toHaveClass(/selected/)
+  })
+
+  test('⌘+c + ⌘+v : l\'identifiant du projet collé est pX (pas null)', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    await page.keyboard.press('Meta+c')
+    await page.keyboard.press('Meta+v')
+    await page.waitForLoadState('networkidle')
+    const idText = await page.locator('.project-item').nth(0).locator('.project-item__id').textContent()
+    expect(idText.trim()).toMatch(/^p\d+$/)
+  })
+
+  test('⌘+c + ⌘+v : l\'id collé est différent de l\'original', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    const originalId = await page.locator('.project-item').nth(0).getAttribute('data-id')
+    await page.keyboard.press('Meta+c')
+    await page.keyboard.press('Meta+v')
+    await page.waitForLoadState('networkidle')
+    const copiedId = await page.locator('.project-item').nth(0).getAttribute('data-id')
+    expect(copiedId).not.toBe(originalId)
+  })
+
+  test('après ⌘+c + ⌘+v, le projet collé est persistant', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    const items = page.locator('.project-item')
+    const countBefore = await items.count()
+    await page.keyboard.press('Meta+c')
+    await page.keyboard.press('Meta+v')
+    await page.waitForLoadState('networkidle')
+    await page.reload()
+    await expect(items).toHaveCount(countBefore + 1)
+  })
+
+})
+
 // ─── CUT + PASTE DANS PROJECTLISTER ─────────────────────────────────────────
 // many-projects : Projet A, Projet B, Projet C
 

@@ -3,7 +3,7 @@ import Item from './Item.js'
 export default class Brin extends Item {
 
   static get thingName() {
-    return { thing: 'brin', THING: 'BRIN', Thing: 'Brin', things: 'brins', THINGS: 'BRINS', Things: 'Brins', the: 'le', THE: 'LE', The: 'Le' }
+    return { thing: 'brin', THING: 'BRIN', Thing: 'Brin', things: 'brins', THINGS: 'BRINS', Things: 'Brins', the: 'le', THE: 'LE', The: 'Le', of: 'du ' }
   }
 
   static get idPrefix() {

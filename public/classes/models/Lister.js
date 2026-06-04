@@ -321,6 +321,7 @@ export default class Lister {
       this.domContainer.appendChild(itemElement)
     }
     await this.commitNewItem(item, itemElement, insertionIndex)
+    this.selectedIndex = insertionIndex
     if (typeof item.render === 'function') item.render(itemElement)
     itemElement.classList.add('selected')
   }

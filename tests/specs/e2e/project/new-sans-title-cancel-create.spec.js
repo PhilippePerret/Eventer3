@@ -5,40 +5,39 @@ test.beforeEach(() => {
   installFixtures('many-projects')
 })
 
-test('la touche Entrée sans titre annule complètement la création du projet', async ({ page }) => {
-  console.log('\n=== TEST VALIDATION VIDE NOUVEAU PROJET ===\n')
-
+test('la touche Entrée sans titre affiche une notification', async ({ page }) => {
   await page.goto('/')
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
 
-  const items = page.locator('.project-item')
-
-  console.log('-> vérification nombre initial projets')
-  await expect(items).toHaveCount(3)
-  await expect(items.nth(0)).toHaveClass(/selected/)
-  await expect(items.nth(1)).not.toHaveClass(/selected/)
-  await expect(items.nth(2)).not.toHaveClass(/selected/)
-
-  console.log('-> lecture backend avant création')
-  const beforeResp = await page.request.get('/api/listers/1')
-  const before = await beforeResp.json()
-
-  console.log('-> création nouveau projet')
   await page.keyboard.press('n')
+  await expect(page.locator('.project-item.selected input[name="title"]')).toBeVisible()
 
-  console.log('-> validation vide')
   await page.keyboard.press('Enter')
 
-  console.log('-> vérification nombre final projets')
-  await expect(items).toHaveCount(3)
-  await expect(page.locator('input')).toHaveCount(0)
-  await expect(items.nth(0)).toHaveClass(/selected/)
-  await expect(items.nth(1)).not.toHaveClass(/selected/)
-  await expect(items.nth(2)).not.toHaveClass(/selected/)
+  await expect(page.locator('#notification')).toBeVisible()
+  await expect(page.locator('#notification')).toContainText('projet')
+})
 
-  console.log('-> vérification backend inchangé')
-  const afterResp = await page.request.get('/api/listers/1')
-  const after = await afterResp.json()
-  expect(after.item_ids).toEqual(before.item_ids)
+test('la touche Entrée sans titre : l\'éditeur reste visible', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
 
-  console.log('\n=== FIN TEST VALIDATION VIDE NOUVEAU PROJET ===\n')
+  await page.keyboard.press('n')
+  await page.keyboard.press('Enter')
+
+  await expect(page.locator('.project-item input[name="title"]')).toBeVisible()
+})
+
+test('la touche Entrée sans titre : aucun projet créé', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+
+  const items = page.locator('.project-item')
+  const countBefore = await items.count()
+
+  await page.keyboard.press('n')
+  await page.keyboard.press('Enter')
+  await page.keyboard.press('Escape')
+
+  await expect(items).toHaveCount(countBefore)
 })

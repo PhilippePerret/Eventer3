@@ -234,7 +234,7 @@ module DB
         item_class = _lister_item_class(lister_row['type'])
         next nil unless item_class
 
-        project_id = _find_project_id(db, lister_id) || lister_id
+        project_id = _find_project_id(db, lister_id)
         prefix     = { 'project' => 'p', 'event' => 'e', 'perso' => 'c' }[item_class] || 'i'
         item_id    = fields['id'] || _generate_id(db, project_id, item_class, prefix)
 
@@ -327,7 +327,12 @@ module DB
     private_class_method :_find_project_id
 
     def self._generate_id(db, project_id, item_type, prefix)
-      return "#{prefix}#{Time.now.to_i}" unless project_id
+      valid_project = project_id && db.execute("SELECT 1 FROM items WHERE id = ? LIMIT 1", [project_id.to_s]).first
+      unless valid_project
+        val = 1
+        val += 1 while db.execute("SELECT 1 FROM items WHERE id = ?", ["#{prefix}#{val}"]).first
+        return "#{prefix}#{val}"
+      end
       db.execute("INSERT OR IGNORE INTO counters (project_id, item_type, last_val) VALUES (?, ?, 0)", [project_id, item_type])
       db.execute("UPDATE counters SET last_val = last_val + 1 WHERE project_id = ? AND item_type = ?", [project_id, item_type])
       counter_row = db.execute("SELECT last_val FROM counters WHERE project_id = ? AND item_type = ?", [project_id, item_type]).first

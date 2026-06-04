@@ -3,6 +3,7 @@ import Texte from '../../system/Texte.js'
 import {ItemDataMapper} from '../repositories/Mapper.js'
 import ListerRepository from '../repositories/ListerRepository.js'
 import PopupSelect from '../ui/PopupSelect.js'
+import Notification from '../ui/Notification.js'
 
 
 export default class Item {
