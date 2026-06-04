@@ -65,6 +65,13 @@ export default class ListerRepository {
     return await response.json()
   }
 
+  static async deleteItem(lister, item) {
+    const response = await fetch(`/api/listers/${lister.id}/items/${item.id}`, {
+      method: 'DELETE'
+    })
+    if (!response.ok) raise(`Impossible de supprimer l'item ${item.id}`)
+  }
+
   static async createLister(fields) {
     const response = await fetch('/api/listers', {
       method: 'POST',

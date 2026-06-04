@@ -99,6 +99,13 @@ patch '/api/items/:id' do
   JSON.generate(ok: true)
 end
 
+delete '/api/listers/:lister_id/items/:item_id' do
+  result = DB::Repo.delete_item(DATA_DIR, params[:lister_id], params[:item_id])
+  halt 404 unless result
+  content_type :json
+  JSON.generate(ok: true)
+end
+
 post '/api/listers/:id/items' do
   payload = JSON.parse(request.body.read)
   item = DB::Repo.create_item(DATA_DIR, params[:id], payload)

@@ -91,6 +91,7 @@ export default class BrinLister extends Lister {
     })
 
     if (this.keyboardController) this.keyboardController.register(this)
+    this._updateEventBadges(this.selectedEvent)
   }
 
   _createItemElement(item, idx) {
@@ -182,6 +183,15 @@ export default class BrinLister extends Lister {
       Brin.applyBadgeColor(badge, brin.color)
       metaEl.appendChild(badge)
     })
+  }
+
+  _onAfterDelete(brin) {
+    this.eventLister.items.forEach(ev => {
+      if (Array.isArray(ev.brin_ids)) {
+        ev.brin_ids = ev.brin_ids.filter(id => id !== brin.id)
+      }
+    })
+    this._updateEventBadges(this.selectedEvent)
   }
 
   async _saveEventBrinIds(event) {

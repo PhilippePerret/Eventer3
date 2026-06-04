@@ -190,13 +190,4 @@ Le DOM suffit largement.
 
 ## Options
 
-Les options de l’application sont consignées dans le fichier JSON `/data/app_config.js` propre à chaque utilisateur.
-
-Ce fichier définit les options suivantes :
-
-| Option          | Description                                                  | valeurs                                                      |
-| --------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| `modeAffichage` | Mode d’affichage courant, entre :<br />*EST-CE VRAIMENT NÉCESSAIRE alors qu’il peut être changé très rapidement grâce au raccouci ⌘+`m`* ? | `normal` = par imbrication (comme le Finder)<br />`niveau` = par niveau |
-
-
-
+Cf. [options](Options.md).

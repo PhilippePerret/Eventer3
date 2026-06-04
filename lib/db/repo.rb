@@ -251,6 +251,54 @@ module DB
       end
     end
 
+    def self.delete_item(data_dir, lister_id, item_id)
+      with_db(data_dir) do |db|
+        now = Time.now.strftime('%Y-%m-%dT%H:%M:%S')
+
+        if lister_id.to_s.end_with?('-brins')
+          project_id = lister_id.to_s.sub(/-brins$/, '')
+          pp_row = db.execute("SELECT brin_ids FROM project_props WHERE item_id = ? LIMIT 1", [project_id]).first
+          next nil unless pp_row
+          brin_ids = JSON.parse(pp_row['brin_ids'] || '[]') rescue []
+          next nil unless brin_ids.include?(item_id)
+          brin_ids.delete(item_id)
+          db.execute("UPDATE project_props SET brin_ids = ? WHERE item_id = ?", [JSON.generate(brin_ids), project_id])
+          # Retirer le brin de tous les events qui l'ont assigné
+          db.execute("SELECT item_id, brin_ids FROM event_props WHERE brin_ids LIKE ?", ["%#{item_id}%"]).each do |row|
+            ev_brin_ids = JSON.parse(row['brin_ids'] || '[]') rescue []
+            if ev_brin_ids.include?(item_id)
+              ev_brin_ids.delete(item_id)
+              db.execute("UPDATE event_props SET brin_ids = ? WHERE item_id = ?", [JSON.generate(ev_brin_ids), row['item_id']])
+            end
+          end
+
+        elsif lister_id.to_s.end_with?('-persos')
+          project_id = lister_id.to_s.sub(/-persos$/, '')
+          pp_row = db.execute("SELECT perso_ids FROM project_props WHERE item_id = ? LIMIT 1", [project_id]).first
+          next nil unless pp_row
+          perso_ids = JSON.parse(pp_row['perso_ids'] || '[]') rescue []
+          next nil unless perso_ids.include?(item_id)
+          perso_ids.delete(item_id)
+          db.execute("UPDATE project_props SET perso_ids = ? WHERE item_id = ?", [JSON.generate(perso_ids), project_id])
+
+        else
+          lister_row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [lister_id.to_i]).first
+          next nil unless lister_row
+          item_ids = JSON.parse(lister_row['item_ids'] || '[]')
+          next nil unless item_ids.include?(item_id.to_s)
+          item_ids.delete(item_id.to_s)
+          db.execute("UPDATE listers SET item_ids = ?, updated_at = ? WHERE id = ?", [JSON.generate(item_ids), now, lister_id.to_i])
+        end
+
+        %w[project event brin perso].each do |type|
+          db.execute("DELETE FROM #{type}_props WHERE item_id = ?", [item_id])
+        end
+        db.execute("DELETE FROM counters WHERE project_id = ?", [item_id])
+        db.execute("DELETE FROM items WHERE id = ?", [item_id])
+        true
+      end
+    end
+
     # ── Helpers privés ──────────────────────────────────────────────
 
     def self.with_db(data_dir)

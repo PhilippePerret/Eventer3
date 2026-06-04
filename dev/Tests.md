@@ -10,11 +10,18 @@
 
 - [x] S’assurer que la méthode `Lister.sortItems` existe et qu’elle classe bien les items fournis.
 
-- [ ] Dans un lister quelconque, on peut cocher les éléments (Projets, Brins, Events, Persos…). Mais quand on fait un couper ou un coller, il y a deux comportemen différents : SI des éléments sont cochés, ce sont eux ET SEULEMENT EUX (pas l’item sélectionné) qui sont considérés. SI en revanche aucun item n’est coché, c’est l’item sélectionné qui est considéré/traité. Faire l’essai par exemple avec couper-coller
+- [ ] Dans un lister quelconque, on peut cocher les éléments (Projets, Brins, Events, Persos…). Mais quand on fait un couper ou un coller, il y a deux comportement différents : SI des éléments sont cochés, ce sont eux ET SEULEMENT EUX (pas l’item sélectionné) qui sont considérés. SI en revanche aucun item n’est coché, c’est l’item sélectionné qui est considéré/traité. Faire l’essai par exemple avec couper-coller
 
 - [ ] En revanche, supprimer (`Delete` sans la touche `Shift`) supprime seulement l’item sélectionné. Deux essais : 1) `Delete` seul => supprimer l’item sélectionné. 2)  `Shift`+`Delete` => supprime les items cochés (mais PAS celui sélectionné, SAUF s’il est coché, évidemment !
 
 - [ ] La touche ← permet de revenir au Lister « parent » (s’il existe évidemment, donc un test avec un Lister qui a un parent et un avec un Lister qui n’a pas de parent.
+
+- [ ] Un. Lister doit toujours posséder au moins un item. Tester :
+  - [ ] Un event doit toujours posséder au moins un évènement. On ne doit pas pouvoir détruire le dernier, ni avec la touche `Delete`, ni en mettant son title à rien.
+  - [ ] Un projet doit toujours posséder au moins un brin. => on ne doit pas pouvoir détruire le dernier brin, ni avec la touche `Delete`, ni en mettant son title à rien.
+  - [ ] Un projet doit toujours posséder au moins un personnage. => on ne doit pas pouvoir détruire le dernier personnage, ni avec la touche `Delete`, ni en mettant son title à rien. 
+  - [ ] on ne doit pas pouvoir détruire le dernier projet, ni avec la touche `Delete` ni en mettant son contenu à rien.
+
 
 ---
 
@@ -93,22 +100,36 @@
 
 ## Event
 
+- [x] La touche ⌦ permet de supprimer l’item sélectionné même s’il y a des items cochés mais SI ça n’est pas le dernier. Comportement identique pour les Project, les Brins et les Persos.
+
+- [ ] Test de la suppression des Items cochés avec ⇧+ ⌦. Tester : un message de confirmation doit être validé (Enter). Tester : l’Item sélectionné n’est pas supprimé s’il n’est pas coché. NOTE : fonctionnement commun à TOUS LES TYPES D’ITEM.
+
+- [ ] La combinaison ⇧+⌦ est documentée dans la fenêtre des raccourcis (`?`).
+
 - [ ] Un event affiche : son `title`, les badges de ses brins, les badges de ses personnages (personnages propres + personnages de ses brins) et le menu `state`
   \+ glisser la souris sur les badges (perso et brin) affiche leur `title` complet (avec un système propre à l’application, plus gros et plus rapide que l’attribut `title` de l’objet DOM.
   
 - [ ] On doit pouvoir mettre un Event en édition pour modifier de façon persistante sont `title` et son `state`.
 
-- [ ] La combinaison ⌘+`c` permet de copier l’item (toutes ses propriétés SAUF son id)
+- [ ] La combinaison ⌘+`c` permet de copier l’item sélectionné (toutes ses propriétés SAUF son id).
 
 - [ ] La combinaison ⌘+`x` permet de couper l’item (toutes ses propriétés MÊME son id)
+
+- [ ] Avec ⌘+`x`, on ne doit pas pouvoir couper le dernier item quelconque.
+
+- [ ] La combinaison ⌘+`v` permet de coller l’item au-dessus de l’item sélectionné **même dans un autre panneau** (essayer forcément avec les évènemenciers). MAIS PAS dans un panneau d’un autre type : on ne peut pas coller un event dans le panneau des brins, dans le panneau des projets ou le panneau des personnages, etc.
+
+- [ ] La combinaison ⌘+`v` permet de coller LES items copiés ou coupés (avec ⇧+⌘+`c`/`v`) même dans un autre panneau (de même type). Faire le test de coller un event dans plusieurs évènemenciers.
+
+- [ ] Un item COUPÉ doit pouvoir être collé PLUSIEURS FOIS avec la combinaison ⌘+`v`, en gardant dans le même `id`, mais sans créer de nouveaux items persistants. 
 
 - [ ] La combinaison ⇧+⌘+`c` permet de copier tous les items cochés (toutes leurs propriétés sauf leur id). Faire un test avec l’élément sélectionné coché (il est pris aussi) et un test avec l’élément sélectionné non coché (il n’est pas pris).
 
 - [ ] La combinaison ⇧+⌘+`x` permet de couper tous les items cochés (toutes leurs propriétés MÊME leur id). Faire un test avec l’élément sélectionné coché (il est coupé aussi et pris) et un test avec l’élément sélectionné non coché (il n’est pas considéré.
 
-- [ ] La combinaison ⌘+`v` permet de coller l’item (toutes ses propriétés MÊME son id) au-dessus de l’item sélectionné. Faire aussi le test avec **plusieurs** items copiés ou coupés.
+- [ ] Avec la combinaison ⇧+⌘+`x`, on ne doit pas pouvoir couper tous les items d’un Lister (quand ils sont tous cochés) => message d’alerte disant qu’il faut au moins décocher un (1) élément.
 
-- [ ] La combinaison ⌘+`v` permet de coller l’item au-dessus de l’item sélectionné **même dans un autre panneau** (essayer forcément avec les évènemenciers). Faire aussi le test avec **plusieurs** items copiés ou coupés.
+- [ ] La touche `?` (⇧+,) permet d’afficher la liste de tous les raccoucis. La touche ⌘+↩︎ permet de fermer le panneau des raccourcis comme tout panneau)
 
 - [ ] Un event peut définir sa météo (`meteo` ☀️🌤️🌦️☁️💨⛈️🌪️🌨️) dans un mini panneau qui contient aussi l’effet.
 
@@ -117,8 +138,6 @@
 - [ ] La météo et l’effet d’un event influence son apparence (si l’option du Lister le demande => flag du Lister)
 
 - [ ] Un event peut définir sa date `dyndate` de façon fixe (en lui donnant un nom fixe).
-
-- [ ] Test de la suppression des Items cochés avec ⇧+ ⌦. Tester : un message de confirmation doit être validé (Enter). Tester : l’Item sélectionné n’est pas supprimé s’il n’est pas coché. NOTE : fonctionnement commun à TOUS LES TYPES D’ITEM.
 
 - [ ] Test unitaire du calcul de la date dynamique.
 
@@ -161,6 +180,7 @@
 ## Options application
 
 - [ ] S’assurer que si l’option `open-with-project-list` est active, c’est la liste des projets qui est affichée. S’assurer que si l’option `open-with-project-list` est `false`, c’est la dernier évènemencier qui est ouvert OU la liste des projets si aucun dernier évènemencier n’est défini.
+- [ ] S’assurer que l’option `do-not-confirm-delete` fonctionne : on la désactive et on détruit un event => message de confirmation (par `Enter`) 1) on conrfirme => l’event est détruit, on annule (`Escape`). On l’active => On détruit un event => pas de message de confirmation + l’event est bien supprimé.
 
 ---
 

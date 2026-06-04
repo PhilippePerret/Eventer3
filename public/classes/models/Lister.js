@@ -3,6 +3,7 @@ import { raise } from '../../system/Error.js'
 import Item from './Item.js'
 import ListerRepository from '../repositories/ListerRepository.js'
 import FooterHelp from '../ui/FooterHelp.js'
+import Notification from '../ui/Notification.js'
 
 
 export default class Lister {
@@ -116,7 +117,8 @@ export default class Lister {
       this.domItems.push(itemElement)
       this.domContainer.appendChild(itemElement)
     })
-    FooterHelp.update(this.uiModes)
+    const canDelete = this.items.filter(item => item.active !== false).length > 1
+    FooterHelp.update(this.uiModes, { canDelete })
     if (this.keyboardController) this.keyboardController.register(this)
     return this.domContainer
   }
@@ -280,6 +282,31 @@ export default class Lister {
   }
 
   _onCancelNewItem(idx) {}
+
+  deleteSelectedItem() {
+    const activeItems = this.items.filter(item => item.active !== false)
+    if (activeItems.length <= 1) {
+      Notification.show('Impossible de supprimer le dernier élément.')
+      return
+    }
+    const idx = this.selectedIndex
+    const item = this.items[idx]
+    const el = this.domItems[idx]
+    if (!item || !el) return
+    el.remove()
+    this.items.splice(idx, 1)
+    this.domItems.splice(idx, 1)
+    this.item_ids = this.item_ids.filter(id => id !== item.id)
+    const newIdx = Math.min(idx, this.domItems.length - 1)
+    this.selectedIndex = newIdx
+    if (this.domItems[newIdx]) this.domItems[newIdx].classList.add('selected')
+    const canDelete = this.items.filter(i => i.active !== false).length > 1
+    FooterHelp.update(this.uiModes, { canDelete })
+    this._onAfterDelete(item)
+    void ListerRepository.deleteItem(this, item)
+  }
+
+  _onAfterDelete(item) {}
 
   toggleSelectedItemChecked() {
     const item = this.items[this.selectedIndex]

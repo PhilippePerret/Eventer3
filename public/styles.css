@@ -92,13 +92,13 @@ body {
 }
 
 .project-item__title {
-  font-size: 24px;
+  font-size: 32px;
   font-weight: 700;
 }
 
 .project-item__id {
   color: var(--muted);
-  font-size: 15px;
+  font-size: 22px;
   white-space: nowrap;
 }
 

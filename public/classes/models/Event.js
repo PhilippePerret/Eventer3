@@ -40,6 +40,7 @@ export default class Event extends Item {
       <div class="event-body">
         <div class="event-left"><span class="event-text">${this.title}</span></div>
         <div class="event-meta">
+          <span class="event-brins-badges"></span>
           <span class="event-state">${stateLabel}</span>
         </div>
       </div>

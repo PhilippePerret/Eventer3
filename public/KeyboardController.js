@@ -129,6 +129,11 @@ export default class KeyboardController {
         event.preventDefault()
         return
 
+      case 'Delete':
+        this.activeLister.deleteSelectedItem?.()
+        event.preventDefault()
+        return
+
       case 'Escape':
         this.activeLister.close()
         event.preventDefault()
