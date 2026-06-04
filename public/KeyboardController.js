@@ -1,10 +1,12 @@
 import LOG from './system/LOG.js'
+import ShortcutsPanel from './classes/ui/ShortcutsPanel.js'
 
 export default class KeyboardController {
 
   constructor() {
     this.activeLister = null
     this.modeStack = []
+    this.shortcutsPanel = new ShortcutsPanel()
   }
 
   register(lister) {
@@ -52,10 +54,14 @@ export default class KeyboardController {
 
   onKeyDown(event) {
 
-    // Règle globale : Cmd+Enter ferme le lister courant (sauf exception dans close())
+    // Règle globale : Cmd+Enter ferme le panneau ouvert (raccourcis ou lister courant)
     if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
       event.preventDefault()
-      this.activeLister?.close()
+      if (this.shortcutsPanel.isVisible) {
+        this.shortcutsPanel.close()
+      } else {
+        this.activeLister?.close()
+      }
       return
     }
 
@@ -69,6 +75,12 @@ export default class KeyboardController {
     // Édition contentEditable en cours
     if (this.activeLister?.editing) {
       this.activeLister._handleEditingKeyDown(event)
+      return
+    }
+
+    if (event.key === '?' && !event.metaKey && !event.ctrlKey) {
+      event.preventDefault()
+      this.shortcutsPanel.open()
       return
     }
 
@@ -118,14 +130,22 @@ export default class KeyboardController {
         return
 
       case 'ArrowDown':
-        if (event.metaKey) this.activeLister.moveSelectedItemDown()
-        else this.activeLister.selectNextItem()
+        if (event.metaKey) {
+          if (this.shortcutsPanel.isVisible) this.shortcutsPanel.nextContext()
+          else this.activeLister.moveSelectedItemDown()
+        } else {
+          this.activeLister.selectNextItem()
+        }
         event.preventDefault()
         return
 
       case 'ArrowUp':
-        if (event.metaKey) this.activeLister.moveSelectedItemUp()
-        else this.activeLister.selectPreviousItem()
+        if (event.metaKey) {
+          if (this.shortcutsPanel.isVisible) this.shortcutsPanel.previousContext()
+          else this.activeLister.moveSelectedItemUp()
+        } else {
+          this.activeLister.selectPreviousItem()
+        }
         event.preventDefault()
         return
 
