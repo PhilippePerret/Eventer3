@@ -195,6 +195,10 @@ export default class Item {
       case 'Escape':
         event.preventDefault()
         if (this.__isTemporary) {
+          if (keyboardController.activeLister.domItems.length === 0) {
+            Notification.show(`Il faut définir le texte ${this.constructor.thingName.of}${this.constructor.thingName.thing}`)
+            return
+          }
           this.cancelEditor(keyboardController, itemElement)
         } else {
           if (originalData) Object.assign(this, originalData)
@@ -208,8 +212,8 @@ export default class Item {
         LOG.m(2, 'ENTER VALIDATION', { id: this.id, title: this.title, temporary: this.__isTemporary })
         event.preventDefault()
         if (!inputs[0].value.trim()) {
-          this.cancelEditor(keyboardController, itemElement)
-          LOG.m(2, 'Item.creation.cancelled.emptyTitle')
+          Notification.show(`Il faut définir le texte ${this.constructor.thingName.of}${this.constructor.thingName.thing}`)
+          LOG.m(2, 'Item.creation.emptyTitle.notification')
           return
         }
         const oldId = this.id

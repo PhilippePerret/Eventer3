@@ -1,3 +1,25 @@
+export const SHORTCUTS = [
+  {
+    contextName: "Liste d'éléments",
+    description: "Liste de projets, d'event, de brins…",
+    shorcuts: [
+      {sc: '↑', ef: 'choisir l’élément au-dessus'},
+      {sc: '↓', ef: 'choisir l’élément au-dessous'}
+    ]
+  },
+  {
+    contextName: "édition des éléments",
+    description: "Création, modification, suppression…",
+    shortcuts: [
+      {sc: 'n', ef: 'Création de l’élément au-dessus du sélectionné'},
+      {sc: '⌥ + n', ef: 'Création de l’élément en dessous du sélectionné'},
+      {sc: '↩︎', ef: 'Édition de l’élément sélectionné'},
+      {mode: 'ÉDITION', sc: '⇥', ef: 'Passer en revue les propriétés'},
+      {mode: 'ÉDITION', sc: '↩︎', ef: 'Enregitrer les changements'},
+      {mode: 'ÉDITION', sc: '␛', ef: 'Annuler les modifications'},
+    ]
+  }
+]
 
 window.APP_UI_MODES = {
   projects: [

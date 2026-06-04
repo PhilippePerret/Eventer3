@@ -63,9 +63,8 @@ get '/api/listers/:id' do
 end
 
 get '/api/items/:id/lister' do
-  lister = DB::Repo.find_item_lister(DATA_DIR, params[:id])
-  halt 404 unless lister
   content_type :json
+  lister = DB::Repo.find_item_lister(DATA_DIR, params[:id])
   JSON.generate(lister)
 end
 

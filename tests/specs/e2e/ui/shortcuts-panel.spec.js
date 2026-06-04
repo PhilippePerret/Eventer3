@@ -4,20 +4,20 @@ import { test, expect } from '../__setup__.js'
 // Il se ferme avec ⌘+Enter (comme tout panneau modal)
 // Il affiche TOUS les raccourcis de l'application
 
-test.skip('la touche ? ouvre le panneau des raccourcis', async ({ page }) => {
+test('la touche ? ouvre le panneau des raccourcis', async ({ page }) => {
   await page.goto('/')
   await expect(page.locator('#shortcuts-panel')).not.toBeVisible()
   await page.keyboard.press('?')
   await expect(page.locator('#shortcuts-panel')).toBeVisible()
 })
 
-test.skip('le panneau des raccourcis contient la touche ⌦ (supprimer)', async ({ page }) => {
+test('le panneau des raccourcis contient la touche ⌦ (supprimer)', async ({ page }) => {
   await page.goto('/')
   await page.keyboard.press('?')
   await expect(page.locator('#shortcuts-panel')).toContainText('⌦')
 })
 
-test.skip('le panneau des raccourcis ferme avec ⌘+Enter', async ({ page }) => {
+test('le panneau des raccourcis ferme avec ⌘+Enter', async ({ page }) => {
   await page.goto('/')
   await page.keyboard.press('?')
   await expect(page.locator('#shortcuts-panel')).toBeVisible()
@@ -25,7 +25,7 @@ test.skip('le panneau des raccourcis ferme avec ⌘+Enter', async ({ page }) => 
   await expect(page.locator('#shortcuts-panel')).not.toBeVisible()
 })
 
-test.skip('après fermeture du panneau, l\'EventLister reste actif (navigation fonctionne)', async ({ page }) => {
+test('après fermeture du panneau, l\'EventLister reste actif (navigation fonctionne)', async ({ page }) => {
   await page.goto('/')
   await page.keyboard.press('?')
   await page.keyboard.press('Meta+Enter')

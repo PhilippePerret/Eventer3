@@ -32,7 +32,7 @@ Item
 ├── Project    idPrefix: null  (id = slug du titre)
 ├── Event      idPrefix: 'e'   (e1, e2…)
 ├── Brin       idPrefix: 'b'   (b1, b2…)
-└── Perso      idPrefix: 'p'   (p1, p2…)
+└── Perso      idPrefix: 'c'   (p1, p2…)
 ```
 
 ---

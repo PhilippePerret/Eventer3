@@ -423,6 +423,7 @@ export default class Lister {
     const created = await ListerRepository.createItem(this.id, payload)
     if (!item.id) item.id = created.id
     itemElement.dataset.id = item.id
+    if (typeof item.render === 'function') item.render(itemElement)
     item.parentLister = this
     LOG.m(2, 'Lister.commitNewItem', { itemId: item.id, insertionIndex })
     this.items.splice(insertionIndex, 0, item)
