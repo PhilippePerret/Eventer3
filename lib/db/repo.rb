@@ -234,8 +234,8 @@ module DB
         item_class = _lister_item_class(lister_row['type'])
         next nil unless item_class
 
-        project_id = _find_project_id(db, lister_id)
-        prefix     = { 'project' => 'proj', 'event' => 'e', 'perso' => 'p' }[item_class] || 'i'
+        project_id = _find_project_id(db, lister_id) || lister_id
+        prefix     = { 'project' => 'p', 'event' => 'e', 'perso' => 'c' }[item_class] || 'i'
         item_id    = fields['id'] || _generate_id(db, project_id, item_class, prefix)
 
         db.execute(

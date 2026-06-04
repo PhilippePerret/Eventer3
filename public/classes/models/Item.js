@@ -8,7 +8,7 @@ import PopupSelect from '../ui/PopupSelect.js'
 export default class Item {
 
   static get newItemPlaceholder() {
-    return 'Titre du nouvel item'
+    return 'Titre du nouveau ' + this.thingName.thing
   }
 
   static get idPrefix() {
@@ -68,6 +68,7 @@ export default class Item {
     const itemElement = document.createElement('div')
     this.constructor.itemClasses.forEach(c => itemElement.classList.add(c))
     itemElement.classList.add(`${this.constructor.minClass}-item`)
+    if (this.id) itemElement.dataset.id = this.id
     return itemElement
   }
 
@@ -231,6 +232,10 @@ export default class Item {
         LOG.m(2, 'Item.edition.committed', { id: this.id, title: this.title })
         return
     }
+  }
+
+  toClipboardData() {
+    return { title: this.title, type: this.type, color: this.color, checked: this.checked }
   }
 
   focusNextEditionInput(inputs) {

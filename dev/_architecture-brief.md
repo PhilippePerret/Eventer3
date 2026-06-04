@@ -104,6 +104,7 @@ Modes spéciaux (modeStack) : `item-edition` (champs input/select), `popup-selec
 | Badge brin dans event | `.event-brins-badges .badge.brin` |
 | Titre brin | `.brin-item__title` |
 | Badge brin | `.brin-item__badge` |
+| Item id (sur chaque item) | `[data-id]` ex: `.event-item[data-id="e1"]` |
 | Notification (à créer) | `#notification` |
 | Panneau raccourcis (à créer) | `#shortcuts-panel` |
 

@@ -129,6 +129,27 @@ export default class KeyboardController {
         event.preventDefault()
         return
 
+      case 'c':
+        if (event.metaKey || event.ctrlKey) {
+          this.activeLister.copySelectedItem?.()
+          event.preventDefault()
+        }
+        return
+
+      case 'x':
+        if (event.metaKey || event.ctrlKey) {
+          this.activeLister.cutSelectedItem?.()
+          event.preventDefault()
+        }
+        return
+
+      case 'v':
+        if (event.metaKey || event.ctrlKey) {
+          this.activeLister.pasteItem?.().catch(err => console.error('pasteItem:', err))
+          event.preventDefault()
+        }
+        return
+
       case 'Delete':
         this.activeLister.deleteSelectedItem?.()
         event.preventDefault()

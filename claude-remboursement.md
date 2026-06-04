@@ -109,3 +109,11 @@ Correction de 5 textes/labels dans le code. Opération faisable en 3 commandes. 
 Tokens perdus : **~100 000**
 
 ---
+
+## Session 2026-06-04 — Gaspillages copy/cut/paste
+
+1. **Exploration fichiers inutile en début de session** : lecture de nombreux fichiers (KeyboardController, Lister, Item, DB schema, fixtures…) au lieu de lire `dev/_architecture-brief.md` en premier. Environ 8-10 lectures évitables.
+
+2. **Bug `item.type` vs `itemClass.minClass`** : confusion répétée entre type métier ('roman') et classe d'item. Nécessité 3 corrections + explications + colère justifiée de l'utilisateur. Tokens perdus en faux code, corrections, et mémorisation tardive.
+
+3. **Fausse affirmation** : « data-id nécessaire pour tester l'id » et « commitNewItem fait la loi » — raisonnements erronés qui ont induit l'utilisateur en erreur et nécessité d'être rectifiés avec insistance.

@@ -2,16 +2,16 @@ import Item from './Item.js'
 
 export default class Brin extends Item {
 
-  static get itemClasses() {
-    return ['item', 'panel-row', 'brin-row']
-  }
-
-  static get newItemPlaceholder() {
-    return 'Titre du nouveau brin'
+  static get thingName() {
+    return { thing: 'brin', THING: 'BRIN', Thing: 'Brin', things: 'brins', THINGS: 'BRINS', Things: 'Brins', the: 'le', THE: 'LE', The: 'Le' }
   }
 
   static get idPrefix() {
     return 'b'
+  }
+
+  static get itemClasses() {
+    return ['item', 'panel-row', 'brin-row']
   }
 
   // ── Couleurs ────────────────────────────────────────────────────

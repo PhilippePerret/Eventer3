@@ -2,16 +2,17 @@ import Item from './Item.js'
 
 export default class Event extends Item {
 
+  static get thingName() {
+    return { thing: 'évènement', THING: 'ÉVÈNEMENT', Thing: 'Évènement', things: 'évènements', THINGS: 'ÉVÈNEMENTS', Things: 'Évènements', the: 'l’', THE: 'L’', The: 'L’' }
+  }
+
+
   constructor(data = {}) {
     super(data)
     // bi is the persistence key for brin_ids (mapped in Mapper, but data here is still raw)
     this.brin_ids = data.bi ?? data.brin_ids ?? []
   }
 
-
-  static get newItemPlaceholder() {
-    return 'Titre du nouvel évènement'
-  }
 
   static get idPrefix() {
     return 'e'

@@ -283,6 +283,48 @@ export default class Lister {
 
   _onCancelNewItem(idx) {}
 
+  copySelectedItem() {
+    const item = this.items[this.selectedIndex]
+    if (!item) return
+    this.keyboardController.clipboard = { minClass: this.itemClass.minClass, data: item.toClipboardData() }
+  }
+
+  cutSelectedItem() {
+    const activeItems = this.items.filter(item => item.active !== false)
+    if (activeItems.length <= 1) {
+      Notification.show(`Impossible de couper le dernier ${this.itemClass.thingName.thing}.`)
+      return
+    }
+    const item = this.items[this.selectedIndex]
+    if (!item) return
+    const clipData = item.toClipboardData()
+    clipData.id = item.id
+    this.keyboardController.clipboard = { minClass: this.itemClass.minClass, data: clipData, isCut: true }
+    this.deleteSelectedItem({ silent: true })
+  }
+
+  async pasteItem() {
+    const clipboard = this.keyboardController?.clipboard
+    if (!clipboard) return
+    if (clipboard.minClass !== this.itemClass.minClass) return
+    const insertionIndex = this.selectedIndex
+    const itemData = { ...clipboard.data }
+    if (!clipboard.isCut) delete itemData.id
+    const item = new this.itemClass(itemData)
+    const itemElement = item.createElement()
+    if (typeof item.render === 'function') item.render(itemElement)
+    const currentEl = this.domItems[insertionIndex]
+    if (currentEl) {
+      currentEl.classList.remove('selected')
+      currentEl.before(itemElement)
+    } else {
+      this.domContainer.appendChild(itemElement)
+    }
+    await this.commitNewItem(item, itemElement, insertionIndex)
+    if (typeof item.render === 'function') item.render(itemElement)
+    itemElement.classList.add('selected')
+  }
+
   deleteSelectedItem() {
     const activeItems = this.items.filter(item => item.active !== false)
     if (activeItems.length <= 1) {
@@ -376,9 +418,10 @@ export default class Lister {
       delete this.__isVirtual
     }
     const payload = { title: item.title, type: item.type }
-    if (this.itemClass.idPrefix === null) payload.id = item.id
+    if (item.id) payload.id = item.id
     const created = await ListerRepository.createItem(this.id, payload)
-    if (this.itemClass.idPrefix !== null) item.id = created.id
+    if (!item.id) item.id = created.id
+    itemElement.dataset.id = item.id
     item.parentLister = this
     LOG.m(2, 'Lister.commitNewItem', { itemId: item.id, insertionIndex })
     this.items.splice(insertionIndex, 0, item)
