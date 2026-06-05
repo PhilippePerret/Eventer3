@@ -440,7 +440,7 @@ module DB
     def self._insert_props(db, item_id, payload, item_class)
       case item_class
       when 'project' then db.execute("INSERT OR IGNORE INTO project_props (item_id) VALUES (?)", [item_id])
-      when 'event'   then db.execute("INSERT OR IGNORE INTO event_props (item_id, depth) VALUES (?, ?)", [item_id, payload['depth'] || 1])
+      when 'event'   then db.execute("INSERT OR IGNORE INTO event_props (item_id) VALUES (?)", [item_id])
       when 'brin'    then db.execute("INSERT OR IGNORE INTO brin_props (item_id, badge) VALUES (?, ?)", [item_id, payload['badge']])
       when 'perso'   then db.execute("INSERT OR IGNORE INTO perso_props (item_id, badge) VALUES (?, ?)", [item_id, payload['badge']])
       end

@@ -40,8 +40,8 @@ module DB
         ['model', 0, 1, 2, '["b1"]', '["p1"]']
       )
       db.execute(
-        "INSERT INTO event_props (item_id, depth, lister_id) VALUES (?, ?, ?)",
-        ['e1', 1, nil]
+        "INSERT INTO event_props (item_id, lister_id) VALUES (?, ?)",
+        ['e1', nil]
       )
       db.execute("INSERT INTO brin_props  (item_id, badge) VALUES (?, ?)", ['b1', 'BRI'])
       db.execute("INSERT INTO perso_props (item_id, badge) VALUES (?, ?)", ['p1', 'PER'])

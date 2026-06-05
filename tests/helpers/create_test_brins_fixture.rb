@@ -47,12 +47,12 @@ db.transaction do
     ['test-brins', 0, 1, 2, '["b1","b2","b3","b4"]', '[]'])
 
   # event_props
-  db.execute("INSERT INTO event_props (item_id, depth, lister_id, brin_ids) VALUES (?, ?, ?, ?)",
-    ['e1', 1, nil, '["b1","b2"]'])
-  db.execute("INSERT INTO event_props (item_id, depth, lister_id, brin_ids) VALUES (?, ?, ?, ?)",
-    ['e2', 1, nil, '["b2","b3"]'])
-  db.execute("INSERT INTO event_props (item_id, depth, lister_id, brin_ids) VALUES (?, ?, ?, ?)",
-    ['e3', 1, nil, '[]'])
+  db.execute("INSERT INTO event_props (item_id, lister_id, brin_ids) VALUES (?, ?, ?)",
+    ['e1', nil, '["b1","b2"]'])
+  db.execute("INSERT INTO event_props (item_id, lister_id, brin_ids) VALUES (?, ?, ?)",
+    ['e2', nil, '["b2","b3"]'])
+  db.execute("INSERT INTO event_props (item_id, lister_id, brin_ids) VALUES (?, ?, ?)",
+    ['e3', nil, '[]'])
 
   # brin_props
   [['b1','BRA'],['b2','BRB'],['b3','BRC'],['b4','BRD']].each do |id, badge|

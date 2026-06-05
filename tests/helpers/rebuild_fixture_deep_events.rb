@@ -29,24 +29,24 @@ db.transaction do
   # Top-level events (e1 has sub-lister id=3)
   db.execute("INSERT INTO items (id, title, type, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
     ['e1', 'Évènement un', 'event', now, now])
-  db.execute("INSERT INTO event_props (item_id, depth, lister_id) VALUES (?, ?, ?)", ['e1', 1, 3])
+  db.execute("INSERT INTO event_props (item_id, lister_id) VALUES (?, ?)", ['e1', 3])
 
   db.execute("INSERT INTO items (id, title, type, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
     ['e2', 'Évènement deux', 'event', now, now])
-  db.execute("INSERT INTO event_props (item_id, depth) VALUES (?, ?)", ['e2', 1])
+  db.execute("INSERT INTO event_props (item_id) VALUES (?)", ['e2'])
 
   db.execute("INSERT INTO items (id, title, type, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
     ['e3', 'Évènement trois', 'event', now, now])
-  db.execute("INSERT INTO event_props (item_id, depth) VALUES (?, ?)", ['e3', 1])
+  db.execute("INSERT INTO event_props (item_id) VALUES (?)", ['e3'])
 
   # Sub-events under e1
   db.execute("INSERT INTO items (id, title, type, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
     ['e4', 'Évènement e4', 'event', now, now])
-  db.execute("INSERT INTO event_props (item_id, depth) VALUES (?, ?)", ['e4', 2])
+  db.execute("INSERT INTO event_props (item_id) VALUES (?)", ['e4'])
 
   db.execute("INSERT INTO items (id, title, type, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
     ['e5', 'Évènement e5', 'event', now, now])
-  db.execute("INSERT INTO event_props (item_id, depth) VALUES (?, ?)", ['e5', 2])
+  db.execute("INSERT INTO event_props (item_id) VALUES (?)", ['e5'])
 
   # Counters
   db.execute("INSERT INTO counters (project_id, item_type, last_val) VALUES (?, ?, ?)", ['project-a', 'event', 5])

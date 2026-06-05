@@ -92,7 +92,7 @@ end
 
 patch '/api/items/:id' do
   payload = JSON.parse(request.body.read)
-  # LOG.m(1, "[PATCH /api/items/#{params[:id]}] payload=#{payload.inspect}")
+  LOG.m(1, "[PATCH /api/items/#{params[:id]}] payload=#{payload.inspect}")
   DB::Repo.update_item(DATA_DIR, params[:id], payload)
   content_type :json
   JSON.generate(ok: true)

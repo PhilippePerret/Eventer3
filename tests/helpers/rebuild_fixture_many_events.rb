@@ -25,7 +25,7 @@ db.transaction do
   [['e1', 'Évènement un'], ['e2', 'Évènement deux'], ['e3', 'Évènement trois']].each do |id, title|
     db.execute("INSERT INTO items (id, title, type, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
       [id, title, 'event', now, now])
-    db.execute("INSERT INTO event_props (item_id, depth) VALUES (?, ?)", [id, 1])
+    db.execute("INSERT INTO event_props (item_id) VALUES (?)", [id])
   end
 
   db.execute("INSERT INTO items (id, title, type, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",

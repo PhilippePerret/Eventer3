@@ -38,13 +38,13 @@ db.transaction do
 
   db.execute("INSERT INTO items (id, title, created_at, updated_at) VALUES (?, ?, ?, ?)",
     ['e1', 'Événement 1', now, now])
-  db.execute("INSERT INTO event_props (item_id, depth, brin_ids, perso_ids) VALUES (?, ?, ?, ?)",
-    ['e1', 1, '["b1"]', '["c1"]'])
+  db.execute("INSERT INTO event_props (item_id, brin_ids, perso_ids) VALUES (?, ?, ?)",
+    ['e1', '["b1"]', '["c1"]'])
 
   db.execute("INSERT INTO items (id, title, created_at, updated_at) VALUES (?, ?, ?, ?)",
     ['e2', 'Événement 2', now, now])
-  db.execute("INSERT INTO event_props (item_id, depth, brin_ids, perso_ids) VALUES (?, ?, ?, ?)",
-    ['e2', 1, '[]', '[]'])
+  db.execute("INSERT INTO event_props (item_id, brin_ids, perso_ids) VALUES (?, ?, ?)",
+    ['e2', '[]', '[]'])
 
   # b1 possède c2
   db.execute("INSERT INTO items (id, title, type, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
