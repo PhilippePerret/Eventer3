@@ -6,11 +6,12 @@
 
 ## Todo
 
-- Modifier partout, et notamment dans les fixtures et la création des données par défaut le fait que `Item.depth` n’existe plus et que `Lister.depth` prend le relais. La correction a déjà été faite dans dev/Specs-SQLite.md
+- Modifier partout le fait que `Item.depth` n’existe plus et que `Lister.depth` prend le relais. La correction a déjà été faite dans dev/Specs-SQLite.md
 
 - En tirer les conséquences :
 
-  - [ ] la propriété doit être définie pour tout Lister enregistré (le premier, celui des projets, doit avoir le niveau 0 — le premier `Lister` du premier projet doit avoir le niveau 1)
+  - [ ] la propriété doit être définie pour tout Lister enregistré . Le premier, celui des projets, doit avoir le niveau 0 — le premier `Lister` du premier projet doit donc avoir le niveau 1 (depth 1). Ensuite, le Lister de tout Event aura le depth 2.
+  - [ ] 
 
   
 

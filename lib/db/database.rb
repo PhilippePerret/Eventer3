@@ -9,7 +9,6 @@ module DB
     CREATE TABLE IF NOT EXISTS listers (
       id              INTEGER PRIMARY KEY,
       type            TEXT,
-      depth           INTEGER DEFAULT NULL,
       nature          TEXT,
       scale           TEXT,
       item_ids        TEXT DEFAULT '[]',
