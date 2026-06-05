@@ -443,6 +443,7 @@ Une réflexion doit être menée concenant ces propriétés qui sont pour le mom
 | `Project` | **`type`**  | Un projet ne peut-être que de deux types : scénario ou roman. Cela détermine comment sera traité le `ScriptLister` final. |
 | Valeurs : |             | `scenario`, `roman`                                          |
 |    `Brin` | **`type`**  | Un brin peut être de type « intrigue », « accessoire », « thématique », « personnage » en fonction de la chose sur laquelle il se focalise. Ces types sont consignés dans la constante `BrinTypes`. |
+| Valeurs : |             | Cf. la constante `BrinTypes`                                 |
 |   `Perso` | **`type`**  | Un personnage peut être de 3 types différents, du côté du protagonisme (type « prota », du côté de l’antagonisme (type « anta », ou ambivalent donc un peu les deux (type « ambi » ). |
 |           | **`genre`** | Correspond vraiment au *genre*, donc femme, homme, non binaire ou autre. |
 |           |             |                                                              |

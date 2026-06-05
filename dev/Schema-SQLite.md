@@ -92,14 +92,12 @@
 
 ## Notes
 
-### `items.lister_id` remplace `has_lister`
-Un item possède un lister si et seulement si il existe un enregistrement dans `listers` avec `parent_item_id = item.id`. La colonne `has_lister` est redondante et supprimée.
-
 ### `items.type`
+
 La colonne `type` est commune à tous les items. Elle est interprétée différemment selon la classe spécialisée :
 - **Event** : `dia` / `act` / `des`
 - **Brin** : `mint` / `aint` / … (BrinTypes)
-- **Perso** : `p` / `a` / `b` (protagoniste / antagoniste / ambivalent)
+- **Perso** : `prota` / `anta` / `ambi` (protagoniste / antagoniste / ambivalent)
 - **Project** : `scenario` / `roman`
 
 ### `items.depth`

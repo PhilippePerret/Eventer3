@@ -2,6 +2,7 @@ import Lister from './Lister.js'
 import Brin from './Brin.js'
 import ListerRepository from '../repositories/ListerRepository.js'
 import FooterHelp from '../ui/FooterHelp.js'
+import PersoLister from './PersoLister.js'
 
 export default class BrinLister extends Lister {
 
@@ -13,7 +14,20 @@ export default class BrinLister extends Lister {
     }
     await ListerRepository.loadDefinition(brinLister)
     await brinLister.loadItems()
+    brinLister._persoMarks = await BrinLister._loadPersoMarks(eventLister)
     brinLister.render()
+  }
+
+  static async _loadPersoMarks(eventLister) {
+    const projectId = eventLister.parentItem?.id
+    if (!projectId) return {}
+    const listerId = eventLister.persos_lister_id ?? `${projectId}-persos`
+    const itemsData = await ListerRepository.loadItems({ id: listerId })
+    const marks = {}
+    Object.entries(itemsData).forEach(([id, data]) => {
+      marks[id] = data.avatar ?? data.badge ?? '--'
+    })
+    return marks
   }
 
   static async init(eventLister) {
@@ -100,6 +114,7 @@ export default class BrinLister extends Lister {
     if (this.checked(item)) el.classList.add('checked')
     if (idx === this.selectedIndex) el.classList.add('selected')
     item.render(el)
+    this._updateBrinPersoMarks(item, el)
 
     el.querySelector('.panel-color')?.addEventListener('change', (e) => {
       item.color = e.target.value
@@ -114,6 +129,26 @@ export default class BrinLister extends Lister {
     })
 
     return el
+  }
+
+  // ── Perso marks sur chaque ligne de brin ─────────────────────────
+
+  _updateBrinPersoMarks(brin, brinEl) {
+    const marksEl = brinEl.querySelector('.brin-persos-marks')
+    if (!marksEl) return
+    marksEl.innerHTML = ''
+    ;(brin.perso_ids ?? []).forEach(id => {
+      const mark = this._persoMarks?.[id]
+      if (!mark) return
+      const span = document.createElement('span')
+      span.className = 'perso-mark'
+      span.textContent = mark
+      marksEl.appendChild(span)
+    })
+  }
+
+  async openPersoPanel() {
+    await PersoLister.open(this)
   }
 
   // ── Spécifique brins : badge auto sur l'event ─────────────────────

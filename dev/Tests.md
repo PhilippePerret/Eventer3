@@ -150,6 +150,11 @@
 
   De cette manière, il est impossible de choisir un personnage pour un event qui appartient déjà à un de ses brins.
 
+## Perso
+
+- [ ] On ne peut pas choisir le même avatar pour deux personnages
+- [ ] On ne peut pas choisir le même badge pour deux personnages.
+
 ## Brin
 
 ### Généralités
@@ -157,6 +162,7 @@
 - [ ] En édition, avec la touche `Tab`, on doit pouvoir modifier, dans l’ordre : le `title`, le `badge`, le `type` et la `color` du brin.
 - [ ] Le choix de la couleur du brin doit modifier l’affichage des events qui l’ont en premier brin si l’option de l’EventLister le demande (choix entre fond = premier brin ou fond = climat).
 - [ ] On ne doit pas pouvoir mettre un badge de plus de trois lettres. Et ça doit s’écrire toujours en capitales.
+- [ ] On ne peut pas choisir le même badge pour deux brins (ATTENTION à la créataion automatique de badge, qui doit en tenir compte)
 
 ### Panneau des brins
 

@@ -6,8 +6,9 @@ export default class ListerRepository {
     const response = await fetch(`/api/listers/${lister.id}`)
     if (!response.ok) return
     const data = await response.json()
-    if (data.item_ids)       lister.item_ids       = data.item_ids
+    if (data.item_ids)        lister.item_ids        = data.item_ids
     if (data.brins_lister_id) lister.brins_lister_id = data.brins_lister_id
+    if (data.persos_lister_id) lister.persos_lister_id = data.persos_lister_id
   }
 
   static async loadItems(lister) {

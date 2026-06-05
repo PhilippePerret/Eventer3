@@ -59,7 +59,9 @@ export default class Item {
     this.updated_at = data.updated_at ?? null
     this.badge = data.badge ?? null
     this.brin_ids = data.brin_ids ?? []
+    this.perso_ids = data.perso_ids ?? []
     this.patronyme = data.patronyme ?? null
+    this.avatar = data.avatar ?? null
     this.fonction = data.fonction ?? null
     // -- ajouté au runtime --
     this.parentLister = data.parentLister ?? null
@@ -130,8 +132,10 @@ export default class Item {
     trigger.classList.add('popup-select-trigger')
     trigger.dataset.type = 'popup-select'
     trigger.dataset.fieldName = field.name
-    const currentOpt = field.options.find(o => o.value === this[field.property])
-    trigger.textContent = currentOpt ? currentOpt.label : ''
+    if (element.dataset.property) trigger.dataset.property = element.dataset.property
+    const propValue = this[field.property] ?? null
+    const currentOpt = field.options.find(o => o.value === propValue)
+    trigger.textContent = currentOpt ? currentOpt.label : (propValue != null ? String(propValue) : '—')
     element.replaceWith(trigger)
     return trigger
   }

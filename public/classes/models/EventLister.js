@@ -1,6 +1,7 @@
 import Lister from './Lister.js'
 import Event from './Event.js'
 import BrinLister from './BrinLister.js'
+import PersoLister from './PersoLister.js'
 
 export default class EventLister extends Lister {
 
@@ -23,6 +24,10 @@ export default class EventLister extends Lister {
 
   async openBrinPanel() {
     await BrinLister.open(this)
+  }
+
+  async openPersoPanel() {
+    await PersoLister.open(this)
   }
 
   renderHeader() {

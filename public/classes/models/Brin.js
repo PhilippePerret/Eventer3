@@ -63,6 +63,7 @@ export default class Brin extends Item {
     super(data)
     if (Array.isArray(this.type)) this.type = ''
     this.file = data.fi ?? data.file ?? ''
+    this.perso_ids = data.brin_perso_ids ?? data.perso_ids ?? []
   }
 
   // ── DOM ──────────────────────────────────────────────────────────
@@ -124,7 +125,7 @@ export default class Brin extends Item {
     typeSelect.addEventListener('click', e => e.stopPropagation())
 
     const persos = document.createElement('div')
-    persos.className = 'panel-persos'
+    persos.className = 'panel-persos brin-persos-marks'
 
     const file = document.createElement('div')
     file.className = 'panel-file brin-item__file'

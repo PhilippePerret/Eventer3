@@ -118,6 +118,13 @@ export default class KeyboardController {
         }
         return
 
+      case 'p':
+        if (typeof this.activeLister.openPersoPanel === 'function') {
+          this.activeLister.openPersoPanel().catch(err => console.error('openPersoPanel:', err))
+          event.preventDefault()
+        }
+        return
+
       case 'ArrowRight':
         this.activeLister.enterSelectedItem().catch(err => console.error('enterSelectedItem:', err))
         event.preventDefault()

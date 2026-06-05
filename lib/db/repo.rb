@@ -102,6 +102,12 @@ module DB
               "UPDATE project_props SET brin_ids = ? WHERE item_id = ?",
               [JSON.generate(fields['item_ids']), project_id]
             )
+          elsif id.to_s.end_with?('-persos')
+            project_id = id.to_s.sub(/-persos$/, '')
+            db.execute(
+              "UPDATE project_props SET perso_ids = ? WHERE item_id = ?",
+              [JSON.generate(fields['item_ids']), project_id]
+            )
           else
             db.execute(
               "UPDATE listers SET item_ids = ?, updated_at = ? WHERE id = ?",
@@ -149,14 +155,25 @@ module DB
           { id: id, item_ids: brin_ids, updated_at: nil }
         end
       end
+      if id.to_s.end_with?('-persos')
+        project_id = id.to_s.sub(/-persos$/, '')
+        return with_db(data_dir) do |db|
+          pp_row = db.execute("SELECT perso_ids FROM project_props WHERE item_id = ? LIMIT 1", [project_id]).first
+          next nil unless pp_row
+          perso_ids = JSON.parse(pp_row['perso_ids'] || '[]') rescue []
+          { id: id, item_ids: perso_ids, updated_at: nil }
+        end
+      end
       with_db(data_dir) do |db|
         row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [id]).first
         next nil unless row
         result = { id: row['id'], item_ids: JSON.parse(row['item_ids'] || '[]'), updated_at: row['updated_at'] }
-        pp_row = db.execute("SELECT item_id, brin_ids FROM project_props WHERE lister_id = ? LIMIT 1", [id]).first
+        pp_row = db.execute("SELECT item_id, brin_ids, perso_ids FROM project_props WHERE lister_id = ? LIMIT 1", [id]).first
         if pp_row
           brin_ids = JSON.parse(pp_row['brin_ids'] || '[]') rescue []
           result[:brins_lister_id] = "#{pp_row['item_id']}-brins" unless brin_ids.empty?
+          perso_ids = JSON.parse(pp_row['perso_ids'] || '[]') rescue []
+          result[:persos_lister_id] = "#{pp_row['item_id']}-persos" unless perso_ids.empty?
         end
         result
       end
@@ -170,6 +187,15 @@ module DB
           next {} unless pp_row
           brin_ids = JSON.parse(pp_row['brin_ids'] || '[]') rescue []
           _fetch_items(db, brin_ids)
+        end
+      end
+      if lister_id.to_s.end_with?('-persos')
+        project_id = lister_id.to_s.sub(/-persos$/, '')
+        return with_db(data_dir) do |db|
+          pp_row = db.execute("SELECT perso_ids FROM project_props WHERE item_id = ? LIMIT 1", [project_id]).first
+          next {} unless pp_row
+          perso_ids = JSON.parse(pp_row['perso_ids'] || '[]') rescue []
+          _fetch_items(db, perso_ids)
         end
       end
       with_db(data_dir) do |db|
@@ -226,6 +252,21 @@ module DB
           brin_ids << item_id unless brin_ids.include?(item_id)
           db.execute("UPDATE project_props SET brin_ids = ? WHERE item_id = ?", [JSON.generate(brin_ids), project_id])
           next { 'id' => item_id, 'title' => fields['title'], 'type' => fields['type'] }
+        end
+
+        if lister_id.to_s.end_with?('-persos')
+          project_id = lister_id.to_s.sub(/-persos$/, '')
+          item_id = fields['id'] || _generate_id(db, project_id, 'perso', 'c')
+          db.execute(
+            "INSERT INTO items (id, title, type, color, checked, duration, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            [item_id, fields['title'], nil, nil, 0, nil, now, now]
+          )
+          db.execute("INSERT OR IGNORE INTO perso_props (item_id, badge) VALUES (?, ?)", [item_id, fields['badge']])
+          pp_row = db.execute("SELECT perso_ids FROM project_props WHERE item_id = ? LIMIT 1", [project_id]).first
+          perso_ids = pp_row ? (JSON.parse(pp_row['perso_ids'] || '[]') rescue []) : []
+          perso_ids << item_id unless perso_ids.include?(item_id)
+          db.execute("UPDATE project_props SET perso_ids = ? WHERE item_id = ?", [JSON.generate(perso_ids), project_id])
+          next { 'id' => item_id, 'title' => fields['title'] }
         end
 
         lister_row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [lister_id]).first
@@ -351,8 +392,9 @@ module DB
                ep.state AS st,
                CASE WHEN ep.item_id IS NOT NULL THEN ep.perso_ids ELSE pp.perso_ids END AS perso_ids,
                CASE WHEN ep.item_id IS NOT NULL THEN ep.brin_ids  ELSE pp.brin_ids  END AS brin_ids,
-               bp.badge, bp.perso_ids AS brin_perso_ids,
-               pers.badge AS perso_badge, pers.patronyme, pers.fonction,
+               COALESCE(bp.badge, pers.badge) AS badge,
+               bp.perso_ids AS brin_perso_ids,
+               pers.patronyme, pers.avatar, pers.fonction,
                CASE WHEN ep.lister_id IS NOT NULL OR pp.lister_id IS NOT NULL THEN 1 ELSE 0 END AS hl
         FROM items i
         LEFT JOIN project_props pp   ON pp.item_id = i.id
@@ -363,10 +405,11 @@ module DB
       SQL
       hash = {}
       rows.each do |row|
-        row['brin_ids']  = JSON.parse(row['brin_ids']  || '[]') rescue []
-        row['perso_ids'] = JSON.parse(row['perso_ids'] || '[]') rescue []
-        row['active']    = row['active'].nil? ? nil : row['active'].to_i == 1
-        row['hl']        = row['hl'].to_i == 1
+        row['brin_ids']       = JSON.parse(row['brin_ids']       || '[]') rescue []
+        row['perso_ids']      = JSON.parse(row['perso_ids']      || '[]') rescue []
+        row['brin_perso_ids'] = JSON.parse(row['brin_perso_ids'] || '[]') rescue []
+        row['active'] = row['active'].nil? ? nil : row['active'].to_i == 1
+        row['hl']     = row['hl'].to_i == 1
         hash[row['id']] = row
       end
       ordered = {}
@@ -407,6 +450,12 @@ module DB
         db.execute("UPDATE event_props SET brin_ids = ? WHERE item_id = ?",
           [JSON.generate(payload['brin_ids']), item_id])
       end
+      if payload.key?('perso_ids')
+        db.execute("UPDATE event_props SET perso_ids = ? WHERE item_id = ?",
+          [JSON.generate(payload['perso_ids']), item_id])
+        db.execute("UPDATE brin_props  SET perso_ids = ? WHERE item_id = ?",
+          [JSON.generate(payload['perso_ids']), item_id])
+      end
       if payload.key?('state')
         db.execute("UPDATE event_props SET state = ? WHERE item_id = ?",
           [payload['state'].to_i, item_id])
@@ -414,6 +463,15 @@ module DB
       if payload.key?('badge')
         db.execute("UPDATE brin_props  SET badge = ? WHERE item_id = ?", [payload['badge'], item_id])
         db.execute("UPDATE perso_props SET badge = ? WHERE item_id = ?", [payload['badge'], item_id])
+      end
+      if payload.key?('patronyme')
+        db.execute("UPDATE perso_props SET patronyme = ? WHERE item_id = ?", [payload['patronyme'], item_id])
+      end
+      if payload.key?('avatar')
+        db.execute("UPDATE perso_props SET avatar = ? WHERE item_id = ?", [payload['avatar'], item_id])
+      end
+      if payload.key?('fonction')
+        db.execute("UPDATE perso_props SET fonction = ? WHERE item_id = ?", [payload['fonction'], item_id])
       end
     end
     private_class_method :_update_props
