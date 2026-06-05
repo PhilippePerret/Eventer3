@@ -40,6 +40,32 @@ export default class Perso extends Item {
     return this.avatar ?? this.badge ?? '--'
   }
 
+  // ── Badge auto-calc ──────────────────────────────────────────────
+
+  static badgeSource(title, patronyme) {
+    return (patronyme ?? '').trim() || (title ?? '').trim()
+  }
+
+  commitEdition(itemElement, fields, inputs) {
+    const badgeIdx  = fields.findIndex(f => f.property === 'badge')
+    const titleIdx  = fields.findIndex(f => f.property === 'title')
+    const patroIdx  = fields.findIndex(f => f.property === 'patronyme')
+    if (badgeIdx >= 0 && !inputs[badgeIdx].value.trim()) {
+      const source = Perso.badgeSource(
+        inputs[titleIdx]?.value ?? '',
+        patroIdx >= 0 ? (inputs[patroIdx]?.value ?? '') : ''
+      )
+      if (source) {
+        const existingBadges = (this.parentLister?.items ?? [])
+          .filter(p => p.id !== this.id)
+          .map(p => p.badge)
+          .filter(Boolean)
+        inputs[badgeIdx].value = Perso.generateUniqueBadge(source, existingBadges)
+      }
+    }
+    super.commitEdition(itemElement, fields, inputs)
+  }
+
   // ── Editor ──────────────────────────────────────────────────────
 
   getEditorFields(type, itemElement) {
@@ -74,7 +100,7 @@ export default class Perso extends Item {
     const mark = document.createElement('div')
     mark.className = 'panel-badge perso-item__badge'
     mark.dataset.property = 'badge'
-    mark.textContent = this.avatar ?? this.badge ?? '--'
+    mark.textContent = this.badge ?? '--'
 
     const title = document.createElement('div')
     title.className = 'perso-item__title'

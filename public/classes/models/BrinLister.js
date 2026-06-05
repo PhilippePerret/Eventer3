@@ -191,7 +191,34 @@ export default class BrinLister extends Lister {
     if (i > -1) ev.brin_ids.splice(i, 1)
     else ev.brin_ids.push(brin.id)
     this._updateEventBadges(ev)
+    this._updateEventPersoMarks(ev)
     return ev.brin_ids.includes(brin.id)
+  }
+
+  _updateEventPersoMarks(event) {
+    const eventEl = this.eventLister.domItems[this.eventLister.selectedIndex]
+    if (!eventEl) return
+    let marksEl = eventEl.querySelector('.event-persos-marks')
+    if (!marksEl) {
+      marksEl = document.createElement('span')
+      marksEl.className = 'event-persos-marks'
+      eventEl.querySelector('.event-meta')?.appendChild(marksEl)
+    }
+    marksEl.innerHTML = ''
+    const allPersoIds = new Set(event.perso_ids ?? [])
+    ;(event.brin_ids ?? []).forEach(brinId => {
+      const brin = this.items.find(b => b.id === brinId)
+      if (!brin) return
+      ;(brin.perso_ids ?? []).forEach(pid => allPersoIds.add(pid))
+    })
+    allPersoIds.forEach(id => {
+      const mark = this._persoMarks?.[id]
+      if (!mark) return
+      const span = document.createElement('span')
+      span.className = 'perso-mark'
+      span.textContent = mark
+      marksEl.appendChild(span)
+    })
   }
 
   async _saveAfterToggle(brin) {
@@ -227,6 +254,7 @@ export default class BrinLister extends Lister {
       }
     })
     this._updateEventBadges(this.selectedEvent)
+    this._updateEventPersoMarks(this.selectedEvent)
   }
 
   async _saveEventBrinIds(event) {

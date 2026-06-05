@@ -6,10 +6,21 @@
 
 ## Todo
 
+- Modifier partout, et notamment dans les fixtures et la création des données par défaut le fait que `Item.depth` n’existe plus et que `Lister.depth` prend le relais. La correction a déjà été faite dans dev/Specs-SQLite.md
+
+- En tirer les conséquences :
+
+  - [ ] la propriété doit être définie pour tout Lister enregistré (le premier, celui des projets, doit avoir le niveau 0 — le premier `Lister` du premier projet doit avoir le niveau 1)
+
+  
 
 
-* Implémenter les personnages (`Perso` et `PersoLister`).
-* Implémenter le filtre
+
+* Implémenter les menus « météo » et « effet » pour les events, qu’on doit pouvoir atteindre après l’état. Gérer les incompatibilités qui sont définies dans le fichier constantes.js dans METEO
+* Implémenter les différentes mode de vue des évènemencier : 
+  * le mode normal par imbrication
+  * le mode « par niveau » où tous les évènements d’un même projet et d’un même niveau sont affichés
+* Implémenter LE FILTRE (le prochain gros morceau)
 * Propriété `flags` pour les `Lister` — première option : le mode d’affichage des fond d’Event, soit par couleur de premier brin, soit par « climat » (météo + effet).
 * Définir l’option d’EventListener qui détermine si le fond des events doit être déterminé par son premier Brin ou par son « climat », constitué 1) de sa météo et 2) de son effet. 
 * ajouter la propriété `mode` de `Lister` qui permettra de définir si les items sont des projets, des évènements (event normaux ou event script), des brins ou des personnages.

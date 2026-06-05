@@ -6,6 +6,41 @@ export const PERSO_AVATARS = [
   '🦊','🦮','🐕‍🦺','🐩','🐴','🐒','🐈','🐈‍⬛','🦜','🦆','🐏'
 ]
 
+export const EVENT_METEO = {
+ ps: '☀️', //"ps" pour "plein soleil"
+ vo: '🌤️', //"vo" pour "voilé"
+ di:'🌦️',  // "di" pour "soleil discret"
+ nu: '☁️', // "nu" pour "nuageux"
+ gr:' 💨', // "gr" pour "ciel gris/nuageux de nuit"
+ ne: '⛈️', // "ne" pour "neigeux"
+ to:'🌪️',  // "to" pour "tornade"
+ pl:'🌨️'    // pl" pour "pluvieux"
+}
+
+// Définition des incompatibilés (il ne peut pas faire "plein soleil"
+// pendant la nuit)
+export const EVENT_METEO_EXLUSIONS = {
+  ps: ['au', 'cr', 'nu'],
+  vo: ['au', 'nu', 'cr'],
+  di: ['au', 'nu', 'cr']
+}
+export const EVENT_EFFET = {
+  au: 'Aube',
+  ma: 'Matin',
+  mi: 'Midi',
+  jr: 'Jour',
+  so: 'Soir',
+  cr: 'Crépuscule',
+  nu: 'Nuit'
+}
+
+
+export const EVENT_LIEU = {
+  ext: 'Extérieur', 
+  int: 'Intérieur',
+  blk: 'Noir',
+  ind: 'Indéfini',
+}
 export const PERSO_FONCTIONS = [
   'protagoniste',
   'antagoniste',
@@ -26,6 +61,23 @@ export const SHORTCUTS = [
       {sc: '↓', ef: 'sélectionner l’élément au-dessous'},
       {sc: '␣', ef: 'cocher/décocher l’élément sélectionné'},
       {sc: '⌘ + ↑', ef: 'Monter l’élément sélectionné'}
+    ]
+  },
+  {
+    contextName: "Liste des évènements",
+    description: "Ce qu'on peut faire quand la liste des évènements est affichée",
+    shortcuts: [
+      {sc: '↩︎', ef: "Édition de l'évènement sélectionné"},
+      {sc: 'b', ef: 'Affiche les brins pour les éditer et les choisir'},
+      {sc: 'p', ef: 'Affiche les personnages pour les éditer et les choisir'},
+
+    ]
+  },
+  {
+    contextName: "Liste des brins",
+    description: "Ce qu'on peut faire quand la liste des brins est affichée",
+    shortcuts: [
+      {sc: 'p', ef: 'Affiche les personnages pour les éditer et les choisir'}
     ]
   },
   {

@@ -1,0 +1,53 @@
+import { installFixtures } from '../../../helpers/install-fixtures'
+import { test, expect } from '../__setup__.js'
+
+test.beforeEach(() => {
+  installFixtures('many-projects')
+})
+
+async function createProject(page, title) {
+  await page.goto('/')
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await page.keyboard.press('n')
+  const titleInput = page.locator('.project-item.selected input[name="title"]')
+  await titleInput.fill(title)
+  await page.keyboard.press('Enter')
+  await page.waitForLoadState('networkidle')
+  const idText = await page.locator('.project-item').nth(0).locator('.project-item__id').textContent()
+  return idText.trim()
+}
+
+test('un nouveau projet sauvegardé a un évènemencier avec un event "Acte I"', async ({ page }) => {
+  const projectId = await createProject(page, 'Mon premier projet')
+
+  const listerResp = await page.request.get(`/api/items/${projectId}/lister`)
+  expect(listerResp.ok()).toBeTruthy()
+  const listerData = await listerResp.json()
+  expect(listerData.id).toBeTruthy()
+
+  const itemsResp = await page.request.get(`/api/listers/${listerData.id}/items`)
+  expect(itemsResp.ok()).toBeTruthy()
+  const items = await itemsResp.json()
+  const eventTitles = Object.values(items).map(i => i.title)
+  expect(eventTitles).toContain('Acte I')
+})
+
+test('un nouveau projet sauvegardé a un brin "Intrigue principale"', async ({ page }) => {
+  const projectId = await createProject(page, 'Mon premier projet')
+
+  const itemsResp = await page.request.get(`/api/listers/${projectId}-brins/items`)
+  expect(itemsResp.ok()).toBeTruthy()
+  const items = await itemsResp.json()
+  const brinTitles = Object.values(items).map(i => i.title)
+  expect(brinTitles).toContain('Intrigue principale')
+})
+
+test('un nouveau projet sauvegardé a un personnage "Votre protagoniste"', async ({ page }) => {
+  const projectId = await createProject(page, 'Mon premier projet')
+
+  const itemsResp = await page.request.get(`/api/listers/${projectId}-persos/items`)
+  expect(itemsResp.ok()).toBeTruthy()
+  const items = await itemsResp.json()
+  const persoTitles = Object.values(items).map(i => i.title)
+  expect(persoTitles).toContain('Votre protagoniste')
+})

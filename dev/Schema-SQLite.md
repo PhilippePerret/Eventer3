@@ -10,6 +10,7 @@
     listers {
         INTEGER id PK
         TEXT type
+        INTEGER depth
         TEXT nature
         TEXT scale
         TEXT item_ids
@@ -27,7 +28,6 @@
         INTEGER checked
         INTEGER duration
         TEXT path
-        INTEGER depth
         TEXT created_at
         TEXT updated_at
     }
@@ -101,8 +101,11 @@ La colonne `type` est commune à tous les items. Elle est interprétée différe
 - **Project** : `scenario` / `roman`
 
 ### `items.depth`
+
 Valeur dénormalisée pour accélérer les requêtes de vue par niveau.  
 **À mettre à jour** lors de tout déplacement d'un item vers un autre lister.
+
+ATTENTION : réfléchir d’abord à la pertinence de cette donnée (qui serait plus logiquement attribuée aux évènemenciers (Lister de type EventLister)
 
 ### `counters` 
 

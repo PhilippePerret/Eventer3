@@ -10,6 +10,8 @@
   --perso: #d8e0d5;
   --emoji: 40px;
   --lisible:32px; /* taille de font lisible*/
+  --coche: 30px;
+  --badge:20px;
 }
 
 * {
@@ -128,7 +130,7 @@ body {
 
 .event-check {
   color: #1f9d41;
-  font-size: 24px;
+  font-size: var(--coche);
   font-weight: 900;
   line-height: 1;
 }
@@ -235,7 +237,7 @@ body {
   height: 28px;
   padding: 0 8px;
   border-radius: 999px;
-  font-size: 11px;
+  font-size: var(--badge);
   font-weight: 600;
   letter-spacing: .04em;
   color: var(--muted);
@@ -420,8 +422,8 @@ body {
 }
 
 .panel-check {
-  color: #00a832;
-  font-size: 24px;
+  /* color: #00a832; */
+  font-size: var(--coche);
   font-weight: 900;
   line-height: 1;
 }
@@ -454,7 +456,7 @@ body {
 
 .brin-row.selected.checked .panel-check {
   opacity: 1;
-  color: white;
+  color: #00a832;
 }
 
 .brin-row.selected .panel-color-dot {
@@ -533,7 +535,7 @@ body {
 
 .perso-row .panel-check {
   opacity: 0;
-  font-size: 16px;
+  font-size: var(--coche);
 }
 
 .perso-row.checked .panel-check {
@@ -543,7 +545,7 @@ body {
 
 .perso-row.selected.checked .panel-check {
   opacity: 1;
-  color: white;
+  color: #00a832;
 }
 
 .perso-row.inherited .panel-check {
@@ -562,7 +564,7 @@ body {
   border-radius: 999px;
   overflow: hidden;
   white-space: nowrap;
-  font-size: 11px;
+    font-size: var(--badge);
   font-weight: 700;
   letter-spacing: .08em;
   text-align: center;

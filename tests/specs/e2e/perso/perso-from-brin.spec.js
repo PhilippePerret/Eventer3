@@ -108,6 +108,26 @@ test("cocher c3 depuis le panneau perso de b1 ajoute son avatar sur la ligne du 
   await expect(brinEl.locator('.brin-persos-marks')).toContainText('🎭')
 })
 
+// ─── Marques perso sur la ligne d'event ──────────────────────────────────────
+
+test("les persos des brins d'un event s'affichent sur la ligne dès le chargement (sans ouvrir le panneau perso)", async ({ page }) => {
+  await goToEventLister(page)
+  // e1 a brin b1 (perso c2=RO) et perso direct c1=CY
+  const eventEl = page.locator('.event-item').nth(0)
+  await expect(eventEl.locator('.event-persos-marks')).toContainText('CY')
+  await expect(eventEl.locator('.event-persos-marks')).toContainText('RO')
+})
+
+test("retirer un brin d'un event met à jour les marques perso sur la ligne de l'event", async ({ page }) => {
+  await openBrinPanel(page)
+  // b1 est coché sur e1 (c2=RO via b1 s'affiche sur e1)
+  // décocher b1
+  await page.keyboard.press(' ')
+  const eventEl = page.locator('.event-item').nth(0)
+  // c2 (RO) ne devrait plus apparaître (vient de b1)
+  await expect(eventEl.locator('.event-persos-marks')).not.toContainText('RO')
+})
+
 // ─── Persistance ─────────────────────────────────────────────────────────────
 
 test("persistance : cochage sur brin survit au rechargement", async ({ page }) => {

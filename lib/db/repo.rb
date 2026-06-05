@@ -50,7 +50,8 @@ module DB
           %w[title type color checked duration].each do |col|
             next unless payload.key?(col)
             sets << "#{col} = ?"
-            vals << payload[col]
+            v = payload[col]
+            vals << (col == 'checked' ? (v ? 1 : 0) : v)
           end
           unless sets.empty?
             db.execute("UPDATE items SET #{sets.join(', ')}, updated_at = ? WHERE id = ?", vals + [now, item_id])
@@ -212,7 +213,8 @@ module DB
         %w[title type color checked duration].each do |col|
           next unless fields.key?(col)
           sets << "#{col} = ?"
-          vals << fields[col]
+          v = fields[col]
+          vals << (col == 'checked' ? (v ? 1 : 0) : v)
         end
         new_id = fields['id']
         if new_id && new_id != item_id

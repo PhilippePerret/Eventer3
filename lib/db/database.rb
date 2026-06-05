@@ -9,6 +9,7 @@ module DB
     CREATE TABLE IF NOT EXISTS listers (
       id              INTEGER PRIMARY KEY,
       type            TEXT,
+      depth           INTEGER DEFAULT NULL,
       nature          TEXT,
       scale           TEXT,
       item_ids        TEXT DEFAULT '[]',
@@ -43,7 +44,6 @@ module DB
     CREATE TABLE IF NOT EXISTS event_props (
       item_id   TEXT PRIMARY KEY REFERENCES items(id),
       lister_id INTEGER DEFAULT NULL,
-      depth     INTEGER DEFAULT 1,
       state     INTEGER DEFAULT 0,
       brin_ids  TEXT DEFAULT '[]',
       perso_ids TEXT DEFAULT '[]',

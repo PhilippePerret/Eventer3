@@ -26,6 +26,20 @@ async function startEditingSecondProject(page) {
   return titleInput
 }
 
+// --- Lisibilité en édition ---
+
+test("l'input id est lisible (blanc) sur fond vert en édition d'un nouveau projet", async ({ page }) => {
+  await page.goto('/')
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await page.keyboard.press('n')
+  const idInput = page.locator('.project-item.selected input[name="id"]')
+  await expect(idInput).toBeVisible()
+  const color = await idInput.evaluate(el => window.getComputedStyle(el).color)
+  // rgb(128,128,128) ou moins lumineux = illisible sur vert
+  // on vérifie que la couleur est claire (blanc = rgb(255,255,255))
+  expect(color).toBe('rgb(255, 255, 255)')
+})
+
 // --- Hauteur visuelle ---
 
 test("la hauteur du project-item reste identique en édition", async ({ page }) => {

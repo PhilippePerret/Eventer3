@@ -113,6 +113,7 @@ export default class Lister {
     activeItems.forEach((item, itemIndex) => {
       const itemElement = item.createElement(this.itemClass.name.toLowerCase())
       if (itemIndex === this.selectedIndex) itemElement.classList.add('selected')
+      if (item.checked) itemElement.classList.add('checked')
       if (typeof item.render === 'function') item.render(itemElement)
       this.domItems.push(itemElement)
       this.domContainer.appendChild(itemElement)
@@ -357,8 +358,11 @@ export default class Lister {
     if (!item || !el) return
     const isChecked = this._performToggleChecked(item)
     el.classList.toggle('checked', isChecked)
+    this._updateCheckVisual(el, isChecked)
     void this._saveAfterToggle(item)
   }
+
+  _updateCheckVisual(el, isChecked) {}
 
   _performToggleChecked(item) {
     item.checked = !item.checked

@@ -125,3 +125,13 @@ Tokens perdus : **~100 000**
 - Total: ~47,500 tokens gaspillés
 
 **Estimation tokens utilisés inutilement:** ~47,500
+---
+
+## Session 2026-06-05 (suite persos — violations TDD répétées)
+
+**Violations TDD :**
+- Implémentation CSS + JS avant écriture des tests (bug sélection visuelle)
+- Écriture de code (PersoLister.commitNewItem, Perso.commitEdition) avant confirmation RED des tests
+- Total : au moins 3 violations TDD dans la même session
+
+**Estimation tokens gaspillés :** ~35,000

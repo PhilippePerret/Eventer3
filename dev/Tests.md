@@ -109,6 +109,12 @@
 - [ ] Un event affiche : son `title`, les badges de ses brins, les badges de ses personnages (personnages propres + personnages de ses brins) et le menu `state`
   \+ glisser la souris sur les badges (perso et brin) affiche leur `title` complet (avec un système propre à l’application, plus gros et plus rapide que l’attribut `title` de l’objet DOM.
   
+- [ ] Lors du copier/coller ou couper/coller d’un event dans un autre évènemencier, S’ASSURER QUE LE `depth` est juste.
+  
+  - [ ] QUESTION : est-ce qu’il ne serait plus « logique » que ce soit l’évènemencier qui ait un niveau ?
+  - [ ] L’avantage : tous les Events d’un ListerEvent auraient automatiquement le bon depht. Il ne serait pas nécessaire de modifier tous les Event d’un Liste d’Event déplacé à un autre niveau
+  - [ ] les inconvénients : il faudrait de toute façon modifier le Lister d’un event dès que cet Event serait mis à un niveau différent (depth = depth de ListerEvent de l’Event + 1)
+  
 - [ ] On doit pouvoir mettre un Event en édition pour modifier de façon persistante sont `title` et son `state`.
 
 - [ ] La combinaison ⌘+`c` permet de copier l’item sélectionné (toutes ses propriétés SAUF son id).
@@ -131,7 +137,7 @@
 
 - [ ] La touche `?` (⇧+,) permet d’afficher la liste de tous les raccoucis. La touche ⌘+↩︎ permet de fermer le panneau des raccourcis comme tout panneau)
 
-- [ ] Un event peut définir sa météo (`meteo` ☀️🌤️🌦️☁️💨⛈️🌪️🌨️) dans un mini panneau qui contient aussi l’effet.
+- [ ] Un event peut définir sa météo (cf. `EVENT_METEO` ) dans un mini panneau qui contient aussi l’effet.
 
 - [ ] Un event peut définir son effet (`effet`) pami « jour », « nuit, etc. Voir les valeus possibles et les vraies valeurs dans la données `EFFETS`.
 
@@ -142,11 +148,6 @@
 - [ ] Test unitaire du calcul de la date dynamique.
 
 - [ ] Un event peut définir sa date `dyndate`de façon dynamique.
-
-- [ ] Quand le panneau des personnages d’un event est ouvert (avec `p`), la liste des personnages de ses brins doivent être : 
-
-  - cochés
-  - grisé/non éditable (on ne peut pas les décocher)
 
   De cette manière, il est impossible de choisir un personnage pour un event qui appartient déjà à un de ses brins.
 
@@ -229,40 +230,78 @@
 
 ---
 
-## Test total
+## TEST LIVE TOTAL
+
+
+
+### Premiers projets
+
+`live-total/100-premiers-projets`
 
 Ce test est censé passer tout en revue comme une seule visite. On met les différents fichiers tests dans un dossier `test-total` qui comportera des tests incrémentés de 100 en 100 pour pouvoir introduire des tests supplémentaires entre les tests déjà effectués.
 
 On détruit toute base de données (fichier `data/eventer.db`)
 
 - [ ] L’appel de l’application doit créer un premier projet modèle avec un brin, un personnage et un event. Vérifier dans la base de données.
-  Le projet modèle doit être doit être affiché dans le panneau des projets avec la bonne apparence.
-  Le panneau doit afficher « Liste des projets » 
+  - [ ] Le projet modèle doit être affiché dans le panneau des projets avec la bonne apparence.
+  - [ ] Le panneau doit afficher « Liste des projets » 
+
 - [ ] La flèche → doit permettre d’entrer dans le premier évènemencier du projet par défaut
-- [ ] La flèche ← doit permettre de revenir à la liste des projets.
-- [ ] La touche « n » doit permettre de créer un nouveau projet. TESTER AUSSI : doit lui créer un event, un brin et un personnage. TESTER AUSSI : en édition, le fond doit être VERT.
+- [ ] La flèche ← doit permettre de revenir à la liste des projets sans créer d’évènemencier pour le projet ni aucun Event. Vérifier dans les données persistantes. 
+- [ ] La touche « n » doit permettre de créer un nouveau projet. 
+  - [ ] le fond doit être VERT comme pour toute édition
+
+- [ ] La touche « ↩︎ » doit valider l’édition
+  - [ ] Le nouveau projet doit être correctement affiché 
+  - [ ] le nouveau projet doit être sélectionné
+  - [ ] le nouveau projet doit être enregistré en DB
+  - [ ] Un premier brin « Intrigue principale » doit avoir été créé en BD et associé au projet
+  - [ ] Un premier personnage « Votre protagoniste » doit avoir été créé en BD et associé au projet
+  - [ ] Un premier évènement « Acte I » doit avoir été créé en BD et associé au projet.
+
 - [ ] Les flèches ↑ et ↓ doivent permettre de sélectionner (en boucle) les projets affichés.
-- [ ] Sélectionner le dernier projet et taper ⌥+`n`. Un nouveau projet doit se créer SOUS le dernier projet.  Puis : 
+- [ ] La combinaison ⌘ ↑ et ↓ doit permettre de modifier l’ordre des projets.
+  - [ ] L’ordre, après un petit laps de temps, doit être enregistré en DB.
+
+- [ ] Sélectionner le dernier projet avec  ↑ et ↓ et taper ⌥+`n`. Un nouveau projet doit se créer SOUS le dernier projet : 
 
   1. Lui donner le titre « Mon troisième projet ».
+     1. un identifiant « mon-troisieme-projet » doit se calculer automatiquement
 
-  2. La touche `Tab` doit permettre de rejoindre le champ `id` et de le modifier.
+  2. La touche `Tab` doit permettre de rejoindre le champ `id` et de le modifier ; mettre « projet-trois ».
 
-  3. La touche `Enter` doit permettre d’enregistrer le nouveau projet.
+  3. La touche ↩︎  doit permettre d’enregistrer le nouveau projet.
+     - [ ] l’identifiant enregistré doit être « projet-trois »
 
-     TESTER AUSSI : l’identifiant du projet doit se calculer automatiquement.
+- [ ] La combinaison ⌘+↑ et ⌘+↓ doit permettre de remonter le dernier projet tout en haut puis de le mettre en deuxième position. Puis de remonter le dernier projet tout en haut.
+  - [ ] l’ordre des projets doit être conservé en base de données, dans listers#1.
 
-     TESTER AUSSI : La donnée persistante est enregistrée.
-- [ ] La combinaison ⌘+↑ et ⌘+↓ doit permettre de remonter le dernier projet tout en haut puis de le mettre en deuxième position. Puis de remonter le dernier projet tout en haut. TESTER AUSSI : L’ordrer des projets doit être conservé en base de données, dans lister#1.
 - [ ] En relançant l’application, l’ordre des projets doit être conservé.
-- [ ] La touche `Enter` met le projet en édition. TESTER AUSSI : on ne doit pas pouvoir modifier l’identifiant du projet.
-- [ ] La flèche → permet d’entrer dans le premier évènemencier du premier projet.
-- [ ] La touche `Enter` permet de passer le premier event en édition (TESTER FOND EN VERT). Puis : 
+- [ ] La touche ↩︎ met le projet en édition.
+  - [ ] la touche ⇥ ne doit plus permettre de modifier l’identifiant.
+  - [ ] la touche ↩︎ met fin à l’édition.
 
-  1. On met « C’est l’incipit du roman en title ». 
-  2. La touche `Tab` doit permettre de choisir l’état (state). Choisir « ébauche ».
-  3. La touche `Enter` permet d’enregistrer (de façon persistane) les nouvelles données.
+
+### Premier évènemencier
+
+`200-premier-eventer.specs.js`
+
+- [ ] La flèche → permet d’entrer dans le premier évènemencier du premier projet. Cet event doit être « Acte I »
+
+- [ ] La touche ↩︎ permet de passer le premier event en édition
+
+  - [ ] Le fond doit passer au vert
+  - On met « C’est l’incipit du roman en title ». 
+  - La touche ⇥ doit permettre de choisir l’état (choisir « ébauche »), puis la météo (choisir le grand soleil), puis l’effet (choisir « nuit »).
+
+    - [ ] L’application doit signaler une erreur : « il n’y a pas de grand soleil de nuit »)
+
+    - revenir sur le menu de la météo avec ⇥ plusieurs fois et choisir « nuageux »
+    -  
+  - La touche `Enter` permet d’enregistrer (de façon persistane) les nouvelles données.
+
 - [ ] La touche ⌥+`n` permet de créer un nouvel event sous le premier. On lui donne le titre « Une séquence de poursuite » avec le state « premier jet ».
+
 - [ ] La touche `n` permet de créer un troisième event entre les deux autres, avec le titre « Une séquence de fouille » avec le state « ébauche ».
 
 ### Brins

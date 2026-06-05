@@ -1,6 +1,9 @@
 import Lister from './Lister.js'
 import Project from './Project.js'
 import EventLister from './EventLister.js'
+import Brin from './Brin.js'
+import Perso from './Perso.js'
+import ListerRepository from '../repositories/ListerRepository.js'
 import KeyboardController from '../../KeyboardController.js'
 import LOG from '../../system/LOG.js'
 
@@ -28,6 +31,24 @@ export default class ProjectLister extends Lister {
 
   get childListerClass() {
     return EventLister
+  }
+
+  async commitNewItem(item, itemElement, insertionIndex) {
+    await super.commitNewItem(item, itemElement, insertionIndex)
+    const eventLister = await ListerRepository.createLister({ type: 'events', parent_item_id: item.id })
+    await ListerRepository.createItem(eventLister.id, { title: 'Acte I', type: 'event' })
+    const brinLister = await ListerRepository.createLister({ type: 'brins', parent_item_id: item.id })
+    await ListerRepository.createItem(brinLister.id, {
+      title: 'Intrigue principale',
+      type: 'brin',
+      badge: Brin.generateBadge('Intrigue principale'),
+      color: Brin.colorFor(1)
+    })
+    const persoLister = await ListerRepository.createLister({ type: 'persos', parent_item_id: item.id })
+    await ListerRepository.createItem(persoLister.id, {
+      title: 'Votre protagoniste',
+      badge: Perso.generateUniqueBadge('Votre protagoniste', [])
+    })
   }
 
   renderHeader() {

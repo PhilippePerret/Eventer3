@@ -1,4 +1,5 @@
 import Item from './Item.js'
+import Texte from '../../system/Texte.js'
 
 export default class Project extends Item {
 
@@ -14,6 +15,19 @@ export default class Project extends Item {
     const titleField = { name: 'title', property: 'title', selector: `.${type}-item__title`, placeholder: this.constructor.newItemPlaceholder }
     if (this.hasLister) return [titleField]
     return [titleField, { name: 'id', property: 'id', selector: `.${type}-item__id`, placeholder: 'identifiant' }]
+  }
+
+  createEditorElement(keyboardController) {
+    const itemElement = super.createEditorElement(keyboardController)
+    if (this.__isTemporary) {
+      const inputs = itemElement.querySelectorAll('input')
+      if (inputs.length >= 2) {
+        inputs[0].addEventListener('input', () => {
+          inputs[1].value = Texte.slugify(inputs[0].value)
+        })
+      }
+    }
+    return itemElement
   }
 
   render(div) {

@@ -66,6 +66,16 @@ test("le perso sélectionné a un fond coloré visible (pas transparent)", async
   await expect(page.locator('.perso-item').nth(0)).toHaveCSS('background-color', 'rgb(77, 158, 254)')
 })
 
+test("la coche d'un perso coché reste verte même sélectionné (pas blanche)", async ({ page }) => {
+  await openPersoPanel(page)
+  // c1 est sélectionné (index 0) ET coché (direct sur e1)
+  const c1 = page.locator('.perso-item').nth(0)
+  await expect(c1).toHaveClass(/selected/)
+  await expect(c1).toHaveClass(/checked/)
+  // La coche doit rester verte (rgb(0, 168, 50)), pas blanche
+  await expect(c1.locator('.panel-check')).toHaveCSS('color', 'rgb(0, 168, 50)')
+})
+
 // ─── Affichage ───────────────────────────────────────────────────────────────
 
 test("le panneau affiche tous les personnages du projet", async ({ page }) => {
@@ -197,13 +207,22 @@ test("cocher c3 depuis le panneau perso de e1 ajoute son avatar sur la ligne de 
   await expect(eventEl.locator('.event-persos-marks')).toContainText('🎭')
 })
 
-// ─── Avatar prioritaire sur badge ────────────────────────────────────────────
+// ─── Badge et avatar : colonnes séparées ─────────────────────────────────────
 
-test("si un perso a un avatar, l'avatar s'affiche à la place du badge dans le panneau", async ({ page }) => {
+test("la colonne badge affiche le badge (2 lettres), pas l'avatar", async ({ page }) => {
   await openPersoPanel(page)
-  // c3 (index 2) a avatar 🎭 → afficher 🎭 pas CH
-  await expect(page.locator('.perso-item').nth(2).locator('.perso-item__badge')).toHaveText('🎭')
-  await expect(page.locator('.perso-item').nth(3).locator('.perso-item__badge')).toHaveText('👑')
+  // c3 a avatar 🎭 ET badge CH → badge column doit montrer CH (pas 🎭)
+  await expect(page.locator('.perso-item').nth(2).locator('.perso-item__badge')).toHaveText('CH')
+  await expect(page.locator('.perso-item').nth(3).locator('.perso-item__badge')).toHaveText('VA')
+})
+
+test("la colonne avatar affiche l'avatar si défini, sinon '—'", async ({ page }) => {
+  await openPersoPanel(page)
+  // c1, c2 sans avatar → '—'
+  await expect(page.locator('.perso-item').nth(0).locator('.perso-item__avatar')).toHaveText('—')
+  // c3 avatar 🎭
+  await expect(page.locator('.perso-item').nth(2).locator('.perso-item__avatar')).toHaveText('🎭')
+  await expect(page.locator('.perso-item').nth(3).locator('.perso-item__avatar')).toHaveText('👑')
 })
 
 test("si perso assigné à l'event a un avatar, la ligne event affiche l'avatar pas le badge", async ({ page }) => {
@@ -237,6 +256,52 @@ test("n ouvre l'éditeur pour un nouveau perso (input title focalisé)", async (
   await openPersoPanel(page)
   await page.keyboard.press('n')
   await expect(page.locator('.perso-item.selected input[name="title"]')).toBeFocused()
+})
+
+// ─── Badge auto-calcul ───────────────────────────────────────────────────────
+
+test("créer un perso avec patronyme → badge calculé depuis le patronyme", async ({ page }) => {
+  await openPersoPanel(page)
+  await page.keyboard.press('n')
+  await page.locator('.perso-item.selected input[name="title"]').fill('Jean')
+  await page.keyboard.press('Tab') // → patronyme
+  await page.locator('.perso-item.selected input[name="patronyme"]').fill('Valjean')
+  // badge vide : laisser auto-calc
+  await page.keyboard.press('Enter')
+  // 'Valjean' sans espaces → 'VA'
+  await expect(page.locator('.perso-item').nth(0).locator('.perso-item__badge')).toHaveText('VA')
+})
+
+test("créer un perso sans patronyme → badge calculé depuis le titre", async ({ page }) => {
+  await openPersoPanel(page)
+  await page.keyboard.press('n')
+  await page.locator('.perso-item.selected input[name="title"]').fill('Cosette')
+  // pas de patronyme, badge vide
+  await page.keyboard.press('Enter')
+  await expect(page.locator('.perso-item').nth(0).locator('.perso-item__badge')).toHaveText('CO')
+})
+
+test("badge unique si collision avec un badge existant", async ({ page }) => {
+  await openPersoPanel(page)
+  await page.keyboard.press('n')
+  // 'Cyrus' → 'CY' → collision avec c1 → doit être différent
+  await page.locator('.perso-item.selected input[name="title"]').fill('Cyrus')
+  await page.keyboard.press('Enter')
+  const badgeEl = page.locator('.perso-item').nth(0).locator('.perso-item__badge')
+  await expect(badgeEl).not.toHaveText('CY')
+  const badge = await badgeEl.textContent()
+  expect(badge.trim().length).toBe(2)
+})
+
+test("éditer un perso et vider le badge → recalculé depuis le patronyme", async ({ page }) => {
+  await openPersoPanel(page)
+  await page.keyboard.press('Enter') // édite c1 (title='Cyrano', patronyme='de Bergerac')
+  await page.keyboard.press('Tab') // → patronyme
+  await page.keyboard.press('Tab') // → badge
+  await page.locator('.perso-item.selected input[name="badge"]').fill('') // vider
+  await page.keyboard.press('Enter')
+  // patronyme 'de Bergerac' → 'debergerac'.toUpperCase() → 'DE'
+  await expect(page.locator('.perso-item').nth(0).locator('.perso-item__badge')).toHaveText('DE')
 })
 
 test("créer un perso : Enter valide et l'ajoute à la liste", async ({ page }) => {
