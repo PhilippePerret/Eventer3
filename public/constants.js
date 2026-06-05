@@ -1,3 +1,14 @@
+export const PERSO_FONCTIONS = [
+  'protagoniste',
+  'antagoniste',
+  'deutéragoniste',
+  'adjuvant',
+  'opposant',
+  'personnage secondaire',
+  'figurant',
+  'narrateur'
+]
+
 export const SHORTCUTS = [
   {
     contextName: "Liste d'éléments",

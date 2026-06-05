@@ -407,9 +407,6 @@ Pour le reste, le fonctionnement est le même que pour le reste : pour que le br
 
 Note importante : Contrairement à un *brin* (cf. ci-dessus), un personnage peut appartenir à n’importe quoi sauf à un personnage : un projet, un évènemencier ou un brin.
 
-Mais le personnage est TOUJOURS créé dans le fichier `__persos.json` du projet, qui se trouve dans : 
-	**`/data/lof-projects/lof-mon-id-projet/__persos.json`**.
-
 La place la plus logique d’un personnage est dans un brin. Quand le brin est sélectionné, dans sa fenêtre, la touche « p » permet de choisir/créer un personnage.
 
 Pour le reste, le fonctionnement est le même que pour le reste : pour que le personnage soit réellement créé, il faut qu’il ait au moins un `title` (non vide) qui correspond à son *pseudo*.
@@ -429,7 +426,7 @@ Quel que soit le cas, la première valeur est toujours `tittle` (qui est le pseu
 | `Project`    | `title`  →  (custom) `id`<br />Un premier ’id` est calculé automatiquement à partir du titre entré<br />Un fois l’identifiant fixé, on ne le touche plus. |
 | `Event`      | `title` → `state`                                            |
 | `Brin`       | `title`  → `badge` (éditable, première version calculée d’après les trois premières lettres capitalisées du title) → `type` → `color` |
-| `Perso`      | `title` → `badge` (2 lettres majuscules max, première version proposée automatiquement par title) → `Patronyme` → `avatar` → `fonction` |
+| `Perso`      | `title` →  `Patronyme` → `badge` (2 lettres majuscules max, première version proposée automatiquement par title) → `avatar` → `fonction` |
 | `ScriptItem` | `title` (le texte) → `state` → `nature`                      |
 
 <a name="item-types"></a>
@@ -440,12 +437,13 @@ Quel que soit le cas, la première valeur est toujours `tittle` (qui est le pseu
 
 Une réflexion doit être menée concenant ces propriétés qui sont pour le moment utilisées un peu n’importe comment. On va essayer de faire une table pour rationnaliser ça.
 
-| Item      | propriété   | Description et valeurs                                       |
-| --------- | ----------- | ------------------------------------------------------------ |
-| `Event`   |             |                                                              |
+|      Item | propriété   | Description et valeurs                                       |
+| --------: | ----------- | ------------------------------------------------------------ |
+|   `Event` |             |                                                              |
 | `Project` | **`type`**  | Un projet ne peut-être que de deux types : scénario ou roman. Cela détermine comment sera traité le `ScriptLister` final. |
-| `Brin`    | **`type`**  | Un brin peut être de type « intrigue », « accessoire », « thématique », « personnage » en fonction de la chose sur laquelle il se focalise. Ces types sont consignés dans la constante `BrinTypes`. |
-| `Perso`   | **`type`**  | Un personnage peut être de 3 types différents, du côté du protagonisme, du côté de l’antagonisme, ou ambivalent (un peu des deux). |
+| Valeurs : |             | `scenario`, `roman`                                          |
+|    `Brin` | **`type`**  | Un brin peut être de type « intrigue », « accessoire », « thématique », « personnage » en fonction de la chose sur laquelle il se focalise. Ces types sont consignés dans la constante `BrinTypes`. |
+|   `Perso` | **`type`**  | Un personnage peut être de 3 types différents, du côté du protagonisme (type « prota », du côté de l’antagonisme (type « anta », ou ambivalent donc un peu les deux (type « ambi » ). |
 |           | **`genre`** | Correspond vraiment au *genre*, donc femme, homme, non binaire ou autre. |
 |           |             |                                                              |
 |           |             |                                                              |

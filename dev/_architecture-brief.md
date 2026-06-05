@@ -11,8 +11,11 @@
 | `app.rb` | Sinatra ; routes `GET/PATCH /data/*` ; `Bootstrap.ensure_initial_data!` sur chaque requête |
 | `public/app.js` | `App.start()` → `ProjectLister.init()` |
 | `public/config.js` | `window.APP_UI_MODES` (raccourcis footer) + `window.APP_CONFIG` (brinTypes, brinColors) |
-| `public/index.html` | Structure DOM : `#main-panel`, `#shortcuts-footer`, `#brin-panel`, `#panel-overlay>#panel` |
+| `public/index.html` | Structure DOM : `#main-panel`, `#shortcuts-footer`, `#shortcuts-panel`, `#notification`, `#brin-panel`, `#panel-overlay>#panel` |
+| `public/constants.js` | ES module — `export const SHORTCUTS` (format doc, 4 contextes) — chargé comme `<script type="module">` |
+| `public/config.js` | **Script classique** (pas `type="module"`) — `window.APP_UI_MODES` + `window.APP_CONFIG` — NE PAS y mettre `export` |
 | `public/KeyboardController.js` | Switch central `onKeyDown` ; `pushMode/popMode` pour modaux |
+| `public/classes/ui/ShortcutsPanel.js` | Lit `window.APP_UI_MODES` (pas SHORTCUTS), affiche dans `#shortcuts-panel`, navigation par contextes |
 | `public/classes/models/Lister.js` | Classe de base : `render()`, `selectItemAt()`, `moveSelectedItem()`, `createNewItem()`, `stopEditing()`, `commitNewItem()` |
 | `public/classes/models/Item.js` | Classe de base item |
 | `public/classes/ui/FooterHelp.js` | `FooterHelp.update(modes)` → lit `APP_UI_MODES[mode]` → écrit dans `#shortcuts-footer` |
@@ -50,12 +53,13 @@ Item
 | `ArrowDown/Up` | `selectNextItem()` / `selectPreviousItem()` |
 | `⌘ArrowDown/Up` | `moveSelectedItemDown/Up()` |
 | `Escape` | `activeLister.close()` |
-| `⌘Enter` | `activeLister.close()` (global, avant tout) |
+| `⌘Enter` | ferme `ShortcutsPanel` si visible, sinon `activeLister.close()` |
+| `?` | ouvre `ShortcutsPanel` — **géré AVANT** `if (!this.activeLister) return` (sinon timing Playwright fail) |
+| `⌘ArrowDown/Up` | si `shortcutsPanel.isVisible` → `nextContext/previousContext()`, sinon `moveSelectedItemDown/Up()` |
 | `Delete` | **À implémenter** → `deleteSelectedItem()` |
 | `⌘c` | **À implémenter** → copie item sélectionné (sans id) |
 | `⌘x` | **À implémenter** → coupe item sélectionné (avec id) ; interdit sur dernier item |
 | `⌘v` | **À implémenter** → colle au-dessus sélection ; cross-panel même type OK ; cross-type bloqué |
-| `?` | **À implémenter** → ouvre panneau raccourcis |
 
 Modes spéciaux (modeStack) : `item-edition` (champs input/select), `popup-select`.  
 Édition contentEditable : `activeLister.editing === true` → `_handleEditingKeyDown`.
@@ -105,17 +109,17 @@ Modes spéciaux (modeStack) : `item-edition` (champs input/select), `popup-selec
 | Titre brin | `.brin-item__title` |
 | Badge brin | `.brin-item__badge` |
 | Item id (sur chaque item) | `[data-id]` ex: `.event-item[data-id="e1"]` |
-| Notification (à créer) | `#notification` |
-| Panneau raccourcis (à créer) | `#shortcuts-panel` |
+| Notification | `#notification` (géré par `public/classes/ui/Notification.js`) |
+| Panneau raccourcis | `#shortcuts-panel` (géré par `ShortcutsPanel.js`) |
 
 ---
 
 ## Conventions ID
 
-- Project : slug du titre (`mon-projet`)
+- Project : slug du titre (`mon-projet`) ou `p1`, `p2`… lors de copies.
 - Event : `e1`, `e2`…
 - Brin : `b1`, `b2`…
-- Perso : `p1`, `p2`…
+- Perso : `c1`, `c2`…
 
 ---
 
@@ -125,16 +129,21 @@ Modes spéciaux (modeStack) : `item-edition` (champs input/select), `popup-selec
 - Import tests : toujours depuis `__setup__.js`, jamais `@playwright/test`
 - `installFixtures('nom')` dans `beforeEach` ou au niveau module
 - `Lister`/`Item` : ne jamais dupliquer dans une sous-classe ce qui existe dans la base
+- Le `type` d’un `Item` (`Project`, `Event`, `Brin`, `Perso`, `Script`) n’est JAMAIS la classe spécialisée minorisée de l’item. Le type de `Project` n’est JAMAIS `perso`, le `type` d’un `Event` n’est JAMAIS `event`, le `type` d’un `Perso` n’est JAMAIS `perso`. Voir les [types possibles] dans le document des modèles.
 - Loi de Déméter : déléguer via méthode statique, ne pas câbler les détails d'une autre classe
-- Séparation des responsabilités : FooterHelp, PopupSelect = classes dédiées
+- Séparation des responsabilités : FooterHelp, PopupSelect, ShortcutsPanel, Notification = classes dédiées
 - `lister_id` d'un Item = id de son Lister enfant, PAS son appartenance (appartenance = `item_ids` du Lister parent)
+- `commitNewItem` : après `item.id = created.id`, appeler `item.render(itemElement)` pour afficher l'id généré par le serveur
+- Notification titre vide : dans `handleEditionKeyDown`, Enter/Escape sur item temporaire sans titre → `Notification.show(...)` + `return` (garder l'éditeur ouvert)
+- Lister virtuel vide : `cancelEditor` sur lister avec `domItems.length === 0` → notification au lieu d'écran blanc
+- `config.js` est un script **classique** (sans `type="module"`) — mettre `export` dedans casse tout → `APP_UI_MODES` undefined
 - Pas de commentaires sauf WHY non-obvious
 
 ---
 
 ## État courant (2026-06-04)
 
-- 97 tests verts
+- Tests : tous verts (108+)
+- **Implémenté** : panneau raccourcis (`?` / `⌘Enter` / `⌘↑↓`), notifications titre vide, fix 404 `/api/items/:id/lister`
 - En cours : `Delete` pour supprimer un item (keyboard-delete.spec.js — phase RED)
-- TDD RED écrit : ⌘+c/⌘+x/⌘+v (keyboard-copy-cut-paste.spec.js)
-- Skippés pour plus tard : panneau des raccourcis (`?`), Persos, Options, CSS brins/projet
+- À faire : Persos, Options, CSS brins/projet, ⌘+c/⌘+x/⌘+v

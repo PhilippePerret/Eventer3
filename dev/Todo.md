@@ -2,16 +2,14 @@
 
 ## SUPRA TODO
 
-* Préciser clairement : 
-  * `type` n'est pas la classe mineure de l’Item, IL FAUT ARRÊTER DE FAIRE DES TESTS COMME `i.type = event` alors que le type ne sera JAMAIS `event`
-  * `lister_id` NE DÉFINIT PAS UNE APPARTENANCE MAIS UNE POSSESSION. C’est le Lister « enfant » d’un Item. Les appartenances sont EXCLUSIVEMENT définis par `item_ids`, `brin_ids` et `perso.ids` qui sont des listes ordonnées (enregistrées en String dans la db).
-
 ## Bug
-
--  Pas vraiment en bug, mais il y a vraiment trop de responsabilités qui ne sont pas là où elles devraient être. Je l’ai relevé pour les brins affectés à un event. C’est BrinLister qui s’occupait d’enregistrer les brins dans l’event ! (ALORS QUE C’EST l’event qui doit le faire !!!!) et qui s’occupait de cocher l’élément DOM (ALORS QUE C’EST À Lister DE LE FAIRE POUR TOUS LES TYPES DE Liste !!!). Je ne vois pas voir ce genre de chose. Il faut passer en revue tout le code et METTRE LES RESPONSABILITÉS LÀ OÙ ELLES DOIVENT SE TROUVER. À PARTIR D’UNE FONCTIONNALITÉ N’EST PAS PROPRE À UN Lister spécialisée, elle DOIT se trouver dans Lister, pas dans BrinLister, EvenLister ou quoi que ce soit !!!!
 
 ## Todo
 
+
+
+* Implémenter les personnages (`Perso` et `PersoLister`).
+* Implémenter le filtre
 * Propriété `flags` pour les `Lister` — première option : le mode d’affichage des fond d’Event, soit par couleur de premier brin, soit par « climat » (météo + effet).
 * Définir l’option d’EventListener qui détermine si le fond des events doit être déterminé par son premier Brin ou par son « climat », constitué 1) de sa météo et 2) de son effet. 
 * ajouter la propriété `mode` de `Lister` qui permettra de définir si les items sont des projets, des évènements (event normaux ou event script), des brins ou des personnages.

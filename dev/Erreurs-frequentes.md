@@ -36,8 +36,8 @@ Il ne peut y avoir aucune ambigüité quant à la nature des items des la propri
 | Classe        | Classe des items (`item_ids`)       | Id     |
 | ------------- | ----------------------------------- | ------ |
 | **`Project`** | `Event`                             | `eXXX` |
-| **`Event`**   | `Event`                             | `eXXX` |
+| **`Event`**   | `Event`/`Script`                    | `eXXX` |
 | **`Brin`**    | `Brin`                              | `bXXX` |
-| **`Perso`**   | `Perso`                             | `pXXX` |
+| **`Perso`**   | `Perso`                             | `cXXX` |
 | **`Script`**  | --- (c’est la dernière imbrication) | `sXXX` |
 
