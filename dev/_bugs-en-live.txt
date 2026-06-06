@@ -1,1 +1,0 @@
-- C'est quoi ces contextes dans le panneau des raccourcis ? Je veux seulement ceux définis  dans 
