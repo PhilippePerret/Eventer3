@@ -789,21 +789,39 @@ body {
 
 #status-bar {
   position: fixed;
-  right: 40px;
-  bottom: 50px;
-  z-index: 21;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 22;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  background: #e8e3da;
+  border-top: 1px solid var(--line, #ccc);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.05em;
-  color: var(--text-muted, #999);
+  color: #555;
   pointer-events: none;
+}
+
+.event-item.virtual {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 4px 14px 4px 48px;
+  opacity: 0.4;
+  font-style: italic;
+  pointer-events: none;
+  cursor: default;
 }
 
 #shortcuts-footer {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 22px;
   z-index: 20;
   display: flex;
   flex-wrap: wrap;
