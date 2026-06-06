@@ -178,7 +178,11 @@ export default class Item {
     const lister = keyboardController.activeLister
     keyboardController.popMode()
     itemElement.remove()
-    lister.selectItemAt(this.previousSelectedIndex)
+    if (lister.__isVirtual) {
+      lister.leaveToParent()
+    } else {
+      lister.selectItemAt(this.previousSelectedIndex)
+    }
     LOG.m(2, 'Item.creation.cancelled')
   }
 
@@ -196,10 +200,17 @@ export default class Item {
           this._openPopupSelect(document.activeElement, fields, inputs, keyboardController)
         }
         return
+      case 'ArrowLeft':
+        if (this.__isTemporary && keyboardController.activeLister.__isVirtual) {
+          event.preventDefault()
+          this.cancelEditor(keyboardController, itemElement)
+        }
+        return
       case 'Escape':
         event.preventDefault()
         if (this.__isTemporary) {
-          if (keyboardController.activeLister.domItems.length === 0) {
+          const activeLister = keyboardController.activeLister
+          if (!activeLister.__isVirtual && activeLister.domItems.length === 0) {
             Notification.show(`Il faut définir le texte ${this.constructor.thingName.of}${this.constructor.thingName.thing}`)
             return
           }

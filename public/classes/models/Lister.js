@@ -284,7 +284,9 @@ export default class Lister {
     }
   }
 
-  _onCancelNewItem(idx) {}
+  _onCancelNewItem(idx) {
+    if (this.__isVirtual) this.leaveToParent()
+  }
 
   copySelectedItem() {
     const item = this.items[this.selectedIndex]

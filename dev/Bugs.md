@@ -1,1 +1,3 @@
-# Eventer3 - Bugs en Live
+# Eventer3 - Bugs
+
+* Il faudra bien regarder les raccourcis qui doivent être affichés dans la bande d’aide car pour le moment c’est un grand n’importe quoi sur ce qui doit être proposé. Chaque affichage devrait être adapté au mode courant, en sachant que le plus pratique serait de donner un nom très précis à chaque état possible (« affichage d’un évènemencier », « affichage de la liste des brins pour filtre », « affichage de la liste des brins pour affectation à un event », « affichage de la liste des personnages pour affectation aux brins », etc.) afin de pourvoir lister dans `config.js` les racccourics à afficher.
