@@ -118,6 +118,13 @@ export default class KeyboardController {
         }
         return
 
+      case 'm':
+        if (event.metaKey || event.ctrlKey) {
+          this.activeLister.toggleDisplayMode?.()
+          event.preventDefault()
+        }
+        return
+
       case 'p':
         if (typeof this.activeLister.openPersoPanel === 'function') {
           this.activeLister.openPersoPanel().catch(err => console.error('openPersoPanel:', err))

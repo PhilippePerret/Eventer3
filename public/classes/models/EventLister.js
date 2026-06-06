@@ -3,6 +3,7 @@ import Event from './Event.js'
 import BrinLister from './BrinLister.js'
 import PersoLister from './PersoLister.js'
 import ListerRepository from '../repositories/ListerRepository.js'
+import StatusBar from '../ui/StatusBar.js'
 
 export default class EventLister extends Lister {
 
@@ -42,8 +43,13 @@ export default class EventLister extends Lister {
 
   render() {
     const result = super.render()
+    StatusBar.update('events')
     void this._loadAndRenderPersoMarks()
     return result
+  }
+
+  toggleDisplayMode() {
+    return StatusBar.toggleDisplayMode()
   }
 
   async _loadAndRenderPersoMarks() {

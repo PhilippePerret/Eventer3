@@ -88,6 +88,7 @@ export default class Lister {
       keyboardController: this.keyboardController,
       parentItem: item
     })
+    childLister.depth = this.depth + 1
     if (listerData) {
       if (listerData.brins_lister_id) childLister.brins_lister_id = listerData.brins_lister_id
       await childLister.loadItems()
@@ -106,6 +107,7 @@ export default class Lister {
     this.domContainer = document.querySelector('#main-panel')
     this.domContainer.innerHTML = ''
     this.domContainer.className = `${this.itemClass.name.toLowerCase()}-list`
+    if (this.depth != null) this.domContainer.dataset.depth = String(this.depth)
     this.domItems = []
     const header = this.renderHeader()
     if (header) this.domContainer.appendChild(header)

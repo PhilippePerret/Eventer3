@@ -6,6 +6,7 @@ import Perso from './Perso.js'
 import ListerRepository from '../repositories/ListerRepository.js'
 import KeyboardController from '../../KeyboardController.js'
 import LOG from '../../system/LOG.js'
+import StatusBar from '../ui/StatusBar.js'
 
 export default class ProjectLister extends Lister {
 
@@ -26,6 +27,8 @@ export default class ProjectLister extends Lister {
     super(data)
     this.itemClass = Project
   }
+
+  get depth() { return 0 }
 
   get uiModes() { return ['projects'] }
 
@@ -49,6 +52,12 @@ export default class ProjectLister extends Lister {
       title: 'Votre protagoniste',
       badge: Perso.generateUniqueBadge('Votre protagoniste', [])
     })
+  }
+
+  render() {
+    const result = super.render()
+    StatusBar.update('projects')
+    return result
   }
 
   renderHeader() {

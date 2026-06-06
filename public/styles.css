@@ -787,6 +787,18 @@ body {
   pointer-events: none;
 }
 
+#status-bar {
+  position: fixed;
+  right: 40px;
+  bottom: 50px;
+  z-index: 21;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--text-muted, #999);
+  pointer-events: none;
+}
+
 #shortcuts-footer {
   position: fixed;
   left: 0;
