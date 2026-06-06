@@ -22,4 +22,8 @@ export default class StatusBar {
     return StatusBar._displayMode
   }
 
+  static resetToNesting() {
+    StatusBar._displayMode = 'NESTING'
+  }
+
 }

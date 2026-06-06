@@ -4,6 +4,7 @@ import BrinLister from './BrinLister.js'
 import PersoLister from './PersoLister.js'
 import ListerRepository from '../repositories/ListerRepository.js'
 import StatusBar from '../ui/StatusBar.js'
+import FooterHelp from '../ui/FooterHelp.js'
 
 export default class EventLister extends Lister {
 
@@ -49,7 +50,91 @@ export default class EventLister extends Lister {
   }
 
   toggleDisplayMode() {
-    return StatusBar.toggleDisplayMode()
+    const newMode = StatusBar.toggleDisplayMode()
+    if (newMode === 'LEVEL') {
+      void this._renderLevelMode()
+    } else {
+      this.render()
+    }
+    return newMode
+  }
+
+  async enterSelectedItem() {
+    StatusBar.resetToNesting()
+    return super.enterSelectedItem()
+  }
+
+  _getRootEventLister() {
+    let lister = this
+    while (lister.parentItem && lister.parentItem.parentLister.depth > 0) {
+      lister = lister.parentItem.parentLister
+    }
+    return lister
+  }
+
+  async _collectItemsAtDepth(lister, targetDepth) {
+    if (lister.depth === targetDepth) {
+      return lister.items.map(item => ({ item, isVirtual: false }))
+    }
+    const gap = targetDepth - lister.depth
+    const results = []
+    for (const item of lister.items) {
+      if (item.hasLister) {
+        const listerData = await ListerRepository.loadItemLister(item.id)
+        if (listerData) {
+          const childLister = new EventLister({
+            id: listerData.id,
+            item_ids: listerData.item_ids,
+            parentItem: item
+          })
+          childLister.depth = lister.depth + 1
+          await childLister.loadItems()
+          const sub = await this._collectItemsAtDepth(childLister, targetDepth)
+          results.push(...sub)
+        } else {
+          results.push({ item, isVirtual: true, gap })
+        }
+      } else {
+        results.push({ item, isVirtual: true, gap })
+      }
+    }
+    return results
+  }
+
+  async _renderLevelMode() {
+    const root = this._getRootEventLister()
+    const collected = await this._collectItemsAtDepth(root, this.depth)
+
+    const container = this.domContainer
+    container.innerHTML = ''
+    if (this.depth != null) container.dataset.depth = String(this.depth)
+
+    const header = this.renderHeader()
+    if (header) container.appendChild(header)
+
+    this.domItems = []
+    this.selectedIndex = 0
+
+    for (const { item, isVirtual, gap } of collected) {
+      if (isVirtual) {
+        const el = document.createElement('div')
+        el.className = 'event-item virtual'
+        el.textContent = `${item.title} +${gap}`
+        container.appendChild(el)
+      } else {
+        const itemElement = item.createElement()
+        if (typeof item.render === 'function') item.render(itemElement)
+        this.domItems.push(itemElement)
+        container.appendChild(itemElement)
+      }
+    }
+
+    if (this.domItems.length > 0) {
+      this.domItems[0].classList.add('selected')
+    }
+
+    FooterHelp.update(this.uiModes)
+    if (this.keyboardController) this.keyboardController.register(this)
   }
 
   async _loadAndRenderPersoMarks() {
