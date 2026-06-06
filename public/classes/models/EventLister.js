@@ -34,6 +34,31 @@ export default class EventLister extends Lister {
     if (wasVirtual) await BrinLister.init(this)
   }
 
+  openToolsPanel() {
+    if (StatusBar.displayMode !== 'LEVEL') return
+    this.keyboardController.toolsPanel.open([
+      { key: 'c', label: 'Consolider le niveau courant', action: () => void this._consolidateLevel() }
+    ], this.keyboardController)
+  }
+
+  async _consolidateLevel() {
+    const root = this._getRootEventLister()
+    const collected = await this._collectItemsAtDepth(root, this.depth)
+    for (const { item, isVirtual, gap } of collected) {
+      if (isVirtual) await this._createEventsForGap(item, gap)
+    }
+    await this._renderLevelMode()
+  }
+
+  async _createEventsForGap(item, gap) {
+    let currentItemId = item.id
+    for (let i = 1; i <= gap; i++) {
+      const listerData = await ListerRepository.createLister({ type: 'events', parent_item_id: currentItemId })
+      const created = await ListerRepository.createItem(listerData.id, { title: `${item.title} +${i}` })
+      currentItemId = created.id
+    }
+  }
+
   async openBrinPanel() {
     await BrinLister.open(this)
   }

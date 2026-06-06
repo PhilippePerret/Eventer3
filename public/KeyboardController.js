@@ -1,5 +1,6 @@
 import LOG from './system/LOG.js'
 import ShortcutsPanel from './classes/ui/ShortcutsPanel.js'
+import ToolsPanel from './classes/ui/ToolsPanel.js'
 
 export default class KeyboardController {
 
@@ -7,6 +8,7 @@ export default class KeyboardController {
     this.activeLister = null
     this.modeStack = []
     this.shortcutsPanel = new ShortcutsPanel()
+    this.toolsPanel = new ToolsPanel()
   }
 
   register(lister) {
@@ -86,6 +88,13 @@ export default class KeyboardController {
 
     if (!this.activeLister) return
 
+    // Sur Mac, Alt+lettre produit event.key modifié ('˜','µ'…) — event.code est fiable
+    if (event.altKey && !event.metaKey && !event.ctrlKey && event.code === 'KeyN') {
+      this.activeLister.createNewItemAfter?.()
+      event.preventDefault()
+      return
+    }
+
     LOG.m(3, 'Keyboard event', event.key, { metaKey: event.metaKey, shiftKey: event.shiftKey, ctrlKey: event.ctrlKey })
 
     switch (event.key) {
@@ -114,6 +123,13 @@ export default class KeyboardController {
       case 'b':
         if (typeof this.activeLister.openBrinPanel === 'function') {
           this.activeLister.openBrinPanel().catch(err => console.error('openBrinPanel:', err))
+          event.preventDefault()
+        }
+        return
+
+      case 'k':
+        if (event.metaKey || event.ctrlKey) {
+          this.activeLister.openToolsPanel?.()
           event.preventDefault()
         }
         return

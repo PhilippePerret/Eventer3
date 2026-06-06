@@ -12,13 +12,13 @@ export default class ListerRepository {
   }
 
   static async loadItems(lister) {
-    const response = await fetch(`/api/listers/${lister.id}/items`)
+    const response = await fetch(`/api/listers/${lister.id}/items`, { cache: 'no-store' })
     if (!response.ok) return {}
     return await response.json()
   }
 
   static async loadItemLister(itemId) {
-    const response = await fetch(`/api/items/${itemId}/lister`)
+    const response = await fetch(`/api/items/${itemId}/lister`, { cache: 'no-store' })
     if (!response.ok) return null
     return await response.json()
   }

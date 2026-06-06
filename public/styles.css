@@ -6,12 +6,25 @@
   --muted: #938c81;
   --line: #e3ddd2;
   --selected: #4d9efe;
+  --selected-bg: #4d9efe;
+  --selected-bg-muted: #b8d8fd;
   --brin: #ddd4c3;
   --perso: #d8e0d5;
   --emoji: 40px;
-  --lisible:32px; /* taille de font lisible*/
+  --lisible:32px;
   --coche: 30px;
   --badge:20px;
+}
+
+/* Sélection atténuée dans les listings arrière-plan quand un panneau est au premier plan */
+body:has(#brin-panel:not(.hidden)) #main-panel .selected,
+body:has(#perso-panel:not(.hidden)) #main-panel .selected,
+body:has(#perso-panel:not(.hidden)) #brin-panel .selected,
+body:has(#shortcuts-panel:not(.hidden)) #main-panel .selected,
+body:has(#shortcuts-panel:not(.hidden)) #brin-panel .selected,
+body:has(#shortcuts-panel:not(.hidden)) #perso-panel .selected,
+body:has(#tools-panel:not(.hidden)) #main-panel .selected {
+  --selected: var(--selected-bg-muted);
 }
 
 * {
@@ -463,6 +476,19 @@ body {
   box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .4);
 }
 
+.brin-item__title {
+  font-size: var(--lisible);
+}
+
+.brin-item__title input {
+  font-size: var(--lisible);
+  font-family: inherit;
+  background: transparent;
+  border: 0;
+  width: 100%;
+  color: inherit;
+}
+
 .brin-row {
   grid-template-columns: 30px 34px 70px minmax(220px, 1fr) 180px minmax(180px, .7fr) minmax(160px, .7fr);
 }
@@ -735,6 +761,48 @@ body {
 }
 
 /* ─── Shortcuts panel ─────────────────────────────────────────── */
+
+#tools-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 300;
+  min-width: 320px;
+  background: var(--bg, #faf7f2);
+  border: 1px solid var(--line, #ccc);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  padding: 8px 0;
+}
+
+.tools-panel__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+  cursor: default;
+  font-size: 15px;
+}
+
+.tools-panel__item.selected {
+  background: var(--selection-bg, #3478f6);
+  color: white;
+}
+
+.tools-panel__item kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 4px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0.7;
+}
 
 #shortcuts-panel {
   position: fixed;
