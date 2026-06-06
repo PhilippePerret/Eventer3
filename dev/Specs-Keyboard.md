@@ -28,6 +28,7 @@ Note : Ci-dessous, lorsqu’on parle d’*élément* (`Item`), on parle évidemm
 | Couper les items cochés (et seulement les items cochés.      | ⇧+⌘+ `x`  |
 | Coller l’item ou les items copiés/collés à la place de l’item sélectionné. | ⌘ `v`     |
 | Coller les items copiés/coupés SOUS l’item sélectionné.      | ⌘+⌥+`v`   |
+| Basculer du mode d’affichage « par imbrication » au mode « par niveau » | ⌘+m       |
 
 Combinaisons propres à certains panneaux
 

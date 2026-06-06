@@ -6,6 +6,14 @@
 
 ---
 
+## Convention de profondeur
+
+- `ProjectLister` (liste des projets) → `depth = 0`
+- `EventLister` racine d'un projet (niveau "Actes") → `depth = 1`
+- Chaque niveau imbriqué supplémentaire → `depth + 1`
+
+---
+
 ## Algorithme de calcul (top-down)
 
 ```
@@ -30,7 +38,7 @@ Appel initial depuis le chargement du projet : `traverser(project.lister_id, 1)`
 ### Arbre
 
 ```
-Liste #1  (type='projects')
+Liste #1  (type='projects', depth=0)
   └── project-a
         └── Liste #2  (type='events', depth=1)  ← niveau "Actes"
               ├── e14  [event_props.lister_id = 3]  ← "Acte 1"
