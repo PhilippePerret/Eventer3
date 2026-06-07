@@ -252,8 +252,6 @@ Voir les [erreurs fréquentes](Erreurs-frequentes.md)
 
 **`dyndate`**. La *date dynamique* pour pouvoir gérer les dates dans l’histoire. Permet de définir des dates comme « trois jours après l’explosion » ou « D1 + 10d ». À l’heure où ces lignes sont écrites, le format n’est pas encore défini, mais il y a de fortes chances que ce soit défini par « D1 = 30/05/2026 » puis des choses comme `D1-10d` ou `explosion=29/05/2026` puis `explosion+2w` (pour « deux semaines après l’explosion ».
 
-> Afin de réduire la taille des fichier `__items.json` qui consigne les données des items d’un Lister, un mapping est effectué sur les clés. Dans le fichier, elles sont toutes sur deux lettres seulement. Cf. le fichier `Mapper.js`
-
 ---
 
 

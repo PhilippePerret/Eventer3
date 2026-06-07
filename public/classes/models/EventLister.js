@@ -42,21 +42,43 @@ export default class EventLister extends Lister {
   }
 
   async _consolidateLevel() {
+    this._levelRenderToken = {}
     const root = this._getRootEventLister()
     const collected = await this._collectItemsAtDepth(root, this.depth)
-    for (const { item, isVirtual, gap } of collected) {
-      if (isVirtual) await this._createEventsForGap(item, gap)
+    for (const entry of collected) {
+      if (entry.isVirtual) {
+        entry.item = await this._createEventsForGap(entry.item, entry.gap)
+        entry.isVirtual = false
+      }
     }
-    await this._renderLevelMode()
+    const container = this.domContainer
+    container.innerHTML = ''
+    if (this.depth != null) container.dataset.depth = String(this.depth)
+    const header = this.renderHeader()
+    if (header) container.appendChild(header)
+    this.domItems = []
+    this.selectedIndex = 0
+    for (const { item } of collected) {
+      const itemElement = item.createElement()
+      if (typeof item.render === 'function') item.render(itemElement)
+      this.domItems.push(itemElement)
+      container.appendChild(itemElement)
+    }
+    if (this.domItems.length > 0) this.domItems[0].classList.add('selected')
+    FooterHelp.update(this.uiModes)
+    if (this.keyboardController) this.keyboardController.register(this)
   }
 
   async _createEventsForGap(item, gap) {
     let currentItemId = item.id
+    let lastCreated = null
     for (let i = 1; i <= gap; i++) {
       const listerData = await ListerRepository.createLister({ type: 'events', parent_item_id: currentItemId })
       const created = await ListerRepository.createItem(listerData.id, { title: `${item.title} +${i}` })
       currentItemId = created.id
+      lastCreated = created
     }
+    return new Event({ ...lastCreated })
   }
 
   async openBrinPanel() {
@@ -127,8 +149,11 @@ export default class EventLister extends Lister {
   }
 
   async _renderLevelMode() {
+    const token = {}
+    this._levelRenderToken = token
     const root = this._getRootEventLister()
     const collected = await this._collectItemsAtDepth(root, this.depth)
+    if (this._levelRenderToken !== token) return
 
     const container = this.domContainer
     container.innerHTML = ''

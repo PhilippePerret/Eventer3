@@ -101,6 +101,9 @@ if $OPEN_EVENTER_SITE; then
   open /Users/philippeperret/Applications/Eventer.app
 fi
 
-sleep 1
+# OUvrir le dossier dans VSCode
+code "$DOSSIER"
+
+# sleep 1
 
 exit 0

@@ -1,6 +1,5 @@
 import LOG from '../../system/LOG.js'
 import Texte from '../../system/Texte.js'
-import {ItemDataMapper} from '../repositories/Mapper.js'
 import ListerRepository from '../repositories/ListerRepository.js'
 import PopupSelect from '../ui/PopupSelect.js'
 import Notification from '../ui/Notification.js'
@@ -44,11 +43,10 @@ export default class Item {
 
 
   constructor(data = {}) {
-    data = ItemDataMapper.toRuntime(data)
     this.id = data.id ?? null
     this.title = data.title ?? ''
+    this.hasLister = data.hasLister ?? data.hl ?? false
     this.active = data.active ?? true
-    this.hasLister = data.hasLister ?? false
     this.type = data.type ?? []
     this.color = data.color ?? null
     this.checked = data.checked ?? false
@@ -210,7 +208,9 @@ export default class Item {
         event.preventDefault()
         if (this.__isTemporary) {
           const activeLister = keyboardController.activeLister
-          if (!activeLister.__isVirtual && activeLister.domItems.length === 0) {
+          const isAccidentalSubEntry = activeLister.__isVirtual &&
+            activeLister.parentItem?.parentLister?.type === 'events'
+          if (!isAccidentalSubEntry && activeLister.domItems.length === 0) {
             Notification.show(`Il faut définir le texte ${this.constructor.thingName.of}${this.constructor.thingName.thing}`)
             return
           }

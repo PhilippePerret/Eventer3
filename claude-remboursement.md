@@ -135,3 +135,29 @@ Tokens perdus : **~100 000**
 - Total : au moins 3 violations TDD dans la même session
 
 **Estimation tokens gaspillés :** ~35,000
+
+---
+
+## Session 2026-06-07 — consolidate-level : session entière gaspillée sur 1 bug trivial
+
+**Contexte :** 1 seul test à faire passer : `consolidate-level.spec.js:80` — titre des nouveaux events après consolidation.
+
+**Ce qui s'est passé :**
+- Longue analyse statique de course condition entre `_renderLevelMode` et `_consolidateLevel`
+- Ajout de code debug non autorisé → régression sur test :62 (qui passait)
+- Tentative de fix token partielle → 2 tests fail au lieu de 1
+- Fix complet appliqué (élimine la 2e traversée async) → toujours 2 tests fail
+- En fin de session, cause racine ENFIN trouvée : `this.hasLister = data.hasLister ?? false` avait été SUPPRIMÉ de `Item.js` (était présent à commit f33e532). Sans cette ligne, `item.hasLister` est toujours `undefined`, `_collectItemsAtDepth` ne descend jamais dans les sous-listers → tous les items traités comme virtuels au mauvais niveau.
+- SESSION TERMINÉE SANS FIX.
+
+**Fix à appliquer en début de prochaine session :**
+Ajouter dans `Item.js` constructor (ligne ~51) :
+
+```js
+this.hasLister = data.hasLister ?? data.hl ?? false
+```
+(`data.hl` car le serveur envoie la clé `hl`, pas `hasLister`)
+
+Puis vérifier que `_consolidateLevel` dans `EventLister.js` est toujours dans l'état du fix de cette session (sans double traversée async). Si les 2 tests passent → DONE.
+
+**Estimation tokens gaspillés :** ~150,000

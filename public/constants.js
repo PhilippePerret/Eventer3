@@ -59,8 +59,9 @@ export const SHORTCUTS = [
     shortcuts: [
       {sc: '↑', ef: 'sélectionner l’élément au-dessus'},
       {sc: '↓', ef: 'sélectionner l’élément au-dessous'},
-      {sc: '␣', ef: 'cocher/décocher l’élément sélectionné'},
-      {sc: '⌘ + ↑', ef: 'Monter l’élément sélectionné'}
+      {sc: '⌘ + ↑', ef: 'Monter l’élément sélectionné'},
+      {sc: '⌘ + ↓', ef: 'Descendre l’élément sélectionné'},
+      {sc: '␣', ef: 'cocher/décocher l’élément sélectionné'}
     ]
   },
   {
@@ -89,7 +90,9 @@ export const SHORTCUTS = [
       {sc: '⌘ + v', ef: 'Coller les éléments sélectionnés'},
       {sc: '⇧ + ⌘ + c', ef: 'Copier les éléments cochés'},
       {sc: '⇧ + ⌘ + x', ef: 'Couper les éléments sélectionnés'},
-      {sc: '⌘ + v', ef: 'Coller les éléments sélectionnés'}
+      {sc: '⌘ + v', ef: 'Coller les éléments sélectionnés'},
+      {sc: '⌦', ef: 'Supprimer l’élément sélectionné'},
+      {sc: '⇧ + ⌦', ef: 'Supprimer les éléments cochés'},
     ]
   },
   {

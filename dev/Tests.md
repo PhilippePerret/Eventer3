@@ -5,22 +5,18 @@
 ## Classe abstraite Lister
 
 - [x] S’assurer que la classe JS `Lister` existe et qu’on peut instancier un objet d’une classe qui en hérite.
-
 - [x] S’assurer que la classe JS `Item` existe et qu’on peut instancier un objet d’une classe qui en hérite.
-
 - [x] S’assurer que la méthode `Lister.sortItems` existe et qu’elle classe bien les items fournis.
+- [ ] En revanche, supprimer (`Delete` sans la touche `Shift`) supprime seulement l’item sélectionné. Deux essais :
+  - [ ] 1) `Delete` seul => supprime l’item sélectionné. 
+  - [ ] 2)  `Shift`+`Delete` => supprime les items cochés (mais PAS celui sélectionné, SAUF s’il est coché, évidemment !
 
-- [ ] Dans un lister quelconque, on peut cocher les éléments (Projets, Brins, Events, Persos…). Mais quand on fait un couper ou un coller, il y a deux comportement différents : SI des éléments sont cochés, ce sont eux ET SEULEMENT EUX (pas l’item sélectionné) qui sont considérés. SI en revanche aucun item n’est coché, c’est l’item sélectionné qui est considéré/traité. Faire l’essai par exemple avec couper-coller
-
-- [ ] En revanche, supprimer (`Delete` sans la touche `Shift`) supprime seulement l’item sélectionné. Deux essais : 1) `Delete` seul => supprimer l’item sélectionné. 2)  `Shift`+`Delete` => supprime les items cochés (mais PAS celui sélectionné, SAUF s’il est coché, évidemment !
-
-- [ ] La touche ← permet de revenir au Lister « parent » (s’il existe évidemment, donc un test avec un Lister qui a un parent et un avec un Lister qui n’a pas de parent.
-
+- [x] La touche ← permet de revenir au Lister « parent » (s’il existe évidemment, donc un test avec un Lister qui a un parent et un avec un Lister qui n’a pas de parent.
 - [ ] Un. Lister doit toujours posséder au moins un item. Tester :
-  - [ ] Un event doit toujours posséder au moins un évènement. On ne doit pas pouvoir détruire le dernier, ni avec la touche `Delete`, ni en mettant son title à rien.
-  - [ ] Un projet doit toujours posséder au moins un brin. => on ne doit pas pouvoir détruire le dernier brin, ni avec la touche `Delete`, ni en mettant son title à rien.
-  - [ ] Un projet doit toujours posséder au moins un personnage. => on ne doit pas pouvoir détruire le dernier personnage, ni avec la touche `Delete`, ni en mettant son title à rien. 
-  - [ ] on ne doit pas pouvoir détruire le dernier projet, ni avec la touche `Delete` ni en mettant son contenu à rien.
+  - [x] Un event doit toujours posséder au moins un évènement. On ne doit pas pouvoir détruire le dernier, ni avec la touche `Delete`, ni en mettant son title à rien.
+  - [x] Un projet doit toujours posséder au moins un brin. => on ne doit pas pouvoir détruire le dernier brin, ni avec la touche `Delete`, ni en mettant son title à rien, ni en le coupant.
+  - [x] Un projet doit toujours posséder au moins un personnage. => on ne doit pas pouvoir détruire le dernier personnage, ni avec la touche `Delete`, ni en mettant son title à rien. 
+  - [x] on ne doit pas pouvoir détruire le dernier projet, ni avec la touche `Delete` ni en mettant son contenu à rien.
 
 
 ---
@@ -69,33 +65,41 @@
 
 - [ ] S’assurer que la touche Space permet de checker (cocher) l’event. Et que cette donnée est persistante. 
 
-- [ ] S’assurer que dans un EventLister quelconque, la combinaison «  Cmd-n » permet de créer un nouvel Event APRÈS celui sélectionné.
+- [x] S’assurer que dans un EventLister quelconque, la combinaison «  ⌥+n » permet de créer un nouvel Event APRÈS celui sélectionné.
+
+  - [x] Fonctionne pour les events
+
+  - [x] fonctionne pour les brins
+
+  - [x] fonctionne pour les personnages
+
+  - [ ] fonctionne pour les styles
 
 - [ ] S’assurer que l’aide footer s’affiche conformément aux modes et aux définitions de config.js. Les tester toutes précisément.
 
-- [ ] S’assurer que lorsque l’Item n’a pas de Lister, quand on fait →, un premier Item fictif soit bien créé dans le Lister fictif. Le faire  — peut-être déjà fait — pour un Item Projet (dans e2e/projet). Le faire pour un Item Event (dans e2e/event). Le faire pour un item Brin (dans e2e/brin). Le faire pour un Item Perso (dans e2e/perso).
+- [x] S’assurer que lorsque l’Item n’a pas de Lister, quand on fait →, un premier Item fictif soit bien créé dans le Lister fictif. Le faire  — peut-être déjà fait — pour un Item Projet (dans e2e/projet). Le faire pour un Item Event (dans e2e/event). Le faire pour un item Brin (dans e2e/brin). Le faire pour un Item Perso (dans e2e/perso).
 
-- [ ] S’assurer qu’une **fichier** Lister ne soit créé avant que ce lister ait vraiment un Item. Le faire pour un ProjectLister. Le faire pour un EventLister.
+- [x] S’assurer que la flèche gauche permette de revenir à la liste des projets (idem = valable pour n’importe quel lister)
 
-- [ ] S’assurer qu’un nouveau projet créé entraine bien aussi la création d’un premier évènemencier (`i1`), un premier brin (`b1` de title « Intrigue principale ») et un premier personnage (`p1` de title « Protagoniste »).
+- [ ] S’assurer que le déplacement d’un item est persistant (idem = valable pour n’importe quel lister)
 
-- [ ] S’assurer que la flèche gauche permet de revenir à la liste des projets (idem = valable pour n’importe quel lister)
+  - [x] fonctionne pour les projets
+  - [x] fonctionne pour les events
+  - [x] fonctionne pour les brins
+  - [x] fonctionne pour les personnages,
+  - [ ] fonctionne pour les styles
 
-- [ ] S’assurer que le déplacement des projets est persistant (idem = valable pour n’importe quel lister)
+- [x] S’assurer que la touche ↩︎ permet de modifier le titre du projet courant ((idem = valable pour n’importe quel lister))
 
-- [ ] S’assurer que la touche Enter permet de modifier le titre du projet courant ((idem = valable pour n’importe quel lister))
-
-- [ ] S’assurer que la modification du titre est bien persistante (Ça doit être le cas pour tous les lister)
-
-- [ ] S’assurer que lorsqu’un item ne peut pas être placer entre deux items de `pos` consécutifs (ex : `pos:123` et `pos:124`), tous les `pos` (où seulement ceux qui posent problème ?) sont re-initialisés à une valeur correcte.
+- [x] S’assurer que la modification du titre est bien persistante (Ça doit être le cas pour tous les lister)
 
 - [ ] S’assurer que la destruction d’un projet qui a un évènemencier détruise bien cet évènemencier aussi. Idem pour un `Event` (on doit détruire aussi le fichier de son `Lister` s’il en a un)
 
 ## Évènemencier
 
-- [ ] S'assurer que le premier item d'un évènemencier est toujours sélectionné (déjà testé ?)
-- [ ] S'assurer que les flèches haut/bas permettent de sélectionner les évènements successifs (déjà testé ?)
-- [ ] S'assurer que la touche Space permette de cocher plusieurs évènement. (déjà testé ?)
+- [x] S'assurer que le premier item d'un évènemencier est toujours sélectionné (déjà testé ?)
+- [x] S'assurer que les flèches haut/bas permettent de sélectionner les évènements successifs (déjà testé ?)
+- [ ] S'assurer que la touche Space permette de cocher plusieurs évènements. (déjà testé ?)
 - [ ] S'assurer que la coche est persistante (cocher plusieurs évènements et recharger l'évènemencier : les mêmes évènements doivent être cochés)
 
 ## Event
@@ -191,9 +195,43 @@
 
 ---
 
+## Options du projet
+
+- [ ] On peut choisir l’aspect des events dans la fenêtre du projet
+  - [ ] le choix « aucun » fait basculer sur la feuille de style alternative qui ne définit rien.
+  - [ ] le choix « style propre » applique le style propre à l’event
+  - [ ] le choix « style du premier brin » applique le style du premier brin
+  - [ ] le choix « style de tous les brins » applique en cascade tous les styles des brins
+  - [ ] le choix « style du premier personnage » applique le style du personnage
+
+---
+
 ## Affichage
 
 - [ ] Le raccourci ⌘+`m` permet de basculer du mode « normal » au mode par « niveau ». Le basculement change la liste affichée.
+
+### Style (panneau des styles)
+
+- [ ] Le raccourci ⌘+`s` permet d’ouvrir le panneau des styles pour les éditer
+- [ ] Le panneau affiche la liste de tous les styles, avec leur aspect
+- [ ] la touche ↩︎ permet d’éditer le style sélectionné
+  - [ ] la touche ⇥ permet de passer de propriété CSS en propriété, pour régler leurs valeurs (soit de façon explicite, soit à l’aide d’un menu).
+  - [ ] la touche ↩︎ permet de mettre fin à l’édition du style
+  - [ ] la modification d’un style se répercute aussitôt sur l’affichage (il faut bien entendu un style utilisé par quelque chose)
+- [ ] La touche « s » permet de choisir les styles de l’`Item` quelle que soit sa classe (cela ouvre le panneau des styles en mode choix) :
+  - [ ] le panneau des styles fonctionne comme les autres Lister pour la navigation, le choix et l’édition
+    - [ ] les touches ↓↑ permettent de se déplacer de style en style
+    - [ ] la touche ␣ permet de choisir (cocher/décocher) le style,
+    - [ ] la touche  ↩︎ permet d’éditer le style
+  - [ ] la combinaisons ⌘+↓↑ permet de passer de groupe de styles en groupes de styles (comme les panneaux de raccourcis clavier)
+  - [ ] À l’ouverture, le panneau des styles rassemble en haut les styles utilisés par l’item,
+  - [ ] Quand on décoche un style, il retourne à sa place « naturelle »
+  - [ ] on peut choisir les styles de l’*event*
+  - [ ] on peut choisir les styles du *brin*
+  - [ ] on peut choisir les styles du personnage
+  - [ ] la combinaison ⌘+↩︎ permet de mettre fin au choix
+
+---
 
 ### Page normale
 

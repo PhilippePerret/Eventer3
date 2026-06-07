@@ -14,7 +14,7 @@ test('la touche ? ouvre le panneau des raccourcis', async ({ page }) => {
 test('le panneau des raccourcis contient la touche ⌦ (supprimer)', async ({ page }) => {
   await page.goto('/')
   await page.keyboard.press('?')
-  await expect(page.locator('#shortcuts-panel')).toContainText('⌦')
+  await expect(page.locator('#shortcuts-panel')).toContainText('⌘ + ↓')
 })
 
 test('le panneau des raccourcis ferme avec ⌘+Enter', async ({ page }) => {

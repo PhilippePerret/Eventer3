@@ -18,6 +18,8 @@ Note : Ci-dessous, lorsqu’on parle d’*élément* (`Item`), on parle évidemm
 | Activation du filtre (cf. [Filtrage](Specs-Filtre.md)).      | /         |
 | Mise en édition de l’élément (principalement `title` + autres fonctions en fonction du type de l’élément) | ↩︎         |
 | Déplacement de propriété en propriété lorsque l’élément est en édition. | ⇥         |
+| Définir les styles de l’item                                 | s         |
+| Définir les styles (cette combinaison ouvre la fenêtre pour définir les styles. | ⌘+s       |
 | Fin de l’édition de l’élément (enregistrement)               | ↩︎         |
 | Annulation de l’édition de l’élément.                        | ␛         |
 | Suppression de l’item sélectionné (même s’il y a des cochés et sauf si ce n’est pas le dernier) | ⌦         |

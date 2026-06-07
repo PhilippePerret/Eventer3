@@ -1,1 +1,20 @@
 # Eventer3 — bugs en live
+
+J'ai un projet avec 3 actes, les actes 1 et 3 on une séquence
+Acte I -> Séquence 1 de Acte I
+Acte II
+Acte III ->  Séquence 1 de Acte III
+
+Quand je suis sur "Séquence 1 de Acte I" et que je fais ⌘+m je devrais obtenir : 
+"Séquence 1 de Acte I"
+"Acte II + 1"
+"Séquence 1 de Acte III"
+
+OR J'OBTIENS : 
+"Acte I + 1"
+"Acte II + 1"
+"Acte III + 1"
+
+!!!!! Absurde
+
+Note : Dans le cas de l'affichage par niveau, le fil d'Ariane devrait indiquer le niveau

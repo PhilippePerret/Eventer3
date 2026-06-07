@@ -9,8 +9,7 @@ export default class Event extends Item {
 
   constructor(data = {}) {
     super(data)
-    // bi is the persistence key for brin_ids (mapped in Mapper, but data here is still raw)
-    this.brin_ids = data.bi ?? data.brin_ids ?? []
+    this.brin_ids = data.brin_ids ?? []
   }
 
 
