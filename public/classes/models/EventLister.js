@@ -64,6 +64,7 @@ export default class EventLister extends Lister {
       this.domItems.push(itemElement)
       container.appendChild(itemElement)
     }
+    this.items = collected.map(e => e.item)
     if (this.domItems.length > 0) this.domItems[0].classList.add('selected')
     FooterHelp.update(this.uiModes)
     if (this.keyboardController) this.keyboardController.register(this)
@@ -74,6 +75,7 @@ export default class EventLister extends Lister {
     let lastCreated = null
     for (let i = 1; i <= gap; i++) {
       const listerData = await ListerRepository.createLister({ type: 'events', parent_item_id: currentItemId })
+      if (i === 1) item.lister_id = listerData.id
       const created = await ListerRepository.createItem(listerData.id, { title: `${item.title} +${i}` })
       currentItemId = created.id
       lastCreated = created
@@ -171,6 +173,7 @@ export default class EventLister extends Lister {
       }
     }
 
+    this.items = collected.filter(e => !e.isVirtual).map(e => e.item)
     if (this.domItems.length > 0) {
       this.domItems[0].classList.add('selected')
     }

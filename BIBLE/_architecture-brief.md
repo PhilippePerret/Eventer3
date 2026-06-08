@@ -89,13 +89,13 @@ Modes spéciaux (modeStack) : `item-edition` (champs input/select), `popup-selec
 | Liste events active | `#main-panel.event-list` |
 | Items projets | `.project-item` |
 | Items events | `.event-item` |
-| Items brins | `.brin-item` |
-| Brin sélectionné | `.brin-item.selected` |
 | Event sélectionné | `.event-item.selected` |
 | Panneau brins | `#brin-panel` |
-| Footer raccourcis | `#shortcuts-footer` |
-| Badge brin dans event | `.event-brins-badges .badge.brin` |
+| Items brins | `.brin-item` |
 | Titre brin | `.brin-item__title` |
+| Badge brin dans event | `.event-brins-badges .badge.brin` |
+| Brin sélectionné | `.brin-item.selected` |
+| Footer raccourcis | `#shortcuts-footer` |
 | Badge brin | `.brin-item__badge` |
 | Item id (sur chaque item) | `[data-id]` ex: `.event-item[data-id="e1"]` |
 | Notification | `#notification` (géré par `public/classes/ui/Notification.js`) |
@@ -114,10 +114,10 @@ Modes spéciaux (modeStack) : `item-edition` (champs input/select), `popup-selec
 
 ## Règles de dev à respecter
 
-- **TDD strict** : test RED → code → GREEN
+- **TDD strict** : test → RED → code → GREEN
 - Import tests : toujours depuis `__setup__.js`, jamais `@playwright/test`
 - `installFixtures('nom')` dans `beforeEach` ou au niveau module
-- `Lister`/`Item` : ne jamais dupliquer dans une sous-classe ce qui existe dans la base
+- `Lister`/`Item` : ne jamais dupliquer dans une sous-classe ce qui existe ou devrait exister dans la base
 - Le `type` d’un `Item` (`Project`, `Event`, `Brin`, `Perso`, `Script`) n’est JAMAIS la classe spécialisée minorisée de l’item. Le type de `Project` n’est JAMAIS `perso`, le `type` d’un `Event` n’est JAMAIS `event`, le `type` d’un `Perso` n’est JAMAIS `perso`. Voir les [types possibles] dans le document des modèles.
 - Loi de Déméter : déléguer via méthode statique, ne pas câbler les détails d'une autre classe
 - Séparation des responsabilités : FooterHelp, PopupSelect, ShortcutsPanel, Notification = classes dédiées

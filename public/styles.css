@@ -769,6 +769,7 @@ body {
   transform: translate(-50%, -50%);
   z-index: 300;
   min-width: 320px;
+  min-height: 200px;
   background: var(--bg, #faf7f2);
   border: 1px solid var(--line, #ccc);
   border-radius: 8px;

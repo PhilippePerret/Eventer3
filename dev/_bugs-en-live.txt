@@ -1,20 +1,32 @@
-# Eventer3 — bugs en live
+PROJET DE TEST : 
+NIVEAU 0    NIVEAU 1    NIVEAU 2
+mon-projet
+            |-— Acte I
+            |       |- Séquence 1 de Acte I
+            |- Acte II
+            |- Acte III
+                    |- Séquence 1 de Acte III
 
-J'ai un projet avec 3 actes, les actes 1 et 3 on une séquence
-Acte I -> Séquence 1 de Acte I
-Acte II
-Acte III ->  Séquence 1 de Acte III
+J'affiche le niveau 2 (correct) :
+mon-projet
+            |-— Acte I
+            |       |- Séquence 1 de Acte I
+            |- Acte II
+            |       |- Acte II +1               [virtuel]
+            |- Acte III
+                    |- Séquence 1 de Acte III
 
-Quand je suis sur "Séquence 1 de Acte I" et que je fais ⌘+m je devrais obtenir : 
-"Séquence 1 de Acte I"
-"Acte II + 1"
-"Séquence 1 de Acte III"
+BUG : je n'arrive pas à éditer "Séquence 1 de Acte III" <== TEST
 
-OR J'OBTIENS : 
-"Acte I + 1"
-"Acte II + 1"
-"Acte III + 1"
+Je consolide (ok au niveau de l'affichage)
+mon-projet
+            |-— Acte I
+            |       |- Séquence 1 de Acte I
+            |- Acte II
+            |       |- Acte II +1               [réel]
+            |- Acte III
+                    |- Séquence 1 de Acte III
 
-!!!!! Absurde
+- BUG : l'item "Acte II +1" créé n'est pas persistant <== TEST
 
-Note : Dans le cas de l'affichage par niveau, le fil d'Ariane devrait indiquer le niveau
+- IMPROVE : Fenêtre des outils trop petite en hauteur

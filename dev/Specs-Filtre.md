@@ -2,7 +2,9 @@
 
 Le ***filtre*** est une fonctionnalité très puissante d’Eventer et essentiel. C’est elle, par exemple qui va permettre de se concentrer sur un brin particulier de l’histoire (p.e. une intrigue).
 
-Le filtre fonctionne sur les deux modes de listing : 
+Le filtre doit fonctionner pour tout : Project, Brin, Perso et Event (=> logique dans `Lister` et `Item`, pas dans les classes spécialisées, à part pour du détail).
+
+Avec les `event`s, Le filtre fonctionne sur les deux modes d’affichage des listings : 
 
 1. le mode normal (ou « imbriqué »)
 2. le mode par niveau (ou « complet »)
@@ -34,3 +36,10 @@ Conformément à toute l’application, tous les `Lister`s (ProjectLister, Event
 | `/`, `/`, `p`   | Annulation de la condition sur les personnages dans le filtrage cumulatif.<br />+ tous les badges se retirent de la ligne supérieure de filtre. |
 | `/`,  `/`,  `/` | Annule toutes les conditions de filtrage : la liste complète des events est affichée. |
 
+---
+
+## Implémentation
+
+Au niveau de l’implémentation du code, voir la grosse réflexion qui a été faite.
+
+**Principe absolu : Aucun état ne doit être relevé dans le DOM.**
