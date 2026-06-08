@@ -18,7 +18,7 @@ test("la touche n désélectionne l'item courant", async ({ page }) => {
   await page.keyboard.press('n')
 
   console.log("-> vérification : item 0 n'est plus sélectionné")
-  await expect(items.nth(1)).not.toHaveClass(/selected/)
+  await expect(items.nth(0)).not.toHaveClass(/selected/)
 
   console.log('\n=== FIN TEST DÉSÉLECTION À LA TOUCHE n ===\n')
 

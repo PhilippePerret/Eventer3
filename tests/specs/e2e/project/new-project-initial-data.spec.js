@@ -13,7 +13,7 @@ async function createProject(page, title) {
   await titleInput.fill(title)
   await page.keyboard.press('Enter')
   await page.waitForLoadState('networkidle')
-  const idText = await page.locator('.project-item').nth(0).locator('.project-item__id').textContent()
+  const idText = await page.locator('.project-item').nth(1).locator('.project-item__id').textContent()
   return idText.trim()
 }
 

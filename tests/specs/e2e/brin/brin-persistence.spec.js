@@ -24,7 +24,7 @@ test("brin créé persiste après rechargement de la page", async ({ page }) => 
   await page.keyboard.press('Enter')
 
   // Vérification immédiate
-  await expect(page.locator('.brin-item').nth(0)).toContainText('Brin persistant')
+  await expect(page.locator('.brin-item').nth(1)).toContainText('Brin persistant')
 
   // Rechargement de la page
   await page.reload()
@@ -54,7 +54,7 @@ test("brin créé a bien un badge affiché après rechargement", async ({ page }
   await page.keyboard.press('Enter')
 
   // Attendre que le DOM reflète la création et que le save réseau soit terminé
-  await expect(page.locator('.brin-item').nth(0)).toContainText('Nouveau Brin')
+  await expect(page.locator('.brin-item').nth(1)).toContainText('Nouveau Brin')
   await page.waitForLoadState('networkidle')
 
   // Recharger
@@ -65,8 +65,8 @@ test("brin créé a bien un badge affiché après rechargement", async ({ page }
   await page.keyboard.press('b')
   await expect(page.locator('#brin-panel')).toBeVisible()
 
-  // Le premier brin (inséré en tête) doit avoir un badge non vide
-  const firstBrin = page.locator('.brin-item').nth(0)
-  await expect(firstBrin).toContainText('Nouveau Brin')
-  await expect(firstBrin.locator('[data-property="badge"]')).not.toHaveText('')
+  // Le second brin (inséré après le premier) doit avoir un badge non vide
+  const newBrin = page.locator('.brin-item').nth(1)
+  await expect(newBrin).toContainText('Nouveau Brin')
+  await expect(newBrin.locator('[data-property="badge"]')).not.toHaveText('')
 })

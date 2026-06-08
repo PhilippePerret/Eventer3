@@ -272,7 +272,7 @@ test("créer un perso avec patronyme → badge calculé depuis le patronyme", as
   // badge vide : laisser auto-calc
   await page.keyboard.press('Enter')
   // 'Valjean' sans espaces → 'VA'
-  await expect(page.locator('.perso-item').nth(0).locator('.perso-item__badge')).toHaveText('VA')
+  await expect(page.locator('.perso-item').nth(1).locator('.perso-item__badge')).toHaveText('VA')
 })
 
 test("créer un perso sans patronyme → badge calculé depuis le titre", async ({ page }) => {
@@ -281,7 +281,7 @@ test("créer un perso sans patronyme → badge calculé depuis le titre", async 
   await page.locator('.perso-item.selected input[name="title"]').fill('Cosette')
   // pas de patronyme, badge vide
   await page.keyboard.press('Enter')
-  await expect(page.locator('.perso-item').nth(0).locator('.perso-item__badge')).toHaveText('CO')
+  await expect(page.locator('.perso-item').nth(1).locator('.perso-item__badge')).toHaveText('CO')
 })
 
 test("badge unique si collision avec un badge existant", async ({ page }) => {
@@ -290,7 +290,7 @@ test("badge unique si collision avec un badge existant", async ({ page }) => {
   // 'Cyrus' → 'CY' → collision avec c1 → doit être différent
   await page.locator('.perso-item.selected input[name="title"]').fill('Cyrus')
   await page.keyboard.press('Enter')
-  const badgeEl = page.locator('.perso-item').nth(0).locator('.perso-item__badge')
+  const badgeEl = page.locator('.perso-item').nth(1).locator('.perso-item__badge')
   await expect(badgeEl).not.toHaveText('CY')
   const badge = await badgeEl.textContent()
   expect(badge.trim().length).toBe(2)
@@ -313,7 +313,7 @@ test("créer un perso : Enter valide et l'ajoute à la liste", async ({ page }) 
   await page.locator('.perso-item.selected input[name="title"]').fill('Nouveau perso')
   await page.keyboard.press('Enter')
   await expect(page.locator('.perso-item')).toHaveCount(5)
-  await expect(page.locator('.perso-item').nth(0).locator('.perso-item__title')).toHaveText('Nouveau perso')
+  await expect(page.locator('.perso-item').nth(1).locator('.perso-item__title')).toHaveText('Nouveau perso')
 })
 
 test("créer un perso : Escape annule, liste inchangée", async ({ page }) => {
@@ -367,7 +367,7 @@ test("persistance : perso créé survit au rechargement", async ({ page }) => {
   await goToEventLister(page)
   await page.keyboard.press('p')
   await expect(page.locator('.perso-item')).toHaveCount(5)
-  await expect(page.locator('.perso-item').nth(0).locator('.perso-item__title')).toHaveText('Perso persisté')
+  await expect(page.locator('.perso-item').nth(1).locator('.perso-item__title')).toHaveText('Perso persisté')
 })
 
 test("persistance : cochage direct survit au rechargement", async ({ page }) => {
@@ -389,7 +389,7 @@ test("après création (Enter), le nouveau perso est sélectionné", async ({ pa
   await page.keyboard.press('n')
   await page.locator('.perso-item.selected input[name="title"]').fill('Nouveau')
   await page.keyboard.press('Enter')
-  await expect(page.locator('.perso-item').nth(0)).toHaveClass(/selected/)
+  await expect(page.locator('.perso-item').nth(1)).toHaveClass(/selected/)
 })
 
 // ─── Sélection après édition ──────────────────────────────────────────────────

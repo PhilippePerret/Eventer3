@@ -22,8 +22,8 @@ test("nouveau brin : il est sélectionné juste après création", async ({ page
   const titleInput = page.locator('.brin-item.selected input[name="title"]')
   await titleInput.fill('Brin créé')
   await page.keyboard.press('Enter')
-  // Le nouveau brin (inséré en tête) doit être sélectionné
-  await expect(page.locator('.brin-item').nth(0)).toHaveClass(/selected/)
+  // Le nouveau brin (inséré après le premier) doit être sélectionné
+  await expect(page.locator('.brin-item').nth(1)).toHaveClass(/selected/)
 })
 
 test("nouveau brin : il s'affiche avec les bonnes classes CSS (panel-row brin-row)", async ({ page }) => {
@@ -32,7 +32,7 @@ test("nouveau brin : il s'affiche avec les bonnes classes CSS (panel-row brin-ro
   const titleInput = page.locator('.brin-item.selected input[name="title"]')
   await titleInput.fill('Brin CSS')
   await page.keyboard.press('Enter')
-  const newBrin = page.locator('.brin-item').nth(0)
+  const newBrin = page.locator('.brin-item').nth(1)
   await expect(newBrin).toHaveClass(/panel-row/)
   await expect(newBrin).toHaveClass(/brin-row/)
 })
@@ -55,6 +55,6 @@ test("nouveau brin : sa couleur est différente de celle du brin précédent", a
   await page.locator('.brin-item.selected input[name="title"]').fill('Nouveau brin couleur')
   await page.keyboard.press('Enter')
   // La couleur du nouveau brin doit être différente
-  const newBrinColor = await page.locator('.brin-item').nth(0).locator('input[type="color"]').inputValue()
+  const newBrinColor = await page.locator('.brin-item').nth(1).locator('input[type="color"]').inputValue()
   expect(newBrinColor).not.toBe(lastColor)
 })

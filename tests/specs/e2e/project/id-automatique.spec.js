@@ -25,7 +25,7 @@ test("la création d'un nouveau projet calcule l'id depuis le titre", async ({ p
   await page.keyboard.press('Enter')
   await page.waitForLoadState('networkidle')
 
-  const newItem = page.locator('.project-item').nth(0)
+  const newItem = page.locator('.project-item').nth(1)
   await expect(newItem.locator('.project-item__id')).toHaveText('mon-nouveau-projet')
 })
 
@@ -44,7 +44,7 @@ test("la création d'un nouveau projet permet de définir un identifiant personn
   await page.keyboard.press('Enter')
   await page.waitForLoadState('networkidle')
 
-  const newItem = page.locator('.project-item').nth(0)
+  const newItem = page.locator('.project-item').nth(1)
   await expect(newItem.locator('.project-item__id')).toHaveText('mon-film')
 })
 
@@ -69,9 +69,9 @@ test("persistance : l'identifiant calculé depuis le titre survit au rechargemen
   await page.keyboard.press('Enter')
   await page.waitForLoadState('networkidle')
 
-  const idText = await page.locator('.project-item').nth(0).locator('.project-item__id').textContent()
+  const idText = await page.locator('.project-item').nth(1).locator('.project-item__id').textContent()
   expect(idText.trim()).toBe('projet-persistant')
 
   await page.reload()
-  await expect(page.locator('.project-item').nth(0).locator('.project-item__id')).toHaveText('projet-persistant')
+  await expect(page.locator('.project-item').nth(1).locator('.project-item__id')).toHaveText('projet-persistant')
 })

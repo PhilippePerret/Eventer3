@@ -5,7 +5,7 @@ test.beforeEach(() => {
   installFixtures('many-events')
 })
 
-test("dans un EventLister, la touche « n » crée un nouvel Event avant celui sélectionné", async ({ page }) => {
+test("dans un EventLister, la touche « n » crée un nouvel Event après celui sélectionné", async ({ page }) => {
 
   await page.goto('/')
 
@@ -39,9 +39,9 @@ test("dans un EventLister, la touche « n » crée un nouvel Event avant celui s
   const items = page.locator('.event-item')
   await expect(items).toHaveCount(4)
 
-  console.log('-> vérification : le nouvel évènement est avant le premier')
-  await expect(items.nth(0)).toContainText('Nouvel évènement test')
-  await expect(items.nth(1)).toContainText(firstEventTitle.trim())
+  console.log('-> vérification : le nouvel évènement est après le premier')
+  await expect(items.nth(0)).toContainText(firstEventTitle.trim())
+  await expect(items.nth(1)).toContainText('Nouvel évènement test')
 
   console.log('\n=== FIN TEST CRÉATION NOUVEL EVENT ===\n')
 

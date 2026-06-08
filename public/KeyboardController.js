@@ -95,7 +95,7 @@ export default class KeyboardController {
 
     // Sur Mac, Alt+lettre produit event.key modifié ('˜','µ'…) — event.code est fiable
     if (event.altKey && !event.metaKey && !event.ctrlKey && event.code === 'KeyN') {
-      this.activeLister.createNewItemAfter?.()
+      this.activeLister.createNewItem?.()
       event.preventDefault()
       return
     }
@@ -112,10 +112,10 @@ export default class KeyboardController {
       case 'n':
         if (event.metaKey || event.ctrlKey) return
         if (event.altKey) {
-          this.activeLister.createNewItemAfter?.()
+          this.activeLister.createNewItem?.()
         } else {
-          LOG.m(2, 'Create new item')
-          this.activeLister.createNewItem()
+          LOG.m(2, 'Create new item after')
+          this.activeLister.createNewItemAfter?.()
         }
         event.preventDefault()
         return

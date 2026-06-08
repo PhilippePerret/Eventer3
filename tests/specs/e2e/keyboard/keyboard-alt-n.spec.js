@@ -13,7 +13,7 @@ async function pressAltNMac(page) {
 test.describe('Alt+n dans la liste des projets', () => {
   test.beforeEach(() => installFixtures('many-projects'))
 
-  test("Alt+n crée un nouvel item EN DESSOUS de l'item sélectionné", async ({ page }) => {
+  test("Alt+n crée un nouvel item AU-DESSUS de l'item sélectionné", async ({ page }) => {
     await page.goto('/')
     await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
 
@@ -23,13 +23,13 @@ test.describe('Alt+n dans la liste des projets', () => {
     await page.keyboard.press('Alt+n')
 
     await expect(items).toHaveCount(4)
-    await expect(items.nth(0)).toContainText('Projet A')
-    await expect(items.nth(1)).toHaveClass(/selected/)
-    await expect(items.nth(1).locator('input[name="title"]')).toBeVisible()
+    await expect(items.nth(1)).toContainText('Projet A')
+    await expect(items.nth(0)).toHaveClass(/selected/)
+    await expect(items.nth(0).locator('input[name="title"]')).toBeVisible()
     await expect(items.nth(2)).toContainText('Projet B')
   })
 
-  test("⌥n Mac (key='˜') crée un item EN DESSOUS — comportement clavier réel", async ({ page }) => {
+  test("⌥n Mac (key='˜') crée un item AU-DESSUS — comportement clavier réel", async ({ page }) => {
     await page.goto('/')
     await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
     await expect(page.locator('.project-item').nth(0)).toHaveClass(/selected/)
@@ -38,15 +38,15 @@ test.describe('Alt+n dans la liste des projets', () => {
 
     const items = page.locator('.project-item')
     await expect(items).toHaveCount(4)
-    await expect(items.nth(1)).toHaveClass(/selected/)
-    await expect(items.nth(1).locator('input[name="title"]')).toBeVisible()
+    await expect(items.nth(0)).toHaveClass(/selected/)
+    await expect(items.nth(0).locator('input[name="title"]')).toBeVisible()
   })
 })
 
 test.describe("Alt+n dans un EventLister", () => {
   test.beforeEach(() => installFixtures('many-events'))
 
-  test("Alt+n crée un event EN DESSOUS de l'event sélectionné", async ({ page }) => {
+  test("Alt+n crée un event AU-DESSUS de l'event sélectionné", async ({ page }) => {
     await page.goto('/')
     await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
     await page.keyboard.press('ArrowRight')
@@ -57,13 +57,13 @@ test.describe("Alt+n dans un EventLister", () => {
 
     await page.keyboard.press('Alt+n')
 
-    await expect(items.nth(0)).toContainText('Évènement un')
-    await expect(items.nth(1)).toHaveClass(/selected/)
-    await expect(items.nth(1).locator('input[name="title"]')).toBeVisible()
+    await expect(items.nth(1)).toContainText('Évènement un')
+    await expect(items.nth(0)).toHaveClass(/selected/)
+    await expect(items.nth(0).locator('input[name="title"]')).toBeVisible()
     await expect(items.nth(2)).toContainText('Évènement deux')
   })
 
-  test("⌥n Mac (key='˜') crée un event EN DESSOUS — comportement clavier réel", async ({ page }) => {
+  test("⌥n Mac (key='˜') crée un event AU-DESSUS — comportement clavier réel", async ({ page }) => {
     await page.goto('/')
     await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
     await page.keyboard.press('ArrowRight')
@@ -73,16 +73,16 @@ test.describe("Alt+n dans un EventLister", () => {
     await pressAltNMac(page)
 
     const items = page.locator('.event-item')
-    await expect(items.nth(0)).toContainText('Évènement un')
-    await expect(items.nth(1)).toHaveClass(/selected/)
-    await expect(items.nth(1).locator('input[name="title"]')).toBeVisible()
+    await expect(items.nth(1)).toContainText('Évènement un')
+    await expect(items.nth(0)).toHaveClass(/selected/)
+    await expect(items.nth(0).locator('input[name="title"]')).toBeVisible()
   })
 })
 
 test.describe("Alt+n dans un BrinLister", () => {
   test.beforeEach(() => installFixtures('with-brins'))
 
-  test("Alt+n crée un brin EN DESSOUS du brin sélectionné", async ({ page }) => {
+  test("Alt+n crée un brin AU-DESSUS du brin sélectionné", async ({ page }) => {
     await page.goto('/')
     await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
     await page.keyboard.press('ArrowRight')
@@ -95,7 +95,7 @@ test.describe("Alt+n dans un BrinLister", () => {
 
     await page.keyboard.press('Alt+n')
 
-    await expect(brins.nth(1)).toHaveClass(/selected/)
-    await expect(brins.nth(1).locator('input[name="title"]')).toBeVisible()
+    await expect(brins.nth(0)).toHaveClass(/selected/)
+    await expect(brins.nth(0).locator('input[name="title"]')).toBeVisible()
   })
 })

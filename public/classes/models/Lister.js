@@ -450,6 +450,7 @@ export default class Lister {
     if (this.__isVirtual) {
       const newLister = await ListerRepository.createLister({ type: this.type, parent_item_id: this.parentItem.id })
       this.id = newLister.id
+      this.parentItem.lister_id = this.id
       delete this.__isVirtual
     }
     const payload = { title: item.title, type: item.type }

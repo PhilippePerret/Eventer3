@@ -53,7 +53,7 @@ test("→ sur un projet sans lister : crée l'éditeur, Enter confirme, n crée 
 
   console.log('-> vérification : project-b a maintenant un lister')
 
-  console.log('-> appui sur n : doit créer un second event au-dessus')
+  console.log('-> appui sur n : doit créer un second event en dessous')
   await page.keyboard.press('n')
   const secondInput = page.locator('.event-item input[name="title"]')
   await expect(secondInput).toBeVisible()
@@ -64,8 +64,8 @@ test("→ sur un projet sans lister : crée l'éditeur, Enter confirme, n crée 
 
   console.log('-> vérification : deux events dans le bon ordre')
   await expect(page.locator('.event-item')).toHaveCount(2)
-  await expect(page.locator('.event-item').nth(0)).toContainText('Mon second event')
-  await expect(page.locator('.event-item').nth(1)).toContainText('Mon premier event')
+  await expect(page.locator('.event-item').nth(0)).toContainText('Mon premier event')
+  await expect(page.locator('.event-item').nth(1)).toContainText('Mon second event')
 
   console.log('\n=== FIN TEST ===\n')
 

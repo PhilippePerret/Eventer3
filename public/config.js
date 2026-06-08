@@ -2,8 +2,8 @@ window.APP_UI_MODES = {
   projects: [
     ['↑ ↓', 'choisir'],
     ['⏎', 'renommer'],
-    ['n', 'nouveau projet'],
-    ['⌥n', 'nouveau projet sous le projet courant'],
+    ['n', 'nouveau projet après'],
+    ['⌥n', 'nouveau projet avant'],
     ['⌘↑ ⌘↓', 'déplacer'],
     ['⌦', 'supprimer'],
     ['→', 'ouvrir']
@@ -11,8 +11,8 @@ window.APP_UI_MODES = {
   listerRoot: [
     ['↑ ↓', 'choisir'],
     ['⏎', 'éditer'],
-    ['n', 'nouveau'],
-    ['⌥n', 'nouveau sous le courant'],
+    ['n', 'nouveau après'],
+    ['⌥n', 'nouveau avant'],
     ['⌘c', 'copier'],
     ['⌘x', 'couper'],
     ['⌘v', 'coller avant'],

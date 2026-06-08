@@ -153,7 +153,7 @@ test("créer un brin : Enter valide et l'ajoute à la liste", async ({ page }) =
   await titleInput.fill('Nouveau brin')
   await page.keyboard.press('Enter')
   await expect(page.locator('.brin-item')).toHaveCount(3)
-  await expect(page.locator('.brin-item').nth(0).locator('.brin-item__title')).toHaveText('Nouveau brin')
+  await expect(page.locator('.brin-item').nth(1).locator('.brin-item__title')).toHaveText('Nouveau brin')
 })
 
 test("créer un brin : Escape annule, liste inchangée", async ({ page }) => {
@@ -242,7 +242,7 @@ test("persistance : brin créé survit au rechargement", async ({ page }) => {
   await goToEventLister(page)
   await page.keyboard.press('b')
   await expect(page.locator('.brin-item')).toHaveCount(3)
-  await expect(page.locator('.brin-item').nth(0).locator('.brin-item__title')).toHaveText('Brin persisté')
+  await expect(page.locator('.brin-item').nth(1).locator('.brin-item__title')).toHaveText('Brin persisté')
 })
 
 test("persistance : brin édité survit au rechargement", async ({ page }) => {
