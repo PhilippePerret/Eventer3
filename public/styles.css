@@ -369,7 +369,7 @@ body {
   top: 0;
   left: 13vw;
   bottom: 0;
-  width: min(55vw, 720px);
+  width: min(55vw, 900px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -499,7 +499,7 @@ body {
 }
 
 .brin-row {
-  grid-template-columns: 30px 34px 70px minmax(220px, 1fr) 180px minmax(180px, .7fr) minmax(160px, .7fr);
+  grid-template-columns: 30px 34px 70px minmax(220px, 1fr) 180px auto minmax(160px, .7fr);
 }
 
 .perso-row {
@@ -580,7 +580,7 @@ body {
 
 .perso-row.selected.checked .panel-check {
   opacity: 1;
-  color: #00a832;
+  color: white;
 }
 
 .perso-row.inherited .panel-check {

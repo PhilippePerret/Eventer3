@@ -66,14 +66,14 @@ test("le perso sélectionné a un fond coloré visible (pas transparent)", async
   await expect(page.locator('.perso-item').nth(0)).toHaveCSS('background-color', 'rgb(77, 158, 254)')
 })
 
-test("la coche d'un perso coché reste verte même sélectionné (pas blanche)", async ({ page }) => {
+test("la coche d'un perso coché sélectionné est blanche (pas verte)", async ({ page }) => {
   await openPersoPanel(page)
   // c1 est sélectionné (index 0) ET coché (direct sur e1)
   const c1 = page.locator('.perso-item').nth(0)
   await expect(c1).toHaveClass(/selected/)
   await expect(c1).toHaveClass(/checked/)
-  // La coche doit rester verte (rgb(0, 168, 50)), pas blanche
-  await expect(c1.locator('.panel-check')).toHaveCSS('color', 'rgb(0, 168, 50)')
+  // Comme pour tous les items sélectionnés, la coche est blanche
+  await expect(c1.locator('.panel-check')).toHaveCSS('color', 'rgb(255, 255, 255)')
 })
 
 // ─── Affichage ───────────────────────────────────────────────────────────────
@@ -207,13 +207,15 @@ test("cocher c3 depuis le panneau perso de e1 ajoute son avatar sur la ligne de 
   await expect(eventEl.locator('.event-persos-marks')).toContainText('🎭')
 })
 
-// ─── Badge et avatar : colonnes séparées ─────────────────────────────────────
+// ─── Badge et avatar : avatar gagne sur badge ────────────────────────────────
 
-test("la colonne badge affiche le badge (2 lettres), pas l'avatar", async ({ page }) => {
+test("la colonne badge affiche l'avatar si disponible, sinon le badge", async ({ page }) => {
   await openPersoPanel(page)
-  // c3 a avatar 🎭 ET badge CH → badge column doit montrer CH (pas 🎭)
-  await expect(page.locator('.perso-item').nth(2).locator('.perso-item__badge')).toHaveText('CH')
-  await expect(page.locator('.perso-item').nth(3).locator('.perso-item__badge')).toHaveText('VA')
+  // c3 a avatar 🎭 ET badge CH → badge circle doit montrer 🎭 (avatar gagne)
+  await expect(page.locator('.perso-item').nth(2).locator('.perso-item__badge')).toHaveText('🎭')
+  await expect(page.locator('.perso-item').nth(3).locator('.perso-item__badge')).toHaveText('👑')
+  // c1, c2 sans avatar → badge text
+  await expect(page.locator('.perso-item').nth(0).locator('.perso-item__badge')).not.toHaveText('🎭')
 })
 
 test("la colonne avatar affiche l'avatar si défini, sinon '—'", async ({ page }) => {
@@ -239,6 +241,7 @@ test("si perso assigné à l'event a un avatar, la ligne event affiche l'avatar 
 test("les avatars déjà utilisés ne sont pas proposés lors du choix pour un autre perso", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('Enter') // éditer c1
+  await expect(page.locator('.perso-item.selected input[name="title"]')).toBeFocused()
   await page.keyboard.press('Tab') // → patronyme
   await page.keyboard.press('Tab') // → badge
   await page.keyboard.press('Tab') // → avatar trigger

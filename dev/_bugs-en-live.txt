@@ -12,4 +12,3 @@ Il reste des gros bugs (AJOUTER DES TESTS !!!)
 (MAIS SI JE RECHARGE L'APPLICATION et que je vais dans le projet, ils sont là -- dont ils sont bien persistants et au bon endroit)
 
 Changement de comportement demandé : "n" => création de l'item APRÈS l'item sélectionné, pas avant (modifier les TESTS) alt + n => création AVANT . DONC : Inverser le comportement : n <-> alt+n
-

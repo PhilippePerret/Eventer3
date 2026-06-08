@@ -100,7 +100,7 @@ export default class Perso extends Item {
     const mark = document.createElement('div')
     mark.className = 'panel-badge perso-item__badge'
     mark.dataset.property = 'badge'
-    mark.textContent = this.badge ?? '--'
+    mark.textContent = this.displayMark
 
     const title = document.createElement('div')
     title.className = 'perso-item__title'
