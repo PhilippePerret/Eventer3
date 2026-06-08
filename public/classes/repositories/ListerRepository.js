@@ -3,7 +3,7 @@ import { raise } from '../../system/Error.js'
 export default class ListerRepository {
 
   static async loadDefinition(lister) {
-    const response = await fetch(`/api/listers/${lister.id}`)
+    const response = await fetch(`/api/listers/${lister.id}`, { cache: 'no-store' })
     if (!response.ok) return
     const data = await response.json()
     if (data.item_ids)        lister.item_ids        = data.item_ids

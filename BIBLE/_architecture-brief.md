@@ -27,9 +27,15 @@
 
 ```
 Lister
-├── ProjectLister   (uiModes: ['projects'])
-├── EventLister     (uiModes: ['listerRoot','eventsRoot'])  childListerClass: EventLister
-└── BrinLister      (uiModes: ['listerRoot','modalPanel'])  rendu dans #brin-panel, pas #main-panel
+├── ProjectLister   (uiModes: ['projects']) ???
+├── EventLister     (uiModes: ['listerRoot','eventsRoot']) childListerClass: EventLister ???
+└── BrinLister      (uiModes: ['listerRoot','modalPanel'])  ??? rendu dans #brin-panel, pas #main-panel
+
+Lister
+├── ProjectLister    items: Project
+├── EventLister      items: Event
+├── BrinLister       items: Brin
+└── PersoLister      items: Perso
 
 Item
 ├── Project    idPrefix: null  (id = slug du titre)
@@ -42,24 +48,7 @@ Item
 
 ## KeyboardController — dispatch (mode normal)
 
-| Touche | Action |
-|---|---|
-| `Enter` | `activeLister.editSelectedItem()` |
-| `n` | `createNewItem()` (avant) / `createNewItemAfter()` si `⌥n` |
-| `Space` | `toggleSelectedItemChecked()` |
-| `b` | `activeLister.openBrinPanel()` |
-| `ArrowRight` | `enterSelectedItem()` |
-| `ArrowLeft` | `leaveToParent()` |
-| `ArrowDown/Up` | `selectNextItem()` / `selectPreviousItem()` |
-| `⌘ArrowDown/Up` | `moveSelectedItemDown/Up()` |
-| `Escape` | `activeLister.close()` |
-| `⌘Enter` | ferme `ShortcutsPanel` si visible, sinon `activeLister.close()` |
-| `?` | ouvre `ShortcutsPanel` — **géré AVANT** `if (!this.activeLister) return` (sinon timing Playwright fail) |
-| `⌘ArrowDown/Up` | si `shortcutsPanel.isVisible` → `nextContext/previousContext()`, sinon `moveSelectedItemDown/Up()` |
-| `Delete` | **À implémenter** → `deleteSelectedItem()` |
-| `⌘c` | **À implémenter** → copie item sélectionné (sans id) |
-| `⌘x` | **À implémenter** → coupe item sélectionné (avec id) ; interdit sur dernier item |
-| `⌘v` | **À implémenter** → colle au-dessus sélection ; cross-panel même type OK ; cross-type bloqué |
+Cf. [Specs-Keyboard.md](../Specs-Keyboard.md)
 
 Modes spéciaux (modeStack) : `item-edition` (champs input/select), `popup-select`.  
 Édition contentEditable : `activeLister.editing === true` → `_handleEditingKeyDown`.
@@ -87,7 +76,7 @@ Modes spéciaux (modeStack) : `item-edition` (champs input/select), `popup-selec
 | `with-brins` | project-a, events e1/e2, brins b1 (MON, non-coché) / b2 (AUT, coché pour e1) |
 | `deep-events` | events imbriqués (pour tests enter/leave) |
 | `projects-edition` | pour tests édition projets |
-| `two-projects-events` | project-a (e1/e2/e3 lister_id=2), project-b (e4/e5 lister_id=3) — pour tests cross-panel paste |
+| <span style="white-space:nowrap;">`two-projects-events`</span> | project-a (e1/e2/e3 lister_id=2), project-b (e4/e5 lister_id=3) — pour tests cross-panel paste |
 
 ---
 

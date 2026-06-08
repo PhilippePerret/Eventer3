@@ -1,4 +1,6 @@
-export default class Panel {
+import { SHORTCUTS } from '../../constants.js'
+
+class Panel {
   constructor() {
     this.el = document.querySelector(this.id)
     this.contextIndex = 0
@@ -17,12 +19,11 @@ export default class Panel {
   }
 
 }
-import { SHORTCUTS } from '../../constants.js'
 
 export default class ShortcutsPanel extends Panel {
 
   constructor() {
-    this.super()
+    super()
     this.contexts = SHORTCUTS
   }
 

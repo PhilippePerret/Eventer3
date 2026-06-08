@@ -100,15 +100,14 @@ A global `KeyboardController` manages keybindings based on current **mode**:
 
 1. **TDD Strict**: Write tests first.
 2. **Verbose Logging**: Enabled with `LOG.on(level)` and `LOG.m(level, message, data)`
-3. **Avoid Over-Abstraction**: If functionality can be handled by existing `Lister` or `Item`, don’t add a new
-abstraction.
+3. **Avoid Over-Abstraction**: If functionality can be handled by existing `Lister` or `Item`, don’t add a new abstraction.
 
 ---
 
 ## 📁 File System Layout
 
 ```
-./CLAUDE.md          # This documentation file
+./CLAUDE.md          # Claude documentation file
 ./app.rb             # Main Sinatra app
 ./lib/               # Backend models and logic
 ./public/            # Frontend assets
@@ -128,8 +127,7 @@ abstraction.
 
 ## ✅ Summary
 
-Eventer3 is a **simple yet powerful** tool for organizing narrative content through nested lists and keyboard
-interaction. It’s ideal for writers, screenwriters, or creators working on long-form storytelling projects.
+Eventer3 is a **simple yet powerful** tool for organizing narrative content through nested lists and keyboard interaction. It’s ideal for writers, screenwriters, or creators working on long-form storytelling projects.
 
 It emphasizes:
 - Local-first design

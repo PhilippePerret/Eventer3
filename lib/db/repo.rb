@@ -75,6 +75,26 @@ module DB
 
     # ── Méthodes API ────────────────────────────────────────────────
 
+    # TESTS ONLY — non utilisé par le frontend
+    def self.find_item_lister(data_dir, item_id)
+      with_db(data_dir) do |db|
+        pp_row = db.execute("SELECT * FROM project_props WHERE item_id = ? LIMIT 1", [item_id]).first
+        if pp_row && pp_row['lister_id']
+          lister_row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [pp_row['lister_id']]).first
+          next nil unless lister_row
+          result = { id: lister_row['id'], item_ids: JSON.parse(lister_row['item_ids'] || '[]'), updated_at: lister_row['updated_at'] }
+          brin_ids = JSON.parse(pp_row['brin_ids'] || '[]') rescue []
+          result[:brins_lister_id] = "#{item_id}-brins" unless brin_ids.empty?
+          next result
+        end
+        ep_row = db.execute("SELECT lister_id FROM event_props WHERE item_id = ? LIMIT 1", [item_id]).first
+        next nil unless ep_row && ep_row['lister_id']
+        lister_row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [ep_row['lister_id']]).first
+        next nil unless lister_row
+        { id: lister_row['id'], item_ids: JSON.parse(lister_row['item_ids'] || '[]'), updated_at: lister_row['updated_at'] }
+      end
+    end
+
     def self.update_lister(data_dir, id, fields)
       with_db(data_dir) do |db|
         if fields.key?('item_ids')
@@ -372,7 +392,7 @@ module DB
       rows = db.execute(<<~SQL, item_ids)
         SELECT i.id, i.title, i.type, i.color, i.checked, i.duration, i.created_at, i.updated_at,
                pp.active, pp.state AS project_state,
-               ep.state AS st,
+               ep.state AS state,
                CASE WHEN ep.item_id IS NOT NULL THEN ep.perso_ids ELSE pp.perso_ids END AS perso_ids,
                CASE WHEN ep.item_id IS NOT NULL THEN ep.brin_ids  ELSE pp.brin_ids  END AS brin_ids,
                COALESCE(bp.badge, pers.badge) AS badge,
