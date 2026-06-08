@@ -34,7 +34,8 @@ window.APP_UI_MODES = {
     ['␛', 'annuler']
   ],
   modalPanel: [
-    ['⌘⏎', 'fermer']
+    ['⌘⏎', 'fermer'],
+    ['⌥↓ ⌥↑', 'suivant/précédent (fond)']
   ]
 }
 

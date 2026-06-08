@@ -188,7 +188,7 @@
   - [ ] Ce raccourci doit être documenté en footer quand le panneau des brins et des personnages est ouvert.
 
 - [ ] Quand le panneau des personnages est ouvert (sur le panneau des brins), on doit pouvoir sélectionner les brins (en dessous) à l’aide de alt+↓/↑
-  - [ ] Ce raccourci doit être documenté
+  - [ ] Ce raccourci doit être documenté en footer quand le panneau des personnages est ouvert surtout le panneau des brins / ou sur les events
 
 
 ---

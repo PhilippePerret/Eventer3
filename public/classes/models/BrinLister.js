@@ -58,7 +58,19 @@ export default class BrinLister extends Lister {
 
   get uiModes() { return ['listerRoot', 'modalPanel'] }
 
+  get backgroundLister() { return this.eventLister }
+
   get selectedEvent() { return this.eventLister.items[this.eventLister.selectedIndex] }
+
+  onBackgroundSelectionChange() {
+    const ev = this.selectedEvent
+    const titleEl = this.domContainer?.querySelector('.panel-title')
+    if (titleEl) titleEl.textContent = `Brins · ${ev?.title ?? this.eventLister.parentItem?.title ?? ''}`
+    this.domItems.forEach((el, idx) => {
+      el.classList.toggle('checked', this.checked(this.items[idx]))
+    })
+    this._updateEventBadges(ev)
+  }
 
   async loadItems() {
     await super.loadItems()

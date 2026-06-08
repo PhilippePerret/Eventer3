@@ -58,6 +58,22 @@ export default class PersoLister extends Lister {
 
   get uiModes() { return ['listerRoot', 'modalPanel'] }
 
+  get backgroundLister() { return this.parentLister }
+
+  async onBackgroundSelectionChange() {
+    if (!this._isFromBrin) {
+      const event = this.contextItem
+      this._inheritedPersoIds = await PersoLister._loadInheritedPersoIds(event, this.parentLister)
+    }
+    const titleEl = this.domContainer?.querySelector('.panel-title')
+    if (titleEl) titleEl.textContent = `Personnages · ${this.contextItem?.title ?? ''}`
+    this.domItems.forEach((el, idx) => {
+      const perso = this.items[idx]
+      el.classList.toggle('checked', this.checked(perso))
+      el.classList.toggle('inherited', this.inherited(perso))
+    })
+  }
+
   get contextItem() {
     return this.parentLister.items[this.parentLister.selectedIndex]
   }

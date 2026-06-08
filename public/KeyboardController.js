@@ -174,6 +174,9 @@ export default class KeyboardController {
         if (event.metaKey) {
           if (this.shortcutsPanel.isVisible) this.shortcutsPanel.nextContext()
           else this.activeLister.moveSelectedItemDown()
+        } else if (event.altKey && this.activeLister.backgroundLister) {
+          this.activeLister.backgroundLister.selectNextItem()
+          void this.activeLister.onBackgroundSelectionChange?.()
         } else {
           this.activeLister.selectNextItem()
         }
@@ -184,6 +187,9 @@ export default class KeyboardController {
         if (event.metaKey) {
           if (this.shortcutsPanel.isVisible) this.shortcutsPanel.previousContext()
           else this.activeLister.moveSelectedItemUp()
+        } else if (event.altKey && this.activeLister.backgroundLister) {
+          this.activeLister.backgroundLister.selectPreviousItem()
+          void this.activeLister.onBackgroundSelectionChange?.()
         } else {
           this.activeLister.selectPreviousItem()
         }
