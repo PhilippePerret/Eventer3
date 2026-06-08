@@ -1,6 +1,10 @@
 # Eventer3
 
+CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
+
 ## SUPRA TODO
+
+- Vérifier le filtre en live, car pour le moment, si je ne me trompe pas, ça n’est pas encore effectif.
 
 ## Bug
 

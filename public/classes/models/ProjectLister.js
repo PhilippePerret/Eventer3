@@ -39,6 +39,7 @@ export default class ProjectLister extends Lister {
   async commitNewItem(item, itemElement, insertionIndex) {
     await super.commitNewItem(item, itemElement, insertionIndex)
     const eventLister = await ListerRepository.createLister({ type: 'events', parent_item_id: item.id })
+    item.lister_id = eventLister.id
     await ListerRepository.createItem(eventLister.id, { title: 'Acte I', type: 'event' })
     const brinLister = await ListerRepository.createLister({ type: 'brins', parent_item_id: item.id })
     await ListerRepository.createItem(brinLister.id, {
