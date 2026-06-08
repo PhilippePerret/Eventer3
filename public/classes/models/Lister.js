@@ -4,6 +4,7 @@ import Item from './Item.js'
 import ListerRepository from '../repositories/ListerRepository.js'
 import FooterHelp from '../ui/FooterHelp.js'
 import Notification from '../ui/Notification.js'
+import FilterState from '../system/FilterState.js'
 
 
 export default class Lister {
@@ -28,6 +29,8 @@ export default class Lister {
     this.items = []
     this.domItems = []
     this.selectedIndex = 0
+    // -- Filtre --
+    this.filterState = new FilterState()
     // -- Édition contentEditable --
     this.editing = false
     this.editingElement = null
@@ -135,11 +138,25 @@ export default class Lister {
   }
 
   selectNextItem() {
-    this.selectItemAt(this.selectedIndex + 1)
+    let i = this.selectedIndex + 1
+    while (i < this.items.length && this.items[i]._visible === false) i++
+    if (i < this.items.length) this.selectItemAt(i)
   }
 
   selectPreviousItem() {
-    this.selectItemAt(this.selectedIndex - 1)
+    let i = this.selectedIndex - 1
+    while (i >= 0 && this.items[i]._visible === false) i--
+    if (i >= 0) this.selectItemAt(i)
+  }
+
+  _clampSelection() {
+    if (this.items[this.selectedIndex]?._visible !== false) return
+    let i = this.selectedIndex + 1
+    while (i < this.items.length && this.items[i]._visible === false) i++
+    if (i < this.items.length) { this.selectItemAt(i); return }
+    i = this.selectedIndex - 1
+    while (i >= 0 && this.items[i]._visible === false) i--
+    if (i >= 0) this.selectItemAt(i)
   }
 
   moveSelectedItemDown() {
@@ -373,6 +390,17 @@ export default class Lister {
 
   async _saveAfterToggle(item) {
     await this.saveItems()
+  }
+
+  applyFilter() {
+    this.items.forEach((item, i) => {
+      const newVisible = this.filterState.matches(item)
+      if (newVisible !== item._visible) {
+        item._visible = newVisible
+        this.domItems[i].classList.toggle('hidden', !newVisible)
+      }
+    })
+    this._clampSelection()
   }
 
   close() {}

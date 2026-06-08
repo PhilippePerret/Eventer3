@@ -19,7 +19,7 @@ window.APP_UI_MODES = {
     ['⌦', 'supprimer'],
     ['←', 'parent'],
     ['→', 'éléments'],
-    ['/', 'filtrer'],
+    ['⌘:', 'filtrer'],
     ['␣', 'cocher']
   ],
   "eventsRoot explaination": "Seulement pour les items de type event (pas project)",

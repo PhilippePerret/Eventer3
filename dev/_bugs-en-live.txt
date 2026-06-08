@@ -1,32 +1,15 @@
-PROJET DE TEST : 
-NIVEAU 0    NIVEAU 1    NIVEAU 2
-mon-projet
-            |-— Acte I
-            |       |- Séquence 1 de Acte I
-            |- Acte II
-            |- Acte III
-                    |- Séquence 1 de Acte III
+Il reste des gros bugs (AJOUTER DES TESTS !!!)
+- J'ai un projet
+- je crée un nouveau projet
+- je crée le premier eventer de ce projet (4 events de niveau 1 donc)
+- je reviens à la liste des projets
+- je choisis l'autre projet
+- je rentre dans l'autre projet (→)
+- je reviens à la liste des projets
+- je choisis le nouveau projet
+- je rentre dedans (→)
+- BUG les 4 events de son premier lister ont disparu.
+(MAIS SI JE RECHARGE L'APPLICATION et que je vais dans le projet, ils sont là -- dont ils sont bien persistants et au bon endroit)
 
-J'affiche le niveau 2 (correct) :
-mon-projet
-            |-— Acte I
-            |       |- Séquence 1 de Acte I
-            |- Acte II
-            |       |- Acte II +1               [virtuel]
-            |- Acte III
-                    |- Séquence 1 de Acte III
+Changement de comportement demandé : "n" => création de l'item APRÈS l'item sélectionné, pas avant (modifier les TESTS) alt + n => création AVANT . DONC : Inverser le comportement : n <-> alt+n
 
-BUG : je n'arrive pas à éditer "Séquence 1 de Acte III" <== TEST
-
-Je consolide (ok au niveau de l'affichage)
-mon-projet
-            |-— Acte I
-            |       |- Séquence 1 de Acte I
-            |- Acte II
-            |       |- Acte II +1               [réel]
-            |- Acte III
-                    |- Séquence 1 de Acte III
-
-- BUG : l'item "Acte II +1" créé n'est pas persistant <== TEST
-
-- IMPROVE : Fenêtre des outils trop petite en hauteur

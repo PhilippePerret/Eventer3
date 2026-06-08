@@ -111,10 +111,10 @@ export const SHORTCUTS = [
     contextName: "Filtrage des éléments",
     description: "Filtrer les projets, les events, les brins…",
     shortcuts: [
-      {sc: '/', ef: 'Passer en mode filtre'},
-      {mode: 'FILTRE', sc: '/b', ef: 'Filtrer les events par les brins'},
-      {mode: 'FILTRE', sc: '/t', ef: 'Filtrer par le texte'},
-      {mode: 'FILTRE', sc: '/p', ef: 'Filtrer les events ou les brins par les personnages'}
+      {sc: '⌘ + :', ef: 'Passer en mode filtre'},
+      {mode: 'FILTRE', sc: 'b', ef: 'Filtrer les events par les brins'},
+      {mode: 'FILTRE', sc: 't', ef: 'Filtrer par le texte'},
+      {mode: 'FILTRE', sc: 'p', ef: 'Filtrer les events ou les brins par les personnages'}
     ]
   }
 ]

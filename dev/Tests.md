@@ -160,6 +160,15 @@
 - [ ] On ne peut pas choisir le même avatar pour deux personnages
 - [ ] On ne peut pas choisir le même badge pour deux personnages.
 
+### Panneau des personnages
+
+- [ ] « p » ouvre le panneau des personnages s’il n’est pas actif
+- [ ] « p » ferme le panneau des personnages s’il n’est pas actif
+- [ ] ⌥ + ↑ / ↓ sélectionne les autres évènements si le panneau est ouvert sur la liste d’event
+  - [ ] Ce raccourci doit être documenté
+- [ ] ⌥ + ↑ / ↓ sélectionne les autres brins si le panneau est ouvert sur la liste des brins
+  - [ ] Ce raccourci doit être documenté
+
 ## Brin
 
 ### Généralités
@@ -171,8 +180,16 @@
 
 ### Panneau des brins
 
+- [ ] « b » ouvre le panneau des brins s’il n’est pas actif
+- [ ] « b » ferme le panneau des brins si c’est le panneau actif
 - [ ] Le panneau des brins ne devrait jamais être vide. <= Un projet devrait TOUJOURS avoir au moins un brin « modèle ».
 - [ ] À l’ouverture du panneau, seuls les brins de l’event sélectionné devraient être cochés.
+- [ ] Quand le panneau des brins est ouvert, on doit pouvoir sélectionner les events (en dessous) à l’aide de alt+↓/↑
+  - [ ] Ce raccourci doit être documenté en footer quand le panneau des brins et des personnages est ouvert.
+
+- [ ] Quand le panneau des personnages est ouvert (sur le panneau des brins), on doit pouvoir sélectionner les brins (en dessous) à l’aide de alt+↓/↑
+  - [ ] Ce raccourci doit être documenté
+
 
 ---
 

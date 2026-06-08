@@ -1,6 +1,11 @@
 import LOG from './system/LOG.js'
 import ShortcutsPanel from './classes/ui/ShortcutsPanel.js'
 import ToolsPanel from './classes/ui/ToolsPanel.js'
+import FilterBar from './classes/ui/FilterBar.js'
+import Notification from './classes/ui/Notification.js'
+import ListerRepository from './classes/repositories/ListerRepository.js'
+import Brin from './classes/models/Brin.js'
+import Perso from './classes/models/Perso.js'
 
 export default class KeyboardController {
 
@@ -205,6 +210,13 @@ export default class KeyboardController {
         event.preventDefault()
         return
 
+      case ':':
+        if (event.metaKey || event.ctrlKey) {
+          this._enterFilterSequence()
+          event.preventDefault()
+        }
+        return
+
       case 'Escape':
         this.activeLister.close()
         event.preventDefault()
@@ -212,6 +224,168 @@ export default class KeyboardController {
 
     }
 
+  }
+
+  _enterFilterSequence() {
+    FilterBar.showHint()
+    this.pushMode({
+      type: 'filter-sequence',
+      onKeyDown: (event, kc) => {
+        event.preventDefault()
+        kc.popMode()
+        if (event.key === ':') {
+          kc._clearAllFilters()
+          return
+        }
+        FilterBar.update(kc.activeLister.filterState, kc.activeLister)
+        if (event.key === 't') kc._enterFilterText()
+        else if (event.key === 'b') kc._enterFilterBrins()
+        else if (event.key === 'p') kc._enterFilterPersos()
+        // Escape ou autre touche : quitte silencieusement
+      }
+    })
+  }
+
+  _enterFilterText() {
+    const input = document.getElementById('filter-input')
+    if (!input) return
+    input.value = ''
+    input.classList.remove('hidden')
+    input.focus()
+
+    const applyLive = () => {
+      const query = input.value.trim()
+      const lister = this.activeLister
+      if (!lister) return
+      if (query) {
+        lister.filterState.textFields.set('title', query)
+      } else {
+        lister.filterState.textFields.delete('title')
+      }
+      lister.applyFilter()
+      FilterBar.update(lister.filterState, lister)
+    }
+
+    input.addEventListener('input', applyLive)
+
+    this.pushMode({
+      type: 'filter-text',
+      onKeyDown: (event, kc) => {
+        if (event.key === 'Enter') {
+          event.preventDefault()
+          input.removeEventListener('input', applyLive)
+          input.classList.add('hidden')
+          FilterBar.update(kc.activeLister.filterState, kc.activeLister)
+          kc.popMode()
+        } else if (event.key === 'Escape') {
+          event.preventDefault()
+          input.removeEventListener('input', applyLive)
+          input.value = ''
+          input.classList.add('hidden')
+          kc.activeLister.filterState.textFields.delete('title')
+          kc.activeLister.applyFilter()
+          FilterBar.update(kc.activeLister.filterState, kc.activeLister)
+          kc.popMode()
+        }
+        // autres touches : ne pas intercepter → input reçoit le caractère
+      }
+    })
+  }
+
+  _enterFilterBrins()  { return this._enterFilterByType(Brin) }
+  _enterFilterPersos() { return this._enterFilterByType(Perso) }
+
+  async _enterFilterByType(ItemClass) {
+    const singular = ItemClass.name.toLowerCase()
+    const ids      = this.activeLister?.parentItem?.[`${singular}_ids`] ?? []
+    const tn       = ItemClass.thingName
+    if (ids.length === 0) {
+      Notification.show(`Aucun ${tn.thing} à filtrer pour le moment`)
+      return
+    }
+    const panel = document.getElementById('filter-selector-panel')
+    if (!panel) return
+    const data = await ListerRepository.loadItems({ id: `${this.activeLister.parentItem.id}-${singular}s` })
+    this._openFilterSelector(panel, ids, data, `Filtrer par ${tn.thing}`, `${singular}Ids`)
+  }
+
+  _openFilterSelector(panel, ids, data, titleText, filterKey) {
+    panel.innerHTML = ''
+
+    const titleEl = document.createElement('div')
+    titleEl.className = 'filter-selector-title'
+    titleEl.textContent = titleText
+    panel.appendChild(titleEl)
+
+    const rows = []
+    ids.forEach(id => {
+      const item = data[id]
+      if (!item) return
+      const row = document.createElement('div')
+      row.className = 'filter-selector-row'
+      row.dataset.id = id
+      if (this.activeLister.filterState[filterKey].has(id)) row.classList.add('checked')
+
+      const badge = document.createElement('span')
+      badge.className = 'filter-selector-badge'
+      badge.textContent = item.badge ?? item.avatar ?? '?'
+      if (item.color) badge.style.background = item.color
+      row.appendChild(badge)
+
+      const label = document.createElement('span')
+      label.className = 'filter-selector-label'
+      label.textContent = item.title ?? id
+      row.appendChild(label)
+
+      rows.push({ el: row, id })
+      panel.appendChild(row)
+    })
+
+    if (rows.length > 0) rows[0].el.classList.add('focused')
+    let focusIdx = 0
+    panel.classList.remove('hidden')
+
+    this.pushMode({
+      type: 'filter-selector',
+      onKeyDown: (event, kc) => {
+        if (event.key === 'Escape') {
+          event.preventDefault()
+          panel.classList.add('hidden')
+          kc.popMode()
+          FilterBar.update(kc.activeLister.filterState, kc.activeLister)
+        } else if (event.key === 'Enter') {
+          event.preventDefault()
+          panel.classList.add('hidden')
+          kc.popMode()
+          kc.activeLister.applyFilter()
+          FilterBar.update(kc.activeLister.filterState, kc.activeLister)
+        } else if (event.key === 'ArrowDown') {
+          event.preventDefault()
+          rows[focusIdx]?.el.classList.remove('focused')
+          focusIdx = (focusIdx + 1) % rows.length
+          rows[focusIdx]?.el.classList.add('focused')
+        } else if (event.key === 'ArrowUp') {
+          event.preventDefault()
+          rows[focusIdx]?.el.classList.remove('focused')
+          focusIdx = (focusIdx - 1 + rows.length) % rows.length
+          rows[focusIdx]?.el.classList.add('focused')
+        } else if (event.key === ' ') {
+          event.preventDefault()
+          const row = rows[focusIdx]
+          if (!row) return
+          const set = kc.activeLister.filterState[filterKey]
+          if (set.has(row.id)) { set.delete(row.id); row.el.classList.remove('checked') }
+          else                  { set.add(row.id);    row.el.classList.add('checked') }
+        }
+      }
+    })
+  }
+
+  _clearAllFilters() {
+    if (!this.activeLister) return
+    this.activeLister.filterState.clear()
+    this.activeLister.applyFilter()
+    FilterBar.clear()
   }
 
 }

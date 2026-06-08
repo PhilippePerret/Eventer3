@@ -2,15 +2,24 @@
 
 ## Options du projet
 
+Les options par projet sont consignées dans le fichier `eventer.config.js`
+
 ### Aspect des items
 
 On a le choix entre :
 
 - aucun style,
-- leur style propre (défini par « s »),
+- leur style propre (défini avec la touche « s »),
+- le style de leur « météo » (climat et effet),
 - le style de leur premier brin,
 - le style de tous leurs brins (en cascade)
 - le style du personnage
+
+### Nom des niveaux
+
+Pour l’affichage des events par niveau, on peut définir le nom des niveaux dans les préférences du projet
+
+---
 
 ## Options de l'application
 

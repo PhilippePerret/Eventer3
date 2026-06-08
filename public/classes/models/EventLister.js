@@ -199,6 +199,21 @@ export default class EventLister extends Lister {
     this.items.forEach((event, idx) => {
       const el = this.domItems[idx]
       if (!el) return
+
+      const brinsEl = el.querySelector('.event-brins-badges')
+      if (brinsEl) {
+        brinsEl.innerHTML = ''
+        ;(event.brin_ids ?? []).forEach(brinId => {
+          const brin = brinsData[brinId]
+          if (!brin) return
+          const span = document.createElement('span')
+          span.className = 'panel-badge'
+          span.textContent = brin.badge ?? '?'
+          if (brin.color) span.style.background = brin.color
+          brinsEl.appendChild(span)
+        })
+      }
+
       const marksEl = el.querySelector('.event-persos-marks')
       if (!marksEl) return
       marksEl.innerHTML = ''

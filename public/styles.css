@@ -14,6 +14,9 @@
   --lisible:32px;
   --coche: 30px;
   --badge:20px;
+  --petit-badge: 14px;
+  --width-petit-badge:38px;
+  --height-petit-badge:38px;
 }
 
 /* Sélection atténuée dans les listings arrière-plan quand un panneau est au premier plan */
@@ -191,6 +194,13 @@ body {
   gap: 6px;
 }
 
+.event-brins-badges,
+.event-persos-marks {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .event-state {
   order: -999;
   flex: 0 0 auto;
@@ -247,10 +257,11 @@ body {
   align-items: center;
   justify-content: center;
   min-width: 28px;
-  height: 28px;
+  width:var(--width-petit-badge);
+  height: var(--height-petit-badge);
   padding: 0 8px;
   border-radius: 999px;
-  font-size: var(--badge);
+  font-size: var(--petit-badge);
   font-weight: 600;
   letter-spacing: .04em;
   color: var(--muted);
@@ -258,8 +269,6 @@ body {
 
 .badge.brin {
   background: var(--brin);
-  width: 36px;
-  min-width: 36px;
   padding: 0;
 }
 
@@ -469,7 +478,7 @@ body {
 
 .brin-row.selected.checked .panel-check {
   opacity: 1;
-  color: #00a832;
+  color: white;
 }
 
 .brin-row.selected .panel-color-dot {
@@ -583,14 +592,13 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  min-width: 42px;
-  height: 28px;
+  width: var(--width-petit-badge);
+  height: var(--height-petit-badge);
   padding: 0 8px;
   border-radius: 999px;
   overflow: hidden;
   white-space: nowrap;
-    font-size: var(--badge);
+  font-size: var(--petit-badge);
   font-weight: 700;
   letter-spacing: .08em;
   text-align: center;
@@ -865,6 +873,7 @@ body {
   height: 22px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 0 16px;
   background: #e8e3da;
   border-top: 1px solid var(--line, #ccc);
@@ -873,6 +882,25 @@ body {
   letter-spacing: 0.05em;
   color: #555;
   pointer-events: none;
+}
+
+.status-filter-badge {
+  padding: 2px 10px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  pointer-events: none;
+}
+
+.status-filter-badge--mode {
+  background: #22c55e;
+  color: white;
+}
+
+.status-filter-badge--active {
+  background: #ef4444;
+  color: white;
 }
 
 .event-item.virtual {
@@ -884,6 +912,124 @@ body {
   font-style: italic;
   pointer-events: none;
   cursor: default;
+}
+
+/* décale le contenu quand l'input filtre est affiché */
+body:has(#filter-input:not(.hidden)) #main-panel {
+  padding-top: 52px;
+}
+
+/* ─── Filtre ──────────────────────────────────────────────────── */
+
+#filter-input {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding: 10px 48px;
+  background: #f6f3ee;
+  border: none;
+  border-bottom: 2px solid var(--line);
+  font-size: 18px;
+  color: var(--text);
+  outline: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .12);
+}
+
+#filter-input::placeholder {
+  color: var(--muted);
+}
+
+#filter-bar {
+  position: fixed;
+  bottom: 64px;
+  left: 0;
+  right: 0;
+  z-index: 23;
+  padding: 4px 16px;
+  background: rgba(246, 243, 238, .96);
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+#filter-selector-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 60;
+  min-width: 400px;
+  background: #f6f3ee;
+  border: 1px solid #ddd6ca;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .22);
+  color: var(--text);
+}
+
+.filter-selector-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.filter-selector-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: default;
+  position: relative;
+}
+
+.filter-selector-row::before {
+  content: '';
+  width: 20px;
+  flex-shrink: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #22c55e;
+  text-align: center;
+}
+
+.filter-selector-row.checked::before {
+  content: '✓';
+}
+
+.filter-selector-row.focused {
+  background: var(--selected);
+  color: white;
+}
+
+.filter-selector-row.focused .filter-selector-badge {
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .4);
+}
+
+.filter-selector-badge {
+  width: var(--width-petit-badge);
+  height: var(--height-petit-badge);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--petit-badge);
+  background: var(--brin);
+  flex-shrink: 0;
+}
+
+.filter-selector-label {
+  font-size: 20px;
+  font-weight: 500;
+  flex: 1;
 }
 
 #shortcuts-footer {
