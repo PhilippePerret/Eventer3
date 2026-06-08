@@ -126,7 +126,10 @@ export default class KeyboardController {
         return
 
       case 'b': case 'B':
-        if (typeof this.activeLister.openBrinPanel === 'function') {
+        if (this.activeLister.constructor.name === 'BrinLister') {
+          this.activeLister.close()
+          event.preventDefault()
+        } else if (typeof this.activeLister.openBrinPanel === 'function') {
           this.activeLister.openBrinPanel().catch(err => console.error('openBrinPanel:', err))
           event.preventDefault()
         }
@@ -147,7 +150,10 @@ export default class KeyboardController {
         return
 
       case 'p': case 'P':
-        if (typeof this.activeLister.openPersoPanel === 'function') {
+        if (this.activeLister.constructor.name === 'PersoLister') {
+          this.activeLister.close()
+          event.preventDefault()
+        } else if (typeof this.activeLister.openPersoPanel === 'function') {
           this.activeLister.openPersoPanel().catch(err => console.error('openPersoPanel:', err))
           event.preventDefault()
         }

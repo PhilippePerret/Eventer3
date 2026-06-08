@@ -39,6 +39,12 @@ test("Escape ferme le panneau", async ({ page }) => {
   await expect(page.locator('#brin-panel')).not.toBeVisible()
 })
 
+test("b ferme le panneau des brins quand il est actif", async ({ page }) => {
+  await openBrinPanel(page)
+  await page.keyboard.press('b')
+  await expect(page.locator('#brin-panel')).not.toBeVisible()
+})
+
 test("Cmd+Enter ferme le panneau", async ({ page }) => {
   await openBrinPanel(page)
   await page.keyboard.press('Meta+Enter')

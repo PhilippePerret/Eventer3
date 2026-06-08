@@ -1,0 +1,1 @@
+- bug : en créant un nouveau projet, j'ai deux fois un brin "Intrigue principale". Comment est-ce possible ?

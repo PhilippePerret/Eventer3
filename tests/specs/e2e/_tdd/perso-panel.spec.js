@@ -44,6 +44,12 @@ test("Escape ferme le panneau perso", async ({ page }) => {
   await expect(page.locator('#perso-panel')).not.toBeVisible()
 })
 
+test("p ferme le panneau des persos quand il est actif", async ({ page }) => {
+  await openPersoPanel(page)
+  await page.keyboard.press('p')
+  await expect(page.locator('#perso-panel')).not.toBeVisible()
+})
+
 test("Cmd+Enter ferme le panneau perso", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('Meta+Enter')
