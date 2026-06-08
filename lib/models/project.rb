@@ -10,7 +10,6 @@ class Project < Item
         type:       'project',
         title:      'Projet modèle',
         active:     true,
-        hasLister:  true,
         items:      ['i1'],
         brins:      ['b1'],
         persos:     ['p1'],

@@ -6,8 +6,8 @@
 
 # Test info
 
-- Name: _tdd/consolidate-level.spec.js >> consolidation : titres des nouveaux events corrects
-- Location: specs/e2e/_tdd/consolidate-level.spec.js:80:1
+- Name: _tdd/consolidate-level.spec.js >> panneau outils contient 'Consolider le niveau courant'
+- Location: specs/e2e/_tdd/consolidate-level.spec.js:51:1
 
 # Error details
 

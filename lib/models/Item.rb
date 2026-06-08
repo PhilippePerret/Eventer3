@@ -14,7 +14,6 @@ class Item
         id: id,
         ty: 'project',
         tt: 'Projet modèle',
-        hl: false,
         co: nil,
         ca: Time.now.iso8601,
         ua: Time.now.iso8601
@@ -33,8 +32,5 @@ class Item
     data[:id]
   end
 
-  def has_lister?
-    data[:hasLister] == true
-  end
 
 end

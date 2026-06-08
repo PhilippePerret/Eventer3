@@ -1,13 +1,8 @@
-import { SHORTCUTS } from '../../constants.js'
-
-export default class ShortcutsPanel {
-
+export default class Panel {
   constructor() {
-    this.el = document.querySelector('#shortcuts-panel')
+    this.el = document.querySelector(this.id)
     this.contextIndex = 0
-    this.contexts = SHORTCUTS
   }
-
   get isVisible() {
     return !this.el.classList.contains('hidden')
   }
@@ -20,6 +15,19 @@ export default class ShortcutsPanel {
   close() {
     this.el.classList.add('hidden')
   }
+
+}
+import { SHORTCUTS } from '../../constants.js'
+
+export default class ShortcutsPanel extends Panel {
+
+  constructor() {
+    this.super()
+    this.contexts = SHORTCUTS
+  }
+
+  get id() { return '#shortcuts-panel' }
+
 
   nextContext() {
     if (this.contextIndex < this.contexts.length - 1) {

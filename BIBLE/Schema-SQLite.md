@@ -10,7 +10,7 @@
     listers {
         INTEGER id PK
         TEXT type
-        INTEGER depth
+        INTEGER depth -- UTILE ????
         TEXT nature
         TEXT scale
         TEXT item_ids

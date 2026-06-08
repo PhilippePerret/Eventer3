@@ -81,16 +81,14 @@ export default class Lister {
     if (!this.childListerClass) return
     const item = this.items[this.selectedIndex]
     if (!item) return
-    const listerData = await ListerRepository.loadItemLister(item.id)
     const childLister = new this.childListerClass({
-      id: listerData?.id ?? null,
-      item_ids: listerData?.item_ids ?? [],
+      id: item.lister_id ?? null,
       keyboardController: this.keyboardController,
       parentItem: item
     })
     childLister.depth = this.depth + 1
-    if (listerData) {
-      if (listerData.brins_lister_id) childLister.brins_lister_id = listerData.brins_lister_id
+    if (item.lister_id != null) {
+      await childLister.loadDefinition()
       await childLister.loadItems()
     } else {
       childLister.__isVirtual = true

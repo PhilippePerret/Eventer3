@@ -126,21 +126,13 @@ export default class EventLister extends Lister {
     const gap = targetDepth - lister.depth
     const results = []
     for (const item of lister.items) {
-      if (item.hasLister) {
-        const listerData = await ListerRepository.loadItemLister(item.id)
-        if (listerData) {
-          const childLister = new EventLister({
-            id: listerData.id,
-            item_ids: listerData.item_ids,
-            parentItem: item
-          })
-          childLister.depth = lister.depth + 1
-          await childLister.loadItems()
-          const sub = await this._collectItemsAtDepth(childLister, targetDepth)
-          results.push(...sub)
-        } else {
-          results.push({ item, isVirtual: true, gap })
-        }
+      if (item.lister_id != null) {
+        const childLister = new EventLister({ id: item.lister_id, parentItem: item })
+        childLister.depth = lister.depth + 1
+        await childLister.loadDefinition()
+        await childLister.loadItems()
+        const sub = await this._collectItemsAtDepth(childLister, targetDepth)
+        results.push(...sub)
       } else {
         results.push({ item, isVirtual: true, gap })
       }

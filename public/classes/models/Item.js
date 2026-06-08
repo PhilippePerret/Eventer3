@@ -45,7 +45,7 @@ export default class Item {
   constructor(data = {}) {
     this.id = data.id ?? null
     this.title = data.title ?? ''
-    this.hasLister = data.hasLister ?? data.hl ?? false
+    this.lister_id = data.lister_id ?? null
     this.active = data.active ?? true
     this.type = data.type ?? []
     this.color = data.color ?? null

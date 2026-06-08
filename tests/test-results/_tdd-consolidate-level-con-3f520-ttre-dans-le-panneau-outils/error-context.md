@@ -12,82 +12,24 @@
 # Error details
 
 ```
-Error: expect(locator).toHaveCount(expected) failed
+Error: expect(locator).toHaveClass(expected) failed
 
-Locator:  locator('.event-item')
-Expected: 4
-Received: 2
-Timeout:  5000ms
+Locator: locator('#main-panel')
+Expected pattern: /project-list/
+Received string:  ""
+Timeout: 5000ms
 
 Call log:
-  - Expect "toHaveCount" with timeout 5000ms
-  - waiting for locator('.event-item')
-    14 × locator resolved to 2 elements
-       - unexpected value "2"
+  - Expect "toHaveClass" with timeout 5000ms
+  - waiting for locator('#main-panel')
+    14 × locator resolved to <main id="main-panel"></main>
+       - unexpected value ""
 
 ```
 
-# Page snapshot
-
 ```yaml
-- generic [active] [ref=e1]:
-  - main [ref=e2]:
-    - navigation [ref=e3]:
-      - button "Séquence 1" [ref=e4] [cursor=pointer]
-      - generic [ref=e5]: ‹
-    - generic [ref=e8]:
-      - generic [ref=e9]: Acte 1 +2
-      - generic [ref=e11]: —
-    - generic [ref=e14]:
-      - generic [ref=e15]: Acte 2 +2
-      - generic [ref=e17]: —
-  - generic: DISP MODE LEVEL
-  - contentinfo "Raccourcis clavier" [ref=e18]:
-    - generic [ref=e19]:
-      - generic [ref=e20]: ↑ ↓
-      - text: choisir
-    - generic [ref=e21]:
-      - generic [ref=e22]: ⏎
-      - text: éditer
-    - generic [ref=e23]:
-      - generic [ref=e24]: "n"
-      - text: nouveau
-    - generic [ref=e25]:
-      - generic [ref=e26]: ⌥n
-      - text: nouveau sous le courant
-    - generic [ref=e27]:
-      - generic [ref=e28]: ⌘c
-      - text: copier
-    - generic [ref=e29]:
-      - generic [ref=e30]: ⌘x
-      - text: couper
-    - generic [ref=e31]:
-      - generic [ref=e32]: ⌘v
-      - text: coller avant
-    - generic [ref=e33]:
-      - generic [ref=e34]: ⌦
-      - text: supprimer
-    - generic [ref=e35]:
-      - generic [ref=e36]: ←
-      - text: parent
-    - generic [ref=e37]:
-      - generic [ref=e38]: →
-      - text: éléments
-    - generic [ref=e39]:
-      - generic [ref=e40]: /
-      - text: filtrer
-    - generic [ref=e41]:
-      - generic [ref=e42]: ␣
-      - text: cocher
-    - generic [ref=e43]:
-      - generic [ref=e44]: b
-      - text: brins
-    - generic [ref=e45]:
-      - generic [ref=e46]: p
-      - text: personnages
-    - generic [ref=e47]:
-      - generic [ref=e48]: o
-      - text: options
+- main
+- contentinfo "Raccourcis clavier"
 ```
 
 # Test source
@@ -104,7 +46,8 @@ Call log:
   9  | })
   10 | 
   11 | async function enterLevelMode(page, targetDepth) {
-  12 |   await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+> 12 |   await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+     |                                             ^ Error: expect(locator).toHaveClass(expected) failed
   13 |   await expect(page.locator('.project-item').nth(0)).toHaveClass(/selected/)
   14 |   await page.keyboard.press('ArrowRight')
   15 |   await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
@@ -169,8 +112,7 @@ Call log:
   74 | 
   75 |   console.log('-> 0 virtuels, 4 items réels')
   76 |   await expect(page.locator('.event-item.virtual')).toHaveCount(0)
-> 77 |   await expect(page.locator('.event-item')).toHaveCount(4)
-     |                                             ^ Error: expect(locator).toHaveCount(expected) failed
+  77 |   await expect(page.locator('.event-item')).toHaveCount(4)
   78 | })
   79 | 
   80 | test("consolidation : titres des nouveaux events corrects", async ({ page }) => {

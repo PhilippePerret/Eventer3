@@ -6,24 +6,22 @@
 
 # Test info
 
-- Name: _tdd/consolidate-level.spec.js >> consolidation : titres des nouveaux events corrects
-- Location: specs/e2e/_tdd/consolidate-level.spec.js:80:1
+- Name: _tdd/consolidate-level.spec.js >> ⌘+k inactif hors LEVEL mode
+- Location: specs/e2e/_tdd/consolidate-level.spec.js:37:1
 
 # Error details
 
 ```
 Error: expect(locator).toHaveClass(expected) failed
 
-Locator: locator('#main-panel')
-Expected pattern: /project-list/
-Received string:  ""
+Locator: locator('.project-item').first()
+Expected pattern: /selected/
 Timeout: 5000ms
+Error: element(s) not found
 
 Call log:
   - Expect "toHaveClass" with timeout 5000ms
-  - waiting for locator('#main-panel')
-    14 × locator resolved to <main id="main-panel"></main>
-       - unexpected value ""
+  - waiting for locator('.project-item').first()
 
 ```
 
@@ -46,8 +44,7 @@ Call log:
   9  | })
   10 | 
   11 | async function enterLevelMode(page, targetDepth) {
-> 12 |   await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
-     |                                             ^ Error: expect(locator).toHaveClass(expected) failed
+  12 |   await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
   13 |   await expect(page.locator('.project-item').nth(0)).toHaveClass(/selected/)
   14 |   await page.keyboard.press('ArrowRight')
   15 |   await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
@@ -75,7 +72,8 @@ Call log:
   37 | test("⌘+k inactif hors LEVEL mode", async ({ page }) => {
   38 |   await page.goto('/')
   39 | 
-  40 |   await expect(page.locator('.project-item').nth(0)).toHaveClass(/selected/)
+> 40 |   await expect(page.locator('.project-item').nth(0)).toHaveClass(/selected/)
+     |                                                      ^ Error: expect(locator).toHaveClass(expected) failed
   41 |   await page.keyboard.press('ArrowRight')
   42 |   await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
   43 | 

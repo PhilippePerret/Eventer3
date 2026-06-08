@@ -62,12 +62,6 @@ get '/api/listers/:id' do
   JSON.generate(lister)
 end
 
-get '/api/items/:id/lister' do
-  content_type :json
-  lister = DB::Repo.find_item_lister(DATA_DIR, params[:id])
-  JSON.generate(lister)
-end
-
 patch '/api/listers/:id' do
   payload = JSON.parse(request.body.read)
   DB::Repo.update_lister(DATA_DIR, params[:id], payload)

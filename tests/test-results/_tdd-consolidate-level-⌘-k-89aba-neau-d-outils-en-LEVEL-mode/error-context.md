@@ -6,8 +6,8 @@
 
 # Test info
 
-- Name: _tdd/consolidate-level.spec.js >> consolidation : titres des nouveaux events corrects
-- Location: specs/e2e/_tdd/consolidate-level.spec.js:80:1
+- Name: _tdd/consolidate-level.spec.js >> ⌘+k ouvre le panneau d'outils en LEVEL mode
+- Location: specs/e2e/_tdd/consolidate-level.spec.js:28:1
 
 # Error details
 

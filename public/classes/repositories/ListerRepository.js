@@ -17,12 +17,6 @@ export default class ListerRepository {
     return await response.json()
   }
 
-  static async loadItemLister(itemId) {
-    const response = await fetch(`/api/items/${itemId}/lister`, { cache: 'no-store' })
-    if (!response.ok) return null
-    return await response.json()
-  }
-
   static async save(lister) {
     const response = await fetch(`/api/listers/${lister.id}`, {
       method: 'PATCH',
