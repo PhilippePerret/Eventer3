@@ -37,11 +37,11 @@ window.APP_UI_MODES = {
   stylePanel: [
     ['↑ ↓', 'choisir'],
     ['␣', 'cocher / décocher'],
-    ['⌘↓ ⌘↑', 'déplacer (le dernier l\'emporte)']
+    ['⌘↓ ⌘↑', 'déplacer (le dernier style l\'emporte)']
   ],
   modalPanel: [
     ['⌘⏎', 'fermer'],
-    ['⌥↓ ⌥↑', 'suivant/précédent (fond)']
+    ['⌥↓ ⌥↑', 'Event suivant/précédent']
   ]
 }
 
