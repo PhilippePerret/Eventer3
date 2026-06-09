@@ -56,6 +56,7 @@ export default class Lister {
     return [{ type: 'text', field: this.filterField, placeholder: 'Filtrer…' }]
   }
 
+
   get contextPath() {
     if (this.parentItem) return `${this.parentItem.parentLister.contextPath}/lof-${this.parentItem.id}`
     return `lof-${this.id}`
@@ -125,7 +126,7 @@ export default class Lister {
 
   _renderFilterBar(container) {
     const bar = document.createElement('div')
-    bar.className = 'filter-bar'
+    bar.className = 'filter-bar hidden'
     this._widgetFilterState = {}
 
     this.filterWidgets.forEach(widget => {
@@ -161,8 +162,8 @@ export default class Lister {
             e.stopPropagation()
             const set = this._widgetFilterState[widget.field]
             const val = String(opt.value)
-            if (set.has(val)) { set.delete(val); optEl.classList.remove('active') }
-            else              { set.add(val);    optEl.classList.add('active') }
+            if (set.has(val)) { set.delete(val); optEl.classList.remove('checked') }
+            else              { set.add(val);    optEl.classList.add('checked') }
             this._applyWidgetFilters()
           })
           dropdown.appendChild(optEl)
@@ -174,6 +175,10 @@ export default class Lister {
             if (d !== dropdown) d.classList.add('hidden')
           })
           dropdown.classList.toggle('hidden')
+        })
+
+        btn.addEventListener('keydown', e => {
+          if (e.key === 'Tab') dropdown.classList.add('hidden')
         })
 
         div.appendChild(btn)
@@ -213,6 +218,7 @@ export default class Lister {
   }
 
   focusTextFilter() {
+    this.domContainer?.querySelector('.filter-bar')?.classList.remove('hidden')
     this.domContainer?.querySelector('.panel-search')?.focus()
   }
 

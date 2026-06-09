@@ -561,19 +561,21 @@ body {
 }
 
 .filter-widget__option {
-  padding: 5px 12px;
+  padding: 5px 12px 5px 28px;
   cursor: pointer;
   font-size: 13px;
   white-space: nowrap;
+  position: relative;
 }
 
 .filter-widget__option:hover {
   background: var(--hover, rgba(255,255,255,0.08));
 }
 
-.filter-widget__option.active {
-  color: var(--accent, #b08040);
-  font-weight: 600;
+.filter-widget__option.checked::before {
+  content: '✓';
+  position: absolute;
+  left: 8px;
 }
 
 .panel-close {

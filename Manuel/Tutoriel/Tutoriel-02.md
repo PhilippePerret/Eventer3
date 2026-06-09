@@ -63,3 +63,47 @@ Nous allons donc créer des *séquences* à l’intérieur de nos actes et comme
   => vous revenez aux actes. À tout moment vous pouvez revenir au niveau supérieur de cette manière.
 
 - jouez la flèche →  pour entrer à nouveau dans le premier acte.
+
+- créer trois séquences avec la touche « n » :
+
+  - Séquence 1 : « Routine du personnages »
+  - Séquence 2 : « Incident déclencheur »
+  - Séquence 3 : « Refus de l’appel ».
+
+
+-  parfait, maintenant, nous allons justement passer en mode d’affichage « par niveau » qui va nous permettre de voir tous les éléments au même niveau, donc, en fait, toutes les séquences, même celles qui n’existent pas (sic).
+- pour ça, jouons ⌘+m
+
+Si vous avez bien suivi ce tutoriel, vous allez vous retrouver avec une liste contenant : 
+
+~~~
+Routine du personnages
+Incident déclencheur 
+Refus de l’appel
+Acte II + 1									 (grisé)
+Acte III + 1								 (grisé)
+~~~
+
+Vous remarquez que, puisque les deux autres actes n’ont pas encore de séquence, *Eventer* « invente » en quelque sorte ces séquences pour les event qui n’en ont pas. Nous verrons plus tard comment « consolider » ces events manquants, mais pour le moment, retournons à la vue par imbrication (on pourrait le faire automatiquement en cliquant ← puisque les préférences par défaut précisent de revenir à l’affichage par imbricatrion dès qu’on passe à un autre niveau.
+
+- sélectionnez « Routine du personnage » avec les flèches
+
+- pressez « ← »
+
+  => Vous revenez aux actes
+
+Je vous laisse créer des séquences pour les deux autres actes, de la même manière que nous l’avons fait pour l’acte I.
+
+### Brins
+
+Les brins permettent une chose très intéressantes dans *Eventer* : se concentrer sur un « fil », une « intrigue » particulière de de l’histoire, sans se préoccuper des autres. Pour voir, par exemple, si ce « fil » ou cette « intrigue » commence, se développe et se termine bien.
+
+>  En analysant suffisamment d’histoires, on se rend compte qu’elles sont constituées par de tels fils qui s’entrelacent les uns dans les autres mais ne s’influençant pas forcément beaucoup les uns les autres. Ils ont souvent leur vie isolé. Ils se croisent mais ces croisements sont toujours l’objet d’events bien précis.
+
+Les deux brins principaux concernent évidemment l’intrigue principale et, le plus souvent, l’intrigue amoureuse.
+
+Si nous considérons Le Titanic, par exemple, l’intrigue principale concerne le paquebot et son naufrage et l’intrigue amoureuse concerne bien entendu Rose et Jack. Pouvoir se concentrer sur l’une ou l’autre des intrigues facilite grandement le travail ou la recherche sur le projet.
+
+On se souvent bien entendu de ce moment où les deux intrigues se croisent, au milieu du film :
+
+- les deux vigiles, alors qu’ils observent Rose et Jack s’embrasser sur le pont, s’aperçoivent trop tard que le paquebot fonce dans un iceberg

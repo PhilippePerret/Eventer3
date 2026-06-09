@@ -12,13 +12,31 @@ async function goToEventLister(page, fixture = 'with-event-states') {
   await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
   await page.keyboard.press('ArrowRight')
   await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+  // ':' révèle la barre et focus le titre
+  await page.keyboard.press(':')
+  await expect(page.locator('#main-panel .filter-bar')).toBeVisible()
 }
 
 // ─── Structure ────────────────────────────────────────────────────────────────
 
-test("EventLister : barre de filtres présente", async ({ page }) => {
-  await goToEventLister(page)
+test("EventLister : barre de filtres cachée par défaut", async ({ page }) => {
+  installFixtures('with-event-states')
+  await page.goto('/')
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await page.keyboard.press('ArrowRight')
+  await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(page.locator('#main-panel .filter-bar')).toBeHidden()
+})
+
+test("EventLister : ':' révèle la barre et focus le titre", async ({ page }) => {
+  installFixtures('with-event-states')
+  await page.goto('/')
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await page.keyboard.press('ArrowRight')
+  await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+  await page.keyboard.press(':')
   await expect(page.locator('#main-panel .filter-bar')).toBeVisible()
+  await expect(page.locator('#main-panel .panel-search')).toBeFocused()
 })
 
 test("EventLister : widget titre présent dans la barre", async ({ page }) => {
@@ -43,17 +61,34 @@ test("EventLister : widget effet présent dans la barre", async ({ page }) => {
 
 // ─── Navigation clavier ───────────────────────────────────────────────────────
 
-test("':' focus le champ titre", async ({ page }) => {
-  await goToEventLister(page)
-  await page.keyboard.press(':')
-  await expect(page.locator('#main-panel .panel-search')).toBeFocused()
-})
-
 test("TAB depuis titre : focus widget état", async ({ page }) => {
   await goToEventLister(page)
-  await page.locator('#main-panel .panel-search').focus()
+  // goToEventLister presse ':' → titre focusé
   await page.keyboard.press('Tab')
   await expect(page.locator('#main-panel .filter-widget[data-field="state"] .filter-widget__btn')).toBeFocused()
+})
+
+test("TAB depuis état : focus widget météo", async ({ page }) => {
+  await goToEventLister(page)
+  await page.locator('#main-panel .filter-widget[data-field="state"] .filter-widget__btn').focus()
+  await page.keyboard.press('Tab')
+  await expect(page.locator('#main-panel .filter-widget[data-field="meteo"] .filter-widget__btn')).toBeFocused()
+})
+
+test("TAB depuis météo : focus widget effet", async ({ page }) => {
+  await goToEventLister(page)
+  await page.locator('#main-panel .filter-widget[data-field="meteo"] .filter-widget__btn').focus()
+  await page.keyboard.press('Tab')
+  await expect(page.locator('#main-panel .filter-widget[data-field="effet"] .filter-widget__btn')).toBeFocused()
+})
+
+test("TAB depuis dropdown ouvert : ferme dropdown et focus widget suivant", async ({ page }) => {
+  await goToEventLister(page)
+  await page.locator('#main-panel .filter-widget[data-field="state"] .filter-widget__btn').click()
+  await expect(page.locator('#main-panel .filter-widget[data-field="state"] .filter-widget__dropdown')).toBeVisible()
+  await page.keyboard.press('Tab')
+  await expect(page.locator('#main-panel .filter-widget[data-field="state"] .filter-widget__dropdown')).toBeHidden()
+  await expect(page.locator('#main-panel .filter-widget[data-field="meteo"] .filter-widget__btn')).toBeFocused()
 })
 
 // ─── Filtre état ──────────────────────────────────────────────────────────────

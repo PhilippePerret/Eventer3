@@ -1,4 +1,3 @@
-- le panneau brins et personnage du mode filtre devrait avoir DES COCHES BLANCHES !!!! à la sélection, POURQUOI EST-CE QUE JE N'ARRIVE PAS À OBTENIR ÇA ??????!!!!!!
 - faire ajouter meteo et effet dans ligne event
 - mettre ces menus et 'state' dans la ligne de filtre au-dessus des events
 
