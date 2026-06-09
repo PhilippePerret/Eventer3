@@ -270,15 +270,15 @@
 
 ### Styles CSS
 
-- [ ] La touche « s » sur un event permet de définir son style, donc ouvre le panneau des styles.
-  - [ ] ça ne fonctionne pas sur la liste des projets
-  - [ ] ça ne fonctionne pas sur les brins et les personnages
-- [ ] Le panneau des styles affiche tous les styles définis dans les fichiers du dossier des thèmes (`data/theme/`
-- [ ] On peut choisir les styles de l’event sélectionné et les ordonner :
-  - [ ] les touches ↓↑ permettent de se déplacer d’un style à l’autre
-  - [ ] la touche ␣ permet de cocher/décocher un style
-  - [ ] les touches ⌘+↓↑ permettent de déplacer les styles
-  - [ ] le style est immédiatement appliqué à l’event sélectionné
+- [x] La touche « s » sur un event permet de définir son style, donc ouvre le panneau des styles.
+  - [x] ça ne fonctionne pas sur la liste des projets
+  - [x] ça ne fonctionne pas sur les brins et les personnages
+- [x] Le panneau des styles affiche tous les styles définis dans les fichiers du dossier des thèmes (`data/theme/`
+- [x] On peut choisir les styles de l’event sélectionné et les ordonner :
+  - [x] les touches ↓↑ permettent de se déplacer d’un style à l’autre
+  - [x] la touche ␣ permet de cocher/décocher un style
+  - [x] les touches ⌘+↓↑ permettent de déplacer les styles
+  - [x] le style est immédiatement appliqué à l’event sélectionné
 - [ ] On peut choisir les styles de TOUS les events cochés :
   - [ ] la combinaison ⇧ + s ouvre le panneau des styles en mode « tous les cochés »
   - [ ] les touches ↓↑ permettent de se déplacer d’un style à l’autre

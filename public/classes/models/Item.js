@@ -89,7 +89,6 @@ export default class Item {
     input.style.background = 'transparent'
     input.style.color = 'inherit'
     input.style.padding = '0'
-    input.style.margin = '0'
     input.style.width = '100%'
     input.style.minWidth = '0'
     input.style.appearance = 'none'

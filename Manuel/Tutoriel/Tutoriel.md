@@ -47,3 +47,7 @@ C’est la composante de base de *Eventer*, il est donc très important de savoi
 Il peut y avoir autant d’évènemenciers pour gérer une histoire que d’échelle.
 
 On peut penser aussi ces évènemenciers comme des cartes et leurs échelles.
+
+Dans *Eventer*, on fonctionne par « imbrication » dans ces évènements (qu’on appellera souvent « event », à l’anglais, pour faire plus court.
+
+On part de l’évènement le plus long, le plus grand, (les actes par exemple) pour aboutir à l’évènement le plus court (une pensée, une action, une description).

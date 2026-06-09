@@ -40,7 +40,8 @@ export default class StyleLister {
       })
       .filter(Boolean)
       .join('\n')
-    styleEl.textContent = rules
+    const selectedRule = `.event-item[data-id="${event.id}"].selected:not(.editing) .event-text { color: white !important; }`
+    styleEl.textContent = rules + '\n' + selectedRule
   }
 
   // ── Constructor ─────────────────────────────────────────────────────

@@ -1,0 +1,8 @@
+.note {
+  font-size: 0.75em;
+  color: rgb(95, 121, 216);
+  margin-left: 15vw;
+}
+.selected .note {
+  color:white;
+}
