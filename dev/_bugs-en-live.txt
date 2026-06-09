@@ -1,3 +1,3 @@
 - faire ajouter meteo et effet dans ligne event
-- mettre ces menus et 'state' dans la ligne de filtre au-dessus des events
-
+- ajouter aussi 'lieu' (int(érieur), ext(érieur, aucun) — je pense qu'il faut l'ajouter à la table
+- ajouter ce menu à la bande de filtre, comme pour météo

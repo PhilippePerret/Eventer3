@@ -493,6 +493,7 @@ body {
   padding: 3px 8px 4px;
   align-items: center;
   border-bottom: 1px solid var(--line);
+  background: rgba(235, 138, 9, 0.6);
 }
 
 .filter-widget {
@@ -536,6 +537,8 @@ body {
 .filter-widget__btn:focus {
   outline: none;
   border-color: var(--accent, #b08040);
+  background: rgba(176, 128, 64, 0.18);
+  box-shadow: 0 0 0 2px rgba(176, 128, 64, 0.25);
 }
 
 .filter-widget__btn.has-selection {

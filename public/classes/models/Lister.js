@@ -5,6 +5,7 @@ import ListerRepository from '../repositories/ListerRepository.js'
 import FooterHelp from '../ui/FooterHelp.js'
 import Notification from '../ui/Notification.js'
 import FilterState from '../system/FilterState.js'
+import PopupSelect from '../ui/PopupSelect.js'
 
 
 export default class Lister {
@@ -147,51 +148,63 @@ export default class Lister {
         })
       } else if (widget.type === 'menu') {
         this._widgetFilterState[widget.field] = new Set()
+
         const btn = document.createElement('button')
         btn.className = 'filter-widget__btn'
         btn.textContent = widget.label ?? widget.field
-        const dropdown = document.createElement('div')
-        dropdown.className = 'filter-widget__dropdown hidden'
 
-        widget.values.forEach(opt => {
-          const optEl = document.createElement('div')
-          optEl.className = 'filter-widget__option'
-          optEl.dataset.value = String(opt.value)
-          optEl.textContent = opt.label
-          optEl.addEventListener('click', e => {
-            e.stopPropagation()
-            const set = this._widgetFilterState[widget.field]
-            const val = String(opt.value)
-            if (set.has(val)) { set.delete(val); optEl.classList.remove('checked') }
-            else              { set.add(val);    optEl.classList.add('checked') }
-            this._applyWidgetFilters()
-          })
-          dropdown.appendChild(optEl)
-        })
+        const updateBtn = (values) => {
+          btn.classList.toggle('has-selection', values.length > 0)
+          btn.textContent = values.length > 0
+            ? `${widget.label ?? widget.field} (${values.length})`
+            : (widget.label ?? widget.field)
+        }
 
-        btn.addEventListener('click', e => {
-          e.stopPropagation()
-          bar.querySelectorAll('.filter-widget__dropdown:not(.hidden)').forEach(d => {
-            if (d !== dropdown) d.classList.add('hidden')
-          })
-          dropdown.classList.toggle('hidden')
-        })
+        const openPopup = () => {
+          const currentValues = [...this._widgetFilterState[widget.field]]
+          new PopupSelect({
+            options: widget.values,
+            currentValue: currentValues,
+            multi: true,
+            keyboardController: this.keyboardController,
+            onChange: (values) => {
+              this._widgetFilterState[widget.field] = new Set(values)
+              this._applyWidgetFilters()
+              updateBtn(values)
+            },
+            onSelect: (values) => {
+              this._widgetFilterState[widget.field] = new Set(values)
+              this._applyWidgetFilters()
+              updateBtn(values)
+              btn.focus()
+            },
+            onCancel: () => { btn.focus() },
+            onTab: () => {
+              const btns = [...bar.querySelectorAll('.filter-widget__btn')]
+              const idx = btns.indexOf(btn)
+              if (idx >= 0 && idx < btns.length - 1) btns[idx + 1].focus()
+              else bar.querySelector('.panel-search')?.focus()
+            },
+          }).open(btn)
+        }
 
+        btn.addEventListener('click', openPopup)
         btn.addEventListener('keydown', e => {
-          if (e.key === 'Tab') dropdown.classList.add('hidden')
+          if (e.key === 'Tab' || e.key === 'Escape') {
+            // propagate : Tab → KC navigue, Escape → KC ferme popup/panneau
+          } else if (e.key === 'ArrowDown') {
+            e.stopPropagation()
+            e.preventDefault()
+            openPopup()
+          } else {
+            e.stopPropagation()
+          }
         })
 
         div.appendChild(btn)
-        div.appendChild(dropdown)
       }
 
       bar.appendChild(div)
-    })
-
-    document.addEventListener('click', e => {
-      if (!e.target.closest('.filter-widget__btn') && !e.target.closest('.filter-widget__dropdown')) {
-        bar.querySelectorAll('.filter-widget__dropdown').forEach(d => d.classList.add('hidden'))
-      }
     })
 
     container.appendChild(bar)

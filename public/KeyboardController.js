@@ -107,6 +107,26 @@ export default class KeyboardController {
 
     if (!this.activeLister) return
 
+    // TAB dans la barre de filtre : panel-search → premier btn, btn → btn suivant, dernier btn → panel-search
+    if (event.key === 'Tab') {
+      const active = document.activeElement
+      if (active?.classList.contains('panel-search')) {
+        const bar = active.closest('.filter-bar')
+        const firstBtn = bar?.querySelector('.filter-widget__btn')
+        if (firstBtn) { event.preventDefault(); firstBtn.focus(); return }
+      } else if (active?.classList.contains('filter-widget__btn')) {
+        const bar = active.closest('.filter-bar')
+        if (bar) {
+          event.preventDefault()
+          const btns = [...bar.querySelectorAll('.filter-widget__btn')]
+          const idx = btns.indexOf(active)
+          if (idx >= 0 && idx < btns.length - 1) btns[idx + 1].focus()
+          else bar.querySelector('.panel-search')?.focus()
+          return
+        }
+      }
+    }
+
     if (document.activeElement?.classList.contains('panel-search') && event.key !== 'Escape' && event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return
 
     // Sur Mac, Alt+lettre produit event.key modifié ('˜','µ'…) — event.code est fiable

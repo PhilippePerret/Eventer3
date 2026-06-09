@@ -24,7 +24,7 @@ test.describe('Annulation entrée accidentelle dans un lister vide', () => {
 
     console.log('-> → accidentel sur e1 (sans sous-lister) → lister virtuel + édition')
     await page.keyboard.press('ArrowRight')
-    await expect(page.locator('#main-panel input')).toBeVisible()
+    await expect(page.locator('#main-panel input.event-text')).toBeVisible()
 
     console.log('-> Escape pour annuler')
     await page.keyboard.press('Escape')
@@ -55,7 +55,7 @@ test.describe('Annulation entrée accidentelle dans un lister vide', () => {
 
     console.log('-> → accidentel sur e1')
     await page.keyboard.press('ArrowRight')
-    await expect(page.locator('#main-panel input')).toBeVisible()
+    await expect(page.locator('#main-panel input.event-text')).toBeVisible()
 
     console.log('-> ← pour annuler')
     await page.keyboard.press('ArrowLeft')

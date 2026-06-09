@@ -1,11 +1,13 @@
 export default class PopupSelect {
 
-  constructor({ options, currentValue, multi = false, allowCustom = false, onSelect, onCancel, keyboardController = null }) {
+  constructor({ options, currentValue, multi = false, allowCustom = false, onSelect, onCancel, onChange = null, onTab = null, keyboardController = null }) {
     this.options = options
     this.multi = multi
     this.allowCustom = allowCustom
     this.onSelect = onSelect
     this.onCancel = onCancel
+    this.onChange = onChange
+    this.onTab = onTab
     this.keyboardController = keyboardController
     this.currentValue = currentValue
     this.selectedValues = multi ? (Array.isArray(currentValue) ? [...currentValue] : []) : []
@@ -122,6 +124,7 @@ export default class PopupSelect {
       }
 
       li.dataset.index = i
+      li.dataset.value = String(opt.value)
       li.addEventListener('click', () => this._selectByIndex(i))
       this.listElement.appendChild(li)
     })
@@ -168,6 +171,7 @@ export default class PopupSelect {
       if (i >= 0) this.selectedValues.splice(i, 1)
       else this.selectedValues.push(opt.value)
       this._renderOptions()
+      this.onChange?.([...this.selectedValues])
     } else {
       this.currentValue = opt.value
       this.close()
@@ -202,6 +206,12 @@ export default class PopupSelect {
 
   handleKeyDown(event, _controller) {
     switch (event.key) {
+      case 'Tab':
+        event.preventDefault()
+        this.close()
+        if (this.onTab) this.onTab()
+        else if (this.onCancel) this.onCancel()
+        return
       case 'ArrowDown':
         event.preventDefault()
         this._focusOption(this.focusedIndex + 1)

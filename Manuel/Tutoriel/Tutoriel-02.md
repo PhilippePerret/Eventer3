@@ -107,3 +107,27 @@ Si nous considérons Le Titanic, par exemple, l’intrigue principale concerne l
 On se souvent bien entendu de ce moment où les deux intrigues se croisent, au milieu du film :
 
 - les deux vigiles, alors qu’ils observent Rose et Jack s’embrasser sur le pont, s’aperçoivent trop tard que le paquebot fonce dans un iceberg
+
+Cet évènement appartiendra donc aux deux intrigues, au deux brins.
+
+> Pourquoi le nom « brin » au lieu d’intrigue ? Tout simplement parce que ce mot recouvre bien d’autre chose que des intrigues. Un brin peut permettre de suivre le développement d’un thème particulier, ou l’évolution de la relation entre deux personnages, ou même l’utilisation d’un décor ou d’un accessoire. Il fallait donc un nom différent de « intrigue » et puisqu’une histoire peut être vue comme une corde faite de brins entrelacés, le nom « brin » a été retenu.
+
+Vous pouvez maintenant charger le fichier [eventer-titanic] pour 
+
+- téléchargez le fichier
+
+- importez-le dans *Eventer* grâce à : 
+
+  - combinaison ⌘+k
+
+    => ouvre la boite des outils
+
+  - touche « i » pour « importer »
+
+  - choisir le fichier téléchargé
+
+    => Le nouveau projet « Titanic » a été importé dans *Eventer*
+
+  - pressez plusieurs fois  « ← » pour revenir à la liste des projets avec plusieurs 
+
+  - choisir le projet « Titanic »
