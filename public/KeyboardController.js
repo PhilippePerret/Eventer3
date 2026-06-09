@@ -9,11 +9,15 @@ import Perso from './classes/models/Perso.js'
 
 export default class KeyboardController {
 
+  // Panels ordered by z-index ascending (reversed = highest first)
+  static MOVABLE_PANEL_IDS = ['#filter-selector-panel', '#brin-panel', '#perso-panel', '#style-panel', '#shortcuts-panel', '#tools-panel']
+
   constructor() {
     this.activeLister = null
     this.modeStack = []
     this.shortcutsPanel = new ShortcutsPanel()
     this.toolsPanel = new ToolsPanel()
+    this._panelOffsets = new WeakMap()
   }
 
   register(lister) {
@@ -70,6 +74,16 @@ export default class KeyboardController {
         this.activeLister?.close()
       }
       return
+    }
+
+    // Ctrl+Shift+Arrow : déplacer le panneau au premier plan
+    if (event.ctrlKey && event.shiftKey && !event.metaKey && ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+      const el = this._getMovableElement()
+      if (el) {
+        this._movePanel(el, event.key)
+        event.preventDefault()
+        return
+      }
     }
 
     // Modes spéciaux (popup-select…)
@@ -246,6 +260,28 @@ export default class KeyboardController {
 
     }
 
+  }
+
+  _getMovableElement() {
+    const ids = [...KeyboardController.MOVABLE_PANEL_IDS].reverse()
+    for (const id of ids) {
+      const el = document.querySelector(id)
+      if (!el || el.classList.contains('hidden')) continue
+      const kids = el.children
+      return kids.length === 1 ? kids[0] : el
+    }
+    return null
+  }
+
+  _movePanel(el, direction) {
+    const step = 50
+    if (!this._panelOffsets.has(el)) this._panelOffsets.set(el, { dx: 0, dy: 0 })
+    const offset = this._panelOffsets.get(el)
+    if (direction === 'ArrowDown')  offset.dy += step
+    if (direction === 'ArrowUp')    offset.dy -= step
+    if (direction === 'ArrowRight') offset.dx += step
+    if (direction === 'ArrowLeft')  offset.dx -= step
+    el.style.translate = `${offset.dx}px ${offset.dy}px`
   }
 
   _enterFilterSequence() {
