@@ -22,6 +22,7 @@
 /* Sélection atténuée dans les listings arrière-plan quand un panneau est au premier plan */
 body:has(#brin-panel:not(.hidden)) #main-panel .selected,
 body:has(#perso-panel:not(.hidden)) #main-panel .selected,
+body:has(#style-panel:not(.hidden)) #main-panel .selected,
 body:has(#perso-panel:not(.hidden)) #brin-panel .selected,
 body:has(#shortcuts-panel:not(.hidden)) #main-panel .selected,
 body:has(#shortcuts-panel:not(.hidden)) #brin-panel .selected,
@@ -182,7 +183,7 @@ body {
 }
 
 .event-text {
-  display: inline;
+  display: inline-block;
   font-size: 25px;
   line-height: 1.4;
   white-space: nowrap;
@@ -362,6 +363,57 @@ body {
   justify-content: center;
   padding-top: 6vh;
   z-index: 100;
+}
+
+#style-panel {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 20, 20, .10);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 6vh;
+  z-index: 102;
+}
+
+.style-panel__inner {
+  width: min(95vw, 860px);
+  max-height: 80vh;
+  overflow: auto;
+  background: #f6f3ee;
+  border: 1px solid #ddd6ca;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .22);
+}
+
+.style-row {
+  grid-template-columns: 30px 1fr;
+}
+
+.style-row .panel-check {
+  opacity: 0;
+}
+
+.style-row.checked .panel-check {
+  opacity: 1;
+  color: #00a832;
+}
+
+.style-row.selected {
+  background: var(--selected) !important;
+  color: white;
+}
+
+.style-row.selected.checked .panel-check {
+  color: white;
+}
+
+.style-item__preview {
+  padding: 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #perso-panel {

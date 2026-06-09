@@ -159,6 +159,16 @@ export default class KeyboardController {
         }
         return
 
+      case 's': case 'S':
+        if (this.activeLister.constructor.name === 'StyleLister') {
+          this.activeLister.close()
+          event.preventDefault()
+        } else if (typeof this.activeLister.openStylePanel === 'function') {
+          this.activeLister.openStylePanel({ applyToCheckedEvents: event.shiftKey }).catch(err => console.error('openStylePanel:', err))
+          event.preventDefault()
+        }
+        return
+
       case 'ArrowRight':
         this.activeLister.enterSelectedItem().catch(err => console.error('enterSelectedItem:', err))
         event.preventDefault()

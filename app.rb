@@ -115,6 +115,22 @@ post '/api/listers/:id/items' do
   JSON.generate(item)
 end
 
+get '/api/themes' do
+  content_type :json
+  themes_dir = File.join(DATA_DIR, 'themes')
+  styles = []
+  if Dir.exist?(themes_dir)
+    Dir.glob(File.join(themes_dir, '*.css')).sort.each do |file|
+      css = File.read(file)
+      css.scan(/\.([a-zA-Z][a-zA-Z0-9_-]*)\s*\{([^}]*)\}/m) do |name, body|
+        label = name.gsub(/[-_]/, ' ').split.map(&:capitalize).join(' ')
+        styles << { name: name, label: label, css: body.strip }
+      end
+    end
+  end
+  JSON.generate(styles)
+end
+
 get '/' do
   content_type :html
   send_file File.join(settings.public_folder, 'index.html')

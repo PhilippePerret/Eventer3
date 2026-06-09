@@ -10,6 +10,7 @@ export default class Event extends Item {
   constructor(data = {}) {
     super(data)
     this.brin_ids = data.brin_ids ?? []
+    this.css = Array.isArray(data.css) ? [...data.css] : []
   }
 
 

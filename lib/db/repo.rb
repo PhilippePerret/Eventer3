@@ -398,7 +398,8 @@ module DB
                COALESCE(bp.badge, pers.badge) AS badge,
                bp.perso_ids AS brin_perso_ids,
                pers.patronyme, pers.avatar, pers.fonction,
-               COALESCE(ep.lister_id, pp.lister_id) AS lister_id
+               COALESCE(ep.lister_id, pp.lister_id) AS lister_id,
+               ep.css
         FROM items i
         LEFT JOIN project_props pp   ON pp.item_id = i.id
         LEFT JOIN event_props   ep   ON ep.item_id = i.id
@@ -411,6 +412,7 @@ module DB
         row['brin_ids']       = JSON.parse(row['brin_ids']       || '[]') rescue []
         row['perso_ids']      = JSON.parse(row['perso_ids']      || '[]') rescue []
         row['brin_perso_ids'] = JSON.parse(row['brin_perso_ids'] || '[]') rescue []
+        row['css']            = JSON.parse(row['css']            || '[]') rescue []
         row['active'] = row['active'].nil? ? nil : row['active'].to_i == 1
         hash[row['id']] = row
       end
@@ -461,6 +463,10 @@ module DB
       if payload.key?('state')
         db.execute("UPDATE event_props SET state = ? WHERE item_id = ?",
           [payload['state'].to_i, item_id])
+      end
+      if payload.key?('css')
+        db.execute("UPDATE event_props SET css = ? WHERE item_id = ?",
+          [JSON.generate(payload['css']), item_id])
       end
       if payload.key?('badge')
         db.execute("UPDATE brin_props  SET badge = ? WHERE item_id = ?", [payload['badge'], item_id])

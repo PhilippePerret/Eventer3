@@ -49,7 +49,8 @@ module DB
       meteo     TEXT,
       effet     TEXT,
       dyndate   TEXT,
-      is_script INTEGER DEFAULT 0
+      is_script INTEGER DEFAULT 0,
+      css       TEXT DEFAULT '[]'
     );
 
     CREATE TABLE IF NOT EXISTS brin_props (
@@ -92,6 +93,11 @@ module DB
     SCHEMA.split(';').each do |stmt|
       stmt = stmt.strip
       db.execute(stmt) unless stmt.empty?
+    end
+    begin
+      db.execute("ALTER TABLE event_props ADD COLUMN css TEXT DEFAULT '[]'")
+    rescue SQLite3::Exception => e
+      raise unless e.message.include?('duplicate column name')
     end
     db.close
   end

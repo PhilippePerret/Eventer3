@@ -2,6 +2,7 @@ import Lister from './Lister.js'
 import Event from './Event.js'
 import BrinLister from './BrinLister.js'
 import PersoLister from './PersoLister.js'
+import StyleLister from './StyleLister.js'
 import ListerRepository from '../repositories/ListerRepository.js'
 import StatusBar from '../ui/StatusBar.js'
 import FooterHelp from '../ui/FooterHelp.js'
@@ -91,11 +92,25 @@ export default class EventLister extends Lister {
     await PersoLister.open(this)
   }
 
+  async openStylePanel(options = {}) {
+    await StyleLister.open(this, options)
+  }
+
   render() {
     const result = super.render()
     StatusBar.update('events')
     void this._loadAndRenderPersoMarks()
+    void this._applyEventStyles()
     return result
+  }
+
+  async _applyEventStyles() {
+    const styles = await StyleLister.loadStyles()
+    this.items.forEach((ev, idx) => {
+      if (Array.isArray(ev.css) && ev.css.length > 0) {
+        StyleLister.applyToEventElement(ev, this.domItems[idx], styles)
+      }
+    })
   }
 
   toggleDisplayMode() {

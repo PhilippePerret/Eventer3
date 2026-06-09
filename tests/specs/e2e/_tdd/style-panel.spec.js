@@ -1,4 +1,4 @@
-import { installFixtures } from '../../../helpers/install-fixtures'
+import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect } from '../__setup__.js'
 
 test.beforeEach(() => {
@@ -7,7 +7,7 @@ test.beforeEach(() => {
 
 // fixture with-styles :
 //   project-a, events e1/e2, brins b1/b2
-//   themes/default.css : .style-gros (font-size:26px), .style-petit (font-size:9px)
+//   themes/default.css : .titre (font-size:26px, underline), .note-rouge (font-size:9px, red, margin)
 
 async function goToEventLister(page) {
   await page.goto('/')
@@ -135,32 +135,40 @@ test("Space décoche un style coché", async ({ page }) => {
 
 // ─── Application CSS immédiate ───────────────────────────────────────────────
 
-test("cocher style-gros applique font-size:26px à .event-body de l'event courant", async ({ page }) => {
+test("cocher .titre applique font-size:26px à .event-text de l'event courant", async ({ page }) => {
   await openStylePanel(page)
-  // s'assurer que style-gros est bien en position 0
   const name0 = await page.locator('.style-item').nth(0).getAttribute('data-name')
-  expect(name0).toBe('style-gros')
+  expect(name0).toBe('titre')
   await page.keyboard.press(' ')
-  await expect(page.locator('.event-item').nth(0).locator('.event-body'))
+  await expect(page.locator('.event-item').nth(0).locator('.event-text'))
     .toHaveCSS('font-size', '26px')
 })
 
-test("cocher style-petit applique font-size:9px à .event-body", async ({ page }) => {
+test("cocher .note-rouge applique font-size:9px à .event-text", async ({ page }) => {
   await openStylePanel(page)
-  await page.keyboard.press('ArrowDown') // → style-petit
+  await page.keyboard.press('ArrowDown') // → note-rouge
   const name1 = await page.locator('.style-item').nth(1).getAttribute('data-name')
-  expect(name1).toBe('style-petit')
+  expect(name1).toBe('note-rouge')
   await page.keyboard.press(' ')
-  await expect(page.locator('.event-item').nth(0).locator('.event-body'))
+  await expect(page.locator('.event-item').nth(0).locator('.event-text'))
     .toHaveCSS('font-size', '9px')
 })
 
-test("décocher un style retire son effet CSS de .event-body", async ({ page }) => {
+test("cocher .note-rouge applique margin-left à .event-text (inline-block requis)", async ({ page }) => {
   await openStylePanel(page)
-  await page.keyboard.press(' ') // cocher style-gros
+  await page.keyboard.press('ArrowDown') // → note-rouge
+  await page.keyboard.press(' ')
+  const ml = await page.locator('.event-item').nth(0).locator('.event-text').evaluate(el =>
+    getComputedStyle(el).marginLeft
+  )
+  expect(ml).not.toBe('0px')
+})
+
+test("décocher un style retire son effet CSS de .event-text", async ({ page }) => {
+  await openStylePanel(page)
+  await page.keyboard.press(' ') // cocher .titre
   await page.keyboard.press(' ') // décocher
-  // retour à la taille par défaut (pas 26px)
-  const fontSize = await page.locator('.event-item').nth(0).locator('.event-body').evaluate(el =>
+  const fontSize = await page.locator('.event-item').nth(0).locator('.event-text').evaluate(el =>
     parseFloat(getComputedStyle(el).fontSize)
   )
   expect(fontSize).not.toBe(26)
@@ -168,27 +176,26 @@ test("décocher un style retire son effet CSS de .event-body", async ({ page }) 
 
 // ─── L'ordre compte ──────────────────────────────────────────────────────────
 
-test("ordre [style-gros, style-petit] → font-size 9px (petit appliqué en dernier, gagne)", async ({ page }) => {
+test("ordre [titre, note-rouge] → font-size 9px (note-rouge appliqué en dernier, gagne)", async ({ page }) => {
   await openStylePanel(page)
-  // style-gros est index 0, style-petit est index 1
-  await page.keyboard.press(' ')           // cocher style-gros (index 0)
-  await page.keyboard.press('ArrowDown')   // → style-petit
-  await page.keyboard.press(' ')           // cocher style-petit
-  // ordre : [style-gros, style-petit] → petit gagne → 9px
-  await expect(page.locator('.event-item').nth(0).locator('.event-body'))
+  await page.keyboard.press(' ')           // cocher .titre (index 0)
+  await page.keyboard.press('ArrowDown')   // → .note-rouge
+  await page.keyboard.press(' ')           // cocher .note-rouge
+  // ordre panel : [titre, note-rouge] → note-rouge appliqué en dernier → 9px
+  await expect(page.locator('.event-item').nth(0).locator('.event-text'))
     .toHaveCSS('font-size', '9px')
 })
 
-test("inverser l'ordre [style-petit, style-gros] → font-size 26px (gros appliqué en dernier)", async ({ page }) => {
+test("inverser l'ordre [note-rouge, titre] → font-size 26px (titre appliqué en dernier)", async ({ page }) => {
   await openStylePanel(page)
-  await page.keyboard.press(' ')           // cocher style-gros (index 0, sélectionné)
+  await page.keyboard.press(' ')           // cocher .titre (index 0, sélectionné)
   await page.keyboard.press('ArrowDown')
-  await page.keyboard.press(' ')           // cocher style-petit (index 1)
-  await page.keyboard.press('ArrowUp')     // revenir sur style-gros (index 0)
-  // ⌘↓ déplace style-gros après style-petit → ordre [style-petit, style-gros]
+  await page.keyboard.press(' ')           // cocher .note-rouge (index 1)
+  await page.keyboard.press('ArrowUp')     // revenir sur .titre (index 0)
+  // ⌘↓ déplace .titre après .note-rouge → ordre [note-rouge, titre]
   await page.keyboard.press('Meta+ArrowDown')
-  // gros appliqué en dernier → 26px
-  await expect(page.locator('.event-item').nth(0).locator('.event-body'))
+  // titre appliqué en dernier → 26px
+  await expect(page.locator('.event-item').nth(0).locator('.event-text'))
     .toHaveCSS('font-size', '26px')
 })
 
@@ -205,35 +212,36 @@ test("⌘↓ déplace le style vers le bas dans le panneau", async ({ page }) =>
 test("⌘↑ déplace le style vers le haut dans le panneau", async ({ page }) => {
   await openStylePanel(page)
   await page.keyboard.press('ArrowDown')
-  const nameAt1Before = await page.locator('.style-item').nth(1).getAttribute('data-name')
+  const nameAt1 = await page.locator('.style-item').nth(1).getAttribute('data-name')
   await page.keyboard.press('Meta+ArrowUp')
   const nameAt0After = await page.locator('.style-item').nth(0).getAttribute('data-name')
-  expect(nameAt0After).toBe(nameAt1Before)
+  expect(nameAt0After).toBe(nameAt1)
 })
 
 // ─── Changement d'event en fond (⌥↓/⌥↑) ────────────────────────────────────
 
-test("⌥↓ passe à l'event suivant en fond", async ({ page }) => {
+test("⌥↓ passe à l'event suivant en fond, mise à jour des styles cochés", async ({ page }) => {
   await openStylePanel(page)
-  await page.keyboard.press(' ') // cocher style-gros sur e1
+  await page.keyboard.press(' ') // cocher .titre sur e1
   await page.keyboard.press('Alt+ArrowDown') // passer à e2
   await expect(page.locator('.event-item').nth(1)).toHaveClass(/selected/)
-  // e2 n'a pas de style coché
   await expect(page.locator('.style-item').nth(0)).not.toHaveClass(/checked/)
 })
 
-test("⌥↑ revient à l'event précédent", async ({ page }) => {
+test("⌥↑ revient à l'event précédent, styles cochés restaurés", async ({ page }) => {
   await openStylePanel(page)
+  await page.keyboard.press(' ') // cocher .titre sur e1
   await page.keyboard.press('Alt+ArrowDown')
   await page.keyboard.press('Alt+ArrowUp')
   await expect(page.locator('.event-item').nth(0)).toHaveClass(/selected/)
+  await expect(page.locator('.style-item').nth(0)).toHaveClass(/checked/)
 })
 
 // ─── Persistance ─────────────────────────────────────────────────────────────
 
 test("persistance : style coché survit au rechargement", async ({ page }) => {
   await openStylePanel(page)
-  await page.keyboard.press(' ') // cocher style-gros
+  await page.keyboard.press(' ') // cocher .titre
   await page.waitForLoadState('networkidle')
 
   await page.reload()
@@ -255,28 +263,42 @@ test("persistance : style décoché survit au rechargement", async ({ page }) =>
   await expect(page.locator('.style-item').nth(0)).not.toHaveClass(/checked/)
 })
 
-test("persistance : font-size correcte sur .event-body après rechargement", async ({ page }) => {
+test("persistance : font-size correcte sur .event-text après rechargement", async ({ page }) => {
   await openStylePanel(page)
-  await page.keyboard.press(' ') // cocher style-gros → 26px
+  await page.keyboard.press(' ') // cocher .titre → 26px
   await page.waitForLoadState('networkidle')
 
   await page.reload()
   await goToEventLister(page)
-  await expect(page.locator('.event-item').nth(0).locator('.event-body'))
+  await expect(page.locator('.event-item').nth(0).locator('.event-text'))
     .toHaveCSS('font-size', '26px')
 })
 
-test("persistance : l'ordre inversé survit au rechargement (gros après petit → 26px)", async ({ page }) => {
+test("persistance : ordre inversé survit au rechargement (titre après note-rouge → 26px)", async ({ page }) => {
   await openStylePanel(page)
-  await page.keyboard.press(' ')           // cocher style-gros
+  await page.keyboard.press(' ')           // cocher .titre
   await page.keyboard.press('ArrowDown')
-  await page.keyboard.press(' ')           // cocher style-petit
+  await page.keyboard.press(' ')           // cocher .note-rouge
   await page.keyboard.press('ArrowUp')
-  await page.keyboard.press('Meta+ArrowDown') // ordre → [petit, gros]
+  await page.keyboard.press('Meta+ArrowDown') // ordre → [note-rouge, titre]
   await page.waitForLoadState('networkidle')
 
   await page.reload()
   await goToEventLister(page)
-  await expect(page.locator('.event-item').nth(0).locator('.event-body'))
+  await expect(page.locator('.event-item').nth(0).locator('.event-text'))
     .toHaveCSS('font-size', '26px')
+})
+
+// ─── Footer ──────────────────────────────────────────────────────────────────
+
+test("le panneau styles n'affiche pas 'nouveau après' dans le footer", async ({ page }) => {
+  await openStylePanel(page)
+  const footerText = await page.locator('#shortcuts-footer').textContent()
+  expect(footerText).not.toContain('nouveau après')
+})
+
+test("le panneau styles affiche 'déplacer' dans le footer", async ({ page }) => {
+  await openStylePanel(page)
+  const footerText = await page.locator('#shortcuts-footer').textContent()
+  expect(footerText.toLowerCase()).toContain('déplacer')
 })

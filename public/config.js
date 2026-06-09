@@ -26,12 +26,18 @@ window.APP_UI_MODES = {
   eventsRoot: [
     ['b', 'brins'],
     ['p', 'personnages'],
+    ['s', 'styles'],
     ['o', 'options']
   ],
   itemEditing: [
     ['⇥', 'propriété suivante'],
     ['⏎', 'enregistrer'],
     ['␛', 'annuler']
+  ],
+  stylePanel: [
+    ['↑ ↓', 'choisir'],
+    ['␣', 'cocher / décocher'],
+    ['⌘↓ ⌘↑', 'déplacer (le dernier l\'emporte)']
   ],
   modalPanel: [
     ['⌘⏎', 'fermer'],
