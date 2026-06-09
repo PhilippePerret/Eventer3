@@ -1,3 +1,3 @@
-- la taille ne s'applique pas. Quand je choisis note-rouge, le texte devrait être petit, il garde sa taille normale => TEST
-- Il ne faut pas que les styles s'appliquent à la partie left de l'event, AUCUN (MAIS ATTENTION : la partie body est un span mais je veux pouvoir utiliser les margin et autres styles qui s'appliquent à des display:block ou inline-block) -- Quelle est la solution ? => TEST avec la margin-left définie
-- l'aide du footer ne se règle pas (les raccourcis "n", "Enter", etc. ne sont pas fonctionnels, dans cette fenêtre -- il ne faut garder que les flèches de navigation, de déplacement et de choix -- profiter qu'il y a peu de choix pour indiquer "⌘↓↑ Déplacer (le dernier style l'emporte)")
+Le fonctionnement du filtre est pourri. C'est tout ce que je peux en dire pour le moment.
+
+- le panneau brins du mode filtre devrait avoir DES COCHES BLANCHES !!!! à la sélection, POURQUOI EST-CE QUE JE N'ARRIVE PAS À OBTENIR ÇA ??????!!!!!!
