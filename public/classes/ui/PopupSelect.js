@@ -1,6 +1,6 @@
 export default class PopupSelect {
 
-  constructor({ options, currentValue, multi = false, allowCustom = false, onSelect, onCancel, onChange = null, onTab = null, keyboardController = null }) {
+  constructor({ options, currentValue, multi = false, allowCustom = false, onSelect, onCancel, onChange = null, onTab = null, keyboardController = null, disabledValues = [] }) {
     this.options = options
     this.multi = multi
     this.allowCustom = allowCustom
@@ -9,6 +9,7 @@ export default class PopupSelect {
     this.onChange = onChange
     this.onTab = onTab
     this.keyboardController = keyboardController
+    this.disabledValues = disabledValues
     this.currentValue = currentValue
     this.selectedValues = multi ? (Array.isArray(currentValue) ? [...currentValue] : []) : []
     this.focusedIndex = 0
@@ -123,9 +124,13 @@ export default class PopupSelect {
         li.appendChild(document.createTextNode(opt.label))
       }
 
+      if (this.disabledValues.includes(opt.value)) {
+        li.classList.add('disabled')
+      }
+
       li.dataset.index = i
       li.dataset.value = String(opt.value)
-      li.addEventListener('click', () => this._selectByIndex(i))
+      li.addEventListener('click', () => { if (!this.disabledValues.includes(opt.value)) this._selectByIndex(i) })
       this.listElement.appendChild(li)
     })
 
@@ -166,6 +171,7 @@ export default class PopupSelect {
   _selectByIndex(index) {
     const opt = this.filteredOptions[index]
     if (!opt) return
+    if (this.disabledValues.includes(opt.value)) return
     if (this.multi) {
       const i = this.selectedValues.indexOf(opt.value)
       if (i >= 0) this.selectedValues.splice(i, 1)

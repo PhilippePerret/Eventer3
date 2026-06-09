@@ -99,6 +99,11 @@ module DB
     rescue SQLite3::Exception => e
       raise unless e.message.include?('duplicate column name')
     end
+    begin
+      db.execute("ALTER TABLE event_props ADD COLUMN lieu TEXT")
+    rescue SQLite3::Exception => e
+      raise unless e.message.include?('duplicate column name')
+    end
     db.close
   end
 

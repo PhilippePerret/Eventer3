@@ -392,7 +392,7 @@ module DB
       rows = db.execute(<<~SQL, item_ids)
         SELECT i.id, i.title, i.type, i.color, i.checked, i.duration, i.created_at, i.updated_at,
                pp.active, pp.state AS project_state,
-               ep.state AS state, ep.meteo, ep.effet,
+               ep.state AS state, ep.meteo, ep.effet, ep.lieu,
                CASE WHEN ep.item_id IS NOT NULL THEN ep.perso_ids ELSE pp.perso_ids END AS perso_ids,
                CASE WHEN ep.item_id IS NOT NULL THEN ep.brin_ids  ELSE pp.brin_ids  END AS brin_ids,
                COALESCE(bp.badge, pers.badge) AS badge,
@@ -467,6 +467,15 @@ module DB
       if payload.key?('css')
         db.execute("UPDATE event_props SET css = ? WHERE item_id = ?",
           [JSON.generate(payload['css']), item_id])
+      end
+      if payload.key?('meteo')
+        db.execute("UPDATE event_props SET meteo = ? WHERE item_id = ?", [payload['meteo'], item_id])
+      end
+      if payload.key?('effet')
+        db.execute("UPDATE event_props SET effet = ? WHERE item_id = ?", [payload['effet'], item_id])
+      end
+      if payload.key?('lieu')
+        db.execute("UPDATE event_props SET lieu = ? WHERE item_id = ?", [payload['lieu'], item_id])
       end
       if payload.key?('badge')
         db.execute("UPDATE brin_props  SET badge = ? WHERE item_id = ?", [payload['badge'], item_id])

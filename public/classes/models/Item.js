@@ -140,11 +140,13 @@ export default class Item {
   _openPopupSelect(triggerElement, fields, inputs, keyboardController) {
     const field = fields.find(f => f.name === triggerElement.dataset.fieldName)
     if (!field) return
+    const disabledValues = field.getDisabledValues?.(this) ?? []
     const popup = new PopupSelect({
       options: field.options,
       currentValue: this[field.property],
       multi: field.multi ?? false,
       allowCustom: field.allowCustom ?? false,
+      disabledValues,
       keyboardController,
       onSelect: (value) => {
         this[field.property] = value
