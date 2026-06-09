@@ -1,5 +1,6 @@
 import Lister from './Lister.js'
 import Event from './Event.js'
+import { EVENT_STATE, EVENT_METEO, EVENT_EFFET } from '../../constants.js'
 import BrinLister from './BrinLister.js'
 import PersoLister from './PersoLister.js'
 import StyleLister from './StyleLister.js'
@@ -15,6 +16,15 @@ export default class EventLister extends Lister {
   }
 
   get uiModes() { return ['listerRoot', 'eventsRoot'] }
+
+  get filterWidgets() {
+    return [
+      { type: 'text',  field: 'title', placeholder: 'Filtrer…' },
+      { type: 'menu',  field: 'state',  label: 'état',   values: EVENT_STATE.map(s => ({ value: String(s.value), label: s.label })) },
+      { type: 'menu',  field: 'meteo',  label: 'météo',  values: Object.entries(EVENT_METEO).map(([k, v]) => ({ value: k, label: v.trim() })) },
+      { type: 'menu',  field: 'effet',  label: 'effet',  values: Object.entries(EVENT_EFFET).map(([k, v]) => ({ value: k, label: v })) },
+    ]
+  }
 
   get childListerClass() {
     return EventLister

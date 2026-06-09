@@ -1,9 +1,10 @@
+import Lister from './Lister.js'
 import ListerRepository from '../repositories/ListerRepository.js'
 import FooterHelp from '../ui/FooterHelp.js'
 
 const PREVIEW_TEXT = 'Il était une fois une histoire extraordinaire...'
 
-export default class StyleLister {
+export default class StyleLister extends Lister {
 
   // ── Static ──────────────────────────────────────────────────────────
 
@@ -47,25 +48,16 @@ export default class StyleLister {
   // ── Constructor ─────────────────────────────────────────────────────
 
   constructor({ eventLister, styles, keyboardController, options = {} }) {
+    super({ type: 'styles', keyboardController })
     this.eventLister = eventLister
-    this.keyboardController = keyboardController
     this.options = options
-    this.editing = false
-    this.selectedIndex = 0
-    this.domItems = []
-    this.domContainer = null
     this._styles = styles
     this._initItems()
   }
 
-  _initItems() {
-    const ev = this.selectedEvent
-    const checkedNames = Array.isArray(ev?.css) ? ev.css : []
-    const checkedStyles = checkedNames.map(n => this._styles.find(s => s.name === n)).filter(Boolean)
-    const uncheckedStyles = this._styles.filter(s => !checkedNames.includes(s.name))
-    this.items = [...checkedStyles, ...uncheckedStyles]
-    this._checkedNames = new Set(checkedNames)
-  }
+  // ── Filter ──────────────────────────────────────────────────────────
+
+  get filterField() { return 'name' }
 
   // ── Accessors ───────────────────────────────────────────────────────
 
@@ -81,6 +73,17 @@ export default class StyleLister {
     return this._checkedNames.has(style.name)
   }
 
+  // ── Items init ──────────────────────────────────────────────────────
+
+  _initItems() {
+    const ev = this.selectedEvent
+    const checkedNames = Array.isArray(ev?.css) ? ev.css : []
+    const checkedStyles = checkedNames.map(n => this._styles.find(s => s.name === n)).filter(Boolean)
+    const uncheckedStyles = this._styles.filter(s => !checkedNames.includes(s.name))
+    this.items = [...checkedStyles, ...uncheckedStyles]
+    this._checkedNames = new Set(checkedNames)
+  }
+
   // ── Render ──────────────────────────────────────────────────────────
 
   render() {
@@ -92,13 +95,7 @@ export default class StyleLister {
     card.className = 'style-panel__inner'
     panel.appendChild(card)
 
-    const header = document.createElement('div')
-    header.className = 'panel-header'
-    const titleEl = document.createElement('span')
-    titleEl.className = 'panel-title'
-    titleEl.textContent = `Styles · ${this.selectedEvent?.title ?? ''}`
-    header.appendChild(titleEl)
-    card.appendChild(header)
+    this._renderPanelHeader(card, `Styles · ${this.selectedEvent?.title ?? ''}`)
 
     FooterHelp.update(this.uiModes)
 
@@ -143,23 +140,6 @@ export default class StyleLister {
     return el
   }
 
-  // ── Navigation ──────────────────────────────────────────────────────
-
-  selectItemAt(i) {
-    if (i < 0 || i >= this.domItems.length) return
-    this.domItems[this.selectedIndex]?.classList.remove('selected')
-    this.domItems[i].classList.add('selected')
-    this.selectedIndex = i
-  }
-
-  selectNextItem() {
-    if (this.selectedIndex < this.items.length - 1) this.selectItemAt(this.selectedIndex + 1)
-  }
-
-  selectPreviousItem() {
-    if (this.selectedIndex > 0) this.selectItemAt(this.selectedIndex - 1)
-  }
-
   // ── Toggle ──────────────────────────────────────────────────────────
 
   toggleSelectedItemChecked() {
@@ -178,24 +158,7 @@ export default class StyleLister {
 
   // ── Move ────────────────────────────────────────────────────────────
 
-  moveSelectedItemDown() { this._moveSelectedItem(1) }
-  moveSelectedItemUp()   { this._moveSelectedItem(-1) }
-
-  _moveSelectedItem(direction) {
-    const current = this.selectedIndex
-    const target = current + direction
-    if (target < 0 || target >= this.items.length) return
-
-    const [movedItem] = this.items.splice(current, 1)
-    this.items.splice(target, 0, movedItem)
-
-    const [movedEl] = this.domItems.splice(current, 1)
-    this.domItems.splice(target, 0, movedEl)
-
-    if (direction > 0) this.domItems[target - 1]?.after(movedEl)
-    else               this.domItems[target + 1]?.before(movedEl)
-
-    this.selectedIndex = target
+  _onAfterMoveItem() {
     this._syncEventCss()
   }
 

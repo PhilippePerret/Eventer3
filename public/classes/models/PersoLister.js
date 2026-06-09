@@ -104,13 +104,7 @@ export default class PersoLister extends Lister {
     card.className = 'perso-panel__inner'
     panel.appendChild(card)
 
-    const header = document.createElement('div')
-    header.className = 'panel-header'
-    const titleEl = document.createElement('span')
-    titleEl.className = 'panel-title'
-    titleEl.textContent = `Personnages · ${this.contextItem?.title ?? ''}`
-    header.appendChild(titleEl)
-    card.appendChild(header)
+    this._renderPanelHeader(card, `Personnages · ${this.contextItem?.title ?? ''}`)
 
     FooterHelp.update(this.uiModes)
 

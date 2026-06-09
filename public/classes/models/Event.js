@@ -1,4 +1,5 @@
 import Item from './Item.js'
+import { EVENT_STATE } from '../../constants.js'
 
 export default class Event extends Item {
 
@@ -10,6 +11,8 @@ export default class Event extends Item {
   constructor(data = {}) {
     super(data)
     this.brin_ids = data.brin_ids ?? []
+    this.meteo = data.meteo ?? null
+    this.effet = data.effet ?? 'jr'
     this.css = Array.isArray(data.css) ? [...data.css] : []
   }
 
@@ -19,18 +22,7 @@ export default class Event extends Item {
   }
 
   static get stateOptions() {
-    return [
-      { value: 0, label: '—' },
-      { value: 1, label: 'ébauche' },
-      { value: 2, label: 'développement' },
-      { value: 3, label: 'premier jet' },
-      { value: 4, label: 'réécriture' },
-      { value: 5, label: 'achèvement' },
-      { value: 6, label: 'à corriger' },
-      { value: 7, label: 'correction' },
-      { value: 8, label: 'à relire' },
-      { value: 9, label: 'achevé' },
-    ]
+    return EVENT_STATE
   }
 
   render(div) {

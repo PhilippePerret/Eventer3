@@ -1,10 +1,4 @@
-Le fonctionnement du filtre est pourri. C'est tout ce que je peux en dire pour le moment. Il faut qu'on trouve une solution.
-- j'ai beau cocher/décocher des brins, ça NE FILTRE PAS les events concernés
-- le panneau brins du mode filtre devrait avoir DES COCHES BLANCHES !!!! à la sélection, POURQUOI EST-CE QUE JE N'ARRIVE PAS À OBTENIR ÇA ??????!!!!!!
-- la fenêtre personnages pour le filtre n'affiche pas les avatars (même lorsqu'ils existent). Et elle ne produit rien non plus comme filrage
-- la coche elle non plus n'est pas blanche, malgré mes nombreuses demandes
-- On ne voit pas assez qu'on passe en mode filtre (malgré la "lumière" en bas d'écran). En fait, je voudrais que la combinaison cmd+: ouvre une bande
-- En fait, il y a deux comportements, je pense :
-1) le filtrage des brins et des personnages par leur texte
-2) le filtrage des events, beaucoup plus important au niveau des critères
-Pour le 1), je demande depuis le début qu'il y ait un champ de saisi pour "filtrer" par le titre les brins et les personnages. Un champ TOUJOURS PRÉSENT et qui fonctionne de façon fuzzy. Pourrait-on s'occuper de ça ? Note : comme il n'y aura jamais un millier de brins ou de personnage, ce filtre fuzzy pourrait fonctionner avec le DOM. SAUF SI on fait un truc plus sérieux, respectueux de la philosophie, et donc coder pour Lister (et donc tout Lister) et qui virtualise la liste des items affichés, quels qu'ils soient, pour les gérer comme devraient l'être les filtres
+- le panneau brins et personnage du mode filtre devrait avoir DES COCHES BLANCHES !!!! à la sélection, POURQUOI EST-CE QUE JE N'ARRIVE PAS À OBTENIR ÇA ??????!!!!!!
+- faire ajouter meteo et effet dans ligne event
+- mettre ces menus et 'state' dans la ligne de filtre au-dessus des events
+

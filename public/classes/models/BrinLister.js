@@ -96,13 +96,7 @@ export default class BrinLister extends Lister {
     card.className = 'brin-panel__inner'
     panel.appendChild(card)
 
-    const header = document.createElement('div')
-    header.className = 'panel-header'
-    const titleEl = document.createElement('span')
-    titleEl.className = 'panel-title'
-    titleEl.textContent = `Brins · ${this.selectedEvent?.title ?? this.eventLister.parentItem?.title ?? ''}`
-    header.appendChild(titleEl)
-    card.appendChild(header)
+    this._renderPanelHeader(card, `Brins · ${this.selectedEvent?.title ?? this.eventLister.parentItem?.title ?? ''}`)
 
     FooterHelp.update(this.uiModes)
 

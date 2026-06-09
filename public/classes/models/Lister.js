@@ -48,6 +48,14 @@ export default class Lister {
 
   get uiModes() { return [] }
 
+  get hasSearchField() { return true }
+
+  get filterField() { return 'title' }
+
+  get filterWidgets() {
+    return [{ type: 'text', field: this.filterField, placeholder: 'Filtrer…' }]
+  }
+
   get contextPath() {
     if (this.parentItem) return `${this.parentItem.parentLister.contextPath}/lof-${this.parentItem.id}`
     return `lof-${this.id}`
@@ -104,6 +112,110 @@ export default class Lister {
     return null
   }
 
+  _renderPanelHeader(card, title) {
+    const header = document.createElement('div')
+    header.className = 'panel-header'
+    const titleEl = document.createElement('span')
+    titleEl.className = 'panel-title'
+    titleEl.textContent = title
+    header.appendChild(titleEl)
+    card.appendChild(header)
+    if (this.hasSearchField) this._renderFilterBar(card)
+  }
+
+  _renderFilterBar(container) {
+    const bar = document.createElement('div')
+    bar.className = 'filter-bar'
+    this._widgetFilterState = {}
+
+    this.filterWidgets.forEach(widget => {
+      const div = document.createElement('div')
+      div.className = 'filter-widget'
+      div.dataset.field = widget.field
+
+      if (widget.type === 'text') {
+        this._widgetFilterState[widget.field] = ''
+        const input = document.createElement('input')
+        input.type = 'text'
+        input.className = 'panel-search'
+        input.placeholder = widget.placeholder ?? 'Filtrer…'
+        div.appendChild(input)
+        input.addEventListener('input', () => {
+          this._widgetFilterState[widget.field] = input.value.trim().toLowerCase()
+          this._applyWidgetFilters()
+        })
+      } else if (widget.type === 'menu') {
+        this._widgetFilterState[widget.field] = new Set()
+        const btn = document.createElement('button')
+        btn.className = 'filter-widget__btn'
+        btn.textContent = widget.label ?? widget.field
+        const dropdown = document.createElement('div')
+        dropdown.className = 'filter-widget__dropdown hidden'
+
+        widget.values.forEach(opt => {
+          const optEl = document.createElement('div')
+          optEl.className = 'filter-widget__option'
+          optEl.dataset.value = String(opt.value)
+          optEl.textContent = opt.label
+          optEl.addEventListener('click', e => {
+            e.stopPropagation()
+            const set = this._widgetFilterState[widget.field]
+            const val = String(opt.value)
+            if (set.has(val)) { set.delete(val); optEl.classList.remove('active') }
+            else              { set.add(val);    optEl.classList.add('active') }
+            this._applyWidgetFilters()
+          })
+          dropdown.appendChild(optEl)
+        })
+
+        btn.addEventListener('click', e => {
+          e.stopPropagation()
+          bar.querySelectorAll('.filter-widget__dropdown:not(.hidden)').forEach(d => {
+            if (d !== dropdown) d.classList.add('hidden')
+          })
+          dropdown.classList.toggle('hidden')
+        })
+
+        div.appendChild(btn)
+        div.appendChild(dropdown)
+      }
+
+      bar.appendChild(div)
+    })
+
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.filter-widget__btn') && !e.target.closest('.filter-widget__dropdown')) {
+        bar.querySelectorAll('.filter-widget__dropdown').forEach(d => d.classList.add('hidden'))
+      }
+    })
+
+    container.appendChild(bar)
+  }
+
+  _applyWidgetFilters() {
+    this.items.forEach((item, i) => {
+      let visible = true
+      for (const [field, filter] of Object.entries(this._widgetFilterState)) {
+        if (typeof filter === 'string') {
+          if (filter && !(item[field] ?? '').toString().toLowerCase().includes(filter)) {
+            visible = false; break
+          }
+        } else if (filter instanceof Set && filter.size > 0) {
+          if (!filter.has(String(item[field] ?? ''))) {
+            visible = false; break
+          }
+        }
+      }
+      item._visible = visible
+      this.domItems[i]?.classList.toggle('hidden', !visible)
+    })
+    this._clampSelection()
+  }
+
+  focusTextFilter() {
+    this.domContainer?.querySelector('.panel-search')?.focus()
+  }
+
   render() {
     this.domContainer = document.querySelector('#main-panel')
     this.domContainer.innerHTML = ''
@@ -112,6 +224,7 @@ export default class Lister {
     this.domItems = []
     const header = this.renderHeader()
     if (header) this.domContainer.appendChild(header)
+    if (this.hasSearchField) this._renderFilterBar(this.domContainer)
     const activeItems = this.items.filter(item => item.active !== false)
     activeItems.forEach((item, itemIndex) => {
       const itemElement = item.createElement(this.itemClass.name.toLowerCase())
@@ -183,6 +296,10 @@ export default class Lister {
     if (direction > 0) targetItemElement.after(movedItemElement)
     else targetItemElement.before(movedItemElement)
     this.selectedIndex = targetIndex
+    this._onAfterMoveItem(currentIndex, targetIndex)
+  }
+
+  _onAfterMoveItem(currentIndex, targetIndex) {
     this._syncIdsOnMove(currentIndex, targetIndex)
     this.scheduleSave()
   }

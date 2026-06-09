@@ -107,6 +107,8 @@ export default class KeyboardController {
 
     if (!this.activeLister) return
 
+    if (document.activeElement?.classList.contains('panel-search') && event.key !== 'Escape' && event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return
+
     // Sur Mac, Alt+lettre produit event.key modifié ('˜','µ'…) — event.code est fiable
     if (event.altKey && !event.metaKey && !event.ctrlKey && event.code === 'KeyN') {
       this.activeLister.createNewItem?.()
@@ -249,8 +251,10 @@ export default class KeyboardController {
       case ':':
         if (event.metaKey || event.ctrlKey) {
           this._enterFilterSequence()
-          event.preventDefault()
+        } else {
+          this.activeLister?.focusTextFilter?.()
         }
+        event.preventDefault()
         return
 
       case 'Escape':

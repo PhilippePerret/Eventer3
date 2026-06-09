@@ -392,7 +392,7 @@ module DB
       rows = db.execute(<<~SQL, item_ids)
         SELECT i.id, i.title, i.type, i.color, i.checked, i.duration, i.created_at, i.updated_at,
                pp.active, pp.state AS project_state,
-               ep.state AS state,
+               ep.state AS state, ep.meteo, ep.effet,
                CASE WHEN ep.item_id IS NOT NULL THEN ep.perso_ids ELSE pp.perso_ids END AS perso_ids,
                CASE WHEN ep.item_id IS NOT NULL THEN ep.brin_ids  ELSE pp.brin_ids  END AS brin_ids,
                COALESCE(bp.badge, pers.badge) AS badge,
