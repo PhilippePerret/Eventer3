@@ -10,6 +10,20 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
 ## Todo
 
+- Rendre les panneaux déplaçables à la souris : 
+
+  - Ctrl+⌘+flèches permet de déplacer le panneau courant dans tous les sens, 
+  - ⇧ permet d’augmenter le pas.
+  - la position est consigné de façon « définitive » dans les `prefs.js` de l’user.
+
+- Implémenter le comportement spécial avec la touche ⇧ qui signifie « à tous les events cochés ». Au lieu d’appliquer simplement un choix à l’event sélectionné, il s’applique à tous les events cochés (ça doit être indiqué dans le titre, clairement. Fonctionne pour : 
+
+  - le choix des brins
+  - le choix des personnages
+  - les styles
+
+  Attention aux conflits : quel comportement adopté si un event coché ne comporte pas les mêmes caractéristiques que les autres (=> signaler et prendre le principe que les choix d’un event sont automatiquement ajouté. Si l’event E1 est dans Br1, E2 est dans Br2, si les deux sont cochés et que le panneau des brins est ouvert avec ⇧, les deux brins Br1 et Br2 sont cochés. Si on annule ça ne fait rien. Si on ferme, on doit appliquer les deux brins.
+
 - Modifier partout le fait que `Item.depth` n’existe plus et que `Lister.depth` prend le relais. La correction a déjà été faite dans dev/Specs-SQLite.md
 
 - En tirer les conséquences :

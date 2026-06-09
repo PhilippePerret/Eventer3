@@ -223,30 +223,7 @@
 
 ---
 
-## Affichage
-
-- [ ] Le raccourci ⌘+`m` permet de basculer du mode « normal » au mode par « niveau ». Le basculement change la liste affichée.
-
-### Style (panneau des styles)
-
-- [ ] Le raccourci ⌘+`s` permet d’ouvrir le panneau des styles pour les éditer
-- [ ] Le panneau affiche la liste de tous les styles, avec leur aspect
-- [ ] la touche ↩︎ permet d’éditer le style sélectionné
-  - [ ] la touche ⇥ permet de passer de propriété CSS en propriété, pour régler leurs valeurs (soit de façon explicite, soit à l’aide d’un menu).
-  - [ ] la touche ↩︎ permet de mettre fin à l’édition du style
-  - [ ] la modification d’un style se répercute aussitôt sur l’affichage (il faut bien entendu un style utilisé par quelque chose)
-- [ ] La touche « s » permet de choisir les styles de l’`Item` quelle que soit sa classe (cela ouvre le panneau des styles en mode choix) :
-  - [ ] le panneau des styles fonctionne comme les autres Lister pour la navigation, le choix et l’édition
-    - [ ] les touches ↓↑ permettent de se déplacer de style en style
-    - [ ] la touche ␣ permet de choisir (cocher/décocher) le style,
-    - [ ] la touche  ↩︎ permet d’éditer le style
-  - [ ] la combinaisons ⌘+↓↑ permet de passer de groupe de styles en groupes de styles (comme les panneaux de raccourcis clavier)
-  - [ ] À l’ouverture, le panneau des styles rassemble en haut les styles utilisés par l’item,
-  - [ ] Quand on décoche un style, il retourne à sa place « naturelle »
-  - [ ] on peut choisir les styles de l’*event*
-  - [ ] on peut choisir les styles du *brin*
-  - [ ] on peut choisir les styles du personnage
-  - [ ] la combinaison ⌘+↩︎ permet de mettre fin au choix
+- [ ] 
 
 ---
 
@@ -284,6 +261,35 @@
 - [ ] Les combinaisons avec la bouche `$` permettent de définir la recherche entièrement au clavier. L’aide Footer permet de visualiser les combinaisons.
 
 ---
+
+
+
+## Affichage
+
+- [x] Le raccourci ⌘+`m` permet de basculer du mode « normal » au mode par « niveau ». Le basculement change la liste affichée.
+
+### Styles CSS
+
+- [ ] La touche « s » sur un event permet de définir son style, donc ouvre le panneau des styles.
+  - [ ] ça ne fonctionne pas sur la liste des projets
+  - [ ] ça ne fonctionne pas sur les brins et les personnages
+- [ ] Le panneau des styles affiche tous les styles définis dans les fichiers du dossier des thèmes (`data/theme/`
+- [ ] On peut choisir les styles de l’event sélectionné et les ordonner :
+  - [ ] les touches ↓↑ permettent de se déplacer d’un style à l’autre
+  - [ ] la touche ␣ permet de cocher/décocher un style
+  - [ ] les touches ⌘+↓↑ permettent de déplacer les styles
+  - [ ] le style est immédiatement appliqué à l’event sélectionné
+- [ ] On peut choisir les styles de TOUS les events cochés :
+  - [ ] la combinaison ⇧ + s ouvre le panneau des styles en mode « tous les cochés »
+  - [ ] les touches ↓↑ permettent de se déplacer d’un style à l’autre
+  - [ ] la touche ␣ permet de cocher/décocher un style
+  - [ ] les touches ⌘+↓↑ permettent de déplacer les styles
+  - [ ] le style est immédiatement appliqué à TOUS les events cochés
+- [ ] On peut ajouter une classe à chaud dans les fichiers de `/data/theme/`
+
+---
+
+
 
 ## TEST LIVE TOTAL
 

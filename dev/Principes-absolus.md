@@ -2,7 +2,7 @@
 
 ## Lister et Item
 
-Avant d’implémenter un comportement propre à une [classe spécialisée][], il faut se demander si ça n’est pas plutôt un comportement de tous les `Lister` ou tous les `Items` et donc
+Avant d’implémenter un comportement propre à une [classe spécialisée][], il faut se demander si ça n’est pas plutôt un comportement de tous les `Lister` ou tous les `Items` et donc l’implémenter dans ces classes abstraites.
 
 ## Annexe
 

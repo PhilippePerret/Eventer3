@@ -1,6 +1,6 @@
 # Eventer3 -  Affichage
 
-Il existe deux mode d’affichage dans Eventer :
+Il existe deux modes d’affichage dans Eventer :
 
 - le mode « par imbrication ». C’est le mode « naturel » où, comme dans le Finder d’un Mac en mode liste ou l’Explorer Windows, on peut « visiter » les dossiers, remonter, etc.
 - le mode « par niveau ». C’est le mode où l’on voit tous les évènements (`Event`) d’un même niveau dans un listing unique.
