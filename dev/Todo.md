@@ -10,16 +10,48 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
 ## Todo
 
-- suppression : indiquer le nombre d’event supprimé et confirmer avec ce nombre
+- réflexion : ne faudrait-il pas une base par projet ? de cette manière il serait possible de giter un projet pour garder tout l’historique.
+
+  - -> documenter (une main DB qui persiste les fichiers/des fichiers eventer.db pour chaque projet)
+
+- formatage du texte (markdown-like, badge de personnages)
+
+  - on recherche les badges des personnages, on les remplace par les pseudos
+
+  - on recherche \*italiques\*, \_\_souligné__, \*\*gras**, \~\~barré\~\~
+
+  - on recherche les `[titre](lien)` (lien toujours externe, target _blank)
+
+  - on recherche les références internes (je ne sais pas encore quelle forme elles doivent avoir. On prend de toute façon `[titre](path)` comme modèle, mais `path` sera remplacé par un identifiant d’event, par exemple. Par exemple : 
+
+    ~~~
+    il faut [voir la séquence](e256)
+    ~~~
+
+    Possibilité d’ouvrir la référence dans la même fenêtre ou dans l’autre fenêtre (la division de la fenêtre est une fonctionnalité requise)
+
+    ​	=> implémenter le raccourci pour 1) atteindre le lien et 2) ouvrir dans la fenêtre courante ou l’autre fenêtre
+
+- suppression : indiquer le nombre d’events supprimés et confirmer avec ce nombre. Donc, à la suppression : l’application regarde le nombre d’events que ça supprimerait (cout ?) 
+
+  - la suppression doit-elle vraiment supprimer tous les events enfants ou seulement les liens : suppression réelle
+
+- possibilité de diviser la fenêtre en deux parties, chacune avec leur évènemencier (le plus courant : l’évènemencier de niveau 1 du projet courant)
+
 - panneau des options
+
   - il faut commencer à pouvoir déterminer les options
   - quelle option et où agit-elle ?
+
 - import/export
+
   - system : reproduire une fenêtre comme le Finder pour choisir un dossier (pour exporter) ou choisir un fichier (pour importer)
   - choix du format (en export, garder les identifiant car il pourra y être fait référecence
+
 - héritage : option « les sous-events héritent automatiquement des brins et personnages (seulement des brins ? des personnages ? de la météo ? de l’effet ? du lieu ? de la dyndate ?)
+
   - l’héritage doit-il être réel ou virtuel ?
-- formatage du texte (markdown-like, badge de personnages
+
 - déplacement de panneau  : est-ce que la position est persistante ? (sinon => préférences de l’application)
 
 - Implémenter le comportement spécial avec la touche ⇧ qui signifie « à tous les events cochés ». Au lieu d’appliquer simplement un choix à l’event sélectionné, il s’applique à tous les events cochés (ça doit être indiqué dans le titre, clairement. Fonctionne pour : 
@@ -38,7 +70,9 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
 - système de référence : une marque permet de faire référence à un event/brin/personnage particulier (mais surtout un event) et permet de l’afficher pour le voir. Peut-être même pour s’y rendre concrètemen
 
-  
+  - utilisation particulière des références : un système de note sur le projet avec un dossier « Notes » en dernier event de niveau acte qui contiendrait toutes les notes au fil du développement, avec `[cf. note xxx](e125)` -- possibilité de rejoindre l’endroit où la note est appelée (attention, il peut y en avoir plusieurs : tous les afficher => TESTS)
+
+  => Possibilité de diviser la fenêtre en deux parties 
 
 
 

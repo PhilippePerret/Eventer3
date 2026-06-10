@@ -147,7 +147,14 @@ module DB
       end
     end
 
-    def self.find_lister_by_id(data_dir, id)
+    def self.find_lister_by_id(data_dir, id, project_id: nil)
+      if project_id
+        return with_project_db(data_dir, project_id) do |db|
+          row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [id]).first
+          next nil unless row
+          { id: row['id'], item_ids: JSON.parse(row['item_ids'] || '[]'), updated_at: row['updated_at'] }
+        end
+      end
       if id.to_s.end_with?('-brins')
         project_id = id.to_s.sub(/-brins$/, '')
         return with_db(data_dir) do |db|
@@ -181,7 +188,14 @@ module DB
       end
     end
 
-    def self.find_items_by_lister_id(data_dir, lister_id)
+    def self.find_items_by_lister_id(data_dir, lister_id, project_id: nil)
+      if project_id
+        return with_project_db(data_dir, project_id) do |db|
+          lister_row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [lister_id]).first
+          next {} unless lister_row
+          _fetch_items(db, JSON.parse(lister_row['item_ids'] || '[]'), with_project_props: false)
+        end
+      end
       if lister_id.to_s.end_with?('-brins')
         project_id = lister_id.to_s.sub(/-brins$/, '')
         return with_db(data_dir) do |db|
@@ -207,7 +221,23 @@ module DB
       end
     end
 
-    def self.update_item(data_dir, item_id, fields)
+    def self.update_item(data_dir, item_id, fields, project_id: nil)
+      if project_id
+        return with_project_db(data_dir, project_id) do |db|
+          now = Time.now.strftime('%Y-%m-%dT%H:%M:%S')
+          sets, vals = [], []
+          %w[title type color checked duration].each do |col|
+            next unless fields.key?(col)
+            sets << "#{col} = ?"
+            v = fields[col]
+            vals << (col == 'checked' ? (v ? 1 : 0) : v)
+          end
+          unless sets.empty?
+            db.execute("UPDATE items SET #{sets.join(', ')}, updated_at = ? WHERE id = ?", vals + [now, item_id])
+          end
+          _update_props(db, item_id, fields)
+        end
+      end
       with_db(data_dir) do |db|
         now  = Time.now.strftime('%Y-%m-%dT%H:%M:%S')
         sets, vals = [], []
@@ -238,7 +268,26 @@ module DB
       end
     end
 
-    def self.create_item(data_dir, lister_id, fields)
+    def self.create_item(data_dir, lister_id, fields, project_id: nil)
+      if project_id
+        return with_project_db(data_dir, project_id) do |db|
+          now = Time.now.strftime('%Y-%m-%dT%H:%M:%S')
+          lister_row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [lister_id]).first
+          next nil unless lister_row
+          item_class = _lister_item_class(lister_row['type'])
+          next nil unless item_class
+          prefix  = { 'project' => 'p', 'event' => 'e', 'perso' => 'c', 'brin' => 'b' }[item_class] || 'i'
+          item_id = fields['id'] || _generate_id(db, project_id, item_class, prefix)
+          db.execute(
+            "INSERT INTO items (id, title, type, color, checked, duration, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            [item_id, fields['title'], fields['type'], fields['color'], 0, fields['duration'], now, now]
+          )
+          _insert_props(db, item_id, fields, item_class)
+          item_ids = JSON.parse(lister_row['item_ids'] || '[]') << item_id
+          db.execute("UPDATE listers SET item_ids = ?, updated_at = ? WHERE id = ?", [JSON.generate(item_ids), now, lister_id])
+          { 'id' => item_id, 'title' => fields['title'], 'type' => fields['type'] }
+        end
+      end
       with_db(data_dir) do |db|
         now = Time.now.strftime('%Y-%m-%dT%H:%M:%S')
 
@@ -354,6 +403,15 @@ module DB
     end
     private_class_method :with_db
 
+    def self.with_project_db(data_dir, project_id)
+      db = DB.open_project(data_dir, project_id)
+      db.results_as_hash = true
+      result = yield(db)
+      db.close
+      result
+    end
+    private_class_method :with_project_db
+
     def self._lister_item_class(lister_type)
       case lister_type
       when 'projects' then 'project'
@@ -386,27 +444,48 @@ module DB
     end
     private_class_method :_generate_id
 
-    def self._fetch_items(db, item_ids)
+    def self._fetch_items(db, item_ids, with_project_props: true)
       return {} if item_ids.empty?
       placeholders = item_ids.map { '?' }.join(', ')
-      rows = db.execute(<<~SQL, item_ids)
-        SELECT i.id, i.title, i.type, i.color, i.checked, i.duration, i.created_at, i.updated_at,
-               pp.active, pp.state AS project_state,
-               ep.state AS state, ep.meteo, ep.effet, ep.lieu,
-               CASE WHEN ep.item_id IS NOT NULL THEN ep.perso_ids ELSE pp.perso_ids END AS perso_ids,
-               CASE WHEN ep.item_id IS NOT NULL THEN ep.brin_ids  ELSE pp.brin_ids  END AS brin_ids,
-               COALESCE(bp.badge, pers.badge) AS badge,
-               bp.perso_ids AS brin_perso_ids,
-               pers.patronyme, pers.avatar, pers.fonction,
-               COALESCE(ep.lister_id, pp.lister_id) AS lister_id,
-               ep.css
-        FROM items i
-        LEFT JOIN project_props pp   ON pp.item_id = i.id
-        LEFT JOIN event_props   ep   ON ep.item_id = i.id
-        LEFT JOIN brin_props    bp   ON bp.item_id = i.id
-        LEFT JOIN perso_props   pers ON pers.item_id = i.id
-        WHERE i.id IN (#{placeholders})
-      SQL
+      if with_project_props
+        sql = <<~SQL
+          SELECT i.id, i.title, i.type, i.color, i.checked, i.duration, i.created_at, i.updated_at,
+                 pp.active, pp.state AS project_state,
+                 ep.state AS state, ep.meteo, ep.effet, ep.lieu,
+                 CASE WHEN ep.item_id IS NOT NULL THEN ep.perso_ids ELSE pp.perso_ids END AS perso_ids,
+                 CASE WHEN ep.item_id IS NOT NULL THEN ep.brin_ids  ELSE pp.brin_ids  END AS brin_ids,
+                 COALESCE(bp.badge, pers.badge) AS badge,
+                 bp.perso_ids AS brin_perso_ids,
+                 pers.patronyme, pers.avatar, pers.fonction,
+                 COALESCE(ep.lister_id, pp.lister_id) AS lister_id,
+                 ep.css
+          FROM items i
+          LEFT JOIN project_props pp   ON pp.item_id = i.id
+          LEFT JOIN event_props   ep   ON ep.item_id = i.id
+          LEFT JOIN brin_props    bp   ON bp.item_id = i.id
+          LEFT JOIN perso_props   pers ON pers.item_id = i.id
+          WHERE i.id IN (#{placeholders})
+        SQL
+      else
+        sql = <<~SQL
+          SELECT i.id, i.title, i.type, i.color, i.checked, i.duration, i.created_at, i.updated_at,
+                 NULL AS active, NULL AS project_state,
+                 ep.state AS state, ep.meteo, ep.effet, ep.lieu,
+                 ep.perso_ids AS perso_ids,
+                 ep.brin_ids  AS brin_ids,
+                 COALESCE(bp.badge, pers.badge) AS badge,
+                 bp.perso_ids AS brin_perso_ids,
+                 pers.patronyme, pers.avatar, pers.fonction,
+                 ep.lister_id AS lister_id,
+                 ep.css
+          FROM items i
+          LEFT JOIN event_props   ep   ON ep.item_id = i.id
+          LEFT JOIN brin_props    bp   ON bp.item_id = i.id
+          LEFT JOIN perso_props   pers ON pers.item_id = i.id
+          WHERE i.id IN (#{placeholders})
+        SQL
+      end
+      rows = db.execute(sql, item_ids)
       hash = {}
       rows.each do |row|
         row['brin_ids']       = JSON.parse(row['brin_ids']       || '[]') rescue []

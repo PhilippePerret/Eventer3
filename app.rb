@@ -56,7 +56,7 @@ patch '/data/*' do |requested_path|
 end
 
 get '/api/listers/:id' do
-  lister = DB::Repo.find_lister_by_id(DATA_DIR, params[:id])
+  lister = DB::Repo.find_lister_by_id(DATA_DIR, params[:id], project_id: params[:project_id])
   halt 404 unless lister
   content_type :json
   JSON.generate(lister)
@@ -86,7 +86,7 @@ post '/api/listers' do
 end
 
 get '/api/listers/:id/items' do
-  items = DB::Repo.find_items_by_lister_id(DATA_DIR, params[:id])
+  items = DB::Repo.find_items_by_lister_id(DATA_DIR, params[:id], project_id: params[:project_id])
   content_type :json
   JSON.generate(items)
 end
@@ -94,7 +94,7 @@ end
 patch '/api/items/:id' do
   payload = JSON.parse(request.body.read)
   LOG.m(1, "[PATCH /api/items/#{params[:id]}] payload=#{payload.inspect}")
-  DB::Repo.update_item(DATA_DIR, params[:id], payload)
+  DB::Repo.update_item(DATA_DIR, params[:id], payload, project_id: params[:project_id])
   content_type :json
   JSON.generate(ok: true)
 end
@@ -108,7 +108,7 @@ end
 
 post '/api/listers/:id/items' do
   payload = JSON.parse(request.body.read)
-  item = DB::Repo.create_item(DATA_DIR, params[:id], payload)
+  item = DB::Repo.create_item(DATA_DIR, params[:id], payload, project_id: params[:project_id])
   halt 422 unless item
   content_type :json
   status 201

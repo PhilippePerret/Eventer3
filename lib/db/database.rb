@@ -77,12 +77,85 @@ module DB
     );
   SQL
 
+  PROJECT_SCHEMA = <<~SQL
+    CREATE TABLE IF NOT EXISTS listers (
+      id              INTEGER PRIMARY KEY,
+      type            TEXT,
+      nature          TEXT,
+      scale           TEXT,
+      item_ids        TEXT DEFAULT '[]',
+      options         TEXT DEFAULT '{}',
+      path            TEXT,
+      created_at      TEXT,
+      updated_at      TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS items (
+      id          TEXT PRIMARY KEY,
+      title       TEXT,
+      type        TEXT,
+      color       TEXT,
+      checked     INTEGER DEFAULT 0,
+      duration    INTEGER,
+      path        TEXT,
+      created_at  TEXT,
+      updated_at  TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS event_props (
+      item_id   TEXT PRIMARY KEY REFERENCES items(id),
+      lister_id INTEGER DEFAULT NULL,
+      state     INTEGER DEFAULT 0,
+      brin_ids  TEXT DEFAULT '[]',
+      perso_ids TEXT DEFAULT '[]',
+      meteo     TEXT,
+      effet     TEXT,
+      lieu      TEXT,
+      dyndate   TEXT,
+      is_script INTEGER DEFAULT 0,
+      css       TEXT DEFAULT '[]'
+    );
+
+    CREATE TABLE IF NOT EXISTS brin_props (
+      item_id   TEXT PRIMARY KEY REFERENCES items(id),
+      badge     TEXT,
+      perso_ids TEXT DEFAULT '[]'
+    );
+
+    CREATE TABLE IF NOT EXISTS perso_props (
+      item_id    TEXT PRIMARY KEY REFERENCES items(id),
+      badge      TEXT,
+      patronyme  TEXT,
+      avatar     TEXT,
+      fonction   TEXT,
+      genre      TEXT,
+      birthyear  INTEGER
+    );
+
+    CREATE TABLE IF NOT EXISTS counters (
+      project_id  TEXT NOT NULL,
+      item_type   TEXT NOT NULL,
+      last_val    INTEGER DEFAULT 0,
+      PRIMARY KEY (project_id, item_type)
+    );
+  SQL
+
   def self.path(data_dir)
     File.join(data_dir, DB_FILENAME)
   end
 
+  def self.project_path(data_dir, project_id)
+    File.join(data_dir, project_id.to_s, DB_FILENAME)
+  end
+
   def self.open(data_dir)
     db = SQLite3::Database.new(path(data_dir))
+    db.foreign_keys = true
+    db
+  end
+
+  def self.open_project(data_dir, project_id)
+    db = SQLite3::Database.new(project_path(data_dir, project_id))
     db.foreign_keys = true
     db
   end
@@ -103,6 +176,18 @@ module DB
       db.execute("ALTER TABLE event_props ADD COLUMN lieu TEXT")
     rescue SQLite3::Exception => e
       raise unless e.message.include?('duplicate column name')
+    end
+    db.close
+  end
+
+  def self.initialize_project!(data_dir, project_id)
+    dir = File.join(data_dir, project_id.to_s)
+    FileUtils.mkdir_p(dir)
+    return if File.exist?(project_path(data_dir, project_id))
+    db = open_project(data_dir, project_id)
+    PROJECT_SCHEMA.split(';').each do |stmt|
+      stmt = stmt.strip
+      db.execute(stmt) unless stmt.empty?
     end
     db.close
   end
