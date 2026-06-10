@@ -1,31 +1,33 @@
 import { installFixtures } from '../../../helpers/install-fixtures'
+import { setupProjectFolder, createAndSelectFolderInPicker } from '../../../helpers/create-project-helper.js'
 import { test, expect } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('many-projects')
 })
 
-async function createProject(page, title) {
+async function createProject(page, expect) {
   await page.goto('/')
   await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+
+  const { folderName } = await setupProjectFolder(page)
   await page.keyboard.press('n')
-  const titleInput = page.locator('.project-item.selected input[name="title"]')
-  await titleInput.fill(title)
-  await page.keyboard.press('Enter')
+  await createAndSelectFolderInPicker(page, expect, folderName)
   await page.waitForLoadState('networkidle')
+
   const idText = await page.locator('.project-item').nth(1).locator('.project-item__id').textContent()
   return idText.trim()
 }
 
 test('un nouveau projet sauvegardé a un évènemencier avec un event "Acte I"', async ({ page }) => {
-  const projectId = await createProject(page, 'Mon premier projet')
+  const projectId = await createProject(page, expect)
 
   const listerResp = await page.request.get(`/api/items/${projectId}/lister`)
   expect(listerResp.ok()).toBeTruthy()
   const listerData = await listerResp.json()
   expect(listerData.id).toBeTruthy()
 
-  const itemsResp = await page.request.get(`/api/listers/${listerData.id}/items`)
+  const itemsResp = await page.request.get(`/api/listers/${listerData.id}/items?project_id=${projectId}`)
   expect(itemsResp.ok()).toBeTruthy()
   const items = await itemsResp.json()
   const eventTitles = Object.values(items).map(i => i.title)
@@ -33,7 +35,7 @@ test('un nouveau projet sauvegardé a un évènemencier avec un event "Acte I"',
 })
 
 test('un nouveau projet sauvegardé a un brin "Intrigue principale"', async ({ page }) => {
-  const projectId = await createProject(page, 'Mon premier projet')
+  const projectId = await createProject(page, expect)
 
   const itemsResp = await page.request.get(`/api/listers/${projectId}-brins/items`)
   expect(itemsResp.ok()).toBeTruthy()
@@ -43,7 +45,7 @@ test('un nouveau projet sauvegardé a un brin "Intrigue principale"', async ({ p
 })
 
 test('un nouveau projet sauvegardé a un personnage "Votre protagoniste"', async ({ page }) => {
-  const projectId = await createProject(page, 'Mon premier projet')
+  const projectId = await createProject(page, expect)
 
   const itemsResp = await page.request.get(`/api/listers/${projectId}-persos/items`)
   expect(itemsResp.ok()).toBeTruthy()

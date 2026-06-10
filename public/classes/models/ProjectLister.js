@@ -73,10 +73,15 @@ export default class ProjectLister extends Lister {
 
     if (!folder_path) return
 
-    const db_path     = folder_path + '/eventer.db'
+    const db_path = folder_path + '/eventer.db'
+
+    // Sauver db_path en PREMIER pour que create_lister sache utiliser le project DB
+    await ListerRepository.saveItem(item, { db_path, folder_path })
+
     const eventLister = await ListerRepository.createLister({ type: 'events', parent_item_id: item.id })
     item.lister_id    = eventLister.id
-    await ListerRepository.createItem(eventLister.id, { title: 'Acte I', type: 'event' })
+    await ListerRepository.createItem(eventLister.id, { title: 'Acte I', type: 'event' }, { project_id: item.id })
+
     const brinLister = await ListerRepository.createLister({ type: 'brins', parent_item_id: item.id })
     await ListerRepository.createItem(brinLister.id, {
       title: 'Intrigue principale',
@@ -89,7 +94,6 @@ export default class ProjectLister extends Lister {
       title: 'Votre protagoniste',
       badge: Perso.generateUniqueBadge('Votre protagoniste', [])
     })
-    await ListerRepository.saveItem(item, { db_path, folder_path })
   }
 
   render() {

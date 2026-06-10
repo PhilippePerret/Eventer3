@@ -41,15 +41,13 @@
 
 - [x] S’assurer que Cmd-flèche haut/bas permet de déplacer les projets (comportement de `Lister`).
 
-- [x] S’assurer que la touche « n » permet de créer (provisoirement juste dans le DOM) un nouveau projet SOUS la sélection.
+- [x] S’assurer que la touche « n » permet de créer un nouveau projet SOUS la sélection en choisissant son dossier dans le Finder.
 
 - [x] S’assurer que la touche « n » suivi de la touche Escape ne crée rien au final ni d’élément DOM, ni de projet en backend (données persistantes)
 
-- [x] S’assurer que la touche « n » suivi de la touche Entrer sans avoir entré aucun title ne crée rien au final ni d’élément DOM, ni de projet en backend (données persistantes)
-
 - [x] S’assurer que la touche « n » (création d’un nouvel item) désélectionne l’item courant.
 
-- [x] S’assurer que le fait de taper un titre de projet, lorsqu’il est nouveau (ET SEULEMENT DANS CE CAS), crée en même temps l’identifiant logique et le met dans le champ visible. Attention : ça n’est valable QUE pour les Item de type Project, pas les autres.
+- [x] S’assurer que le fait de taper un titre de projet, lorsqu’il est nouveau (ET SEULEMENT DANS CE CAS), crée en même temps l’identifiant logique (slug) et le met dans le champ visible. Attention : ça n’est valable QUE pour les Item de type Project, pas les autres.
 
 - [x] S’assurer que la flèche droite permet de RENTRER dans le projet (c’est-à-dire de voir son premier évènemencier — qui correspond à ses `events`) (idem = valable pour n’importe quel lister)
 
@@ -75,7 +73,7 @@
 
   - [ ] fonctionne pour les styles
 
-- [ ] S’assurer que l’aide footer s’affiche conformément aux modes et aux définitions de config.js. Les tester toutes précisément.
+- [ ] S’assurer que l’aide footer (ce n’est plus ~~l’aide footer~~ maintenant, c’est l’ « « aide contextuelle » s’affiche conformément aux modes et aux définitions de config.js. Les tester toutes précisément. Il faut jouer « ? » pour afficher cette aide contextuelle.
 
 - [x] S’assurer que lorsque l’Item n’a pas de Lister, quand on fait →, un premier Item fictif soit bien créé dans le Lister fictif. Le faire  — peut-être déjà fait — pour un Item Projet (dans e2e/projet). Le faire pour un Item Event (dans e2e/event). Le faire pour un item Brin (dans e2e/brin). Le faire pour un Item Perso (dans e2e/perso).
 

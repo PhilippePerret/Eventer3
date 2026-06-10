@@ -41,12 +41,16 @@ test('un projet démo minimal complet est créé et affiché', async ({ page }) 
   await showTree(dataDir)
   console.log('=== FIN ARBORESCENCE DATA ===\n')
 
-  const eventerDb = path.join(dataDir, 'eventer.db')
+  const mainDb     = path.join(dataDir, 'main.db')
+  const modelDb    = path.join(dataDir, 'model', 'eventer.db')
 
   console.log('\n-> vérification structure minimale')
 
-  expect(await pathExists(eventerDb)).toBe(true)
-  console.log('-> eventer.db OK')
+  expect(await pathExists(mainDb)).toBe(true)
+  console.log('-> main.db OK')
+
+  expect(await pathExists(modelDb)).toBe(true)
+  console.log('-> model/eventer.db OK')
 
   console.log('\n-> vérification DOM')
   await expect(page.locator('body')).toContainText('Projet modèle')

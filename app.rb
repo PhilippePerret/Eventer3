@@ -104,7 +104,7 @@ patch '/api/items/:id' do
 end
 
 delete '/api/listers/:lister_id/items/:item_id' do
-  result = DB::Repo.delete_item(DATA_DIR, params[:lister_id], params[:item_id])
+  result = DB::Repo.delete_item(DATA_DIR, params[:lister_id], params[:item_id], project_id: params[:project_id])
   halt 404 unless result
   content_type :json
   JSON.generate(ok: true)

@@ -46,7 +46,7 @@ test("→ sur un projet sans lister : crée l'éditeur, Enter confirme, n crée 
   expect(listerResp.ok()).toBeTruthy()
   const lister = await listerResp.json()
   expect(lister.item_ids).toHaveLength(1)
-  const itemsResp = await page.request.get(`/api/listers/${lister.id}/items`)
+  const itemsResp = await page.request.get(`/api/listers/${lister.id}/items?project_id=project-b`)
   expect(itemsResp.ok()).toBeTruthy()
   const items = await itemsResp.json()
   expect(items[lister.item_ids[0]].title).toBe('Mon premier event')

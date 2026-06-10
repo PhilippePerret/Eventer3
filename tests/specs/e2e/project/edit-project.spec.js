@@ -28,16 +28,23 @@ async function startEditingSecondProject(page) {
 
 // --- Lisibilité en édition ---
 
-test("l'input id est lisible (blanc) sur fond vert en édition d'un nouveau projet", async ({ page }) => {
+test("un projet créé via FilePicker apparaît sélectionné dans la liste", async ({ page }) => {
+  // Ce test remplace le test de lisibilité de l'input id, supprimé avec le passage au FilePicker.
+  // La création via FilePicker n'expose plus d'input id en ligne.
+  const { setupProjectFolder, createAndSelectFolderInPicker } = await import('../../../helpers/create-project-helper.js')
+
   await page.goto('/')
   await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+
+  const { folderName } = await setupProjectFolder(page)
   await page.keyboard.press('n')
-  const idInput = page.locator('.project-item.selected input[name="id"]')
-  await expect(idInput).toBeVisible()
-  const color = await idInput.evaluate(el => window.getComputedStyle(el).color)
-  // rgb(128,128,128) ou moins lumineux = illisible sur vert
-  // on vérifie que la couleur est claire (blanc = rgb(255,255,255))
-  expect(color).toBe('rgb(255, 255, 255)')
+  await createAndSelectFolderInPicker(page, expect, folderName)
+  await page.waitForLoadState('networkidle')
+
+  const items = page.locator('.project-item')
+  const countAfter = await items.count()
+  expect(countAfter).toBeGreaterThan(1)
+  await expect(items.nth(1)).toHaveClass(/selected/)
 })
 
 // --- Hauteur visuelle ---

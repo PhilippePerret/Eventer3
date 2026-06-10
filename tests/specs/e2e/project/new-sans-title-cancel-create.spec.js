@@ -5,17 +5,19 @@ test.beforeEach(() => {
   installFixtures('many-projects')
 })
 
-test('la touche Entrée sans titre affiche une notification', async ({ page }) => {
+test('Escape dans le FilePicker ne crée pas de projet', async ({ page }) => {
   await page.goto('/')
   await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
 
+  const items = page.locator('.project-item')
+  const countBefore = await items.count()
+
   await page.keyboard.press('n')
-  await expect(page.locator('.project-item.selected input[name="title"]')).toBeVisible()
+  await expect(page.locator('.file-picker')).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(page.locator('.file-picker')).not.toBeVisible()
 
-  await page.keyboard.press('Enter')
-
-  await expect(page.locator('#notification')).toBeVisible()
-  await expect(page.locator('#notification')).toContainText('projet')
+  await expect(items).toHaveCount(countBefore)
 })
 
 test('la touche Entrée sans titre : l\'éditeur reste visible', async ({ page }) => {

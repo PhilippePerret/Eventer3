@@ -596,7 +596,7 @@ export default class Lister {
     }
     const payload = { title: item.title, type: item.type }
     if (item.id) payload.id = item.id
-    const created = await ListerRepository.createItem(this.id, payload)
+    const created = await ListerRepository.createItem(this.id, payload, { project_id: this.project_id })
     if (!item.id) item.id = created.id
     itemElement.dataset.id = item.id
     if (typeof item.render === 'function') item.render(itemElement)

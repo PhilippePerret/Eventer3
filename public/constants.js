@@ -67,6 +67,43 @@ export const PERSO_FONCTIONS = [
   'narrateur'
 ]
 
+/**
+ * Grande donnée indiquant les raccourcis propres à chaque contexte
+ */
+export const HELP_PER_CONTEXT = {
+  'navigate-items': {
+    title: 'Navigation par item',
+    shortcuts: [
+      {sc: '↑', ef: 'sélectionner le précédent'},
+      {sc: '↓', ef: 'sélectionner le suivant'},
+      {sc: '⌘ + ↑', ef: 'Monter l’élément'},
+      {sc: '⌘ + ↓', ef: 'Descendre l’élément'}
+    ]
+  },
+  'edition-item': {
+    title: 'Édition de l’élément',
+    shortcuts: [
+
+    ]
+  },
+
+  'project-list': {
+    title: "Liste des projets",
+    other_contexts: ['navigate-items'], // Autres aides à ajouter avant
+    shortcuts: [
+      {sc: 'n', ef: "Création d'un nouveau projet"},
+      {sc: 'o', ef: "Ouvrir un projet"},
+      {sc: '→', ef: '« Entrer » dans le projet'},
+    ]
+  },
+
+  'project-edition': {
+    title: "Édition du projet",
+    other_contexts: ['edition-item']
+  }
+
+}
+
 export const SHORTCUTS = [
   {
     contextName: "Liste d'éléments",

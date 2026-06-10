@@ -78,16 +78,24 @@ module DB
 
     # TESTS ONLY — non utilisé par le frontend
     def self.find_item_lister(data_dir, item_id)
-      with_db(data_dir) do |db|
-        pp_row = db.execute("SELECT * FROM project_props WHERE item_id = ? LIMIT 1", [item_id]).first
-        if pp_row && pp_row['lister_id']
-          lister_row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [pp_row['lister_id']]).first
-          next nil unless lister_row
-          result = { id: lister_row['id'], item_ids: JSON.parse(lister_row['item_ids'] || '[]'), updated_at: lister_row['updated_at'] }
-          brin_ids = JSON.parse(pp_row['brin_ids'] || '[]') rescue []
-          result[:brins_lister_id] = "#{item_id}-brins" unless brin_ids.empty?
-          next result
+      pp_data = with_db(data_dir) do |db|
+        db.execute("SELECT * FROM project_props WHERE item_id = ? LIMIT 1", [item_id]).first
+      end
+      if pp_data && pp_data['lister_id']
+        lister_id = pp_data['lister_id']
+        db_path   = pp_data['db_path']
+        brin_ids  = JSON.parse(pp_data['brin_ids'] || '[]') rescue []
+        lister_row = if db_path && !db_path.to_s.strip.empty?
+          with_project_db(data_dir, item_id) { |db| db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [lister_id]).first }
+        else
+          with_db(data_dir) { |db| db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [lister_id]).first }
         end
+        return nil unless lister_row
+        result = { id: lister_row['id'], item_ids: JSON.parse(lister_row['item_ids'] || '[]'), updated_at: lister_row['updated_at'] }
+        result[:brins_lister_id] = "#{item_id}-brins" unless brin_ids.empty?
+        return result
+      end
+      with_db(data_dir) do |db|
         ep_row = db.execute("SELECT lister_id FROM event_props WHERE item_id = ? LIMIT 1", [item_id]).first
         next nil unless ep_row && ep_row['lister_id']
         lister_row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [ep_row['lister_id']]).first
@@ -132,6 +140,35 @@ module DB
     def self.create_lister(data_dir, type:, parent_item_id:, item_ids: [])
       return { id: "#{parent_item_id}-brins"  } if type == 'brins'
       return { id: "#{parent_item_id}-persos" } if type == 'persos'
+
+      db_path = with_db(data_dir) do |db|
+        row = db.execute("SELECT db_path FROM project_props WHERE item_id = ? LIMIT 1", [parent_item_id]).first
+        row ? row['db_path'] : nil
+      end
+
+      if db_path
+        full_path = db_path.start_with?('/') ? db_path : File.join(data_dir, db_path)
+        Bootstrap.ensure_project_data!(full_path)
+        proj_db = DB.open_project(full_path)
+        proj_db.results_as_hash = true
+        now    = Time.now.strftime('%Y-%m-%dT%H:%M:%S')
+        proj_db.execute(
+          "INSERT INTO listers (type, item_ids, created_at, updated_at) VALUES (?, ?, ?, ?)",
+          [type, JSON.generate(item_ids), now, now]
+        )
+        new_id = proj_db.last_insert_row_id
+        proj_db.close
+        with_db(data_dir) do |db|
+          existing = db.execute("SELECT 1 FROM project_props WHERE item_id = ?", [parent_item_id]).first
+          if existing
+            db.execute("UPDATE project_props SET lister_id = ? WHERE item_id = ?", [new_id, parent_item_id])
+          else
+            db.execute("INSERT INTO project_props (item_id, lister_id) VALUES (?, ?)", [parent_item_id, new_id])
+          end
+        end
+        return { id: new_id }
+      end
+
       with_db(data_dir) do |db|
         now = Time.now.strftime('%Y-%m-%dT%H:%M:%S')
         db.execute(
@@ -158,11 +195,22 @@ module DB
 
     def self.find_lister_by_id(data_dir, id, project_id: nil)
       if project_id
-        return with_project_db(data_dir, project_id) do |db|
+        lister_data = with_project_db(data_dir, project_id) do |db|
           row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [id]).first
           next nil unless row
           { id: row['id'], item_ids: JSON.parse(row['item_ids'] || '[]'), updated_at: row['updated_at'] }
         end
+        return nil unless lister_data
+        with_db(data_dir) do |db|
+          pp_row = db.execute("SELECT brin_ids, perso_ids FROM project_props WHERE item_id = ? LIMIT 1", [project_id]).first
+          if pp_row
+            brin_ids  = JSON.parse(pp_row['brin_ids']  || '[]') rescue []
+            perso_ids = JSON.parse(pp_row['perso_ids'] || '[]') rescue []
+            lister_data[:brins_lister_id]  = "#{project_id}-brins"  unless brin_ids.empty?
+            lister_data[:persos_lister_id] = "#{project_id}-persos" unless perso_ids.empty?
+          end
+        end
+        return lister_data
       end
       if id.to_s.end_with?('-brins')
         project_id = id.to_s.sub(/-brins$/, '')
@@ -353,7 +401,25 @@ module DB
       end
     end
 
-    def self.delete_item(data_dir, lister_id, item_id)
+    def self.delete_item(data_dir, lister_id, item_id, project_id: nil)
+      if project_id && !lister_id.to_s.end_with?('-brins') && !lister_id.to_s.end_with?('-persos')
+        return with_project_db(data_dir, project_id) do |db|
+          now      = Time.now.strftime('%Y-%m-%dT%H:%M:%S')
+          lister_row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [lister_id.to_i]).first
+          next nil unless lister_row
+          item_ids = JSON.parse(lister_row['item_ids'] || '[]')
+          next nil unless item_ids.include?(item_id.to_s)
+          item_ids.delete(item_id.to_s)
+          db.execute("UPDATE listers SET item_ids = ?, updated_at = ? WHERE id = ?", [JSON.generate(item_ids), now, lister_id.to_i])
+          %w[event brin perso].each do |type|
+            db.execute("DELETE FROM #{type}_props WHERE item_id = ?", [item_id])
+          end
+          db.execute("DELETE FROM counters WHERE project_id = ?", [item_id])
+          db.execute("DELETE FROM items WHERE id = ?", [item_id])
+          true
+        end
+      end
+
       with_db(data_dir) do |db|
         now = Time.now.strftime('%Y-%m-%dT%H:%M:%S')
 
@@ -418,8 +484,9 @@ module DB
         row ? row['db_path'] : nil
       end
       raise "Aucun db_path trouvé pour le projet #{project_id.inspect}" unless db_path
-      Bootstrap.ensure_project_data!(db_path)
-      proj_db = DB.open_project(db_path)
+      full_path = db_path.start_with?('/') ? db_path : File.join(data_dir, db_path)
+      Bootstrap.ensure_project_data!(full_path)
+      proj_db = DB.open_project(full_path)
       proj_db.results_as_hash = true
       result = yield(proj_db)
       proj_db.close
