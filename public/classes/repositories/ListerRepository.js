@@ -2,8 +2,12 @@ import { raise } from '../../system/Error.js'
 
 export default class ListerRepository {
 
+  static _projectQuery(obj) {
+    return obj?.project_id ? `?project_id=${obj.project_id}` : ''
+  }
+
   static async loadDefinition(lister) {
-    const response = await fetch(`/api/listers/${lister.id}`, { cache: 'no-store' })
+    const response = await fetch(`/api/listers/${lister.id}${ListerRepository._projectQuery(lister)}`, { cache: 'no-store' })
     if (!response.ok) return
     const data = await response.json()
     if (data.item_ids)        lister.item_ids        = data.item_ids
@@ -12,13 +16,13 @@ export default class ListerRepository {
   }
 
   static async loadItems(lister) {
-    const response = await fetch(`/api/listers/${lister.id}/items`, { cache: 'no-store' })
+    const response = await fetch(`/api/listers/${lister.id}/items${ListerRepository._projectQuery(lister)}`, { cache: 'no-store' })
     if (!response.ok) return {}
     return await response.json()
   }
 
   static async save(lister) {
-    const response = await fetch(`/api/listers/${lister.id}`, {
+    const response = await fetch(`/api/listers/${lister.id}${ListerRepository._projectQuery(lister)}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ item_ids: lister.item_ids })
@@ -42,7 +46,7 @@ export default class ListerRepository {
 
   static async saveItem(item, fields, { oldId } = {}) {
     const urlId = oldId ?? item.id
-    const response = await fetch(`/api/items/${urlId}`, {
+    const response = await fetch(`/api/items/${urlId}${ListerRepository._projectQuery(item)}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(fields)
@@ -50,8 +54,9 @@ export default class ListerRepository {
     if (!response.ok) raise(`Impossible de sauver l'item ${urlId}`)
   }
 
-  static async createItem(listerId, fields) {
-    const response = await fetch(`/api/listers/${listerId}/items`, {
+  static async createItem(listerId, fields, { project_id } = {}) {
+    const query = project_id ? `?project_id=${project_id}` : ''
+    const response = await fetch(`/api/listers/${listerId}/items${query}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(fields)
@@ -61,7 +66,7 @@ export default class ListerRepository {
   }
 
   static async deleteItem(lister, item) {
-    const response = await fetch(`/api/listers/${lister.id}/items/${item.id}`, {
+    const response = await fetch(`/api/listers/${lister.id}/items/${item.id}${ListerRepository._projectQuery(lister)}`, {
       method: 'DELETE'
     })
     if (!response.ok) raise(`Impossible de supprimer l'item ${item.id}`)

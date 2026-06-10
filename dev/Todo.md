@@ -25,7 +25,7 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
   - on recherche les références internes (je ne sais pas encore quelle forme elles doivent avoir. On prend de toute façon `[titre](path)` comme modèle, mais `path` sera remplacé par un identifiant d’event, par exemple. Par exemple : 
 
     ~~~
-    il faut [voir la séquence](e256)
+    il faut [voir la séquence](e256) qui parle de…
     ~~~
 
     Possibilité d’ouvrir la référence dans la même fenêtre ou dans l’autre fenêtre (la division de la fenêtre est une fonctionnalité requise)
