@@ -150,6 +150,30 @@ get '/api/fs' do
   JSON.generate(path: path, entries: entries)
 end
 
+get '/api/fs/exists' do
+  path = params[:path]
+  halt 422 unless path && !path.strip.empty?
+  content_type :json
+  JSON.generate(exists: File.exist?(path))
+end
+
+post '/api/projects/open' do
+  payload     = JSON.parse(request.body.read)
+  folder_path = payload['folder_path']
+  halt 422 unless folder_path && !folder_path.strip.empty?
+  db_path = File.join(folder_path, 'eventer.db')
+  halt 422 unless File.exist?(db_path)
+  proj_db = DB.open_project(db_path)
+  proj_db.results_as_hash = true
+  events_lister = proj_db.execute("SELECT * FROM listers WHERE type = 'events' LIMIT 1").first
+  proj_db.close
+  halt 422 unless events_lister
+  result = DB::Repo.open_project_from_db(DATA_DIR, folder_path: folder_path, db_path: db_path, lister_id: events_lister['id'])
+  content_type :json
+  status 201
+  JSON.generate(result)
+end
+
 post '/api/fs/mkdir' do
   payload = JSON.parse(request.body.read)
   halt 422 unless payload['path'] && !payload['path'].strip.empty?

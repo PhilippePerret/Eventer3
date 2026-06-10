@@ -8,6 +8,7 @@ import KeyboardController from '../../KeyboardController.js'
 import LOG from '../../system/LOG.js'
 import StatusBar from '../ui/StatusBar.js'
 import FilePicker from '../ui/FilePicker.js'
+import ConfirmDialog from '../ui/ConfirmDialog.js'
 
 export default class ProjectLister extends Lister {
 
@@ -44,6 +45,30 @@ export default class ProjectLister extends Lister {
   async createNewItemAfter() {
     const folder_path = await FilePicker.open({ mode: 'folder', keyboardController: this.keyboardController })
     if (!folder_path) return
+
+    const checkResp = await fetch(`/api/fs/exists?path=${encodeURIComponent(folder_path + '/eventer.db')}`, { cache: 'no-store' })
+    const { exists } = await checkResp.json()
+    if (exists) {
+      const confirmed = await ConfirmDialog.open({
+        message: "Il existe déjà un fichier eventer.db dans ce dossier. S'agit-il de la base de données d'un projet existant ?",
+        keyboardController: this.keyboardController,
+      })
+      if (!confirmed) return
+
+      const importResp = await fetch('/api/projects/open', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ folder_path }),
+      })
+      if (!importResp.ok) return
+      const imported = await importResp.json()
+      await this.loadDefinition()
+      await this.loadItems()
+      const newIdx = this.items.findIndex(i => i.id === imported.id)
+      if (newIdx >= 0) this.selectedIndex = newIdx
+      this.render()
+      return
+    }
 
     this._pendingFolderPath = folder_path
     const folderName = folder_path.split('/').at(-1)

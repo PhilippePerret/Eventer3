@@ -104,6 +104,33 @@ module DB
       end
     end
 
+    def self.open_project_from_db(data_dir, folder_path:, db_path:, lister_id:)
+      with_db(data_dir) do |db|
+        now         = Time.now.strftime('%Y-%m-%dT%H:%M:%S')
+        folder_name = File.basename(folder_path)
+        item_id     = _generate_id(db, nil, 'project', 'p')
+
+        db.execute(
+          "INSERT INTO items (id, title, type, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
+          [item_id, folder_name, 'project', now, now]
+        )
+
+        stored_db_path = db_path.start_with?(data_dir + '/') ? db_path.sub("#{data_dir}/", '') : db_path
+        db.execute(
+          "INSERT INTO project_props (item_id, lister_id, db_path, folder_path) VALUES (?, ?, ?, ?)",
+          [item_id, lister_id, stored_db_path, folder_path]
+        )
+
+        projects_lister = db.execute("SELECT * FROM listers WHERE id = 1 LIMIT 1").first
+        if projects_lister
+          item_ids = JSON.parse(projects_lister['item_ids'] || '[]') << item_id
+          db.execute("UPDATE listers SET item_ids = ?, updated_at = ? WHERE id = 1", [JSON.generate(item_ids), now])
+        end
+
+        { 'id' => item_id, 'title' => folder_name }
+      end
+    end
+
     def self.update_lister(data_dir, id, fields, project_id: nil)
       if project_id && fields.key?('item_ids')
         return with_project_db(data_dir, project_id) do |db|
