@@ -1,5 +1,6 @@
 require 'json'
 require_relative 'database'
+require_relative '../bootstrap'
 
 module DB
   module Repo
@@ -412,10 +413,16 @@ module DB
     private_class_method :with_db
 
     def self.with_project_db(data_dir, project_id)
-      db = DB.open_project(data_dir, project_id)
-      db.results_as_hash = true
-      result = yield(db)
-      db.close
+      db_path = with_db(data_dir) do |db|
+        row = db.execute("SELECT db_path FROM project_props WHERE item_id = ? LIMIT 1", [project_id]).first
+        row ? row['db_path'] : nil
+      end
+      raise "Aucun db_path trouvé pour le projet #{project_id.inspect}" unless db_path
+      Bootstrap.ensure_project_data!(db_path)
+      proj_db = DB.open_project(db_path)
+      proj_db.results_as_hash = true
+      result = yield(proj_db)
+      proj_db.close
       result
     end
     private_class_method :with_project_db

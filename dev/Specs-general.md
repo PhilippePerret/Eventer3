@@ -46,9 +46,9 @@ Eventer2/
 │
 ├── app.rb
 │
-├── data/ (les données)
+├── data/
 │	 	│	
-│   └── main.db
+│   └── main.db 
 │
 ├── public/
 │   ├── app.js
@@ -117,7 +117,7 @@ Responsabilités :
 
 - servir l’interface
 - charger/sauvegarder les évènements/projets
-- exporter
+- exporter/importer
 - ouvrir des fichiers externes (chaque évènement/projet peut avoir son fichier)
 
 Aucune logique métier compliquée.
@@ -141,7 +141,7 @@ Voir le fichier [Specs](Specs-modeles.md) pour le détail.
 - colonne centrale unique
 - une ligne = un évènement/un projet
   - à gauche : son intitulé 
-  - à droite : badges des brins, badges des personnages, état
+  - à droite : badges des brins, badges des personnages, état, données en fonction de sa classe spécialisée
 
 - édition directe
 - déplacement immédiat
@@ -153,13 +153,13 @@ Voir le fichier [Specs](Specs-modeles.md) pour le détail.
 
 Le premier panneau quand on lance l’application est le **panneau des projets**.
 
-Ensuite, une fois le projet choisi, un panneau des évènements (appartenant au *Lister* courant) est toujours affiché (il peut y en avoir une infinité, par imbrication, mais un seul affiché dans ce mode normal — ensuite, d’autres panneaux pourront afficher aussi des listes d’events). Les panneaux des brins et des personnages s’affichent au besoin, en modal, au-dessus de lui).
+Ensuite, une fois le projet choisi, un panneau des ses évènements de premier niveau (appartenant au *Lister* courant) est toujours affiché (il peut y en avoir une infinité, par imbrication, mais un seul affiché dans ce mode normal — ensuite, d’autres panneaux pourront afficher aussi des listes d’events). Les panneaux des brins et des personnages s’affichent au besoin, en modal, au-dessus de lui).
 
-Tous ces panneaux, quels qu’ils soient, sont des `Lister`s et fonctionnent donc de la même façon. Cf. les [Interactions](#interactions).
+Tous ces panneaux (events, projects, brins, persos, styles), sont des `Lister`s et fonctionnent donc de la même façon. Cf. les [Interactions](#interactions).
 
 ### Autres panneaux
 
-D’autres panneaux ponctuels permettent de régler les options ou les valeurs particulières des diffférents éléments. Par exemple le panneau des données de l’event, qui permet de régler sa météo, son effet et son lieu/décor (si on l’enregistre un jour).
+D’autres panneaux ponctuels permettent de régler les options ou les valeurs particulières des diffférents éléments. Par exemple le panneau des options du projet ou de l’application qui permettent de définir des valeurs ou des comportements particuliers.
 
 ---
 
@@ -167,7 +167,7 @@ D’autres panneaux ponctuels permettent de régler les options ou les valeurs p
 
 # Interactions
 
-Cf. [Spécifications Keyboard](Specs-Keyboard.md).
+Les interactions avec l’interface se font **exclusivement** Cf. [Spécifications Keyboard](Specs-Keyboard.md).
 
 ---
 

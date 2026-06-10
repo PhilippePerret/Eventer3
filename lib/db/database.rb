@@ -3,7 +3,7 @@ require 'fileutils'
 
 module DB
 
-  DB_FILENAME = 'eventer.db'
+  DB_FILENAME = 'main.db'
 
   SCHEMA = <<~SQL
     CREATE TABLE IF NOT EXISTS listers (
@@ -31,13 +31,15 @@ module DB
     );
 
     CREATE TABLE IF NOT EXISTS project_props (
-      item_id   TEXT PRIMARY KEY REFERENCES items(id),
-      state     INTEGER DEFAULT 0,
-      active    INTEGER DEFAULT 1,
-      year      INTEGER,
-      lister_id INTEGER,
-      brin_ids  TEXT DEFAULT '[]',
-      perso_ids TEXT DEFAULT '[]'
+      item_id     TEXT PRIMARY KEY REFERENCES items(id),
+      state       INTEGER DEFAULT 0,
+      active      INTEGER DEFAULT 1,
+      year        INTEGER,
+      lister_id   INTEGER,
+      brin_ids    TEXT DEFAULT '[]',
+      perso_ids   TEXT DEFAULT '[]',
+      db_path     TEXT,
+      folder_path TEXT
     );
 
     CREATE TABLE IF NOT EXISTS event_props (
@@ -144,18 +146,8 @@ module DB
     File.join(data_dir, DB_FILENAME)
   end
 
-  def self.project_path(data_dir, project_id)
-    File.join(data_dir, project_id.to_s, DB_FILENAME)
-  end
-
   def self.open(data_dir)
     db = SQLite3::Database.new(path(data_dir))
-    db.foreign_keys = true
-    db
-  end
-
-  def self.open_project(data_dir, project_id)
-    db = SQLite3::Database.new(project_path(data_dir, project_id))
     db.foreign_keys = true
     db
   end
@@ -167,24 +159,31 @@ module DB
       stmt = stmt.strip
       db.execute(stmt) unless stmt.empty?
     end
-    begin
-      db.execute("ALTER TABLE event_props ADD COLUMN css TEXT DEFAULT '[]'")
-    rescue SQLite3::Exception => e
-      raise unless e.message.include?('duplicate column name')
-    end
-    begin
-      db.execute("ALTER TABLE event_props ADD COLUMN lieu TEXT")
-    rescue SQLite3::Exception => e
-      raise unless e.message.include?('duplicate column name')
+    [
+      "ALTER TABLE event_props ADD COLUMN css TEXT DEFAULT '[]'",
+      "ALTER TABLE event_props ADD COLUMN lieu TEXT",
+      "ALTER TABLE project_props ADD COLUMN db_path TEXT",
+      "ALTER TABLE project_props ADD COLUMN folder_path TEXT",
+    ].each do |migration|
+      begin
+        db.execute(migration)
+      rescue SQLite3::Exception => e
+        raise unless e.message.include?('duplicate column name')
+      end
     end
     db.close
   end
 
-  def self.initialize_project!(data_dir, project_id)
-    dir = File.join(data_dir, project_id.to_s)
-    FileUtils.mkdir_p(dir)
-    return if File.exist?(project_path(data_dir, project_id))
-    db = open_project(data_dir, project_id)
+  def self.open_project(db_path)
+    db = SQLite3::Database.new(db_path)
+    db.foreign_keys = true
+    db
+  end
+
+  def self.initialize_project!(db_path)
+    FileUtils.mkdir_p(File.dirname(db_path))
+    return if File.exist?(db_path)
+    db = open_project(db_path)
     PROJECT_SCHEMA.split(';').each do |stmt|
       stmt = stmt.strip
       db.execute(stmt) unless stmt.empty?

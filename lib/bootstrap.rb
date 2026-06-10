@@ -11,8 +11,8 @@ class Bootstrap
     ensure_themes!(data_dir)
   end
 
-  def self.ensure_project_data!(data_dir, project_id)
-    DB.initialize_project!(data_dir, project_id)
+  def self.ensure_project_data!(db_path)
+    DB.initialize_project!(db_path)
   end
 
   def self.ensure_themes!(data_dir)
