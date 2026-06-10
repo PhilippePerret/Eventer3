@@ -24,7 +24,7 @@ test("un event avec état affiche sa pastille", async ({ page }) => {
   await page.keyboard.press('Enter')
   await expect(page.locator('.event-item.selected input[name="title"]')).toBeFocused()
   await page.keyboard.press('Tab')
-  const trigger = page.locator('.event-item.selected .popup-select-trigger')
+  const trigger = page.locator('.event-item.selected [data-field-name="state"]')
   await expect(trigger).toBeFocused()
   await page.keyboard.press('ArrowDown')
   // L'option "ébauche" est la 2e (index 1), ↓ pour la sélectionner

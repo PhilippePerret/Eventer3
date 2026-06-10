@@ -10,11 +10,17 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
 ## Todo
 
-- Rendre les panneaux déplaçables à la souris : 
-
-  - Ctrl+⌘+flèches permet de déplacer le panneau courant dans tous les sens, 
-  - ⇧ permet d’augmenter le pas.
-  - la position est consigné de façon « définitive » dans les `prefs.js` de l’user.
+- suppression : indiquer le nombre d’event supprimé et confirmer avec ce nombre
+- panneau des options
+  - il faut commencer à pouvoir déterminer les options
+  - quelle option et où agit-elle ?
+- import/export
+  - system : reproduire une fenêtre comme le Finder pour choisir un dossier (pour exporter) ou choisir un fichier (pour importer)
+  - choix du format (en export, garder les identifiant car il pourra y être fait référecence
+- héritage : option « les sous-events héritent automatiquement des brins et personnages (seulement des brins ? des personnages ? de la météo ? de l’effet ? du lieu ? de la dyndate ?)
+  - l’héritage doit-il être réel ou virtuel ?
+- formatage du texte (markdown-like, badge de personnages
+- déplacement de panneau  : est-ce que la position est persistante ? (sinon => préférences de l’application)
 
 - Implémenter le comportement spécial avec la touche ⇧ qui signifie « à tous les events cochés ». Au lieu d’appliquer simplement un choix à l’event sélectionné, il s’applique à tous les events cochés (ça doit être indiqué dans le titre, clairement. Fonctionne pour : 
 
@@ -29,7 +35,8 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 - En tirer les conséquences :
 
   - [ ] la propriété doit être définie pour tout Lister enregistré . Le premier, celui des projets, doit avoir le niveau 0 — le premier `Lister` du premier projet doit donc avoir le niveau 1 (depth 1). Ensuite, le Lister de tout Event aura le depth 2.
-  - [ ] 
+
+- système de référence : une marque permet de faire référence à un event/brin/personnage particulier (mais surtout un event) et permet de l’afficher pour le voir. Peut-être même pour s’y rendre concrètemen
 
   
 

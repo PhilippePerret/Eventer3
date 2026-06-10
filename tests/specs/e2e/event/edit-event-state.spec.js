@@ -24,7 +24,7 @@ test("Tab puis ArrowDown ouvre le popup de sélection d'état", async ({ page })
 
   await startEditing(page)
   await page.keyboard.press('Tab')
-  const trigger = page.locator('.event-item.selected .popup-select-trigger')
+  const trigger = page.locator('.event-item.selected [data-field-name="state"]')
   await expect(trigger).toBeFocused()
 
   await page.keyboard.press('ArrowDown')
@@ -75,7 +75,7 @@ test("Enter sélectionne l'option et ferme le popup", async ({ page }) => {
 
   await expect(page.locator('.popup-select')).not.toBeVisible()
 
-  const trigger = page.locator('.event-item.selected .popup-select-trigger')
+  const trigger = page.locator('.event-item.selected [data-field-name="state"]')
   await expect(trigger).toHaveText('ébauche')
   await expect(titleInput).toBeFocused()
 })
@@ -136,7 +136,7 @@ test("Enter sur résultat filtré sélectionne et ferme", async ({ page }) => {
   await expect(page.locator('.popup-select__option')).toHaveCount(1)
   await page.keyboard.press('Enter')
 
-  const trigger = page.locator('.event-item.selected .popup-select-trigger')
+  const trigger = page.locator('.event-item.selected [data-field-name="state"]')
   await expect(trigger).toHaveText('à relire')
 })
 
