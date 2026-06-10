@@ -2,7 +2,6 @@ import LOG from '../../system/LOG.js'
 import { raise } from '../../system/Error.js'
 import Item from './Item.js'
 import ListerRepository from '../repositories/ListerRepository.js'
-import FooterHelp from '../ui/FooterHelp.js'
 import Notification from '../ui/Notification.js'
 import FilterState from '../system/FilterState.js'
 import PopupSelect from '../ui/PopupSelect.js'
@@ -258,7 +257,6 @@ export default class Lister {
       this.domContainer.appendChild(itemElement)
     })
     const canDelete = this.items.filter(item => item.active !== false).length > 1
-    FooterHelp.update(this.uiModes, { canDelete })
     if (this.keyboardController) this.keyboardController.register(this)
     return this.domContainer
   }
@@ -504,7 +502,6 @@ export default class Lister {
     this.selectedIndex = newIdx
     if (this.domItems[newIdx]) this.domItems[newIdx].classList.add('selected')
     const canDelete = this.items.filter(i => i.active !== false).length > 1
-    FooterHelp.update(this.uiModes, { canDelete })
     this._onAfterDelete(item)
     void ListerRepository.deleteItem(this, item)
   }

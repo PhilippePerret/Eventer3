@@ -1,5 +1,5 @@
 import LOG from './system/LOG.js'
-import ShortcutsPanel from './classes/ui/ShortcutsPanel.js'
+import ContextualHelp from './classes/ui/ContextualHelp.js'
 import ToolsPanel from './classes/ui/ToolsPanel.js'
 import FilterBar from './classes/ui/FilterBar.js'
 import Notification from './classes/ui/Notification.js'
@@ -15,7 +15,6 @@ export default class KeyboardController {
   constructor() {
     this.activeLister = null
     this.modeStack = []
-    this.shortcutsPanel = new ShortcutsPanel()
     this.toolsPanel = new ToolsPanel()
     this._panelOffsets = new WeakMap()
   }
@@ -44,6 +43,7 @@ export default class KeyboardController {
   }
 
   enterItemEdition({ defaultInput = null, onKeyDown }) {
+    ContextualHelp.setContext('edition-item')
 
     this.pushMode({
       type: 'item-edition',
@@ -65,14 +65,17 @@ export default class KeyboardController {
 
   onKeyDown(event) {
 
-    // Règle globale : Cmd+Enter ferme le panneau ouvert (raccourcis ou lister courant)
+    // Cmd+? — aide contextuelle (fonctionne partout, même en édition)
+    if ((event.metaKey || event.ctrlKey) && event.key === '?') {
+      event.preventDefault()
+      ContextualHelp.open(this)
+      return
+    }
+
+    // Règle globale : Cmd+Enter ferme le panneau/lister courant
     if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
       event.preventDefault()
-      if (this.shortcutsPanel.isVisible) {
-        this.shortcutsPanel.close()
-      } else {
-        this.activeLister?.close()
-      }
+      this.activeLister?.close()
       return
     }
 
@@ -96,12 +99,6 @@ export default class KeyboardController {
     // Édition contentEditable en cours
     if (this.activeLister?.editing) {
       this.activeLister._handleEditingKeyDown(event)
-      return
-    }
-
-    if (event.key === '?' && !event.metaKey && !event.ctrlKey) {
-      event.preventDefault()
-      this.shortcutsPanel.open()
       return
     }
 
@@ -218,8 +215,7 @@ export default class KeyboardController {
 
       case 'ArrowDown':
         if (event.metaKey) {
-          if (this.shortcutsPanel.isVisible) this.shortcutsPanel.nextContext()
-          else this.activeLister.moveSelectedItemDown()
+          this.activeLister.moveSelectedItemDown()
         } else if (event.altKey && this.activeLister.backgroundLister) {
           this.activeLister.backgroundLister.selectNextItem()
           void this.activeLister.onBackgroundSelectionChange?.()
@@ -231,8 +227,7 @@ export default class KeyboardController {
 
       case 'ArrowUp':
         if (event.metaKey) {
-          if (this.shortcutsPanel.isVisible) this.shortcutsPanel.previousContext()
-          else this.activeLister.moveSelectedItemUp()
+          this.activeLister.moveSelectedItemUp()
         } else if (event.altKey && this.activeLister.backgroundLister) {
           this.activeLister.backgroundLister.selectPreviousItem()
           void this.activeLister.onBackgroundSelectionChange?.()

@@ -3,14 +3,14 @@
   "type": "module",
   "scripts": {
     "test": "playwright test",
-    "test:headed": "playwright test --headed",
-    "test:unit": "clear;clear;node --test specs/unit/**/*.test.js",
-    "test:ruby:tdd": "clear;clear;ruby ruby/_tdd/*",
-    "test:ruby": "clear;clear;ruby ruby/**/*",
-    "test:unit:tdd": "clear;clear;node --test specs/unit/_tdd/*.test.js",
-    "test:e2e": "clear;clear;playwright test",
-    "test:e2e:tdd": "clear;clear;playwright test -- e2e/_tdd",
-    "test:all": "clear;clear;ruby ruby/**/*;playwright test;node --test specs/unit/**/*.test.js"
+    "test:headed": "playwright test --headed; printf '\\a'",
+    "test:unit": "clear;clear;node --test specs/unit/**/*.test.js; printf '\\a'",
+    "test:ruby:tdd": "clear;clear;ruby ruby/_tdd/*; printf '\\a'",
+    "test:ruby": "clear;clear;ruby ruby/**/*; printf '\\a'",
+    "test:unit:tdd": "clear;clear;node --test specs/unit/_tdd/*.test.js; printf '\\a'",
+    "test:e2e": "clear;clear;playwright test; printf '\\a'",
+    "test:e2e:tdd": "clear;clear;playwright test -- e2e/_tdd; printf '\\a'",
+    "test:all": "clear;clear;ruby ruby/**/*;playwright test;node --test specs/unit/**/*.test.js; printf '\\a'"
   },
   "devDependencies": {
     "@playwright/test": "^1.49.1"

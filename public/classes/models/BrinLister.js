@@ -1,8 +1,8 @@
 import Lister from './Lister.js'
 import Brin from './Brin.js'
 import ListerRepository from '../repositories/ListerRepository.js'
-import FooterHelp from '../ui/FooterHelp.js'
 import PersoLister from './PersoLister.js'
+import ContextualHelp from '../ui/ContextualHelp.js'
 
 export default class BrinLister extends Lister {
 
@@ -88,6 +88,7 @@ export default class BrinLister extends Lister {
   // ── Rendu dans le panneau flottant (pas #main-panel) ─────────────
 
   render() {
+    ContextualHelp.setContext('brin-list')
     const panel = document.querySelector('#brin-panel')
     panel.innerHTML = ''
     panel.classList.remove('hidden')
@@ -98,7 +99,6 @@ export default class BrinLister extends Lister {
 
     this._renderPanelHeader(card, `Brins · ${this.selectedEvent?.title ?? this.eventLister.parentItem?.title ?? ''}`)
 
-    FooterHelp.update(this.uiModes)
 
     this.domContainer = card
     this.domItems = []
@@ -268,9 +268,9 @@ export default class BrinLister extends Lister {
   }
 
   close() {
+    ContextualHelp.restoreContext()
     document.querySelector('#brin-panel').classList.add('hidden')
     document.querySelector('#brin-panel').innerHTML = ''
-    FooterHelp.update(this.eventLister.uiModes)
     this.keyboardController.register(this.eventLister)
   }
 

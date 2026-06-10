@@ -3,6 +3,7 @@ import Texte from '../../system/Texte.js'
 import ListerRepository from '../repositories/ListerRepository.js'
 import PopupSelect from '../ui/PopupSelect.js'
 import Notification from '../ui/Notification.js'
+import ContextualHelp from '../ui/ContextualHelp.js'
 
 
 export default class Item {
@@ -177,6 +178,7 @@ export default class Item {
 
   cancelEditor(keyboardController, itemElement) {
     const lister = keyboardController.activeLister
+    ContextualHelp.restoreContext()
     keyboardController.popMode()
     itemElement.remove()
     if (lister.__isVirtual) {
@@ -223,6 +225,7 @@ export default class Item {
           itemElement.classList.remove('editing')
           itemElement.innerHTML = ''
           if (typeof this.render === 'function') this.render(itemElement)
+          ContextualHelp.restoreContext()
           keyboardController.popMode()
         }
         return
@@ -251,6 +254,7 @@ export default class Item {
             await ListerRepository.save(lister)
           }
         }
+        ContextualHelp.restoreContext()
         keyboardController.popMode()
         LOG.m(2, 'Item.edition.committed', { id: this.id, title: this.title })
         return

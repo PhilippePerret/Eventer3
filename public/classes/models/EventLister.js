@@ -6,7 +6,7 @@ import PersoLister from './PersoLister.js'
 import StyleLister from './StyleLister.js'
 import ListerRepository from '../repositories/ListerRepository.js'
 import StatusBar from '../ui/StatusBar.js'
-import FooterHelp from '../ui/FooterHelp.js'
+import ContextualHelp from '../ui/ContextualHelp.js'
 
 export default class EventLister extends Lister {
 
@@ -77,7 +77,6 @@ export default class EventLister extends Lister {
     }
     this.items = collected.map(e => e.item)
     if (this.domItems.length > 0) this.domItems[0].classList.add('selected')
-    FooterHelp.update(this.uiModes)
     if (this.keyboardController) this.keyboardController.register(this)
   }
 
@@ -107,6 +106,7 @@ export default class EventLister extends Lister {
   }
 
   render() {
+    ContextualHelp.resetContext('event-list')
     const result = super.render()
     StatusBar.update('events')
     void this._loadAndRenderPersoMarks()
@@ -203,7 +203,6 @@ export default class EventLister extends Lister {
       this.domItems[0].classList.add('selected')
     }
 
-    FooterHelp.update(this.uiModes)
     if (this.keyboardController) this.keyboardController.register(this)
   }
 

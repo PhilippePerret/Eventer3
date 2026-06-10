@@ -1,6 +1,6 @@
 import Lister from './Lister.js'
 import ListerRepository from '../repositories/ListerRepository.js'
-import FooterHelp from '../ui/FooterHelp.js'
+import ContextualHelp from '../ui/ContextualHelp.js'
 
 const PREVIEW_TEXT = 'Il était une fois une histoire extraordinaire...'
 
@@ -87,6 +87,7 @@ export default class StyleLister extends Lister {
   // ── Render ──────────────────────────────────────────────────────────
 
   render() {
+    ContextualHelp.setContext('style-list')
     const panel = document.querySelector('#style-panel')
     panel.innerHTML = ''
     panel.classList.remove('hidden')
@@ -97,7 +98,6 @@ export default class StyleLister extends Lister {
 
     this._renderPanelHeader(card, `Styles · ${this.selectedEvent?.title ?? ''}`)
 
-    FooterHelp.update(this.uiModes)
 
     this.domContainer = card
     this.domItems = []
@@ -200,10 +200,10 @@ export default class StyleLister extends Lister {
   // ── Close ────────────────────────────────────────────────────────────
 
   close() {
+    ContextualHelp.restoreContext()
     const panel = document.querySelector('#style-panel')
     panel.classList.add('hidden')
     panel.innerHTML = ''
-    FooterHelp.update(this.eventLister.uiModes)
     this.keyboardController.register(this.eventLister)
   }
 

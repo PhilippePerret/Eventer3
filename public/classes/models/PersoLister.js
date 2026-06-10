@@ -1,7 +1,7 @@
 import Lister from './Lister.js'
 import Perso from './Perso.js'
 import ListerRepository from '../repositories/ListerRepository.js'
-import FooterHelp from '../ui/FooterHelp.js'
+import ContextualHelp from '../ui/ContextualHelp.js'
 
 export default class PersoLister extends Lister {
 
@@ -96,6 +96,7 @@ export default class PersoLister extends Lister {
   // ── Rendu ──────────────────────────────────────────────────────────
 
   render() {
+    ContextualHelp.setContext('perso-list')
     const panel = document.querySelector('#perso-panel')
     panel.innerHTML = ''
     panel.classList.remove('hidden')
@@ -106,7 +107,6 @@ export default class PersoLister extends Lister {
 
     this._renderPanelHeader(card, `Personnages · ${this.contextItem?.title ?? ''}`)
 
-    FooterHelp.update(this.uiModes)
 
     this.domContainer = card
     this.domItems = []
@@ -234,10 +234,10 @@ export default class PersoLister extends Lister {
   // ── Fermeture ──────────────────────────────────────────────────────
 
   close() {
+    ContextualHelp.restoreContext()
     const panel = document.querySelector('#perso-panel')
     panel.classList.add('hidden')
     panel.innerHTML = ''
-    FooterHelp.update(this.parentLister.uiModes)
     this.keyboardController.register(this.parentLister)
   }
 

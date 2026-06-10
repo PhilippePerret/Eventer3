@@ -9,6 +9,7 @@ import LOG from '../../system/LOG.js'
 import StatusBar from '../ui/StatusBar.js'
 import FilePicker from '../ui/FilePicker.js'
 import ConfirmDialog from '../ui/ConfirmDialog.js'
+import ContextualHelp from '../ui/ContextualHelp.js'
 
 export default class ProjectLister extends Lister {
 
@@ -30,8 +31,7 @@ export default class ProjectLister extends Lister {
     this.itemClass = Project
   }
 
-  get depth() { return 0 }
-
+  get depth()   { return 0 }
   get uiModes() { return ['projects'] }
 
   get childListerClass() {
@@ -122,6 +122,7 @@ export default class ProjectLister extends Lister {
   }
 
   render() {
+    ContextualHelp.resetContext('project-list')
     const result = super.render()
     StatusBar.update('projects')
     return result
