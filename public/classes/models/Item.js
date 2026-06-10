@@ -176,12 +176,12 @@ export default class Item {
     })
   }
 
-  cancelEditor(keyboardController, itemElement) {
+  cancelEditor(keyboardController, itemElement, { leaveToParent = false } = {}) {
     const lister = keyboardController.activeLister
     ContextualHelp.restoreContext()
     keyboardController.popMode()
     itemElement.remove()
-    if (lister.__isVirtual) {
+    if (lister.__isVirtual || leaveToParent) {
       lister.leaveToParent()
     } else {
       lister.selectItemAt(this.previousSelectedIndex)
@@ -204,9 +204,9 @@ export default class Item {
         }
         return
       case 'ArrowLeft':
-        if (this.__isTemporary && keyboardController.activeLister.__isVirtual) {
+        if (this.__isTemporary) {
           event.preventDefault()
-          this.cancelEditor(keyboardController, itemElement)
+          this.cancelEditor(keyboardController, itemElement, { leaveToParent: true })
         }
         return
       case 'Escape':

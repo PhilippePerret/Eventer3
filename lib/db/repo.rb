@@ -510,7 +510,9 @@ module DB
         row = db.execute("SELECT db_path FROM project_props WHERE item_id = ? LIMIT 1", [project_id]).first
         row ? row['db_path'] : nil
       end
-      raise "Aucun db_path trouvé pour le projet #{project_id.inspect}" unless db_path
+      if db_path.nil? || db_path.to_s.strip.empty?
+        return with_db(data_dir) { |db| yield(db) }
+      end
       full_path = db_path.start_with?('/') ? db_path : File.join(data_dir, db_path)
       Bootstrap.ensure_project_data!(full_path)
       proj_db = DB.open_project(full_path)

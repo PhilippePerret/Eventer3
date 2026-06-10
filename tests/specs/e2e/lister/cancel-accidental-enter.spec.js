@@ -1,6 +1,36 @@
 import { installFixtures } from '../../../helpers/install-fixtures'
 import { test, expect } from '../__setup__.js'
 
+test.describe('← annule la création d\'un event dans un lister non-virtuel', () => {
+
+  test.beforeEach(() => installFixtures('many-events'))
+
+  test("← pendant la création d'un event retourne à la liste des projets", async ({ page }) => {
+
+    await page.goto('/')
+
+    console.log('\n=== TEST ← ANNULE CRÉATION EVENT ===')
+
+    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    await page.keyboard.press('ArrowRight')
+    await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+
+    const eventCount = await page.locator('.event-item').count()
+    console.log(`-> ${eventCount} events, appui sur n`)
+    await page.keyboard.press('n')
+    await expect(page.locator('.event-item input[name="title"]')).toBeVisible()
+
+    console.log('-> ← pour annuler et revenir aux projets')
+    await page.keyboard.press('ArrowLeft')
+
+    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+
+    console.log('\n=== FIN TEST ← ANNULE CRÉATION EVENT ===\n')
+
+  })
+
+})
+
 test.describe('Annulation entrée accidentelle dans un lister vide', () => {
 
   test.beforeEach(() => installFixtures('many-events'))

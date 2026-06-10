@@ -75,7 +75,7 @@ export const PERSO_FONCTIONS = [
  * ContextualHelp.resetContext('contexte') => reset complètement la pile des contextes
  * ContextualHelp.setContext('contexte') => emplile (ajoute) le contexte provisoire
  * ContextualHelp.restoreContext() => dépile, donc revient au contexte précédent.
- * 
+ * g
  */
 export const HELP_PER_CONTEXT = {
 
@@ -102,9 +102,9 @@ export const HELP_PER_CONTEXT = {
     title: "Liste des projets",
     other_contexts: ['navigate-items'],
     shortcuts: [
-      {sc: 'n',  ef: "Nouveau projet (FilePicker)",     key: 'n'},
-      {sc: '↩︎', ef: "Renommer le projet sélectionné", key: 'Enter'},
       {sc: '→',  ef: "Entrer dans le projet",           key: 'ArrowRight'},
+      {sc: 'n',  ef: "Nouveau/ouvrir projet",           key: 'n'},
+      {sc: '↩︎', ef: "Renommer le projet sélectionné", key: 'Enter'},
       {sc: '⌦',  ef: "Supprimer le projet",            key: 'Delete'},
     ]
   },
