@@ -571,6 +571,12 @@ module DB
       if payload.key?('lieu')
         db.execute("UPDATE event_props SET lieu = ? WHERE item_id = ?", [payload['lieu'], item_id])
       end
+      if payload.key?('db_path')
+        db.execute("UPDATE project_props SET db_path = ? WHERE item_id = ?", [payload['db_path'], item_id])
+      end
+      if payload.key?('folder_path')
+        db.execute("UPDATE project_props SET folder_path = ? WHERE item_id = ?", [payload['folder_path'], item_id])
+      end
       if payload.key?('badge')
         db.execute("UPDATE brin_props  SET badge = ? WHERE item_id = ?", [payload['badge'], item_id])
         db.execute("UPDATE perso_props SET badge = ? WHERE item_id = ?", [payload['badge'], item_id])

@@ -2,6 +2,7 @@ require 'sinatra'
 require 'json'
 require 'fileutils'
 require 'time'
+require 'cgi'
 require_relative './lib/bootstrap'
 require_relative './lib/db/repo'
 require_relative './lib/system/log'
@@ -94,6 +95,9 @@ end
 patch '/api/items/:id' do
   payload = JSON.parse(request.body.read)
   LOG.m(1, "[PATCH /api/items/#{params[:id]}] payload=#{payload.inspect}")
+  if (db_path = payload['db_path']) && !db_path.strip.empty?
+    Bootstrap.ensure_project_data!(db_path)
+  end
   DB::Repo.update_item(DATA_DIR, params[:id], payload, project_id: params[:project_id])
   content_type :json
   JSON.generate(ok: true)
@@ -113,6 +117,46 @@ post '/api/listers/:id/items' do
   content_type :json
   status 201
   JSON.generate(item)
+end
+
+get '/api/settings/:key' do
+  db = DB.open(DATA_DIR)
+  db.results_as_hash = true
+  row = db.execute("SELECT value FROM app_settings WHERE key = ? LIMIT 1", [params[:key]]).first
+  db.close
+  content_type :json
+  JSON.generate(value: row ? row['value'] : nil)
+end
+
+patch '/api/settings/:key' do
+  payload = JSON.parse(request.body.read)
+  db = DB.open(DATA_DIR)
+  db.results_as_hash = true
+  db.execute("INSERT OR REPLACE INTO app_settings (key, value) VALUES (?, ?)", [params[:key], payload['value']])
+  db.close
+  content_type :json
+  JSON.generate(ok: true)
+end
+
+get '/api/fs' do
+  raw  = params[:path]
+  path = raw ? File.expand_path(raw) : File.expand_path('~')
+  halt 404 unless File.directory?(path)
+  entries = Dir.entries(path)
+    .reject { |name| name.start_with?('.') }
+    .map    { |name| full = File.join(path, name); { name: name, type: File.directory?(full) ? 'directory' : 'file', path: full } }
+    .sort_by { |e| e[:name].downcase }
+  content_type :json
+  JSON.generate(path: path, entries: entries)
+end
+
+post '/api/fs/mkdir' do
+  payload = JSON.parse(request.body.read)
+  halt 422 unless payload['path'] && !payload['path'].strip.empty?
+  FileUtils.mkdir_p(payload['path'])
+  content_type :json
+  status 201
+  JSON.generate(path: payload['path'])
 end
 
 get '/api/themes' do

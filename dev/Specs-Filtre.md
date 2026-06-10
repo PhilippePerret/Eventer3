@@ -2,7 +2,7 @@
 
 Le ***filtre*** est une fonctionnalité très puissante d’Eventer et essentiel. C’est elle, par exemple qui va permettre de se concentrer sur un brin particulier de l’histoire (p.e. une intrigue).
 
-Le filtre doit fonctionner pour tout : Project, Brin, Perso et Event (=> logique dans `Lister` et `Item`, pas dans les classes spécialisées, à part pour du détail).
+Le filtre fonctionne pour tout : Project, Brin, Perso et Event et même les styles (=> logique dans `Lister` et `Item`, pas dans les classes spécialisées, à part pour du détail).
 
 Avec les `event`s, Le filtre fonctionne sur les deux modes d’affichage des listings : 
 

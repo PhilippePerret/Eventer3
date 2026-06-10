@@ -77,6 +77,11 @@ module DB
       last_val    INTEGER DEFAULT 0,
       PRIMARY KEY (project_id, item_type)
     );
+
+    CREATE TABLE IF NOT EXISTS app_settings (
+      key   TEXT PRIMARY KEY,
+      value TEXT
+    );
   SQL
 
   PROJECT_SCHEMA = <<~SQL

@@ -4,7 +4,35 @@
 
 ---
 
+## Nota bene
+
+Gros changement du mercredi 10 juin : séparation de la base principale, `data/main.db` qui contiendra la liste des projets seulement, et de nombreuses autres informations de setting, et les `eventer.db` propres à chaque projet et placés dans leur dossier.
+
 ## Tables
+
+### main.db
+
+(non vérifié par Claude)
+
+~~~sql
+   project_props {
+        TEXT item_id PK
+        INTEGER state
+        INTEGER active
+        INTEGER year
+        TEXT lister_id FK // <== CHILD !!! NOT PARENT !!! 		      TEXT brin_ids
+        TEXT perso_ids
+       	TEXT folder_path
+       	TEXT db_path
+    }
+
+~~~
+
+
+
+---
+
+### eventer.db
 
 ```
     listers {
@@ -32,14 +60,6 @@
         TEXT updated_at
     }
 
-    project_props {
-        TEXT item_id PK
-        INTEGER state
-        INTEGER active
-        INTEGER year
-        TEXT lister_id FK // <== CHILD !!! NOT PARENT !!! 		      TEXT brin_ids
-        TEXT perso_ids
-    }
 
     event_props {
         TEXT item_id PK

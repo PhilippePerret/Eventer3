@@ -115,10 +115,11 @@ Modes spéciaux (modeStack) : `item-edition` (champs input/select), `popup-selec
 ## Règles de dev à respecter
 
 - **TDD strict** : test → RED → code → GREEN
+- on crée d’abord le test dans le dossier `_tdd` qui existe pour chaque cas (tests e2e, ruby, unit). Et lorsqu’il passe au vert, on demande à l’utilisateur de le déplacer vers son dossier canonique (ni `mv`, ni `cp`).
 - Import tests : toujours depuis `__setup__.js`, jamais `@playwright/test`
 - `installFixtures('nom')` dans `beforeEach` ou au niveau module
 - `Lister`/`Item` : ne jamais dupliquer dans une sous-classe ce qui existe ou devrait exister dans la base
-- Le `type` d’un `Item` (`Project`, `Event`, `Brin`, `Perso`, `Script`) n’est JAMAIS la classe spécialisée minorisée de l’item. Le type de `Project` n’est JAMAIS `perso`, le `type` d’un `Event` n’est JAMAIS `event`, le `type` d’un `Perso` n’est JAMAIS `perso`. Voir les [types possibles] dans le document des modèles.
+- Le `type` d’un `Item` (`Project`, `Event`, `Brin`, `Perso`, `Script`) n’est JAMAIS la classe spécialisée minorisée de l’item. Le type de `Project` n’est JAMAIS `perso`, le `type` d’un `Event` n’est JAMAIS `event`, le `type` d’un `Perso` n’est JAMAIS `perso`. Voir les [types possibles](../dev/Specs-modeles.md#item-types) dans le document des modèles.
 - Loi de Déméter : déléguer via méthode statique, ne pas câbler les détails d'une autre classe
 - Séparation des responsabilités : FooterHelp, PopupSelect, ShortcutsPanel, Notification = classes dédiées
 - `lister_id` d'un Item = id de son Lister enfant, PAS son appartenance (appartenance = `item_ids` du Lister parent)

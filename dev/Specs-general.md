@@ -167,7 +167,7 @@ D’autres panneaux ponctuels permettent de régler les options ou les valeurs p
 
 # Interactions
 
-Les interactions avec l’interface se font **exclusivement** Cf. [Spécifications Keyboard](Specs-Keyboard.md).
+Les interactions avec l’interface se font **exclusivement** avec/au clavier. Cf. [Spécifications Keyboard](Specs-Keyboard.md).
 
 ---
 

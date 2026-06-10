@@ -560,7 +560,7 @@ export default class Lister {
     LOG.m(2, 'Lister.createNewItem.done', { items: this.items.length, domItems: this.domItems.length })
   }
 
-  createNewItemAfter() {
+  createNewItemAfter(defaultTitle = '') {
     if (!this.keyboardController) throw new Error('Lister.createNewItemAfter: keyboardController missing')
     const originalIndex = this.selectedIndex
     const insertionIndex = originalIndex + 1
@@ -573,7 +573,8 @@ export default class Lister {
       lister: this,
       keyboardController: this.keyboardController,
       insertionIndex,
-      currentItemElement: nextEl
+      currentItemElement: nextEl,
+      defaultTitle,
     })
     item.previousSelectedIndex = originalIndex
   }

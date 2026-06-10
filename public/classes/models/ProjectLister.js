@@ -7,6 +7,7 @@ import ListerRepository from '../repositories/ListerRepository.js'
 import KeyboardController from '../../KeyboardController.js'
 import LOG from '../../system/LOG.js'
 import StatusBar from '../ui/StatusBar.js'
+import FilePicker from '../ui/FilePicker.js'
 
 export default class ProjectLister extends Lister {
 
@@ -40,15 +41,46 @@ export default class ProjectLister extends Lister {
     return { id: item.lister_id ?? null, parentItem: item, project_id: item.id }
   }
 
+  async createNewItemAfter() {
+    const folder_path = await FilePicker.open({ mode: 'folder', keyboardController: this.keyboardController })
+    if (!folder_path) return
+
+    this._pendingFolderPath = folder_path
+    const folderName = folder_path.split('/').at(-1)
+
+    const originalIndex = this.selectedIndex
+    const insertionIndex = originalIndex + 1
+    const currentEl = this.domItems[originalIndex]
+    if (currentEl) currentEl.classList.remove('selected')
+    const nextEl = this.domItems[insertionIndex] ?? null
+    this.selectedIndex = insertionIndex
+
+    const item = new this.itemClass({ id: '', title: folderName })
+    const itemElement = item.createElement()
+    item.render(itemElement)
+    if (nextEl) nextEl.before(itemElement)
+    else this.domContainer.appendChild(itemElement)
+    this.selectElement(itemElement)
+
+    await this.commitNewItem(item, itemElement, insertionIndex)
+  }
+
   async commitNewItem(item, itemElement, insertionIndex) {
+    const folder_path = this._pendingFolderPath ?? null
+    this._pendingFolderPath = null
+
     await super.commitNewItem(item, itemElement, insertionIndex)
+
+    if (!folder_path) return
+
+    const db_path     = folder_path + '/eventer.db'
     const eventLister = await ListerRepository.createLister({ type: 'events', parent_item_id: item.id })
-    item.lister_id = eventLister.id
+    item.lister_id    = eventLister.id
     await ListerRepository.createItem(eventLister.id, { title: 'Acte I', type: 'event' })
     const brinLister = await ListerRepository.createLister({ type: 'brins', parent_item_id: item.id })
     await ListerRepository.createItem(brinLister.id, {
       title: 'Intrigue principale',
-      type: 'brin',
+      type:  'brin',
       badge: Brin.generateBadge('Intrigue principale'),
       color: Brin.colorFor(1)
     })
@@ -57,6 +89,7 @@ export default class ProjectLister extends Lister {
       title: 'Votre protagoniste',
       badge: Perso.generateUniqueBadge('Votre protagoniste', [])
     })
+    await ListerRepository.saveItem(item, { db_path, folder_path })
   }
 
   render() {

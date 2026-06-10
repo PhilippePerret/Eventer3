@@ -38,6 +38,8 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
 - possibilité de diviser la fenêtre en deux parties, chacune avec leur évènemencier (le plus courant : l’évènemencier de niveau 1 du projet courant)
 
+- raccourcis clavier : pas dans le footer mais dans un panneau s’ouvrant avec « ? » => tous les tests sont à centrer là-dessus.
+
 - panneau des options
 
   - il faut commencer à pouvoir déterminer les options
@@ -74,17 +76,19 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
   => Possibilité de diviser la fenêtre en deux parties 
 
+- Un affichage « total » qui affiche tous les évènements, avec une indentation qui montre l’imbrication. Peut-être, dans cet affichage, se limiter au title des events
 
+  - 3e mode d’affichage => cmd+m doit afficher une petite fenêtre affichant :
 
-* Implémenter les menus « météo » et « effet » pour les events, qu’on doit pouvoir atteindre après l’état. Gérer les incompatibilités qui sont définies dans le fichier constantes.js dans METEO
-* Implémenter les différentes mode de vue des évènemencier : 
-  * le mode normal par imbrication
-  * le mode « par niveau » où tous les évènements d’un même projet et d’un même niveau sont affichés
-* Implémenter LE FILTRE (le prochain gros morceau)
-* Propriété `flags` pour les `Lister` — première option : le mode d’affichage des fond d’Event, soit par couleur de premier brin, soit par « climat » (météo + effet).
-* Définir l’option d’EventListener qui détermine si le fond des events doit être déterminé par son premier Brin ou par son « climat », constitué 1) de sa météo et 2) de son effet. 
-* ajouter la propriété `mode` de `Lister` qui permettra de définir si les items sont des projets, des évènements (event normaux ou event script), des brins ou des personnages.
-* S’assurer que les propriétés `created_at`/`ca` et `updated_at`/`ua` soient toujours enregisrées (backend)
+    ~~~
+    Affichage par imbrication
+    Affichage par niveau
+    Affichage total
+    ~~~
+
+    (sélection avec les flèches en Enter, comme pour tout)
+
+* Propriété `flags` pour les `Lister` — première option : le mode d’affichage des fond d’Event, soit par couleur de premier brin, soit par « climat » (météo + effet). UTILE ?
 * Des options générale de l’application
   * `open-with-project-list` : une option détermine si l’application doit s’ouvrir sur la liste des projets ou sur le dernier évènemencier travaillé.
 * Console pour commander Eventer de l’intérieur « en ligne de console »

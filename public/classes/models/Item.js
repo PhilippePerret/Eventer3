@@ -23,8 +23,9 @@ export default class Item {
     return ['item']
   }
 
-  static create({ lister, keyboardController, insertionIndex, currentItemElement }) {
+  static create({ lister, keyboardController, insertionIndex, currentItemElement, defaultTitle = '' }) {
     const item = this.createEmpty()
+    if (defaultTitle) item.title = defaultTitle
     item.__isTemporary = true
     item.previousSelectedIndex = insertionIndex
     const itemElement = item.createEditorElement(keyboardController)
