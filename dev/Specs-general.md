@@ -30,6 +30,9 @@ Deux façons (au moins) de se servir de l’application : 1) on peut s’en ser
 * l’enregistrement est automatique, transparent
 * tout clavier, rien à la souris
 * ~~sauvegarde en JSON~~. SQLite maintenant.
+  * une base par projet (un fichier `eventer.db`)
+  * un main-db pour maintenir les références aux projets
+
 * produire du code verbeux (comme le mode verbose, `--verbose`, des commandes unix) pour pouvoir suivre le message. Mais désactivable facilement. Cf. `LOG` en backend (ruby) et en frontend (JavaScript).
 
 
@@ -45,7 +48,7 @@ Eventer2/
 │
 ├── data/ (les données)
 │	 	│	
-│   └── eventer.db
+│   └── main.db
 │
 ├── public/
 │   ├── app.js
@@ -57,11 +60,17 @@ Eventer2/
 │		│		├── Texte.js  (gestion des textes)
 │		│
 │   ├── index.html
-│   v── style.css
+│   └── style.css
 │
 ├── tests/ (tout, vraiment tout ce qui concerne les tests)
 │
 └── exports/ (servira pour les exportations)
+
+Projet A
+└── eventer.db
+Projet B
+└── eventer.db
+...
 ```
 
 

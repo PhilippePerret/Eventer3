@@ -22,6 +22,7 @@ export default class Lister {
     this.perso_ids = data.perso_ids ?? []
     this.options = data.options ?? { colorizeItemsWithFirstBrin: false }
     this.path = data.path ?? null
+    this.project_id = data.project_id ?? null
     this.created_at = data.created_at ?? null
     this.updated_at = data.updated_at ?? null
     this.keyboardController = data.keyboardController ?? null
@@ -80,7 +81,7 @@ export default class Lister {
     const itemsData = await ListerRepository.loadItems(this)
     this.item_ids.forEach(id => {
       const itemData = itemsData[id]
-      if (itemData) this.items.push(new this.itemClass({ ...itemData, parentLister: this }))
+      if (itemData) this.items.push(new this.itemClass({ ...itemData, parentLister: this, project_id: this.project_id }))
     })
   }
 
@@ -90,14 +91,17 @@ export default class Lister {
     this.parentItem.parentLister.render()
   }
 
+  _childListerData(item) {
+    return { id: item.lister_id ?? null, parentItem: item, project_id: this.project_id }
+  }
+
   async enterSelectedItem() {
     if (!this.childListerClass) return
     const item = this.items[this.selectedIndex]
     if (!item) return
     const childLister = new this.childListerClass({
-      id: item.lister_id ?? null,
+      ...this._childListerData(item),
       keyboardController: this.keyboardController,
-      parentItem: item
     })
     childLister.depth = this.depth + 1
     if (item.lister_id != null) {

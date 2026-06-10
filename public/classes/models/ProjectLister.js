@@ -36,6 +36,10 @@ export default class ProjectLister extends Lister {
     return EventLister
   }
 
+  _childListerData(item) {
+    return { id: item.lister_id ?? null, parentItem: item, project_id: item.id }
+  }
+
   async commitNewItem(item, itemElement, insertionIndex) {
     await super.commitNewItem(item, itemElement, insertionIndex)
     const eventLister = await ListerRepository.createLister({ type: 'events', parent_item_id: item.id })

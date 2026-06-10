@@ -71,7 +71,7 @@ end
 
 patch '/api/listers/:id' do
   payload = JSON.parse(request.body.read)
-  DB::Repo.update_lister(DATA_DIR, params[:id], payload)
+  DB::Repo.update_lister(DATA_DIR, params[:id], payload, project_id: params[:project_id])
   content_type :json
   JSON.generate(ok: true)
 end

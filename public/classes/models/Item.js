@@ -61,6 +61,7 @@ export default class Item {
     this.patronyme = data.patronyme ?? null
     this.avatar = data.avatar ?? null
     this.fonction = data.fonction ?? null
+    this.project_id = data.project_id ?? null
     // -- ajouté au runtime --
     this.parentLister = data.parentLister ?? null
   }

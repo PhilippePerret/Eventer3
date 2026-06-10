@@ -95,7 +95,15 @@ module DB
       end
     end
 
-    def self.update_lister(data_dir, id, fields)
+    def self.update_lister(data_dir, id, fields, project_id: nil)
+      if project_id && fields.key?('item_ids')
+        return with_project_db(data_dir, project_id) do |db|
+          db.execute(
+            "UPDATE listers SET item_ids = ?, updated_at = ? WHERE id = ?",
+            [JSON.generate(fields['item_ids']), Time.now.strftime('%Y-%m-%dT%H:%M:%S'), id]
+          )
+        end
+      end
       with_db(data_dir) do |db|
         if fields.key?('item_ids')
           if id.to_s.end_with?('-brins')

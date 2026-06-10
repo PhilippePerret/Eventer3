@@ -7,7 +7,7 @@
 - [x] S’assurer que la classe JS `Lister` existe et qu’on peut instancier un objet d’une classe qui en hérite.
 - [x] S’assurer que la classe JS `Item` existe et qu’on peut instancier un objet d’une classe qui en hérite.
 - [x] S’assurer que la méthode `Lister.sortItems` existe et qu’elle classe bien les items fournis.
-- [ ] En revanche, supprimer (`Delete` sans la touche `Shift`) supprime seulement l’item sélectionné. Deux essais :
+- [ ] En revanche, supprimer (`Delete` sans la touche `Shift`) supprime seulement l’item sélectionné (donc, aussi, tous ses descendants). Deux essais :
   - [ ] 1) `Delete` seul => supprime l’item sélectionné. 
   - [ ] 2)  `Shift`+`Delete` => supprime les items cochés (mais PAS celui sélectionné, SAUF s’il est coché, évidemment !
 
