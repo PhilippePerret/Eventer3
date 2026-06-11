@@ -1597,7 +1597,7 @@ body:has(#filter-input:not(.hidden)) #main-panel {
   font-weight: 700;
   color: var(--text);
   opacity: 0.25;
-  z-index: 0;
+  z-index: -1;
   pointer-events: none;
   user-select: none;
   letter-spacing: 0.04em;
