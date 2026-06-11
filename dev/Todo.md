@@ -60,17 +60,9 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
   Attention aux conflits : quel comportement adopté si un event coché ne comporte pas les mêmes caractéristiques que les autres (=> signaler et prendre le principe que les choix d’un event sont automatiquement ajouté. Si l’event E1 est dans Br1, E2 est dans Br2, si les deux sont cochés et que le panneau des brins est ouvert avec ⇧, les deux brins Br1 et Br2 sont cochés. Si on annule ça ne fait rien. Si on ferme, on doit appliquer les deux brins.
 
-- Modifier partout le fait que `Item.depth` n’existe plus et que `Lister.depth` prend le relais. La correction a déjà été faite dans dev/Specs-SQLite.md
+- système de référence : une marque permet de faire référence à un event/brin/personnage particulier (mais surtout un event) et permet de l’afficher pour le voir. Peut-être même pour s’y rendre concrètement
 
-- En tirer les conséquences :
-
-  - [ ] la propriété doit être définie pour tout Lister enregistré . Le premier, celui des projets, doit avoir le niveau 0 — le premier `Lister` du premier projet doit donc avoir le niveau 1 (depth 1). Ensuite, le Lister de tout Event aura le depth 2.
-
-- système de référence : une marque permet de faire référence à un event/brin/personnage particulier (mais surtout un event) et permet de l’afficher pour le voir. Peut-être même pour s’y rendre concrètemen
-
-  - utilisation particulière des références : un système de note sur le projet avec un dossier « Notes » en dernier event de niveau acte qui contiendrait toutes les notes au fil du développement, avec `[cf. note xxx](e125)` -- possibilité de rejoindre l’endroit où la note est appelée (attention, il peut y en avoir plusieurs : tous les afficher => TESTS)
-
-  => Possibilité de diviser la fenêtre en deux parties 
+  - utilisation particulière des références : un système de note sur le projet avec un « dossier Notes » en dernier event de niveau acte qui contiendrait toutes les notes au fil du développement, avec `[cf. note xxx](e125)` -- possibilité de rejoindre l’endroit où la note est appelée (attention, il peut y en avoir plusieurs : tous les afficher => TESTS)
 
 - Un affichage « total » qui affiche tous les évènements, avec une indentation qui montre l’imbrication. Peut-être, dans cet affichage, se limiter au title des events
 
@@ -85,12 +77,28 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
     (sélection avec les flèches en Enter, comme pour tout)
 
 * Propriété `flags` pour les `Lister` — première option : le mode d’affichage des fond d’Event, soit par couleur de premier brin, soit par « climat » (météo + effet). UTILE ?
+
 * Des options générale de l’application
   * `open-with-project-list` : une option détermine si l’application doit s’ouvrir sur la liste des projets ou sur le dernier évènemencier travaillé.
+  
 * Console pour commander Eventer de l’intérieur « en ligne de console »
+
 * Rendre la propriété `active` propre à `Project < Item` et à personne d’autre. Les autres, lorsqu’ils sont détruits, le sont vraiment (fichiers si nécessaire et dans les données)
-* « o » sur la liste des projets doit permettre d’ouvrir un projet (qui doit contenir le fichier `eventer.db`
+
 * Ajouter les classes `ScriptLister < Lister` et `ScritptItem < Item` comme classes majeures. Noter qu’un évènemencier entier peut être un Lister, mais qu’on peut aussi se contenter de définir certains `Event`s comme des `ScriptItem`s qui permettront de définir le texte final. Noter aussi qu’il peut y avoir des `ScriptEvent`s intermédiaire pour les synopsis par exemple.
+
+  * On peut même imaginer de faire le synopsis à partir d’un niveau d’imbrication moindre, par exemple :
+
+    ~~~
+    NIV 0	|	NIV 1	|	NIV 2	| NIV 3	| NIV 4
+    projet
+    			Actes			Séquence
+    ~~~
+
+    
+
 * les dates dans l’histoire (trouver le système)
+
 * le climat (météo et « effet » comme on dit en scénario)
+
 * Pouvoir rechercher dans tout le projet courant des évènements (recherche), qu’ils soient affichés dans un panneau, et qu’on puisse en choisir (Space pour les choisir ou courant, Cmd+c/x, puis Cmd+v)

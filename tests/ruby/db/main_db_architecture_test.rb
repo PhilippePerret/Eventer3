@@ -20,18 +20,18 @@ class MainDbArchitectureTest < Minitest::Test
       "DB principale doit s'appeler main.db, pas #{File.basename(DB.path(@data_dir))}"
   end
 
-  def test_project_props_has_db_path_column
+  def test_project_refs_has_db_path_column
     db = DB.open(@data_dir)
-    cols = db.execute("PRAGMA table_info(project_props)").map { |r| r[1] }
+    cols = db.execute("PRAGMA table_info(project_refs)").map { |r| r[1] }
     db.close
-    assert_includes cols, 'db_path', "project_props doit avoir colonne db_path"
+    assert_includes cols, 'db_path', "project_refs doit avoir colonne db_path"
   end
 
-  def test_project_props_has_folder_path_column
+  def test_project_refs_has_folder_path_column
     db = DB.open(@data_dir)
-    cols = db.execute("PRAGMA table_info(project_props)").map { |r| r[1] }
+    cols = db.execute("PRAGMA table_info(project_refs)").map { |r| r[1] }
     db.close
-    assert_includes cols, 'folder_path', "project_props doit avoir colonne folder_path"
+    assert_includes cols, 'folder_path', "project_refs doit avoir colonne folder_path"
   end
 
   def test_open_project_takes_direct_path
