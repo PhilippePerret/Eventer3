@@ -23,3 +23,13 @@ ATTENDU : Remplacer le slug par le menu des états du projet (en prenant la cons
 - je choisis TAB (passage au champ suivant)
 ATTENDU : le menu des états se sélectionne
 - Je choisis une valeur et ENTER
+
+BUG: Quand on choisit un lieu pour l'event (p.e. "Extérieur"), on se retrouve avec un rectangle blanc sur la ligne
+CORRECTION : Mettre la forme réduite de lui "EXT", "INT", "NOIR", ""
+
+
+MODIFICATIONS
+- dans constants.js, définition des formes de mot (WORD_FORMS)
+- il faut traduire les textes de HELP_PER_CONTEXT (mettre en cache)
+- les contextes génériques sont maintenant placés dans :shortcuts à l'aide de {context: 'non-du-contexte'}
+- un test avant l'affichage de l'aide contextuelle : s'il y a des éléments dans le presse-papier (CELUI DE L'APPLICATION), il faut ajoute le raccourci '⌘ + v' pour coller. Dans l'idéal, il faudrait connaitre la nature de l'élément pour écrire "Coller le brin"/"Coller les brins"

@@ -1,10 +1,11 @@
 import Item from './Item.js'
 import Texte from '../../system/Texte.js'
+import { WORD_FORMS } from '../../constants.js'
 
 export default class Project extends Item {
 
   static get thingName() {
-    return { thing: 'projet', THING: 'PROJET', Thing: 'Projet', things: 'projets', THINGS: 'PROJETS', Things: 'Projets', the: 'le', THE: 'LE', The: 'Le', of: 'du '}
+    return WORD_FORMS.Project
   }
 
   static get idPrefix() {

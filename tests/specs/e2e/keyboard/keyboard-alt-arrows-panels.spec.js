@@ -157,18 +157,3 @@ test("perso panel (depuis EventLister) : ⌥↓ rafraîchit l'état coché des p
   await expect(page.locator('.perso-item').nth(0)).not.toHaveClass(/checked/)
 })
 
-// ─── Footer documentation ────────────────────────────────────────────────────
-
-test("brin panel : footer affiche le raccourci ⌥↓↑", async ({ page }) => {
-  installFixtures('with-brins')
-  await goToEventLister(page)
-  await page.keyboard.press('b')
-  await expect(page.locator('#shortcuts-footer')).toContainText('⌥↓')
-})
-
-test("perso panel : footer affiche le raccourci ⌥↓↑", async ({ page }) => {
-  installFixtures('with-brins-and-persos')
-  await goToEventLister(page)
-  await page.keyboard.press('p')
-  await expect(page.locator('#shortcuts-footer')).toContainText('⌥↓')
-})

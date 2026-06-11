@@ -65,7 +65,11 @@ test("deux Ctrl+Shift+↓ accumulent : 100px total", async ({ page }) => {
 
 test("Ctrl+Shift+↓ déplace le panneau raccourcis de 50px", async ({ page }) => {
   await page.goto('/')
-  await page.keyboard.press('?')
+  await page.evaluate(() => {
+    const panel = document.querySelector('#shortcuts-panel')
+    panel.innerHTML = '<div class="shortcuts-panel__inner"><p>Test</p></div>'
+    panel.classList.remove('hidden')
+  })
   await expect(page.locator('#shortcuts-panel')).toBeVisible()
   const before = await page.locator('.shortcuts-panel__inner').boundingBox()
   await page.keyboard.press('Control+Shift+ArrowDown')

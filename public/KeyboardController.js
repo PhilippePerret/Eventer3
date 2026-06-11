@@ -43,7 +43,7 @@ export default class KeyboardController {
   }
 
   enterItemEdition({ defaultInput = null, onKeyDown }) {
-    ContextualHelp.setContext('edition-item')
+    ContextualHelp.setContext('item-edition')
 
     this.pushMode({
       type: 'item-edition',
@@ -73,8 +73,11 @@ export default class KeyboardController {
     }
 
     // Règle globale : Cmd+Enter ferme le panneau/lister courant
+    // (mais si un mode est actif, il prend la main en priorité)
     if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
       event.preventDefault()
+      const mode = this.getCurrentMode()
+      if (mode) { void mode.onKeyDown(event, this); return }
       this.activeLister?.close()
       return
     }

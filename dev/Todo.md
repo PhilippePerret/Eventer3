@@ -4,21 +4,17 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
 ## SUPRA TODO
 
-- Vérifier le filtre en live, car pour le moment, si je ne me trompe pas, ça n’est pas encore effectif.
-
 ## Bug
 
 ## Todo
 
-- réflexion : ne faudrait-il pas une base par projet ? de cette manière il serait possible de giter un projet pour garder tout l’historique.
-
-  - -> documenter (une main DB qui persiste les fichiers/des fichiers eventer.db pour chaque projet)
+- Insertion d’un lien avec cmd+k (déjà documenté)
 
 - formatage du texte (markdown-like, badge de personnages)
 
   - on recherche les badges des personnages, on les remplace par les pseudos
 
-  - on recherche \*italiques\*, \_\_souligné__, \*\*gras**, \~\~barré\~\~
+  - on recherche \*italiques\*, \_\_souligné__, \*\*gras**, \~\~barré\~\~ (attention : si déjà appliqué, retirer)
 
   - on recherche les `[titre](lien)` (lien toujours externe, target _blank)
 
@@ -32,11 +28,11 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
     ​	=> implémenter le raccourci pour 1) atteindre le lien et 2) ouvrir dans la fenêtre courante ou l’autre fenêtre
 
-- suppression : indiquer le nombre d’events supprimés et confirmer avec ce nombre. Donc, à la suppression : l’application regarde le nombre d’events que ça supprimerait (cout ?) 
+- **suppression** : indiquer le nombre d’events supprimés et confirmer avec ce nombre. Donc, à la suppression : l’application regarde le nombre d’events que ça supprimerait (cout ?) 
 
   - la suppression doit-elle vraiment supprimer tous les events enfants ou seulement les liens : suppression réelle
 
-- possibilité de diviser la fenêtre en deux parties, chacune avec leur évènemencier (le plus courant : l’évènemencier de niveau 1 du projet courant)
+- possibilité de **diviser la fenêtre en deux parties**, chacune avec leur évènemencier (le plus courant : l’évènemencier de niveau 1 du projet courant)
 
 - raccourcis clavier : pas dans le footer mais dans un panneau s’ouvrant avec « ? » => tous les tests sont à centrer là-dessus.
 

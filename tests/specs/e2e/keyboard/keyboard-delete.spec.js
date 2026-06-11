@@ -29,9 +29,12 @@ test.describe('Delete dans ProjectLister', () => {
     await expect(items).toHaveCount(initialCount - 1)
   })
 
-  test('le footer mentionne ⌦ dans le ProjectLister avec plusieurs projets', async ({ page }) => {
+  test('l\'aide contextuelle mentionne ⌦ dans le ProjectLister avec plusieurs projets', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#shortcuts-footer')).toContainText('⌦')
+    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    await page.keyboard.press('Meta+?')
+    await expect(page.locator('.contextual-help')).toContainText('⌦')
+    await page.keyboard.press('Escape')
   })
 
   test('quand un seul projet reste, le footer ne mentionne plus ⌦', async ({ page }) => {
@@ -99,13 +102,16 @@ test.describe('Delete dans EventLister', () => {
     await expect(items).toHaveCount(initialCount - 1)
   })
 
-  test('le footer mentionne ⌦ dans un EventLister avec plusieurs events', async ({ page }) => {
+  test('l\'aide contextuelle mentionne ⌦ dans un EventLister avec plusieurs events', async ({ page }) => {
     await page.goto('/')
     await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
     await page.keyboard.press('ArrowRight')
     await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
-    await expect(page.locator('#shortcuts-footer')).toContainText('⌦')
+    await page.keyboard.press('Meta+?')
+    await expect(page.locator('.contextual-help')).toContainText('⌦')
+    await page.keyboard.press('Escape')
   })
+
 
 })
 

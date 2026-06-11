@@ -1,9 +1,10 @@
 import Item from './Item.js'
+import { WORD_FORMS } from '../../constants.js'
 
 export default class Brin extends Item {
 
   static get thingName() {
-    return { thing: 'brin', THING: 'BRIN', Thing: 'Brin', things: 'brins', THINGS: 'BRINS', Things: 'Brins', the: 'le', THE: 'LE', The: 'Le', of: 'du ' }
+    return WORD_FORMS.Brin
   }
 
   static get idPrefix() {

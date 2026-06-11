@@ -1,28 +1,27 @@
 import { test, expect } from '../__setup__.js'
 
-// Le panneau des raccourcis s'ouvre avec la touche ? (Shift+,)
-// Il se ferme avec ⌘+Enter (comme tout panneau modal)
-// Il affiche TOUS les raccourcis de l'application
+const OPEN_KEY = 'Meta+?'
 
-test('la touche ? ouvre le panneau des raccourcis', async ({ page }) => {
+test('Cmd+? ouvre l\'aide contextuelle', async ({ page }) => {
   await page.goto('/')
-  await expect(page.locator('#shortcuts-panel')).not.toBeVisible()
-  await page.keyboard.press('?')
-  await expect(page.locator('#shortcuts-panel')).toBeVisible()
+  await expect(page.locator('.contextual-help')).not.toBeVisible()
+  await page.keyboard.press(OPEN_KEY)
+  await expect(page.locator('.contextual-help')).toBeVisible()
 })
 
-test('le panneau des raccourcis contient la touche ⌦ (supprimer)', async ({ page }) => {
+test('l\'aide contextuelle contient la touche ⌘ + ↓', async ({ page }) => {
   await page.goto('/')
-  await page.keyboard.press('?')
-  await expect(page.locator('#shortcuts-panel')).toContainText('⌘ + ↓')
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await page.keyboard.press(OPEN_KEY)
+  await expect(page.locator('.contextual-help')).toContainText('⌘ + ↓')
 })
 
-test('le panneau des raccourcis ferme avec ⌘+Enter', async ({ page }) => {
+test('l\'aide contextuelle ferme avec Escape', async ({ page }) => {
   await page.goto('/')
-  await page.keyboard.press('?')
-  await expect(page.locator('#shortcuts-panel')).toBeVisible()
-  await page.keyboard.press('Meta+Enter')
-  await expect(page.locator('#shortcuts-panel')).not.toBeVisible()
+  await page.keyboard.press(OPEN_KEY)
+  await expect(page.locator('.contextual-help')).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(page.locator('.contextual-help')).not.toBeVisible()
 })
 
 test('après fermeture du panneau, l\'EventLister reste actif (navigation fonctionne)', async ({ page }) => {

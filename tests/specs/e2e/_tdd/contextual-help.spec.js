@@ -27,6 +27,15 @@ test('Escape ferme le panneau d\'aide contextuelle', async ({ page }) => {
   await expect(page.locator('.contextual-help')).not.toBeVisible()
 })
 
+test('⌘+Enter ferme le panneau d\'aide contextuelle', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await page.keyboard.press(OPEN_KEY)
+  await expect(page.locator('.contextual-help')).toBeVisible()
+  await page.keyboard.press('Meta+Enter')
+  await expect(page.locator('.contextual-help')).not.toBeVisible()
+})
+
 test('le panneau fonctionne depuis n\'importe quel contexte (édition en cours)', async ({ page }) => {
   await page.goto('/')
   await expect(page.locator('.project-item').first()).toBeVisible()
@@ -126,4 +135,59 @@ test('le footer d\'aide (ancien shortcuts-footer) est vide', async ({ page }) =>
   await page.goto('/')
   const footer = page.locator('#shortcuts-footer')
   await expect(footer).toHaveText('')
+})
+
+// ── except ────────────────────────────────────────────────────────
+
+test('project-list : ␣ absent (except depuis with-selected)', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await page.keyboard.press(OPEN_KEY)
+  const keys = await page.locator('.contextual-help__key').allTextContents()
+  expect(keys.some(k => k === '␣')).toBeFalsy()
+})
+
+// ── Templates wf ───────────────────────────────────────────────────
+
+test('project-list : "{wf.Thing} précédent" résolu en "Projet précédent"', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await page.keyboard.press(OPEN_KEY)
+  const effects = await page.locator('.contextual-help__effect').allTextContents()
+  expect(effects.some(e => e === 'Projet précédent')).toBeTruthy()
+})
+
+test('project-list : "{wf.Thing} suivant" résolu en "Projet suivant"', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await page.keyboard.press(OPEN_KEY)
+  const effects = await page.locator('.contextual-help__effect').allTextContents()
+  expect(effects.some(e => e === 'Projet suivant')).toBeTruthy()
+})
+
+test('project-list : with-selected résolu avec "projet" (wf.mot fallback)', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await page.keyboard.press(OPEN_KEY)
+  const effects = await page.locator('.contextual-help__effect').allTextContents()
+  // "Supprimer le projet" from "{sc:'⌦', ef:'Supprimer {wf.le}{wf.mot}'}"
+  expect(effects.some(e => e.includes('projet'))).toBeTruthy()
+})
+
+test('event-list : "{wf.Thing} précédent" résolu en "Évènement précédent"', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await page.keyboard.press('ArrowRight')
+  await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+  await page.keyboard.press(OPEN_KEY)
+  const effects = await page.locator('.contextual-help__effect').allTextContents()
+  expect(effects.some(e => e === 'Évènement précédent')).toBeTruthy()
+})
+
+test('aucun placeholder {wf.*} ne reste dans le rendu', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await page.keyboard.press(OPEN_KEY)
+  const fullText = await page.locator('.contextual-help').textContent()
+  expect(fullText).not.toMatch(/\{wf\.\w+\}/)
 })

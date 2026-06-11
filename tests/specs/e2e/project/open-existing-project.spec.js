@@ -20,6 +20,7 @@ async function tryPickExistingFolder(page, expect, workDir) {
     headers: { 'Content-Type': 'application/json' },
     data: JSON.stringify({ value: workDir })
   })
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
   await page.keyboard.press('n')
   await expect(page.locator('.file-picker')).toBeVisible()
   await page.keyboard.press('Enter')

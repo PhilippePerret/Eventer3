@@ -1,10 +1,10 @@
 import Item from './Item.js'
-import { PERSO_FONCTIONS, PERSO_AVATARS } from '../../constants.js'
+import { PERSO_FONCTIONS, PERSO_AVATARS, WORD_FORMS } from '../../constants.js'
 
 export default class Perso extends Item {
 
   static get thingName() {
-    return { thing: 'personnage', THING: 'PERSONNAGE', Thing: 'Personnage', things: 'personnages', THINGS: 'PERSONNAGES', Things: 'Personnages', the: 'le', THE: 'LE', The: 'Le', of: 'du ' }
+    return WORD_FORMS.Perso
   }
 
   static get idPrefix() { return 'c' }

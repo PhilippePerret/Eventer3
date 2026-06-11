@@ -1,10 +1,10 @@
 import Item from './Item.js'
-import { EVENT_STATE, EVENT_METEO, EVENT_EFFET, EVENT_LIEU, EVENT_METEO_EXLUSIONS } from '../../constants.js'
+import { WORD_FORMS, EVENT_STATE, EVENT_METEO, EVENT_EFFET, EVENT_LIEU, EVENT_METEO_EXLUSIONS } from '../../constants.js'
 
 export default class Event extends Item {
 
   static get thingName() {
-    return { thing: 'évènement', THING: 'ÉVÈNEMENT', Thing: 'Évènement', things: 'évènements', THINGS: 'ÉVÈNEMENTS', Things: 'Évènements', the: 'l’', THE: 'L’', The: 'L’', of: 'de l’' }
+    return WORD_FORMS.Event
   }
 
 

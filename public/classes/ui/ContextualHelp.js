@@ -2,6 +2,24 @@ import { HELP_PER_CONTEXT } from '../../constants.js'
 
 export default class ContextualHelp {
 
+  // ── Cache de résolution de templates ──────────────────────────
+  static _templateCache = new WeakMap()
+
+  static _resolveTemplate(text, ctx) {
+    if (!text) return ''
+    if (!ctx) return text.replace(/\{[^}]+\}/g, '')
+    let cache = this._templateCache.get(ctx)
+    if (!cache) { cache = new Map(); this._templateCache.set(ctx, cache) }
+    if (cache.has(text)) return cache.get(text)
+    const wf = ctx.wf
+    const result = text.replace(/\{wf\.(\w+)\}|\{(\w+)\}/g, (match, wfKey, directKey) => {
+      if (wfKey) return wf?.[wfKey] ?? ''
+      return String(ctx[directKey] ?? '')
+    })
+    cache.set(text, result)
+    return result
+  }
+
   // ── Pile de contextes ──────────────────────────────────────────
   static _stack = []
 
@@ -29,20 +47,39 @@ export default class ContextualHelp {
   constructor(keyboardController) {
     this.keyboardController = keyboardController
     this._selectedIndex     = 0
-    this._shortcuts         = []
+    this._shortcuts         = []  // raccourcis navigables (sans en-têtes)
+    this._items             = []  // liste de rendu (shortcuts + en-têtes de section)
   }
 
   _buildShortcuts() {
     const ctx = HELP_PER_CONTEXT[ContextualHelp.currentContext]
     if (!ctx) {
-      this._shortcuts = [{ sc: '—', ef: 'Raccourcis à définir' }]
+      const fallback = { sc: '—', ef: 'Raccourcis à définir' }
+      this._items     = [fallback]
+      this._shortcuts = [fallback]
       return
+    }
+    const expand = (shortcuts, except = []) => {
+      for (const sc of (shortcuts ?? [])) {
+        if (sc.context) {
+          const sub = HELP_PER_CONTEXT[sc.context]
+          if (!sub) continue
+          if (sub.title) this._items.push({ __section: true, title: sub.title })
+          expand(sub.shortcuts, sc.except ?? [])
+        } else {
+          if (except.includes(sc.sc)) continue
+          this._items.push(sc)
+          this._shortcuts.push(sc)
+        }
+      }
     }
     for (const otherKey of (ctx.other_contexts ?? [])) {
       const other = HELP_PER_CONTEXT[otherKey]
-      if (other?.shortcuts) this._shortcuts.push(...other.shortcuts)
+      if (!other) continue
+      if (other.title) this._items.push({ __section: true, title: other.title })
+      expand(other.shortcuts)
     }
-    this._shortcuts.push(...(ctx.shortcuts ?? []))
+    expand(ctx.shortcuts)
   }
 
   _init() {
@@ -56,6 +93,7 @@ export default class ContextualHelp {
 
   _buildDOM() {
     const ctx = HELP_PER_CONTEXT[ContextualHelp.currentContext]
+    const resolve = (text) => ContextualHelp._resolveTemplate(text, ctx)
 
     this._overlay = document.createElement('div')
     this._overlay.className = 'contextual-help-overlay'
@@ -65,31 +103,54 @@ export default class ContextualHelp {
 
     const title = document.createElement('div')
     title.className   = 'contextual-help__title'
-    title.textContent = ctx?.title ?? '— Contexte non défini'
+    title.textContent = resolve(ctx?.title ?? '— Contexte non défini')
     this._el.appendChild(title)
 
     const list = document.createElement('div')
     list.className = 'contextual-help__list'
 
-    this._shortcuts.forEach((sc, i) => {
+    let rowIndex    = 0
+    let currentGroup = null
+    this._items.forEach((item) => {
+      if (item.__section) {
+        currentGroup = document.createElement('div')
+        currentGroup.className = 'contextual-help__group'
+        const legend = document.createElement('div')
+        legend.className   = 'contextual-help__group-title'
+        legend.textContent = resolve(item.title)
+        currentGroup.appendChild(legend)
+        list.appendChild(currentGroup)
+        return
+      }
       const row = document.createElement('div')
       row.className = 'contextual-help__row'
-      if (i === 0) row.classList.add('selected')
+      if (rowIndex === 0) row.classList.add('selected')
 
       const kbd = document.createElement('kbd')
       kbd.className   = 'contextual-help__key'
-      kbd.textContent = sc.sc
+      kbd.textContent = item.sc
 
       const ef = document.createElement('span')
       ef.className   = 'contextual-help__effect'
-      ef.textContent = sc.ef
+      ef.textContent = resolve(item.ef)
 
       row.appendChild(kbd)
       row.appendChild(ef)
-      list.appendChild(row)
+      ;(currentGroup ?? list).appendChild(row)
+      rowIndex++
     })
 
     this._el.appendChild(list)
+
+    const footer = document.createElement('div')
+    footer.className = 'contextual-help__footer'
+    const closeBtn = document.createElement('div')
+    closeBtn.className   = 'contextual-help__close-btn'
+    closeBtn.textContent = 'Fermer ⌘ + ↩︎'
+    closeBtn.addEventListener('click', () => this._close())
+    footer.appendChild(closeBtn)
+    this._el.appendChild(footer)
+
     this._overlay.appendChild(this._el)
     document.body.appendChild(this._overlay)
   }
@@ -104,6 +165,7 @@ export default class ContextualHelp {
         this._selectAt(this._selectedIndex - 1)
         break
       case 'Enter': {
+        if (event.metaKey) { this._close(); break }
         const sc = this._shortcuts[this._selectedIndex]
         this._close()
         if (sc?.key) {

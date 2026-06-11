@@ -67,6 +67,14 @@ export const PERSO_FONCTIONS = [
   'narrateur'
 ]
 
+export const WORD_FORMS = {
+  Event: { e:'', elle:'eau', thing: 'évènement', THING: 'ÉVÈNEMENT', Thing: 'Évènement', things: 'évènements', THINGS: 'ÉVÈNEMENTS', Things: 'Évènements', the: 'l’', THE: 'L’', The: 'L’', of: 'de l’', Le: 'Le', le: 'le' /* "Le supprimer"*/ },
+  Project: { e:'', elle:'eau', thing: 'projet', THING: 'PROJET', Thing: 'Projet', things: 'projets', THINGS: 'PROJETS', Things: 'Projets', the: 'le ', THE: 'LE ', The: 'Le ', of: 'du ', Le: 'Le', le: 'le'/* pronom */},
+  Brin: { e: '', elle:'eau', thing: 'brin', THING: 'BRIN', Thing: 'Brin', things: 'brins', THINGS: 'BRINS', Things: 'Brins', the: 'le ', THE: 'LE ', The: 'Le ', of: 'du ' , Le: 'Le', le: 'le'},
+  Perso: { e: '', elle:'eau', thing: 'personnage', THING: 'PERSONNAGE', Thing: 'Personnage', things: 'personnages', THINGS: 'PERSONNAGES', Things: 'Personnages', the: 'le ', THE: 'LE ', The: 'Le ', of: 'du ', Le: 'Le', le: 'le' },
+  Style: { e:'', elle:'eau', thing: 'style', THING: 'STYLE', Thing: 'Style', things: 'styles', THINGS: 'STYLES', Things: 'Styles', the: 'le ', THE: 'LE ', The: 'Le ', of: 'du ', Le: 'Le', le: 'le' }
+}
+  
 /**
  * Aide contextuelle : raccourcis par contexte exact.
  * Chaque shortcut a : sc (symbole affiché), ef (effet), key (KeyboardEvent.key),
@@ -79,86 +87,148 @@ export const PERSO_FONCTIONS = [
  */
 export const HELP_PER_CONTEXT = {
 
+  /*- générique : navigation dans une liste d'items -*/
   'navigate-items': {
-    title: "Navigation par item",
+    // title: "Navigation par item",
     shortcuts: [
-      {sc: '↑',      ef: "Sélectionner le précédent",  key: 'ArrowUp'},
-      {sc: '↓',      ef: "Sélectionner le suivant",    key: 'ArrowDown'},
-      {sc: '⌘ + ↑', ef: "Monter l'élément",            key: 'ArrowUp',   metaKey: true},
-      {sc: '⌘ + ↓', ef: "Descendre l'élément",         key: 'ArrowDown', metaKey: true},
+      {sc: '↑',       ef: "{wf.Thing} précédent",             key: 'ArrowUp'},
+      {sc: '↓',       ef: "{wf.Thing} suivant",               key: 'ArrowDown'},
+      {sc: '⌘ + ↑',   ef: "Monter {wf.the}{wf.thing}",        key: 'ArrowUp',   metaKey: true},
+      {sc: '⌘ + ↓',   ef: "Descendre {wf.the}{wf.thing}",     key: 'ArrowDown', metaKey: true},
     ]
   },
 
-  'edition-item': {
-    title: "Édition de l'élément",
+  /*- générique: Ce qu'on peut faire de la sélection -*/
+  'with-selected':{
+    title: '{wf.Thing} sélectionné{wf.e}',
     shortcuts: [
-      {sc: '⇥',  ef: "Passer au champ suivant", key: 'Tab'},
-      {sc: '↩︎', ef: "Enregistrer",             key: 'Enter'},
-      {sc: '␛',  ef: "Annuler",                 key: 'Escape'},
+      {sc: 'n',     ef: "Nouv{wf.elle} {wf.thing}",               key: 'n'},
+      {sc: '⌥ + n', ef: "Nouv{wf.elle} {wf.thing} avant", key: 'n', altkey: true},
+      {sc: '↩︎',     ef: 'L’éditer',      key: 'Enter'},
+      {sc: '␣',     ef: "{wf.Le} Cocher/décocher",      key: 'Space'},
+      {sc: '⌦',     ef: "{wf.Le} Supprimer",            key: 'Delete'},
+      {sc: '⌘ + c', ef: "{wf.Le} Copier",               key: 'c', metakey: true},
+      {sc: '⌘ + x', ef: "{wf.Le} Couper",               key: 'x', metakey: true},
     ]
   },
 
+  /*- générique: Propre aux éléments cochés -*/
+  'with-checkeds': {
+    title: "{wf.Things} coché{wf.e}s",
+    shortcuts: [
+      {sc: '⇧⌘ + c', ef: "Les copier", key: 'c', metakey: true},
+      {sc: '⇧⌘ + x', ef: "Les couper", key: 'x', metakey: true},
+
+    ]
+  },
+
+  /*- générique : édition d'un item quelconque -*/
+  'item-edition': {
+    title: "Édition {wf.of}{wf.thing}",
+    shortcuts: [
+      {sc: '⇥',   ef: "Champ suivant {fields_order}",       key: 'Tab'},
+      {sc: '↩︎',   ef: "Enregistrer {wf.the}{wf.thing}",     key: 'Enter'},
+      {sc: '␛',   ef: "Annuler l’édition",                    key: 'Escape'},
+      {sc: '⌘ + i', ef: "Sélection en italique",  key: 'i', metaKey: true},
+      {sc: '⌘ + g', ef: "Sélection en gras",      key: 'g', metaKey: true},
+      {sc: '⌘ + b', ef: "Sélection barrée",       key: 'b', metaKey: true},
+      {sc: '⌘ + u', ef: "Sélection soulignée",    key: 'u', metaKey: true},
+      {sc: '⌘ + k', ef: "Insérer le lien…",       key: 'k', metaKey: true},
+    ]
+  },
+
+  /*-- CONTEXTE : Liste des projets affiché --*/
   'project-list': {
     title: "Liste des projets",
-    other_contexts: ['navigate-items'],
+    wf: WORD_FORMS.Project,
     shortcuts: [
-      {sc: '→',  ef: "Entrer dans le projet",           key: 'ArrowRight'},
-      {sc: 'n',  ef: "Nouveau/ouvrir projet",           key: 'n'},
-      {sc: '↩︎', ef: "Renommer le projet sélectionné", key: 'Enter'},
-      {sc: '⌦',  ef: "Supprimer le projet",            key: 'Delete'},
+      {context: 'navigate-items'},
+      {sc: '→',   ef: "Entrer dans le projet",            key: 'ArrowRight'},
+      {context: 'with-selected', except: ['␣']}
     ]
   },
-
+  
   'project-edition': {
     title: "Édition du projet",
-    other_contexts: ['edition-item'],
-    shortcuts: []
+    fields_order: 'titre → état → titre',
+    wf: WORD_FORMS.Project,
+    shortcuts: [
+      {context: 'item-edition'}
+    ]
   },
 
   'event-list': {
     title: "Évènementier",
-    other_contexts: ['navigate-items'],
+    wf: WORD_FORMS.Event,
     shortcuts: [
-      {sc: 'n',  ef: "Nouvel évènement après",          key: 'n'},
-      {sc: '↩︎', ef: "Éditer l'évènement",             key: 'Enter'},
-      {sc: '←',  ef: "Retour à la liste de projets",   key: 'ArrowLeft'},
-      {sc: 'b',  ef: "Panneau des brins",               key: 'b'},
-      {sc: 'p',  ef: "Panneau des personnages",         key: 'p'},
-      {sc: '⌦',  ef: "Supprimer l'évènement",          key: 'Delete'},
+      {context: 'navigate-items'},
+      {context: 'with-selected'},
+      {sc: '→',   ef: 'Évènemencier de l’event',          key: 'ArrowRight'},
+      {sc: '←',   ef: "Retour à la liste de projets",     key: 'ArrowLeft'},
+      {sc: 'b',   ef: "Choisir les brins",                key: 'b'},
+      {sc: 'p',   ef: "Choisir les personnages",          key: 'p'}
+    ]
+  },
+
+  'event-edition': {
+    title: "Édition d'un évènement",
+    wf: WORD_FORMS.Event,
+    fields_order: 'titre → état → météo → effet → titre',
+    shortcuts: [
+      {context: 'item-edition'}
     ]
   },
 
   'brin-list': {
     title: "Liste des brins",
-    other_contexts: ['navigate-items'],
+    wf: WORD_FORMS.Brin,
     shortcuts: [
-      {sc: 'n',  ef: "Nouveau brin",         key: 'n'},
-      {sc: '↩︎', ef: "Éditer le brin",       key: 'Enter'},
       {sc: 'p',  ef: "Panneau personnages",  key: 'p'},
-      {sc: '⌦',  ef: "Supprimer le brin",   key: 'Delete'},
+      {context: 'navigate-items'},
+      {context: 'with-selected'},
+      {context: 'with-checkeds'}
     ]
+  },
+  
+  'brin-edition': {
+    fields_order: 'titre → type → titre',
+    title: "Édition du brin",
+    wf:WORD_FORMS.Brin,
+    shortcuts: [
+      {context: 'item-edition'}
+    ]
+
   },
 
   'perso-list': {
     title: "Liste des personnages",
-    other_contexts: ['navigate-items'],
+    wf: WORD_FORMS.Perso,
     shortcuts: [
-      {sc: 'n',  ef: "Nouveau personnage",       key: 'n'},
-      {sc: '↩︎', ef: "Éditer le personnage",    key: 'Enter'},
-      {sc: '⌦',  ef: "Supprimer le personnage", key: 'Delete'},
+      {context: 'navigate-items'},
+      {context: 'with-selected'},
+      {context: 'with-checkeds'}
+    ]
+  },
+
+  'perso-edition': {
+    wf: WORD_FORMS.Perso,
+    fields_order: 'pseudo → patronyme → badge → avatar → fonction → pseudo',
+    shortcuts: [
+      {context: 'item-edition'}
     ]
   },
 
   'style-list': {
+    wf: WORD_FORMS.Style,
     title: "Styles d'affichage",
     shortcuts: [
-      {sc: '↑ ↓', ef: "Choisir un style",              key: 'ArrowDown'},
-      {sc: '␣',   ef: "Cocher / décocher",              key: ' '},
-      {sc: '⌘↓',  ef: "Déplacer (dernier l'emporte)",  key: 'ArrowDown', metaKey: true},
+      {context: 'navigate-items'}
     ]
   },
 
 }
+
+//###################################################################
 
 export const SHORTCUTS = [
   {

@@ -297,8 +297,10 @@ test("le panneau styles n'affiche pas 'nouveau après' dans le footer", async ({
   expect(footerText).not.toContain('nouveau après')
 })
 
-test("le panneau styles affiche 'déplacer' dans le footer", async ({ page }) => {
+test("le panneau styles affiche 'monter'/'descendre' dans l'aide contextuelle", async ({ page }) => {
   await openStylePanel(page)
-  const footerText = await page.locator('#shortcuts-footer').textContent()
-  expect(footerText.toLowerCase()).toContain('déplacer')
+  await page.keyboard.press('Meta+?')
+  const helpText = await page.locator('.contextual-help').textContent()
+  expect(helpText.toLowerCase()).toContain('monter')
+  expect(helpText.toLowerCase()).toContain('descendre')
 })
