@@ -47,7 +47,7 @@ export default class Event extends Item {
     div.innerHTML = `
       <div class="event-check-gutter"><span class="event-check">${this.checked ? '✓' : ''}</span></div>
       <div class="event-body">
-        <div class="event-col1"><span class="event-text">${this.title}</span></div>
+        <div class="event-col1"><span class="event-text">${this.renderedTitle}</span></div>
         <div class="event-col2">
           <span class="event-state">${stateLabel}</span>
           <span class="event-meteo">${meteoLabel}</span>

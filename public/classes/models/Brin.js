@@ -106,7 +106,7 @@ export default class Brin extends Item {
     const title = document.createElement('div')
     title.className = 'brin-item__title'
     title.dataset.property = 'title'
-    title.textContent = this.title
+    title.innerHTML = this.renderedTitle
 
     const typeSelect = document.createElement('select')
     typeSelect.className = 'panel-type field-select'

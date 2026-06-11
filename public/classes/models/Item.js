@@ -44,6 +44,10 @@ export default class Item {
   }
 
 
+  get renderedTitle() {
+    return Texte.renderMarkdown(this.title)
+  }
+
   constructor(data = {}) {
     this.id = data.id ?? null
     this.title = data.title ?? ''

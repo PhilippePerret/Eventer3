@@ -105,7 +105,7 @@ export default class Perso extends Item {
     const title = document.createElement('div')
     title.className = 'perso-item__title'
     title.dataset.property = 'title'
-    title.textContent = this.title
+    title.innerHTML = this.renderedTitle
 
     const patronyme = document.createElement('div')
     patronyme.className = 'perso-item__patronyme'

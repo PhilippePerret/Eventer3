@@ -41,8 +41,6 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
 - Pouvoir définir l’aspect par défaut des items (tous et/ou par genre, event, brin, etc.)
 
-- Traitement de ⇧ ajouté aux raccourcis qui s’applique à tous les éléments cochés (par exemple pour copier/couper
-
 - import/export
 
   - system : reproduire une fenêtre comme le Finder pour choisir un dossier (pour exporter) ou choisir un fichier (pour importer)
@@ -50,7 +48,7 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
 - héritage : option « les sous-events héritent automatiquement des brins et personnages (seulement des brins ? des personnages ? de la météo ? de l’effet ? du lieu ? de la dyndate ?)
 
-  - l’héritage doit-il être réel ou virtuel ?
+  - l’héritage doit-il être réel ou virtuel ? (i.e. en cache ou persistant)
 
 - déplacement de panneau  : est-ce que la position est persistante ? (sinon => préférences de l’application)
 
