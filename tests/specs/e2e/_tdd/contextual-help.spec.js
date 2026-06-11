@@ -147,6 +147,41 @@ test('project-list : ␣ absent (except depuis with-selected)', async ({ page })
   expect(keys.some(k => k === '␣')).toBeFalsy()
 })
 
+// ── Clipboard paste ───────────────────────────────────────────────
+
+test('⌘+v apparaît dans l\'aide si clipboard compatible (après ⌘+c)', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await page.keyboard.press('Meta+c')
+  await page.keyboard.press(OPEN_KEY)
+  const keys = await page.locator('.contextual-help__key').allTextContents()
+  expect(keys.some(k => k.includes('v'))).toBeTruthy()
+})
+
+test('⌘+v absent de l\'aide si clipboard vide', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await page.keyboard.press(OPEN_KEY)
+  const keys = await page.locator('.contextual-help__key').allTextContents()
+  expect(keys.some(k => k === '⌘ + v')).toBeFalsy()
+})
+
+test('⌘+v absent si clipboard incompatible (brin copié, panneau persos)', async ({ page }) => {
+  installFixtures('with-brins-and-persos')
+  await page.goto('/')
+  await expect(page.locator('.project-item').first()).toBeVisible()
+  await page.keyboard.press('ArrowRight')
+  await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+  await page.keyboard.press('b')
+  await expect(page.locator('#brin-panel')).toBeVisible()
+  await page.keyboard.press('Meta+c')
+  await page.keyboard.press('p')
+  await expect(page.locator('#perso-panel')).toBeVisible()
+  await page.keyboard.press(OPEN_KEY)
+  const keys = await page.locator('.contextual-help__key').allTextContents()
+  expect(keys.some(k => k === '⌘ + v')).toBeFalsy()
+})
+
 // ── Templates wf ───────────────────────────────────────────────────
 
 test('project-list : "{wf.Thing} précédent" résolu en "Projet précédent"', async ({ page }) => {

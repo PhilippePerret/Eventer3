@@ -80,6 +80,21 @@ export default class ContextualHelp {
       expand(other.shortcuts)
     }
     expand(ctx.shortcuts)
+
+    const clipboard   = this.keyboardController?.clipboard
+    const activeLister = this.keyboardController?.activeLister
+    if (clipboard && activeLister && clipboard.minClass === activeLister.itemClass?.minClass) {
+      const wf         = activeLister.itemClass.thingName
+      const isMultiple = Array.isArray(clipboard.data)
+      const ef         = 'Coller ' + (isMultiple ? 'les ' + wf.things : wf.the + wf.thing)
+      const paste = { sc: '⌘ + v', ef, key: 'v', metaKey: true }
+      this._items.unshift(
+        { __section: true, title: 'Presse-papier' },
+        paste,
+        { __group_end: true }
+      )
+      this._shortcuts.unshift(paste)
+    }
   }
 
   _init() {
@@ -112,6 +127,7 @@ export default class ContextualHelp {
     let rowIndex    = 0
     let currentGroup = null
     this._items.forEach((item) => {
+      if (item.__group_end) { currentGroup = null; return }
       if (item.__section) {
         currentGroup = document.createElement('div')
         currentGroup.className = 'contextual-help__group'
@@ -144,6 +160,12 @@ export default class ContextualHelp {
 
     const footer = document.createElement('div')
     footer.className = 'contextual-help__footer'
+
+    const applyHint = document.createElement('span')
+    applyHint.className   = 'contextual-help__apply-hint'
+    applyHint.textContent = 'Appliquer le raccourci sélectionné : ↩︎'
+    footer.appendChild(applyHint)
+
     const closeBtn = document.createElement('div')
     closeBtn.className   = 'contextual-help__close-btn'
     closeBtn.textContent = 'Fermer ⌘ + ↩︎'

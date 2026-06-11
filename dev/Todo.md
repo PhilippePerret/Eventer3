@@ -34,12 +34,14 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
 - possibilité de **diviser la fenêtre en deux parties**, chacune avec leur évènemencier (le plus courant : l’évènemencier de niveau 1 du projet courant)
 
-- raccourcis clavier : pas dans le footer mais dans un panneau s’ouvrant avec « ? » => tous les tests sont à centrer là-dessus.
-
-- panneau des options
+- panneau(x) des options
 
   - il faut commencer à pouvoir déterminer les options
   - quelle option et où agit-elle ?
+
+- Pouvoir définir l’aspect par défaut des items (tous et/ou par genre, event, brin, etc.)
+
+- Traitement de ⇧ ajouté aux raccourcis qui s’applique à tous les éléments cochés (par exemple pour copier/couper
 
 - import/export
 
