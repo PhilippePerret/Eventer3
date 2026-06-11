@@ -1589,7 +1589,22 @@ body:has(#filter-input:not(.hidden)) #main-panel {
   justify-content: center;
 }
 
+#contextual-help-hint {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  opacity: 0.25;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: 0.04em;
+}
+
 .contextual-help {
+  position: relative;
   width: 380px;
   max-height: 70vh;
   background: #ffffff;
