@@ -7,11 +7,11 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
 
   // Naviguer au premier project
   await page.press('body', 'ArrowRight')
-  await page.waitForTimeout(500)
+  await expect(page.locator('.event-item')).toHaveCount(3)
 
   // Ouvrir brins pour e1 (doit avoir A et B cochés)
   await page.press('body', 'b')
-  await page.waitForTimeout(300)
+  await expect(page.locator('#brin-panel')).toBeVisible()
 
   let brinsItems = page.locator('.brin-item')
   let checkedCount = 0

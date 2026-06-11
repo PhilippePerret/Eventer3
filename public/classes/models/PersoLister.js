@@ -22,11 +22,12 @@ export default class PersoLister extends Lister {
       isFromBrin
     })
     persoLister.id = eventLister.persos_lister_id ?? `${eventLister.parentItem?.id}-persos`
+    persoLister.project_id = eventLister.project_id
     await ListerRepository.loadDefinition(persoLister)
     await persoLister.loadItems()
     if (persoLister.items.length === 0) {
       const badge = Perso.generateUniqueBadge('Votre protagoniste', [])
-      const created = await ListerRepository.createItem(persoLister.id, { title: 'Votre protagoniste', badge })
+      const created = await ListerRepository.createItem(persoLister.id, { title: 'Votre protagoniste', badge }, { project_id: persoLister.project_id })
       persoLister.item_ids.push(created.id)
       await persoLister.loadItems()
     }
@@ -219,16 +220,17 @@ export default class PersoLister extends Lister {
   async commitNewItem(item, itemElement, insertionIndex) {
     const existingBadges = this.items.map(p => p.badge).filter(Boolean)
     item.badge = Perso.generateUniqueBadge(item.title, existingBadges)
-    const payload = { title: item.title, badge: item.badge }
-    const created = await ListerRepository.createItem(this.id, payload)
-    item.id = created.id
-    item.parentLister = this
-    this.items.splice(insertionIndex, 0, item)
-    this.item_ids.splice(insertionIndex, 0, item.id)
+    await super.commitNewItem(item, itemElement, insertionIndex)
+  }
+
+  _extraPayload(item) {
+    return { badge: item.badge }
+  }
+
+  _finalizeNewItemElement(item, itemElement, insertionIndex) {
     const properEl = this._createItemElement(item, insertionIndex)
     itemElement.replaceWith(properEl)
-    this.domItems.splice(insertionIndex, 0, properEl)
-    await ListerRepository.save(this)
+    return properEl
   }
 
   // ── Fermeture ──────────────────────────────────────────────────────

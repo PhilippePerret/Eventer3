@@ -104,7 +104,7 @@ export default class Lister {
       keyboardController: this.keyboardController,
     })
     childLister.depth = this.depth + 1
-    if (item.lister_id != null) {
+    if (childLister.id != null) {
       await childLister.loadDefinition()
       await childLister.loadItems()
     } else {
@@ -248,7 +248,7 @@ export default class Lister {
     const header = this.renderHeader()
     if (header) this.domContainer.appendChild(header)
     if (this.hasSearchField) this._renderFilterBar(this.domContainer)
-    const activeItems = this.items.filter(item => item.active !== false)
+    const activeItems = this.items.filter(item => item.active == null || (item.active !== false && item.active !== 0))
     activeItems.forEach((item, itemIndex) => {
       const itemElement = item.createElement(this.itemClass.name.toLowerCase())
       if (itemIndex === this.selectedIndex) itemElement.classList.add('selected')
@@ -449,7 +449,7 @@ export default class Lister {
   }
 
   cutSelectedItem() {
-    const activeItems = this.items.filter(item => item.active !== false)
+    const activeItems = this.items.filter(item => item.active == null || (item.active !== false && item.active !== 0))
     if (activeItems.length <= 1) {
       Notification.show(`Impossible de couper le dernier ${this.itemClass.thingName.thing}.`)
       return
@@ -486,7 +486,7 @@ export default class Lister {
   }
 
   deleteSelectedItem() {
-    const activeItems = this.items.filter(item => item.active !== false)
+    const activeItems = this.items.filter(item => item.active == null || (item.active !== false && item.active !== 0))
     if (activeItems.length <= 1) {
       Notification.show('Impossible de supprimer le dernier élément.')
       return
@@ -587,24 +587,31 @@ export default class Lister {
 
   async commitNewItem(item, itemElement, insertionIndex) {
     if (this.__isVirtual) {
-      const newLister = await ListerRepository.createLister({ type: this.type, parent_item_id: this.parentItem.id })
+      const newLister = await ListerRepository.createLister({ type: this.type, parent_item_id: this.parentItem.id, project_id: this.project_id })
       this.id = newLister.id
       this.parentItem.lister_id = this.id
       delete this.__isVirtual
     }
-    const payload = { title: item.title, type: item.type }
+    const payload = { title: item.title, type: item.type, ...this._extraPayload(item) }
     if (item.id) payload.id = item.id
     const created = await ListerRepository.createItem(this.id, payload, { project_id: this.project_id })
     if (!item.id) item.id = created.id
-    itemElement.dataset.id = item.id
-    if (typeof item.render === 'function') item.render(itemElement)
+    const finalEl = this._finalizeNewItemElement(item, itemElement, insertionIndex)
     item.parentLister = this
     LOG.m(2, 'Lister.commitNewItem', { itemId: item.id, insertionIndex })
     this.items.splice(insertionIndex, 0, item)
     this.item_ids.splice(insertionIndex, 0, item.id)
-    this.domItems.splice(insertionIndex, 0, itemElement)
+    this.domItems.splice(insertionIndex, 0, finalEl)
     await ListerRepository.save(this)
     LOG.m(2, 'Lister.commitNewItem.saved', { item_ids: [...this.item_ids] })
+  }
+
+  _extraPayload(item) { return {} }
+
+  _finalizeNewItemElement(item, itemElement) {
+    itemElement.dataset.id = item.id
+    if (typeof item.render === 'function') item.render(itemElement)
+    return itemElement
   }
 
   selectElement(domElement) {

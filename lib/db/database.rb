@@ -5,29 +5,13 @@ module DB
 
   DB_FILENAME = 'main.db'
 
-  # Registre global : liste des projets + paramètres app
+  # Registre global : projets + paramètres app UNIQUEMENT
   SCHEMA = <<~SQL
-    CREATE TABLE IF NOT EXISTS listers (
-      id         INTEGER PRIMARY KEY,
-      type       TEXT,
-      item_ids   TEXT DEFAULT '[]',
-      created_at TEXT,
-      updated_at TEXT
-    );
-
-    CREATE TABLE IF NOT EXISTS items (
-      id         TEXT PRIMARY KEY,
-      title      TEXT,
-      type       TEXT,
-      created_at TEXT,
-      updated_at TEXT
-    );
-
     CREATE TABLE IF NOT EXISTS project_refs (
-      item_id     TEXT PRIMARY KEY REFERENCES items(id),
+      id          TEXT PRIMARY KEY,
+      title       TEXT,
       db_path     TEXT,
-      folder_path TEXT,
-      lister_id   INTEGER
+      folder_path TEXT
     );
 
     CREATE TABLE IF NOT EXISTS app_settings (
@@ -104,10 +88,8 @@ module DB
     );
 
     CREATE TABLE IF NOT EXISTS counters (
-      project_id TEXT NOT NULL,
-      item_type  TEXT NOT NULL,
-      last_val   INTEGER DEFAULT 0,
-      PRIMARY KEY (project_id, item_type)
+      item_type  TEXT PRIMARY KEY,
+      last_val   INTEGER DEFAULT 0
     );
   SQL
 
@@ -129,7 +111,6 @@ module DB
       stmt = stmt.strip
       db.execute(stmt) unless stmt.empty?
     end
-    _migrate_main_db!(db, data_dir)
     db.close
   end
 
@@ -152,34 +133,6 @@ module DB
   end
 
   # ── Migrations privées ──────────────────────────────────────────
-
-  def self._migrate_main_db!(db, data_dir)
-    # Crée project_refs depuis project_props (ancienne table) si besoin
-    begin
-      old_rows = db.execute("SELECT item_id, db_path, folder_path FROM project_props")
-      old_rows.each do |row|
-        next unless row['item_id']
-        existing = db.execute("SELECT 1 FROM project_refs WHERE item_id = ? LIMIT 1", [row['item_id']]).first
-        next if existing
-        db.execute(
-          "INSERT INTO project_refs (item_id, db_path, folder_path) VALUES (?, ?, ?)",
-          [row['item_id'], row['db_path'], row['folder_path']]
-        )
-      end
-    rescue SQLite3::Exception
-      # project_props n'existe pas encore — OK
-    end
-    # Migre les données projet hors de main.db vers eventer.db
-    begin
-      projects = db.execute("SELECT pr.item_id, pr.db_path, i.title, pp.state, pp.active, pp.year, pp.lister_id, pp.brin_ids, pp.perso_ids FROM project_refs pr LEFT JOIN items i ON i.id = pr.item_id LEFT JOIN project_props pp ON pp.item_id = pr.item_id WHERE pr.db_path IS NOT NULL AND pr.db_path != ''")
-      projects.each do |proj|
-        _migrate_project_data_to_eventer!(db, proj, data_dir)
-      end
-    rescue SQLite3::Exception
-      # Pas de données à migrer
-    end
-  end
-  private_class_method :_migrate_main_db!
 
   def self._migrate_project_db!(db)
     # Ajoute project_meta si absent (pour DBs existantes)

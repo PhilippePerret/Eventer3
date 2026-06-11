@@ -1,4 +1,5 @@
 require 'json'
+require 'securerandom'
 require_relative 'database'
 require_relative '../bootstrap'
 
@@ -87,51 +88,40 @@ module DB
       end
     end
 
-    def self.open_project_from_db(data_dir, folder_path:, db_path:, lister_id:)
+    def self.open_project_from_db(data_dir, folder_path:, db_path:)
       with_db(data_dir) do |db|
-        now         = Time.now.strftime('%Y-%m-%dT%H:%M:%S')
-        folder_name = File.basename(folder_path)
-        item_id     = _generate_main_id(db, 'p')
-
-        db.execute(
-          "INSERT INTO items (id, title, type, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
-          [item_id, folder_name, 'project', now, now]
-        )
+        new_id         = SecureRandom.uuid
+        folder_name    = File.basename(folder_path)
         stored_db_path = db_path.start_with?(data_dir + '/') ? db_path.sub("#{data_dir}/", '') : db_path
         db.execute(
-          "INSERT INTO project_refs (item_id, db_path, folder_path, lister_id) VALUES (?, ?, ?, ?)",
-          [item_id, stored_db_path, folder_path, lister_id]
+          "INSERT INTO project_refs (id, title, db_path, folder_path) VALUES (?, ?, ?, ?)",
+          [new_id, folder_name, stored_db_path, folder_path]
         )
-        projects_lister = db.execute("SELECT * FROM listers WHERE id = 1 LIMIT 1").first
-        if projects_lister
-          item_ids = JSON.parse(projects_lister['item_ids'] || '[]') << item_id
-          db.execute("UPDATE listers SET item_ids = ?, updated_at = ? WHERE id = 1", [JSON.generate(item_ids), now])
-        end
-        { 'id' => item_id, 'title' => folder_name }
+        { 'id' => new_id, 'title' => folder_name }
       end
     end
 
     def self.update_lister(data_dir, id, fields, project_id: nil)
       now = Time.now.strftime('%Y-%m-%dT%H:%M:%S')
-      if project_id && fields.key?('item_ids')
-        return with_project_db(data_dir, project_id) do |db|
-          db.execute("UPDATE listers SET item_ids = ?, updated_at = ? WHERE id = ?",
-            [JSON.generate(fields['item_ids']), now, id])
-        end
-      end
       if fields.key?('item_ids')
         if id.to_s.end_with?('-brins')
-          pid = id.to_s.sub(/-brins$/, '')
+          pid = project_id || id.to_s.sub(/-brins$/, '')
           return with_project_db(data_dir, pid) do |db|
             db.execute("UPDATE project_meta SET brin_ids = ? WHERE id = ?",
               [JSON.generate(fields['item_ids']), pid])
           end
         end
         if id.to_s.end_with?('-persos')
-          pid = id.to_s.sub(/-persos$/, '')
+          pid = project_id || id.to_s.sub(/-persos$/, '')
           return with_project_db(data_dir, pid) do |db|
             db.execute("UPDATE project_meta SET perso_ids = ? WHERE id = ?",
               [JSON.generate(fields['item_ids']), pid])
+          end
+        end
+        if project_id
+          return with_project_db(data_dir, project_id) do |db|
+            db.execute("UPDATE listers SET item_ids = ?, updated_at = ? WHERE id = ?",
+              [JSON.generate(fields['item_ids']), now, id])
           end
         end
         with_db(data_dir) do |db|
@@ -141,12 +131,13 @@ module DB
       end
     end
 
-    def self.create_lister(data_dir, type:, parent_item_id:, item_ids: [])
+    def self.create_lister(data_dir, type:, parent_item_id:, item_ids: [], project_id: nil)
       return { id: "#{parent_item_id}-brins"  } if type == 'brins'
       return { id: "#{parent_item_id}-persos" } if type == 'persos'
 
       now = Time.now.strftime('%Y-%m-%dT%H:%M:%S')
-      new_id = with_project_db(data_dir, parent_item_id) do |db|
+      db_project_id = project_id || parent_item_id
+      new_id = with_project_db(data_dir, db_project_id) do |db|
         db.execute("INSERT INTO listers (type, item_ids, created_at, updated_at) VALUES (?, ?, ?, ?)",
           [type, JSON.generate(item_ids), now, now])
         lid = db.last_insert_row_id
@@ -163,19 +154,38 @@ module DB
         end
         lid
       end
-      # Cache lister_id in project_refs for fast navigation
-      if type == 'events'
-        with_db(data_dir) do |db|
-          db.execute("UPDATE project_refs SET lister_id = ? WHERE item_id = ?", [new_id, parent_item_id])
-        end
-      end
       { id: new_id }
     end
 
     def self.find_lister_by_id(data_dir, id, project_id: nil)
+      if id.to_s.end_with?('-brins')
+        pid = project_id || id.to_s.sub(/-brins$/, '')
+        return with_project_db(data_dir, pid) do |db|
+          meta = db.execute("SELECT brin_ids FROM project_meta LIMIT 1").first
+          next nil unless meta
+          brin_ids = JSON.parse(meta['brin_ids'] || '[]') rescue []
+          { id: id, item_ids: brin_ids, updated_at: nil }
+        end
+      end
+      if id.to_s.end_with?('-persos')
+        pid = project_id || id.to_s.sub(/-persos$/, '')
+        return with_project_db(data_dir, pid) do |db|
+          meta = db.execute("SELECT perso_ids FROM project_meta LIMIT 1").first
+          next nil unless meta
+          perso_ids = JSON.parse(meta['perso_ids'] || '[]') rescue []
+          { id: id, item_ids: perso_ids, updated_at: nil }
+        end
+      end
       if project_id
         return with_project_db(data_dir, project_id) do |db|
-          row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [id]).first
+          actual_id = if id.to_s == project_id.to_s
+            meta = db.execute("SELECT lister_id FROM project_meta LIMIT 1").first
+            meta ? meta['lister_id'] : nil
+          else
+            id
+          end
+          next nil unless actual_id
+          row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [actual_id]).first
           next nil unless row
           lister_data = { id: row['id'], item_ids: JSON.parse(row['item_ids'] || '[]'), updated_at: row['updated_at'] }
           meta = db.execute("SELECT brin_ids, perso_ids, link_targets FROM project_meta LIMIT 1").first
@@ -191,30 +201,10 @@ module DB
           lister_data
         end
       end
-      if id.to_s.end_with?('-brins')
-        pid = id.to_s.sub(/-brins$/, '')
-        return with_project_db(data_dir, pid) do |db|
-          meta = db.execute("SELECT brin_ids FROM project_meta LIMIT 1").first
-          next nil unless meta
-          brin_ids = JSON.parse(meta['brin_ids'] || '[]') rescue []
-          { id: id, item_ids: brin_ids, updated_at: nil }
-        end
-      end
-      if id.to_s.end_with?('-persos')
-        pid = id.to_s.sub(/-persos$/, '')
-        return with_project_db(data_dir, pid) do |db|
-          meta = db.execute("SELECT perso_ids FROM project_meta LIMIT 1").first
-          next nil unless meta
-          perso_ids = JSON.parse(meta['perso_ids'] || '[]') rescue []
-          { id: id, item_ids: perso_ids, updated_at: nil }
-        end
-      end
-      # Lister racine des projets (main.db)
+      # Liste des projets — toutes les entrées de project_refs
       with_db(data_dir) do |db|
-        row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [id]).first
-        next nil unless row
-        result = { id: row['id'], item_ids: JSON.parse(row['item_ids'] || '[]'), updated_at: row['updated_at'] }
-        result
+        item_ids = db.execute("SELECT id FROM project_refs ORDER BY rowid").map { |r| r['id'] }
+        { id: id, item_ids: item_ids, updated_at: nil }
       end
     end
 
@@ -232,7 +222,14 @@ module DB
             perso_ids = JSON.parse(meta['perso_ids'] || '[]') rescue []
             _fetch_items(db, perso_ids)
           else
-            lister_row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [lister_id]).first
+            actual_id = if lister_id.to_s == project_id.to_s
+              meta = db.execute("SELECT lister_id FROM project_meta LIMIT 1").first
+              meta ? meta['lister_id'] : nil
+            else
+              lister_id
+            end
+            next {} unless actual_id
+            lister_row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [actual_id]).first
             next {} unless lister_row
             _fetch_items(db, JSON.parse(lister_row['item_ids'] || '[]'))
           end
@@ -257,11 +254,22 @@ module DB
         end
       end
       # Lister des projets (main.db)
-      with_db(data_dir) do |db|
-        lister_row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [lister_id]).first
-        next {} unless lister_row
-        _fetch_project_items(db, JSON.parse(lister_row['item_ids'] || '[]'))
+      projects = with_db(data_dir) do |db|
+        item_ids = db.execute("SELECT id FROM project_refs ORDER BY rowid").map { |r| r['id'] }
+        _fetch_project_items(db, item_ids)
       end
+      projects.each do |id, item|
+        begin
+          active = with_project_db(data_dir, id) do |db|
+            meta = db.execute("SELECT active FROM project_meta LIMIT 1").first rescue nil
+            meta ? meta['active'].to_i : 1
+          end
+          item['active'] = active
+        rescue
+          item['active'] = 1
+        end
+      end
+      projects
     end
 
     def self.update_item(data_dir, item_id, fields, project_id: nil)
@@ -283,25 +291,13 @@ module DB
       end
       # Project item (main.db) — title/id changes
       with_db(data_dir) do |db|
-        sets, vals = [], []
-        %w[title type].each do |col|
-          next unless fields.key?(col)
-          sets << "#{col} = ?"
-          vals << fields[col]
-        end
         new_id = fields['id']
         if new_id && new_id != item_id
-          db.execute("PRAGMA foreign_keys = OFF")
-          begin
-            db.execute("UPDATE items SET id = ?, updated_at = ? WHERE id = ?", [new_id, now, item_id])
-            db.execute("UPDATE project_refs SET item_id = ? WHERE item_id = ?", [new_id, item_id])
-          ensure
-            db.execute("PRAGMA foreign_keys = ON")
-          end
+          db.execute("UPDATE project_refs SET id = ? WHERE id = ?", [new_id, item_id])
           item_id = new_id
         end
-        unless sets.empty?
-          db.execute("UPDATE items SET #{sets.join(', ')}, updated_at = ? WHERE id = ?", vals + [now, item_id])
+        if fields.key?('title')
+          db.execute("UPDATE project_refs SET title = ? WHERE id = ?", [fields['title'], item_id])
         end
       end
       # Champs projet → project_meta dans eventer.db
@@ -375,17 +371,12 @@ module DB
       end
       # Nouveau projet (main.db)
       with_db(data_dir) do |db|
-        lister_row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [lister_id]).first
-        next nil unless lister_row
-        item_id = fields['id'] || _generate_main_id(db, 'p')
+        new_id = fields['id'] || SecureRandom.uuid
         db.execute(
-          "INSERT INTO items (id, title, type, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
-          [item_id, fields['title'], fields['type'] || 'project', now, now]
+          "INSERT INTO project_refs (id, title, db_path, folder_path) VALUES (?, ?, ?, ?)",
+          [new_id, fields['title'], fields['db_path'], fields['folder_path']]
         )
-        db.execute("INSERT OR IGNORE INTO project_refs (item_id) VALUES (?)", [item_id])
-        item_ids = JSON.parse(lister_row['item_ids'] || '[]') << item_id
-        db.execute("UPDATE listers SET item_ids = ?, updated_at = ? WHERE id = ?", [JSON.generate(item_ids), now, lister_id])
-        { 'id' => item_id, 'title' => fields['title'], 'type' => fields['type'] }
+        { 'id' => new_id, 'title' => fields['title'] }
       end
     end
 
@@ -433,22 +424,15 @@ module DB
           item_ids.delete(item_id.to_s)
           db.execute("UPDATE listers SET item_ids = ?, updated_at = ? WHERE id = ?", [JSON.generate(item_ids), now, lister_id.to_i])
           %w[event brin perso].each { |t| db.execute("DELETE FROM #{t}_props WHERE item_id = ?", [item_id]) }
-          db.execute("DELETE FROM counters WHERE project_id = ?", [item_id])
+          db.execute("DELETE FROM counters")
           db.execute("DELETE FROM items WHERE id = ?", [item_id])
           true
         end
       end
       # Suppression projet (main.db)
       with_db(data_dir) do |db|
-        lister_row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [lister_id.to_i]).first
-        next nil unless lister_row
-        item_ids = JSON.parse(lister_row['item_ids'] || '[]')
-        next nil unless item_ids.include?(item_id.to_s)
-        item_ids.delete(item_id.to_s)
-        db.execute("UPDATE listers SET item_ids = ?, updated_at = ? WHERE id = ?", [JSON.generate(item_ids), now, lister_id.to_i])
-        db.execute("DELETE FROM project_refs WHERE item_id = ?", [item_id])
-        db.execute("DELETE FROM items WHERE id = ?", [item_id])
-        true
+        deleted = db.execute("DELETE FROM project_refs WHERE id = ?", [item_id])
+        deleted.changes > 0 ? true : nil
       end
     end
 
@@ -465,14 +449,21 @@ module DB
 
     def self.with_project_db(data_dir, project_id)
       db_path = with_db(data_dir) do |db|
-        row = db.execute("SELECT db_path FROM project_refs WHERE item_id = ? LIMIT 1", [project_id]).first
+        row = db.execute("SELECT db_path, folder_path FROM project_refs WHERE id = ? LIMIT 1", [project_id]).first
         # Fallback legacy
         row ||= begin
-          db.execute("SELECT db_path FROM project_props WHERE item_id = ? LIMIT 1", [project_id]).first
+          db.execute("SELECT db_path, folder_path FROM project_props WHERE item_id = ? LIMIT 1", [project_id]).first
         rescue SQLite3::Exception
           nil
         end
-        row ? row['db_path'] : nil
+        next nil unless row
+        dp = row['db_path']
+        if dp.nil? || dp.to_s.strip.empty?
+          fp = row['folder_path']
+          (fp && !fp.to_s.strip.empty?) ? File.join(fp, 'eventer.db') : nil
+        else
+          dp
+        end
       end
       if db_path.nil? || db_path.to_s.strip.empty?
         return with_db(data_dir) { |db| yield(db) }
@@ -506,33 +497,25 @@ module DB
     private_class_method :_generate_main_id
 
     def self._generate_id(db, project_id, item_type, prefix)
-      if project_id
-        db.execute("INSERT OR IGNORE INTO counters (project_id, item_type, last_val) VALUES (?, ?, 0)", [project_id, item_type])
-        db.execute("UPDATE counters SET last_val = last_val + 1 WHERE project_id = ? AND item_type = ?", [project_id, item_type])
-        counter_row = db.execute("SELECT last_val FROM counters WHERE project_id = ? AND item_type = ?", [project_id, item_type]).first
-        val = counter_row ? counter_row['last_val'] : 1
-      else
-        val = 1
-      end
+      db.execute("INSERT OR IGNORE INTO counters (item_type, last_val) VALUES (?, 0)", [item_type])
+      db.execute("UPDATE counters SET last_val = last_val + 1 WHERE item_type = ?", [item_type])
+      counter_row = db.execute("SELECT last_val FROM counters WHERE item_type = ?", [item_type]).first
+      val = counter_row ? counter_row['last_val'] : 1
       val += 1 while db.execute("SELECT 1 FROM items WHERE id = ?", ["#{prefix}#{val}"]).first
       "#{prefix}#{val}"
     end
     private_class_method :_generate_id
 
-    # Chargement des items d'un projet (main.db) — titre + ref lister
+    # Chargement des projets depuis project_refs
     def self._fetch_project_items(db, item_ids)
       return {} if item_ids.empty?
       placeholders = item_ids.map { '?' }.join(', ')
-      sql = <<~SQL
-        SELECT i.id, i.title, i.type, i.created_at, i.updated_at,
-               pr.lister_id, pr.db_path, pr.folder_path
-        FROM items i
-        LEFT JOIN project_refs pr ON pr.item_id = i.id
-        WHERE i.id IN (#{placeholders})
-      SQL
-      rows = db.execute(sql, item_ids)
+      rows = db.execute(
+        "SELECT id, title, db_path, folder_path FROM project_refs WHERE id IN (#{placeholders})",
+        item_ids
+      )
       hash = {}
-      rows.each { |row| hash[row['id']] = row }
+      rows.each { |row| hash[row['id']] = { 'id' => row['id'], 'title' => row['title'], 'type' => 'roman', 'db_path' => row['db_path'], 'folder_path' => row['folder_path'] } }
       ordered = {}
       item_ids.each { |id| ordered[id] = hash[id] if hash[id] }
       ordered

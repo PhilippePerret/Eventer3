@@ -6,17 +6,19 @@ import Notification from './classes/ui/Notification.js'
 import ListerRepository from './classes/repositories/ListerRepository.js'
 import Brin from './classes/models/Brin.js'
 import Perso from './classes/models/Perso.js'
+import TargetsPanel from './classes/ui/TargetsPanel.js'
 
 export default class KeyboardController {
 
   // Panels ordered by z-index ascending (reversed = highest first)
-  static MOVABLE_PANEL_IDS = ['#filter-selector-panel', '#brin-panel', '#perso-panel', '#style-panel', '#shortcuts-panel', '#tools-panel']
+  static MOVABLE_PANEL_IDS = ['#filter-selector-panel', '#brin-panel', '#perso-panel', '#style-panel', '#shortcuts-panel', '#tools-panel', '.targets-panel']
 
   constructor() {
     this.activeLister = null
     this.modeStack = []
     this.toolsPanel = new ToolsPanel()
     this._panelOffsets = new WeakMap()
+    this.targets = []
   }
 
   register(lister) {
@@ -174,8 +176,10 @@ export default class KeyboardController {
       case 'k':
         if (event.metaKey || event.ctrlKey) {
           this.activeLister.openToolsPanel?.()
-          event.preventDefault()
+        } else {
+          this._addTarget()
         }
+        event.preventDefault()
         return
 
       case 'm':
@@ -304,6 +308,23 @@ export default class KeyboardController {
     if (direction === 'ArrowRight') offset.dx += step
     if (direction === 'ArrowLeft')  offset.dx -= step
     el.style.translate = `${offset.dx}px ${offset.dy}px`
+  }
+
+  _addTarget() {
+    const lister = this.activeLister
+    if (!lister) return
+    const item = lister.items[lister.selectedIndex]
+    if (!item) return
+    if (this.targets.some(t => t.id === item.id)) {
+      Notification.show(`Déjà dans les cibles : ${item.title}`)
+      return
+    }
+    this.targets.push({ id: item.id, title: item.title })
+    Notification.show(`Cible mémorisée : ${item.title}`)
+    const projectId = lister.parentItem?.id
+    if (projectId) {
+      ListerRepository.saveItem({ id: projectId }, { link_targets: this.targets }).catch(console.error)
+    }
   }
 
   _enterFilterSequence() {

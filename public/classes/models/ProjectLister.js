@@ -39,7 +39,7 @@ export default class ProjectLister extends Lister {
   }
 
   _childListerData(item) {
-    return { id: item.lister_id ?? null, parentItem: item, project_id: item.id }
+    return { id: item.id, parentItem: item, project_id: item.id }
   }
 
   async createNewItemAfter() {

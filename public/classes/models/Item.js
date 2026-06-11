@@ -4,6 +4,7 @@ import ListerRepository from '../repositories/ListerRepository.js'
 import PopupSelect from '../ui/PopupSelect.js'
 import Notification from '../ui/Notification.js'
 import ContextualHelp from '../ui/ContextualHelp.js'
+import TargetsPanel from '../ui/TargetsPanel.js'
 
 
 export default class Item {
@@ -197,6 +198,14 @@ export default class Item {
     const { originalData } = options
     LOG.m(3, 'Item.handleEditionKeyDown', { key: event.key, item: this.id })
     if (event.metaKey || event.ctrlKey) {
+      if (event.key === 'k') {
+        event.preventDefault()
+        const field = document.activeElement
+        if (field && (field.tagName === 'INPUT' || field.tagName === 'TEXTAREA')) {
+          TargetsPanel.open(keyboardController, field)
+        }
+        return
+      }
       const WRAP = { i: ['*','*'], g: ['**','**'], b: ['~~','~~'], u: ['__','__'] }
       const wrap = WRAP[event.key]
       if (wrap) {

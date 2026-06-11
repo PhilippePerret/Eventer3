@@ -8,7 +8,11 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
 ## Todo
 
-- Insertion d’un lien avec cmd+k (déjà documenté)
+- ⇥ pour se déplacer de lien en lien dans un event, puis :
+
+  - « w » pour l’ouvrir dans l’autre fenêtre (pas encore implémentée)
+  - « g » pour aller (go) à l’autre élément
+  - « a » (« afficher ») pour simplement afficher dans une fenêtre modale l’élément, quel qu’il soit.
 
 - formatage du texte (markdown-like, badge de personnages)
 

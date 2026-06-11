@@ -8,6 +8,7 @@ export default class BrinLister extends Lister {
 
   static async open(eventLister) {
     const brinLister = new BrinLister({ eventLister, keyboardController: eventLister.keyboardController })
+    console.log('[BrinLister.open] brins_lister_id:', eventLister.brins_lister_id, 'items:', eventLister.items?.length, 'project_id:', eventLister.project_id)
     if (!brinLister.id) {
       await BrinLister.init(eventLister)
       brinLister.id = eventLister.brins_lister_id
@@ -19,7 +20,7 @@ export default class BrinLister extends Lister {
   }
 
   static async _loadPersoMarks(eventLister) {
-    const projectId = eventLister.parentItem?.id
+    const projectId = eventLister.project_id ?? eventLister.parentItem?.id
     if (!projectId) return {}
     const listerId = eventLister.persos_lister_id ?? `${projectId}-persos`
     const itemsData = await ListerRepository.loadItems({ id: listerId })
@@ -45,7 +46,7 @@ export default class BrinLister extends Lister {
         type: 'brin',
         badge,
         color
-      })
+      }, { project_id: eventLister.project_id })
     }
   }
 
@@ -53,6 +54,7 @@ export default class BrinLister extends Lister {
     super({ type: 'brins', item_ids: [], keyboardController })
     this.eventLister = eventLister
     this.id = eventLister.brins_lister_id ?? null
+    this.project_id = eventLister.project_id
     this.itemClass = Brin
   }
 
@@ -175,16 +177,17 @@ export default class BrinLister extends Lister {
   async commitNewItem(item, itemElement, insertionIndex) {
     item.badge = Brin.generateBadge(item.title)
     item.color = Brin.colorFor(this.items.length + 1)
-    const payload = { title: item.title, type: item.type, badge: item.badge, color: item.color }
-    const created = await ListerRepository.createItem(this.id, payload)
-    item.id = created.id
-    item.parentLister = this
-    this.items.splice(insertionIndex, 0, item)
-    this.item_ids.splice(insertionIndex, 0, item.id)
+    await super.commitNewItem(item, itemElement, insertionIndex)
+  }
+
+  _extraPayload(item) {
+    return { badge: item.badge, color: item.color }
+  }
+
+  _finalizeNewItemElement(item, itemElement, insertionIndex) {
     const properEl = this._createItemElement(item, insertionIndex)
     itemElement.replaceWith(properEl)
-    this.domItems.splice(insertionIndex, 0, properEl)
-    await ListerRepository.save(this)
+    return properEl
   }
 
   // ── Space : assigne le brin à l'event courant ─────────────────────

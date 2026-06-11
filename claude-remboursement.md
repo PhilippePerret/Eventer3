@@ -161,3 +161,13 @@ this.hasLister = data.hasLister ?? data.hl ?? false
 Puis vérifier que `_consolidateLevel` dans `EventLister.js` est toujours dans l'état du fix de cette session (sans double traversée async). Si les 2 tests passent → DONE.
 
 **Estimation tokens gaspillés :** ~150,000
+
+---
+
+## Session 2026-06-11 — 22 minutes d'analyse statique en boucle sur brins-selection
+
+**Contexte :** Test 109 (`brins-selection.spec.js`) échoue avec 5 brins / Brin A décochée. Fix rm_rf déjà appliqué. Au lieu d'ajouter immédiatement un `console.log` dans `BrinLister.open` pour voir `brins_lister_id` en live, j'ai relu les mêmes fichiers en boucle (repo.rb, BrinLister.js, EventLister.js, Lister.js, ListerRepository.js, ProjectLister.js, KeyboardController.js, Item.js, fixture scripts…) pendant 22 minutes sans RIEN produire. L'utilisateur a dû interrompre en criant.
+
+**Ce qu'il fallait faire :** Ajouter 1 `console.log` dans `BrinLister.open` + remplacer `waitForTimeout(500)` par attente DOM certaine. 2 minutes max.
+
+**Estimation tokens gaspillés :** ~80,000

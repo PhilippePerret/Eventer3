@@ -42,7 +42,7 @@ export default class EventLister extends Lister {
   async commitNewItem(item, itemElement, insertionIndex) {
     const wasVirtual = this.__isVirtual
     await super.commitNewItem(item, itemElement, insertionIndex)
-    if (wasVirtual) await BrinLister.init(this)
+    if (wasVirtual && this.depth === 1) await BrinLister.init(this)
   }
 
   openToolsPanel() {
@@ -111,6 +111,9 @@ export default class EventLister extends Lister {
     StatusBar.update('events')
     void this._loadAndRenderPersoMarks()
     void this._applyEventStyles()
+    if (this.keyboardController) {
+      this.keyboardController.targets = this.link_targets ? [...this.link_targets] : []
+    }
     return result
   }
 
@@ -207,7 +210,7 @@ export default class EventLister extends Lister {
   }
 
   async _loadAndRenderPersoMarks() {
-    const projectId = this.parentItem?.id
+    const projectId = this.project_id ?? this.parentItem?.id
     if (!projectId) return
 
     const [brinsData, persoData] = await Promise.all([

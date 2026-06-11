@@ -80,7 +80,7 @@ end
 post '/api/listers' do
   payload = JSON.parse(request.body.read)
   halt 422 unless payload['type'] && payload['parent_item_id']
-  result = DB::Repo.create_lister(DATA_DIR, type: payload['type'], parent_item_id: payload['parent_item_id'], item_ids: payload['item_ids'] || [])
+  result = DB::Repo.create_lister(DATA_DIR, type: payload['type'], parent_item_id: payload['parent_item_id'], item_ids: payload['item_ids'] || [], project_id: payload['project_id'])
   content_type :json
   status 201
   JSON.generate(result)
@@ -163,12 +163,7 @@ post '/api/projects/open' do
   halt 422 unless folder_path && !folder_path.strip.empty?
   db_path = File.join(folder_path, 'eventer.db')
   halt 422 unless File.exist?(db_path)
-  proj_db = DB.open_project(db_path)
-  proj_db.results_as_hash = true
-  events_lister = proj_db.execute("SELECT * FROM listers WHERE type = 'events' LIMIT 1").first
-  proj_db.close
-  halt 422 unless events_lister
-  result = DB::Repo.open_project_from_db(DATA_DIR, folder_path: folder_path, db_path: db_path, lister_id: events_lister['id'])
+  result = DB::Repo.open_project_from_db(DATA_DIR, folder_path: folder_path, db_path: db_path)
   content_type :json
   status 201
   JSON.generate(result)

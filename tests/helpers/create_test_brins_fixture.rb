@@ -7,6 +7,9 @@ DATA_DIR = File.expand_path('../../../data', __FILE__)
 db_path = DB.path(DATA_DIR)
 File.delete(db_path) if File.exist?(db_path)
 
+project_dir = File.join(DATA_DIR, 'test-brins')
+FileUtils.rm_rf(project_dir) if File.exist?(project_dir)
+
 DB.initialize!(DATA_DIR)
 
 db = DB.open(DATA_DIR)
@@ -14,23 +17,14 @@ db.results_as_hash = true
 
 now = Time.now.strftime('%Y-%m-%dT%H:%M:%S')
 
+PROJECT_ID      = 'test-brins'
 PROJECT_DB_REL  = 'test-brins/eventer.db'
 PROJECT_DB_PATH = File.join(DATA_DIR, PROJECT_DB_REL)
 
-db.transaction do
-  # Lister projets
-  db.execute("INSERT INTO listers (id, type, item_ids, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
-    [1, 'projects', '["test-brins"]', now, now])
-
-  # Project item (main.db: pas de color)
-  db.execute("INSERT INTO items (id, title, type, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
-    ['test-brins', 'Projet Brins Test', 'roman', now, now])
-
-  # project_refs (nouvelle architecture)
-  db.execute("INSERT INTO project_refs (item_id, db_path, folder_path, lister_id) VALUES (?, ?, ?, ?)",
-    ['test-brins', PROJECT_DB_REL, File.join(DATA_DIR, 'test-brins'), 2])
-end
-
+db.execute(
+  "INSERT INTO project_refs (id, title, db_path, folder_path) VALUES (?, ?, ?, ?)",
+  [PROJECT_ID, 'Projet Brins Test', PROJECT_DB_REL, File.join(DATA_DIR, 'test-brins')]
+)
 db.close
 
 # Créer le project DB avec les events + brins
@@ -46,7 +40,7 @@ brins = [
 ]
 
 proj_db.transaction do
-  # Lister events (id=2, correspond à project_refs.lister_id)
+  # Lister events (id=2, référencé par project_meta.lister_id)
   proj_db.execute("INSERT INTO listers (id, type, item_ids, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
     [2, 'events', '["e1","e3","e2"]', now, now])
 
@@ -61,7 +55,7 @@ proj_db.transaction do
   proj_db.execute("INSERT INTO event_props (item_id, brin_ids) VALUES (?, ?)", ['e2', '["b2","b3"]'])
   proj_db.execute("INSERT INTO event_props (item_id, brin_ids) VALUES (?, ?)", ['e3', '[]'])
 
-  # Brin items + props dans eventer.db (nouvelle architecture)
+  # Brin items + props
   brins.each do |id, title, type, color, badge|
     proj_db.execute("INSERT INTO items (id, title, type, color, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)",
       [id, title, type, color, now, now])
@@ -71,13 +65,13 @@ proj_db.transaction do
   # project_meta
   proj_db.execute(
     "INSERT INTO project_meta (id, state, active, lister_id, brin_ids, perso_ids) VALUES (?, ?, ?, ?, ?, ?)",
-    ['test-brins', 0, 1, 2, '["b1","b2","b3","b4"]', '[]']
+    [PROJECT_ID, 0, 1, 2, '["b1","b2","b3","b4"]', '[]']
   )
 
-  # counters
-  proj_db.execute("INSERT INTO counters (project_id, item_type, last_val) VALUES (?, ?, ?)", ['test-brins', 'event', 3])
-  proj_db.execute("INSERT INTO counters (project_id, item_type, last_val) VALUES (?, ?, ?)", ['test-brins', 'brin',  4])
-  proj_db.execute("INSERT INTO counters (project_id, item_type, last_val) VALUES (?, ?, ?)", ['test-brins', 'perso', 0])
+  # counters (sans project_id)
+  proj_db.execute("INSERT INTO counters (item_type, last_val) VALUES (?, ?)", ['event', 3])
+  proj_db.execute("INSERT INTO counters (item_type, last_val) VALUES (?, ?)", ['brin',  4])
+  proj_db.execute("INSERT INTO counters (item_type, last_val) VALUES (?, ?)", ['perso', 0])
 end
 
 proj_db.close
