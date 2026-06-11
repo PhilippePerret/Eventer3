@@ -1,4 +1,5 @@
 import LOG from '../../system/LOG.js'
+import Texte from '../../system/Texte.js'
 import { raise } from '../../system/Error.js'
 import Item from './Item.js'
 import ListerRepository from '../repositories/ListerRepository.js'

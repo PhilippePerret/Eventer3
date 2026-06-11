@@ -196,6 +196,15 @@ export default class Item {
   async handleEditionKeyDown(event, keyboardController, itemElement, fields, inputs, options = {}) {
     const { originalData } = options
     LOG.m(3, 'Item.handleEditionKeyDown', { key: event.key, item: this.id })
+    if (event.metaKey || event.ctrlKey) {
+      const WRAP = { i: ['*','*'], g: ['**','**'], b: ['~~','~~'], u: ['__','__'] }
+      const wrap = WRAP[event.key]
+      if (wrap) {
+        event.preventDefault()
+        Texte.wrapSelection(wrap[0], wrap[1])
+        return
+      }
+    }
     switch (event.key) {
       case 'Tab':
         event.preventDefault()
