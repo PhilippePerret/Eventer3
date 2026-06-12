@@ -9,6 +9,7 @@ test.beforeEach(() => {
 async function createProjectAndGetFolderInfo(page, expect) {
   await page.goto('/')
   const { folderName, workDir } = await setupProjectFolder(page)
+  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
   await page.keyboard.press('n')
   await createAndSelectFolderInPicker(page, expect, folderName)
   await page.waitForLoadState('networkidle')

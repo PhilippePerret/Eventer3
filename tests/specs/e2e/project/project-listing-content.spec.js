@@ -1,7 +1,7 @@
-import { installFixtures } from '../../helpers/install-fixtures'
+import { installFixtures } from '../../../helpers/install-fixtures'
 installFixtures('many-projects')
 
-import { test, expect } from './__setup__.js'
+import { test, expect } from '../__setup__.js'
 
 test('la liste affiche uniquement les projets actifs', async ({ page }) => {
 

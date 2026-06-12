@@ -1,8 +1,8 @@
-import { installFixtures } from '../../helpers/install-fixtures'
-import { setupProjectFolder, createAndSelectFolderInPicker } from '../../helpers/create-project-helper.js'
+import { installFixtures } from '../../../helpers/install-fixtures'
+import { setupProjectFolder, createAndSelectFolderInPicker } from '../../../helpers/create-project-helper.js'
 installFixtures('many-projects')
 
-import { test, expect } from './__setup__.js'
+import { test, expect } from '../__setup__.js'
 
 test('la touche n crée un nouveau projet vide en dessous de la sélection', async ({ page }) => {
   await page.goto('/')

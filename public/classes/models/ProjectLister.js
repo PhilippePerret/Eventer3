@@ -101,7 +101,7 @@ export default class ProjectLister extends Lister {
     const { exists } = await checkResp.json()
     if (exists) {
       const result = await ConfirmDialog.open({
-        message: 'Dois-je utiliser la base de données eventer.db de ce dossier ?',
+        message: 'Ce dossier contient déjà un projet (eventer.db). Dois-je l\'utiliser ?',
         keyboardController: this.keyboardController,
         buttons: [
           { label: 'Annuler',          key: 'Escape', shortcut: '␛',  value: false     },

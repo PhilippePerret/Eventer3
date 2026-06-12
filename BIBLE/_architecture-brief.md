@@ -110,6 +110,7 @@ Elle a été profondément modifiée le 12 juin 2026.
 | Items events | `.event-item` |
 | Event sélectionné | `.event-item.selected` |
 | Panneau brins | `#brin-panel` |
+| Panneau persos | `#perso-panel` |
 | Items brins | `.brin-item` |
 | Titre brin | `.brin-item__title` |
 | Badge brin dans event | `.event-brins-badges .badge.brin` |

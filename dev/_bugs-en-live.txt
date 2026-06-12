@@ -26,33 +26,14 @@ BUG: Quand on choisit un lieu pour l'event (p.e. "Extérieur"), on se retrouve a
 CORRECTION : Mettre la forme réduite de lui "EXT", "INT", "NOIR", ""
 
 
-MODIFICATIONS
-- dans constants.js, définition des formes de mot (WORD_FORMS)
-- il faut traduire les textes de HELP_PER_CONTEXT (mettre en cache)
-- les contextes génériques sont maintenant placés dans :shortcuts à l'aide de {context: 'non-du-contexte'}
-- un test avant l'affichage de l'aide contextuelle : s'il y a des éléments dans le presse-papier (CELUI DE L'APPLICATION), il faut ajoute le raccourci '⌘ + v' pour coller. Dans l'idéal, il faudrait connaitre la nature de l'élément pour écrire "Coller le brin"/"Coller les brins"
-
-BUG : quand on choisit un dossier qui contient déjà un eventer.db, la fenêtre est super moche. Et les choix devraient être
-Message "Il existe déjà une base de données EventerX pour ce projet.
-Dois-je l'utiliser ?"
-- Oui, ouvrir ce projet
-- Non, la détruire
-- Ne pas prendre 
-- Annuler
-
-
-
 
 BUG
 - Je mets un event en édition
 - je TAB pour sélectionner le menu state
 - je choisis un état, puis Enter
 - je TAB
-ATTENDU : je passe au menu suivant
-BUG : je dois TABer 2 fois
-Pareil pour les autres, ça repart chaque fois du title alors que les propriétés devraient tourner en boucle.
+ATTENDU : je devrais passer au menu suivant
+BUG : je dois TABer 2 fois pour l'atteindre
+Pareil pour les autres, ça repart chaque fois du title alors que les propriétés devraient tourner en boucle avec TAB.
 
-
-l'id du projet n'est plus éditable, c'est un UUID fixe maintenant => corriger les tests
-
-
+On doit vérifier la gestion des cibles.
