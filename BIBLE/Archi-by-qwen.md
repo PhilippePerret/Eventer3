@@ -8,7 +8,7 @@ interface.
 
 - **Backend:** Ruby Sinatra
 - **Frontend:** Vanilla JavaScript (ES modules), no framework, no build process
-- **Persistence:** SQLite (`./data/eventer.db`)
+- **Persistence:** SQLite (données application : `./data/main.db`, données de chaque projet : dans son `eventer.db`)
 
 ---
 
@@ -93,6 +93,7 @@ A global `KeyboardController` manages keybindings based on current **mode**:
 ### Unit Tests
 - Node built-in test runner (`node --test`)
 - Located in: `tests/specs/unit/`
+- Ruby tests: `tests/ruby/`
 
 ---
 
@@ -107,17 +108,18 @@ A global `KeyboardController` manages keybindings based on current **mode**:
 ## 📁 File System Layout
 
 ```
-./CLAUDE.md          # Claude documentation file
-./app.rb             # Main Sinatra app
-./lib/               # Backend models and logic
-./public/            # Frontend assets
-  └── index.html     # Entry point
-  └── app.js         # JS entry script
+./CLAUDE.md          	# Claude documentation file
+./app.rb             	# Main Sinatra app
+./data.main.db				# App database
+./lib/               	# Backend models and logic
+./public/            	# Frontend assets
+  └── index.html     	# Entry point
+  └── app.js         	# JS entry script
   └── classes/
       ├── models/
       ├── repositories/
       └── system/
-./tests/             # Test suite
+./tests/             	# Test suite
   ├── e2e/
   ├── specs/unit/
   └── fixtures/

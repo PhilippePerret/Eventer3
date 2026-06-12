@@ -19,7 +19,7 @@
 | `public/classes/models/Lister.js` | Classe de base : `render()`, `selectItemAt()`, `moveSelectedItem()`, `createNewItem()`, `stopEditing()`, `commitNewItem()` |
 | `public/classes/models/Item.js` | Classe de base item |
 | `public/classes/ui/FooterHelp.js` | `FooterHelp.update(modes)` → lit `APP_UI_MODES[mode]` → écrit dans `#shortcuts-footer` |
-| `public/classes/repositories/ListerRepository.js` | PATCH/PUT vers le serveur ; `loadDefinition`, `loadItems`, `save`, `saveItems`, `createItem`, `createLister` |
+| `public/classes/repositories/<br />ListerRepository.js` | PATCH/PUT vers le serveur ; `loadDefinition`, `loadItems`, `save`, `saveItems`, `createItem`, `createLister` |
 
 ---
 
@@ -32,10 +32,11 @@ Lister
 └── BrinLister      (uiModes: ['listerRoot','modalPanel'])  ??? rendu dans #brin-panel, pas #main-panel
 
 Lister
-├── ProjectLister    items: Project
-├── EventLister      items: Event
-├── BrinLister       items: Brin
-└── PersoLister      items: Perso
+├── ProjectLister    	items: Project
+├── EventLister      	items: Event
+├── BrinLister       	items: Brin
+├── PersoLister      	items: Perso
+└── StyleLister				items: Style
 
 Item
 ├── Project    idPrefix: null  (id = slug du titre)
@@ -55,7 +56,25 @@ Modes spéciaux (modeStack) : `item-edition` (champs input/select), `popup-selec
 
 ---
 
+## Persistance des données
+
+Elle a été profondément modifiée le 12 juin 2026.
+
+**Avant** : toutes les données étaient enregistrées dans une base SQLite unique : `data/eventer.db`.
+
+**Maintenant** : il y a d’un côté la base de l’application : `data/main.db` et de l’autres TOUS les fichiers `eventer.db`, un par projet, qui contiennent TOUTES LES DONNÉES de chaque projet (events, brins, personnages, préférences, styles, métadonnées du projet, etc.)
+
+`data/main.db` contient les références aux projets (pour un affichage rapide) dans une table `project_refs`, donc : `title` (titre humain du projet), `id` (uuid du projet), `db_path`(chemin d’accès à la base `eventer.db` contenant toutes les données du projet — si `null`, peut se déduire de `folder_path` puisque la base est par défaut à la racine du projet) et `folder_path` (chemin d’accès au dossier principal du projet).
+
+**Toute autre information** concernant le projet se trouve dans son fichier `eventer.db` propre.
+
+
+
+---
+
 ## APP_UI_MODES (config.js)
+
+*(cette section est à préciser, elle ne contient pas d’information pertinente — je me demande même à quoi elle sert)*
 
 | Mode | Utilisé par |
 |---|---|
@@ -105,7 +124,7 @@ Modes spéciaux (modeStack) : `item-edition` (champs input/select), `popup-selec
 
 ## Conventions ID
 
-- Project : slug du titre (`mon-projet`) ou `p1`, `p2`… lors de copies.
+- Project : UUID
 - Event : `e1`, `e2`…
 - Brin : `b1`, `b2`…
 - Perso : `c1`, `c2`…
@@ -120,9 +139,10 @@ Modes spéciaux (modeStack) : `item-edition` (champs input/select), `popup-selec
 - `installFixtures('nom')` dans `beforeEach` ou au niveau module
 - `Lister`/`Item` : ne jamais dupliquer dans une sous-classe ce qui existe ou devrait exister dans la base
 - Le `type` d’un `Item` (`Project`, `Event`, `Brin`, `Perso`, `Script`) n’est JAMAIS la classe spécialisée minorisée de l’item. Le type de `Project` n’est JAMAIS `perso`, le `type` d’un `Event` n’est JAMAIS `event`, le `type` d’un `Perso` n’est JAMAIS `perso`. Voir les [types possibles](../dev/Specs-modeles.md#item-types) dans le document des modèles.
-- Loi de Déméter : déléguer via méthode statique, ne pas câbler les détails d'une autre classe
-- Séparation des responsabilités : FooterHelp, PopupSelect, ShortcutsPanel, Notification = classes dédiées
-- `lister_id` d'un Item = id de son Lister enfant, PAS son appartenance (appartenance = `item_ids` du Lister parent)
+- Loi de Déméter : bien diviser les responsabilités. Un `Lister` n’a pas à savoir comment un `Item` est enregistré.
+- Séparation des responsabilités : FooterHelp, PopupSelect, ShortcutsPanel, Notification = classes dédiées. Mais hériter ce qui peut l’être. Par exemple les `KeyboardablePanel`s qui fonctionnent tous de la même façon.
+- Délégation : déléguer via méthode statique, ne pas câbler les détails d'une autre classe
+- `lister_id` d'un Item = id de son Lister enfant, PAS son appartenance (appartenance = `item_ids` du Lister parent). Note : le fait de passer par ce `lister_id` permet de conserver l’**ordre** des enfants.
 - `commitNewItem` : après `item.id = created.id`, appeler `item.render(itemElement)` pour afficher l'id généré par le serveur
 - Notification titre vide : dans `handleEditionKeyDown`, Enter/Escape sur item temporaire sans titre → `Notification.show(...)` + `return` (garder l'éditeur ouvert)
 - Lister virtuel vide : `cancelEditor` sur lister avec `domItems.length === 0` → notification au lieu d'écran blanc

@@ -68,3 +68,6 @@ BUG
 ATTENDU : je passe au menu suivant
 BUG : je dois TABer 2 fois
 Pareil pour les autres, ça repart chaque fois du title alors que les propriétés devraient tourner en boucle.
+
+
+l'id du projet n'est plus éditable, c'est un UUID fixe maintenant => corriger les tests

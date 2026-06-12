@@ -106,14 +106,14 @@ selectNextItem() {
 
 ## 6. Clavier
 
-`/` → push mode `filter-sequence` dans `keyboardController.modeStack`.
+`:` → push mode `filter-sequence` dans `keyboardController.modeStack`.
 
 Dans ce mode :
 - `t` → active champ texte (input event → `applyFilter` texte)
 - `b` → ouvre SelectorPanel brins filtre
 - `p` → ouvre SelectorPanel persos filtre
-- `/` → flag `cancelNext = true`, prochain `t/b/p` annule cette condition
-- `///` → `filterState.clear()` + exit mode
+- `:` → flag `cancelNext = true`, prochain `t/b/p` annule cette condition
+- `:::` → `filterState.clear()` + exit mode
 - `Escape` → exit sans reset
 
 ---
@@ -123,14 +123,3 @@ Dans ce mode :
 Affichée au-dessus de `#main-panel` quand filtre actif. Contient :
 - `<input>` par champ texte actif
 - badges brins/persos actifs (cliquables pour annuler)
-
----
-
-## Ce qui reste à faire (à reprendre demain)
-
-1. TDD → RED sur `FilterState.matches()`
-2. TDD → RED sur `Lister.applyFilter()` + indices
-3. TDD → RED sur navigation avec items cachés
-4. TDD → RED sur `SelectorPanel`
-5. TDD → RED sur mode clavier `filter-sequence`
-6. Implémentation dans cet ordre strict (un RED confirmé avant chaque implémentation)

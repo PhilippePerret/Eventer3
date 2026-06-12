@@ -1,1 +1,1 @@
-- [Défauts live 2026-06-01](project_defauts_live.md) — 8 bugs trouvés en test live, à corriger un par un avec TDD
+- 

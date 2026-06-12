@@ -20,8 +20,24 @@ module DB
     );
   SQL
 
-  # Données complètes et isolées d'un projet
+  ###################################################################
+  # Registre propre à chaque projet ( 1 projet = 1 eventer.db )
+  # Données complètes et isolées d'un projet en particulier
+  # PAS DANS main.db !!!
+  # DANS eventer.db de chaque projet
   PROJECT_SCHEMA = <<~SQL
+
+    CREATE TABLE IF NOT EXISTS project_meta (
+      id           TEXT NOT NULL, -- UUID
+      state        INTEGER DEFAULT 0,
+      active       INTEGER DEFAULT 1,
+      year         INTEGER,       -- Année de l'histoire
+      lister_id    INTEGER,       -- FK Premier évènemencier
+      brin_ids     TEXT DEFAULT '[]',
+      perso_ids    TEXT DEFAULT '[]',
+      link_targets TEXT DEFAULT '[]'
+    );
+
     CREATE TABLE IF NOT EXISTS listers (
       id         INTEGER PRIMARY KEY,
       type       TEXT,
@@ -46,16 +62,6 @@ module DB
       updated_at TEXT
     );
 
-    CREATE TABLE IF NOT EXISTS project_meta (
-      id           TEXT NOT NULL,
-      state        INTEGER DEFAULT 0,
-      active       INTEGER DEFAULT 1,
-      year         INTEGER,
-      lister_id    INTEGER,
-      brin_ids     TEXT DEFAULT '[]',
-      perso_ids    TEXT DEFAULT '[]',
-      link_targets TEXT DEFAULT '[]'
-    );
 
     CREATE TABLE IF NOT EXISTS event_props (
       item_id   TEXT PRIMARY KEY REFERENCES items(id),

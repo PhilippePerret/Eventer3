@@ -15,16 +15,12 @@ Gros changement du mercredi 10 juin : séparation de la base principale, `data/m
 (non vérifié par Claude)
 
 ~~~sql
-   project_props {
-        TEXT item_id PK
-        INTEGER state
-        INTEGER active
-        INTEGER year
-        TEXT lister_id FK // <== CHILD !!! NOT PARENT !!! 		      TEXT brin_ids
-        TEXT perso_ids
-       	TEXT folder_path
-       	TEXT db_path
-    }
+   project_refs {
+      TEXT id UUID
+			TEXT title   
+     	TEXT folder_path
+     	TEXT db_path
+   }
 
 ~~~
 
@@ -34,8 +30,24 @@ Gros changement du mercredi 10 juin : séparation de la base principale, `data/m
 
 ### eventer.db
 
+Chaque projet d’histoire possède son propre `eventer.db` contenant TOUTES ses données *EventerX*, à commencer par ses events, ses brins, ses personnages.
+
 ```
-    listers {
+   project_meta {
+        TEXT id UUID
+        INTEGER state
+        INTEGER active
+        INTEGER year
+        TEXT lister_id FK // <== CHILD !!! NOT PARENT !!! 		      TEXT brin_ids
+        TEXT perso_ids
+       	TEXT folder_path
+       	TEXT db_path
+       	TEXT created_at
+       	TEXT updated_at
+    }
+
+
+		listers {
         INTEGER id PK
         TEXT type
         INTEGER depth -- UTILE ????

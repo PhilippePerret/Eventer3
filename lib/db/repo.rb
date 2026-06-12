@@ -6,6 +6,9 @@ require_relative '../bootstrap'
 module DB
   module Repo
 
+    # with_db(data_dir) -> main.db de l'application
+    # with_project_db(...) -> eventer.db du projet
+
     # ── Méthodes legacy (context_path) ─────────────────────────────
 
     def self.find_lister(data_dir, context_path, type: nil)
