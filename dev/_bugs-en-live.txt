@@ -1,26 +1,9 @@
-POUR REPRENDRE DEMAIN
-(ci-dessous le texte que je n'ai pas pu lui donner puisqu'on est arrivé au bout des crédits)
- On arrête, écris juste dans un fichier ce qu'on vient de faire, l'endroit où tu bloques tout et que tu réfléchis en boucle sans être capable de t'arrêter pour trouver une solution et on repartira de là, mais avec mon aide puisque TU ES INCAPABLE DE TROUVER LA SOLUTION TOI-MÊME, DONC :
-  - tu t'arrêteras À LA PREMIÈRE INTERROGATION (au premier blocage, à la première incompréhension, je ne sais pas comment tu réfléchis
-  - tu me soumettras le problème CONCRÈTEMENT (pas avec du baratin comme tu sais le faire)
-  - je trouverai une solution concrète
-  et on avancera comme ça petit à petit
-  Ce qu'il faudrait, c'est que tu sois capable de te mettre À TOI-MÊME un timeout. Genre : si au bout de 30 secondes, tu n'as pas proposé quelque chose de concret, TU T'ARRÊTES et tu expliques où tu en es.
-  ok ?
-  
-  
-  
-  
-
-
 Ci-dessous, quand j'écris CMD?, c'est que je fais Cmd+Maj+ pour faire apparaitre l'aide contextuelle,
-
--BUG VISUEL : Le titre "Liste des projets" devrait être différent des titres des projets (le mettre plus discret, comme incrusté dans la fenêtre)
 
 - destruction complète du fichier data, que se passe-t-il maintenant ?
 
 - Je suis sur le filepicker après "n" sur liste projet
-- Cmd?,
+- CMD?,
 BUG Ça devrait m'afficher l'aide du contexte "filepicker-folder-mode", ça m'affiche l'aide du contexte "liste des projets"
 - Je choisis un dossier
 - ça me marque le nom du dossier en titre et le sélectionne

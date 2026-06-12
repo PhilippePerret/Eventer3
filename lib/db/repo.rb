@@ -481,8 +481,8 @@ module DB
       end
       # Suppression projet (main.db)
       with_db(data_dir) do |db|
-        deleted = db.execute("DELETE FROM project_refs WHERE id = ?", [item_id])
-        deleted.changes > 0 ? true : nil
+        db.execute("DELETE FROM project_refs WHERE id = ?", [item_id])
+        db.changes > 0 ? true : nil
       end
     end
 

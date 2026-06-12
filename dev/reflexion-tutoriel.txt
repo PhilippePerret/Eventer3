@@ -1,0 +1,30 @@
+CE TEXTE N'EST PAS À LIRE PAR CLAUDE
+
+Tutoriel automatisé avec tests
+
+L'idée est de faire un tutoriel qui puisse s'auto tester.
+Exemple:
+
+- On lance l'application
+- On joue "/tutoriel" dans la console
+=> ça lance le tutoriel
+
+- Créez un nouveau projet
+    <== pressez "n"                 // cette commande doit être testé
+    + pressez "n" pour nouveau dossier
+    + tapez "Mon nouveau projet"
+    + tapez ↩︎
+    ==> Le nouveau projet se crée => nouvelle ligne avec le nom
+
+- « Rentrez » dans ce projet
+    <== pressez "→" {key:'ArrowRight'}
+    ==> On entre dans le projet, c'est-à-dire dans le premier évènemencier 
+    
+    Donc une étape de tuto :
+    {
+        title: "Créer un nouveau projet",
+        actions: [
+            {type: 'key', keycombo: "n", h_expected: "Le FilePicker s'ouvre", expected: 'filePicker visible'},
+            {type: 'key', keycombo: 'ArrowDown', h_expected: "Sélection du 2e élément"}
+        ]
+    }
