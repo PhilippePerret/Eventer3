@@ -488,6 +488,28 @@ module DB
       end
     end
 
+    def self.find_item_ancestors(data_dir, project_id, item_id)
+      with_project_db(data_dir, project_id) do |db|
+        ancestors = []
+        current_id = item_id
+        loop do
+          lister = db.execute(
+            "SELECT id FROM listers WHERE item_ids LIKE ? LIMIT 1",
+            ["%\"#{current_id}\"%"]
+          ).first
+          break unless lister
+          owner = db.execute(
+            "SELECT item_id FROM event_props WHERE lister_id = ? LIMIT 1",
+            [lister['id']]
+          ).first
+          break unless owner
+          ancestors.unshift(owner['item_id'])
+          current_id = owner['item_id']
+        end
+        ancestors
+      end
+    end
+
     # ── Helpers privés ──────────────────────────────────────────────
 
     def self.with_db(data_dir)

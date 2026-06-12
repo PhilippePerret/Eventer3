@@ -50,8 +50,8 @@ test('⌘+k en édition → TargetsPanel s\'ouvre avec la cible mémorisée', as
 
   await page.keyboard.press('Meta+k')
   await expect(page.locator('.targets-panel')).toBeVisible()
-  await expect(page.locator('.targets-panel__item')).toHaveCount(1)
-  await expect(page.locator('.targets-panel__item').first()).toContainText(title.trim())
+  await expect(page.locator('.floating-panel__item')).toHaveCount(1)
+  await expect(page.locator('.floating-panel__item').first()).toContainText(title.trim())
 })
 
 test('Enter dans TargetsPanel → insère [title](id) au curseur', async ({ page }) => {
@@ -120,5 +120,5 @@ test('targets persistées : rechargement → cibles toujours présentes', async 
 
   await page.keyboard.press('Meta+k')
   await expect(page.locator('.targets-panel')).toBeVisible()
-  await expect(page.locator('.targets-panel__item').first()).toContainText(title.trim())
+  await expect(page.locator('.floating-panel__item').first()).toContainText(title.trim())
 })

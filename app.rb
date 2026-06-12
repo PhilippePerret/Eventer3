@@ -70,6 +70,12 @@ get '/api/items/:id/lister' do
   JSON.generate(lister)
 end
 
+get '/api/items/:id/ancestors' do
+  content_type :json
+  ancestors = DB::Repo.find_item_ancestors(DATA_DIR, params[:project_id], params[:id])
+  JSON.generate({ ancestors: ancestors })
+end
+
 patch '/api/listers/:id' do
   payload = JSON.parse(request.body.read)
   DB::Repo.update_lister(DATA_DIR, params[:id], payload, project_id: params[:project_id])

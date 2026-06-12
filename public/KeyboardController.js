@@ -383,7 +383,11 @@ export default class KeyboardController {
   }
 
   executeLinkAction(action, targetId) {
-    Notification.show(`Action "${action}" sur ${targetId} — à implémenter`)
+    if (action === 'go') {
+      void this.activeLister.navigateToItem(targetId)
+    } else {
+      Notification.show(`Action "${action}" sur ${targetId} — à implémenter`)
+    }
   }
 
   _enterFilterSequence() {

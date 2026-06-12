@@ -79,6 +79,15 @@ export default class ListerRepository {
     if (!response.ok) raise(`Impossible de supprimer l'item ${item.id}`)
   }
 
+  static async fetchAncestors(projectId, itemId) {
+    const response = await fetch(
+      `/api/items/${itemId}/ancestors?project_id=${projectId}`,
+      { cache: 'no-store' }
+    )
+    const data = await response.json()
+    return data.ancestors ?? []
+  }
+
   static async createLister(fields) {
     const response = await fetch('/api/listers', {
       method: 'POST',

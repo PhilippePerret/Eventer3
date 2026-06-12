@@ -142,6 +142,27 @@ export default class EventLister extends Lister {
     return super.enterSelectedItem()
   }
 
+  async navigateToItem(targetId) {
+    const projectId = this.project_id ?? this.parentItem?.id
+    const ancestors = await ListerRepository.fetchAncestors(projectId, targetId)
+
+    const rootLister = this._getRootEventLister()
+    rootLister.render()
+
+    for (const ancestorId of ancestors) {
+      const lister = this.keyboardController.activeLister
+      const idx = lister.items.findIndex(item => item.id === ancestorId)
+      if (idx >= 0) {
+        lister.selectItemAt(idx)
+        await lister.enterSelectedItem()
+      }
+    }
+
+    const finalLister = this.keyboardController.activeLister
+    const targetIdx = finalLister.items.findIndex(item => item.id === targetId)
+    if (targetIdx >= 0) finalLister.selectItemAt(targetIdx)
+  }
+
   _getRootEventLister() {
     let lister = this
     while (lister.parentItem && lister.parentItem.parentLister.depth > 0) {
