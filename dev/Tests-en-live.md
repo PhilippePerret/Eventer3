@@ -10,7 +10,7 @@
 
   => s’assurer qu’un nouveau main.db est créé
 
-  ++ 
+  ++ un projet modèle
 
 ## Depuis le lancement de l’application
 
@@ -32,7 +32,9 @@
 
   => il disparait
 
+  ++ mais le dossier existe encore, avec eventer.db dedans.
+
 ### Ouvrir un projet
 
 - « n » => filepicker s’ouvre
-- choisir le dossier qu’on vient de créer et retirer
+- choisir le dossier qu’on vient de créer + ↩︎
