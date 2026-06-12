@@ -158,6 +158,15 @@ get '/api/fs' do
   JSON.generate(path: path, entries: entries)
 end
 
+delete '/api/fs' do
+  path = params[:path]
+  halt 422 unless path && !path.strip.empty?
+  halt 422 unless File.basename(path) == 'eventer.db'
+  File.delete(path) if File.exist?(path)
+  content_type :json
+  JSON.generate(ok: true)
+end
+
 get '/api/fs/exists' do
   path = params[:path]
   halt 422 unless path && !path.strip.empty?

@@ -54,3 +54,5 @@ Pareil pour les autres, ça repart chaque fois du title alors que les propriét�
 
 
 l'id du projet n'est plus éditable, c'est un UUID fixe maintenant => corriger les tests
+
+

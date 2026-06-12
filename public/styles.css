@@ -1,6 +1,8 @@
 /* ─── Variables ──────────────────────────────────────────────── */
 
 :root {
+  --dialog-font-size: 15px;
+  --dialog-btn-font-size: 15px;
   --bg: #f3f1eb;
   --text: #2f2d29;
   --muted: #938c81;
@@ -1570,36 +1572,81 @@ body:has(#filter-input:not(.hidden)) #main-panel {
 }
 
 .confirm-dialog {
-  width: 420px;
+  width: 520px;
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.18);
   border-radius: 12px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(0, 0, 0, 0.04);
-  padding: 24px 28px 20px;
+  padding: 32px 36px 28px;
   font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-  font-size: 14px;
+  font-size: var(--dialog-font-size);
   color: #1d1d1f;
 }
 
 .confirm-dialog__message {
-  margin: 0 0 20px;
-  line-height: 1.5;
+  margin: 0 0 28px;
+  line-height: 1.6;
+  font-size: var(--dialog-font-size);
 }
 
 .confirm-dialog__footer {
   display: flex;
-  justify-content: flex-end;
-  font-size: 13px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.confirm-dialog__btn-group {
+  display: flex;
+  gap: 10px;
+}
+
+.confirm-dialog__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 20px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #f5f5f5;
+  font-family: inherit;
+  font-size: var(--dialog-btn-font-size);
+  color: #333;
+  cursor: pointer;
+}
+
+.confirm-dialog__btn--primary {
+  background: #2a9d4e;
+  border-color: #2a9d4e;
+  color: #fff;
+  font-weight: 500;
+}
+
+.confirm-dialog__btn--secondary {
+  background: #fff0f0;
+  border-color: #e0b0b0;
+  color: #c00;
+}
+
+.confirm-dialog__btn--cancel {
+  background: #f5f5f5;
+  border-color: #ccc;
   color: #555;
 }
 
-.confirm-dialog__footer kbd {
+
+.confirm-dialog__btn kbd {
   font-family: inherit;
-  background: #f0f0f0;
-  border: 1px solid #ccc;
+  background: rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.15);
   border-radius: 4px;
   padding: 1px 5px;
-  font-size: 12px;
+  font-size: 11px;
+}
+
+.confirm-dialog__btn--primary kbd {
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.3);
 }
 
 /* ── ContextualHelp ───────────────────────────────────────────────── */

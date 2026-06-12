@@ -481,8 +481,10 @@ module DB
       end
       # Suppression projet (main.db)
       with_db(data_dir) do |db|
+        row = db.execute("SELECT 1 FROM project_refs WHERE id = ? LIMIT 1", [item_id]).first
+        next nil unless row
         db.execute("DELETE FROM project_refs WHERE id = ?", [item_id])
-        db.changes > 0 ? true : nil
+        true
       end
     end
 

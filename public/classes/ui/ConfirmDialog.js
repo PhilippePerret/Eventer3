@@ -1,22 +1,21 @@
 export default class ConfirmDialog {
 
-  static open({ message, keyboardController }) {
+  static open({ message, keyboardController, buttons = null }) {
     return new Promise((resolve) => {
-      const dialog = new ConfirmDialog({
-        message,
-        keyboardController,
-        onConfirm: () => resolve(true),
-        onCancel:  () => resolve(false),
-      })
+      const resolvedButtons = buttons ?? [
+        { label: 'Confirmer', key: 'Enter',  shortcut: '↩︎', value: true  },
+        { label: 'Annuler',   key: 'Escape', shortcut: '␛',  value: false },
+      ]
+      const dialog = new ConfirmDialog({ message, keyboardController, buttons: resolvedButtons, onChoose: resolve })
       dialog._init()
     })
   }
 
-  constructor({ message, keyboardController, onConfirm, onCancel }) {
+  constructor({ message, keyboardController, buttons, onChoose }) {
     this.message            = message
     this.keyboardController = keyboardController
-    this._onConfirm         = onConfirm
-    this._onCancel          = onCancel
+    this.buttons            = buttons
+    this._onChoose          = onChoose
   }
 
   _init() {
@@ -40,23 +39,46 @@ export default class ConfirmDialog {
 
     const footer = document.createElement('div')
     footer.className = 'confirm-dialog__footer'
-    footer.innerHTML = '<kbd>↩︎</kbd> Confirmer &nbsp;&nbsp; <kbd>␛</kbd> Annuler'
 
-    this._el.appendChild(text)
-    this._el.appendChild(footer)
+    const cancelBtn = this.buttons.find(b => b.key === 'Escape')
+    const otherBtns = this.buttons.filter(b => b.key !== 'Escape')
+
+    if (cancelBtn) footer.appendChild(this._makeBtn(cancelBtn, 'cancel'))
+
+    const group = document.createElement('div')
+    group.className = 'confirm-dialog__btn-group'
+    otherBtns.forEach((b, i) => {
+      const variant = i === otherBtns.length - 1 ? 'primary' : 'secondary'
+      group.appendChild(this._makeBtn(b, variant))
+    })
+    footer.appendChild(group)
+
+    this._el.append(text, footer)
     this._overlay.appendChild(this._el)
     document.body.appendChild(this._overlay)
   }
 
+  _makeBtn(b, variant) {
+    const btn = document.createElement('button')
+    btn.type      = 'button'
+    btn.className = `confirm-dialog__btn confirm-dialog__btn--${variant}`
+    const kbd = document.createElement('kbd')
+    kbd.textContent = b.shortcut
+    btn.appendChild(kbd)
+    btn.appendChild(document.createTextNode(' ' + b.label))
+    btn.addEventListener('click', () => this._choose(b.value))
+    return btn
+  }
+
   _handleKey(event) {
     event.preventDefault()
-    if (event.key === 'Enter') {
-      this._close()
-      this._onConfirm?.()
-    } else if (event.key === 'Escape') {
-      this._close()
-      this._onCancel?.()
-    }
+    const btn = this.buttons.find(b => b.key === event.key)
+    if (btn) this._choose(btn.value)
+  }
+
+  _choose(value) {
+    this._close()
+    this._onChoose?.(value)
   }
 
   _close() {

@@ -100,25 +100,33 @@ export default class ProjectLister extends Lister {
     const checkResp = await fetch(`/api/fs/exists?path=${encodeURIComponent(folder_path + '/eventer.db')}`, { cache: 'no-store' })
     const { exists } = await checkResp.json()
     if (exists) {
-      const confirmed = await ConfirmDialog.open({
-        message: "Il existe déjà un fichier eventer.db dans ce dossier. S'agit-il de la base de données d'un projet existant ?",
+      const result = await ConfirmDialog.open({
+        message: 'Dois-je utiliser la base de données eventer.db de ce dossier ?',
         keyboardController: this.keyboardController,
+        buttons: [
+          { label: 'Annuler',          key: 'Escape', shortcut: '␛',  value: false     },
+          { label: 'Non, la détruire', key: 'Delete', shortcut: '⌦',  value: 'destroy' },
+          { label: 'Oui',              key: 'Enter',  shortcut: '↩︎', value: 'use'     },
+        ],
       })
-      if (!confirmed) return
-
-      const importResp = await fetch('/api/projects/open', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ folder_path }),
-      })
-      if (!importResp.ok) return
-      const imported = await importResp.json()
-      await this.loadDefinition()
-      await this.loadItems()
-      const newIdx = this.items.findIndex(i => i.id === imported.id)
-      if (newIdx >= 0) this.selectedIndex = newIdx
-      this.render()
-      return
+      if (!result) return
+      if (result === 'use') {
+        const importResp = await fetch('/api/projects/open', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ folder_path }),
+        })
+        if (!importResp.ok) return
+        const imported = await importResp.json()
+        await this.loadDefinition()
+        await this.loadItems()
+        const newIdx = this.items.findIndex(i => i.id === imported.id)
+        if (newIdx >= 0) this.selectedIndex = newIdx
+        this.render()
+        return
+      }
+      // 'destroy' → supprimer l'eventer.db existant, puis créer un nouveau projet
+      await fetch(`/api/fs?path=${encodeURIComponent(folder_path + '/eventer.db')}`, { method: 'DELETE' })
     }
 
     this._pendingFolderPath = folder_path
