@@ -113,7 +113,7 @@ export default class EventLister extends Lister {
     void this._loadAndRenderPersoMarks()
     void this._applyEventStyles()
     if (this.keyboardController) {
-      this.keyboardController.targets = this.link_targets ? [...this.link_targets] : []
+      this.keyboardController.targetsManager.load(this.link_targets, this.parentItem?.id)
     }
     return result
   }

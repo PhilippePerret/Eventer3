@@ -167,7 +167,7 @@ export default class ContextualHelp {
     footer.appendChild(applyHint)
 
     const closeBtn = document.createElement('div')
-    closeBtn.className   = 'contextual-help__close-btn'
+    closeBtn.className   = 'panel-footer-key contextual-help__close-btn'
     closeBtn.textContent = 'Fermer ⌘ + ↩︎'
     closeBtn.addEventListener('click', () => this._close())
     footer.appendChild(closeBtn)

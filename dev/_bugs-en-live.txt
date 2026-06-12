@@ -36,4 +36,4 @@ ATTENDU : je devrais passer au menu suivant
 BUG : je dois TABer 2 fois pour l'atteindre
 Pareil pour les autres, ça repart chaque fois du title alors que les propriétés devraient tourner en boucle avec TAB.
 
-On doit vérifier la gestion des cibles.
+Route des liens vers les cibles mauvaises

@@ -7,6 +7,8 @@ import ListerRepository from './classes/repositories/ListerRepository.js'
 import Brin from './classes/models/Brin.js'
 import Perso from './classes/models/Perso.js'
 import TargetsPanel from './classes/ui/TargetsPanel.js'
+import TargetsManager from './classes/ui/TargetsManager.js'
+import LinkOpenPopup from './classes/ui/LinkOpenPopup.js'
 
 export default class KeyboardController {
 
@@ -18,7 +20,7 @@ export default class KeyboardController {
     this.modeStack = []
     this.toolsPanel = new ToolsPanel()
     this._panelOffsets = new WeakMap()
-    this.targets = []
+    this.targetsManager = new TargetsManager()
   }
 
   register(lister) {
@@ -126,6 +128,10 @@ export default class KeyboardController {
           else bar.querySelector('.panel-search')?.focus()
           return
         }
+      } else {
+        this._cycleLink(!event.shiftKey)
+        event.preventDefault()
+        return
       }
     }
 
@@ -189,6 +195,11 @@ export default class KeyboardController {
         }
         return
 
+      case 'o':
+        this._openActiveLink()
+        event.preventDefault()
+        return
+
       case 'p': case 'P':
         if (this.activeLister.constructor.name === 'PersoLister') {
           this.activeLister.close()
@@ -221,6 +232,7 @@ export default class KeyboardController {
         return
 
       case 'ArrowDown':
+        this._clearActiveLink()
         if (event.metaKey) {
           this.activeLister.moveSelectedItemDown()
         } else if (event.altKey && this.activeLister.backgroundLister) {
@@ -233,6 +245,7 @@ export default class KeyboardController {
         return
 
       case 'ArrowUp':
+        this._clearActiveLink()
         if (event.metaKey) {
           this.activeLister.moveSelectedItemUp()
         } else if (event.altKey && this.activeLister.backgroundLister) {
@@ -315,16 +328,62 @@ export default class KeyboardController {
     if (!lister) return
     const item = lister.items[lister.selectedIndex]
     if (!item) return
-    if (this.targets.some(t => t.id === item.id)) {
-      Notification.show(`Déjà dans les cibles : ${item.title}`)
+    this.targetsManager.add(item)
+  }
+
+  _cycleLink(forward = true) {
+    const lister = this.activeLister
+    if (!lister) return
+    const selectedEl = lister.domItems[lister.selectedIndex]
+    if (!selectedEl) return
+    const links = [...selectedEl.querySelectorAll('.item-link')]
+    if (links.length === 0) {
+      Notification.show('Le titre de cet élément ne contient aucun lien')
       return
     }
-    this.targets.push({ id: item.id, title: item.title })
-    Notification.show(`Cible mémorisée : ${item.title}`)
-    const projectId = lister.parentItem?.id
-    if (projectId) {
-      ListerRepository.saveItem({ id: projectId }, { link_targets: this.targets }).catch(console.error)
+    let nextIdx
+    if (this._activeLinkEl) {
+      const idx = links.indexOf(this._activeLinkEl)
+      this._activeLinkEl.classList.remove('item-link--active')
+      if (forward) {
+        nextIdx = (idx >= 0 ? idx + 1 : 0) % links.length
+      } else {
+        nextIdx = (idx > 0 ? idx - 1 : links.length - 1)
+      }
+    } else {
+      nextIdx = forward ? 0 : links.length - 1
     }
+    this._activeLinkEl = links[nextIdx]
+    this._activeLinkEl.classList.add('item-link--active')
+  }
+
+  _clearActiveLink() {
+    if (this._activeLinkEl) {
+      this._activeLinkEl.classList.remove('item-link--active')
+      this._activeLinkEl = null
+    }
+  }
+
+  _openActiveLink() {
+    if (!this._activeLinkEl) {
+      const lister = this.activeLister
+      const selectedEl = lister?.domItems[lister?.selectedIndex]
+      const hasLinks = (selectedEl?.querySelectorAll('.item-link').length ?? 0) > 0
+      Notification.show(hasLinks
+        ? 'Aucun lien sélectionné — utilisez TAB pour naviguer entre les liens'
+        : 'Le titre de cet élément ne contient aucun lien'
+      )
+      return
+    }
+    LinkOpenPopup.open({
+      targetId:          this._activeLinkEl.dataset.id,
+      targetTitle:       this._activeLinkEl.textContent,
+      keyboardController: this,
+    })
+  }
+
+  executeLinkAction(action, targetId) {
+    Notification.show(`Action "${action}" sur ${targetId} — à implémenter`)
   }
 
   _enterFilterSequence() {

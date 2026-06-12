@@ -3,6 +3,8 @@
 :root {
   --dialog-font-size: 15px;
   --dialog-btn-font-size: 15px;
+  --panel-font-size: 15px;
+  --panel-padding-x: 18px;
   --bg: #f3f1eb;
   --text: #2f2d29;
   --muted: #938c81;
@@ -974,9 +976,9 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 20px;
+  padding: 10px var(--panel-padding-x);
   cursor: default;
-  font-size: 15px;
+  font-size: var(--panel-font-size);
 }
 
 .tools-panel__item.selected {
@@ -998,30 +1000,118 @@ body {
   opacity: 0.7;
 }
 
-.targets-panel {
+/* ─── Item links ─────────────────────────────────────────────────────────── */
+
+.item-link {
+  color: #3478f6;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+.event-item.selected .item-link {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.item-link--active {
+  background-color: #3478f6;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+.event-item.selected .item-link--active {
+  background-color: #fff;
+  color: #3478f6;
+}
+
+/* ─── Floating panel ─────────────────────────────────────────────────────── */
+
+.floating-panel {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 300;
-  min-width: 320px;
-  background: var(--bg, #faf7f2);
-  border: 1px solid var(--line, #ccc);
-  border-radius: 8px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-  padding: 8px 0;
+  max-height: 70vh;
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,0,0,0.04);
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  color: #1d1d1f;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.targets-panel__item {
-  padding: 10px 20px;
+.floating-panel__title {
+  padding: 14px var(--panel-padding-x) 12px;
+  font-weight: 700;
+  font-size: var(--panel-font-size);
+  color: #1d1d1f;
+  border-bottom: 1px solid #eee;
+  flex-shrink: 0;
+}
+
+.floating-panel__separator {
+  height: 1px;
+  background: #eee;
+  flex-shrink: 0;
+}
+
+.floating-panel__zone {
+  min-height: 120px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.floating-panel__item {
+  padding: 8px var(--panel-padding-x);
   cursor: default;
-  font-size: 15px;
+  font-size: var(--panel-font-size);
 }
 
-.targets-panel__item.selected {
-  background: var(--selection-bg, #3478f6);
-  color: white;
+.floating-panel__item.selected {
+  background: var(--selected-bg, #3478f6);
+  color: #fff;
 }
+
+.floating-panel__footer {
+  padding: 10px 14px;
+  border-top: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.floating-panel__pin-label {
+  padding: 6px var(--panel-padding-x) 2px;
+  font-size: 18px;
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}
+
+.panel-footer-key {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #444;
+  cursor: default;
+  user-select: none;
+}
+
+/* ─── Per-panel overrides ────────────────────────────────────────────────── */
+
+.targets-panel  { z-index: 300; width: 380px; }
+.link-open-popup { z-index: 400; width: 340px; }
 
 #shortcuts-panel {
   position: fixed;
@@ -1692,9 +1782,9 @@ body:has(#filter-input:not(.hidden)) #main-panel {
 }
 
 .contextual-help__title {
-  padding: 14px 18px 12px;
+  padding: 14px var(--panel-padding-x) 12px;
   font-weight: 700;
-  font-size: 15px;
+  font-size: var(--panel-font-size);
   color: #1d1d1f;
   border-bottom: 1px solid #eee;
   flex-shrink: 0;
@@ -1779,13 +1869,5 @@ body:has(#filter-input:not(.hidden)) #main-panel {
 .contextual-help__close-btn {
   background: #34c759;
   color: #fff;
-  border-radius: 6px;
-  padding: 5px 12px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: default;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  user-select: none;
+  border: none;
 }
