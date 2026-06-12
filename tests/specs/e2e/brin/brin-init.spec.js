@@ -28,7 +28,7 @@ test("b1 'Intrigue principale' est persisté dans la base de données", async ({
   await expect(page.locator('#brin-panel')).toBeVisible()
   await page.waitForLoadState('networkidle')
 
-  const eventsListerResp = await page.request.get('/api/items/project-a/lister')
+  const eventsListerResp = await page.request.get('/api/items/00000000-0000-0000-0000-000000000001/lister')
   expect(eventsListerResp.ok()).toBeTruthy()
   const eventsLister = await eventsListerResp.json()
   const brinsListerId = eventsLister.brins_lister_id

@@ -42,11 +42,11 @@ test("→ sur un projet sans lister : crée l'éditeur, Enter confirme, n crée 
   await expect(page.locator('.event-item').nth(0)).toContainText('Mon premier event')
 
   console.log('-> vérification : données persistées sur le serveur')
-  const listerResp = await page.request.get('/api/items/project-b/lister')
+  const listerResp = await page.request.get('/api/items/00000000-0000-0000-0000-000000000002/lister')
   expect(listerResp.ok()).toBeTruthy()
   const lister = await listerResp.json()
   expect(lister.item_ids).toHaveLength(1)
-  const itemsResp = await page.request.get(`/api/listers/${lister.id}/items?project_id=project-b`)
+  const itemsResp = await page.request.get(`/api/listers/${lister.id}/items?project_id=00000000-0000-0000-0000-000000000002`)
   expect(itemsResp.ok()).toBeTruthy()
   const items = await itemsResp.json()
   expect(items[lister.item_ids[0]].title).toBe('Mon premier event')

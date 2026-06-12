@@ -10,8 +10,6 @@ test('la liste des projets possède les bonnes classes CSS', async ({ page }) =>
   const listing = page.locator('#main-panel.project-list').first()
   const item = page.locator('.project-item')
   const title = page.locator('.project-item__title')
-  const pid = page.locator('.project-item__id')
-
   console.log('\n=== TEST CLASSES CSS PROJECT LISTING ===')
 
   console.log('-> vérification #main-panel.project-list')
@@ -25,9 +23,6 @@ test('la liste des projets possède les bonnes classes CSS', async ({ page }) =>
 
   console.log('-> vérification .project-item__title')
   await expect(title.nth(0)).toContainText('Projet A')
-
-  console.log('-> vérification .project-item__id')
-  await expect(pid.nth(0)).toContainText('project-a')
 
   console.log('\n=== FIN TEST CLASSES CSS PROJECT LISTING ===\n')
 

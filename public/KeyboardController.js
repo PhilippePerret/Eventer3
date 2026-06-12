@@ -398,15 +398,15 @@ export default class KeyboardController {
 
   async _enterFilterByType(ItemClass) {
     const singular = ItemClass.name.toLowerCase()
-    const ids      = this.activeLister?.parentItem?.[`${singular}_ids`] ?? []
     const tn       = ItemClass.thingName
+    const panel    = document.getElementById('filter-selector-panel')
+    if (!panel) return
+    const data = await ListerRepository.loadItems({ id: `${this.activeLister.parentItem.id}-${singular}s` })
+    const ids  = Object.keys(data)
     if (ids.length === 0) {
       Notification.show(`Aucun ${tn.thing} à filtrer pour le moment`)
       return
     }
-    const panel = document.getElementById('filter-selector-panel')
-    if (!panel) return
-    const data = await ListerRepository.loadItems({ id: `${this.activeLister.parentItem.id}-${singular}s` })
     this._openFilterSelector(panel, ids, data, `Filtrer par ${tn.thing}`, `${singular}Ids`)
   }
 

@@ -15,8 +15,7 @@ async function createProject(page, expect) {
   await createAndSelectFolderInPicker(page, expect, folderName)
   await page.waitForLoadState('networkidle')
 
-  const idText = await page.locator('.project-item').nth(1).locator('.project-item__id').textContent()
-  return idText.trim()
+  return await page.locator('.project-item').nth(1).getAttribute('data-id')
 }
 
 test('un nouveau projet sauvegardé a un évènemencier avec un event "Acte I"', async ({ page }) => {

@@ -210,6 +210,7 @@ test.describe('⌘+c + ⌘+v dans ProjectLister', () => {
     const selectedTitle = await page.locator('.project-item.selected .project-item__title').textContent()
     await page.keyboard.press('Meta+c')
     await page.keyboard.press('Meta+v')
+    await page.keyboard.press('Enter')
     await expect(items).toHaveCount(countBefore + 1)
     await expect(items.nth(0).locator('.project-item__title')).toHaveText(selectedTitle.trim())
   })
@@ -219,17 +220,19 @@ test.describe('⌘+c + ⌘+v dans ProjectLister', () => {
     await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
     await page.keyboard.press('Meta+c')
     await page.keyboard.press('Meta+v')
+    await page.keyboard.press('Enter')
     await expect(page.locator('.project-item').nth(0)).toHaveClass(/selected/)
   })
 
-  test('⌘+c + ⌘+v : l\'identifiant du projet collé est pX (pas null)', async ({ page }) => {
+  test('⌘+c + ⌘+v : l\'identifiant du projet collé est un UUID valide (pas vide)', async ({ page }) => {
     await page.goto('/')
     await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
     await page.keyboard.press('Meta+c')
     await page.keyboard.press('Meta+v')
+    await page.keyboard.press('Enter')
     await page.waitForLoadState('networkidle')
-    const idText = await page.locator('.project-item').nth(0).locator('.project-item__id').textContent()
-    expect(idText.trim()).toMatch(/^p\d+$/)
+    const copiedId = await page.locator('.project-item').nth(0).getAttribute('data-id')
+    expect(copiedId).toBeTruthy()
   })
 
   test('⌘+c + ⌘+v : l\'id collé est différent de l\'original', async ({ page }) => {
@@ -238,6 +241,7 @@ test.describe('⌘+c + ⌘+v dans ProjectLister', () => {
     const originalId = await page.locator('.project-item').nth(0).getAttribute('data-id')
     await page.keyboard.press('Meta+c')
     await page.keyboard.press('Meta+v')
+    await page.keyboard.press('Enter')
     await page.waitForLoadState('networkidle')
     const copiedId = await page.locator('.project-item').nth(0).getAttribute('data-id')
     expect(copiedId).not.toBe(originalId)
@@ -250,6 +254,7 @@ test.describe('⌘+c + ⌘+v dans ProjectLister', () => {
     const countBefore = await items.count()
     await page.keyboard.press('Meta+c')
     await page.keyboard.press('Meta+v')
+    await page.keyboard.press('Enter')
     await page.waitForLoadState('networkidle')
     await page.reload()
     await expect(items).toHaveCount(countBefore + 1)

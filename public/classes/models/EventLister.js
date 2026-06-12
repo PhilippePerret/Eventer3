@@ -81,12 +81,13 @@ export default class EventLister extends Lister {
   }
 
   async _createEventsForGap(item, gap) {
+    const projectId = this.project_id
     let currentItemId = item.id
     let lastCreated = null
     for (let i = 1; i <= gap; i++) {
-      const listerData = await ListerRepository.createLister({ type: 'events', parent_item_id: currentItemId })
+      const listerData = await ListerRepository.createLister({ type: 'events', parent_item_id: currentItemId, project_id: projectId })
       if (i === 1) item.lister_id = listerData.id
-      const created = await ListerRepository.createItem(listerData.id, { title: `${item.title} +${i}` })
+      const created = await ListerRepository.createItem(listerData.id, { title: `${item.title} +${i}` }, { project_id: projectId })
       currentItemId = created.id
       lastCreated = created
     }
@@ -157,7 +158,7 @@ export default class EventLister extends Lister {
     const results = []
     for (const item of lister.items) {
       if (item.lister_id != null) {
-        const childLister = new EventLister({ id: item.lister_id, parentItem: item })
+        const childLister = new EventLister({ id: item.lister_id, parentItem: item, project_id: this.project_id })
         childLister.depth = lister.depth + 1
         await childLister.loadDefinition()
         await childLister.loadItems()

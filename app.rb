@@ -110,6 +110,14 @@ delete '/api/listers/:lister_id/items/:item_id' do
   JSON.generate(ok: true)
 end
 
+post '/api/projects/:id/duplicate' do
+  result = DB::Repo.duplicate_project(DATA_DIR, params[:id])
+  halt 422 unless result
+  content_type :json
+  status 201
+  JSON.generate(result)
+end
+
 post '/api/listers/:id/items' do
   payload = JSON.parse(request.body.read)
   item = DB::Repo.create_item(DATA_DIR, params[:id], payload, project_id: params[:project_id])

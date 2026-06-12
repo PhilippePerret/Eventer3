@@ -44,7 +44,7 @@ test('Space persiste la coche après rechargement', async ({ page }) => {
   await page.waitForLoadState('networkidle')
 
   // Vérification API directe avant rechargement
-  const itemsResp = await page.request.get('/api/listers/2/items?project_id=project-a')
+  const itemsResp = await page.request.get('/api/listers/2/items?project_id=00000000-0000-0000-0000-000000000001')
   const itemsData = await itemsResp.json()
   const firstEventId = Object.keys(itemsData)[0]
   const checkedValue = itemsData[firstEventId]?.checked

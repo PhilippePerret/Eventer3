@@ -127,10 +127,8 @@ module DB
               [JSON.generate(fields['item_ids']), now, id])
           end
         end
-        with_db(data_dir) do |db|
-          db.execute("UPDATE listers SET item_ids = ?, updated_at = ? WHERE id = ?",
-            [JSON.generate(fields['item_ids']), now, id])
-        end
+        # ProjectLister ordering not stored in main.db (no listers table there)
+        return nil
       end
     end
 
@@ -148,11 +146,16 @@ module DB
         if meta_row
           db.execute("UPDATE project_meta SET lister_id = ? WHERE id = ?", [lid, parent_item_id])
         else
-          ep_row = db.execute("SELECT 1 FROM event_props WHERE item_id = ? LIMIT 1", [parent_item_id]).first
-          if ep_row
-            db.execute("UPDATE event_props SET lister_id = ? WHERE item_id = ?", [lid, parent_item_id])
+          item_row = db.execute("SELECT 1 FROM items WHERE id = ? LIMIT 1", [parent_item_id]).first
+          if item_row
+            ep_row = db.execute("SELECT 1 FROM event_props WHERE item_id = ? LIMIT 1", [parent_item_id]).first
+            if ep_row
+              db.execute("UPDATE event_props SET lister_id = ? WHERE item_id = ?", [lid, parent_item_id])
+            else
+              db.execute("INSERT INTO event_props (item_id, lister_id) VALUES (?, ?)", [parent_item_id, lid])
+            end
           else
-            db.execute("INSERT INTO event_props (item_id, lister_id) VALUES (?, ?)", [parent_item_id, lid])
+            db.execute("INSERT INTO project_meta (id, lister_id) VALUES (?, ?)", [parent_item_id, lid])
           end
         end
         lid
@@ -292,7 +295,7 @@ module DB
           _update_props(db, item_id, fields)
         end
       end
-      # Project item (main.db) — title/id changes
+      # Project item (main.db) — title/id/db_path/folder_path changes
       with_db(data_dir) do |db|
         new_id = fields['id']
         if new_id && new_id != item_id
@@ -301,6 +304,16 @@ module DB
         end
         if fields.key?('title')
           db.execute("UPDATE project_refs SET title = ? WHERE id = ?", [fields['title'], item_id])
+        end
+        path_sets, path_vals = [], []
+        if fields.key?('db_path') && fields['db_path'].to_s.strip != ''
+          path_sets << 'db_path = ?'; path_vals << fields['db_path']
+        end
+        if fields.key?('folder_path') && fields['folder_path'].to_s.strip != ''
+          path_sets << 'folder_path = ?'; path_vals << fields['folder_path']
+        end
+        unless path_sets.empty?
+          db.execute("UPDATE project_refs SET #{path_sets.join(', ')} WHERE id = ?", path_vals + [item_id])
         end
       end
       # Champs projet → project_meta dans eventer.db
@@ -380,6 +393,40 @@ module DB
           [new_id, fields['title'], fields['db_path'], fields['folder_path']]
         )
         { 'id' => new_id, 'title' => fields['title'] }
+      end
+    end
+
+    def self.duplicate_project(data_dir, source_id)
+      require 'fileutils'
+      with_db(data_dir) do |db|
+        row = db.execute("SELECT * FROM project_refs WHERE id = ? LIMIT 1", [source_id]).first
+        next nil unless row
+        source_title   = row['title']
+        source_db_path = row['db_path']
+        source_folder  = row['folder_path']
+        if source_folder.nil? || source_folder.strip.empty?
+          full_db       = source_db_path.start_with?('/') ? source_db_path : File.join(data_dir, source_db_path)
+          source_folder = File.dirname(full_db)
+        end
+        parent_dir   = File.dirname(source_folder)
+        new_basename = "#{File.basename(source_folder)}-copie"
+        new_folder   = File.join(parent_dir, new_basename)
+        i = 2
+        base = new_folder
+        while File.exist?(new_folder)
+          new_folder = "#{base}-#{i}"
+          i += 1
+        end
+        FileUtils.cp_r(source_folder, new_folder)
+        new_id      = SecureRandom.uuid
+        new_db_full = File.join(new_folder, 'eventer.db')
+        stored_db   = new_db_full.start_with?(data_dir + '/') ? new_db_full.sub("#{data_dir}/", '') : new_db_full
+        stored_fp   = new_folder.start_with?(data_dir + '/') ? new_folder.sub("#{data_dir}/", '') : new_folder
+        db.execute(
+          "INSERT INTO project_refs (id, title, db_path, folder_path) VALUES (?, ?, ?, ?)",
+          [new_id, source_title, stored_db, stored_fp]
+        )
+        { 'id' => new_id, 'title' => source_title, 'folder_path' => new_folder, 'db_path' => new_db_full }
       end
     end
 

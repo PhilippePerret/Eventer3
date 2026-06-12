@@ -30,7 +30,7 @@ Gros changement du mercredi 10 juin : séparation de la base principale, `data/m
 
 ### eventer.db
 
-Chaque projet d’histoire possède son propre `eventer.db` contenant TOUTES ses données *EventerX*, à commencer par ses events, ses brins, ses personnages.
+Chaque projet d’histoire possède son propre `eventer.db` contenant TOUTES ses données *EventerX*, à commencer par ses events, ses brins, ses personnages ou ses métadonnées.
 
 ```
    project_meta {

@@ -8,7 +8,6 @@ export default class BrinLister extends Lister {
 
   static async open(eventLister) {
     const brinLister = new BrinLister({ eventLister, keyboardController: eventLister.keyboardController })
-    console.log('[BrinLister.open] brins_lister_id:', eventLister.brins_lister_id, 'items:', eventLister.items?.length, 'project_id:', eventLister.project_id)
     if (!brinLister.id) {
       await BrinLister.init(eventLister)
       brinLister.id = eventLister.brins_lister_id

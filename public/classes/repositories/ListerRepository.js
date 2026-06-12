@@ -8,8 +8,13 @@ export default class ListerRepository {
 
   static async loadDefinition(lister) {
     const response = await fetch(`/api/listers/${lister.id}${ListerRepository._projectQuery(lister)}`, { cache: 'no-store' })
-    if (!response.ok) return
+    if (!response.ok) {
+      if (response.status === 404) lister.__isVirtual = true
+      return
+    }
     const data = await response.json()
+    if (!data) return
+    if (data.id != null)        lister.id                = data.id
     if (data.item_ids)          lister.item_ids          = data.item_ids
     if (data.brins_lister_id)   lister.brins_lister_id   = data.brins_lister_id
     if (data.persos_lister_id)  lister.persos_lister_id  = data.persos_lister_id

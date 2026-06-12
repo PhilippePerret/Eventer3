@@ -9,6 +9,7 @@ import LOG from '../../system/LOG.js'
 import StatusBar from '../ui/StatusBar.js'
 import FilePicker from '../ui/FilePicker.js'
 import ConfirmDialog from '../ui/ConfirmDialog.js'
+import Notification from '../ui/Notification.js'
 import ContextualHelp from '../ui/ContextualHelp.js'
 
 export default class ProjectLister extends Lister {
@@ -40,6 +41,56 @@ export default class ProjectLister extends Lister {
 
   _childListerData(item) {
     return { id: item.id, parentItem: item, project_id: item.id }
+  }
+
+  copySelectedItem() {
+    const item = this.items[this.selectedIndex]
+    if (!item) return
+    const data = item.toClipboardData()
+    data.id = item.id
+    this.keyboardController.clipboard = { minClass: this.itemClass.minClass, data }
+  }
+
+  async pasteItem() {
+    const clipboard = this.keyboardController?.clipboard
+    if (!clipboard) return
+    if (clipboard.minClass !== this.itemClass.minClass) return
+    if (clipboard.isCut) return super.pasteItem()
+
+    const confirmed = await ConfirmDialog.open({
+      message: `Voulez-vous vraiment dupliquer le projet « ${clipboard.data.title} » ?`,
+      keyboardController: this.keyboardController,
+    })
+    if (!confirmed) return
+
+    const response = await fetch(`/api/projects/${clipboard.data.id}/duplicate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    if (!response.ok) {
+      Notification.show('Impossible de dupliquer le projet')
+      return
+    }
+    const newProject = await response.json()
+
+    const insertionIndex = this.selectedIndex
+    const item = new Project({ id: newProject.id, title: newProject.title, type: 'roman', folder_path: newProject.folder_path, db_path: newProject.db_path })
+    const itemElement = item.createElement()
+    if (typeof item.render === 'function') item.render(itemElement)
+    const currentEl = this.domItems[insertionIndex]
+    if (currentEl) {
+      currentEl.classList.remove('selected')
+      currentEl.before(itemElement)
+    } else {
+      this.domContainer.appendChild(itemElement)
+    }
+    const finalEl = this._finalizeNewItemElement(item, itemElement, insertionIndex)
+    item.parentLister = this
+    this.items.splice(insertionIndex, 0, item)
+    this.item_ids.splice(insertionIndex, 0, item.id)
+    this.domItems.splice(insertionIndex, 0, finalEl)
+    this.selectedIndex = insertionIndex
+    finalEl.classList.add('selected')
   }
 
   async createNewItemAfter() {
@@ -113,12 +164,12 @@ export default class ProjectLister extends Lister {
       type:  'brin',
       badge: Brin.generateBadge('Intrigue principale'),
       color: Brin.colorFor(1)
-    })
+    }, { project_id: item.id })
     const persoLister = await ListerRepository.createLister({ type: 'persos', parent_item_id: item.id })
     await ListerRepository.createItem(persoLister.id, {
       title: 'Votre protagoniste',
       badge: Perso.generateUniqueBadge('Votre protagoniste', [])
-    })
+    }, { project_id: item.id })
   }
 
   render() {

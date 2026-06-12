@@ -13,13 +13,13 @@ now = Time.now.strftime('%Y-%m-%dT%H:%M:%S')
 
 db.transaction do
   db.execute("INSERT INTO listers (id, type, item_ids, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
-    [1, 'projects', '["project-a","project-b","project-c","project-hidden"]', now, now])
+    [1, 'projects', '["00000000-0000-0000-0000-000000000001","00000000-0000-0000-0000-000000000002","00000000-0000-0000-0000-000000000003","00000000-0000-0000-0000-000000000004"]', now, now])
 
   [
-    ['project-a',      'Projet A',     'roman',    1],
-    ['project-b',      'Projet B',     'scenario', 1],
-    ['project-c',      'Projet C',     'roman',    1],
-    ['project-hidden', 'Projet caché', 'roman',    0],
+    ['00000000-0000-0000-0000-000000000001',      'Projet A',     'roman',    1],
+    ['00000000-0000-0000-0000-000000000002',      'Projet B',     'scenario', 1],
+    ['00000000-0000-0000-0000-000000000003',      'Projet C',     'roman',    1],
+    ['00000000-0000-0000-0000-000000000004', 'Projet caché', 'roman',    0],
   ].each do |id, title, type, active|
     db.execute("INSERT INTO items (id, title, type, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
       [id, title, type, now, now])

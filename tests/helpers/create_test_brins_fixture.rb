@@ -7,7 +7,8 @@ DATA_DIR = File.expand_path('../../../data', __FILE__)
 db_path = DB.path(DATA_DIR)
 File.delete(db_path) if File.exist?(db_path)
 
-project_dir = File.join(DATA_DIR, 'test-brins')
+PROJECT_UUID    = 'ffffffff-ffff-ffff-ffff-000000000001'
+project_dir = File.join(DATA_DIR, PROJECT_UUID)
 FileUtils.rm_rf(project_dir) if File.exist?(project_dir)
 
 DB.initialize!(DATA_DIR)
@@ -17,13 +18,13 @@ db.results_as_hash = true
 
 now = Time.now.strftime('%Y-%m-%dT%H:%M:%S')
 
-PROJECT_ID      = 'test-brins'
-PROJECT_DB_REL  = 'test-brins/eventer.db'
+PROJECT_ID      = PROJECT_UUID
+PROJECT_DB_REL  = "#{PROJECT_UUID}/eventer.db"
 PROJECT_DB_PATH = File.join(DATA_DIR, PROJECT_DB_REL)
 
 db.execute(
   "INSERT INTO project_refs (id, title, db_path, folder_path) VALUES (?, ?, ?, ?)",
-  [PROJECT_ID, 'Projet Brins Test', PROJECT_DB_REL, File.join(DATA_DIR, 'test-brins')]
+  [PROJECT_ID, 'Projet Brins Test', PROJECT_DB_REL, File.join(DATA_DIR, PROJECT_UUID)]
 )
 db.close
 

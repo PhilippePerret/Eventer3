@@ -14,7 +14,7 @@ now = Time.now.strftime('%Y-%m-%dT%H:%M:%S')
 db.transaction do
   # Listers
   db.execute("INSERT INTO listers (id, type, item_ids, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
-    [1, 'projects', '["project-a"]', now, now])
+    [1, 'projects', '["00000000-0000-0000-0000-000000000001"]', now, now])
   db.execute("INSERT INTO listers (id, type, item_ids, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
     [2, 'events', '["e1","e2","e3"]', now, now])
   db.execute("INSERT INTO listers (id, type, item_ids, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
@@ -22,9 +22,9 @@ db.transaction do
 
   # Project
   db.execute("INSERT INTO items (id, title, type, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
-    ['project-a', 'Projet A', 'roman', now, now])
+    ['00000000-0000-0000-0000-000000000001', 'Projet A', 'roman', now, now])
   db.execute("INSERT INTO project_props (item_id, state, active, lister_id, brin_ids, perso_ids) VALUES (?, ?, ?, ?, ?, ?)",
-    ['project-a', 0, 1, 2, '[]', '[]'])
+    ['00000000-0000-0000-0000-000000000001', 0, 1, 2, '[]', '[]'])
 
   # Top-level events (e1 has sub-lister id=3)
   db.execute("INSERT INTO items (id, title, type, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
@@ -49,9 +49,9 @@ db.transaction do
   db.execute("INSERT INTO event_props (item_id) VALUES (?)", ['e5'])
 
   # Counters
-  db.execute("INSERT INTO counters (project_id, item_type, last_val) VALUES (?, ?, ?)", ['project-a', 'event', 5])
-  db.execute("INSERT INTO counters (project_id, item_type, last_val) VALUES (?, ?, ?)", ['project-a', 'brin',  0])
-  db.execute("INSERT INTO counters (project_id, item_type, last_val) VALUES (?, ?, ?)", ['project-a', 'perso', 0])
+  db.execute("INSERT INTO counters (project_id, item_type, last_val) VALUES (?, ?, ?)", ['00000000-0000-0000-0000-000000000001', 'event', 5])
+  db.execute("INSERT INTO counters (project_id, item_type, last_val) VALUES (?, ?, ?)", ['00000000-0000-0000-0000-000000000001', 'brin',  0])
+  db.execute("INSERT INTO counters (project_id, item_type, last_val) VALUES (?, ?, ?)", ['00000000-0000-0000-0000-000000000001', 'perso', 0])
 end
 
 db.close

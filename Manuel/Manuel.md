@@ -10,27 +10,6 @@ NOTE POUR CLAUDE : TU N’AS PAS À LIRE CE FICHIER
 
 ***EventerX*** est un application permettant de gérer efficacement la structure de son film ou de son roman en gérant ses *évènements* ou *event*.
 
-### Les évènements
-
-Un *event*, c’est :
-
-- un acte,
-- un dialogue,
-- une action,
-- une séquence,
-- une description,
-- etc.
-
-Tout est *event*, dans une histoire, ou « une histoire est une suite d’event » qui ont des échelles différentes. Les échelles, c’est par exemple :
-
-- L’histoire, c’est une exposition (event 1), une première partie de développement (event 2), une deuxième partie de développement  (event 3) et un dénouement (event4).
-- L’histoire, c’est une première séquence (event 1), une seconde séquence (event 2), une séquence 3 (event 3), une séquence 4 jusqu’à une séquence 32 (event 32).
-- L’histoire c’est la scène 1, la scène 2, … la scène 68, qui sont chacune des events à l’échelle de la scène.
-- L’histoire, c’est aussi chaque paragraphe, qui peut être un *event* lui aussi.
-- Ou l’histoire c’est chaque ligne du scénario, donc chaque action, chaque description et chaque dialogue.
-
-***EventerX*** permet de gérer tous ces évènements par imbrication, comme des dossiers dans des dossiers dans des dossiers.
-
 ### De la structure au texte final
 
 Et c’est justement l’imbrication de tous ces évènements qui permet de non seulement travailler la structure mais d’aller également, à l’intérieur même de l’application, jusqu’au texte final du roman ou du scénario, sans même s’en apercoir.
@@ -117,37 +96,92 @@ Nous allons par exemple créer les scènes de la séquence 8 de l’acte 2.
 
 Bravo vous venez de créer votre premier évènemencier avec plusieurs items, plusieurs *events*.
 
-
+<a name="events"></a>
 
 ---
 
-## Liste des évènements
+## Les évènements
+
+### Définition
+
+Un *event*, c’est :
+
+- un acte,
+- un dialogue,
+- une action,
+- une séquence,
+- une description,
+- etc.
+
+Tout est *event*, dans une histoire, ou « une histoire est une suite d’event » qui ont des échelles différentes. Les échelles, c’est par exemple :
+
+- L’histoire, c’est une exposition (event 1), une première partie de développement (event 2), une deuxième partie de développement  (event 3) et un dénouement (event4).
+- L’histoire, c’est une première séquence (event 1), une seconde séquence (event 2), une séquence 3 (event 3), une séquence 4 jusqu’à une séquence 32 (event 32).
+- L’histoire c’est la scène 1, la scène 2, … la scène 68, qui sont chacune des events à l’échelle de la scène.
+- L’histoire, c’est aussi chaque paragraphe, qui peut être un *event* lui aussi.
+- Ou l’histoire c’est chaque ligne du scénario, donc chaque action, chaque description et chaque dialogue.
+
+***EventerX*** permet de gérer tous ces évènements par imbrication, comme des dossiers dans des dossiers dans des dossiers.
+
+
 
 L’affichage le plus naturel de *EventerX*, c’est l’affichage d’un évènemencier, donc d’une liste d’*events*.
 
 ### Déplacement des events
 
-On se sert de ⌘ et ↓↑
+On se sert de `⌘↓` et `⌘↑`  comme dans tout panneau.
 
 ### Définition des brins de l’event
 
-* sélectionner l’event
+* sélectionner l’*event*
 
 * presser « b » (comme « brin »)
 
-  => la fenêtre des brins s’ouvre
+  => le [panneau des brins][] s’ouvre.
 
-* dans la fenêtre des brins, cocher les brins à prendre, décocher ceux à retirer
+* dans la fenêtre des brins, cocher les brins à prendre, décocher ceux à retirer (si l’*event* en possédait déjà),
 
-* pour ne nouveaux brins, voir [Création d’un brin][]
+* pour créer de nouveaux brins, voir [Création d’un brin][].
 
-
+<a name="brins"></a>
 
 ---
 
 ## Les brins
 
+<a name="brin-definition"></a>
+
+---
+
+### Définition
+
+Le type de *brin* le plus simple à comprendre est le type « intrigue ». Une histoire, la plus simple soit-elle, mêle, autour d’une intrigue principale (et souvent une intrigue amoureuses) de multiples intrigues plus ou moins importantes. Chacune est appelée un « brin » dans le cadre d’*EventerX*.
+
+Pourquoi le terme « brin » au lieu d’« intrigue » ? Tout simplement parce que le terme d’intrigue est trop limitatif. Un brin peu concerner bien d’autres choses qui se développent dans une histoire. Par exemple : 
+
+- l’évolution de la relation entre deux personnages peut faire l’objet d’un *brin*,
+- l’utilisation d’un accessoire particulier peut faire l’objet d’un *brin*,
+- le développement de tous les thèmes de l’histoire peuvent aussi faire l’objet de *brins*,
+- etc.
+
+Vous voyez que leur usage est multiple. 
+
+---
+
+### Avantage des brins
+
+L’avantage des [brins][] dans *EventerX* est de permettre de se concentrer spécifiquement sur un aspect de l’histoire en l’isolant de tout le reste. Vous pouvez par exemple : 
+
+- afficher toutes les scènes qui concernent la relation entre deux personnages,
+- afficher toutes les moments de scènes où un certain accessoire est utilisés,
+- afficher tous les dialogues où le thème principal de l’histoire est développé,
+- etc.
+
+Mais si vous utilisez aussi les brins pour prendre des notes ou des choses à faire, vous pouvez obtenir une liste complète ou partielle de ces points.
+
 <a name="brins-panel"></a>
+
+---
 
 ### Panneau des brins
 
@@ -307,3 +341,9 @@ Et donc, à un moment donné, je peux avoir besoin de récupérer 4 notes (2 sur
 [fenêtre des brins]: #brins-panel
 [ panneau des brins ]: #brins-panel
 [panneau des personnages]: #persos-panel
+[brins]: #brins
+[brin]: #brins
+[events]: #events
+[event]: #events
+[évènement]: #events
+[évènements]: #events

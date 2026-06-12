@@ -9,10 +9,10 @@ test('la liste affiche uniquement les projets actifs', async ({ page }) => {
 
   await expect(page.locator('.project-item')).toHaveCount(3)
 
-  await expect(page.locator('text=project-a')).toBeVisible()
-  await expect(page.locator('text=project-b')).toBeVisible()
-  await expect(page.locator('text=project-c')).toBeVisible()
+  await expect(page.locator('text=Projet A')).toBeVisible()
+  await expect(page.locator('text=Projet B')).toBeVisible()
+  await expect(page.locator('text=Projet C')).toBeVisible()
 
-  await expect(page.locator('text=project-hidden')).toHaveCount(0)
+  await expect(page.locator('text=Projet caché')).toHaveCount(0)
 
 })
