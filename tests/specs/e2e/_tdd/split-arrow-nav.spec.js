@@ -9,7 +9,7 @@ async function gotoApp(page) {
 }
 
 async function openSplit(page) {
-  await page.keyboard.press('Meta+2')
+  await page.keyboard.press('Alt+2')
   await pane1(page).locator('.popup-select__option', { hasText: 'Vertical' }).click()
   await expect(page.frameLocator('#pane-2').locator('.project-item').first()).toBeVisible()
   // après openSplit : data-focused = pane-2, Playwright keyboard focus = pane-1
@@ -21,7 +21,7 @@ test('Cmd+→ depuis pane-1 → data-focused passe à pane-2', async ({ page }) 
   await gotoApp(page)
   await openSplit(page)
   // pane-2 a déjà data-focused après openSplit — on force pane-1 d'abord
-  await page.keyboard.press('Meta+1')
+  await page.keyboard.press('Alt+1')
   await expect(page.locator('#pane-1')).toHaveAttribute('data-focused', '')
   // Cmd+→ depuis pane-1 (Playwright keyboard focus = pane-1)
   await page.keyboard.press('Meta+ArrowRight')
@@ -50,7 +50,7 @@ test('Cmd+← depuis pane-2 → data-focused passe à pane-1', async ({ page }) 
 test('Cmd+← depuis pane-1 → data-focused passe à pane-2', async ({ page }) => {
   await gotoApp(page)
   await openSplit(page)
-  await page.keyboard.press('Meta+1')
+  await page.keyboard.press('Alt+1')
   await expect(page.locator('#pane-1')).toHaveAttribute('data-focused', '')
   await page.keyboard.press('Meta+ArrowLeft')
   await expect(page.locator('#pane-2')).toHaveAttribute('data-focused', '')

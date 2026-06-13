@@ -88,19 +88,29 @@ export default class KeyboardController {
       return
     }
 
-    // Cmd+Digit2/1/0 + Cmd+←/→ : contrôle split-window (event.code = AZERTY-safe)
-    if (event.metaKey && !event.ctrlKey && !event.altKey) {
-      if (event.key === '2') {
+    // Alt+Chiffre : contrôle split-window (event.code = AZERTY+PN-safe)
+    if (event.altKey && !event.metaKey && !event.ctrlKey) {
+      if (event.code === 'Digit2' || event.code === 'Numpad2') {
         event.preventDefault()
-        SplitManager.openSplitChoice(this)
+        const pane2 = window !== window.parent ? window.parent.document.getElementById('pane-2') : null
+        if (pane2?.hasAttribute('data-split-active')) {
+          window.parent.postMessage({ type: 'shell-action', action: 'focus-pane-2' }, '*')
+        } else {
+          SplitManager.openSplitChoice(this)
+        }
         return
       }
-      if (event.key === '1') {
+      if (event.code === 'Digit1' || event.code === 'Numpad1') {
         event.preventDefault()
-        if (window !== window.parent) window.parent.postMessage({ type: 'shell-action', action: 'focus-pane-1' }, '*')
+        const pane2 = window !== window.parent ? window.parent.document.getElementById('pane-2') : null
+        if (pane2?.hasAttribute('data-split-active')) {
+          window.parent.postMessage({ type: 'shell-action', action: 'focus-pane-1' }, '*')
+        } else {
+          Notification.show(ERRORS[6100])
+        }
         return
       }
-      if (event.key === '0') {
+      if (event.code === 'Digit0' || event.code === 'Numpad0') {
         event.preventDefault()
         const pane2 = window !== window.parent ? window.parent.document.getElementById('pane-2') : null
         if (!pane2?.hasAttribute('data-split-active')) {
@@ -110,6 +120,10 @@ export default class KeyboardController {
         }
         return
       }
+    }
+
+    // Cmd+←/→ : cycle focus entre panes
+    if (event.metaKey && !event.ctrlKey && !event.altKey) {
       if (event.code === 'ArrowRight' || event.code === 'ArrowLeft') {
         if (SplitManager.cyclePanes()) { event.preventDefault(); return }
       }
