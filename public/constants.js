@@ -87,6 +87,14 @@ export const WORD_FORMS = {
  */
 export const HELP_PER_CONTEXT = {
 
+  /*-générique : double panneau -*/
+  'double-panneu': {
+    title: "Double panneau",
+    shortcuts: [
+      {sc: '⇧ + ⇥', ef: 'Changer de panneau'}
+    ]
+  },
+
   /*- générique : navigation dans une liste d'items -*/
   'navigate-items': {
     // title: "Navigation par item",

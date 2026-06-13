@@ -40,7 +40,14 @@ Pareil pour les autres, ça repart chaque fois du title alors que les propriét�
 SYSTÈME D'AIDE
 Par exemple : Notification avec une marque "?" qui permet à l'utilisateur de faire "?" (Maj+,) pour obtenir une aide appropriée
 Fonctionnement : ça pourrait une table en parallèle de ERRORS et MESSAGES 
-AIDE['error-6100'] automatique quand ERRORS[6100]
+AIDE['E6100'] automatique quand ERRORS[6100]
+AIDE['M3000] automatique quand MESSAGES[3000] appelé
+Fonctionnement : une erreur ou un message est affiché => l'« aide message » est activé 
+Maj+, pressé => si plusieurs aides activées (on peut avoir message ou contexte) => menu popup pour choisir => rejoindre l'aide appropriée
+AIDE['E6100'] = {file: "Aide.md", anchor: "ancre-a-rejoindre"}
 
-SYSTÈME D'OUVERTURE
+SYSTÈME D'OUVERTURE AUTOMATIQUE Mac-like
 Je veux qu'un fichier ".evt" ouvre automatiquement le fichier dans l'application EventerX
+
+
+BUGS

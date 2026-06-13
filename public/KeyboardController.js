@@ -9,6 +9,7 @@ import Perso from './classes/models/Perso.js'
 import TargetsPanel from './classes/ui/TargetsPanel.js'
 import TargetsManager from './classes/ui/TargetsManager.js'
 import LinkOpenPopup from './classes/ui/LinkOpenPopup.js'
+import SplitManager from './classes/ui/SplitManager.js'
 import { ERRORS } from './system/Locales.js'
 
 export default class KeyboardController {
@@ -87,11 +88,11 @@ export default class KeyboardController {
       return
     }
 
-    // Cmd+Digit2/1/0 : contrôle split-window (event.code = AZERTY-safe)
+    // Cmd+Digit2/1/0 + Cmd+←/→ : contrôle split-window (event.code = AZERTY-safe)
     if (event.metaKey && !event.ctrlKey && !event.altKey) {
       if (event.code === 'Digit2') {
         event.preventDefault()
-        if (window !== window.parent) window.parent.postMessage({ type: 'shell-action', action: 'split-open' }, '*')
+        SplitManager.openSplitChoice(this)
         return
       }
       if (event.code === 'Digit1') {
@@ -108,6 +109,9 @@ export default class KeyboardController {
           window.parent.postMessage({ type: 'shell-action', action: 'split-close' }, '*')
         }
         return
+      }
+      if (event.code === 'ArrowRight' || event.code === 'ArrowLeft') {
+        if (SplitManager.cyclePanes()) { event.preventDefault(); return }
       }
     }
 
