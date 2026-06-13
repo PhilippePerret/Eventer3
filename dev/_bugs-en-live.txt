@@ -37,14 +37,26 @@ BUG : je dois TABer 2 fois pour l'atteindre
 Pareil pour les autres, ça repart chaque fois du title alors que les propriétés devraient tourner en boucle avec TAB.
 
 
-SYSTÈME D'AIDE
-Par exemple : Notification avec une marque "?" qui permet à l'utilisateur de faire "?" (Maj+,) pour obtenir une aide appropriée
-Fonctionnement : ça pourrait une table en parallèle de ERRORS et MESSAGES 
-AIDE['E6100'] automatique quand ERRORS[6100]
-AIDE['M3000] automatique quand MESSAGES[3000] appelé
-Fonctionnement : une erreur ou un message est affiché => l'« aide message » est activé 
-Maj+, pressé => si plusieurs aides activées (on peut avoir message ou contexte) => menu popup pour choisir => rejoindre l'aide appropriée
+SYSTÈME FIN D'AIDE (system/help.js)
+Fonctionnement : 
+- Un message d'erreur est affiché (ERRORS[2000] par exemple). 
+- Or, une aide est définie pour ce message (AIDE['E2000']) 
+- Si l'user joue "?" (Maj+","), un pré-panneau s'ouvre : 
+"Voulez-vous voir : 
+(f) l'aide du message
+(j) l'aide du contexte courant" 
+(c'est un KeyboardablePanel).
+- l'user choisit "f" => Un panneau d'aide s'ouvre avec le texte de l'aide en question. Normalement a priori, ce sera en markdown (ou, si j'ai le courage, un format plus adapté qui permettra de distinguer une action à faire, un effet, etc.).
+- de la même manière, quand il y a un changement de contexte (voir où il est déjà indiqué à l'aide contextuelle), l'help.js doit être appelé pour savoir s'il existe une aide pour ce contexte. Si oui, "?" permet de l'afficher (avec choix si une autre aide, une aide-message, est aussi déclaré — voir )
+Une "aide-message" disparait dès que le message disparait.
+
+Maj+, pressé => si plusieurs aides activées (message/erreur ou contexte) => menu popup pour choisir => rejoindre l'aide appropriée
 AIDE['E6100'] = {file: "Aide.md", anchor: "ancre-a-rejoindre"}
+Aide pour message (MESSAGES n'est pas encore implémenté, mais il le sera comme ERRORS).
+AIDE['M6100'] = {file: "Aide.md", anchor: "ancre-a-rejoindre"}
+AIDE['<contexte>'] = {file: "Autre-ide.md", anchor: "autre-ancre"}
+
+---
 
 SYSTÈME D'OUVERTURE AUTOMATIQUE Mac-like
 Je veux qu'un fichier ".evt" ouvre automatiquement le fichier dans l'application EventerX

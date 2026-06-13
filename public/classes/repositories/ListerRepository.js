@@ -7,13 +7,11 @@ export default class ListerRepository {
   }
 
   static async loadDefinition(lister) {
+    if (!lister.id) { lister.__isVirtual = true; return }
     const response = await fetch(`/api/listers/${lister.id}${ListerRepository._projectQuery(lister)}`, { cache: 'no-store' })
-    if (!response.ok) {
-      if (response.status === 404) lister.__isVirtual = true
-      return
-    }
+    if (!response.ok) return
     const data = await response.json()
-    if (!data) return
+    if (!data || data.virtual) { lister.__isVirtual = true; return }
     if (data.id != null)        lister.id                = data.id
     if (data.item_ids)          lister.item_ids          = data.item_ids
     if (data.brins_lister_id)   lister.brins_lister_id   = data.brins_lister_id
@@ -23,6 +21,7 @@ export default class ListerRepository {
   }
 
   static async loadItems(lister) {
+    if (!lister.id) return {}
     const response = await fetch(`/api/listers/${lister.id}/items${ListerRepository._projectQuery(lister)}`, { cache: 'no-store' })
     if (!response.ok) return {}
     return await response.json()

@@ -159,6 +159,7 @@ export default class FilePicker {
   }
 
   _renderEntries() {
+    if (this._creatingFolder) return
     this._entriesEl.innerHTML = ''
     this.entries.forEach((entry, i) => {
       const el = document.createElement('div')

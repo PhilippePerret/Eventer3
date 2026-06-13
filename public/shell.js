@@ -8,7 +8,7 @@ function setFocused(paneEl) {
 }
 
 pane1El.addEventListener('load', function() { this.focus(); setFocused(this) })
-pane2El.addEventListener('load', function() { this.focus(); setFocused(this) })
+pane2El.addEventListener('load', function() { if (!isSplitActive()) return; this.focus(); setFocused(this) })
 
 function isSplitActive() {
   return pane2El.hasAttribute('data-split-active')
