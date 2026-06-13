@@ -90,17 +90,17 @@ export default class KeyboardController {
 
     // Cmd+Digit2/1/0 + Cmd+←/→ : contrôle split-window (event.code = AZERTY-safe)
     if (event.metaKey && !event.ctrlKey && !event.altKey) {
-      if (event.code === 'Digit2') {
+      if (event.key === '2') {
         event.preventDefault()
         SplitManager.openSplitChoice(this)
         return
       }
-      if (event.code === 'Digit1') {
+      if (event.key === '1') {
         event.preventDefault()
         if (window !== window.parent) window.parent.postMessage({ type: 'shell-action', action: 'focus-pane-1' }, '*')
         return
       }
-      if (event.code === 'Digit0') {
+      if (event.key === '0') {
         event.preventDefault()
         const pane2 = window !== window.parent ? window.parent.document.getElementById('pane-2') : null
         if (!pane2?.hasAttribute('data-split-active')) {

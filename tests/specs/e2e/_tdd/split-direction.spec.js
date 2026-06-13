@@ -8,11 +8,17 @@ async function gotoApp(page) {
   await expect(pane1(page).locator('.project-item').first()).toHaveClass(/selected/)
 }
 
-// ─── Cmd+2 ouvre un popup de choix ────────────────────────────────────────────
+// ─── Cmd+2 (clavier principal et pavé numérique) ─────────────────────────────
 
 test('Cmd+2 affiche un popup vertical/horizontal', async ({ page }) => {
   await gotoApp(page)
   await page.keyboard.press('Meta+2')
+  await expect(pane1(page).locator('.popup-select')).toBeVisible()
+})
+
+test('Cmd+2 pavé numérique (sans Shift) affiche aussi le popup', async ({ page }) => {
+  await gotoApp(page)
+  await page.keyboard.press('Meta+Numpad2')
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
 })
 
