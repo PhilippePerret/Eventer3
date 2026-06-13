@@ -87,6 +87,30 @@ export default class KeyboardController {
       return
     }
 
+    // Cmd+Digit2/1/0 : contrôle split-window (event.code = AZERTY-safe)
+    if (event.metaKey && !event.ctrlKey && !event.altKey) {
+      if (event.code === 'Digit2') {
+        event.preventDefault()
+        if (window !== window.parent) window.parent.postMessage({ type: 'shell-action', action: 'split-open' }, '*')
+        return
+      }
+      if (event.code === 'Digit1') {
+        event.preventDefault()
+        if (window !== window.parent) window.parent.postMessage({ type: 'shell-action', action: 'focus-pane-1' }, '*')
+        return
+      }
+      if (event.code === 'Digit0') {
+        event.preventDefault()
+        const pane2 = window !== window.parent ? window.parent.document.getElementById('pane-2') : null
+        if (!pane2?.hasAttribute('data-split-active')) {
+          Notification.show(ERRORS[6100])
+        } else {
+          window.parent.postMessage({ type: 'shell-action', action: 'split-close' }, '*')
+        }
+        return
+      }
+    }
+
     // Ctrl+Shift+Arrow : déplacer le panneau au premier plan
     if (event.ctrlKey && event.shiftKey && !event.metaKey && ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
       const el = this._getMovableElement()
@@ -114,6 +138,16 @@ export default class KeyboardController {
 
     // TAB dans la barre de filtre : panel-search → premier btn, btn → btn suivant, dernier btn → panel-search
     if (event.key === 'Tab') {
+      if (event.shiftKey && window !== window.parent) {
+        const pane2 = window.parent.document.getElementById('pane-2')
+        if (pane2?.hasAttribute('data-split-active')) {
+          event.preventDefault()
+          const myPaneId = window.frameElement?.id
+          const action = myPaneId === 'pane-2' ? 'focus-pane-1' : 'focus-pane-2'
+          window.parent.postMessage({ type: 'shell-action', action }, '*')
+          return
+        }
+      }
       const active = document.activeElement
       if (active?.classList.contains('panel-search')) {
         const bar = active.closest('.filter-bar')

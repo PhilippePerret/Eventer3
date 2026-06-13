@@ -524,7 +524,7 @@ body#shell #pane-2 {
   border: none;
   height: 100%;
 }
-body#shell #pane-2[src=""] {
+body#shell #pane-2:not([data-split-active]) {
   display: none;
 }
 

@@ -41,3 +41,6 @@ SYSTÈME D'AIDE
 Par exemple : Notification avec une marque "?" qui permet à l'utilisateur de faire "?" (Maj+,) pour obtenir une aide appropriée
 Fonctionnement : ça pourrait une table en parallèle de ERRORS et MESSAGES 
 AIDE['error-6100'] automatique quand ERRORS[6100]
+
+SYSTÈME D'OUVERTURE
+Je veux qu'un fichier ".evt" ouvre automatiquement le fichier dans l'application EventerX
