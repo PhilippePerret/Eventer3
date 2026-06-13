@@ -1,18 +1,18 @@
 export default class LinkOpenPopup {
 
-  static open({ targetId, targetTitle, keyboardController }) {
-    new LinkOpenPopup({ targetId, targetTitle, keyboardController })._init()
+  static open({ targetId, targetTitle, keyboardController, hasSplit = false }) {
+    new LinkOpenPopup({ targetId, targetTitle, keyboardController, hasSplit })._init()
   }
 
-  constructor({ targetId, targetTitle, keyboardController }) {
+  constructor({ targetId, targetTitle, keyboardController, hasSplit = false }) {
     this.targetId = targetId
     this.targetTitle = targetTitle
     this.keyboardController = keyboardController
     this._selectedIndex = 0
     this._options = [
-      { label: 'Dans son évènemencier', action: 'go'    },
-      { label: 'Sa carte',              action: 'card'  },
-      { label: 'Dans l\'autre fenêtre', action: 'split' },
+      { key: 'g', label: 'Dans son évènemencier',                              action: 'go'    },
+      { key: 'c', label: 'Afficher sa carte',                                  action: 'card'  },
+      { key: 'a', label: hasSplit ? "Dans l'autre fenêtre" : "Dans une autre fenêtre", action: 'split' },
     ]
   }
 
@@ -37,7 +37,16 @@ export default class LinkOpenPopup {
       const row = document.createElement('div')
       row.className = 'floating-panel__item'
       if (i === 0) row.classList.add('selected')
-      row.textContent = opt.label
+
+      const keyBadge = document.createElement('span')
+      keyBadge.className = 'panel-footer-key link-open-popup__key'
+      keyBadge.textContent = opt.key
+
+      const labelSpan = document.createElement('span')
+      labelSpan.textContent = opt.label
+
+      row.appendChild(keyBadge)
+      row.appendChild(labelSpan)
       this._el.appendChild(row)
     })
 
@@ -63,6 +72,9 @@ export default class LinkOpenPopup {
       case 'ArrowUp':   this._selectAt(this._selectedIndex - 1); break
       case 'Enter':     this._confirm(); break
       case 'Escape':    this._close();   break
+      case 'g': this._confirmAction('go');    break
+      case 'c': this._confirmAction('card');  break
+      case 'a': this._confirmAction('split'); break
     }
   }
 
@@ -75,6 +87,11 @@ export default class LinkOpenPopup {
 
   _confirm() {
     const action = this._options[this._selectedIndex].action
+    this._close()
+    this.keyboardController.executeLinkAction(action, this.targetId)
+  }
+
+  _confirmAction(action) {
     this._close()
     this.keyboardController.executeLinkAction(action, this.targetId)
   }

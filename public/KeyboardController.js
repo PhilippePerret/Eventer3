@@ -9,6 +9,7 @@ import Perso from './classes/models/Perso.js'
 import TargetsPanel from './classes/ui/TargetsPanel.js'
 import TargetsManager from './classes/ui/TargetsManager.js'
 import LinkOpenPopup from './classes/ui/LinkOpenPopup.js'
+import { ERRORS } from './system/Locales.js'
 
 export default class KeyboardController {
 
@@ -257,9 +258,26 @@ export default class KeyboardController {
         event.preventDefault()
         return
 
+      case 'g':
+        if (!event.metaKey && !event.ctrlKey) {
+          this._executeLinkActionDirect('go')
+          event.preventDefault()
+        }
+        return
+
+      case 'a':
+        if (!event.metaKey && !event.ctrlKey) {
+          this._executeLinkActionDirect('split')
+          event.preventDefault()
+        }
+        return
+
       case 'c':
         if (event.metaKey || event.ctrlKey) {
           this.activeLister.copySelectedItem?.()
+          event.preventDefault()
+        } else {
+          this._executeLinkActionDirect('card')
           event.preventDefault()
         }
         return
@@ -380,6 +398,14 @@ export default class KeyboardController {
       targetTitle:       this._activeLinkEl.textContent,
       keyboardController: this,
     })
+  }
+
+  _executeLinkActionDirect(action) {
+    if (!this._activeLinkEl) {
+      Notification.show(ERRORS[5200])
+      return
+    }
+    this.executeLinkAction(action, this._activeLinkEl.dataset.id)
   }
 
   executeLinkAction(action, targetId) {
