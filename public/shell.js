@@ -42,6 +42,11 @@ window.addEventListener('message', (event) => {
         setFocused(pane2El)
       }
       break
+    case 'split-rotate': {
+      const current = document.body.style.flexDirection
+      document.body.style.flexDirection = current === 'column' ? 'row' : 'column'
+      break
+    }
     case 'split-close':
       pane2El.removeAttribute('data-split-active')
       pane1El.focus()

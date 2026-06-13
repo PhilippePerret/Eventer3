@@ -61,6 +61,14 @@ export default class SplitManager {
     }).open(anchor)
   }
 
+  static rotateSplit() {
+    if (window === window.parent) return false
+    const pane2 = window.parent.document.getElementById('pane-2')
+    if (!pane2?.hasAttribute('data-split-active')) return false
+    window.parent.postMessage({ type: 'shell-action', action: 'split-rotate' }, '*')
+    return true
+  }
+
   static cyclePanes() {
     if (window === window.parent) return false
     const pane2 = window.parent.document.getElementById('pane-2')

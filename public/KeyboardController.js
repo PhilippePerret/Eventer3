@@ -120,6 +120,11 @@ export default class KeyboardController {
         }
         return
       }
+      if (event.code === 'KeyR') {
+        event.preventDefault()
+        if (!SplitManager.rotateSplit()) Notification.show(ERRORS[6100])
+        return
+      }
     }
 
     // Cmd+←/→ : cycle focus entre panes
