@@ -82,7 +82,10 @@ export default class Texte {
       .replace(/~~(.+?)~~/g,           '<s>$1</s>')
       .replace(/__(.+?)__/g,           '<u>$1</u>')
       .replace(/\^(.+?)\^/g,           '<sup>$1</sup>')
-      .replace(/\[(.+?)\]\((.+?)\)/g, '<span class="item-link" data-id="$2">$1</span>')
+      .replace(/\[(.+?)\]\((.+?)\)/g, (_, text, url) => {
+        if (/^https?:\/\//.test(url)) return `<a href="${url}" target="_blank" rel="noopener">${text}</a>`
+        return `<span class="item-link" data-id="${url}">${text}</span>`
+      })
   }
 
 }
