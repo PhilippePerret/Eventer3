@@ -9,10 +9,37 @@ export default class App {
 
     LOG.m(1, 'Start application')
 
-    await ProjectLister.init()
+    const projectLister = await ProjectLister.init()
+
+    window.addEventListener('message', async (event) => {
+      if (event.data?.type !== 'app-action') return
+      if (event.data.action === 'navigate-to-item') {
+        await App.navigateToItem(projectLister, event.data.targetId, event.data.projectId)
+      }
+    })
 
     LOG.m(1, 'Application started, projets affichés')
 
+    if (window !== window.parent) {
+      window.parent.postMessage({ type: 'shell-action', action: 'pane-ready', paneId: window.frameElement?.id }, '*')
+    }
+
+  }
+
+  static async navigateToItem(projectLister, targetId, projectId) {
+    const kc = projectLister.keyboardController
+    const lister = kc.activeLister
+    if (!lister) return
+    if (typeof lister.navigateToItem === 'function') {
+      await lister.navigateToItem(targetId)
+    } else {
+      // ProjectLister : entrer d'abord dans le bon projet
+      const projectItem = lister.items.find(item => item.id === projectId)
+      if (!projectItem) return
+      lister.selectItemAt(lister.items.indexOf(projectItem))
+      await lister.enterSelectedItem()
+      await kc.activeLister.navigateToItem(targetId)
+    }
   }
 
 }

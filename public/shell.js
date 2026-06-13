@@ -1,5 +1,6 @@
 const pane1El = document.getElementById('pane-1')
 const pane2El = document.getElementById('pane-2')
+let _pendingNavigation = null
 
 function setFocused(paneEl) {
   pane1El.removeAttribute('data-focused')
@@ -22,6 +23,23 @@ window.addEventListener('message', (event) => {
         pane2El.setAttribute('src', '/app-frame.html')
         pane2El.setAttribute('data-split-active', '')
         document.body.style.flexDirection = event.data.direction === 'horizontal' ? 'column' : 'row'
+      }
+      break
+    case 'split-open-and-navigate':
+      if (!isSplitActive()) {
+        _pendingNavigation = { targetId: event.data.targetId, projectId: event.data.projectId }
+        pane2El.setAttribute('src', '/app-frame.html')
+        pane2El.setAttribute('data-split-active', '')
+        document.body.style.flexDirection = event.data.direction === 'horizontal' ? 'column' : 'row'
+      }
+      break
+    case 'pane-ready':
+      if (event.data.paneId === 'pane-2' && _pendingNavigation) {
+        const nav = _pendingNavigation
+        _pendingNavigation = null
+        pane2El.contentWindow.postMessage({ type: 'app-action', action: 'navigate-to-item', ...nav }, '*')
+        pane2El.focus()
+        setFocused(pane2El)
       }
       break
     case 'split-close':

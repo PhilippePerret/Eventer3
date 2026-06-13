@@ -62,6 +62,8 @@ Et donc, à un moment donné, je peux avoir besoin de récupérer 4 notes (2 sur
 
 ### Organiser les cibles mémorisées
 
+Vous pouvez organiser les cibles en les déplaçant dans leur fenêtre à l’aide du raccourci `⌘↓`  et `⌘↑` classique et même les « épingler » pour ne jamais les perdre, simplement en les remontant dans la zone dédiée, en haut de la fenêtre.
+
 
 
 ### Rejoindre ou afficher une référence

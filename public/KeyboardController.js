@@ -445,10 +445,13 @@ export default class KeyboardController {
       )
       return
     }
+    const hasSplit = window !== window.parent &&
+      !!window.parent.document.getElementById('pane-2')?.hasAttribute('data-split-active')
     LinkOpenPopup.open({
-      targetId:          this._activeLinkEl.dataset.id,
-      targetTitle:       this._activeLinkEl.textContent,
+      targetId:           this._activeLinkEl.dataset.id,
+      targetTitle:        this._activeLinkEl.textContent,
       keyboardController: this,
+      hasSplit,
     })
   }
 
@@ -463,6 +466,9 @@ export default class KeyboardController {
   executeLinkAction(action, targetId) {
     if (action === 'go') {
       void this.activeLister.navigateToItem(targetId)
+    } else if (action === 'split') {
+      const projectId = this.activeLister?.project_id ?? this.activeLister?.parentItem?.id
+      SplitManager.openInOtherPane(targetId, projectId, this)
     } else {
       Notification.show(`Action "${action}" sur ${targetId} — à implémenter`)
     }
