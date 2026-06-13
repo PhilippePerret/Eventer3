@@ -38,4 +38,5 @@ Pareil pour les autres, ça repart chaque fois du title alors que les propriét�
 
 
 SYSTÈME D'AIDE
-Par exemple : 
+Par exemple : Notification avec une marque "?" qui permet à l'utilisateur de faire "?" (Maj+,) pour obtenir une aide appropriée
+

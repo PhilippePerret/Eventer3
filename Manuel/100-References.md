@@ -58,6 +58,12 @@ Et donc, à un moment donné, je peux avoir besoin de récupérer 4 notes (2 sur
 
   => le texte affiche maintenant mes liens vers les notes
 
+---
+
+### Organiser les cibles mémorisées
+
+
+
 ### Rejoindre ou afficher une référence
 
 À partir d’ici, j’ai trois moyens pour interagir avec ces liens :
