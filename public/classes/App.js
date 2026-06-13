@@ -28,6 +28,13 @@ export default class App {
 
   static async navigateToItem(projectLister, targetId, projectId) {
     const kc = projectLister.keyboardController
+    if (!projectId) {
+      // projectId null = revenir à la liste projets, sélectionner le projet targetId
+      projectLister.render()
+      const projectItem = projectLister.items.find(item => item.id === targetId)
+      if (projectItem) projectLister.selectItemAt(projectLister.items.indexOf(projectItem))
+      return
+    }
     const lister = kc.activeLister
     if (!lister) return
     if (typeof lister.navigateToItem === 'function') {

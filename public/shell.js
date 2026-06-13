@@ -48,6 +48,9 @@ window.addEventListener('message', (event) => {
       break
     }
     case 'split-close':
+      if (event.data.fromPaneId === 'pane-2' && event.data.currentState) {
+        pane1El.contentWindow.postMessage({ type: 'app-action', action: 'navigate-to-item', ...event.data.currentState }, '*')
+      }
       pane2El.removeAttribute('data-split-active')
       pane1El.focus()
       setFocused(pane1El)

@@ -25,3 +25,15 @@ Il est préférable d’associer des personnages aux brins (de cette manière, l
 - presser « p » pour ouvrir le [panneau des personnages][],
 - cocher les personnages voulus et décocher ceux à retirer.
 
+<a name="persos-panel"></a>
+
+---
+
+### Le panneau des personnages
+
+Ce panneau présente et permet de gérer la liste des personnages du projet, en leur attribuant un pseudo, un badge de deux lettres (utilisable dans les textes pour les raccourcir et surtout se donner la possibilité de changer leur nom), un avatar, des fonctions, etc.
+
+Pour ouvrir ce panneau, se placer sur un *event* quelconque, et presser la touche « p » (comme « personnage »).
+
+Pour connaitre les choses possibles sur ce panneau, ouvrez-le et tapez la combinaison magique « 
+

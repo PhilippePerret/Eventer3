@@ -116,7 +116,10 @@ export default class KeyboardController {
         if (!pane2?.hasAttribute('data-split-active')) {
           Notification.show(ERRORS[6100])
         } else {
-          window.parent.postMessage({ type: 'shell-action', action: 'split-close' }, '*')
+          const _sel = this.activeLister?.items[this.activeLister.selectedIndex]
+          const _pid = this.activeLister?.project_id ?? this.activeLister?.parentItem?.id ?? null
+          const currentState = _sel?.id ? { targetId: _sel.id, projectId: _pid } : null
+          window.parent.postMessage({ type: 'shell-action', action: 'split-close', fromPaneId: window.frameElement?.id, currentState }, '*')
         }
         return
       }

@@ -19,4 +19,6 @@ Pour la fusion, il faut supprimer les [TOC] dans les fichiers
 
 [Les Personnages](05-Persos.md)
 
+[Les Fenêtres](50-Fenetres.md)
+
 [Les références](100-References.md)
