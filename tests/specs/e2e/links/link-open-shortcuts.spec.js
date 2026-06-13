@@ -1,4 +1,4 @@
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 
 test.beforeEach(() => {
@@ -7,17 +7,17 @@ test.beforeEach(() => {
 
 async function gotoEventList(page) {
   await page.goto('/')
-  await expect(page.locator('.project-item').first()).toHaveClass(/selected/)
+  await expect(pane1(page).locator('.project-item').first()).toHaveClass(/selected/)
   await page.keyboard.press('ArrowRight')
   await page.waitForLoadState('networkidle')
-  await expect(page.locator('.event-item').first()).toHaveClass(/selected/)
+  await expect(pane1(page).locator('.event-item').first()).toHaveClass(/selected/)
 }
 
 async function enterSubLister(page) {
-  const depthAttr = await page.locator('#main-panel').getAttribute('data-depth')
+  const depthAttr = await pane1(page).locator('#main-panel').getAttribute('data-depth')
   const nextDepth  = String((depthAttr != null ? parseInt(depthAttr) : 0) + 1)
   await page.keyboard.press('ArrowRight')
-  await expect(page.locator('#main-panel')).toHaveAttribute('data-depth', nextDepth)
+  await expect(pane1(page).locator('#main-panel')).toHaveAttribute('data-depth', nextDepth)
 }
 
 // Navigue jusqu'à sc3s2a2 (item avec liens) et active le premier lien
@@ -30,7 +30,7 @@ async function activateFirstLink(page) {
   await page.keyboard.press('ArrowDown')
   await page.keyboard.press('ArrowDown') // → sc3s2a2
   await page.keyboard.press('Tab')       // active premier lien
-  await expect(page.locator('.item-link--active')).toHaveCount(1)
+  await expect(pane1(page).locator('.item-link--active')).toHaveCount(1)
 }
 
 // ─── Labels et badges dans le popup ──────────────────────────────────────────
@@ -38,13 +38,13 @@ async function activateFirstLink(page) {
 test("popup : première option contient badge 'g'", async ({ page }) => {
   await activateFirstLink(page)
   await page.keyboard.press('o')
-  await expect(page.locator('.floating-panel__item').nth(0).locator('.link-open-popup__key')).toHaveText('g')
+  await expect(pane1(page).locator('.floating-panel__item').nth(0).locator('.link-open-popup__key')).toHaveText('g')
 })
 
 test("popup : deuxième option contient badge 'c' et texte 'Afficher sa carte'", async ({ page }) => {
   await activateFirstLink(page)
   await page.keyboard.press('o')
-  const second = page.locator('.floating-panel__item').nth(1)
+  const second = pane1(page).locator('.floating-panel__item').nth(1)
   await expect(second.locator('.link-open-popup__key')).toHaveText('c')
   await expect(second).toContainText('Afficher sa carte')
 })
@@ -52,7 +52,7 @@ test("popup : deuxième option contient badge 'c' et texte 'Afficher sa carte'",
 test("popup : troisième option contient badge 'a' et texte 'Dans une autre fenêtre'", async ({ page }) => {
   await activateFirstLink(page)
   await page.keyboard.press('o')
-  const third = page.locator('.floating-panel__item').nth(2)
+  const third = pane1(page).locator('.floating-panel__item').nth(2)
   await expect(third.locator('.link-open-popup__key')).toHaveText('a')
   await expect(third).toContainText('Dans une autre fenêtre')
 })
@@ -62,25 +62,25 @@ test("popup : troisième option contient badge 'a' et texte 'Dans une autre fen�
 test("popup : 'g' ferme le popup et navigue vers la cible", async ({ page }) => {
   await activateFirstLink(page)
   await page.keyboard.press('o')
-  await expect(page.locator('.link-open-popup')).toBeVisible()
+  await expect(pane1(page).locator('.link-open-popup')).toBeVisible()
   await page.keyboard.press('g')
-  await expect(page.locator('.link-open-popup')).not.toBeVisible()
+  await expect(pane1(page).locator('.link-open-popup')).not.toBeVisible()
 })
 
 test("popup : 'c' ferme le popup", async ({ page }) => {
   await activateFirstLink(page)
   await page.keyboard.press('o')
-  await expect(page.locator('.link-open-popup')).toBeVisible()
+  await expect(pane1(page).locator('.link-open-popup')).toBeVisible()
   await page.keyboard.press('c')
-  await expect(page.locator('.link-open-popup')).not.toBeVisible()
+  await expect(pane1(page).locator('.link-open-popup')).not.toBeVisible()
 })
 
 test("popup : 'a' ferme le popup", async ({ page }) => {
   await activateFirstLink(page)
   await page.keyboard.press('o')
-  await expect(page.locator('.link-open-popup')).toBeVisible()
+  await expect(pane1(page).locator('.link-open-popup')).toBeVisible()
   await page.keyboard.press('a')
-  await expect(page.locator('.link-open-popup')).not.toBeVisible()
+  await expect(pane1(page).locator('.link-open-popup')).not.toBeVisible()
 })
 
 // ─── Raccourcis g/c/a sans popup (lien actif sélectionné) ────────────────────
@@ -88,19 +88,19 @@ test("popup : 'a' ferme le popup", async ({ page }) => {
 test("'g' avec lien actif (sans popup) → navigue et popup ne s'ouvre pas", async ({ page }) => {
   await activateFirstLink(page)
   await page.keyboard.press('g')
-  await expect(page.locator('.link-open-popup')).not.toBeVisible()
+  await expect(pane1(page).locator('.link-open-popup')).not.toBeVisible()
 })
 
 test("'c' avec lien actif (sans popup) → action déclenchée, pas de popup", async ({ page }) => {
   await activateFirstLink(page)
   await page.keyboard.press('c')
-  await expect(page.locator('.link-open-popup')).not.toBeVisible()
+  await expect(pane1(page).locator('.link-open-popup')).not.toBeVisible()
 })
 
 test("'a' avec lien actif (sans popup) → action déclenchée, pas de popup", async ({ page }) => {
   await activateFirstLink(page)
   await page.keyboard.press('a')
-  await expect(page.locator('.link-open-popup')).not.toBeVisible()
+  await expect(pane1(page).locator('.link-open-popup')).not.toBeVisible()
 })
 
 // ─── Raccourcis g/c/a sans cible sélectionnée ────────────────────────────────
@@ -108,20 +108,20 @@ test("'a' avec lien actif (sans popup) → action déclenchée, pas de popup", a
 test("'g' sans cible sélectionnée → notification 'Aucune cible'", async ({ page }) => {
   await gotoEventList(page)
   await page.keyboard.press('g')
-  await expect(page.locator('.notification')).toBeVisible()
-  await expect(page.locator('.notification')).toContainText('Aucune cible')
+  await expect(pane1(page).locator('.notification')).toBeVisible()
+  await expect(pane1(page).locator('.notification')).toContainText('Aucune cible')
 })
 
 test("'c' sans cible sélectionnée → notification 'Aucune cible'", async ({ page }) => {
   await gotoEventList(page)
   await page.keyboard.press('c')
-  await expect(page.locator('.notification')).toBeVisible()
-  await expect(page.locator('.notification')).toContainText('Aucune cible')
+  await expect(pane1(page).locator('.notification')).toBeVisible()
+  await expect(pane1(page).locator('.notification')).toContainText('Aucune cible')
 })
 
 test("'a' sans cible sélectionnée → notification 'Aucune cible'", async ({ page }) => {
   await gotoEventList(page)
   await page.keyboard.press('a')
-  await expect(page.locator('.notification')).toBeVisible()
-  await expect(page.locator('.notification')).toContainText('Aucune cible')
+  await expect(pane1(page).locator('.notification')).toBeVisible()
+  await expect(pane1(page).locator('.notification')).toContainText('Aucune cible')
 })

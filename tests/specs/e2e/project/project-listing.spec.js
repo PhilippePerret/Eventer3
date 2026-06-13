@@ -1,15 +1,15 @@
 import { installFixtures } from '../../../helpers/install-fixtures'
 installFixtures('many-projects')
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 
 test('la liste des projets possède les bonnes classes CSS', async ({ page }) => {
 
   await page.goto('/')
 
-  const mainPanel = page.locator('#main-panel')
-  const listing = page.locator('#main-panel.project-list').first()
-  const item = page.locator('.project-item')
-  const title = page.locator('.project-item__title')
+  const mainPanel = pane1(page).locator('#main-panel')
+  const listing = pane1(page).locator('#main-panel.project-list').first()
+  const item = pane1(page).locator('.project-item')
+  const title = pane1(page).locator('.project-item__title')
   console.log('\n=== TEST CLASSES CSS PROJECT LISTING ===')
 
   console.log('-> vérification #main-panel.project-list')

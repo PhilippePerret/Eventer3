@@ -1,5 +1,5 @@
 import { installFixtures } from '../../../helpers/install-fixtures'
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('with-persos')
@@ -14,15 +14,15 @@ test.beforeEach(() => {
 
 async function goToEventLister(page) {
   await page.goto('/')
-  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await page.keyboard.press('ArrowRight')
-  await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 }
 
 async function openPersoPanel(page) {
   await goToEventLister(page)
   await page.keyboard.press('p')
-  await expect(page.locator('#perso-panel')).toBeVisible()
+  await expect(pane1(page).locator('#perso-panel')).toBeVisible()
 }
 
 // ─── Ouverture / fermeture ───────────────────────────────────────────────────
@@ -30,52 +30,52 @@ async function openPersoPanel(page) {
 test("p ouvre le panneau des personnages depuis EventLister", async ({ page }) => {
   await goToEventLister(page)
   await page.keyboard.press('p')
-  await expect(page.locator('#perso-panel')).toBeVisible()
+  await expect(pane1(page).locator('#perso-panel')).toBeVisible()
 })
 
 test("l'EventLister reste visible en fond pendant que le panneau est ouvert", async ({ page }) => {
   await openPersoPanel(page)
-  await expect(page.locator('#main-panel')).toBeVisible()
+  await expect(pane1(page).locator('#main-panel')).toBeVisible()
 })
 
 test("Escape ferme le panneau perso", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('Escape')
-  await expect(page.locator('#perso-panel')).not.toBeVisible()
+  await expect(pane1(page).locator('#perso-panel')).not.toBeVisible()
 })
 
 test("p ferme le panneau des persos quand il est actif", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('p')
-  await expect(page.locator('#perso-panel')).not.toBeVisible()
+  await expect(pane1(page).locator('#perso-panel')).not.toBeVisible()
 })
 
 test("Cmd+Enter ferme le panneau perso", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('Meta+Enter')
-  await expect(page.locator('#perso-panel')).not.toBeVisible()
+  await expect(pane1(page).locator('#perso-panel')).not.toBeVisible()
 })
 
 test("après fermeture, l'EventLister redevient actif (↓ change la sélection d'event)", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('Escape')
-  await expect(page.locator('.event-item').nth(0)).toHaveClass(/selected/)
+  await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
   await page.keyboard.press('ArrowDown')
-  await expect(page.locator('.event-item').nth(1)).toHaveClass(/selected/)
+  await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/selected/)
 })
 
 // ─── Sélection visuelle ──────────────────────────────────────────────────────
 
 test("le perso sélectionné a un fond coloré visible (pas transparent)", async ({ page }) => {
   await openPersoPanel(page)
-  await expect(page.locator('.perso-item').nth(0)).toHaveClass(/selected/)
-  await expect(page.locator('.perso-item').nth(0)).toHaveCSS('background-color', 'rgb(77, 158, 254)')
+  await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/selected/)
+  await expect(pane1(page).locator('.perso-item').nth(0)).toHaveCSS('background-color', 'rgb(77, 158, 254)')
 })
 
 test("la coche d'un perso coché sélectionné est blanche (pas verte)", async ({ page }) => {
   await openPersoPanel(page)
   // c1 est sélectionné (index 0) ET coché (direct sur e1)
-  const c1 = page.locator('.perso-item').nth(0)
+  const c1 = pane1(page).locator('.perso-item').nth(0)
   await expect(c1).toHaveClass(/selected/)
   await expect(c1).toHaveClass(/checked/)
   // Comme pour tous les items sélectionnés, la coche est blanche
@@ -86,62 +86,62 @@ test("la coche d'un perso coché sélectionné est blanche (pas verte)", async (
 
 test("le panneau affiche tous les personnages du projet", async ({ page }) => {
   await openPersoPanel(page)
-  await expect(page.locator('.perso-item')).toHaveCount(4)
+  await expect(pane1(page).locator('.perso-item')).toHaveCount(4)
 })
 
 test("les pseudos sont affichés", async ({ page }) => {
   await openPersoPanel(page)
-  await expect(page.locator('.perso-item').nth(0).locator('.perso-item__title')).toHaveText('Cyrano')
-  await expect(page.locator('.perso-item').nth(1).locator('.perso-item__title')).toHaveText('Roxane')
+  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-item__title')).toHaveText('Cyrano')
+  await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-item__title')).toHaveText('Roxane')
 })
 
 test("les badges sont affichés (2 lettres)", async ({ page }) => {
   await openPersoPanel(page)
-  await expect(page.locator('.perso-item').nth(0).locator('.perso-item__badge')).toHaveText('CY')
-  await expect(page.locator('.perso-item').nth(1).locator('.perso-item__badge')).toHaveText('RO')
+  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-item__badge')).toHaveText('CY')
+  await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-item__badge')).toHaveText('RO')
 })
 
 test("le premier perso est sélectionné à l'ouverture", async ({ page }) => {
   await openPersoPanel(page)
-  await expect(page.locator('.perso-item').nth(0)).toHaveClass(/selected/)
+  await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/selected/)
 })
 
 // ─── Cochés : direct vs hérité ───────────────────────────────────────────────
 
 test("c1 (direct e1) est coché et décochable", async ({ page }) => {
   await openPersoPanel(page)
-  await expect(page.locator('.perso-item').nth(0)).toHaveClass(/checked/)
-  await expect(page.locator('.perso-item').nth(0)).not.toHaveClass(/inherited/)
+  await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/checked/)
+  await expect(pane1(page).locator('.perso-item').nth(0)).not.toHaveClass(/inherited/)
 })
 
 test("c2 (via brin b1) est coché et grisé (hérité)", async ({ page }) => {
   await openPersoPanel(page)
-  await expect(page.locator('.perso-item').nth(1)).toHaveClass(/checked/)
-  await expect(page.locator('.perso-item').nth(1)).toHaveClass(/inherited/)
+  await expect(pane1(page).locator('.perso-item').nth(1)).toHaveClass(/checked/)
+  await expect(pane1(page).locator('.perso-item').nth(1)).toHaveClass(/inherited/)
 })
 
 test("c3 et c4 ne sont pas cochés", async ({ page }) => {
   await openPersoPanel(page)
-  await expect(page.locator('.perso-item').nth(2)).not.toHaveClass(/checked/)
-  await expect(page.locator('.perso-item').nth(3)).not.toHaveClass(/checked/)
+  await expect(pane1(page).locator('.perso-item').nth(2)).not.toHaveClass(/checked/)
+  await expect(pane1(page).locator('.perso-item').nth(3)).not.toHaveClass(/checked/)
 })
 
 test("Space ne décroche pas un perso hérité (grisé)", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('ArrowDown') // → c2 (inherited)
-  await expect(page.locator('.perso-item').nth(1)).toHaveClass(/inherited/)
+  await expect(pane1(page).locator('.perso-item').nth(1)).toHaveClass(/inherited/)
   await page.keyboard.press(' ')
-  await expect(page.locator('.perso-item').nth(1)).toHaveClass(/checked/) // toujours coché
+  await expect(pane1(page).locator('.perso-item').nth(1)).toHaveClass(/checked/) // toujours coché
 })
 
 test("e2 (sans brins ni persos directs) : aucun perso coché", async ({ page }) => {
   await goToEventLister(page)
   await page.keyboard.press('ArrowDown') // e2
   await page.keyboard.press('p')
-  await expect(page.locator('.perso-item').nth(0)).not.toHaveClass(/checked/)
-  await expect(page.locator('.perso-item').nth(1)).not.toHaveClass(/checked/)
-  await expect(page.locator('.perso-item').nth(2)).not.toHaveClass(/checked/)
-  await expect(page.locator('.perso-item').nth(3)).not.toHaveClass(/checked/)
+  await expect(pane1(page).locator('.perso-item').nth(0)).not.toHaveClass(/checked/)
+  await expect(pane1(page).locator('.perso-item').nth(1)).not.toHaveClass(/checked/)
+  await expect(pane1(page).locator('.perso-item').nth(2)).not.toHaveClass(/checked/)
+  await expect(pane1(page).locator('.perso-item').nth(3)).not.toHaveClass(/checked/)
 })
 
 // ─── Navigation ──────────────────────────────────────────────────────────────
@@ -149,20 +149,20 @@ test("e2 (sans brins ni persos directs) : aucun perso coché", async ({ page }) 
 test("↓ sélectionne le perso suivant", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('ArrowDown')
-  await expect(page.locator('.perso-item').nth(1)).toHaveClass(/selected/)
+  await expect(pane1(page).locator('.perso-item').nth(1)).toHaveClass(/selected/)
 })
 
 test("↑ sélectionne le perso précédent", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('ArrowDown')
   await page.keyboard.press('ArrowUp')
-  await expect(page.locator('.perso-item').nth(0)).toHaveClass(/selected/)
+  await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/selected/)
 })
 
 test("↓↑ dans le panneau ne modifient pas la sélection de l'EventLister", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('ArrowDown')
-  await expect(page.locator('.event-item').nth(0)).toHaveClass(/selected/)
+  await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
 })
 
 // ─── Space (cocher/décocher perso direct) ────────────────────────────────────
@@ -171,36 +171,36 @@ test("Space coche un perso non-coché (c3)", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('ArrowDown')
   await page.keyboard.press('ArrowDown') // → c3
-  await expect(page.locator('.perso-item').nth(2)).not.toHaveClass(/checked/)
+  await expect(pane1(page).locator('.perso-item').nth(2)).not.toHaveClass(/checked/)
   await page.keyboard.press(' ')
-  await expect(page.locator('.perso-item').nth(2)).toHaveClass(/checked/)
+  await expect(pane1(page).locator('.perso-item').nth(2)).toHaveClass(/checked/)
 })
 
 test("Space décoche un perso direct coché (c1)", async ({ page }) => {
   await openPersoPanel(page)
-  await expect(page.locator('.perso-item').nth(0)).toHaveClass(/checked/)
+  await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/checked/)
   await page.keyboard.press(' ')
-  await expect(page.locator('.perso-item').nth(0)).not.toHaveClass(/checked/)
+  await expect(pane1(page).locator('.perso-item').nth(0)).not.toHaveClass(/checked/)
 })
 
 // ─── Badges persos sur la ligne de l'event ───────────────────────────────────
 
 test("la ligne de e1 affiche le badge de c1 (direct) quand le panneau est ouvert", async ({ page }) => {
   await openPersoPanel(page)
-  const eventEl = page.locator('.event-item').nth(0)
+  const eventEl = pane1(page).locator('.event-item').nth(0)
   await expect(eventEl.locator('.event-persos-marks')).toContainText('CY')
 })
 
 test("la ligne de e1 affiche le badge de c2 (hérité via brin b1) quand le panneau est ouvert", async ({ page }) => {
   await openPersoPanel(page)
-  const eventEl = page.locator('.event-item').nth(0)
+  const eventEl = pane1(page).locator('.event-item').nth(0)
   await expect(eventEl.locator('.event-persos-marks')).toContainText('RO')
 })
 
 test("la ligne de e2 n'affiche aucun badge perso", async ({ page }) => {
   await page.goto('/')
   await page.keyboard.press('ArrowRight')
-  const eventEl = page.locator('.event-item').nth(1)
+  const eventEl = pane1(page).locator('.event-item').nth(1)
   await expect(eventEl.locator('.event-persos-marks .perso-mark')).toHaveCount(0)
 })
 
@@ -209,7 +209,7 @@ test("cocher c3 depuis le panneau perso de e1 ajoute son avatar sur la ligne de 
   await page.keyboard.press('ArrowDown')
   await page.keyboard.press('ArrowDown') // → c3
   await page.keyboard.press(' ')
-  const eventEl = page.locator('.event-item').nth(0)
+  const eventEl = pane1(page).locator('.event-item').nth(0)
   await expect(eventEl.locator('.event-persos-marks')).toContainText('🎭')
 })
 
@@ -218,19 +218,19 @@ test("cocher c3 depuis le panneau perso de e1 ajoute son avatar sur la ligne de 
 test("la colonne badge affiche l'avatar si disponible, sinon le badge", async ({ page }) => {
   await openPersoPanel(page)
   // c3 a avatar 🎭 ET badge CH → badge circle doit montrer 🎭 (avatar gagne)
-  await expect(page.locator('.perso-item').nth(2).locator('.perso-item__badge')).toHaveText('🎭')
-  await expect(page.locator('.perso-item').nth(3).locator('.perso-item__badge')).toHaveText('👑')
+  await expect(pane1(page).locator('.perso-item').nth(2).locator('.perso-item__badge')).toHaveText('🎭')
+  await expect(pane1(page).locator('.perso-item').nth(3).locator('.perso-item__badge')).toHaveText('👑')
   // c1, c2 sans avatar → badge text
-  await expect(page.locator('.perso-item').nth(0).locator('.perso-item__badge')).not.toHaveText('🎭')
+  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-item__badge')).not.toHaveText('🎭')
 })
 
 test("la colonne avatar affiche l'avatar si défini, sinon '—'", async ({ page }) => {
   await openPersoPanel(page)
   // c1, c2 sans avatar → '—'
-  await expect(page.locator('.perso-item').nth(0).locator('.perso-item__avatar')).toHaveText('—')
+  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-item__avatar')).toHaveText('—')
   // c3 avatar 🎭
-  await expect(page.locator('.perso-item').nth(2).locator('.perso-item__avatar')).toHaveText('🎭')
-  await expect(page.locator('.perso-item').nth(3).locator('.perso-item__avatar')).toHaveText('👑')
+  await expect(pane1(page).locator('.perso-item').nth(2).locator('.perso-item__avatar')).toHaveText('🎭')
+  await expect(pane1(page).locator('.perso-item').nth(3).locator('.perso-item__avatar')).toHaveText('👑')
 })
 
 test("si perso assigné à l'event a un avatar, la ligne event affiche l'avatar pas le badge", async ({ page }) => {
@@ -238,7 +238,7 @@ test("si perso assigné à l'event a un avatar, la ligne event affiche l'avatar 
   await page.keyboard.press('ArrowDown')
   await page.keyboard.press('ArrowDown') // → c3
   await page.keyboard.press(' ') // assigner c3 à e1
-  const eventEl = page.locator('.event-item').nth(0)
+  const eventEl = pane1(page).locator('.event-item').nth(0)
   await expect(eventEl.locator('.event-persos-marks')).toContainText('🎭')
 })
 
@@ -247,14 +247,14 @@ test("si perso assigné à l'event a un avatar, la ligne event affiche l'avatar 
 test("les avatars déjà utilisés ne sont pas proposés lors du choix pour un autre perso", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('Enter') // éditer c1
-  await expect(page.locator('.perso-item.selected input[name="title"]')).toBeFocused()
+  await expect(pane1(page).locator('.perso-item.selected input[name="title"]')).toBeFocused()
   await page.keyboard.press('Tab') // → patronyme
   await page.keyboard.press('Tab') // → badge
   await page.keyboard.press('Tab') // → avatar trigger
   await page.keyboard.press('ArrowDown') // → ouvre popup avatar
-  await expect(page.locator('.popup-select')).toBeVisible()
+  await expect(pane1(page).locator('.popup-select')).toBeVisible()
   // 🎭 (c3) et 👑 (c4) ne doivent pas apparaître parmi les options régulières
-  const options = page.locator('.popup-select__option:not(.popup-select__option--custom)')
+  const options = pane1(page).locator('.popup-select__option:not(.popup-select__option--custom)')
   await expect(options.filter({ hasText: '🎭' })).toHaveCount(0)
   await expect(options.filter({ hasText: '👑' })).toHaveCount(0)
 })
@@ -264,7 +264,7 @@ test("les avatars déjà utilisés ne sont pas proposés lors du choix pour un a
 test("n ouvre l'éditeur pour un nouveau perso (input title focalisé)", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('n')
-  await expect(page.locator('.perso-item.selected input[name="title"]')).toBeFocused()
+  await expect(pane1(page).locator('.perso-item.selected input[name="title"]')).toBeFocused()
 })
 
 // ─── Badge auto-calcul ───────────────────────────────────────────────────────
@@ -272,31 +272,31 @@ test("n ouvre l'éditeur pour un nouveau perso (input title focalisé)", async (
 test("créer un perso avec patronyme → badge calculé depuis le patronyme", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('n')
-  await page.locator('.perso-item.selected input[name="title"]').fill('Jean')
+  await pane1(page).locator('.perso-item.selected input[name="title"]').fill('Jean')
   await page.keyboard.press('Tab') // → patronyme
-  await page.locator('.perso-item.selected input[name="patronyme"]').fill('Valjean')
+  await pane1(page).locator('.perso-item.selected input[name="patronyme"]').fill('Valjean')
   // badge vide : laisser auto-calc
   await page.keyboard.press('Enter')
   // 'Valjean' sans espaces → 'VA'
-  await expect(page.locator('.perso-item').nth(1).locator('.perso-item__badge')).toHaveText('VA')
+  await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-item__badge')).toHaveText('VA')
 })
 
 test("créer un perso sans patronyme → badge calculé depuis le titre", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('n')
-  await page.locator('.perso-item.selected input[name="title"]').fill('Cosette')
+  await pane1(page).locator('.perso-item.selected input[name="title"]').fill('Cosette')
   // pas de patronyme, badge vide
   await page.keyboard.press('Enter')
-  await expect(page.locator('.perso-item').nth(1).locator('.perso-item__badge')).toHaveText('CO')
+  await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-item__badge')).toHaveText('CO')
 })
 
 test("badge unique si collision avec un badge existant", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('n')
   // 'Cyrus' → 'CY' → collision avec c1 → doit être différent
-  await page.locator('.perso-item.selected input[name="title"]').fill('Cyrus')
+  await pane1(page).locator('.perso-item.selected input[name="title"]').fill('Cyrus')
   await page.keyboard.press('Enter')
-  const badgeEl = page.locator('.perso-item').nth(1).locator('.perso-item__badge')
+  const badgeEl = pane1(page).locator('.perso-item').nth(1).locator('.perso-item__badge')
   await expect(badgeEl).not.toHaveText('CY')
   const badge = await badgeEl.textContent()
   expect(badge.trim().length).toBe(2)
@@ -307,26 +307,26 @@ test("éditer un perso et vider le badge → recalculé depuis le patronyme", as
   await page.keyboard.press('Enter') // édite c1 (title='Cyrano', patronyme='de Bergerac')
   await page.keyboard.press('Tab') // → patronyme
   await page.keyboard.press('Tab') // → badge
-  await page.locator('.perso-item.selected input[name="badge"]').fill('') // vider
+  await pane1(page).locator('.perso-item.selected input[name="badge"]').fill('') // vider
   await page.keyboard.press('Enter')
   // patronyme 'de Bergerac' → 'debergerac'.toUpperCase() → 'DE'
-  await expect(page.locator('.perso-item').nth(0).locator('.perso-item__badge')).toHaveText('DE')
+  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-item__badge')).toHaveText('DE')
 })
 
 test("créer un perso : Enter valide et l'ajoute à la liste", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('n')
-  await page.locator('.perso-item.selected input[name="title"]').fill('Nouveau perso')
+  await pane1(page).locator('.perso-item.selected input[name="title"]').fill('Nouveau perso')
   await page.keyboard.press('Enter')
-  await expect(page.locator('.perso-item')).toHaveCount(5)
-  await expect(page.locator('.perso-item').nth(1).locator('.perso-item__title')).toHaveText('Nouveau perso')
+  await expect(pane1(page).locator('.perso-item')).toHaveCount(5)
+  await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-item__title')).toHaveText('Nouveau perso')
 })
 
 test("créer un perso : Escape annule, liste inchangée", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('n')
   await page.keyboard.press('Escape')
-  await expect(page.locator('.perso-item')).toHaveCount(4)
+  await expect(pane1(page).locator('.perso-item')).toHaveCount(4)
 })
 
 // ─── Édition ─────────────────────────────────────────────────────────────────
@@ -334,7 +334,7 @@ test("créer un perso : Escape annule, liste inchangée", async ({ page }) => {
 test("Enter édite le perso sélectionné (input title avec valeur courante)", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('Enter')
-  const titleInput = page.locator('.perso-item.selected input[name="title"]')
+  const titleInput = pane1(page).locator('.perso-item.selected input[name="title"]')
   await expect(titleInput).toBeFocused()
   await expect(titleInput).toHaveValue('Cyrano')
 })
@@ -342,23 +342,23 @@ test("Enter édite le perso sélectionné (input title avec valeur courante)", a
 test("Tab en édition cycle : title → patronyme → badge → avatar → fonction", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('Enter')
-  await expect(page.locator('.perso-item.selected input[name="title"]')).toBeFocused()
+  await expect(pane1(page).locator('.perso-item.selected input[name="title"]')).toBeFocused()
   await page.keyboard.press('Tab')
-  await expect(page.locator('.perso-item.selected input[name="patronyme"]')).toBeFocused()
+  await expect(pane1(page).locator('.perso-item.selected input[name="patronyme"]')).toBeFocused()
   await page.keyboard.press('Tab')
-  await expect(page.locator('.perso-item.selected input[name="badge"]')).toBeFocused()
+  await expect(pane1(page).locator('.perso-item.selected input[name="badge"]')).toBeFocused()
   await page.keyboard.press('Tab')
-  await expect(page.locator('.perso-item.selected [data-property="avatar"]')).toBeFocused()
+  await expect(pane1(page).locator('.perso-item.selected [data-property="avatar"]')).toBeFocused()
   await page.keyboard.press('Tab')
-  await expect(page.locator('.perso-item.selected [data-property="fonction"]')).toBeFocused()
+  await expect(pane1(page).locator('.perso-item.selected [data-property="fonction"]')).toBeFocused()
 })
 
 test("édition : modifier le titre puis Enter met à jour l'affichage", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('Enter')
-  await page.locator('.perso-item.selected input[name="title"]').fill('Cyrano de Bergerac')
+  await pane1(page).locator('.perso-item.selected input[name="title"]').fill('Cyrano de Bergerac')
   await page.keyboard.press('Enter')
-  await expect(page.locator('.perso-item').nth(0).locator('.perso-item__title')).toHaveText('Cyrano de Bergerac')
+  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-item__title')).toHaveText('Cyrano de Bergerac')
 })
 
 // ─── Persistance ─────────────────────────────────────────────────────────────
@@ -366,14 +366,14 @@ test("édition : modifier le titre puis Enter met à jour l'affichage", async ({
 test("persistance : perso créé survit au rechargement", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('n')
-  await page.locator('.perso-item.selected input[name="title"]').fill('Perso persisté')
+  await pane1(page).locator('.perso-item.selected input[name="title"]').fill('Perso persisté')
   await page.keyboard.press('Enter')
   await page.waitForLoadState('networkidle')
   await page.reload()
   await goToEventLister(page)
   await page.keyboard.press('p')
-  await expect(page.locator('.perso-item')).toHaveCount(5)
-  await expect(page.locator('.perso-item').nth(1).locator('.perso-item__title')).toHaveText('Perso persisté')
+  await expect(pane1(page).locator('.perso-item')).toHaveCount(5)
+  await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-item__title')).toHaveText('Perso persisté')
 })
 
 test("persistance : cochage direct survit au rechargement", async ({ page }) => {
@@ -385,7 +385,7 @@ test("persistance : cochage direct survit au rechargement", async ({ page }) => 
   await page.reload()
   await goToEventLister(page)
   await page.keyboard.press('p')
-  await expect(page.locator('.perso-item').nth(2)).toHaveClass(/checked/)
+  await expect(pane1(page).locator('.perso-item').nth(2)).toHaveClass(/checked/)
 })
 
 // ─── Sélection après création ─────────────────────────────────────────────────
@@ -393,9 +393,9 @@ test("persistance : cochage direct survit au rechargement", async ({ page }) => 
 test("après création (Enter), le nouveau perso est sélectionné", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('n')
-  await page.locator('.perso-item.selected input[name="title"]').fill('Nouveau')
+  await pane1(page).locator('.perso-item.selected input[name="title"]').fill('Nouveau')
   await page.keyboard.press('Enter')
-  await expect(page.locator('.perso-item').nth(1)).toHaveClass(/selected/)
+  await expect(pane1(page).locator('.perso-item').nth(1)).toHaveClass(/selected/)
 })
 
 // ─── Sélection après édition ──────────────────────────────────────────────────
@@ -403,9 +403,9 @@ test("après création (Enter), le nouveau perso est sélectionné", async ({ pa
 test("après édition (Enter), le perso modifié reste sélectionné", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('Enter') // édite c1
-  await page.locator('.perso-item.selected input[name="title"]').fill('Cyrano modifié')
+  await pane1(page).locator('.perso-item.selected input[name="title"]').fill('Cyrano modifié')
   await page.keyboard.press('Enter')
-  await expect(page.locator('.perso-item').nth(0)).toHaveClass(/selected/)
+  await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/selected/)
 })
 
 // ─── Sélection à la réouverture ───────────────────────────────────────────────
@@ -413,18 +413,18 @@ test("après édition (Enter), le perso modifié reste sélectionné", async ({ 
 test("réouverture : le premier perso est sélectionné", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('Escape')
-  await expect(page.locator('#perso-panel')).not.toBeVisible()
+  await expect(pane1(page).locator('#perso-panel')).not.toBeVisible()
   await page.keyboard.press('p')
-  await expect(page.locator('#perso-panel')).toBeVisible()
-  await expect(page.locator('.perso-item').nth(0)).toHaveClass(/selected/)
+  await expect(pane1(page).locator('#perso-panel')).toBeVisible()
+  await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/selected/)
 })
 
 test("réouverture : ↓ change bien la sélection", async ({ page }) => {
   await openPersoPanel(page)
   await page.keyboard.press('Escape')
   await page.keyboard.press('p')
-  await expect(page.locator('#perso-panel')).toBeVisible()
+  await expect(pane1(page).locator('#perso-panel')).toBeVisible()
   await page.keyboard.press('ArrowDown')
-  await expect(page.locator('.perso-item').nth(1)).toHaveClass(/selected/)
-  await expect(page.locator('.perso-item').nth(0)).not.toHaveClass(/selected/)
+  await expect(pane1(page).locator('.perso-item').nth(1)).toHaveClass(/selected/)
+  await expect(pane1(page).locator('.perso-item').nth(0)).not.toHaveClass(/selected/)
 })

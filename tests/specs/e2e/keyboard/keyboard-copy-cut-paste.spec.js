@@ -1,5 +1,5 @@
 import { installFixtures } from '../../../helpers/install-fixtures.js'
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 
 // ─── COPY ⌘+c ───────────────────────────────────────────────────────────────
 // many-events : project-a (hl:true, e1/e2/e3), project-b (sans events)
@@ -10,14 +10,14 @@ test.describe('⌘+c dans EventLister', () => {
 
   async function goToEventLister(page) {
     await page.goto('/')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await page.keyboard.press('ArrowRight')
-    await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   }
 
   test('⌘+c ne retire pas l\'item original de la liste', async ({ page }) => {
     await goToEventLister(page)
-    const items = page.locator('.event-item')
+    const items = pane1(page).locator('.event-item')
     const countBefore = await items.count()
     await page.keyboard.press('Meta+c')
     await expect(items).toHaveCount(countBefore)
@@ -25,9 +25,9 @@ test.describe('⌘+c dans EventLister', () => {
 
   test('⌘+c + ⌘+v ajoute un item au-dessus de la sélection', async ({ page }) => {
     await goToEventLister(page)
-    const items = page.locator('.event-item')
+    const items = pane1(page).locator('.event-item')
     const countBefore = await items.count()
-    const selectedTitle = await page.locator('.event-item.selected').textContent()
+    const selectedTitle = await pane1(page).locator('.event-item.selected').textContent()
     await page.keyboard.press('Meta+c')
     await page.keyboard.press('Meta+v')
     await expect(items).toHaveCount(countBefore + 1)
@@ -39,13 +39,13 @@ test.describe('⌘+c dans EventLister', () => {
     await goToEventLister(page)
     await page.keyboard.press('Meta+c')
     await page.keyboard.press('Meta+v')
-    await expect(page.locator('.event-item.selected')).toBeVisible()
-    await expect(page.locator('.event-item').nth(0)).toHaveClass(/selected/)
+    await expect(pane1(page).locator('.event-item.selected')).toBeVisible()
+    await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
   })
 
   test('⌘+c + ⌘+v : l\'item collé a un id différent de l\'original', async ({ page }) => {
     await goToEventLister(page)
-    const items = page.locator('.event-item')
+    const items = pane1(page).locator('.event-item')
     const originalId = await items.nth(0).getAttribute('data-id')
     await page.keyboard.press('Meta+c')
     await page.keyboard.press('Meta+v')
@@ -55,7 +55,7 @@ test.describe('⌘+c dans EventLister', () => {
 
   test('après ⌘+c + ⌘+v, le collage est persistant', async ({ page }) => {
     await goToEventLister(page)
-    const items = page.locator('.event-item')
+    const items = pane1(page).locator('.event-item')
     const countBefore = await items.count()
     await page.keyboard.press('Meta+c')
     await page.keyboard.press('Meta+v')
@@ -75,14 +75,14 @@ test.describe('⌘+x dans EventLister', () => {
 
   async function goToEventLister(page) {
     await page.goto('/')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await page.keyboard.press('ArrowRight')
-    await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   }
 
   test('⌘+x retire l\'item sélectionné de la liste', async ({ page }) => {
     await goToEventLister(page)
-    const items = page.locator('.event-item')
+    const items = pane1(page).locator('.event-item')
     const countBefore = await items.count()
     await page.keyboard.press('Meta+x')
     await expect(items).toHaveCount(countBefore - 1)
@@ -90,7 +90,7 @@ test.describe('⌘+x dans EventLister', () => {
 
   test('⌘+x + ⌘+v restitue l\'item au-dessus de la sélection', async ({ page }) => {
     await goToEventLister(page)
-    const items = page.locator('.event-item')
+    const items = pane1(page).locator('.event-item')
     const countBefore = await items.count()
     // Mémoriser le titre de e1
     const cutTitle = await items.nth(0).textContent()
@@ -105,7 +105,7 @@ test.describe('⌘+x dans EventLister', () => {
 
   test('⌘+x + ⌘+v : l\'item collé conserve le même id que l\'original', async ({ page }) => {
     await goToEventLister(page)
-    const items = page.locator('.event-item')
+    const items = pane1(page).locator('.event-item')
     const originalId = await items.nth(0).getAttribute('data-id')
     await page.keyboard.press('Meta+x')
     await page.keyboard.press('Meta+v')
@@ -114,7 +114,7 @@ test.describe('⌘+x dans EventLister', () => {
 
   test('après ⌘+x + ⌘+v, la suppression initiale est annulée (persistance)', async ({ page }) => {
     await goToEventLister(page)
-    const items = page.locator('.event-item')
+    const items = pane1(page).locator('.event-item')
     const countBefore = await items.count()
     await page.keyboard.press('Meta+x')
     await page.keyboard.press('Meta+v')
@@ -137,36 +137,36 @@ test.describe('⌘+x interdit sur le dernier item', () => {
 
   test('⌘+x du dernier event affiche une notification et ne supprime pas', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await page.keyboard.press('ArrowRight')
-    await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
-    const items = page.locator('.event-item')
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+    const items = pane1(page).locator('.event-item')
     // Couper jusqu'à 1 item restant
     await page.keyboard.press('Meta+x')
     await expect(items).toHaveCount(1)
     // Tenter de couper le dernier
     await page.keyboard.press('Meta+x')
     await expect(items).toHaveCount(1)
-    await expect(page.locator('#notification')).toBeVisible()
-    await expect(page.locator('#notification')).toContainText('évènement')
+    await expect(pane1(page).locator('#notification')).toBeVisible()
+    await expect(pane1(page).locator('#notification')).toContainText('évènement')
   })
 
   test('⌘+x du dernier brin affiche une notification mentionnant "brin"', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await page.keyboard.press('ArrowRight')
-    await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
     await page.keyboard.press('b')
-    await expect(page.locator('#brin-panel')).toBeVisible()
-    const items = page.locator('.brin-item')
+    await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+    const items = pane1(page).locator('.brin-item')
     // Couper jusqu'à 1 brin restant
     await page.keyboard.press('Meta+x')
     await expect(items).toHaveCount(1)
     // Tenter de couper le dernier
     await page.keyboard.press('Meta+x')
     await expect(items).toHaveCount(1)
-    await expect(page.locator('#notification')).toBeVisible()
-    await expect(page.locator('#notification')).toContainText('brin')
+    await expect(pane1(page).locator('#notification')).toBeVisible()
+    await expect(pane1(page).locator('#notification')).toContainText('brin')
   })
 
 })
@@ -177,8 +177,8 @@ test.describe('⌘+x interdit sur le dernier projet (ProjectLister)', () => {
 
   test('⌘+x du dernier projet affiche une notification et ne supprime pas', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
-    const items = page.locator('.project-item')
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+    const items = pane1(page).locator('.project-item')
     const initialCount = await items.count()
     // Couper jusqu'à 1 projet restant
     for (let i = 0; i < initialCount - 1; i++) {
@@ -189,8 +189,8 @@ test.describe('⌘+x interdit sur le dernier projet (ProjectLister)', () => {
     // Tenter de couper le dernier
     await page.keyboard.press('Meta+x')
     await expect(items).toHaveCount(1)
-    await expect(page.locator('#notification')).toBeVisible()
-    await expect(page.locator('#notification')).toContainText('projet')
+    await expect(pane1(page).locator('#notification')).toBeVisible()
+    await expect(pane1(page).locator('#notification')).toContainText('projet')
   })
 
 })
@@ -204,10 +204,10 @@ test.describe('⌘+c + ⌘+v dans ProjectLister', () => {
 
   test('⌘+c + ⌘+v ajoute un projet au-dessus de la sélection', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
-    const items = page.locator('.project-item')
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+    const items = pane1(page).locator('.project-item')
     const countBefore = await items.count()
-    const selectedTitle = await page.locator('.project-item.selected .project-item__title').textContent()
+    const selectedTitle = await pane1(page).locator('.project-item.selected .project-item__title').textContent()
     await page.keyboard.press('Meta+c')
     await page.keyboard.press('Meta+v')
     await page.keyboard.press('Enter')
@@ -217,40 +217,40 @@ test.describe('⌘+c + ⌘+v dans ProjectLister', () => {
 
   test('⌘+c + ⌘+v : l\'item collé est sélectionné', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await page.keyboard.press('Meta+c')
     await page.keyboard.press('Meta+v')
     await page.keyboard.press('Enter')
-    await expect(page.locator('.project-item').nth(0)).toHaveClass(/selected/)
+    await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
   })
 
   test('⌘+c + ⌘+v : l\'identifiant du projet collé est un UUID valide (pas vide)', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await page.keyboard.press('Meta+c')
     await page.keyboard.press('Meta+v')
     await page.keyboard.press('Enter')
     await page.waitForLoadState('networkidle')
-    const copiedId = await page.locator('.project-item').nth(0).getAttribute('data-id')
+    const copiedId = await pane1(page).locator('.project-item').nth(0).getAttribute('data-id')
     expect(copiedId).toBeTruthy()
   })
 
   test('⌘+c + ⌘+v : l\'id collé est différent de l\'original', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
-    const originalId = await page.locator('.project-item').nth(0).getAttribute('data-id')
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+    const originalId = await pane1(page).locator('.project-item').nth(0).getAttribute('data-id')
     await page.keyboard.press('Meta+c')
     await page.keyboard.press('Meta+v')
     await page.keyboard.press('Enter')
     await page.waitForLoadState('networkidle')
-    const copiedId = await page.locator('.project-item').nth(0).getAttribute('data-id')
+    const copiedId = await pane1(page).locator('.project-item').nth(0).getAttribute('data-id')
     expect(copiedId).not.toBe(originalId)
   })
 
   test('après ⌘+c + ⌘+v, le projet collé est persistant', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
-    const items = page.locator('.project-item')
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+    const items = pane1(page).locator('.project-item')
     const countBefore = await items.count()
     await page.keyboard.press('Meta+c')
     await page.keyboard.press('Meta+v')
@@ -271,8 +271,8 @@ test.describe('⌘+x + ⌘+v dans ProjectLister', () => {
 
   test('⌘+x + ⌘+v coupe et colle un projet au-dessus de la sélection', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
-    const items = page.locator('.project-item')
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+    const items = pane1(page).locator('.project-item')
     const countBefore = await items.count()
     const cutTitle = await items.nth(0).textContent()
     await page.keyboard.press('Meta+x')
@@ -293,24 +293,24 @@ test.describe('⌘+v colle dans un autre EventLister (même type)', () => {
 
   test('⌘+c dans project-a puis ⌘+v dans project-b colle l\'item', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
 
     // Entrer dans project-a → copier e1
     await page.keyboard.press('ArrowRight')
-    await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
-    const copiedTitle = await page.locator('.event-item.selected').textContent()
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+    const copiedTitle = await pane1(page).locator('.event-item.selected').textContent()
     await page.keyboard.press('Meta+c')
 
     // Revenir à la liste des projets
     await page.keyboard.press('ArrowLeft')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
 
     // Naviguer sur project-b puis entrer dedans
     await page.keyboard.press('ArrowDown')
     await page.keyboard.press('ArrowRight')
-    await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
-    const items = page.locator('.event-item')
+    const items = pane1(page).locator('.event-item')
     const countBefore = await items.count()
 
     // Coller
@@ -321,26 +321,26 @@ test.describe('⌘+v colle dans un autre EventLister (même type)', () => {
 
   test('⌘+x dans project-a puis ⌘+v dans project-b déplace l\'item', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
 
     // Entrer dans project-a → couper e1
     await page.keyboard.press('ArrowRight')
-    await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
-    const itemsA = page.locator('.event-item')
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+    const itemsA = pane1(page).locator('.event-item')
     const countABefore = await itemsA.count()
-    const cutTitle = await page.locator('.event-item.selected').textContent()
+    const cutTitle = await pane1(page).locator('.event-item.selected').textContent()
     await page.keyboard.press('Meta+x')
     await expect(itemsA).toHaveCount(countABefore - 1)
 
     // Revenir à la liste des projets
     await page.keyboard.press('ArrowLeft')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
 
     // Entrer dans project-b → coller
     await page.keyboard.press('ArrowDown')
     await page.keyboard.press('ArrowRight')
-    await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
-    const itemsB = page.locator('.event-item')
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+    const itemsB = pane1(page).locator('.event-item')
     const countBBefore = await itemsB.count()
     await page.keyboard.press('Meta+v')
     await expect(itemsB).toHaveCount(countBBefore + 1)
@@ -358,18 +358,18 @@ test.describe('⌘+v bloqué entre types différents', () => {
 
   test('ne peut pas coller un event dans le panneau des brins', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await page.keyboard.press('ArrowRight')
-    await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
     // Copier l'event sélectionné
     await page.keyboard.press('Meta+c')
 
     // Ouvrir le panneau brins
     await page.keyboard.press('b')
-    await expect(page.locator('#brin-panel')).toBeVisible()
+    await expect(pane1(page).locator('#brin-panel')).toBeVisible()
 
-    const brins = page.locator('.brin-item')
+    const brins = pane1(page).locator('.brin-item')
     const countBefore = await brins.count()
 
     // Tenter de coller
@@ -379,18 +379,18 @@ test.describe('⌘+v bloqué entre types différents', () => {
 
   test('ne peut pas coller un event dans le panneau des projets', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await page.keyboard.press('ArrowRight')
-    await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
     // Copier l'event sélectionné
     await page.keyboard.press('Meta+c')
 
     // Revenir à la liste des projets
     await page.keyboard.press('ArrowLeft')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
 
-    const projects = page.locator('.project-item')
+    const projects = pane1(page).locator('.project-item')
     const countBefore = await projects.count()
 
     // Tenter de coller

@@ -1,6 +1,6 @@
 import { installFixtures } from '../../../helpers/install-fixtures'
 import { setupProjectFolder, createAndSelectFolderInPicker } from '../../../helpers/create-project-helper.js'
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('many-projects')
@@ -8,14 +8,14 @@ test.beforeEach(() => {
 
 async function createProject(page, expect) {
   await page.goto('/')
-  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
 
   const { folderName } = await setupProjectFolder(page)
   await page.keyboard.press('n')
   await createAndSelectFolderInPicker(page, expect, folderName)
   await page.waitForLoadState('networkidle')
 
-  return await page.locator('.project-item').nth(1).getAttribute('data-id')
+  return await pane1(page).locator('.project-item').nth(1).getAttribute('data-id')
 }
 
 test('un nouveau projet sauvegardé a un évènemencier avec un event "Acte I"', async ({ page }) => {

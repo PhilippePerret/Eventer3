@@ -1,5 +1,5 @@
 import { installFixtures } from '../../../helpers/install-fixtures.js'
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 
 // Fixture filter-events :
 //   b1 "Amour romantique" badge=AMO
@@ -15,26 +15,26 @@ test.beforeEach(() => {
 
 async function enterEventLister(page) {
   await page.goto('/')
-  await expect(page.locator('.project-item').nth(0)).toHaveClass(/selected/)
+  await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
   await page.keyboard.press('ArrowRight')
-  await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 }
 
 test('event avec un brin affiche son badge', async ({ page }) => {
   await enterEventLister(page)
-  const e1 = page.locator('.event-item').nth(0)
+  const e1 = pane1(page).locator('.event-item').nth(0)
   await expect(e1.locator('.event-brins-badges')).toContainText('AMO')
 })
 
 test('event avec deux brins affiche les deux badges', async ({ page }) => {
   await enterEventLister(page)
-  const e3 = page.locator('.event-item').nth(2)
+  const e3 = pane1(page).locator('.event-item').nth(2)
   await expect(e3.locator('.event-brins-badges')).toContainText('AMO')
   await expect(e3.locator('.event-brins-badges')).toContainText('INT')
 })
 
 test('event sans brin a badges vide', async ({ page }) => {
   await enterEventLister(page)
-  const e4 = page.locator('.event-item').nth(3)
+  const e4 = pane1(page).locator('.event-item').nth(3)
   await expect(e4.locator('.event-brins-badges')).toBeEmpty()
 })

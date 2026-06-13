@@ -1,5 +1,5 @@
 import { installFixtures } from '../../../helpers/install-fixtures'
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('with-brins')
@@ -9,30 +9,30 @@ test.beforeEach(() => {
 
 async function openBrinPanel(page) {
   await page.goto('/')
-  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await page.keyboard.press('ArrowRight')
-  await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   await page.keyboard.press('b')
-  await expect(page.locator('#brin-panel')).toBeVisible()
+  await expect(pane1(page).locator('#brin-panel')).toBeVisible()
 }
 
 test("nouveau brin : il est sélectionné juste après création", async ({ page }) => {
   await openBrinPanel(page)
   await page.keyboard.press('n')
-  const titleInput = page.locator('.brin-item.selected input[name="title"]')
+  const titleInput = pane1(page).locator('.brin-item.selected input[name="title"]')
   await titleInput.fill('Brin créé')
   await page.keyboard.press('Enter')
   // Le nouveau brin (inséré après le premier) doit être sélectionné
-  await expect(page.locator('.brin-item').nth(1)).toHaveClass(/selected/)
+  await expect(pane1(page).locator('.brin-item').nth(1)).toHaveClass(/selected/)
 })
 
 test("nouveau brin : il s'affiche avec les bonnes classes CSS (panel-row brin-row)", async ({ page }) => {
   await openBrinPanel(page)
   await page.keyboard.press('n')
-  const titleInput = page.locator('.brin-item.selected input[name="title"]')
+  const titleInput = pane1(page).locator('.brin-item.selected input[name="title"]')
   await titleInput.fill('Brin CSS')
   await page.keyboard.press('Enter')
-  const newBrin = page.locator('.brin-item').nth(1)
+  const newBrin = pane1(page).locator('.brin-item').nth(1)
   await expect(newBrin).toHaveClass(/panel-row/)
   await expect(newBrin).toHaveClass(/brin-row/)
 })
@@ -40,7 +40,7 @@ test("nouveau brin : il s'affiche avec les bonnes classes CSS (panel-row brin-ro
 test("en création, l'éditeur de brin a les classes CSS panel-row et brin-row", async ({ page }) => {
   await openBrinPanel(page)
   await page.keyboard.press('n')
-  const editor = page.locator('.brin-item.selected')
+  const editor = pane1(page).locator('.brin-item.selected')
   await expect(editor).toHaveClass(/panel-row/)
   await expect(editor).toHaveClass(/brin-row/)
 })
@@ -48,13 +48,13 @@ test("en création, l'éditeur de brin a les classes CSS panel-row et brin-row",
 test("nouveau brin : sa couleur est différente de celle du brin précédent", async ({ page }) => {
   await openBrinPanel(page)
   // Récupérer la couleur du dernier brin existant (b2)
-  const lastBrin = page.locator('.brin-item').last()
+  const lastBrin = pane1(page).locator('.brin-item').last()
   const lastColor = await lastBrin.locator('input[type="color"]').inputValue()
   // Créer un nouveau brin
   await page.keyboard.press('n')
-  await page.locator('.brin-item.selected input[name="title"]').fill('Nouveau brin couleur')
+  await pane1(page).locator('.brin-item.selected input[name="title"]').fill('Nouveau brin couleur')
   await page.keyboard.press('Enter')
   // La couleur du nouveau brin doit être différente
-  const newBrinColor = await page.locator('.brin-item').nth(1).locator('input[type="color"]').inputValue()
+  const newBrinColor = await pane1(page).locator('.brin-item').nth(1).locator('input[type="color"]').inputValue()
   expect(newBrinColor).not.toBe(lastColor)
 })

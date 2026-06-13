@@ -1,4 +1,4 @@
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 import { setupTestBrinsFixture } from '../../../helpers/fixture-setup.js'
 
 test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }) => {
@@ -7,13 +7,13 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
 
   // Naviguer au premier project
   await page.press('body', 'ArrowRight')
-  await expect(page.locator('.event-item')).toHaveCount(3)
+  await expect(pane1(page).locator('.event-item')).toHaveCount(3)
 
   // Ouvrir brins pour e1 (doit avoir A et B cochés)
   await page.press('body', 'b')
-  await expect(page.locator('#brin-panel')).toBeVisible()
+  await expect(pane1(page).locator('#brin-panel')).toBeVisible()
 
-  let brinsItems = page.locator('.brin-item')
+  let brinsItems = pane1(page).locator('.brin-item')
   let checkedCount = 0
   let uncheckedCount = 0
 
@@ -45,7 +45,7 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
   await page.press('body', 'b')
   await page.waitForTimeout(300)
 
-  brinsItems = page.locator('.brin-item')
+  brinsItems = pane1(page).locator('.brin-item')
   checkedCount = 0
 
   for (let i = 0; i < await brinsItems.count(); i++) {
@@ -67,7 +67,7 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
   await page.press('body', 'b')
   await page.waitForTimeout(300)
 
-  brinsItems = page.locator('.brin-item')
+  brinsItems = pane1(page).locator('.brin-item')
   checkedCount = 0
   uncheckedCount = 0
 
@@ -87,7 +87,7 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
   expect(uncheckedCount).toBe(2)
 
   // Cocher D
-  const brinDItem = page.locator('.brin-item').filter({ hasText: /Brin D/ })
+  const brinDItem = pane1(page).locator('.brin-item').filter({ hasText: /Brin D/ })
   await brinDItem.click()
   await page.waitForTimeout(200)
 
@@ -107,7 +107,7 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
   await page.press('body', 'b')
   await page.waitForTimeout(300)
 
-  brinsItems = page.locator('.brin-item')
+  brinsItems = pane1(page).locator('.brin-item')
   checkedCount = 0
 
   for (let i = 0; i < await brinsItems.count(); i++) {

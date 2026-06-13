@@ -1,5 +1,5 @@
 import { installFixtures } from '../../../helpers/install-fixtures'
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('many-projects')
@@ -10,7 +10,7 @@ test('la touche Escape après n annule complètement la création du projet', as
 
   await page.goto('/')
 
-  const items = page.locator('.project-item')
+  const items = pane1(page).locator('.project-item')
 
   console.log('-> vérification nombre initial projets')
   await expect(items).toHaveCount(3)
@@ -30,7 +30,7 @@ test('la touche Escape après n annule complètement la création du projet', as
 
   console.log('-> vérification nombre final projets')
   await expect(items).toHaveCount(3)
-  await expect(page.locator('input:not(#filter-input):not(.panel-search)')).toHaveCount(0)
+  await expect(pane1(page).locator('input:not(#filter-input):not(.panel-search)')).toHaveCount(0)
   await expect(items.nth(0)).toHaveClass(/selected/)
   await expect(items.nth(1)).not.toHaveClass(/selected/)
   await expect(items.nth(2)).not.toHaveClass(/selected/)

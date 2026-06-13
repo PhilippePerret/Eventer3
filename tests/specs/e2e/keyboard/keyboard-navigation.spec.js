@@ -1,7 +1,7 @@
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 installFixtures('many-projects')
 
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 
 test(
   'les flèches haut/bas permettent de naviguer dans un Lister',
@@ -9,7 +9,7 @@ test(
 
     await page.goto('/')
 
-    const items = page.locator('.project-item')
+    const items = pane1(page).locator('.project-item')
 
     await expect(items.nth(0))
       .toHaveClass(/selected/)

@@ -1,4 +1,4 @@
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 

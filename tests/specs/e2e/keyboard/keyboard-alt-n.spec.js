@@ -1,9 +1,10 @@
 import { installFixtures } from '../../../helpers/install-fixtures.js'
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 
 // Simule le vrai ⌥n Mac US : event.key = '˜' (dead tilde), event.code = 'KeyN'
 async function pressAltNMac(page) {
-  await page.evaluate(() => {
+  const frame = page.frames().find(f => f.url().includes('app-frame'))
+  await frame.evaluate(() => {
     document.dispatchEvent(new KeyboardEvent('keydown', {
       key: '˜', code: 'KeyN', altKey: true, bubbles: true, cancelable: true
     }))
@@ -15,9 +16,9 @@ test.describe('Alt+n dans la liste des projets', () => {
 
   test("Alt+n crée un nouvel item AU-DESSUS de l'item sélectionné", async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
 
-    const items = page.locator('.project-item')
+    const items = pane1(page).locator('.project-item')
     await expect(items.nth(0)).toHaveClass(/selected/)
 
     await page.keyboard.press('Alt+n')
@@ -31,12 +32,12 @@ test.describe('Alt+n dans la liste des projets', () => {
 
   test("⌥n Mac (key='˜') crée un item AU-DESSUS — comportement clavier réel", async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
-    await expect(page.locator('.project-item').nth(0)).toHaveClass(/selected/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+    await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
     await pressAltNMac(page)
 
-    const items = page.locator('.project-item')
+    const items = pane1(page).locator('.project-item')
     await expect(items).toHaveCount(4)
     await expect(items.nth(0)).toHaveClass(/selected/)
     await expect(items.nth(0).locator('input[name="title"]')).toBeVisible()
@@ -48,11 +49,11 @@ test.describe("Alt+n dans un EventLister", () => {
 
   test("Alt+n crée un event AU-DESSUS de l'event sélectionné", async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await page.keyboard.press('ArrowRight')
-    await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
-    const items = page.locator('.event-item')
+    const items = pane1(page).locator('.event-item')
     await expect(items.nth(0)).toHaveClass(/selected/)
 
     await page.keyboard.press('Alt+n')
@@ -65,14 +66,14 @@ test.describe("Alt+n dans un EventLister", () => {
 
   test("⌥n Mac (key='˜') crée un event AU-DESSUS — comportement clavier réel", async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await page.keyboard.press('ArrowRight')
-    await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
-    await expect(page.locator('.event-item').nth(0)).toHaveClass(/selected/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+    await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
 
     await pressAltNMac(page)
 
-    const items = page.locator('.event-item')
+    const items = pane1(page).locator('.event-item')
     await expect(items.nth(1)).toContainText('Évènement un')
     await expect(items.nth(0)).toHaveClass(/selected/)
     await expect(items.nth(0).locator('input[name="title"]')).toBeVisible()
@@ -84,13 +85,13 @@ test.describe("Alt+n dans un BrinLister", () => {
 
   test("Alt+n crée un brin AU-DESSUS du brin sélectionné", async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await page.keyboard.press('ArrowRight')
-    await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
     await page.keyboard.press('b')
-    await expect(page.locator('#brin-panel')).toBeVisible()
+    await expect(pane1(page).locator('#brin-panel')).toBeVisible()
 
-    const brins = page.locator('.brin-item')
+    const brins = pane1(page).locator('.brin-item')
     await expect(brins.nth(0)).toHaveClass(/selected/)
 
     await page.keyboard.press('Alt+n')

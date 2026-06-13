@@ -23,6 +23,10 @@
   --height-petit-badge:38px;
 }
 
+h1 {
+  font-size:3em!important;
+}
+
 /* Sélection atténuée dans les listings arrière-plan quand un panneau est au premier plan */
 body:has(#brin-panel:not(.hidden)) #main-panel .selected,
 body:has(#perso-panel:not(.hidden)) #main-panel .selected,
@@ -503,6 +507,25 @@ body {
 
 .hidden {
   display: none !important;
+}
+
+/* ── Shell split-pane ───────────────────────────────────────────────────────── */
+body#shell {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+body#shell #pane-1,
+body#shell #pane-2 {
+  flex: 1;
+  border: none;
+  height: 100%;
+}
+body#shell #pane-2[src=""] {
+  display: none;
 }
 
 .panel-header {

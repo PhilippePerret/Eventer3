@@ -2,13 +2,13 @@ import { installFixtures } from '../../../helpers/install-fixtures'
 import { setupProjectFolder, createAndSelectFolderInPicker } from '../../../helpers/create-project-helper.js'
 installFixtures('many-projects')
 
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 
 test("la touche n désélectionne l'item courant", async ({ page }) => {
 
   await page.goto('/')
 
-  const items = page.locator('.project-item')
+  const items = pane1(page).locator('.project-item')
 
   console.log('\n=== TEST DÉSÉLECTION À LA TOUCHE n ===')
 

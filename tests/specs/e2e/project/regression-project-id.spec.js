@@ -3,7 +3,7 @@
  * Tous ces tests vérifient la PERSISTANCE (rechargement de page),
  * pas seulement le DOM immédiat.
  */
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 
 test.beforeEach(() => {
@@ -14,10 +14,10 @@ test.beforeEach(() => {
 
 async function enterProject(page) {
   await page.goto('/')
-  await expect(page.locator('.project-item').first()).toHaveClass(/selected/)
+  await expect(pane1(page).locator('.project-item').first()).toHaveClass(/selected/)
   await page.keyboard.press('ArrowRight')
-  await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
-  await expect(page.locator('.event-item').first()).toBeVisible()
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('.event-item').first()).toBeVisible()
 }
 
 // ── Events imbriqués ───────────────────────────────────────────────────
@@ -27,23 +27,23 @@ test('créer un event imbriqué → persiste après rechargement', async ({ page
 
   // Entrer dans le premier event (lister virtuel)
   await page.keyboard.press('ArrowRight')
-  await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
   // Créer un sous-event
   await page.keyboard.press('n')
-  const input = page.locator('.event-item input[name="title"]')
+  const input = pane1(page).locator('.event-item input[name="title"]')
   await expect(input).toBeFocused()
   await input.fill('Sous-event persistant')
   await page.keyboard.press('Enter')
-  await expect(page.locator('.event-item').first()).toContainText('Sous-event persistant')
+  await expect(pane1(page).locator('.event-item').first()).toContainText('Sous-event persistant')
   await page.waitForLoadState('networkidle')
 
   // Rechargement
   await page.reload()
   await enterProject(page)
   await page.keyboard.press('ArrowRight')
-  await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
-  await expect(page.locator('.event-item').first()).toContainText('Sous-event persistant')
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('.event-item').first()).toContainText('Sous-event persistant')
 })
 
 // ── Création brin ──────────────────────────────────────────────────────
@@ -53,27 +53,27 @@ test('créer un brin → persiste après rechargement', async ({ page }) => {
 
   // Ouvrir le panel brins
   await page.keyboard.press('b')
-  await expect(page.locator('#brin-panel')).toBeVisible()
+  await expect(pane1(page).locator('#brin-panel')).toBeVisible()
 
   // Créer un nouveau brin
   await page.keyboard.press('n')
-  const input = page.locator('.brin-item input[name="title"]')
+  const input = pane1(page).locator('.brin-item input[name="title"]')
   await expect(input).toBeFocused()
   await input.fill('Brin régression')
   await page.keyboard.press('Enter')
 
   // Vérification immédiate
-  await expect(page.locator('.brin-item').filter({ hasText: 'Brin régression' })).toBeVisible()
+  await expect(pane1(page).locator('.brin-item').filter({ hasText: 'Brin régression' })).toBeVisible()
 
   // Fermer le panel + rechargement
   await page.keyboard.press('Escape')
   await page.reload()
   await enterProject(page)
   await page.keyboard.press('b')
-  await expect(page.locator('#brin-panel')).toBeVisible()
+  await expect(pane1(page).locator('#brin-panel')).toBeVisible()
 
   // Le brin doit toujours être là
-  await expect(page.locator('.brin-item').filter({ hasText: 'Brin régression' })).toBeVisible()
+  await expect(pane1(page).locator('.brin-item').filter({ hasText: 'Brin régression' })).toBeVisible()
 })
 
 // ── Création perso ─────────────────────────────────────────────────────
@@ -83,27 +83,27 @@ test('créer un perso → persiste après rechargement', async ({ page }) => {
 
   // Ouvrir le panel persos
   await page.keyboard.press('p')
-  await expect(page.locator('#perso-panel')).toBeVisible()
+  await expect(pane1(page).locator('#perso-panel')).toBeVisible()
 
   // Créer un nouveau perso
   await page.keyboard.press('n')
-  const input = page.locator('.perso-item input[name="title"]')
+  const input = pane1(page).locator('.perso-item input[name="title"]')
   await expect(input).toBeFocused()
   await input.fill('Perso régression')
   await page.keyboard.press('Enter')
 
   // Vérification immédiate
-  await expect(page.locator('.perso-item').filter({ hasText: 'Perso régression' })).toBeVisible()
+  await expect(pane1(page).locator('.perso-item').filter({ hasText: 'Perso régression' })).toBeVisible()
 
   // Fermer le panel + rechargement
   await page.keyboard.press('Escape')
   await page.reload()
   await enterProject(page)
   await page.keyboard.press('p')
-  await expect(page.locator('#perso-panel')).toBeVisible()
+  await expect(pane1(page).locator('#perso-panel')).toBeVisible()
 
   // Le perso doit toujours être là
-  await expect(page.locator('.perso-item').filter({ hasText: 'Perso régression' })).toBeVisible()
+  await expect(pane1(page).locator('.perso-item').filter({ hasText: 'Perso régression' })).toBeVisible()
 })
 
 // ── EventLister depth-2 : brins/persos sans 500 ────────────────────────
@@ -118,7 +118,7 @@ test('entrer EventLister depth-2 → aucun 500 sur brins/persos', async ({ page 
 
   // Entrer dans le premier event (depth 2, parentItem = event, pas projet)
   await page.keyboard.press('ArrowRight')
-  await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   await page.waitForLoadState('networkidle')
 
   expect(errors).toHaveLength(0)

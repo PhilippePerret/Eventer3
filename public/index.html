@@ -5,40 +5,14 @@
   <title>Eventer2</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
-<body>
+<body id="shell">
+  <iframe id="pane-1" src="/app-frame.html"></iframe>
+  <iframe id="pane-2" src=""></iframe>
 
-  <input id="filter-input" class="hidden" type="text" placeholder="Filtrer par titre…" autocomplete="off" />
-
-  <main id="main-panel"></main>
-
-  <div id="filter-bar" class="hidden"></div>
-
-  <div id="status-bar"></div>
-  <footer id="shortcuts-footer" aria-label="Raccourcis clavier"></footer>
-
-
-  <div id="shortcuts-panel" class="hidden"></div>
-
-  <div id="contextual-help-hint">AIDE ⇧⌘&thinsp;?</div>
-
-  <div id="notification" class="notification hidden"></div>
-
-  <div id="brin-panel" class="hidden"></div>
-
-  <div id="perso-panel" class="hidden"></div>
-
-  <div id="style-panel" class="hidden"></div>
-
-  <div id="tools-panel" class="hidden"></div>
-
-  <div id="filter-selector-panel" class="hidden"></div>
-
-  <div id="panel-overlay" class="hidden">
-    <div id="panel"></div>
-  </div>
-
-  <script src="/config.js"></script>
-  <script type="module" src="/constants.js"></script>
-  <script type="module" src="/app.js"></script>
+  <script>
+    document.getElementById('pane-1').addEventListener('load', function() {
+      this.focus()
+    })
+  </script>
 </body>
 </html>

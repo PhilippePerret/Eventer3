@@ -39,6 +39,11 @@ export default class FilePicker {
 
     this._buildDOM()
 
+    this.keyboardController.pushMode({
+      type: 'file-picker',
+      onKeyDown: (event) => this._handleKey(event),
+    })
+
     let startPath = pathData.value
     if (!startPath) {
       const fsResp = await fetch('/api/fs', { cache: 'no-store' })
@@ -46,11 +51,6 @@ export default class FilePicker {
       startPath    = fsData.path
     }
     await this._navigateTo(startPath)
-
-    this.keyboardController.pushMode({
-      type: 'file-picker',
-      onKeyDown: (event) => this._handleKey(event),
-    })
   }
 
   _buildDOM() {

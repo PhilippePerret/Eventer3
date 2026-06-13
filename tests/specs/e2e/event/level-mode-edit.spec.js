@@ -1,5 +1,5 @@
 import { installFixtures } from '../../../helpers/install-fixtures'
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 
 // Fixture level-mode-mixed :
 //   Liste#2 (depth=1) : [e1 "Acte I", e2 "Acte II", e3 "Acte III"]
@@ -13,14 +13,14 @@ test.beforeEach(() => {
 })
 
 async function enterLevelMode(page) {
-  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await page.keyboard.press('ArrowRight')
-  await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   await page.keyboard.press('ArrowRight')
-  await expect(page.locator('#main-panel')).toHaveAttribute('data-depth', '2')
+  await expect(pane1(page).locator('#main-panel')).toHaveAttribute('data-depth', '2')
   await page.keyboard.press('Meta+m')
-  await expect(page.locator('#status-bar')).toContainText('DISP MODE LEVEL')
-  await expect(page.locator('.event-item')).toHaveCount(3)
+  await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
+  await expect(pane1(page).locator('.event-item')).toHaveCount(3)
 }
 
 test("LEVEL mode : item réel après un virtuel est sélectionnable et éditable", async ({ page }) => {
@@ -30,15 +30,15 @@ test("LEVEL mode : item réel après un virtuel est sélectionnable et éditable
   console.log('\n=== TEST ÉDITION DERNIER ITEM RÉEL EN LEVEL MODE ===')
 
   console.log('-> sélection initiale : e11')
-  await expect(page.locator('.event-item[data-id="e11"]')).toHaveClass(/selected/)
+  await expect(pane1(page).locator('.event-item[data-id="e11"]')).toHaveClass(/selected/)
 
   console.log('-> ↓ : saute le virtuel, sélectionne e31')
   await page.keyboard.press('ArrowDown')
-  await expect(page.locator('.event-item[data-id="e31"]')).toHaveClass(/selected/)
+  await expect(pane1(page).locator('.event-item[data-id="e31"]')).toHaveClass(/selected/)
 
   console.log('-> Enter : édition de e31')
   await page.keyboard.press('Enter')
-  const input = page.locator('.event-item[data-id="e31"] input[name="title"]')
+  const input = pane1(page).locator('.event-item[data-id="e31"] input[name="title"]')
   await expect(input).toBeVisible()
   await expect(input).toBeFocused()
   await expect(input).toHaveValue('Séquence 1 de Acte III')

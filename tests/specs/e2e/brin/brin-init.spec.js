@@ -1,5 +1,5 @@
 import { installFixtures } from '../../../helpers/install-fixtures'
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 
 // fixture many-events : project-a (hl:true, events e1/e2/e3, pas de brins lister)
 
@@ -9,23 +9,23 @@ test.beforeEach(() => {
 
 async function goToEventLister(page) {
   await page.goto('/')
-  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await page.keyboard.press('ArrowRight')
-  await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 }
 
 test("un projet sans brins reçoit automatiquement b1 'Intrigue principale' à l'ouverture du panneau", async ({ page }) => {
   await goToEventLister(page)
   await page.keyboard.press('b')
-  await expect(page.locator('#brin-panel')).toBeVisible()
-  await expect(page.locator('.brin-item')).toHaveCount(1)
-  await expect(page.locator('.brin-item').nth(0).locator('.brin-item__title')).toHaveText('Intrigue principale')
+  await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+  await expect(pane1(page).locator('.brin-item')).toHaveCount(1)
+  await expect(pane1(page).locator('.brin-item').nth(0).locator('.brin-item__title')).toHaveText('Intrigue principale')
 })
 
 test("b1 'Intrigue principale' est persisté dans la base de données", async ({ page }) => {
   await goToEventLister(page)
   await page.keyboard.press('b')
-  await expect(page.locator('#brin-panel')).toBeVisible()
+  await expect(pane1(page).locator('#brin-panel')).toBeVisible()
   await page.waitForLoadState('networkidle')
 
   const eventsListerResp = await page.request.get('/api/items/00000000-0000-0000-0000-000000000001/lister')

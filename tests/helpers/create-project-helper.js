@@ -24,18 +24,19 @@ export async function setupProjectFolder(page, folderName = null) {
  * Dans le FilePicker ouvert, crée un sous-dossier avec folderName puis le sélectionne.
  */
 export async function createAndSelectFolderInPicker(page, expect, folderName) {
-  await expect(page.locator('.file-picker')).toBeVisible()
+  const frame = page.frameLocator('#pane-1')
+  await expect(frame.locator('.file-picker')).toBeVisible()
 
   // n dans le FilePicker = nouveau dossier
   await page.keyboard.press('n')
 
-  const input = page.locator('.file-picker__new-folder-input')
+  const input = frame.locator('.file-picker__new-folder-input')
   await expect(input).toBeVisible()
   await input.fill(folderName)
   await input.press('Enter')
 
   // Attendre que l'entrée apparaisse dans la liste
-  await page.locator('.file-picker__entry-name', { hasText: folderName }).waitFor({ state: 'visible' })
+  await frame.locator('.file-picker__entry-name', { hasText: folderName }).waitFor({ state: 'visible' })
 
   // Enter pour sélectionner le dossier
   await page.keyboard.press('Enter')
@@ -50,6 +51,6 @@ export async function createProjectViaFilePicker(page, expect) {
   await page.keyboard.press('n')
   await createAndSelectFolderInPicker(page, expect, folderName)
   await page.waitForLoadState('networkidle')
-  const idText = await page.locator('.project-item').nth(1).locator('.project-item__id').textContent()
+  const idText = await page.frameLocator('#pane-1').locator('.project-item').nth(1).locator('.project-item__id').textContent()
   return { projectId: idText.trim(), folderName }
 }

@@ -1,14 +1,14 @@
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 installFixtures('many-projects')
 
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 
 test('Cmd+flèche permet de déplacer les items', async ({ page }) => {
 
     await page.goto('/')
 
     const items =
-      page.locator('.project-item')
+      pane1(page).locator('.project-item')
 
     await expect(items.nth(0))
       .toContainText('Projet A')

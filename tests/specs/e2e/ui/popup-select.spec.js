@@ -1,8 +1,9 @@
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 
 // Ouvre un PopupSelect en isolation en utilisant le KC réel de l'app
 async function openTestPopup(page, config) {
-  await page.evaluate(async (cfg) => {
+  const frame = page.frames().find(f => f.url().includes('app-frame'))
+  await frame.evaluate(async (cfg) => {
     const { default: PopupSelect } = await import('/classes/ui/PopupSelect.js')
     const anchor = document.createElement('button')
     anchor.style.cssText = 'position:fixed;top:100px;left:100px;z-index:9998'
@@ -19,7 +20,7 @@ async function openTestPopup(page, config) {
     })
     window.__testPopup.open(anchor)
   }, config)
-  await expect(page.locator('.popup-select')).toBeVisible()
+  await expect(pane1(page).locator('.popup-select')).toBeVisible()
 }
 
 // --- Single select ---
@@ -32,11 +33,11 @@ test("single: Enter sélectionne l'option focalisée", async ({ page }) => {
   })
 
   await page.keyboard.press('ArrowDown')
-  await expect(page.locator('.popup-select__option.focused')).toHaveText('Option B')
+  await expect(pane1(page).locator('.popup-select__option.focused')).toHaveText('Option B')
   await page.keyboard.press('Enter')
 
-  await expect(page.locator('.popup-select')).not.toBeVisible()
-  const result = await page.evaluate(() => window.__testResult)
+  await expect(pane1(page).locator('.popup-select')).not.toBeVisible()
+  const result = await page.frames().find(f => f.url().includes('app-frame')).evaluate(() => window.__testResult)
   expect(result).toBe('b')
 })
 
@@ -49,10 +50,10 @@ test("single: Escape annule sans sélection", async ({ page }) => {
 
   await page.keyboard.press('Escape')
 
-  await expect(page.locator('.popup-select')).not.toBeVisible()
-  const result = await page.evaluate(() => window.__testResult)
+  await expect(pane1(page).locator('.popup-select')).not.toBeVisible()
+  const result = await page.frames().find(f => f.url().includes('app-frame')).evaluate(() => window.__testResult)
   expect(result).toBeUndefined()
-  const cancelled = await page.evaluate(() => window.__testCancelled)
+  const cancelled = await page.frames().find(f => f.url().includes('app-frame')).evaluate(() => window.__testCancelled)
   expect(cancelled).toBe(true)
 })
 
@@ -63,7 +64,7 @@ test("single: pré-positionne sur la valeur courante", async ({ page }) => {
     currentValue: 2,
   })
 
-  await expect(page.locator('.popup-select__option.focused')).toHaveText('Deux')
+  await expect(pane1(page).locator('.popup-select__option.focused')).toHaveText('Deux')
 })
 
 test("single: filter réduit les options", async ({ page }) => {
@@ -73,11 +74,11 @@ test("single: filter réduit les options", async ({ page }) => {
     currentValue: null,
   })
 
-  await page.locator('.popup-select__search').type('alph')
-  await expect(page.locator('.popup-select__option')).toHaveCount(2)
+  await pane1(page).locator('.popup-select__search').type('alph')
+  await expect(pane1(page).locator('.popup-select__option')).toHaveCount(2)
   await page.keyboard.press('Enter')
 
-  const result = await page.evaluate(() => window.__testResult)
+  const result = await page.frames().find(f => f.url().includes('app-frame')).evaluate(() => window.__testResult)
   expect(result).toBe(1)
 })
 
@@ -91,14 +92,14 @@ test("multi: Space coche et décoche une option", async ({ page }) => {
     multi: true,
   })
 
-  await expect(page.locator('.popup-select__footer')).toBeVisible()
+  await expect(pane1(page).locator('.popup-select__footer')).toBeVisible()
 
   await page.keyboard.press('ArrowDown')
   await page.keyboard.press(' ')
-  await expect(page.locator('.popup-select__option').nth(1)).toHaveClass(/checked/)
+  await expect(pane1(page).locator('.popup-select__option').nth(1)).toHaveClass(/checked/)
 
   await page.keyboard.press(' ')
-  await expect(page.locator('.popup-select__option').nth(1)).not.toHaveClass(/checked/)
+  await expect(pane1(page).locator('.popup-select__option').nth(1)).not.toHaveClass(/checked/)
 })
 
 test("multi: Enter confirme la sélection multiple", async ({ page }) => {
@@ -116,8 +117,8 @@ test("multi: Enter confirme la sélection multiple", async ({ page }) => {
   await page.keyboard.press(' ')            // cocher C (index 2)
   await page.keyboard.press('Enter')
 
-  await expect(page.locator('.popup-select')).not.toBeVisible()
-  const result = await page.evaluate(() => window.__testResult)
+  await expect(pane1(page).locator('.popup-select')).not.toBeVisible()
+  const result = await page.frames().find(f => f.url().includes('app-frame')).evaluate(() => window.__testResult)
   expect(result).toEqual(['a', 'c'])
 })
 
@@ -129,8 +130,8 @@ test("multi: initialise les cases cochées depuis currentValue", async ({ page }
     multi: true,
   })
 
-  await expect(page.locator('.popup-select__option').nth(1)).toHaveClass(/checked/)
-  await expect(page.locator('.popup-select__option').nth(0)).not.toHaveClass(/checked/)
+  await expect(pane1(page).locator('.popup-select__option').nth(1)).toHaveClass(/checked/)
+  await expect(pane1(page).locator('.popup-select__option').nth(0)).not.toHaveClass(/checked/)
 })
 
 // --- allowCustom ---
@@ -143,9 +144,9 @@ test("allowCustom: affiche 'Ajouter' si le texte ne matche pas", async ({ page }
     allowCustom: true,
   })
 
-  await page.locator('.popup-select__search').type('nouveau')
-  await expect(page.locator('.popup-select__option--custom')).toBeVisible()
-  await expect(page.locator('.popup-select__option--custom')).toContainText('nouveau')
+  await pane1(page).locator('.popup-select__search').type('nouveau')
+  await expect(pane1(page).locator('.popup-select__option--custom')).toBeVisible()
+  await expect(pane1(page).locator('.popup-select__option--custom')).toContainText('nouveau')
 })
 
 test("allowCustom: Enter sur valeur custom la sélectionne", async ({ page }) => {
@@ -156,11 +157,11 @@ test("allowCustom: Enter sur valeur custom la sélectionne", async ({ page }) =>
     allowCustom: true,
   })
 
-  await page.locator('.popup-select__search').type('custom-val')
+  await pane1(page).locator('.popup-select__search').type('custom-val')
   await page.keyboard.press('Enter')
 
-  await expect(page.locator('.popup-select')).not.toBeVisible()
-  const result = await page.evaluate(() => window.__testResult)
+  await expect(pane1(page).locator('.popup-select')).not.toBeVisible()
+  const result = await page.frames().find(f => f.url().includes('app-frame')).evaluate(() => window.__testResult)
   expect(result).toBe('custom-val')
 })
 
@@ -172,6 +173,6 @@ test("allowCustom: n'affiche pas 'Ajouter' si le texte matche exactement", async
     allowCustom: true,
   })
 
-  await page.locator('.popup-select__search').type('alpha')
-  await expect(page.locator('.popup-select__option--custom')).not.toBeVisible()
+  await pane1(page).locator('.popup-select__search').type('alpha')
+  await expect(pane1(page).locator('.popup-select__option--custom')).not.toBeVisible()
 })

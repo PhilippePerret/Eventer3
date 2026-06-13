@@ -1,4 +1,4 @@
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
@@ -53,7 +53,7 @@ test('un projet démo minimal complet est créé et affiché', async ({ page }) 
   console.log('-> model/eventer.db OK')
 
   console.log('\n-> vérification DOM')
-  await expect(page.locator('body')).toContainText('Projet modèle')
+  await expect(pane1(page).locator('body')).toContainText('Projet modèle')
   console.log('-> projet affiché dans le DOM')
 
   console.log('\n=== FIN TEST PROJET DÉMO MINIMAL ===\n')

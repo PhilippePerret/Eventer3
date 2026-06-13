@@ -1,5 +1,5 @@
 import { installFixtures } from '../../../helpers/install-fixtures'
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('many-events')
@@ -7,15 +7,15 @@ test.beforeEach(() => {
 
 async function enterEventLister(page) {
   await page.goto('/')
-  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await page.keyboard.press('ArrowRight')
-  await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 }
 
 test('Space coche visuellement l\'event sélectionné', async ({ page }) => {
   await enterEventLister(page)
 
-  const firstEvent = page.locator('.event-item').nth(0)
+  const firstEvent = pane1(page).locator('.event-item').nth(0)
   await expect(firstEvent).toHaveClass(/selected/)
   await expect(firstEvent.locator('.event-check')).not.toContainText('✓')
 
@@ -27,7 +27,7 @@ test('Space coche visuellement l\'event sélectionné', async ({ page }) => {
 test('Space décoche un event déjà coché', async ({ page }) => {
   await enterEventLister(page)
 
-  const firstEvent = page.locator('.event-item').nth(0)
+  const firstEvent = pane1(page).locator('.event-item').nth(0)
   await page.keyboard.press(' ')
   await expect(firstEvent.locator('.event-check')).toContainText('✓')
 
@@ -51,10 +51,10 @@ test('Space persiste la coche après rechargement', async ({ page }) => {
   expect(checkedValue, `checked DB après PATCH = ${checkedValue}`).toBeTruthy()
 
   await page.reload()
-  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await page.keyboard.press('ArrowRight')
-  await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
-  const firstEvent = page.locator('.event-item').nth(0)
+  const firstEvent = pane1(page).locator('.event-item').nth(0)
   await expect(firstEvent.locator('.event-check')).toContainText('✓')
 })

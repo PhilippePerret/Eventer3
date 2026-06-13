@@ -1,5 +1,5 @@
 import { installFixtures } from '../../../helpers/install-fixtures'
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('many-events')
@@ -12,12 +12,12 @@ test("dans un EventLister, Enter passe l'event sélectionné en édition du titr
   console.log('\n=== TEST ÉDITION TITRE EVENT ===')
 
   console.log('-> entrée dans l\'EventLister du premier projet')
-  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await page.keyboard.press('ArrowRight')
-  await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
   console.log('-> vérification : premier event sélectionné')
-  const firstItem = page.locator('.event-item').nth(0)
+  const firstItem = pane1(page).locator('.event-item').nth(0)
   await expect(firstItem).toHaveClass(/selected/)
 
   console.log('-> appui sur Enter → mise en édition')
@@ -48,12 +48,12 @@ test("dans un EventLister, Escape annule l'édition et restaure le titre origina
   console.log('\n=== TEST ANNULATION ÉDITION EVENT ===')
 
   console.log('-> entrée dans l\'EventLister du premier projet')
-  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await page.keyboard.press('ArrowRight')
-  await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
   console.log('-> vérification : premier event sélectionné')
-  const firstItem = page.locator('.event-item').nth(0)
+  const firstItem = pane1(page).locator('.event-item').nth(0)
   await expect(firstItem).toHaveClass(/selected/)
 
   console.log('-> appui sur Enter → mise en édition')

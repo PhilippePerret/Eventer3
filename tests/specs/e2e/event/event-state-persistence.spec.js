@@ -1,5 +1,5 @@
 import { installFixtures } from '../../../helpers/install-fixtures.js'
-import { test, expect } from '../__setup__.js'
+import { test, expect, pane1 } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('many-events')
@@ -7,21 +7,21 @@ test.beforeEach(() => {
 
 async function goToEventLister(page) {
   await page.goto('/')
-  await expect(page.locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await page.keyboard.press('ArrowRight')
-  await expect(page.locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 }
 
 async function setEventState(page, stateName) {
   await page.keyboard.press('Enter')
-  await expect(page.locator('.event-item.selected input[name="title"]')).toBeFocused()
+  await expect(pane1(page).locator('.event-item.selected input[name="title"]')).toBeFocused()
   await page.keyboard.press('Tab')
-  await expect(page.locator('.event-item.selected [data-field-name="state"]')).toBeFocused()
+  await expect(pane1(page).locator('.event-item.selected [data-field-name="state"]')).toBeFocused()
   await page.keyboard.press('ArrowDown')
-  await expect(page.locator('.popup-select')).toBeVisible()
+  await expect(pane1(page).locator('.popup-select')).toBeVisible()
   // Filtrer pour trouver l'option rapidement
-  await page.locator('.popup-select__search').fill(stateName)
-  await expect(page.locator('.popup-select__option')).toHaveCount(1)
+  await pane1(page).locator('.popup-select__search').fill(stateName)
+  await expect(pane1(page).locator('.popup-select__option')).toHaveCount(1)
   await page.keyboard.press('Enter')
   // Confirmer l'édition
   await page.keyboard.press('Enter')
@@ -33,7 +33,7 @@ test("l'état d'un event est sauvegardé en base et récupéré après rechargem
   await setEventState(page, 'ébauche')
 
   // Vérification immédiate
-  const stateEl = page.locator('.event-item').nth(0).locator('.event-state')
+  const stateEl = pane1(page).locator('.event-item').nth(0).locator('.event-state')
   await expect(stateEl).toHaveText('ébauche')
 
   // Attendre que le PATCH soit terminé avant de recharger
@@ -44,7 +44,7 @@ test("l'état d'un event est sauvegardé en base et récupéré après rechargem
   await goToEventLister(page)
 
   // L'état doit être préservé
-  const stateElAfterReload = page.locator('.event-item').nth(0).locator('.event-state')
+  const stateElAfterReload = pane1(page).locator('.event-item').nth(0).locator('.event-state')
   await expect(stateElAfterReload).toHaveText('ébauche')
 })
 
@@ -60,5 +60,5 @@ test("l'état 'premier jet' persiste après rechargement", async ({ page }) => {
   await page.reload()
   await goToEventLister(page)
 
-  await expect(page.locator('.event-item').nth(0).locator('.event-state')).toHaveText('premier jet')
+  await expect(pane1(page).locator('.event-item').nth(0).locator('.event-state')).toHaveText('premier jet')
 })
