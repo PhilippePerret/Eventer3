@@ -58,8 +58,4 @@ AIDE['<contexte>'] = {file: "Autre-ide.md", anchor: "autre-ancre"}
 
 ---
 
-SYSTÈME D'OUVERTURE AUTOMATIQUE Mac-like
-Je veux qu'un fichier ".evt" ouvre automatiquement le fichier dans l'application EventerX
-
-
 BUGS

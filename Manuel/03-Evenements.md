@@ -8,16 +8,16 @@
 
 ### Définition
 
-Un *event*, c’est :
+Un *event*, c’est *quelque chose qui se passe*:
 
 - un acte,
 - un dialogue,
 - une action,
 - une séquence,
 - une description,
-- etc.
+- …
 
-Tout est *event*, dans une histoire, ou « une histoire est une suite d’event » qui ont des échelles différentes. Les échelles, c’est par exemple :
+En fait, tout est *event*, dans une histoire, ou « une histoire est une suite d’event » qui ont des échelles différentes. Les échelles, c’est par exemple :
 
 - L’histoire, c’est une exposition (event 1), une première partie de développement (event 2), une deuxième partie de développement  (event 3) et un dénouement (event4).
 - L’histoire, c’est une première séquence (event 1), une seconde séquence (event 2), une séquence 3 (event 3), une séquence 4 jusqu’à une séquence 32 (event 32).
@@ -33,7 +33,7 @@ L’affichage le plus naturel de *EventerX*, c’est l’affichage d’un évèn
 
 ### Déplacement des events
 
-On se sert de `⌘↓` et `⌘↑`  comme dans tout panneau.
+Comme dans tout panneau d’*EventerX*, on se sert de `⌘↓` et `⌘↑`.
 
 ### Définition des brins de l’event
 

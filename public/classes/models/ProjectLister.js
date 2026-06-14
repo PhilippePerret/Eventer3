@@ -43,6 +43,10 @@ export default class ProjectLister extends Lister {
     return { id: item.id, parentItem: item, project_id: item.id }
   }
 
+  async _countCascade(_item) {
+    return 0
+  }
+
   copySelectedItem() {
     const item = this.items[this.selectedIndex]
     if (!item) return

@@ -485,7 +485,7 @@ export default class Lister {
     itemElement.classList.add('selected')
   }
 
-  deleteSelectedItem() {
+  async deleteSelectedItem() {
     const activeItems = this.items.filter(item => item.active == null || (item.active !== false && item.active !== 0))
     if (activeItems.length <= 1) {
       Notification.show('Impossible de supprimer le dernier élément.')
@@ -495,6 +495,11 @@ export default class Lister {
     const item = this.items[idx]
     const el = this.domItems[idx]
     if (!item || !el) return
+    const cascadeCount = await this._countCascade(item)
+    if (cascadeCount > 0) {
+      const confirmed = await this._confirmCascadeDelete(item, cascadeCount)
+      if (!confirmed) return
+    }
     el.remove()
     this.items.splice(idx, 1)
     this.domItems.splice(idx, 1)
@@ -502,9 +507,22 @@ export default class Lister {
     const newIdx = Math.min(idx, this.domItems.length - 1)
     this.selectedIndex = newIdx
     if (this.domItems[newIdx]) this.domItems[newIdx].classList.add('selected')
-    const canDelete = this.items.filter(i => i.active !== false).length > 1
     this._onAfterDelete(item)
     void ListerRepository.deleteItem(this, item)
+  }
+
+  async _countCascade(item) {
+    return ListerRepository.countDescendants(this, item)
+  }
+
+  async _confirmCascadeDelete(item, count) {
+    const { default: ConfirmDialog } = await import('../ui/ConfirmDialog.js')
+    return ConfirmDialog.open({
+      title: item.title,
+      inputCount: count,
+      itemType: 'event',
+      keyboardController: this.keyboardController,
+    })
   }
 
   _onAfterDelete(item) {}

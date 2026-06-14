@@ -8,3 +8,16 @@
   font-size: 0.75em;
   color: red;
 }
+
+/* ─── Personnalisation des évènements ─── */
+
+/* Titre des évènements */
+.event-text {
+  font-size: 25px;       /* taille de la police */
+  font-family: inherit;  /* police (inherit = police de l'application) */
+}
+
+/* Espacement vertical entre les évènements */
+.event-item {
+  margin-bottom: 0px;
+}

@@ -473,9 +473,14 @@ module DB
           next nil unless item_ids.include?(item_id.to_s)
           item_ids.delete(item_id.to_s)
           db.execute("UPDATE listers SET item_ids = ?, updated_at = ? WHERE id = ?", [JSON.generate(item_ids), now, lister_id.to_i])
-          %w[event brin perso].each { |t| db.execute("DELETE FROM #{t}_props WHERE item_id = ?", [item_id]) }
+          desc = collect_descendants_in_db(db, item_id)
+          all_ids = [item_id] + desc[:item_ids]
+          all_ids.each do |iid|
+            db.execute("DELETE FROM event_props WHERE item_id = ?", [iid])
+            db.execute("DELETE FROM items WHERE id = ?", [iid])
+          end
+          desc[:lister_ids].each { |lid| db.execute("DELETE FROM listers WHERE id = ?", [lid]) }
           db.execute("DELETE FROM counters")
-          db.execute("DELETE FROM items WHERE id = ?", [item_id])
           true
         end
       end
@@ -486,6 +491,12 @@ module DB
         db.execute("DELETE FROM project_refs WHERE id = ?", [item_id])
         true
       end
+    end
+
+    def self.count_descendants(data_dir, project_id, item_id)
+      with_project_db(data_dir, project_id) do |db|
+        collect_descendants_in_db(db, item_id)[:item_ids].size
+      end || 0
     end
 
     def self.find_item_ancestors(data_dir, project_id, item_id)
@@ -511,6 +522,25 @@ module DB
     end
 
     # ── Helpers privés ──────────────────────────────────────────────
+
+    def self.collect_descendants_in_db(db, item_id)
+      ep = db.execute("SELECT item_id, lister_id FROM event_props WHERE lister_id IS NOT NULL")
+      ep_map = ep.each_with_object({}) { |r, h| h[r['item_id']] = r['lister_id'] }
+      lister_rows = db.execute("SELECT id, item_ids FROM listers")
+      lister_map = lister_rows.each_with_object({}) { |r, h| h[r['id']] = JSON.parse(r['item_ids'] || '[]') }
+      item_ids = []
+      lister_ids = []
+      traverse = ->(id) {
+        lid = ep_map[id]
+        return unless lid
+        children = lister_map[lid] || []
+        lister_ids << lid
+        children.each { |cid| item_ids << cid; traverse.call(cid) }
+      }
+      traverse.call(item_id)
+      { item_ids: item_ids, lister_ids: lister_ids }
+    end
+    private_class_method :collect_descendants_in_db
 
     def self.with_db(data_dir)
       db = DB.open(data_dir)

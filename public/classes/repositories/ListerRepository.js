@@ -78,6 +78,14 @@ export default class ListerRepository {
     if (!response.ok) raise(`Impossible de supprimer l'item ${item.id}`)
   }
 
+  static async countDescendants(lister, item) {
+    const q = ListerRepository._projectQuery(lister)
+    const resp = await fetch(`/api/listers/${lister.id}/items/${item.id}/descendants/count${q}`, { cache: 'no-store' })
+    if (!resp.ok) return 0
+    const data = await resp.json()
+    return data.count ?? 0
+  }
+
   static async fetchAncestors(projectId, itemId) {
     const response = await fetch(
       `/api/items/${itemId}/ancestors?project_id=${projectId}`,

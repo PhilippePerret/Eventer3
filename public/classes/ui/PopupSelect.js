@@ -1,6 +1,6 @@
 export default class PopupSelect {
 
-  constructor({ options, currentValue, multi = false, allowCustom = false, onSelect, onCancel, onChange = null, onTab = null, keyboardController = null, disabledValues = [] }) {
+  constructor({ options, currentValue, multi = false, allowCustom = false, onSelect, onCancel, onChange = null, onTab = null, keyboardController = null, disabledValues = [], title = null, showSearch = true }) {
     this.options = options
     this.multi = multi
     this.allowCustom = allowCustom
@@ -11,6 +11,8 @@ export default class PopupSelect {
     this.keyboardController = keyboardController
     this.disabledValues = disabledValues
     this.currentValue = currentValue
+    this.title = title
+    this.showSearch = showSearch
     this.selectedValues = multi ? (Array.isArray(currentValue) ? [...currentValue] : []) : []
     this.focusedIndex = 0
     this.filteredOptions = [...options]
@@ -57,12 +59,22 @@ export default class PopupSelect {
     popup.style.top = `${rect.bottom + 4}px`
     popup.style.left = `${rect.left}px`  // ajusté après rendu si débordement
 
-    const search = document.createElement('input')
-    search.type = 'text'
-    search.className = 'popup-select__search'
-    search.placeholder = 'Filtrer…'
-    search.addEventListener('input', () => this._onSearchInput())
-    popup.appendChild(search)
+    if (this.title) {
+      const titleEl = document.createElement('div')
+      titleEl.className   = 'popup-select__title'
+      titleEl.textContent = this.title
+      popup.appendChild(titleEl)
+    }
+
+    let search = null
+    if (this.showSearch) {
+      search = document.createElement('input')
+      search.type = 'text'
+      search.className = 'popup-select__search'
+      search.placeholder = 'Filtrer…'
+      search.addEventListener('input', () => this._onSearchInput())
+      popup.appendChild(search)
+    }
 
     const list = document.createElement('ul')
     list.className = 'popup-select__list'
@@ -77,8 +89,8 @@ export default class PopupSelect {
 
     document.body.appendChild(popup)
     this.popupElement = popup
-    this.searchInput = search
-    this.listElement = list
+    this.searchInput  = search
+    this.listElement  = list
 
     if (!this.multi && this.currentValue != null) {
       const idx = this.options.findIndex(o => o.value === this.currentValue)

@@ -16,6 +16,8 @@ export default class SplitManager {
         { value: 'vertical',   label: 'Vertical' },
         { value: 'horizontal', label: 'Horizontal' },
       ],
+      title: 'Split fenêtre',
+      showSearch: false,
       keyboardController,
       onSelect: (value) => {
         window.parent.postMessage({ type: 'shell-action', action: 'split-open', direction: value }, '*')
@@ -51,6 +53,8 @@ export default class SplitManager {
         { value: 'vertical',   label: 'Vertical' },
         { value: 'horizontal', label: 'Horizontal' },
       ],
+      title: 'Split fenêtre',
+      showSearch: false,
       keyboardController,
       onSelect: (value) => {
         window.parent.postMessage({

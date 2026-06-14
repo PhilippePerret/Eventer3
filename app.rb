@@ -108,6 +108,20 @@ patch '/api/items/:id' do
   JSON.generate(ok: true)
 end
 
+get '/data/themes/:file' do
+  halt 404 unless params[:file].end_with?('.css')
+  path = File.join(DATA_DIR, 'themes', params[:file])
+  halt 404 unless File.exist?(path)
+  content_type 'text/css'
+  File.read(path)
+end
+
+get '/api/listers/:lister_id/items/:item_id/descendants/count' do
+  count = DB::Repo.count_descendants(DATA_DIR, params[:project_id], params[:item_id])
+  content_type :json
+  JSON.generate(count: count)
+end
+
 delete '/api/listers/:lister_id/items/:item_id' do
   result = DB::Repo.delete_item(DATA_DIR, params[:lister_id], params[:item_id], project_id: params[:project_id])
   halt 404 unless result

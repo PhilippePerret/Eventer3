@@ -1,8 +1,8 @@
 ## Les fenêtres
 
-Pour une navigation encore plus pratique, on peut diviser la fenêtre principale pour obtenir deux évènemenciers.
+Pour une navigation encore plus pratique, on peut diviser la fenêtre principale pour obtenir deux évènemenciers affichés en même temps, l’un au-dessous de l’autre ou l’un à côté de l’autre.
 
-Voici les raccourcis pratiques pour le réaliser :
+Raccourcis pour opérer la division et en sortir :
 
 | Raccourci | Effet                                                        |
 | --------- | ------------------------------------------------------------ |
@@ -12,3 +12,6 @@ Voici les raccourcis pratiques pour le réaliser :
 | `⌘ + ←`   | Pour focusser sur l’autre fenêtre.                           |
 | `⌥ + 0`   | Pour retourner à la fenêtre unique (plus de plit). Note : C’est la fenêtre qui a le focus qui reste. |
 
+### Fenêtre active
+
+C’est toujours la fenêtre active (celle qui a le focus) qui reçoit les commandes clavier. Elle se reconnait au fait que l’autre est moins opaque et n’est pas entourée d’un filet vert discret.

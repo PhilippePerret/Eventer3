@@ -18,8 +18,9 @@ class Bootstrap
   def self.ensure_themes!(data_dir)
     themes_dir = File.join(data_dir, 'themes')
     FileUtils.mkdir_p(themes_dir)
-    return unless Dir.glob(File.join(themes_dir, '*.css')).empty?
-    File.write(File.join(themes_dir, 'default.css'), <<~CSS)
+    default_path = File.join(themes_dir, 'default.css')
+    return if File.exist?(default_path)
+    File.write(default_path, <<~CSS)
       /* Eventer3 - Styles par défaut */
       .titre {
         font-size: 2em;
@@ -29,6 +30,19 @@ class Bootstrap
         margin-left: 10vw;
         font-size: 0.75em;
         color: red;
+      }
+
+      /* ─── Personnalisation des évènements ─── */
+
+      /* Titre des évènements */
+      .event-text {
+        font-size: 25px;       /* taille de la police */
+        font-family: inherit;  /* police (inherit = police de l'application) */
+      }
+
+      /* Espacement vertical entre les évènements */
+      .event-item {
+        margin-bottom: 0px;
       }
     CSS
   end

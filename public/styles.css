@@ -205,7 +205,6 @@ body {
 
 .event-text {
   display: inline-block;
-  font-size: 25px;
   line-height: 1.4;
   white-space: nowrap;
 }
@@ -905,6 +904,14 @@ body#shell:has(#pane-2[data-split-active]) .pane-wrapper:has(iframe[data-focused
   border-radius: 10px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, .18);
   overflow: hidden;
+}
+
+.popup-select__title {
+  padding: 10px 14px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
 }
 
 .popup-select__search {
@@ -1711,6 +1718,56 @@ body:has(#filter-input:not(.hidden)) #main-panel {
   font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
   font-size: var(--dialog-font-size);
   color: #1d1d1f;
+  overflow: hidden;
+}
+
+.confirm-dialog:has(.confirm-dialog__title) {
+  padding: 0;
+}
+
+.confirm-dialog__title {
+  padding: 14px 20px 12px;
+  font-weight: 700;
+  font-size: var(--dialog-font-size);
+  color: #1d1d1f;
+}
+
+.confirm-dialog__separator {
+  height: 1px;
+  background: #eee;
+}
+
+.confirm-dialog__body {
+  padding: 20px 20px 32px;
+}
+
+.confirm-dialog__body .confirm-dialog__message {
+  margin: 0 0 16px;
+}
+
+.confirm-dialog__input-row {
+  margin: 4px 0 0;
+  font-size: var(--dialog-font-size);
+}
+
+.confirm-dialog__input {
+  margin-left: 6px;
+  width: 60px;
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: var(--dialog-font-size);
+  text-align: center;
+}
+
+.confirm-dialog:has(.confirm-dialog__title) .confirm-dialog__footer {
+  padding: 12px 20px;
+}
+
+.confirm-dialog__btn--primary:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
 .confirm-dialog__message {

@@ -8,40 +8,41 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
 ## Todo
 
-- ⇥ pour se déplacer de lien en lien dans un event, puis :
+- Feuille thème par défaut : mettre la classe pour définir l’aspect par défaut, sans autre définition — et reprendre dedans le style « actuel »
 
-  - « w » pour l’ouvrir dans l’autre fenêtre (pas encore implémentée)
-  - « g » pour aller (go) à l’autre élément
-  - « a » (« afficher ») pour simplement afficher dans une fenêtre modale l’élément, quel qu’il soit.
+- Pouvoir définir les constantes du projet (un panneau à deux colonnes — pour gérer l’espace — où CHAQUE colonne contient les lignes avec <constante><valeur>
 
-- formatage du texte (markdown-like, badge de personnages)
+  - keyboardablePanel => on passe d’une ligne à l’autre avec les flèches
+  - tab => définition de la constante, tab => définition de la valeur
+  - constantes régulières possibles, entre « / » (p.e. « /VILLES?/)
+  - possibilité de laisser des lignes « vides » entre lignes définies, attention : à la « récolte », il faut aller jusqu’au bout, ne pas s’arrêter à la première ligne vide
+  - si, pour une ligne, pas de constante OU pas de valeur : pas d’enregistrement (on passe cette ligne)
+  - reprendre l’esthétique des autres panneaux
+
+- Formatage du texte
 
   - on recherche les badges des personnages, on les remplace par les pseudos
 
-  - on recherche \*italiques\*, \_\_souligné__, \*\*gras**, \~\~barré\~\~ (attention : si déjà appliqué, retirer)
+  - remplacement des constantes (penser aux régulières)
 
-  - on recherche les `[titre](lien)` (lien toujours externe, target _blank)
+  - ~~on recherche \*italiques\*, \_\_souligné__, \*\*gras**, \~\~barré\~\~ (attention : si déjà appliqué, retirer)~~
 
-  - on recherche les références internes (je ne sais pas encore quelle forme elles doivent avoir. On prend de toute façon `[titre](path)` comme modèle, mais `path` sera remplacé par un identifiant d’event, par exemple. Par exemple : 
+  - ~~on recherche les `[titre](lien)` (lien toujours externe, target _blank)~~
 
-    ~~~
-    il faut [voir la séquence](e256) qui parle de…
-    ~~~
+  - ~~on recherche les références internes (je ne sais pas encore quelle forme elles doivent avoir. On prend de toute façon `[titre](path)` comme modèle, mais `path` sera remplacé par un identifiant d’event, par exemple.~~ 
 
-    Possibilité d’ouvrir la référence dans la même fenêtre ou dans l’autre fenêtre (la division de la fenêtre est une fonctionnalité requise)
-
-    ​	=> implémenter le raccourci pour 1) atteindre le lien et 2) ouvrir dans la fenêtre courante ou l’autre fenêtre
+    ~~Possibilité d’ouvrir la référence dans la même fenêtre ou dans l’autre fenêtre (la division de la fenêtre est une fonctionnalité requise)~~
+    
+    ​	~~=> implémenter le raccourci pour 1) atteindre le lien et 2) ouvrir dans la fenêtre courante ou l’autre fenêtre~~
 
 - **suppression** : indiquer le nombre d’events supprimés et confirmer avec ce nombre. Donc, à la suppression : l’application regarde le nombre d’events que ça supprimerait (cout ?) 
 
-  - la suppression doit-elle vraiment supprimer tous les events enfants ou seulement les liens : suppression réelle
-
-- possibilité de **diviser la fenêtre en deux parties**, chacune avec leur évènemencier (le plus courant : l’évènemencier de niveau 1 du projet courant)
+  - mettre une protection, sur les références internes/externes pour vérifier que les cibles existent toujours.
 
 - panneau(x) des options
 
   - il faut commencer à pouvoir déterminer les options
-  - quelle option et où agit-elle ?
+  - quelle option et où agit-elle ? Note : seulement les options indispensables (cf. le fichier réfs)
 
 - Pouvoir définir l’aspect par défaut des items (tous et/ou par genre, event, brin, etc.)
 
@@ -63,10 +64,6 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
   - les styles
 
   Attention aux conflits : quel comportement adopté si un event coché ne comporte pas les mêmes caractéristiques que les autres (=> signaler et prendre le principe que les choix d’un event sont automatiquement ajouté. Si l’event E1 est dans Br1, E2 est dans Br2, si les deux sont cochés et que le panneau des brins est ouvert avec ⇧, les deux brins Br1 et Br2 sont cochés. Si on annule ça ne fait rien. Si on ferme, on doit appliquer les deux brins.
-
-- système de référence : une marque permet de faire référence à un event/brin/personnage particulier (mais surtout un event) et permet de l’afficher pour le voir. Peut-être même pour s’y rendre concrètement
-
-  - utilisation particulière des références : un système de note sur le projet avec un « dossier Notes » en dernier event de niveau acte qui contiendrait toutes les notes au fil du développement, avec `[cf. note xxx](e125)` -- possibilité de rejoindre l’endroit où la note est appelée (attention, il peut y en avoir plusieurs : tous les afficher => TESTS)
 
 - Un affichage « total » qui affiche tous les évènements, avec une indentation qui montre l’imbrication. Peut-être, dans cet affichage, se limiter au title des events
 
@@ -106,3 +103,5 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 * le climat (météo et « effet » comme on dit en scénario)
 
 * Pouvoir rechercher dans tout le projet courant des évènements (recherche), qu’ils soient affichés dans un panneau, et qu’on puisse en choisir (Space pour les choisir ou courant, Cmd+c/x, puis Cmd+v)
+
+* Système d’ouverture mac-like : fichiers .evt qui ouvrent automatiquement le serveur de Eventer
