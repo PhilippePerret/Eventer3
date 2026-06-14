@@ -93,7 +93,7 @@ if $PREPARE_TERMINAL_WINDOWS; then
   sleep 2
   
   # -- Tests --
-  ouvre_terminal_with "{2433, 30, 3432, 951}" "cd '$DOSSIER/tests';\nclear;clear;npm run test:unit;npm run test:e2e"
+  ouvre_terminal_with "{2433, 30, 3432, 951}" "cd '$DOSSIER/tests';\nclear;clear;npm run test:all"
 fi
 
 # Pour lancer la Wep App Safari qui pointe sur le localhost
