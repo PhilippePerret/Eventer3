@@ -191,6 +191,10 @@ export default class ConstantsPanel {
 
   async _close() {
     await this._saveConstants()
+    const lister = this._keyboardController.activeLister
+    if (lister && typeof lister._loadTokens === 'function') {
+      await lister._loadTokens()
+    }
     const el = document.getElementById('constants-panel')
     el.classList.add('hidden')
     el.innerHTML = ''

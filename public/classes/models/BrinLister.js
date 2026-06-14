@@ -66,7 +66,7 @@ export default class BrinLister extends Lister {
   onBackgroundSelectionChange() {
     const ev = this.selectedEvent
     const titleEl = this.domContainer?.querySelector('.panel-title')
-    if (titleEl) titleEl.textContent = `Brins · ${ev?.title ?? this.eventLister.parentItem?.title ?? ''}`
+    if (titleEl) titleEl.textContent = `Brins · ${this._renderTokens(ev?.title ?? this.eventLister.parentItem?.title ?? '')}`
     this.domItems.forEach((el, idx) => {
       el.classList.toggle('checked', this.checked(this.items[idx]))
     })
@@ -80,6 +80,8 @@ export default class BrinLister extends Lister {
       if (!brin.color) brin.color = Brin.colorFor(idx + 1)
     })
   }
+
+  async _countCascade(_item) { return 0 }
 
   checked(brin) {
     const ev = this.selectedEvent
@@ -98,7 +100,7 @@ export default class BrinLister extends Lister {
     card.className = 'brin-panel__inner'
     panel.appendChild(card)
 
-    this._renderPanelHeader(card, `Brins · ${this.selectedEvent?.title ?? this.eventLister.parentItem?.title ?? ''}`)
+    this._renderPanelHeader(card, `Brins · ${this._renderTokens(this.selectedEvent?.title ?? this.eventLister?.parentItem?.title ?? '')}`)
 
 
     this.domContainer = card
@@ -106,6 +108,7 @@ export default class BrinLister extends Lister {
     this.selectedIndex = Math.max(0, Math.min(this.selectedIndex, Math.max(0, this.items.length - 1)))
 
     this.items.forEach((item, idx) => {
+      item._tokens = this._tokens || {}
       const el = this._createItemElement(item, idx)
       this.domItems.push(el)
       card.appendChild(el)

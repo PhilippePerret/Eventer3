@@ -1111,8 +1111,9 @@ body#shell:has(#pane-2[data-split-active]) .pane-wrapper:has(iframe[data-focused
 
 .constants-row__name:focus,
 .constants-row__value:focus {
-  border-color: var(--selected, #3478f6);
-  background: white;
+  border-color: #33bb60;
+  background: #33bb60;
+  color: white !important;
 }
 
 .constants-row__name {

@@ -1,7 +1,5 @@
 Ci-dessous, quand j'écris CMD?, c'est que je fais Cmd+Maj+ pour faire apparaitre l'aide contextuelle,
 
-- destruction complète du fichier data, que se passe-t-il maintenant ?
-
 - Je suis sur le filepicker après "n" sur liste projet
 - CMD?,
 BUG Ça devrait m'afficher l'aide du contexte "filepicker-folder-mode", ça m'affiche l'aide du contexte "liste des projets"
@@ -24,17 +22,6 @@ ATTENDU : le menu des états se sélectionne
 
 BUG: Quand on choisit un lieu pour l'event (p.e. "Extérieur"), on se retrouve avec un rectangle blanc sur la ligne
 CORRECTION : Mettre la forme réduite de lui "EXT", "INT", "NOIR", ""
-
-
-
-BUG
-- Je mets un event en édition
-- je TAB pour sélectionner le menu state
-- je choisis un état, puis Enter
-- je TAB
-ATTENDU : je devrais passer au menu suivant
-BUG : je dois TABer 2 fois pour l'atteindre
-Pareil pour les autres, ça repart chaque fois du title alors que les propriétés devraient tourner en boucle avec TAB.
 
 
 SYSTÈME FIN D'AIDE (system/help.js)

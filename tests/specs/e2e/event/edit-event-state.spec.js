@@ -77,7 +77,7 @@ test("Enter sélectionne l'option et ferme le popup", async ({ page }) => {
 
   const trigger = pane1(page).locator('.event-item.selected [data-field-name="state"]')
   await expect(trigger).toHaveText('ébauche')
-  await expect(titleInput).toBeFocused()
+  await expect(trigger).toBeFocused()
 })
 
 test("valider l'édition commit le titre et l'état", async ({ page }) => {

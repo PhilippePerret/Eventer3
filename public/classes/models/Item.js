@@ -46,7 +46,8 @@ export default class Item {
 
 
   get renderedTitle() {
-    return Texte.renderMarkdown(this.title)
+    const text = Texte.replaceTokens(this.title, this._tokens || {})
+    return Texte.renderMarkdown(text)
   }
 
   constructor(data = {}) {
@@ -160,8 +161,7 @@ export default class Item {
         this[field.property] = value
         const opt = field.options.find(o => o.value === value)
         triggerElement.textContent = opt ? opt.label : String(value)
-        inputs[0].focus()
-        if (typeof inputs[0].select === 'function') inputs[0].select()
+        triggerElement.focus()
       },
       onCancel: () => { triggerElement.focus() },
     })

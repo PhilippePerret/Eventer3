@@ -11,7 +11,35 @@
 
 - Ouvrir le [panneau des personnages][] avec la touche « p » (comme « personnage »),
 
+<a name="badge"></a>
 
+---
+
+### Badge du personnage
+
+On appelle « badge » du personnage deux lettres capitales uniques qui le caractérisent et permet de ne pas avoir à taper chaque fois son nom complet.
+
+Vous pouvez choisir ces deux lettres à votre guise ou laisser *EventerX* les choisir en fonction du pseudo ou du patronyme du personnage.
+
+Une fois choisi, vous pouvez utiliser ce *badge* dans tous les textes au lieu du pseudo du personnage.
+
+Notez cependant que le badge seul remplacera toujours les deux lettres par le pseudo. Pour remplacer plutôt par le patronyme, ajouter « patro » collé aux deux lettres : 
+
+~~~
+Données du personnages
+------------------------------------
+GK		Gil			Gillian Kaplan
+
+
+Dans les textes…				sera remplacé par…
+---------------------------------------------
+	GK						-->			Gil
+	GKpat					-->			Gillian Kaplan
+~~~
+
+
+
+---
 
 ### Choisir les personnages du brin
 

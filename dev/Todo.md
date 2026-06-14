@@ -10,9 +10,9 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
 - Formatage du texte
 
-  - on recherche les badges des personnages, on les remplace par les pseudos
+  - ~~on recherche les badges des personnages, on les remplace par les pseudos~~
 
-  - remplacement des constantes (penser aux régulières)
+  - ~~remplacement des constantes (penser aux régulières)~~
 
   - ~~on recherche \*italiques\*, \_\_souligné__, \*\*gras**, \~\~barré\~\~ (attention : si déjà appliqué, retirer)~~
 

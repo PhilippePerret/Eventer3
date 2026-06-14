@@ -67,7 +67,7 @@ export default class PersoLister extends Lister {
       this._inheritedPersoIds = await PersoLister._loadInheritedPersoIds(event, this.parentLister)
     }
     const titleEl = this.domContainer?.querySelector('.panel-title')
-    if (titleEl) titleEl.textContent = `Personnages · ${this.contextItem?.title ?? ''}`
+    if (titleEl) titleEl.textContent = `Personnages · ${this._renderTokens(this.contextItem?.title ?? '')}`
     this.domItems.forEach((el, idx) => {
       const perso = this.items[idx]
       el.classList.toggle('checked', this.checked(perso))
@@ -78,6 +78,8 @@ export default class PersoLister extends Lister {
   get contextItem() {
     return this.parentLister.items[this.parentLister.selectedIndex]
   }
+
+  async _countCascade(_item) { return 0 }
 
   checked(perso) {
     const item = this.contextItem
@@ -106,7 +108,7 @@ export default class PersoLister extends Lister {
     card.className = 'perso-panel__inner'
     panel.appendChild(card)
 
-    this._renderPanelHeader(card, `Personnages · ${this.contextItem?.title ?? ''}`)
+    this._renderPanelHeader(card, `Personnages · ${this._renderTokens(this.contextItem?.title ?? '')}`)
 
 
     this.domContainer = card
@@ -114,6 +116,7 @@ export default class PersoLister extends Lister {
     this.selectedIndex = Math.max(0, Math.min(this.selectedIndex, Math.max(0, this.items.length - 1)))
 
     this.items.forEach((item, idx) => {
+      item._tokens = this._tokens || {}
       const el = this._createItemElement(item, idx)
       this.domItems.push(el)
       card.appendChild(el)

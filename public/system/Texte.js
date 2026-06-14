@@ -74,6 +74,45 @@ export default class Texte {
     }
   }
 
+  static replaceTokens(text, { constants = [], persos = [] } = {}) {
+    if (!text) return ''
+    text = Texte._replaceConstants(String(text), constants)
+    text = Texte._replaceBadges(text, persos)
+    return text
+  }
+
+  static _replaceConstants(text, constants) {
+    const escape        = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    const REGEX_SPECIAL = /[?*+.{()\[\]\\^$|]/
+    for (const { name, value } of constants) {
+      if (name.startsWith('/') && name.endsWith('/') && name.length > 1) {
+        const pattern = name.slice(1, -1)
+        try {
+          text = text.replace(new RegExp(pattern, 'g'), (match, ...args) => {
+            const offset = args[args.length - 2]
+            const str    = args[args.length - 1]
+            if (REGEX_SPECIAL.test(str[offset + match.length] ?? '')) return match
+            return value.replace(/\$(\d+)/g, (_, n) => args[parseInt(n) - 1] ?? '')
+          })
+        } catch (_) {}
+      } else {
+        text = text.replace(new RegExp(`/${escape(name)}/`, 'g'), value)
+        if (/^\w+$/.test(name))
+          text = text.replace(new RegExp(`\\b${escape(name)}\\b`, 'g'), value)
+        else
+          text = text.split(name).join(value)
+      }
+    }
+    return text
+  }
+
+  static _replaceBadges(text, persos) {
+    const escape = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    for (const { badge, title } of persos)
+      text = text.replace(new RegExp(`\\b${escape(badge)}\\b`, 'g'), title)
+    return text
+  }
+
   static renderMarkdown(text) {
     if (!text) return ''
     return String(text)

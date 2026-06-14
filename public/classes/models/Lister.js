@@ -84,6 +84,25 @@ export default class Lister {
       const itemData = itemsData[id]
       if (itemData) this.items.push(new this.itemClass({ ...itemData, parentLister: this, project_id: this.project_id }))
     })
+    await this._loadTokens()
+  }
+
+  _renderTokens(text) {
+    return Texte.replaceTokens(text, this._tokens || {})
+  }
+
+  async _loadTokens() {
+    if (!this.project_id) return
+    const [constRes, persoRes] = await Promise.all([
+      fetch(`/api/constants?project_id=${this.project_id}`, { cache: 'no-store' }),
+      fetch(`/api/listers/${this.project_id}-persos/items?project_id=${this.project_id}`, { cache: 'no-store' })
+    ])
+    const constants  = constRes.ok  ? await constRes.json()  : []
+    const persosData = persoRes.ok  ? await persoRes.json()  : {}
+    const persos = Object.values(persosData)
+      .filter(p => p.badge && p.title)
+      .map(p => ({ badge: p.badge, title: p.title }))
+    this._tokens = { constants, persos }
   }
 
   leaveToParent() {
@@ -254,6 +273,7 @@ export default class Lister {
       const itemElement = item.createElement(this.itemClass.name.toLowerCase())
       if (itemIndex === this.selectedIndex) itemElement.classList.add('selected')
       if (item.checked) itemElement.classList.add('checked')
+      item._tokens = this._tokens || {}
       if (typeof item.render === 'function') item.render(itemElement)
       this.domItems.push(itemElement)
       this.domContainer.appendChild(itemElement)
@@ -460,7 +480,7 @@ export default class Lister {
     const clipData = item.toClipboardData()
     clipData.id = item.id
     this.keyboardController.clipboard = { minClass: this.itemClass.minClass, data: clipData, isCut: true }
-    this.deleteSelectedItem({ silent: true })
+    this._performDelete(this.selectedIndex, item)
   }
 
   async pasteItem() {
@@ -501,6 +521,12 @@ export default class Lister {
       const confirmed = await this._confirmCascadeDelete(item, cascadeCount)
       if (!confirmed) return
     }
+    this._performDelete(idx, item)
+  }
+
+  _performDelete(idx, item) {
+    const el = this.domItems[idx]
+    if (!el) return
     el.remove()
     this.items.splice(idx, 1)
     this.domItems.splice(idx, 1)
@@ -629,6 +655,7 @@ export default class Lister {
 
   _finalizeNewItemElement(item, itemElement) {
     itemElement.dataset.id = item.id
+    item._tokens = this._tokens || {}
     if (typeof item.render === 'function') item.render(itemElement)
     return itemElement
   }
