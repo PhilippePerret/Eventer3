@@ -8,17 +8,6 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
 ## Todo
 
-- Feuille thème par défaut : mettre la classe pour définir l’aspect par défaut, sans autre définition — et reprendre dedans le style « actuel »
-
-- Pouvoir définir les constantes du projet (un panneau à deux colonnes — pour gérer l’espace — où CHAQUE colonne contient les lignes avec <constante><valeur>
-
-  - keyboardablePanel => on passe d’une ligne à l’autre avec les flèches
-  - tab => définition de la constante, tab => définition de la valeur
-  - constantes régulières possibles, entre « / » (p.e. « /VILLES?/)
-  - possibilité de laisser des lignes « vides » entre lignes définies, attention : à la « récolte », il faut aller jusqu’au bout, ne pas s’arrêter à la première ligne vide
-  - si, pour une ligne, pas de constante OU pas de valeur : pas d’enregistrement (on passe cette ligne)
-  - reprendre l’esthétique des autres panneaux
-
 - Formatage du texte
 
   - on recherche les badges des personnages, on les remplace par les pseudos
@@ -35,20 +24,15 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
     
     ​	~~=> implémenter le raccourci pour 1) atteindre le lien et 2) ouvrir dans la fenêtre courante ou l’autre fenêtre~~
 
-- **suppression** : indiquer le nombre d’events supprimés et confirmer avec ce nombre. Donc, à la suppression : l’application regarde le nombre d’events que ça supprimerait (cout ?) 
-
-  - mettre une protection, sur les références internes/externes pour vérifier que les cibles existent toujours.
+- Traitement des cibles : vérifier qu’elles existent toujours. Sinon, notification.
 
 - panneau(x) des options
 
   - il faut commencer à pouvoir déterminer les options
   - quelle option et où agit-elle ? Note : seulement les options indispensables (cf. le fichier réfs)
 
-- Pouvoir définir l’aspect par défaut des items (tous et/ou par genre, event, brin, etc.)
-
 - import/export
 
-  - system : reproduire une fenêtre comme le Finder pour choisir un dossier (pour exporter) ou choisir un fichier (pour importer)
   - choix du format (en export, garder les identifiant car il pourra y être fait référecence
 
 - héritage : option « les sous-events héritent automatiquement des brins et personnages (seulement des brins ? des personnages ? de la météo ? de l’effet ? du lieu ? de la dyndate ?)

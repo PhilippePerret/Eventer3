@@ -19,7 +19,7 @@ end
 get '/data/*' do |requested_path|
   filepath = File.join(DATA_DIR, requested_path)
   halt 404 unless File.exist?(filepath)
-  content_type :json
+  content_type requested_path.end_with?('.css') ? 'text/css' : :json
   File.read(filepath)
 end
 
@@ -108,12 +108,16 @@ patch '/api/items/:id' do
   JSON.generate(ok: true)
 end
 
-get '/data/themes/:file' do
-  halt 404 unless params[:file].end_with?('.css')
-  path = File.join(DATA_DIR, 'themes', params[:file])
-  halt 404 unless File.exist?(path)
-  content_type 'text/css'
-  File.read(path)
+get '/api/constants' do
+  content_type :json
+  JSON.generate(DB::Repo.get_constants(DATA_DIR, params[:project_id]))
+end
+
+put '/api/constants' do
+  content_type :json
+  payload = JSON.parse(request.body.read)
+  DB::Repo.save_constants(DATA_DIR, params[:project_id], payload)
+  JSON.generate(ok: true)
 end
 
 get '/api/listers/:lister_id/items/:item_id/descendants/count' do

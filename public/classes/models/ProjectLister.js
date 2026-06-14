@@ -32,8 +32,9 @@ export default class ProjectLister extends Lister {
     this.itemClass = Project
   }
 
-  get depth()   { return 0 }
-  get uiModes() { return ['projects'] }
+  get depth()     { return 0 }
+  get uiModes()   { return ['projects'] }
+  get projectId() { return this.items[this.selectedIndex]?.id || null }
 
   get childListerClass() {
     return EventLister

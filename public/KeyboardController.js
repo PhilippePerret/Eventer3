@@ -281,6 +281,11 @@ export default class KeyboardController {
         }
         return
 
+      case 'q': case 'Q':
+        this._openConstantsPanel()
+        event.preventDefault()
+        return
+
       case 'ArrowRight':
         this.activeLister.enterSelectedItem().catch(err => console.error('enterSelectedItem:', err))
         event.preventDefault()
@@ -377,6 +382,14 @@ export default class KeyboardController {
 
     }
 
+  }
+
+  _openConstantsPanel() {
+    const projectId = this.activeLister?.projectId
+    if (!projectId) return
+    import('./classes/ui/ConstantsPanel.js').then(({ default: ConstantsPanel }) => {
+      ConstantsPanel.open(projectId, this).catch(err => console.error('ConstantsPanel:', err))
+    })
   }
 
   _getMovableElement() {

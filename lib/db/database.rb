@@ -97,6 +97,12 @@ module DB
       item_type  TEXT PRIMARY KEY,
       last_val   INTEGER DEFAULT 0
     );
+
+    CREATE TABLE IF NOT EXISTS constants (
+      position INTEGER NOT NULL,
+      name     TEXT    NOT NULL,
+      value    TEXT    NOT NULL
+    );
   SQL
 
   def self.path(data_dir)
@@ -159,6 +165,17 @@ module DB
       SQL
     end
     # Migrations colonnes manquantes
+    begin
+      db.execute("SELECT 1 FROM constants LIMIT 1")
+    rescue SQLite3::Exception
+      db.execute(<<~SQL)
+        CREATE TABLE IF NOT EXISTS constants (
+          position INTEGER NOT NULL,
+          name     TEXT    NOT NULL,
+          value    TEXT    NOT NULL
+        )
+      SQL
+    end
     [
       "ALTER TABLE event_props ADD COLUMN css  TEXT DEFAULT '[]'",
       "ALTER TABLE event_props ADD COLUMN lieu  TEXT",

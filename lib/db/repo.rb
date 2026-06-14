@@ -493,6 +493,27 @@ module DB
       end
     end
 
+    def self.get_constants(data_dir, project_id)
+      with_project_db(data_dir, project_id) do |db|
+        db.execute("SELECT position, name, value FROM constants ORDER BY position")
+          .map { |r| { 'position' => r['position'], 'name' => r['name'], 'value' => r['value'] } }
+      end || []
+    rescue => _e
+      []
+    end
+
+    def self.save_constants(data_dir, project_id, constants)
+      with_project_db(data_dir, project_id) do |db|
+        db.execute("DELETE FROM constants")
+        constants.each do |c|
+          db.execute(
+            "INSERT INTO constants (position, name, value) VALUES (?, ?, ?)",
+            [c['position'].to_i, c['name'].to_s, c['value'].to_s]
+          )
+        end
+      end
+    end
+
     def self.count_descendants(data_dir, project_id, item_id)
       with_project_db(data_dir, project_id) do |db|
         collect_descendants_in_db(db, item_id)[:item_ids].size

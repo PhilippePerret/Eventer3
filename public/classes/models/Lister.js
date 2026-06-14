@@ -48,7 +48,8 @@ export default class Lister {
     this._itemClass = value
   }
 
-  get uiModes() { return [] }
+  get uiModes()   { return [] }
+  get projectId() { return this.project_id || null }
 
   get hasSearchField() { return true }
 
