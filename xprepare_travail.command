@@ -32,8 +32,10 @@ if $OPEN_FINDER_WINDOWS; then
   open_list_window "$DOSSIER/lib" "{304, 30, 1250, 541}" "list"
   open_list_window "$DOSSIER/public" "{1265, 30, 2218, 538}" "list"
   open_list_window "$DOSSIER/tests/e2e" "{2228, 30, 3172, 546}" "list"
-  open_list_window "$DOSSIER" "{813, 665, 2646, 1197}" "none"
 fi
+# Ouvrer inconditionnellement la fenêtre Finder de l'application
+# car maintenant c'est par la commande qu'on lance tout.
+open_list_window "$DOSSIER" "{813, 665, 2646, 1197}" "none"
 
 
 ouvre_iterm_with() {
@@ -101,7 +103,7 @@ if $OPEN_EVENTER_SITE; then
   open /Users/philippeperret/Applications/Eventer.app
 fi
 
-# OUvrir le dossier dans VSCode
+# Ouvrir le dossier développement dans VSCode
 code "$DOSSIER"
 
 # sleep 1
