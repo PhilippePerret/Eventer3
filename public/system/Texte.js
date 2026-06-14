@@ -108,8 +108,11 @@ export default class Texte {
 
   static _replaceBadges(text, persos) {
     const escape = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-    for (const { badge, title } of persos)
+    for (const { badge, title, patronyme } of persos) {
+      if (patronyme)
+        text = text.replace(new RegExp(`\\b${escape(badge)}pat\\b`, 'g'), patronyme)
       text = text.replace(new RegExp(`\\b${escape(badge)}\\b`, 'g'), title)
+    }
     return text
   }
 

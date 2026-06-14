@@ -26,7 +26,7 @@ now = Time.now.strftime('%Y-%m-%dT%H:%M:%S')
 db.transaction do
   # Listers
   db.execute("INSERT INTO listers (id, type, item_ids, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
-    [2, 'events', '["e1","e2"]', now, now])
+    [2, 'events', '["e1","e2","e3"]', now, now])
   db.execute("INSERT INTO listers (id, type, item_ids, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
     [3, 'brins', '["b1"]', now, now])
 
@@ -43,15 +43,19 @@ db.transaction do
     ['e2', 'PP arrive à /VILLE/', 'event', now, now])
   db.execute("INSERT INTO event_props (item_id) VALUES (?)", ['e2'])
 
+  db.execute("INSERT INTO items (id, title, type, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
+    ['e3', 'PPpat arrive à /VILLE/', 'event', now, now])
+  db.execute("INSERT INTO event_props (item_id) VALUES (?)", ['e3'])
+
   # Brin b1 : titre avec token
   db.execute("INSERT INTO items (id, title, type, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
     ['b1', 'Le brin de /VILLE/', 'intrigue', now, now])
   db.execute("INSERT INTO brin_props (item_id, badge) VALUES (?, ?)", ['b1', 'BV'])
 
-  # Perso c1 : Philippe / PP — titre simple (pour badge replacement)
+  # Perso c1 : Phil / PP — patronyme = Philippe Perret (pour badge + patronyme replacement)
   db.execute("INSERT INTO items (id, title, created_at, updated_at) VALUES (?, ?, ?, ?)",
-    ['c1', 'Philippe', now, now])
-  db.execute("INSERT INTO perso_props (item_id, badge) VALUES (?, ?)", ['c1', 'PP'])
+    ['c1', 'Phil', now, now])
+  db.execute("INSERT INTO perso_props (item_id, badge, patronyme) VALUES (?, ?, ?)", ['c1', 'PP', 'Philippe Perret'])
 
   # Perso c2 : titre avec token (pour tester remplacement dans titre perso)
   db.execute("INSERT INTO items (id, title, created_at, updated_at) VALUES (?, ?, ?, ?)",
@@ -62,7 +66,7 @@ db.transaction do
   db.execute("INSERT INTO constants (position, name, value) VALUES (?, ?, ?)", [0, 'VILLE', 'Paris'])
 
   # Counters
-  db.execute("INSERT INTO counters (item_type, last_val) VALUES (?, ?)", ['event', 2])
+  db.execute("INSERT INTO counters (item_type, last_val) VALUES (?, ?)", ['event', 3])
   db.execute("INSERT INTO counters (item_type, last_val) VALUES (?, ?)", ['brin',  1])
   db.execute("INSERT INTO counters (item_type, last_val) VALUES (?, ?)", ['perso', 2])
 end

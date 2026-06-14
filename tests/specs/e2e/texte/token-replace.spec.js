@@ -2,11 +2,12 @@ import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect, pane1 } from '../__setup__.js'
 
 // Fixture with-tokens :
-//   e1 "/VILLE/ est belle"     → "Paris est belle"    (brin_ids=[b1])
-//   e2 "PP arrive à /VILLE/"   → "Philippe arrive à Paris"
-//   b1 "Le brin de /VILLE/"    → "Le brin de Paris"
-//   c1 "Philippe" badge=PP     → badge PP remplacé par "Philippe"
-//   c2 "Héros de /VILLE/"      → "Héros de Paris"
+//   e1 "/VILLE/ est belle"         → "Paris est belle"              (brin_ids=[b1])
+//   e2 "PP arrive à /VILLE/"       → "Phil arrive à Paris"
+//   e3 "PPpat arrive à /VILLE/"    → "Philippe Perret arrive à Paris"
+//   b1 "Le brin de /VILLE/"        → "Le brin de Paris"
+//   c1 "Phil" badge=PP patronyme="Philippe Perret"
+//   c2 "Héros de /VILLE/" badge=HR → "Héros de Paris"
 //   constante VILLE=Paris
 
 test.describe('Token replacement dans les titres', () => {
@@ -24,7 +25,13 @@ test.describe('Token replacement dans les titres', () => {
   test('badge PP remplacé par le titre du personnage', async ({ page }) => {
     await page.goto('/')
     await page.keyboard.press('ArrowRight')
-    await expect(pane1(page).locator('.event-text').nth(1)).toHaveText('Philippe arrive à Paris')
+    await expect(pane1(page).locator('.event-text').nth(1)).toHaveText('Phil arrive à Paris')
+  })
+
+  test('badge PPpat remplacé par le patronyme du personnage', async ({ page }) => {
+    await page.goto('/')
+    await page.keyboard.press('ArrowRight')
+    await expect(pane1(page).locator('.event-text').nth(2)).toHaveText('Philippe Perret arrive à Paris')
   })
 
   // ─── Brins ─────────────────────────────────────────────────────────────────

@@ -101,7 +101,7 @@ export default class Lister {
     const persosData = persoRes.ok  ? await persoRes.json()  : {}
     const persos = Object.values(persosData)
       .filter(p => p.badge && p.title)
-      .map(p => ({ badge: p.badge, title: p.title }))
+      .map(p => ({ badge: p.badge, title: p.title, patronyme: p.patronyme ?? null }))
     this._tokens = { constants, persos }
   }
 
