@@ -6,22 +6,17 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
 ## Bug
 
-- Fenêtre des styles = mauvais aspect (il manque les boutons (fermer/annuler)
-  - indication de Space pour choisir
-  - mettre des lettres devant les styles pour les choi
-
-
 ## Todo
-
-- EN COURS Traitement des cibles : vérifier qu’elles existent toujours. Sinon, notification.
 
 - Type spécial d’un évènemencier « Script » qui contient le texte final. Mais il peut être utilisé entre les deux. Par exemple un niveau intermédiaire
 
   - Projet → acte → séquence → scène → synopsis (mono) → 
-  - le lister script serait un lister mono-item ? (mais à ce moment-là, il faudrait obligatoirement passer par l’affichage par niveau pour les voir — ben oui, c’est juste l’intérêt, sauf que je n’ai pas envie de tout voir tout le temps. Donc, non, on garde le fonctionnement normal, 
+  - le lister script serait un lister mono-item ? NON
   - Donc, en fait, il se peut que la différence soit juste au niveau de : 
     - pas d’affichage nowrap pour un roman ou un scénario
     - Scénario => jouer sur les styles (note : documenter l’application des stsyles)
+    
+      => Scénario => les styles de scénario. Et ce sont eux qui s’affichent quand l’event est de type « manuscript
 
 - panneau(x) des options
 

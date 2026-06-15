@@ -181,7 +181,7 @@ export const HELP_PER_CONTEXT = {
   },
 
   'event-list': {
-    title: "Évènementier",
+    title: "Évènemencier",
     wf: WORD_FORMS.Event,
     shortcuts: [
       {context: 'navigate-items'},

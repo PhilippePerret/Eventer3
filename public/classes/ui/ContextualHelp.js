@@ -163,12 +163,12 @@ export default class ContextualHelp {
 
     const applyHint = document.createElement('span')
     applyHint.className   = 'contextual-help__apply-hint'
-    applyHint.textContent = 'Appliquer le raccourci sélectionné : ↩︎'
+    applyHint.textContent = '↩︎ Appliquer le raccourci sélectionné'
     footer.appendChild(applyHint)
 
     const closeBtn = document.createElement('div')
     closeBtn.className   = 'panel-footer-key contextual-help__close-btn'
-    closeBtn.textContent = 'Fermer ⌘ + ↩︎'
+    closeBtn.textContent = '⌘ ↩︎ Fermer'
     closeBtn.addEventListener('click', () => this._close())
     footer.appendChild(closeBtn)
     this._el.appendChild(footer)
