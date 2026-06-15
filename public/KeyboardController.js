@@ -207,6 +207,13 @@ export default class KeyboardController {
 
     LOG.m(3, 'Keyboard event', event.key, { metaKey: event.metaKey, shiftKey: event.shiftKey, ctrlKey: event.ctrlKey })
 
+    if (event.key.length === 1 && /^[a-z]$/i.test(event.key) && !event.metaKey && !event.ctrlKey && !event.altKey) {
+      if (this.activeLister.handleLetterKey?.(event.key.toLowerCase())) {
+        event.preventDefault()
+        return
+      }
+    }
+
     switch (event.key) {
 
       case 'Enter':
@@ -376,7 +383,8 @@ export default class KeyboardController {
         return
 
       case 'Escape':
-        this.activeLister.close()
+        if (typeof this.activeLister.cancel === 'function') this.activeLister.cancel()
+        else this.activeLister.close?.()
         event.preventDefault()
         return
 

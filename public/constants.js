@@ -87,11 +87,11 @@ export const WORD_FORMS = {
  */
 export const HELP_PER_CONTEXT = {
 
-  /*-générique : double panneau -*/
+  /*-générique : fenêtre divisée -*/
   'double-panneu': {
     title: "Double panneau",
     shortcuts: [
-      {sc: '⇧ + ⇥', ef: 'Changer de panneau'}
+      {sc: '⇧ + ⇥', ef: 'Changer la fenêtre active'}
     ]
   },
 
@@ -117,6 +117,21 @@ export const HELP_PER_CONTEXT = {
       {sc: '⌦',     ef: "{wf.Le} Supprimer",            key: 'Delete'},
       {sc: '⌘ + c', ef: "{wf.Le} Copier",               key: 'c', metakey: true},
       {sc: '⌘ + x', ef: "{wf.Le} Couper",               key: 'x', metakey: true},
+    ]
+  },
+  'event-selected':{
+    title: null,
+    shortcuts: [
+      {sc: 'b',   ef: "Choisir ses brins",                key: 'b'},
+      {sc: 'p',   ef: "Choisir ses personnages",          key: 'p'},
+      {sc: 's',   ef: "Choisir ses styles",               key: 's'}
+    ]
+  },
+
+  'brin-selected':{
+    title: null,
+    shortcuts: [
+      {sc: 'p',   ef: "Choisir ses personnages",          key: 'p'}
     ]
   },
 
@@ -171,10 +186,9 @@ export const HELP_PER_CONTEXT = {
     shortcuts: [
       {context: 'navigate-items'},
       {context: 'with-selected'},
+      {context: 'event-selected'},
       {sc: '→',   ef: 'Évènemencier de l’event',          key: 'ArrowRight'},
-      {sc: '←',   ef: "Retour à la liste de projets",     key: 'ArrowLeft'},
-      {sc: 'b',   ef: "Choisir les brins",                key: 'b'},
-      {sc: 'p',   ef: "Choisir les personnages",          key: 'p'}
+      {sc: '←',   ef: "Retour à la liste de projets",     key: 'ArrowLeft'}
     ]
   },
 
@@ -194,6 +208,7 @@ export const HELP_PER_CONTEXT = {
       {sc: 'p',  ef: "Panneau personnages",  key: 'p'},
       {context: 'navigate-items'},
       {context: 'with-selected'},
+      {context: 'brin-selected'},
       {context: 'with-checkeds'}
     ]
   },
@@ -230,7 +245,11 @@ export const HELP_PER_CONTEXT = {
     wf: WORD_FORMS.Style,
     title: "Styles d'affichage",
     shortcuts: [
-      {context: 'navigate-items'}
+      {context: 'navigate-items'},
+      {sc: '␣', ef: 'Cocher/décocher le style', key: 'Space'},
+      {sc: '↩︎', ef: 'Cocher/décocher le style', key: 'Enter'},
+      {sc: '␛', ef: 'Annuler l’édition', key: 'Escape'},
+      {sc: '⌘ + ↩︎', ef: 'Enregistrer et finir', key: Enter, metaKey: true}
     ]
   },
 

@@ -21,7 +21,7 @@ async function applyStyle(page, styleName) {
   await expect(pane1(page).locator('#style-panel')).toBeVisible()
   if (styleName === 'note-rouge') await page.keyboard.press('ArrowDown')
   await page.keyboard.press(' ')
-  await page.keyboard.press('Escape')
+  await page.keyboard.press('Meta+Enter')
   await expect(pane1(page).locator('#style-panel')).not.toBeVisible()
 }
 

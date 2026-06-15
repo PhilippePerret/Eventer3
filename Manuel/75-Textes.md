@@ -1,4 +1,21 @@
+[TOC]
+
 ## Les Textes
+
+### Aspect
+
+On peut déterminer l’aspect général du texte des évènemenciers en modifiant le style par défaut des *event*. Pour le moment, ça se fait en éditant le fichier `data/themes/default.css`. Vous pouvez modifier la police et la taille des *events.*
+
+On peut également, dans ce dossier `data/themes`, définir tous les styles que l’on veut, qui seront applicable ensuite sur les *events*. Noter ici que l’application s’écarte à ce niveau des traitements de texte conventionnels où l’on ne peut appliquer qu’un seul style à un paragraphe. Ici, on peut en appliquer autant qu’on veut, en sachant que le dernier a toujours raison concernant les caracéritiques communes : si deux styles définissent la taille de la police, c’est toujours la taille du dernier style appliqué qui l’emportera. C’est la raison pour laquelle on peut définir l’order des styles.
+
+#### Appliquer un style à un event
+
+- Ouvrir la fenêtre des styles en tapant `s` alors que l’*event* est sélectionné,
+- choisir les styles voulus en les cochant/décochant (avec `␣` ou `↩︎`),
+- déplacer si nécessaire les styles avec `⌘↓` et `⌘↑`
+- confirmer en fermant la fenêtre avec `⌘ + ↩︎`
+
+---
 
 ### La constantes
 

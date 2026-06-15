@@ -82,6 +82,7 @@ export default class StyleLister extends Lister {
     const uncheckedStyles = this._styles.filter(s => !checkedNames.includes(s.name))
     this.items = [...checkedStyles, ...uncheckedStyles]
     this._checkedNames = new Set(checkedNames)
+    this._initialCss = [...checkedNames]
   }
 
   // ── Render ──────────────────────────────────────────────────────────
@@ -93,11 +94,12 @@ export default class StyleLister extends Lister {
     panel.classList.remove('hidden')
 
     const card = document.createElement('div')
-    card.className = 'style-panel__inner'
+    card.className = 'style-panel__inner floating-panel'
     panel.appendChild(card)
 
-    this._renderPanelHeader(card, `Styles · ${this.selectedEvent?.title ?? ''}`)
-
+    this._renderPanelHeader(card, '')
+    const titleEl = card.querySelector('.panel-title')
+    if (titleEl) titleEl.innerHTML = `Styles · ${this.selectedEvent?.renderedTitle ?? ''}`
 
     this.domContainer = card
     this.domItems = []
@@ -109,7 +111,42 @@ export default class StyleLister extends Lister {
       card.appendChild(el)
     })
 
+    this._renderFooter(card)
+
     if (this.keyboardController) this.keyboardController.register(this)
+  }
+
+  _renderFooter(card) {
+    const footer = document.createElement('div')
+    footer.className = 'floating-panel__footer'
+
+    const escBtn = document.createElement('span')
+    escBtn.className = 'panel-footer-key'
+    escBtn.textContent = '␛ Fermer'
+
+    const hints = document.createElement('span')
+    hints.style.display = 'flex'
+    hints.style.gap = '12px'
+
+    const hint1 = document.createElement('span')
+    hint1.className = 'panel-footer-hint'
+    hint1.textContent = '↩︎/␣ Choisir'
+
+    const hint2 = document.createElement('span')
+    hint2.className = 'panel-footer-hint'
+    hint2.textContent = '⌘↓/⌘↑ Déplacer'
+
+    hints.appendChild(hint1)
+    hints.appendChild(hint2)
+
+    const applyBtn = document.createElement('span')
+    applyBtn.className = 'panel-footer-key'
+    applyBtn.textContent = '⌘ ↩︎ Appliquer'
+
+    footer.appendChild(escBtn)
+    footer.appendChild(hints)
+    footer.appendChild(applyBtn)
+    card.appendChild(footer)
   }
 
   _createItemElement(style, idx) {
@@ -122,7 +159,8 @@ export default class StyleLister extends Lister {
 
     const check = document.createElement('div')
     check.className = 'panel-check'
-    check.textContent = '✓'
+    const letter = String.fromCharCode(97 + idx)
+    check.innerHTML = `<span class="style-item__letter">${letter}</span><span class="style-item__checkmark">✓</span>`
 
     const preview = document.createElement('div')
     preview.className = 'style-item__preview'
@@ -182,7 +220,7 @@ export default class StyleLister extends Lister {
   onBackgroundSelectionChange() {
     const ev = this.selectedEvent
     const titleEl = this.domContainer?.querySelector('.panel-title')
-    if (titleEl) titleEl.textContent = `Styles · ${ev?.title ?? ''}`
+    if (titleEl) titleEl.innerHTML = `Styles · ${ev?.renderedTitle ?? ''}`
 
     this._initItems()
     this.selectedIndex = 0
@@ -207,9 +245,41 @@ export default class StyleLister extends Lister {
     this.keyboardController.register(this.eventLister)
   }
 
+  // ── Cancel (Escape) ──────────────────────────────────────────────────
+
+  cancel() {
+    const ev = this.selectedEvent
+    if (ev) {
+      ev.css = [...this._initialCss]
+      const eventEl = this.eventLister.domItems[this.eventLister.selectedIndex]
+      StyleLister.applyToEventElement(ev, eventEl, this._styles)
+      void this._saveEventCss(ev)
+    }
+    this.close()
+  }
+
+  // ── Lettre → toggle à l'index ────────────────────────────────────────
+
+  handleLetterKey(letter) {
+    const idx = letter.charCodeAt(0) - 97
+    if (idx < 0 || idx >= this.items.length) return false
+    const style = this.items[idx]
+    const el = this.domItems[idx]
+    if (!style || !el) return false
+    if (this._checkedNames.has(style.name)) {
+      this._checkedNames.delete(style.name)
+      el.classList.remove('checked')
+    } else {
+      this._checkedNames.add(style.name)
+      el.classList.add('checked')
+    }
+    this._syncEventCss()
+    return true
+  }
+
   // ── No-ops requis par KeyboardController ─────────────────────────────
 
-  editSelectedItem() {}
+  editSelectedItem() { this.toggleSelectedItemChecked() }
   createNewItem() {}
   createNewItemAfter() {}
   deleteSelectedItem() {}

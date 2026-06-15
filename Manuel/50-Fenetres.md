@@ -15,3 +15,11 @@ Raccourcis pour opérer la division et en sortir :
 ### Fenêtre active
 
 C’est toujours la fenêtre active (celle qui a le focus) qui reçoit les commandes clavier. Elle se reconnait au fait que l’autre est moins opaque et n’est pas entourée d’un filet vert discret.
+
+---
+
+## Les panneaux
+
+On trouve également un grand nombre de panneaux dans *EventerX*, panneau des [brins](04-Brins.md), panneau des [personnages](05-Persos.md), etc.
+
+La plupart de ces panneaux peuvent être déplacés à l’aide du raccourci `⌃⇧` suivi des flèches dans les quatre direction.
