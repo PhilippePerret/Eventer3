@@ -60,8 +60,11 @@ BUG 2
 - Quand j'édite l'event de type man, j'ai toujours le white-space:nowrap !!!
 - et je voudrais que le filet passe au vert (VERT, comme pour l'édition normale)
 
-BUG 3
-    
+BUG 3    
+Se produit lorsque je toggle l'affichage vers "par niveau", ET QUE le lister courant N'A PAS le niveau "man" défini pour le projet MAIS est de nature "man". Dans ce cas, l'application devrait NON PAS relever les events du niveau de l'event sélectionné, MAIS relever les events du niveau "man" défini pour le projet OU s'il n'existe pas pour une imbrication, rechercher un lister "man" avant ou après. FAIRE UN TEST POUR ÇA.
+Comprends-tu suffisamment bien la situation ? Décris-la moi avec tes mots pour qu'on soit sûr.
+
+
 mais on va certainement changer le comportement : Cmd+m va ouvrir une fenêtre pour choisir entre trois modes d'affichage : 
 - par imbrication (défaut)
 - par niveau 

@@ -175,12 +175,31 @@ export default class EventLister extends Lister {
     })
   }
 
+  leaveToParent() {
+    if (StatusBar.displayMode === 'LEVEL') {
+      StatusBar.resetToNesting()
+      const selectedItem = this.items[this.selectedIndex]
+      if (selectedItem?.id) {
+        void this.navigateToItem(selectedItem.id)
+      } else {
+        this._getRootEventLister().render()
+      }
+      return
+    }
+    super.leaveToParent()
+  }
+
   toggleDisplayMode() {
     const newMode = StatusBar.toggleDisplayMode()
     if (newMode === 'LEVEL') {
       void this._renderLevelMode()
     } else {
-      this.render()
+      const selectedItem = this.items[this.selectedIndex]
+      if (selectedItem?.id) {
+        void this.navigateToItem(selectedItem.id)
+      } else {
+        this._getRootEventLister().render()
+      }
     }
     return newMode
   }
@@ -223,7 +242,7 @@ export default class EventLister extends Lister {
     return lister
   }
 
-  async _collectItemsAtDepth(lister, targetDepth) {
+  async _collectItemsAtDepth(lister, targetDepth, isManMode = false) {
     if (lister.depth === targetDepth) {
       return lister.items.map(item => ({ item, isVirtual: false }))
     }
@@ -235,10 +254,10 @@ export default class EventLister extends Lister {
         childLister.depth = lister.depth + 1
         await childLister.loadDefinition()
         await childLister.loadItems()
-        const sub = await this._collectItemsAtDepth(childLister, targetDepth)
+        const sub = await this._collectItemsAtDepth(childLister, targetDepth, isManMode)
         results.push(...sub)
       } else {
-        results.push({ item, isVirtual: true, gap })
+        results.push({ item, isVirtual: !isManMode && !lister._isManLister(), gap })
       }
     }
     return results
@@ -247,19 +266,21 @@ export default class EventLister extends Lister {
   async _renderLevelMode() {
     const token = {}
     this._levelRenderToken = token
+    const prevSelectedId = this.items[this.selectedIndex]?.id
     const root = this._getRootEventLister()
-    const collected = await this._collectItemsAtDepth(root, this.depth)
+    const isManMode = this._isManLister()
+    const targetDepth = isManMode ? (this.man_depth ?? this.depth) : this.depth
+    const collected = await this._collectItemsAtDepth(root, targetDepth, isManMode)
     if (this._levelRenderToken !== token) return
 
     const container = this.domContainer
     container.innerHTML = ''
-    if (this.depth != null) container.dataset.depth = String(this.depth)
+    if (targetDepth != null) container.dataset.depth = String(targetDepth)
 
     const header = this.renderHeader()
     if (header) container.appendChild(header)
 
     this.domItems = []
-    this.selectedIndex = 0
 
     for (const { item, isVirtual, gap } of collected) {
       if (isVirtual) {
@@ -276,8 +297,10 @@ export default class EventLister extends Lister {
     }
 
     this.items = collected.filter(e => !e.isVirtual).map(e => e.item)
+    const restoredIdx = prevSelectedId ? this.items.findIndex(item => item.id === prevSelectedId) : -1
+    this.selectedIndex = restoredIdx >= 0 ? restoredIdx : 0
     if (this.domItems.length > 0) {
-      this.domItems[0].classList.add('selected')
+      this.domItems[this.selectedIndex].classList.add('selected')
     }
 
     if (this.keyboardController) this.keyboardController.register(this)
