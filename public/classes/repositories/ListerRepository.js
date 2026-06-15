@@ -91,6 +91,7 @@ export default class ListerRepository {
       `/api/items/${itemId}/ancestors?project_id=${projectId}`,
       { cache: 'no-store' }
     )
+    if (!response.ok) return null
     const data = await response.json()
     return data.ancestors ?? []
   }

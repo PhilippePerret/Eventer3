@@ -5,6 +5,7 @@ import BrinLister from './BrinLister.js'
 import PersoLister from './PersoLister.js'
 import StyleLister from './StyleLister.js'
 import ListerRepository from '../repositories/ListerRepository.js'
+import Notification from '../ui/Notification.js'
 import StatusBar from '../ui/StatusBar.js'
 import ContextualHelp from '../ui/ContextualHelp.js'
 
@@ -145,6 +146,10 @@ export default class EventLister extends Lister {
   async navigateToItem(targetId) {
     const projectId = this.project_id ?? this.parentItem?.id
     const ancestors = await ListerRepository.fetchAncestors(projectId, targetId)
+    if (ancestors === null) {
+      Notification.show('Cible supprimée ou introuvable')
+      return
+    }
 
     const rootLister = this._getRootEventLister()
     rootLister.render()

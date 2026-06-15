@@ -6,25 +6,22 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
 ## Bug
 
+- Fenêtre des styles = mauvais aspect (il manque les boutons (fermer/annuler)
+  - indication de Space pour choisir
+  - mettre des lettres devant les styles pour les choi
+
+
 ## Todo
 
-- Formatage du texte
+- EN COURS Traitement des cibles : vérifier qu’elles existent toujours. Sinon, notification.
 
-  - ~~on recherche les badges des personnages, on les remplace par les pseudos~~
+- Type spécial d’un évènemencier « Script » qui contient le texte final. Mais il peut être utilisé entre les deux. Par exemple un niveau intermédiaire
 
-  - ~~remplacement des constantes (penser aux régulières)~~
-
-  - ~~on recherche \*italiques\*, \_\_souligné__, \*\*gras**, \~\~barré\~\~ (attention : si déjà appliqué, retirer)~~
-
-  - ~~on recherche les `[titre](lien)` (lien toujours externe, target _blank)~~
-
-  - ~~on recherche les références internes (je ne sais pas encore quelle forme elles doivent avoir. On prend de toute façon `[titre](path)` comme modèle, mais `path` sera remplacé par un identifiant d’event, par exemple.~~ 
-
-    ~~Possibilité d’ouvrir la référence dans la même fenêtre ou dans l’autre fenêtre (la division de la fenêtre est une fonctionnalité requise)~~
-    
-    ​	~~=> implémenter le raccourci pour 1) atteindre le lien et 2) ouvrir dans la fenêtre courante ou l’autre fenêtre~~
-
-- Traitement des cibles : vérifier qu’elles existent toujours. Sinon, notification.
+  - Projet → acte → séquence → scène → synopsis (mono) → 
+  - le lister script serait un lister mono-item ? (mais à ce moment-là, il faudrait obligatoirement passer par l’affichage par niveau pour les voir — ben oui, c’est juste l’intérêt, sauf que je n’ai pas envie de tout voir tout le temps. Donc, non, on garde le fonctionnement normal, 
+  - Donc, en fait, il se peut que la différence soit juste au niveau de : 
+    - pas d’affichage nowrap pour un roman ou un scénario
+    - Scénario => jouer sur les styles (note : documenter l’application des stsyles)
 
 - panneau(x) des options
 
@@ -37,9 +34,7 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
 - héritage : option « les sous-events héritent automatiquement des brins et personnages (seulement des brins ? des personnages ? de la météo ? de l’effet ? du lieu ? de la dyndate ?)
 
-  - l’héritage doit-il être réel ou virtuel ? (i.e. en cache ou persistant)
-
-- déplacement de panneau  : est-ce que la position est persistante ? (sinon => préférences de l’application)
+  - l’héritage doit-il être réel ou virtuel ? (i.e. en cache ou persistant / persistant => il faut l’enregistrer dans les données de l’élément, avantage : on l’a toujours, sans suivre les héritages, ce qui risque d’être compliqué quand on l’affiche en tant que cible par exemple/ désavantage : un changement ne se répercute pas, sauf si demande à chaque fois)
 
 - Implémenter le comportement spécial avec la touche ⇧ qui signifie « à tous les events cochés ». Au lieu d’appliquer simplement un choix à l’event sélectionné, il s’applique à tous les events cochés (ça doit être indiqué dans le titre, clairement. Fonctionne pour : 
 
@@ -47,7 +42,7 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
   - le choix des personnages
   - les styles
 
-  Attention aux conflits : quel comportement adopté si un event coché ne comporte pas les mêmes caractéristiques que les autres (=> signaler et prendre le principe que les choix d’un event sont automatiquement ajouté. Si l’event E1 est dans Br1, E2 est dans Br2, si les deux sont cochés et que le panneau des brins est ouvert avec ⇧, les deux brins Br1 et Br2 sont cochés. Si on annule ça ne fait rien. Si on ferme, on doit appliquer les deux brins.
+  Attention aux conflits : quel comportement adopter si un event coché ne comporte pas les mêmes caractéristiques que les autres (=> signaler et prendre le principe que les choix d’un event sont automatiquement ajouté. Si l’event E1 est dans Br1, E2 est dans Br2, si les deux sont cochés et que le panneau des brins est ouvert avec ⇧, les deux brins Br1 et Br2 sont cochés. Si on annule ça ne fait rien. Si on ferme, on doit appliquer les deux brins.
 
 - Un affichage « total » qui affiche tous les évènements, avec une indentation qui montre l’imbrication. Peut-être, dans cet affichage, se limiter au title des events
 
@@ -61,11 +56,9 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
     (sélection avec les flèches en Enter, comme pour tout)
 
-* Propriété `flags` pour les `Lister` — première option : le mode d’affichage des fond d’Event, soit par couleur de premier brin, soit par « climat » (météo + effet). UTILE ?
-
 * Des options générale de l’application
   * `open-with-project-list` : une option détermine si l’application doit s’ouvrir sur la liste des projets ou sur le dernier évènemencier travaillé.
-  
+
 * Console pour commander Eventer de l’intérieur « en ligne de console »
 
 * Rendre la propriété `active` propre à `Project < Item` et à personne d’autre. Les autres, lorsqu’ils sont détruits, le sont vraiment (fichiers si nécessaire et dans les données)

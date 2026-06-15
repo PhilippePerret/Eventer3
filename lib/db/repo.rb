@@ -201,6 +201,15 @@ module DB
             lister_data[:brins_lister_id]  = "#{project_id}-brins"  unless brin_ids.empty?
             lister_data[:persos_lister_id] = "#{project_id}-persos" unless perso_ids.empty?
             lts = JSON.parse(meta['link_targets'] || '[]') rescue []
+            unless lts.empty?
+              ids = lts.map { |t| t['id'] }
+              existing = db.execute("SELECT id FROM items WHERE id IN (#{ids.map{'?'}.join(',')})", ids).map { |r| r['id'] }.to_set
+              lts_clean = lts.select { |t| existing.include?(t['id']) }
+              if lts_clean.length < lts.length
+                db.execute("UPDATE project_meta SET link_targets = ?", [JSON.generate(lts_clean)])
+              end
+              lts = lts_clean
+            end
             lister_data[:link_targets] = lts unless lts.empty?
             lister_data[:project_item_id] = project_id
           end
@@ -520,8 +529,20 @@ module DB
       end || 0
     end
 
+    def self.items_exist?(data_dir, project_id, ids)
+      return [] if ids.empty?
+      with_project_db(data_dir, project_id) do |db|
+        placeholders = ids.map { '?' }.join(',')
+        rows = db.execute("SELECT id FROM items WHERE id IN (#{placeholders})", ids)
+        rows.map { |r| r['id'] }
+      end
+    rescue => _e
+      []
+    end
+
     def self.find_item_ancestors(data_dir, project_id, item_id)
       with_project_db(data_dir, project_id) do |db|
+        next nil unless db.execute("SELECT id FROM items WHERE id = ? LIMIT 1", [item_id]).first
         ancestors = []
         current_id = item_id
         loop do

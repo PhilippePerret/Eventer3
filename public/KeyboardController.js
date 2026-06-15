@@ -257,7 +257,7 @@ export default class KeyboardController {
         return
 
       case 'o':
-        this._openActiveLink()
+        void this._openActiveLink()
         event.preventDefault()
         return
 
@@ -325,14 +325,14 @@ export default class KeyboardController {
 
       case 'g':
         if (!event.metaKey && !event.ctrlKey) {
-          this._executeLinkActionDirect('go')
+          void this._executeLinkActionDirect('go')
           event.preventDefault()
         }
         return
 
       case 'a':
         if (!event.metaKey && !event.ctrlKey) {
-          this._executeLinkActionDirect('split')
+          void this._executeLinkActionDirect('split')
           event.preventDefault()
         }
         return
@@ -342,7 +342,7 @@ export default class KeyboardController {
           this.activeLister.copySelectedItem?.()
           event.preventDefault()
         } else {
-          this._executeLinkActionDirect('card')
+          void this._executeLinkActionDirect('card')
           event.preventDefault()
         }
         return
@@ -455,7 +455,7 @@ export default class KeyboardController {
     }
   }
 
-  _openActiveLink() {
+  async _openActiveLink() {
     if (!this._activeLinkEl) {
       const lister = this.activeLister
       const selectedEl = lister?.domItems[lister?.selectedIndex]
@@ -466,22 +466,32 @@ export default class KeyboardController {
       )
       return
     }
+    const targetId    = this._activeLinkEl.dataset.id
+    const targetTitle = this._activeLinkEl.textContent
+    const projectId   = this.activeLister?.project_id
+    const ancestors   = await ListerRepository.fetchAncestors(projectId, targetId)
+    if (ancestors === null) {
+      Notification.show('Cible supprimée ou introuvable')
+      return
+    }
     const hasSplit = window !== window.parent &&
       !!window.parent.document.getElementById('pane-2')?.hasAttribute('data-split-active')
-    LinkOpenPopup.open({
-      targetId:           this._activeLinkEl.dataset.id,
-      targetTitle:        this._activeLinkEl.textContent,
-      keyboardController: this,
-      hasSplit,
-    })
+    LinkOpenPopup.open({ targetId, targetTitle, keyboardController: this, hasSplit })
   }
 
-  _executeLinkActionDirect(action) {
+  async _executeLinkActionDirect(action) {
     if (!this._activeLinkEl) {
       Notification.show(ERRORS[5200])
       return
     }
-    this.executeLinkAction(action, this._activeLinkEl.dataset.id)
+    const targetId  = this._activeLinkEl.dataset.id
+    const projectId = this.activeLister?.project_id
+    const ancestors = await ListerRepository.fetchAncestors(projectId, targetId)
+    if (ancestors === null) {
+      Notification.show('Cible supprimée ou introuvable')
+      return
+    }
+    this.executeLinkAction(action, targetId)
   }
 
   executeLinkAction(action, targetId) {

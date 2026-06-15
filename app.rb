@@ -72,6 +72,7 @@ end
 get '/api/items/:id/ancestors' do
   content_type :json
   ancestors = DB::Repo.find_item_ancestors(DATA_DIR, params[:project_id], params[:id])
+  halt 404 if ancestors.nil?
   JSON.generate({ ancestors: ancestors })
 end
 
