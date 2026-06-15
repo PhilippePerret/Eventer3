@@ -50,21 +50,17 @@ AIDE['<contexte>'] = {file: "Autre-ide.md", anchor: "autre-ancre"}
 ** BUGS **
 
 BUG 1
-Boutons footer "alternables
-- le signe '⇥' est trop discret (si opacité, ne la mettre que sur le texte du bouton)
-- J'ai dit que dans TOUT panneau ça devrait être comme ça dorénavant :
-Fenêtre "Type de l'évènemencier de niveau <N>"
-(en profiter pour changer le titre. Ça devrait être "Type de <titre évènemencier[…]> (niv. <Niveau>)")
-
+- Quand on colle un évènement/item, ça devrait le sélectionner <== TEST
+- Même chose pour les brins/personnages <== TESTS
+- Quand on colle plusieurs évènements/item, ça devrait sélectionner le premier <== TEST
+- Même chose pour les brins/personnages <== TESTS
+- cas spécial : 
 
 BUG 2
 - Quand j'édite l'event de type man, j'ai toujours le white-space:nowrap !!!
-- et je voudrais que le filet passe au vert (comme pour l'édition normale)
+- et je voudrais que le filet passe au vert (VERT, comme pour l'édition normale)
 
 BUG 3
-- Cmd+m  ne ne toggle pas bien l'affichage :
-    quand on est en nest (imbriqué) ça passe bien en niveau
-    quand on est en niveau , ça ne passe pas en nesting ou, plus exactement, ça ne fait que supprimer les events virtuels alors que ça devrait revenir sur le lister de l'event sélectionné
     
 mais on va certainement changer le comportement : Cmd+m va ouvrir une fenêtre pour choisir entre trois modes d'affichage : 
 - par imbrication (défaut)

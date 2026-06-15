@@ -18,8 +18,14 @@ async function goToEventLister(page) {
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 }
 
+// Tab Tab Enter = activer le bouton "Appliquer" (dernier bouton footer)
+async function applyNaturePanel(page) {
+  await page.keyboard.press('Tab')   // footer focus → Annuler
+  await page.keyboard.press('Tab')   // footer focus → Appliquer
+  await page.keyboard.press('Enter') // appliquer
+}
+
 // Ouvre le panneau, sélectionne roman+manuscrit, applique, refuse man_depth
-// Navigation : currentValue=null → focusé sur "—" (dernier) ; ArrowUp remonte vers les options
 async function setRomanMan(page) {
   await page.keyboard.press('t')
   await expect(pane1(page).locator('.nature-panel')).toBeVisible()
@@ -33,7 +39,7 @@ async function setRomanMan(page) {
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
   await page.keyboard.press('ArrowUp')                        // manuscrit
   await page.keyboard.press('Enter')                          // manuscrit
-  await page.keyboard.press('Meta+Enter')                     // appliquer
+  await applyNaturePanel(page)
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
   await page.keyboard.press('Escape')                         // refuser man_depth
   await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
@@ -58,7 +64,7 @@ test("'t' dans event lister → panneau .nature-panel s'ouvre", async ({ page })
 test("panneau nature → titre mentionne le niveau courant", async ({ page }) => {
   await goToEventLister(page)
   await page.keyboard.press('t')
-  await expect(pane1(page).locator('.nature-panel .floating-panel__title')).toContainText('niveau 1')
+  await expect(pane1(page).locator('.nature-panel .floating-panel__title')).toContainText('niv. 1')
 })
 
 test("panneau nature → contient 'Nature projet' et 'Nature évènemencier'", async ({ page }) => {
@@ -69,14 +75,15 @@ test("panneau nature → contient 'Nature projet' et 'Nature évènemencier'", a
   await expect(panel).toContainText('Nature évènemencier')
 })
 
-test("panneau nature → footer a '␛' à gauche et '⌘ ↩︎ Appliquer' à droite", async ({ page }) => {
+test("panneau nature → footer a boutons 'Annuler' et 'Appliquer' alternables par Tab", async ({ page }) => {
   await goToEventLister(page)
   await page.keyboard.press('t')
   const footer = pane1(page).locator('.nature-panel .floating-panel__footer')
   await expect(footer).toBeVisible()
-  await expect(footer).toContainText('␛')
-  await expect(footer).toContainText('⌘')
-  await expect(footer).toContainText('Appliquer')
+  const btns = footer.locator('.panel-btn')
+  await expect(btns).toHaveCount(2)
+  await expect(btns.first()).toContainText('Annuler')
+  await expect(btns.last()).toContainText('Appliquer')
 })
 
 // ─── Navigation et menus ──────────────────────────────────────────────────────
@@ -130,13 +137,13 @@ test("Escape ferme le panneau sans appliquer", async ({ page }) => {
 
 // ─── Appliquer ────────────────────────────────────────────────────────────────
 
-test("⌘↩ roman+manuscrit → #main-panel a la classe 'roman-man'", async ({ page }) => {
+test("roman+manuscrit → #main-panel a la classe 'roman-man'", async ({ page }) => {
   await goToEventLister(page)
   await setRomanMan(page)
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/roman-man/)
 })
 
-test("⌘↩ film+scénario → #main-panel a la classe 'film-man'", async ({ page }) => {
+test("film+scénario → #main-panel a la classe 'film-man'", async ({ page }) => {
   await goToEventLister(page)
   await page.keyboard.press('t')
   await page.keyboard.press('Enter')
@@ -146,7 +153,7 @@ test("⌘↩ film+scénario → #main-panel a la classe 'film-man'", async ({ pa
   await page.keyboard.press('Enter')
   await page.keyboard.press('ArrowUp')   // scénario (index 0 depuis évènemencier)
   await page.keyboard.press('Enter')
-  await page.keyboard.press('Meta+Enter')
+  await applyNaturePanel(page)
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
   await page.keyboard.press('Escape')    // refuser man_depth
   await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
@@ -155,7 +162,7 @@ test("⌘↩ film+scénario → #main-panel a la classe 'film-man'", async ({ pa
 
 // ─── Confirmation man_depth ───────────────────────────────────────────────────
 
-test("⌘↩ avec nature man et depth ≠ man_depth → ConfirmDialog s'ouvre avec 'niveau par défaut'", async ({ page }) => {
+test("nature man et depth ≠ man_depth → ConfirmDialog s'ouvre avec 'niveau par défaut'", async ({ page }) => {
   await goToEventLister(page)
   await page.keyboard.press('t')
   await page.keyboard.press('Enter')
@@ -166,7 +173,7 @@ test("⌘↩ avec nature man et depth ≠ man_depth → ConfirmDialog s'ouvre av
   await page.keyboard.press('Enter')
   await page.keyboard.press('ArrowUp')   // manuscrit
   await page.keyboard.press('Enter')
-  await page.keyboard.press('Meta+Enter')
+  await applyNaturePanel(page)
   // nature-panel fermé, confirm-dialog ouvert
   await expect(pane1(page).locator('.nature-panel')).not.toBeVisible()
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
@@ -189,7 +196,7 @@ test("confirmer 'n' → man_depth non sauvegardé, panneau ferme", async ({ page
   await page.keyboard.press('Enter')
   await page.keyboard.press('ArrowUp')   // manuscrit
   await page.keyboard.press('Enter')
-  await page.keyboard.press('Meta+Enter')
+  await applyNaturePanel(page)
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
   await page.keyboard.press('Escape') // refuser man_depth
   await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
@@ -216,7 +223,7 @@ test("confirmer 'o' → man_depth sauvegardé, sibling lister devient roman-man"
   await page.keyboard.press('Enter')
   await page.keyboard.press('ArrowUp')   // manuscrit
   await page.keyboard.press('Enter')
-  await page.keyboard.press('Meta+Enter')
+  await applyNaturePanel(page)
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
   await page.keyboard.press('Enter') // confirmer man_depth (oui)
   await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
@@ -226,7 +233,7 @@ test("confirmer 'o' → man_depth sauvegardé, sibling lister devient roman-man"
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/roman-man/)
 })
 
-test("depth = man_depth → ⌘↩ ferme sans confirmation", async ({ page }) => {
+test("depth = man_depth → appliquer ferme sans confirmation", async ({ page }) => {
   installFixtures('depth-move')
   await page.goto('/')
   await page.keyboard.press('ArrowRight')
@@ -243,13 +250,13 @@ test("depth = man_depth → ⌘↩ ferme sans confirmation", async ({ page }) =>
   await page.keyboard.press('Enter')
   await page.keyboard.press('ArrowUp')    // manuscrit
   await page.keyboard.press('Enter')
-  await page.keyboard.press('Meta+Enter')
+  await applyNaturePanel(page)
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
   await page.keyboard.press('Enter') // man_depth = 2 (oui)
   await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
   // rouvrir 't' : depth 2 = man_depth → pas de confirmation
   await page.keyboard.press('t')
-  await page.keyboard.press('Meta+Enter') // appliquer sans rien changer
+  await applyNaturePanel(page) // appliquer sans rien changer
   await expect(pane1(page).locator('.nature-panel')).not.toBeVisible()
 })
 
@@ -272,7 +279,7 @@ test("nature null à man_depth → panneau affiche 'manuscrit', popup focused su
   await page.keyboard.press('Enter')
   await page.keyboard.press('ArrowUp')   // manuscrit
   await page.keyboard.press('Enter')
-  await page.keyboard.press('Meta+Enter')
+  await applyNaturePanel(page)
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
   await page.keyboard.press('Enter')     // oui → man_depth=2
   await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
@@ -321,4 +328,20 @@ test("roman-man persiste → page.goto('/') puis ArrowRight → #main-panel roma
   await page.goto('/')
   await page.keyboard.press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/roman-man/)
+})
+
+// ─── Tab cycle avec retour à "aucun bouton" ───────────────────────────────────
+
+test("Tab×3 ramène à aucun footer sélectionné → Enter ouvre le popup", async ({ page }) => {
+  await goToEventLister(page)
+  await page.keyboard.press('t')
+  await expect(pane1(page).locator('.nature-panel')).toBeVisible()
+  // Cycler à travers tous les boutons footer
+  await page.keyboard.press('Tab')   // → Annuler
+  await page.keyboard.press('Tab')   // → Appliquer
+  await page.keyboard.press('Tab')   // → aucun (retour à -1)
+  // Enter doit ouvrir le popup du champ sélectionné, pas activer un bouton footer
+  await page.keyboard.press('Enter')
+  await expect(pane1(page).locator('.popup-select')).toBeVisible()
+  await expect(pane1(page).locator('.nature-panel')).toBeVisible()
 })

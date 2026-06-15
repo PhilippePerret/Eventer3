@@ -5,14 +5,16 @@ import ListerRepository from '../repositories/ListerRepository.js'
 export default class NaturePanel {
 
   constructor({ lister, keyboardController }) {
-    this._lister        = lister
-    this._kc            = keyboardController
-    this._projectNature = lister.project_nature
+    this._lister           = lister
+    this._kc               = keyboardController
+    this._projectNature    = lister.project_nature
     const n = lister.nature
-    this._listerNature  = (n == null || n === 'none') ? null : (n === 'no-man' ? 'eventer' : n)
-    this._selectedRow   = 0
-    this._el            = null
-    this._rows          = []
+    this._listerNature     = (n == null || n === 'none') ? null : (n === 'no-man' ? 'eventer' : n)
+    this._selectedRow      = 0
+    this._el               = null
+    this._rows             = []
+    this._footerBtnEls     = []
+    this._footerFocusIndex = -1
   }
 
   open() {
@@ -39,9 +41,11 @@ export default class NaturePanel {
   }
 
   _renderHeader(el) {
+    const raw   = this._lister.parentItem?.title ?? 'l\'évènemencier'
+    const label = raw.length > 24 ? raw.slice(0, 24) + '…' : raw
     const title = document.createElement('div')
     title.className = 'floating-panel__title'
-    title.textContent = `Type de l'évènemencier de niveau ${this._lister.depth}`
+    title.textContent = `Type de « ${label} » (niv. ${this._lister.depth})`
     el.appendChild(title)
   }
 
@@ -61,13 +65,14 @@ export default class NaturePanel {
     footer.className = 'floating-panel__footer'
 
     const cancelBtn = document.createElement('span')
-    cancelBtn.className = 'panel-footer-key'
-    cancelBtn.textContent = '␛ Annuler'
+    cancelBtn.className = 'panel-btn panel-btn--cancel'
+    cancelBtn.textContent = 'Annuler'
 
     const applyBtn = document.createElement('span')
-    applyBtn.className = 'panel-footer-key'
-    applyBtn.textContent = '⌘ ↩︎ Appliquer'
+    applyBtn.className = 'panel-btn panel-btn--primary'
+    applyBtn.textContent = 'Appliquer'
 
+    this._footerBtnEls = [cancelBtn, applyBtn]
     footer.appendChild(cancelBtn)
     footer.appendChild(applyBtn)
     el.appendChild(footer)
@@ -119,8 +124,20 @@ export default class NaturePanel {
 
   // ── Keyboard ───────────────────────────────────────────────────────────────
 
+  _updateFooterFocus() {
+    this._footerBtnEls.forEach((el, i) =>
+      el.classList.toggle('panel-btn--focused', i === this._footerFocusIndex)
+    )
+  }
+
   _handleKey(event) {
     switch (event.key) {
+      case 'Tab':
+        event.preventDefault()
+        this._footerFocusIndex++
+        if (this._footerFocusIndex >= this._footerBtnEls.length) this._footerFocusIndex = -1
+        this._updateFooterFocus()
+        break
       case 'ArrowDown':
         event.preventDefault()
         this._selectedRow = Math.min(1, this._selectedRow + 1)
@@ -133,8 +150,12 @@ export default class NaturePanel {
         break
       case 'Enter':
         event.preventDefault()
-        if (event.metaKey) void this._apply()
-        else this._openPopupForRow(this._selectedRow)
+        if (this._footerFocusIndex >= 0) {
+          if (this._footerFocusIndex === 0) this._close()
+          else void this._apply()
+        } else {
+          this._openPopupForRow(this._selectedRow)
+        }
         break
       case 'Escape':
         event.preventDefault()

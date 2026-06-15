@@ -21,7 +21,9 @@ async function openManDepthConfirm(page) {
   await page.keyboard.press('Enter')
   await page.keyboard.press('ArrowUp')   // manuscrit
   await page.keyboard.press('Enter')
-  await page.keyboard.press('Meta+Enter')
+  await page.keyboard.press('Tab')       // footer → Annuler
+  await page.keyboard.press('Tab')       // footer → Appliquer
+  await page.keyboard.press('Enter')     // appliquer
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
 }
 
@@ -29,10 +31,10 @@ async function openManDepthConfirm(page) {
 
 test("ConfirmDialog : bouton 'Oui' focused par défaut (dernier bouton = action principale)", async ({ page }) => {
   await openManDepthConfirm(page)
-  const btns = pane1(page).locator('.confirm-dialog__btn')
+  const btns = pane1(page).locator('.panel-btn')
   // Dernier bouton = Oui → doit avoir la classe focused
   const lastBtn = btns.last()
-  await expect(lastBtn).toHaveClass(/confirm-dialog__btn--focused/)
+  await expect(lastBtn).toHaveClass(/panel-btn--focused/)
   await expect(lastBtn).toContainText('Oui')
 })
 
@@ -41,20 +43,20 @@ test("ConfirmDialog : bouton 'Oui' focused par défaut (dernier bouton = action 
 test("Tab bascule le focus de Oui vers Non", async ({ page }) => {
   await openManDepthConfirm(page)
   // Par défaut : Oui focused
-  await expect(pane1(page).locator('.confirm-dialog__btn--focused')).toContainText('Oui')
+  await expect(pane1(page).locator('.panel-btn--focused')).toContainText('Oui')
   await page.keyboard.press('Tab')
   // Après Tab : Non focused
-  await expect(pane1(page).locator('.confirm-dialog__btn--focused')).toContainText('Non')
+  await expect(pane1(page).locator('.panel-btn--focused')).toContainText('Non')
 })
 
 test("Tab cycle complet : Non → Oui → Non", async ({ page }) => {
   await openManDepthConfirm(page)
   await page.keyboard.press('Tab')  // Non
-  await expect(pane1(page).locator('.confirm-dialog__btn--focused')).toContainText('Non')
+  await expect(pane1(page).locator('.panel-btn--focused')).toContainText('Non')
   await page.keyboard.press('Tab')  // Oui
-  await expect(pane1(page).locator('.confirm-dialog__btn--focused')).toContainText('Oui')
+  await expect(pane1(page).locator('.panel-btn--focused')).toContainText('Oui')
   await page.keyboard.press('Tab')  // Non
-  await expect(pane1(page).locator('.confirm-dialog__btn--focused')).toContainText('Non')
+  await expect(pane1(page).locator('.panel-btn--focused')).toContainText('Non')
 })
 
 // ─── Enter active le bouton focused ──────────────────────────────────────────
@@ -100,7 +102,7 @@ test("Escape annule même si Oui est focused", async ({ page }) => {
 
 test("bouton focused a une couleur verte (background non-transparent)", async ({ page }) => {
   await openManDepthConfirm(page)
-  const focusedBtn = pane1(page).locator('.confirm-dialog__btn--focused')
+  const focusedBtn = pane1(page).locator('.panel-btn--focused')
   const bg = await focusedBtn.evaluate(el => getComputedStyle(el).backgroundColor)
   // Vert : ne doit pas être transparent ni blanc
   expect(bg).not.toBe('rgba(0, 0, 0, 0)')

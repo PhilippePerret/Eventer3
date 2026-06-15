@@ -42,7 +42,7 @@ test('dialog eventer.db existant → 3 boutons (Annuler, Non la détruire, Oui)'
   await setupFolderWithDb(page)
   await page.goto('/')
   await openPickerAndSelectFolder(page)
-  await expect(pane1(page).locator('.confirm-dialog__btn')).toHaveCount(3)
+  await expect(pane1(page).locator('.panel-btn')).toHaveCount(3)
 })
 
 test('dialog eventer.db → Escape annule, aucun projet créé', async ({ page }) => {

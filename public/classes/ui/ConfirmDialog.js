@@ -122,7 +122,7 @@ export default class ConfirmDialog {
     if (cancelBtn) footer.appendChild(this._makeBtn(cancelBtn, 'cancel'))
 
     const group = document.createElement('div')
-    group.className = 'confirm-dialog__btn-group'
+    group.className = 'panel-btn-group'
     otherBtns.forEach((b, i) => {
       const variant = i === otherBtns.length - 1 ? 'primary' : 'secondary'
       const btn = this._makeBtn(b, variant)
@@ -135,7 +135,7 @@ export default class ConfirmDialog {
 
   _makeBtn(b, variant) {
     const btn = document.createElement('span')
-    btn.className = `confirm-dialog__btn confirm-dialog__btn--${variant}`
+    btn.className = `panel-btn panel-btn--${variant}`
     if (b.shortcut) {
       const kbd = document.createElement('kbd')
       kbd.textContent = b.shortcut
@@ -151,7 +151,7 @@ export default class ConfirmDialog {
 
   _updateFocus() {
     this._btnEls.forEach((el, i) => {
-      el.classList.toggle('confirm-dialog__btn--focused', i === this._focusedIndex)
+      el.classList.toggle('panel-btn--focused', i === this._focusedIndex)
     })
   }
 

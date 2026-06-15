@@ -1907,7 +1907,7 @@ body:has(#filter-input:not(.hidden)) #main-panel {
   padding: 12px 20px;
 }
 
-.confirm-dialog__btn.is-disabled {
+.panel-btn.is-disabled {
   opacity: 0.35;
   cursor: not-allowed;
   pointer-events: none;
@@ -1926,12 +1926,13 @@ body:has(#filter-input:not(.hidden)) #main-panel {
   gap: 12px;
 }
 
-.confirm-dialog__btn-group {
+.panel-btn-group {
   display: flex;
   gap: 10px;
 }
 
-.confirm-dialog__btn {
+/* ── Bouton clavier générique (footer de tout panneau) ── */
+.panel-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -1945,48 +1946,47 @@ body:has(#filter-input:not(.hidden)) #main-panel {
   user-select: none;
 }
 
-.confirm-dialog__btn--primary {
+.panel-btn--primary {
   background: var(--btn-primary-bg);
   border-color: var(--btn-primary-border);
   color: var(--btn-primary-color);
   font-weight: 500;
 }
 
-.confirm-dialog__btn--secondary {
+.panel-btn--secondary {
   background: var(--btn-secondary-bg);
   border-color: var(--btn-secondary-border);
   color: var(--btn-secondary-color);
 }
 
-.confirm-dialog__btn--cancel {
+.panel-btn--cancel {
   background: var(--btn-cancel-bg);
   border-color: var(--btn-cancel-border);
   color: var(--btn-cancel-color);
 }
 
-.confirm-dialog__btn::before {
+.panel-btn::before {
   content: '⇥ ';
-  opacity: 0.4;
+  color: var(--muted);
   font-size: 0.85em;
 }
-.confirm-dialog__btn--focused {
+.panel-btn--focused {
   background: var(--btn-focus-bg) !important;
   border-color: var(--btn-focus-bg) !important;
   color: var(--btn-focus-color) !important;
   outline: 2px solid var(--btn-focus-outline);
   outline-offset: 2px;
 }
-.confirm-dialog__btn--focused::before {
+.panel-btn--focused::before {
   content: '↩︎ ';
-  opacity: 1;
+  color: inherit;
 }
-.confirm-dialog__btn--focused kbd {
+.panel-btn--focused kbd {
   background: rgba(255,255,255,0.2);
   border-color: rgba(255,255,255,0.3);
 }
 
-
-.confirm-dialog__btn kbd {
+.panel-btn kbd {
   font-family: inherit;
   background: rgba(0,0,0,0.08);
   border: 1px solid rgba(0,0,0,0.15);
