@@ -196,7 +196,11 @@ export default class EventLister extends Lister {
     } else {
       const selectedItem = this.items[this.selectedIndex]
       if (selectedItem?.id) {
-        void this.navigateToItem(selectedItem.id)
+        StatusBar.suppressUpdates()
+        void this.navigateToItem(selectedItem.id).then(() => {
+          StatusBar.resumeUpdates()
+          StatusBar.update('events')
+        })
       } else {
         this._getRootEventLister().render()
       }

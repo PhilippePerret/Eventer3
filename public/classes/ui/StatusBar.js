@@ -3,8 +3,13 @@ export default class StatusBar {
   static _displayMode = 'NESTING'
   static _filterState = 'none'  // 'none' | 'mode' | 'active'
   static _currentListerType = 'events'
+  static _suppressUpdates = false
+
+  static suppressUpdates() { StatusBar._suppressUpdates = true }
+  static resumeUpdates()   { StatusBar._suppressUpdates = false }
 
   static update(listerType) {
+    if (StatusBar._suppressUpdates) return
     StatusBar._currentListerType = listerType
     const el = document.querySelector('#status-bar')
     if (!el) return
