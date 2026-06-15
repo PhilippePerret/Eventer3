@@ -8,6 +8,7 @@ import ListerRepository from '../repositories/ListerRepository.js'
 import Notification from '../ui/Notification.js'
 import StatusBar from '../ui/StatusBar.js'
 import ContextualHelp from '../ui/ContextualHelp.js'
+import NaturePanel from '../ui/NaturePanel.js'
 
 export default class EventLister extends Lister {
 
@@ -29,6 +30,14 @@ export default class EventLister extends Lister {
 
   get childListerClass() {
     return EventLister
+  }
+
+  _childListerData(item) {
+    return {
+      ...super._childListerData(item),
+      project_nature: this.project_nature,
+      man_depth: this.man_depth,
+    }
   }
 
   _updateCheckVisual(el, isChecked) {
@@ -110,6 +119,7 @@ export default class EventLister extends Lister {
   render() {
     ContextualHelp.resetContext('event-list')
     const result = super.render()
+    this._updateMainPanelClass()
     StatusBar.update('events')
     void this._loadAndRenderPersoMarks()
     void this._applyEventStyles()
@@ -117,6 +127,43 @@ export default class EventLister extends Lister {
       this.keyboardController.targetsManager.load(this.link_targets, this.parentItem?.id)
     }
     return result
+  }
+
+  _isManLister() {
+    if (this.nature === 'man') return true
+    if (this.nature === 'eventer') return false
+    return this.man_depth != null && this.depth === this.man_depth
+  }
+
+  _updateMainPanelClass() {
+    const panel = document.getElementById('main-panel')
+    if (!panel) return
+    panel.className = panel.className
+      .split(' ')
+      .filter(c => !/^(roman|film)(-man)?$/.test(c))
+      .join(' ')
+    if (!this.project_nature) return
+    const isMan = this._isManLister()
+    if (isMan) {
+      panel.classList.add(`${this.project_nature}-man`)
+    } else {
+      panel.classList.add(this.project_nature)
+    }
+  }
+
+  openNaturePanel() {
+    if (!(this.project_id ?? this.project_item_id)) return
+    new NaturePanel({ lister: this, keyboardController: this.keyboardController }).open()
+  }
+
+  _propagateProjectMetaToAncestors() {
+    const fields = { project_nature: this.project_nature, man_depth: this.man_depth }
+    let lister = this.parentItem?.parentLister
+    while (lister) {
+      if (fields.project_nature != null) lister.project_nature = fields.project_nature
+      if (fields.man_depth != null)      lister.man_depth      = fields.man_depth
+      lister = lister.parentItem?.parentLister
+    }
   }
 
   async _applyEventStyles() {

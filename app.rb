@@ -134,6 +134,13 @@ delete '/api/listers/:lister_id/items/:item_id' do
   JSON.generate(ok: true)
 end
 
+patch '/api/projects/:id' do
+  payload = JSON.parse(request.body.read)
+  DB::Repo.update_project_meta(DATA_DIR, params[:id], payload)
+  content_type :json
+  JSON.generate(ok: true)
+end
+
 post '/api/projects/:id/duplicate' do
   result = DB::Repo.duplicate_project(DATA_DIR, params[:id])
   halt 422 unless result

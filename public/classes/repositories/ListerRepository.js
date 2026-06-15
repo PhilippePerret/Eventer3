@@ -12,12 +12,33 @@ export default class ListerRepository {
     if (!response.ok) return
     const data = await response.json()
     if (!data || data.virtual) { lister.__isVirtual = true; return }
-    if (data.id != null)        lister.id                = data.id
-    if (data.item_ids)          lister.item_ids          = data.item_ids
-    if (data.brins_lister_id)   lister.brins_lister_id   = data.brins_lister_id
-    if (data.persos_lister_id)  lister.persos_lister_id  = data.persos_lister_id
-    if (data.link_targets)      lister.link_targets      = data.link_targets
-    if (data.project_item_id)   lister.project_item_id   = data.project_item_id
+    if (data.id != null)           lister.id             = data.id
+    if (data.item_ids)             lister.item_ids       = data.item_ids
+    if (data.brins_lister_id)      lister.brins_lister_id  = data.brins_lister_id
+    if (data.persos_lister_id)     lister.persos_lister_id = data.persos_lister_id
+    if (data.link_targets)         lister.link_targets   = data.link_targets
+    if (data.project_item_id)      lister.project_item_id  = data.project_item_id
+    if (data.nature != null)       lister.nature         = data.nature
+    if (data.project_nature != null) lister.project_nature = data.project_nature
+    if (data.man_depth != null)    lister.man_depth      = data.man_depth
+  }
+
+  static async saveListerNature(lister, nature) {
+    await fetch(`/api/listers/${lister.id}?project_id=${lister.project_id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nature: nature ?? null }),
+      cache: 'no-store'
+    })
+  }
+
+  static async saveProjectMeta(projectId, fields) {
+    await fetch(`/api/projects/${projectId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(fields),
+      cache: 'no-store'
+    })
   }
 
   static async loadItems(lister) {

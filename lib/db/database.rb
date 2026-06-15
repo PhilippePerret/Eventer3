@@ -179,6 +179,8 @@ module DB
     [
       "ALTER TABLE event_props ADD COLUMN css  TEXT DEFAULT '[]'",
       "ALTER TABLE event_props ADD COLUMN lieu  TEXT",
+      "ALTER TABLE project_meta ADD COLUMN nature    TEXT",
+      "ALTER TABLE project_meta ADD COLUMN man_depth INTEGER",
     ].each do |migration|
       begin
         db.execute(migration)

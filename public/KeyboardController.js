@@ -221,7 +221,7 @@ export default class KeyboardController {
         event.preventDefault()
         return
 
-      case 'n':
+      case 'n': case 'N':
         if (event.metaKey || event.ctrlKey) return
         if (event.altKey) {
           this.activeLister.createNewItem?.()
@@ -247,7 +247,7 @@ export default class KeyboardController {
         }
         return
 
-      case 'k':
+      case 'k': case 'K':
         if (event.metaKey || event.ctrlKey) {
           this.activeLister.openToolsPanel?.()
         } else {
@@ -256,7 +256,7 @@ export default class KeyboardController {
         event.preventDefault()
         return
 
-      case 'm':
+      case 'm': case 'M':
         if (event.metaKey || event.ctrlKey) {
           this.activeLister.toggleDisplayMode?.()
           event.preventDefault()
@@ -354,7 +354,7 @@ export default class KeyboardController {
         }
         return
 
-      case 'x':
+      case 'x': case 'X':
         if (event.metaKey || event.ctrlKey) {
           this.activeLister.cutSelectedItem?.()
           event.preventDefault()
@@ -371,6 +371,13 @@ export default class KeyboardController {
       case 'Delete':
         this.activeLister.deleteSelectedItem?.()
         event.preventDefault()
+        return
+
+      case 't': case 'T':
+        if (!event.metaKey && !event.ctrlKey && !event.altKey) {
+          this.activeLister.openNaturePanel?.()
+          event.preventDefault()
+        }
         return
 
       case ':':

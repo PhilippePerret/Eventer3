@@ -5,8 +5,8 @@ export default class ConfirmDialog {
   static open({ message, title, inputCount, itemType, keyboardController, buttons = null }) {
     return new Promise((resolve) => {
       const resolvedButtons = buttons ?? [
-        { label: 'Confirmer', key: 'Enter',  shortcut: '↩︎', value: true  },
-        { label: 'Annuler',   key: 'Escape', shortcut: '␛',  value: false },
+        { label: 'Confirmer', key: 'Enter',  value: true  },
+        { label: 'Annuler',   key: 'Escape', value: false },
       ]
       const dialog = new ConfirmDialog({ message, title, inputCount, itemType, keyboardController, buttons: resolvedButtons, onChoose: resolve })
       dialog._init()
@@ -22,10 +22,16 @@ export default class ConfirmDialog {
     this.buttons            = buttons
     this._onChoose          = onChoose
     this._inputEl           = null
+    this._confirmBtn        = null
+    this._btnEls            = []
+    this._btnValues         = []
+    this._focusedIndex      = 0
   }
 
   _init() {
     this._buildDOM()
+    this._focusedIndex = Math.max(0, this._btnEls.length - 1)
+    this._updateFocus()
     this.keyboardController.pushMode({
       type: 'confirm-dialog',
       onKeyDown: (event) => this._handleKey(event),
@@ -98,10 +104,10 @@ export default class ConfirmDialog {
     this._el.append(titleEl, sep1, body, sep2, footer)
 
     if (this._confirmBtn) {
-      this._confirmBtn.disabled = true
+      this._confirmBtn.classList.add('is-disabled')
       this._inputEl.addEventListener('input', () => {
         const match = this._inputEl.value.trim() === String(this.inputCount)
-        this._confirmBtn.disabled = !match
+        this._confirmBtn.classList.toggle('is-disabled', !match)
       })
     }
   }
@@ -128,27 +134,45 @@ export default class ConfirmDialog {
   }
 
   _makeBtn(b, variant) {
-    const btn = document.createElement('button')
-    btn.type      = 'button'
+    const btn = document.createElement('span')
     btn.className = `confirm-dialog__btn confirm-dialog__btn--${variant}`
-    const kbd = document.createElement('kbd')
-    kbd.textContent = b.shortcut
-    btn.appendChild(kbd)
-    btn.appendChild(document.createTextNode(' ' + b.label))
-    btn.addEventListener('click', () => this._choose(b.value))
+    if (b.shortcut) {
+      const kbd = document.createElement('kbd')
+      kbd.textContent = b.shortcut
+      btn.appendChild(kbd)
+      btn.appendChild(document.createTextNode(' ' + b.label))
+    } else {
+      btn.textContent = b.label
+    }
+    this._btnEls.push(btn)
+    this._btnValues.push(b.value)
     return btn
   }
 
+  _updateFocus() {
+    this._btnEls.forEach((el, i) => {
+      el.classList.toggle('confirm-dialog__btn--focused', i === this._focusedIndex)
+    })
+  }
+
   _handleKey(event) {
+    if (event.key === 'Tab') {
+      if (this._inputEl) return
+      event.preventDefault()
+      this._focusedIndex = (this._focusedIndex + 1) % this._btnEls.length
+      this._updateFocus()
+      return
+    }
     if (event.key === 'Escape') {
       event.preventDefault()
-      this._choose(false)
+      const cancelBtn = this.buttons.find(b => b.key === 'Escape')
+      this._choose(cancelBtn ? cancelBtn.value : false)
       return
     }
     if (event.key === 'Enter') {
       event.preventDefault()
       if (!this._inputEl || this._inputEl.value.trim() === String(this.inputCount)) {
-        this._choose(true)
+        this._choose(this._btnValues[this._focusedIndex])
       }
       return
     }
@@ -157,7 +181,6 @@ export default class ConfirmDialog {
       const btn = this.buttons.find(b => b.key === event.key)
       if (btn) this._choose(btn.value)
     }
-    // Avec input : laisser passer les autres touches
   }
 
   _choose(value) {

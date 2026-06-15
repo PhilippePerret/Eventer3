@@ -24,3 +24,5 @@ Pour la fusion, il faut supprimer les [TOC] dans les fichiers
 [Les Textes](75-Textes.md)
 
 [Les références](100-References.md)
+
+[Le texte final](150-Texte-final.md)

@@ -3,6 +3,7 @@ import Project from './Project.js'
 import EventLister from './EventLister.js'
 import Brin from './Brin.js'
 import Perso from './Perso.js'
+import PopupSelect from '../ui/PopupSelect.js'
 import ListerRepository from '../repositories/ListerRepository.js'
 import KeyboardController from '../../KeyboardController.js'
 import LOG from '../../system/LOG.js'
@@ -183,6 +184,25 @@ export default class ProjectLister extends Lister {
       title: 'Votre protagoniste',
       badge: Perso.generateUniqueBadge('Votre protagoniste', [])
     }, { project_id: item.id })
+  }
+
+  openNaturePanel() {
+    const projectId = this.projectId
+    if (!projectId) return
+    new PopupSelect({
+      options: [
+        { value: 'roman', label: 'roman' },
+        { value: 'film',  label: 'film/BD' },
+        { value: null,    label: '— (aucun)' },
+      ],
+      currentValue: null,
+      showSearch: false,
+      keyboardController: this.keyboardController,
+      onSelect: async (nature) => {
+        await ListerRepository.saveProjectMeta(projectId, { nature })
+      },
+      onCancel: () => {}
+    }).open(document.getElementById('main-panel'))
   }
 
   render() {

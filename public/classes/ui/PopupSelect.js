@@ -92,7 +92,7 @@ export default class PopupSelect {
     this.searchInput  = search
     this.listElement  = list
 
-    if (!this.multi && this.currentValue != null) {
+    if (!this.multi && this.currentValue !== undefined) {
       const idx = this.options.findIndex(o => o.value === this.currentValue)
       if (idx >= 0) this.focusedIndex = idx
     }

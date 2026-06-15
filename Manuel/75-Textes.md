@@ -1,6 +1,6 @@
 [TOC]
 
-## Les Textes
+## Le Texte/les textes
 
 ### Aspect
 

@@ -127,8 +127,29 @@ module DB
               [JSON.generate(fields['item_ids']), now, id])
           end
         end
-        # ProjectLister ordering not stored in main.db (no listers table there)
-        return nil
+        # ProjectLister : save order to app_settings in main.db
+        return with_db(data_dir) do |db|
+          db.execute(
+            "INSERT INTO app_settings (key, value) VALUES ('project_order', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+            [JSON.generate(fields['item_ids'])]
+          )
+        end
+      end
+      if fields.key?('nature') && project_id
+        return with_project_db(data_dir, project_id) do |db|
+          db.execute("UPDATE listers SET nature = ?, updated_at = ? WHERE id = ?",
+            [fields['nature'], now, id])
+        end
+      end
+    end
+
+    def self.update_project_meta(data_dir, project_id, fields)
+      allowed_keys = %w[nature man_depth]
+      cols = fields.slice(*allowed_keys)
+      return if cols.empty?
+      with_project_db(data_dir, project_id) do |db|
+        sets = cols.keys.map { |k| "#{k} = ?" }.join(', ')
+        db.execute("UPDATE project_meta SET #{sets} WHERE id = ?", cols.values + [project_id])
       end
     end
 
@@ -193,8 +214,8 @@ module DB
           next nil unless actual_id
           row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [actual_id]).first
           next nil unless row
-          lister_data = { id: row['id'], item_ids: JSON.parse(row['item_ids'] || '[]'), updated_at: row['updated_at'] }
-          meta = db.execute("SELECT brin_ids, perso_ids, link_targets FROM project_meta LIMIT 1").first
+          lister_data = { id: row['id'], item_ids: JSON.parse(row['item_ids'] || '[]'), updated_at: row['updated_at'], nature: row['nature'] }
+          meta = db.execute("SELECT brin_ids, perso_ids, link_targets, nature, man_depth FROM project_meta LIMIT 1").first
           if meta
             brin_ids  = JSON.parse(meta['brin_ids']  || '[]') rescue []
             perso_ids = JSON.parse(meta['perso_ids'] || '[]') rescue []
@@ -212,13 +233,25 @@ module DB
             end
             lister_data[:link_targets] = lts unless lts.empty?
             lister_data[:project_item_id] = project_id
+            lister_data[:project_nature] = meta['nature']
+            lister_data[:man_depth]      = meta['man_depth']
           end
           lister_data
         end
       end
-      # Liste des projets — toutes les entrées de project_refs
+      # Liste des projets — ordre persisté dans app_settings, sinon rowid
       with_db(data_dir) do |db|
-        item_ids = db.execute("SELECT id FROM project_refs ORDER BY rowid").map { |r| r['id'] }
+        order_row = db.execute("SELECT value FROM app_settings WHERE key = 'project_order'").first
+        all_ids   = db.execute("SELECT id FROM project_refs ORDER BY rowid").map { |r| r['id'] }
+        item_ids  = if order_row
+          saved     = JSON.parse(order_row['value']) rescue []
+          saved_set = saved.to_set
+          all_set   = all_ids.to_set
+          saved.select { |id| all_set.include?(id) } +
+            all_ids.reject { |id| saved_set.include?(id) }
+        else
+          all_ids
+        end
         { id: id, item_ids: item_ids, updated_at: nil }
       end
     end
@@ -270,7 +303,17 @@ module DB
       end
       # Lister des projets (main.db)
       projects = with_db(data_dir) do |db|
-        item_ids = db.execute("SELECT id FROM project_refs ORDER BY rowid").map { |r| r['id'] }
+        order_row = db.execute("SELECT value FROM app_settings WHERE key = 'project_order'").first
+        all_ids   = db.execute("SELECT id FROM project_refs ORDER BY rowid").map { |r| r['id'] }
+        item_ids  = if order_row
+          saved     = JSON.parse(order_row['value']) rescue []
+          saved_set = saved.to_set
+          all_set   = all_ids.to_set
+          saved.select { |id| all_set.include?(id) } +
+            all_ids.reject { |id| saved_set.include?(id) }
+        else
+          all_ids
+        end
         _fetch_project_items(db, item_ids)
       end
       projects.each do |id, item|

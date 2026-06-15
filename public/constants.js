@@ -56,6 +56,8 @@ export const EVENT_STATE = [ // aussi pour les projets
 
 ]
 
+export const MANUSCRIT_WIDTH = 680 // largeur texte en mode manuscrit/roman (px)
+
 export const PERSO_FONCTIONS = [
   'protagoniste',
   'antagoniste',
@@ -176,6 +178,7 @@ export const HELP_PER_CONTEXT = {
     fields_order: 'titre → état → titre',
     wf: WORD_FORMS.Project,
     shortcuts: [
+      {sc: 't', ef: 'Choisir le type du projet', key: 't'},
       {context: 'item-edition'}
     ]
   },
@@ -184,6 +187,7 @@ export const HELP_PER_CONTEXT = {
     title: "Évènemencier",
     wf: WORD_FORMS.Event,
     shortcuts: [
+      {sc: 't', ef: 'Type de l’évènemencier…', key: 't'},
       {context: 'navigate-items'},
       {context: 'with-selected'},
       {context: 'event-selected'},
@@ -249,7 +253,7 @@ export const HELP_PER_CONTEXT = {
       {sc: '␣', ef: 'Cocher/décocher le style', key: 'Space'},
       {sc: '↩︎', ef: 'Cocher/décocher le style', key: 'Enter'},
       {sc: '␛', ef: 'Annuler l’édition', key: 'Escape'},
-      {sc: '⌘ + ↩︎', ef: 'Enregistrer et finir', key: Enter, metaKey: true}
+      {sc: '⌘ + ↩︎', ef: 'Enregistrer et finir', key: 'Enter', metaKey: true}
     ]
   },
 

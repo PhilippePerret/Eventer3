@@ -44,30 +44,29 @@ AIDE['M6100'] = {file: "Aide.md", anchor: "ancre-a-rejoindre"}
 AIDE['<contexte>'] = {file: "Autre-ide.md", anchor: "autre-ancre"}
 
 
-Maintenant nous devons aborder un problème pas forcément compliqué mais épineux : si tu comprends l'application, tu comprends qu'elle sert à développer une histoire (roman ou film) en travaillant par imbrication progressive.
-Cette imbrication doit aboutir au dernier niveau : celui du texte proprement dit, c'est-à-dire le texte du roman (le manuscript) ou le texte du film (le scénario)
-Pour les exemples ci-cessous, je prendrais l'imbrication naturelle :
-Projet → Actes → Séquences → Scènes → temps de scène → MANUSCRIT
 
-Problème 1 : je dois pouvoir déterminer que tel niveau (tel Lister donc) doit être le niveau MANUSCRIT. Noter que ça n'est pas forcément toujours le même niveau, même pour le même projet. Par exemple, pour une scène très courte (un plan) je pourrais avoir : 
-Projet → Actes → Séquences → Scènes → MANUSCRIT
-MAIS lors de l'"Export du manuscrit", ce sera toujours ce niveau qui sera utilisé
-- Lorsque ce niveau n'existe pas (aucun Lister défini comme manuscrit dans l'imbrication donnée), il faudra quand même indiquer le manque
-
-Bien sûr, à l'affichage, je voudrais un style tout à fait différent :
-D'abord, il n'y aura plus de white-space:nowrap.
-Pour le roman : 
-    – police livre (Garamond ou équivalent google)
-    – largeur plus petite (680 px ?) — mais laissez les menus et badges bien à droite
-    - line-height plus grand
-Pour le scénario:
-    - police geneva
-    - styles propres (intitule, action, nom_personnage, dialogue, note_jeu, center — je les définirai moi-même) 
-    
-- quand on activera l'affichage "par niveau" sur un lister de type manuscrit, c'est tous les niveaux "manuscrit" qui devront être choisis, même si le niveau n'est pas le même comme on l'a vu tout à l'heure
-
-- QUESTION : Comment déterminer que le lister courant doit être de type manuscrit ?
 ---
 
-BUGS
-- Manque de cohérence dans les boutons footer des panneaux : parfois "<action> <raccourci>" parfois "<raccourci> <action>". Mettre partout "<raccourci> <action>" (JE PARLE DES FAUX-BOUTONS DANS LES FOOTERS ET DE RIEN D'AUTRE)
+** BUGS **
+
+BUG 1
+Boutons footer "alternables
+- le signe '⇥' est trop discret (si opacité, ne la mettre que sur le texte du bouton)
+- J'ai dit que dans TOUT panneau ça devrait être comme ça dorénavant :
+Fenêtre "Type de l'évènemencier de niveau <N>"
+(en profiter pour changer le titre. Ça devrait être "Type de <titre évènemencier[…]> (niv. <Niveau>)")
+
+
+BUG 2
+- Quand j'édite l'event de type man, j'ai toujours le white-space:nowrap !!!
+- et je voudrais que le filet passe au vert (comme pour l'édition normale)
+
+BUG 3
+- Cmd+m  ne ne toggle pas bien l'affichage :
+    quand on est en nest (imbriqué) ça passe bien en niveau
+    quand on est en niveau , ça ne passe pas en nesting ou, plus exactement, ça ne fait que supprimer les events virtuels alors que ça devrait revenir sur le lister de l'event sélectionné
+    
+mais on va certainement changer le comportement : Cmd+m va ouvrir une fenêtre pour choisir entre trois modes d'affichage : 
+- par imbrication (défaut)
+- par niveau 
+- total                     <--- sera à implémenter

@@ -21,6 +21,20 @@
   --petit-badge: 14px;
   --width-petit-badge:38px;
   --height-petit-badge:38px;
+
+  /* Boutons de dialogue / panneau footer */
+  --btn-focus-bg:       #2a9d4e;
+  --btn-focus-color:    #fff;
+  --btn-focus-outline:  rgba(42, 157, 78, 0.35);
+  --btn-primary-bg:     #f0f7ff;
+  --btn-primary-border: #b0cef0;
+  --btn-primary-color:  #1a5fa3;
+  --btn-secondary-bg:   #fff0f0;
+  --btn-secondary-border: #e0b0b0;
+  --btn-secondary-color:  #c00;
+  --btn-cancel-bg:      #f5f5f5;
+  --btn-cancel-border:  #ccc;
+  --btn-cancel-color:   #555;
 }
 
 h1 {
@@ -1837,7 +1851,7 @@ body:has(#filter-input:not(.hidden)) #main-panel {
 }
 
 .confirm-dialog {
-  width: 520px;
+  width: 400px;
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.18);
   border-radius: 12px;
@@ -1893,13 +1907,14 @@ body:has(#filter-input:not(.hidden)) #main-panel {
   padding: 12px 20px;
 }
 
-.confirm-dialog__btn--primary:disabled {
+.confirm-dialog__btn.is-disabled {
   opacity: 0.35;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 .confirm-dialog__message {
-  margin: 0 0 28px;
+  margin: 0 0 40px;
   line-height: 1.6;
   font-size: var(--dialog-font-size);
 }
@@ -1922,31 +1937,52 @@ body:has(#filter-input:not(.hidden)) #main-panel {
   gap: 8px;
   padding: 9px 20px;
   border-radius: 8px;
-  border: 1px solid #ccc;
-  background: #f5f5f5;
+  border: 1px solid var(--btn-cancel-border);
+  background: var(--btn-cancel-bg);
   font-family: inherit;
   font-size: var(--dialog-btn-font-size);
-  color: #333;
-  cursor: pointer;
+  color: var(--btn-cancel-color);
+  user-select: none;
 }
 
 .confirm-dialog__btn--primary {
-  background: #2a9d4e;
-  border-color: #2a9d4e;
-  color: #fff;
+  background: var(--btn-primary-bg);
+  border-color: var(--btn-primary-border);
+  color: var(--btn-primary-color);
   font-weight: 500;
 }
 
 .confirm-dialog__btn--secondary {
-  background: #fff0f0;
-  border-color: #e0b0b0;
-  color: #c00;
+  background: var(--btn-secondary-bg);
+  border-color: var(--btn-secondary-border);
+  color: var(--btn-secondary-color);
 }
 
 .confirm-dialog__btn--cancel {
-  background: #f5f5f5;
-  border-color: #ccc;
-  color: #555;
+  background: var(--btn-cancel-bg);
+  border-color: var(--btn-cancel-border);
+  color: var(--btn-cancel-color);
+}
+
+.confirm-dialog__btn::before {
+  content: '⇥ ';
+  opacity: 0.4;
+  font-size: 0.85em;
+}
+.confirm-dialog__btn--focused {
+  background: var(--btn-focus-bg) !important;
+  border-color: var(--btn-focus-bg) !important;
+  color: var(--btn-focus-color) !important;
+  outline: 2px solid var(--btn-focus-outline);
+  outline-offset: 2px;
+}
+.confirm-dialog__btn--focused::before {
+  content: '↩︎ ';
+  opacity: 1;
+}
+.confirm-dialog__btn--focused kbd {
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.3);
 }
 
 
@@ -1959,10 +1995,6 @@ body:has(#filter-input:not(.hidden)) #main-panel {
   font-size: 11px;
 }
 
-.confirm-dialog__btn--primary kbd {
-  background: rgba(255,255,255,0.2);
-  border-color: rgba(255,255,255,0.3);
-}
 
 /* ── ContextualHelp ───────────────────────────────────────────────── */
 
@@ -2095,4 +2127,115 @@ body:has(#filter-input:not(.hidden)) #main-panel {
   background: #34c759;
   color: #fff;
   border: none;
+}
+
+/* ─── NaturePanel ───────────────────────────────────────────────────────────── */
+
+.nature-panel {
+  width: 420px;
+  z-index: 500;
+}
+
+.nature-panel__fields { padding: 4px 0; }
+
+.nature-panel__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px var(--panel-padding-x);
+  gap: 16px;
+  cursor: default;
+}
+
+.nature-panel__row.selected { background: var(--selected); color: white; }
+
+.nature-panel__label { font-weight: 500; }
+
+.nature-panel__value { color: var(--muted); font-style: italic; }
+
+.nature-panel__row.selected .nature-panel__value { color: rgba(255,255,255,.78); }
+
+
+/* ─── Mode manuscrit / scénario ─────────────────────────────────────────────── */
+
+#main-panel.roman-man .event-text,
+#main-panel.film-man .event-text {
+  white-space: normal;
+}
+
+#main-panel.roman-man .event-text {
+  font-family: 'EB Garamond', Garamond, Georgia, serif;
+  max-width: 680px;
+  line-height: 1.7;
+  text-align: justify;
+  margin-left: 12vw;
+}
+
+#main-panel.film-man .event-text {
+  font-family: 'Geneva', 'Helvetica Neue', sans-serif;
+  line-height: 1.6;
+}
+
+/* Styles paragraphes scénario (appliqués via StyleLister en mode film-man) */
+#main-panel.film-man .event-item .intitule   { font-weight: bold; text-transform: uppercase; margin-top: 24px; }
+#main-panel.film-man .event-item .action     { margin-top: 12px; }
+#main-panel.film-man .event-item .nom-perso  { text-align: center; margin-top: 16px; text-transform: uppercase; }
+#main-panel.film-man .event-item .dialogue   { margin-left: 20%; margin-right: 20%; margin-top: 4px; }
+#main-panel.film-man .event-item .note-jeu   { margin-left: 30%; margin-right: 30%; font-style: italic; margin-top: 4px; }
+#main-panel.film-man .event-item .center     { text-align: center; margin-top: 12px; }
+
+/* Fond papier restreint à la largeur du texte (680px + marges) */
+#main-panel.roman-man {
+  background: var(--bg);
+  position: relative;
+}
+
+/* Feuille fixe — reste en place pendant le scroll, marges égales autour du texte */
+#main-panel.roman-man::before {
+  content: '';
+  position: fixed;
+  top: 0; bottom: 0;
+  left: calc(12vw - 24px);
+  width: calc(680px + 144px);
+  background-color: #f9f6f0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='600' height='600' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Contenu au-dessus du fond papier */
+#main-panel.roman-man .event-item,
+#main-panel.roman-man .eventer-breadcrumbs {
+  position: relative;
+  z-index: 1;
+}
+
+/* Gutter transparent — élimine le fond blanc sur chaque ligne */
+#main-panel.roman-man .event-check-gutter {
+  background: transparent;
+}
+
+/* Pas de hover sur papier */
+#main-panel.roman-man .event-item:hover .event-body {
+  background: transparent;
+}
+
+/* Styles appliqués en édition en mode manuscrit/scénario */
+#main-panel.roman-man .event-item.editing .event-text {
+  font-family: 'EB Garamond', Garamond, Georgia, serif;
+  white-space: normal;
+  max-width: 680px;
+}
+#main-panel.film-man .event-item.editing .event-text {
+  white-space: normal;
+}
+
+/* Sélection discrète (filet bleu) en mode manuscrit/scénario */
+#main-panel.roman-man .event-item.selected .event-body,
+#main-panel.film-man .event-item.selected .event-body {
+  background: transparent;
+  color: inherit;
+  border-color: transparent;
+  box-shadow: inset 0 0 0 1px rgba(52, 120, 246, 0.38);
+  border-radius: 3px;
 }

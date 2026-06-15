@@ -16,6 +16,8 @@ export default class Lister {
     this.active = data.active ?? true
     this.type = data.type ?? null
     this.nature = data.nature ?? 'none'
+    this.project_nature = data.project_nature ?? null
+    this.man_depth = data.man_depth ?? null
     this.scale = data.scale ?? null
     this.item_ids = data.item_ids ?? []
     this.brin_ids = data.brin_ids ?? []
