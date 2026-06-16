@@ -49,7 +49,7 @@ body:has(#perso-panel:not(.hidden)) #brin-panel .selected,
 body:has(#shortcuts-panel:not(.hidden)) #main-panel .selected,
 body:has(#shortcuts-panel:not(.hidden)) #brin-panel .selected,
 body:has(#shortcuts-panel:not(.hidden)) #perso-panel .selected,
-body:has(#tools-panel:not(.hidden)) #main-panel .selected {
+body:has(.tools-panel) #main-panel .selected {
   --selected: var(--selected-bg-muted);
 }
 
@@ -1045,36 +1045,18 @@ body#shell:has(#pane-2[data-split-active]) .pane-wrapper:has(iframe[data-focused
 
 /* ─── Shortcuts panel ─────────────────────────────────────────── */
 
-#tools-panel {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.tools-panel {
   z-index: 300;
   min-width: 320px;
-  min-height: 200px;
-  background: var(--bg, #faf7f2);
-  border: 1px solid var(--line, #ccc);
-  border-radius: 8px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-  padding: 8px 0;
 }
 
-.tools-panel__item {
+.tools-panel .floating-panel__item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px var(--panel-padding-x);
-  cursor: default;
-  font-size: var(--panel-font-size);
 }
 
-.tools-panel__item.selected {
-  background: var(--selection-bg, #3478f6);
-  color: white;
-}
-
-.tools-panel__item kbd {
+.tools-panel .floating-panel__item kbd {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1967,7 +1949,7 @@ body:has(#filter-input:not(.hidden)) #main-panel {
 
 .panel-btn::before {
   content: '⇥ ';
-  color: var(--muted);
+  /* color: var(--muted); J'avais déjà demandé à ce qu'il ne soit pas "muté" */
   font-size: 0.85em;
 }
 .panel-btn--focused {

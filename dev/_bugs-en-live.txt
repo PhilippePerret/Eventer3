@@ -69,3 +69,18 @@ mais on va certainement changer le comportement : Cmd+m va ouvrir une fenêtre p
 - par imbrication (défaut)
 - par niveau 
 - total                     <--- sera à implémenter
+
+POINT 1
+- garder l'idée de la boite à outils MAIS :
+- l'ouvrir avec meta+t (VÉRIFIER AVANT LA DISPONIBILITÉ !!!!)
+- garder dedans l'outil "Consolider le niveau"
+- garder la lettre "c" pour le jouer 
+- MAIS ajouter "Consolider le niveau (⌘ + ⇧ + c)"
+- "c" sur panneau des outils lance la consolidation  <== LE TEST
+- meta+shift+c hors panneau outils lance la consolidation <== TEST À FAIRE
+- s'assurer que le panneau des outils fonctionne bien comme un panneau (keyboardablePanel, + TAB Cycle (outil → Fermer → Annuler → outil → etc.)) <== TEST (j'ai préparé e2e/_tdd/tools-panel.specs.js)
+
+POINT 2
+- Nouveau test : meta+shift+, => aide contextuelle doit afficher l'aide contextuelle pour l'affichage par niveau ('display-per-level') => doit contenir "⌘ + ⇧ + c : Consolider le niveau (?)"
+- Le "(?)" est une marque à styliser (SVG ?) indiquant que : QUAND l'outil est sélectionné dans le panneau, SI on joue "?" (shilft+,), on affiche l'aide définie par un numéro dans la définition du raccourci (`{aide:2002}`)
+- Et inversement, quand il y a {:aide} est défini pour le raccourci => on ajoute le "?" stylisé

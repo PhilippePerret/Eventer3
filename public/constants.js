@@ -121,21 +121,6 @@ export const HELP_PER_CONTEXT = {
       {sc: '⌘ + x', ef: "{wf.Le} Couper",               key: 'x', metakey: true},
     ]
   },
-  'event-selected':{
-    title: null,
-    shortcuts: [
-      {sc: 'b',   ef: "Choisir ses brins",                key: 'b'},
-      {sc: 'p',   ef: "Choisir ses personnages",          key: 'p'},
-      {sc: 's',   ef: "Choisir ses styles",               key: 's'}
-    ]
-  },
-
-  'brin-selected':{
-    title: null,
-    shortcuts: [
-      {sc: 'p',   ef: "Choisir ses personnages",          key: 'p'}
-    ]
-  },
 
   /*- générique: Propre aux éléments cochés -*/
   'with-checkeds': {
@@ -145,6 +130,15 @@ export const HELP_PER_CONTEXT = {
       {sc: '⇧⌘ + x', ef: "Les couper", key: 'x', metakey: true},
 
     ]
+  },
+  /*- générique: Tab Cycle-*/
+  'tab-cycle': {
+    shortcuts: [
+      {sc: '⇥', ef: '`&lt;{wf.thing}> ⇥ bouton ⇥ bouton… ⇥ &lt;{wf.thing}>`'},
+      {sc: '↓', ef: '{wf.Thing} suivant'},
+      {sc: '↑', ef: '{wf.Thing} précédent'}
+    ]
+
   },
 
   /*- générique : édition d'un item quelconque -*/
@@ -196,6 +190,17 @@ export const HELP_PER_CONTEXT = {
     ]
   },
 
+
+
+  'event-selected':{
+    title: null,
+    shortcuts: [
+      {sc: 'b',   ef: "Choisir ses brins",                key: 'b'},
+      {sc: 'p',   ef: "Choisir ses personnages",          key: 'p'},
+      {sc: 's',   ef: "Choisir ses styles",               key: 's'}
+    ]
+  },
+
   'event-edition': {
     title: "Édition d'un évènement",
     wf: WORD_FORMS.Event,
@@ -216,7 +221,14 @@ export const HELP_PER_CONTEXT = {
       {context: 'with-checkeds'}
     ]
   },
-  
+ 
+  'brin-selected':{
+    title: null,
+    shortcuts: [
+      {sc: 'p',   ef: "Choisir ses personnages",          key: 'p'}
+    ]
+  },
+
   'brin-edition': {
     fields_order: 'titre → type → titre',
     title: "Édition du brin",
@@ -256,6 +268,17 @@ export const HELP_PER_CONTEXT = {
       {sc: '⌘ + ↩︎', ef: 'Enregistrer et finir', key: 'Enter', metaKey: true}
     ]
   },
+
+
+  'tool-panel': {
+    title: "Panneau des outils",
+    wf: {thing: 'outil', Thing: 'Outil'},
+    shortcuts: [
+      {context: 'tab-cycle'},
+      {sc: '↩︎', ef: 'Exécuter l’outil ou le bouton sélectionné'},
+      {sc: '[a..z]', ef: 'Exécuter l’outil en regard de la lettre'}
+    ]
+  }
 
 }
 

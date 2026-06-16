@@ -15,7 +15,7 @@ import { ERRORS } from './system/Locales.js'
 export default class KeyboardController {
 
   // Panels ordered by z-index ascending (reversed = highest first)
-  static MOVABLE_PANEL_IDS = ['#filter-selector-panel', '#brin-panel', '#perso-panel', '#style-panel', '#shortcuts-panel', '#tools-panel', '.targets-panel']
+  static MOVABLE_PANEL_IDS = ['#filter-selector-panel', '#brin-panel', '#perso-panel', '#style-panel', '#shortcuts-panel', '.targets-panel']
 
   constructor() {
     this.activeLister = null
@@ -248,8 +248,8 @@ export default class KeyboardController {
         return
 
       case 'k': case 'K':
-        if (event.metaKey || event.ctrlKey) {
-          this.activeLister.openToolsPanel?.()
+        if (event.metaKey) {
+          TargetsPanel.open(this, null)
         } else {
           this._addTarget()
         }
@@ -344,11 +344,14 @@ export default class KeyboardController {
         }
         return
 
-      case 'c':
-        if (event.metaKey || event.ctrlKey) {
+      case 'c': case 'C':
+        if (event.metaKey && event.shiftKey) {
+          this.activeLister.consolidateLevel?.()
+          event.preventDefault()
+        } else if (event.metaKey || event.ctrlKey) {
           this.activeLister.copySelectedItem?.()
           event.preventDefault()
-        } else {
+        } else if (!event.shiftKey) {
           void this._executeLinkActionDirect('card')
           event.preventDefault()
         }
@@ -374,7 +377,10 @@ export default class KeyboardController {
         return
 
       case 't': case 'T':
-        if (!event.metaKey && !event.ctrlKey && !event.altKey) {
+        if (event.metaKey) {
+          this.activeLister.openToolsPanel?.()
+          event.preventDefault()
+        } else if (!event.altKey) {
           this.activeLister.openNaturePanel?.()
           event.preventDefault()
         }

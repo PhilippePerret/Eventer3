@@ -60,7 +60,7 @@ Call log:
   65  | 
   66  |   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(2)
   67  | 
-  68  |   await page.keyboard.press('Meta+k')
+  68  |   await page.keyboard.press('Meta+t')
   69  |   await expect(pane1(page).locator('#tools-panel')).toBeVisible()
   70  | 
   71  |   console.log('-> touche C : exécute la consolidation, ferme le panneau')
@@ -76,7 +76,7 @@ Call log:
   81  |   await page.goto('/')
   82  |   await enterLevelMode(page, 3)
   83  | 
-  84  |   await page.keyboard.press('Meta+k')
+  84  |   await page.keyboard.press('Meta+t')
   85  |   await page.keyboard.press('c')
   86  |   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(0)
   87  |   await expect(pane1(page).locator('.event-item')).toHaveCount(4)
@@ -91,7 +91,7 @@ Call log:
   96  |   await page.goto('/')
   97  |   await enterLevelMode(page, 3)
   98  | 
-  99  |   await page.keyboard.press('Meta+k')
+  99  |   await page.keyboard.press('Meta+t')
   100 |   await page.keyboard.press('c')
   101 |   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(0)
   102 |   await expect(pane1(page).locator('.event-item')).toHaveCount(4)
@@ -132,8 +132,8 @@ Call log:
   137 |     await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(1)
   138 |     await expect(pane1(page).locator('.event-item')).toHaveCount(3)
   139 | 
-  140 |     console.log('-> ⌘+k puis c : consolide')
-  141 |     await page.keyboard.press('Meta+k')
+  140 |     console.log('-> ⌘+t puis c : consolide')
+  141 |     await page.keyboard.press('Meta+t')
   142 |     await page.keyboard.press('c')
   143 |     await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(0)
   144 |     await expect(pane1(page).locator('.event-item')).toHaveCount(3)

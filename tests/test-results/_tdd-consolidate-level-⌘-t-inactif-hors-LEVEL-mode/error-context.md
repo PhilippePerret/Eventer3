@@ -6,34 +6,48 @@
 
 # Test info
 
-- Name: _tdd/consolidate-level.spec.js >> consolidation : items restent réels après toggle NESTING → LEVEL
-- Location: specs/e2e/_tdd/consolidate-level.spec.js:95:1
+- Name: _tdd/consolidate-level.spec.js >> ⌘+t inactif hors LEVEL mode
+- Location: specs/e2e/_tdd/consolidate-level.spec.js:37:1
 
 # Error details
 
 ```
-Error: expect(locator).toContainText(expected) failed
+Error: expect(locator).toBeAttached() failed
 
-Locator: locator('#pane-1').contentFrame().locator('#status-bar')
-Expected substring: "DISP MODE LEVEL"
-Received string:    "DISP MODE NESTING"
+Locator: locator('#pane-1').contentFrame().locator('#tools-panel')
+Expected: attached
 Timeout: 5000ms
+Error: element(s) not found
 
 Call log:
-  - Expect "toContainText" with timeout 5000ms
-  - waiting for locator('#pane-1').contentFrame().locator('#status-bar')
-    14 × locator resolved to <div id="status-bar">…</div>
-       - unexpected value "DISP MODE NESTING"
+  - Expect "toBeAttached" with timeout 5000ms
+  - waiting for locator('#pane-1').contentFrame().locator('#tools-panel')
 
 ```
 
 ```yaml
+- main:
+  - navigation:
+    - button "Projet A"
+    - text: ‹
+  - text: Acte 1 — Acte 2 —
 - text: DISP MODE NESTING
+- contentinfo "Raccourcis clavier"
+- text: AIDE ⇧⌘ ?
 ```
 
 # Test source
 
 ```ts
+  1   | import { installFixtures } from '../../../helpers/install-fixtures.js'
+  2   | import { test, expect, pane1 } from '../__setup__.js'
+  3   | 
+  4   | // Fixture depth-move :
+  5   | //   depth=3 : e57, e68 (réels) + "Séquence 2 +1" + "Séquence 3 +1"  — 2 virtuels
+  6   | 
+  7   | test.beforeEach(() => {
+  8   |   installFixtures('depth-move')
+  9   | })
   10  | 
   11  | async function enterLevelMode(page, targetDepth) {
   12  |   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
@@ -71,7 +85,8 @@ Call log:
   44  |   await page.keyboard.press('Meta+t')
   45  | 
   46  |   console.log('-> panneau outils doit exister dans le DOM mais rester caché')
-  47  |   await expect(pane1(page).locator('#tools-panel')).toBeAttached()
+> 47  |   await expect(pane1(page).locator('#tools-panel')).toBeAttached()
+      |                                                     ^ Error: expect(locator).toBeAttached() failed
   48  |   await expect(pane1(page).locator('#tools-panel')).not.toBeVisible()
   49  | })
   50  | 
@@ -134,8 +149,7 @@ Call log:
   107 | 
   108 |   console.log('-> ⌘+m : retour en LEVEL')
   109 |   await page.keyboard.press('Meta+m')
-> 110 |   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
-      |                                                    ^ Error: expect(locator).toContainText(expected) failed
+  110 |   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
   111 | 
   112 |   console.log('-> items consolidés restent réels (0 virtuels, 4 réels)')
   113 |   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(0)
@@ -173,16 +187,4 @@ Call log:
   145 | 
   146 |     console.log('-> ⌘+m : NESTING')
   147 |     await page.keyboard.press('Meta+m')
-  148 |     await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE NESTING')
-  149 | 
-  150 |     console.log('-> ⌘+m : LEVEL')
-  151 |     await page.keyboard.press('Meta+m')
-  152 |     await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
-  153 | 
-  154 |     console.log('-> item Acte II +1 reste réel (0 virtuels)')
-  155 |     await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(0)
-  156 |     await expect(pane1(page).locator('.event-item')).toHaveCount(3)
-  157 |   })
-  158 | })
-  159 | 
 ```

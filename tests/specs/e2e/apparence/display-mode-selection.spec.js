@@ -1,4 +1,4 @@
-import { installFixtures } from '../../../helpers/install-fixtures'
+import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect, pane1 } from '../__setup__.js'
 
 // Fixture depth-move :

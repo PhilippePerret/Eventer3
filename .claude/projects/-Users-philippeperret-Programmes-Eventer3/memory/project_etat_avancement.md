@@ -5,25 +5,25 @@ metadata:
   type: project
 ---
 
-Session 2026-06-14 : tout vert (576+ tests).
+Session 2026-06-15 : mode LEVEL fonctionnel, 2 régressions à corriger.
 
-**Implémenté cette session :**
-- ConstantsPanel UI : footer boutons bordurés, header "Constante/Remplacer par…", Shift+Tab, Cmd+Enter ferme
-- `Texte.replaceTokens` : constantes normales (literal) + regex (`/pattern/`) + badges (`\b`) — `_replaceConstants` et `_replaceBadges` séparés
-- `Texte._replaceBadges` : badge → title ET `<badge>pat` → patronyme (patronyme traité EN PREMIER)
-- Token replacement dans TOUS les items (Event, Brin, Perso) via `Lister._loadTokens` + `_renderTokens` + `item._tokens`
-- `_loadTokens` mappe `{ badge, title, patronyme }` (patronyme indispensable pour `<badge>pat`)
-- Panneau brins/persos : headers avec tokens
-- Post-ConstantsPanel : load tokens AVANT de cacher le panneau
-- Fix Tab navigation édition : `triggerElement.focus()` dans `_openPopupSelect.onSelect`
-- Fix cut/paste race condition : `_performDelete()` helper synchrone dans Lister
-- Fix brin/perso delete persistance : `_countCascade` override → 0 dans BrinLister + PersoLister
-- Fixture with-tokens : e1(/VILLE/), e2(PP→title), e3(PPpat→patronyme), c1(Phil/PP/patronyme=Philippe Perret)
+**Implémenté (session 2026-06-15) :**
+- Mode LEVEL : `_isManLister()`, `_collectItemsAtDepth()`, `_renderLevelMode()` — 12 tests verts dans `_tdd/`
+- `leaveToParent()` override en LEVEL mode → `navigateToItem(selectedItem.id)` (Bug 2b)
+- `toggleDisplayMode()` : LEVEL→NESTING appelle `navigateToItem` + `StatusBar.suppressUpdates` (Bug 2)
+- data_ini_state : 2e projet ajouté (UUID 00000000-0000-0000-0000-000000000002)
+- Fixtures : `man-level-mode` (e99 feuille), `man-nature-explicit`
 
-**Prochaines features (split-pane suite) :**
-1. Cmd+2 popup vertical/horizontal
-2. Focus visible pane actif
-3. Cible dans autre pane
+**Régressions en cours (laissées dans _tdd/) :**
+1. `consolidate-level.spec.js` — race condition : StatusBar.suppressUpdates ajouté mais a introduit un autre bug, laissé en _tdd
+2. `shortcuts-panel.spec.js (_tdd/)` — `?` remplacé par `Meta+?`, mais test encore à vérifier
 
-**Why:** Split-pane suite était listée avant le travail constants/tokens.
-**How to apply:** Reprendre avec TDD depuis split-pane-suite.
+**Prochaine feature :**
+- Mode TREE : afficher TOUS les events du projet avec indentation (profondeur), comme macOS liste vue tout déplié
+- Cmd+m → PopupSelect 3 modes (NESTING / LEVEL / TREE)
+- Cmd+← en mode TREE : fold/collapse lister (persisté en DB, colonne `collapsed` dans listers)
+- Navigation TREE : items visibles uniquement (fold + filtre respectés)
+- Partie "left" des events à la demande (item sélectionné uniquement, touche TBD)
+
+**Why:** Analyse trop longue sur la race condition (20+ min) → session interrompue avant d'aborder TREE.
+**How to apply:** TDD strict. Reprendre régressions AVANT d'implémenter TREE.

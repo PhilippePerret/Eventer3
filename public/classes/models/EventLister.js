@@ -58,8 +58,13 @@ export default class EventLister extends Lister {
   openToolsPanel() {
     if (StatusBar.displayMode !== 'LEVEL') return
     this.keyboardController.toolsPanel.open([
-      { key: 'c', label: 'Consolider le niveau courant', action: () => void this._consolidateLevel() }
+      { key: 'c', label: 'Consolider le niveau (⌘ + ⇧ + c)', action: () => void this.consolidateLevel() }
     ], this.keyboardController)
+  }
+
+  consolidateLevel() {
+    if (StatusBar.displayMode !== 'LEVEL') return
+    void this._consolidateLevel()
   }
 
   async _consolidateLevel() {

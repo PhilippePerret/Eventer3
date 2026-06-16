@@ -8,6 +8,8 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
 ## Todo
 
+- S’assurer que le contexte 'tool-panel' est appliqué quand on ouvre la boite d’outil. Vérifier que l’aide contextuelle soit la bonne.
+
 - Type spécial d’un évènemencier « Script » qui contient le texte final. Mais il peut être utilisé entre les deux. Par exemple un niveau intermédiaire
 
   - Projet → acte → séquence → scène → synopsis (mono) → 

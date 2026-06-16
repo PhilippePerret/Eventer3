@@ -1,86 +1,60 @@
-export default class ToolsPanel {
+import KeyboardablePanel from './KeyboardablePanel.js'
+
+export default class ToolsPanel extends KeyboardablePanel {
 
   constructor() {
+    super({ title: 'Outils', modeType: 'tools-panel', panelClass: 'tools-panel' })
     this._tools = []
-    this._selectedIndex = 0
-    this._keyboardController = null
   }
 
-  get el() {
-    return document.querySelector('#tools-panel')
-  }
-
-  get isVisible() {
-    const el = this.el
-    return el ? !el.classList.contains('hidden') : false
-  }
+  // ── Ouverture ─────────────────────────────────────────────────────────────────
 
   open(tools, keyboardController) {
     this._tools = tools
-    this._selectedIndex = 0
-    this._keyboardController = keyboardController
-    this._render()
-    this.el.classList.remove('hidden')
-    keyboardController.pushMode({
-      type: 'tools-panel',
-      onKeyDown: (event, kc) => this.onKeyDown(event, kc)
-    })
+    this._kc    = keyboardController
+    super.open()
   }
 
-  close() {
-    this.el.classList.add('hidden')
-    this._keyboardController?.popMode()
-    this._keyboardController = null
-  }
+  get isVisible() { return !!this._el }
 
-  _render() {
-    const el = this.el
-    if (!el) return
-    el.innerHTML = ''
+  // ── Template ──────────────────────────────────────────────────────────────────
+
+  _renderContent(zone) {
     this._tools.forEach((tool, i) => {
       const item = document.createElement('div')
-      item.className = 'tools-panel__item' + (i === 0 ? ' selected' : '')
+      item.className = 'floating-panel__item' + (i === 0 ? ' selected' : '')
       item.innerHTML = `<kbd>${tool.key.toUpperCase()}</kbd> ${tool.label}`
-      item.addEventListener('click', () => { tool.action(); this.close() })
-      el.appendChild(item)
+      zone.appendChild(item)
     })
   }
 
-  onKeyDown(event, keyboardController) {
-    if (event.key === 'Escape') {
-      this.close()
-      event.preventDefault()
-      return
-    }
-    if (event.key === 'ArrowDown') {
-      this._selectedIndex = Math.min(this._selectedIndex + 1, this._tools.length - 1)
-      this._updateSelection()
-      event.preventDefault()
-      return
-    }
-    if (event.key === 'ArrowUp') {
-      this._selectedIndex = Math.max(this._selectedIndex - 1, 0)
-      this._updateSelection()
-      event.preventDefault()
-      return
-    }
-    if (event.key === 'Enter') {
-      const tool = this._tools[this._selectedIndex]
-      if (tool) { tool.action(); this.close() }
-      event.preventDefault()
-      return
-    }
-    const tool = this._tools.find(t => t.key.toLowerCase() === event.key.toLowerCase())
-    if (tool) {
-      tool.action()
-      this.close()
-      event.preventDefault()
-    }
+  _getItemCount() { return this._tools.length }
+
+  _onEnterItem(index) {
+    const tool = this._tools[index]
+    if (tool) { tool.action(); this.close() }
   }
 
-  _updateSelection() {
-    const items = this.el?.querySelectorAll('.tools-panel__item') ?? []
-    items.forEach((item, i) => item.classList.toggle('selected', i === this._selectedIndex))
+  _getFooterButtons() {
+    return [
+      { label: 'Exécuter', variant: 'primary', action: () => this._onEnterItem(this._selectedIndex) },
+      { label: 'Fermer',   variant: 'cancel',  action: () => this.close() },
+    ]
+  }
+
+  // ── Clavier (lettres de raccourcis prioritaires sur le TAB cycle) ─────────────
+
+  _handleKey(event) {
+    if (!event.metaKey && !event.ctrlKey && !event.altKey && event.key.length === 1) {
+      const tool = this._tools.find(t => t.key.toLowerCase() === event.key.toLowerCase())
+      if (tool) {
+        tool.action()
+        this.close()
+        event.preventDefault()
+        return
+      }
+    }
+    super._handleKey(event)
   }
 
 }
