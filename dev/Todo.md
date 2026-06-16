@@ -8,17 +8,16 @@ CE FICHIER N’EST PAS À LIRE PAR CLAUDE code
 
 ## Todo
 
+- Si on arrive à s’en sortir du problème de consolidation, on doit encore aborder le problème de l’affichage total
+
+  - fenêtre meta+m => panneau [« par imbrication », « par niveau », « total »]
+  - affichage avec collapse et tout
+  
+- Problème des lignes des events qui n’affichent pas tous leurs données
+
+  - En profiter pour voir aussi l’apparence des events (fond) en fonction du choix (premier brin/climat) → Option d’eventer/de projet/d’application (dans cet ordre.
+
 - S’assurer que le contexte 'tool-panel' est appliqué quand on ouvre la boite d’outil. Vérifier que l’aide contextuelle soit la bonne.
-
-- Type spécial d’un évènemencier « Script » qui contient le texte final. Mais il peut être utilisé entre les deux. Par exemple un niveau intermédiaire
-
-  - Projet → acte → séquence → scène → synopsis (mono) → 
-  - le lister script serait un lister mono-item ? NON
-  - Donc, en fait, il se peut que la différence soit juste au niveau de : 
-    - pas d’affichage nowrap pour un roman ou un scénario
-    - Scénario => jouer sur les styles (note : documenter l’application des stsyles)
-    
-      => Scénario => les styles de scénario. Et ce sont eux qui s’affichent quand l’event est de type « manuscript
 
 - panneau(x) des options
 

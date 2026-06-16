@@ -46,3 +46,34 @@ Comme dans tout panneau d’*EventerX*, on se sert de `⌘↓` et `⌘↑`.
 * dans la fenêtre des brins, cocher les brins à prendre, décocher ceux à retirer (si l’*event* en possédait déjà),
 
 * pour créer de nouveaux brins, voir [Création d’un brin][].
+
+---
+
+### Exporter un évènemencier
+
+{todo}
+
+- `⌘ + t` => ouvre la boite d’outils,
+- choisir « Exporter… »
+- choisir le format,
+- choisir le rang si nécessaire,
+- choisir le fichier de destination,
+- jouer « ↩︎ Exporter ».
+
+L’évènemencier courant est alors exporté, au format voulu, dans le fichier voulu. Suivant le format adopté, vous pouvez l’éditer (le modifier) facilement dans une application simple.
+
+
+
+
+
+---
+
+### Importer un évènemencier
+
+- `⌘ + t` => ouvre la boite d’outils,
+- choisir « Importer… »
+- choisir le projet (fichier `eventer.db`)
+- choisir l’évènemencier,
+- choisir le rang si nécessaire,
+- presser `↩︎` pour importer.
+

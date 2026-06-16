@@ -1,63 +1,49 @@
+import KeyboardablePanel from './KeyboardablePanel.js'
 import Notification from './Notification.js'
 
-export default class TargetsPanel {
+export default class TargetsPanel extends KeyboardablePanel {
 
   static open(keyboardController, field) {
-    new TargetsPanel(keyboardController, field)._init()
+    new TargetsPanel(keyboardController, field).open()
   }
 
   constructor(keyboardController, field) {
-    this.keyboardController = keyboardController
+    super({ title: 'Cibles mémorisées', modeType: 'targets-panel', panelClass: 'targets-panel', keyboardController })
     this.field = field
-    this._selectedIndex = 0
   }
 
-  get _manager() { return this.keyboardController.targetsManager }
+  get _manager() { return this._kc.targetsManager }
 
-  _init() {
-    this._buildDOM()
-    this.keyboardController.pushMode({
-      type: 'targets-panel',
-      onKeyDown: (event) => this._handleKey(event),
-    })
-  }
+  // ── Rendu ────────────────────────────────────────────────────────────────────
 
-  _buildDOM() {
-    this._el = document.createElement('div')
-    this._el.className = 'targets-panel floating-panel'
-    document.body.appendChild(this._el)
-    this._render()
-  }
-
-  _render() {
-    this._el.innerHTML = ''
-
-    const title = document.createElement('div')
-    title.className = 'floating-panel__title'
-    title.textContent = 'Cibles mémorisées'
-    this._el.appendChild(title)
-
+  _renderContent(zone) {
     const targets = this._manager.targets
-    const pc = this._manager.pinnedCount
+    const pc      = this._manager.pinnedCount
 
-    const pinZone = document.createElement('div')
-    pinZone.className = 'floating-panel__zone'
     const pinLabel = document.createElement('div')
     pinLabel.className = 'floating-panel__pin-label'
     pinLabel.textContent = '📌'
-    pinZone.appendChild(pinLabel)
-    targets.slice(0, pc).forEach((t, i) => pinZone.appendChild(this._makeRow(t, i)))
-    this._el.appendChild(pinZone)
+    zone.appendChild(pinLabel)
+    targets.slice(0, pc).forEach((t, i) => zone.appendChild(this._makeRow(t, i)))
 
     const sep = document.createElement('div')
     sep.className = 'floating-panel__separator'
-    this._el.appendChild(sep)
+    zone.appendChild(sep)
 
-    const regularZone = document.createElement('div')
-    regularZone.className = 'floating-panel__zone'
-    targets.slice(pc).forEach((t, i) => regularZone.appendChild(this._makeRow(t, pc + i)))
-    this._el.appendChild(regularZone)
+    targets.slice(pc).forEach((t, i) => zone.appendChild(this._makeRow(t, pc + i)))
+  }
 
+  _getItemCount() { return this._manager.targets.length }
+
+  _onEnterItem(index) {
+    const target = this._manager.targets[index]
+    this.close()
+    if (target && this.field) this._insertLink(target)
+  }
+
+  _getFooterButtons() { return [] }
+
+  _renderFooter(el) {
     const footer = document.createElement('div')
     footer.className = 'floating-panel__footer'
     const escBtn = document.createElement('span')
@@ -68,7 +54,7 @@ export default class TargetsPanel {
     enterBtn.textContent = '↩︎ Insérer'
     footer.appendChild(escBtn)
     footer.appendChild(enterBtn)
-    this._el.appendChild(footer)
+    el.appendChild(footer)
   }
 
   _makeRow(target, globalIndex) {
@@ -80,34 +66,25 @@ export default class TargetsPanel {
     return row
   }
 
+  // ── Clavier ──────────────────────────────────────────────────────────────────
+
   _handleKey(event) {
     event.preventDefault()
     switch (event.key) {
       case 'ArrowDown':
-        if (event.metaKey || event.ctrlKey) {
-          this._moveSelectedItem('down')
-        } else {
-          this._selectAt(this._selectedIndex + 1)
-        }
+        if (event.metaKey || event.ctrlKey) { this._moveSelectedItem('down') }
+        else { this._selectAt(this._selectedIndex + 1) }
         break
       case 'ArrowUp':
-        if (event.metaKey || event.ctrlKey) {
-          this._moveSelectedItem('up')
-        } else {
-          this._selectAt(this._selectedIndex - 1)
-        }
+        if (event.metaKey || event.ctrlKey) { this._moveSelectedItem('up') }
+        else { this._selectAt(this._selectedIndex - 1) }
         break
       case 'Enter':
-        if (event.metaKey || event.ctrlKey) {
-          this._close()
-        } else {
-          const target = this._manager.targets[this._selectedIndex]
-          this._close()
-          if (target && this.field) this._insertLink(target)
-        }
+        if (event.metaKey || event.ctrlKey) { this.close() }
+        else { this._onEnterItem(this._selectedIndex) }
         break
       case 'Escape':
-        this._close()
+        this.close()
         break
     }
   }
@@ -117,15 +94,12 @@ export default class TargetsPanel {
       ? this._manager.moveUp(this._selectedIndex)
       : this._manager.moveDown(this._selectedIndex)
 
-    if (result === 'pinned') {
-      Notification.show('Cible punaisée')
-    } else if (result === 'unpinned') {
-      Notification.show('Cible dépunaisée')
-    } else if (result === true) {
-      this._selectedIndex += (direction === 'up' ? -1 : 1)
-    }
+    if (result === 'pinned')   { Notification.show('Cible punaisée') }
+    else if (result === 'unpinned') { Notification.show('Cible dépunaisée') }
+    else if (result === true)  { this._selectedIndex += (direction === 'up' ? -1 : 1) }
 
-    this._render()
+    const zone = this._el?.querySelector('.floating-panel__zone')
+    if (zone) { zone.innerHTML = ''; this._renderContent(zone) }
   }
 
   _insertLink(target) {
@@ -147,9 +121,8 @@ export default class TargetsPanel {
     rows[this._selectedIndex]?.classList.add('selected')
   }
 
-  _close() {
-    this.keyboardController.popMode()
-    this._el.remove()
+  close() {
+    super.close()
     this.field?.focus()
   }
 

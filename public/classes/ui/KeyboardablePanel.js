@@ -41,7 +41,7 @@ export default class KeyboardablePanel {
 
   _render() {
     const el = document.createElement('div')
-    el.className = ('floating-panel ' + this._panelClass).trim()
+    el.className = ('floating-panel keyboardable-panel ' + this._panelClass).trim()
 
     const titleEl = document.createElement('div')
     titleEl.className = 'floating-panel__title'

@@ -56,10 +56,13 @@ export default class EventLister extends Lister {
   }
 
   openToolsPanel() {
-    if (StatusBar.displayMode !== 'LEVEL') return
-    this.keyboardController.toolsPanel.open([
-      { key: 'c', label: 'Consolider le niveau (⌘ + ⇧ + c)', action: () => void this.consolidateLevel() }
-    ], this.keyboardController)
+    const tools = []
+    if (StatusBar.displayMode === 'LEVEL') {
+      tools.push({ key: 'c', label: 'Consolider le niveau (⌘ + ⇧ + c)', action: () => void this.consolidateLevel() })
+    }
+    tools.push({ key: 'e', label: 'Exporter…', action: () => {} })
+    tools.push({ key: 'i', label: 'Importer…', action: () => {} })
+    this.keyboardController.toolsPanel.open(tools, this.keyboardController)
   }
 
   consolidateLevel() {
@@ -122,6 +125,7 @@ export default class EventLister extends Lister {
   }
 
   render() {
+    if (StatusBar.displayMode === 'LEVEL') return
     ContextualHelp.resetContext('event-list')
     const result = super.render()
     this._updateMainPanelClass()
@@ -197,6 +201,8 @@ export default class EventLister extends Lister {
   toggleDisplayMode() {
     const newMode = StatusBar.toggleDisplayMode()
     if (newMode === 'LEVEL') {
+      StatusBar.resumeUpdates()
+      const root = this._getRootEventLister()
       void this._renderLevelMode()
     } else {
       const selectedItem = this.items[this.selectedIndex]
@@ -282,6 +288,7 @@ export default class EventLister extends Lister {
     const collected = await this._collectItemsAtDepth(root, targetDepth, isManMode)
     if (this._levelRenderToken !== token) return
 
+    if (!this.domContainer) this.domContainer = document.querySelector('#main-panel')
     const container = this.domContainer
     container.innerHTML = ''
     if (targetDepth != null) container.dataset.depth = String(targetDepth)

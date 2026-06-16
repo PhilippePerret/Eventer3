@@ -126,6 +126,7 @@ export default class Lister {
       keyboardController: this.keyboardController,
     })
     childLister.depth = this.depth + 1
+    this.keyboardController?.register(childLister)
     if (childLister.id != null) {
       await childLister.loadDefinition()
       await childLister.loadItems()

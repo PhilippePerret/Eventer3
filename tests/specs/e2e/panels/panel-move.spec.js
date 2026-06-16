@@ -82,15 +82,10 @@ test("Ctrl+Shift+↓ déplace le panneau raccourcis de 50px", async ({ page }) =
 
 test("Ctrl+Shift+↓ déplace le panneau outils de 50px", async ({ page }) => {
   await goToEventLister(page)
-  const frame = page.frames().find(f => f.url().includes('app-frame'))
-  await frame.evaluate(() => {
-    const panel = document.querySelector('#tools-panel')
-    panel.innerHTML = '<div class="tools-panel__item">Test</div><div class="tools-panel__item">Autre</div>'
-    panel.classList.remove('hidden')
-  })
-  await expect(pane1(page).locator('#tools-panel')).toBeVisible()
-  const before = await pane1(page).locator('#tools-panel').boundingBox()
+  await page.keyboard.press('Meta+t')
+  await expect(pane1(page).locator('.tools-panel')).toBeVisible()
+  const before = await pane1(page).locator('.tools-panel').boundingBox()
   await page.keyboard.press('Control+Shift+ArrowDown')
-  const after = await pane1(page).locator('#tools-panel').boundingBox()
+  const after = await pane1(page).locator('.tools-panel').boundingBox()
   expect(Math.round(after.y - before.y)).toBe(50)
 })

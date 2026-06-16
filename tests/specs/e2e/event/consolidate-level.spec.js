@@ -1,11 +1,11 @@
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect, pane1 } from '../__setup__.js'
 
-// Fixture depth-move :
+// Fixture consolidate-level (copie de depth-move, dédiée à ce module) :
 //   depth=3 : e57, e68 (réels) + "Séquence 2 +1" + "Séquence 3 +1"  — 2 virtuels
 
 test.beforeEach(() => {
-  installFixtures('depth-move')
+  installFixtures('consolidate-level')
 })
 
 async function enterLevelMode(page, targetDepth) {
@@ -30,10 +30,10 @@ test("⌘+t ouvre le panneau d'outils en LEVEL mode", async ({ page }) => {
   await enterLevelMode(page, 3)
 
   await page.keyboard.press('Meta+t')
-  await expect(pane1(page).locator('#tools-panel')).toBeVisible()
+  await expect(pane1(page).locator('.tools-panel')).toBeVisible()
 })
 
-test("⌘+t inactif hors LEVEL mode", async ({ page }) => {
+test("hors LEVEL mode : panneau outils s'ouvre sans l'outil Consolider", async ({ page }) => {
   await page.goto('/')
 
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
@@ -42,18 +42,18 @@ test("⌘+t inactif hors LEVEL mode", async ({ page }) => {
 
   await page.keyboard.press('Meta+t')
 
-  await expect(pane1(page).locator('#tools-panel')).toBeAttached()
-  await expect(pane1(page).locator('#tools-panel')).not.toBeVisible()
+  await expect(pane1(page).locator('.tools-panel')).toBeVisible()
+  await expect(pane1(page).locator('.tools-panel')).not.toContainText('Consolider')
 })
 
-test("panneau outils contient 'Consolider le niveau courant'", async ({ page }) => {
+test("panneau outils contient 'Consolider le niveau'", async ({ page }) => {
   await page.goto('/')
   await enterLevelMode(page, 3)
 
   await page.keyboard.press('Meta+t')
-  await expect(pane1(page).locator('#tools-panel')).toBeVisible()
+  await expect(pane1(page).locator('.tools-panel')).toBeVisible()
 
-  await expect(pane1(page).locator('#tools-panel')).toContainText('Consolider le niveau courant')
+  await expect(pane1(page).locator('.tools-panel')).toContainText('Consolider le niveau')
 })
 
 test("consolidation via lettre dans le panneau outils", async ({ page }) => {
@@ -63,10 +63,10 @@ test("consolidation via lettre dans le panneau outils", async ({ page }) => {
   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(2)
 
   await page.keyboard.press('Meta+t')
-  await expect(pane1(page).locator('#tools-panel')).toBeVisible()
+  await expect(pane1(page).locator('.tools-panel')).toBeVisible()
 
   await page.keyboard.press('c')
-  await expect(pane1(page).locator('#tools-panel')).not.toBeVisible()
+  await expect(pane1(page).locator('.tools-panel')).not.toBeVisible()
 
   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(0)
   await expect(pane1(page).locator('.event-item')).toHaveCount(4)
@@ -115,6 +115,8 @@ test.describe("persistance consolidation — item virtuel au niveau root", () =>
   })
 
   test("consolidation item root-level : reste réel après toggle NESTING → LEVEL", async ({ page }) => {
+    page.on('console', msg => process.stdout.write(`[BROWSER] ${msg.text()}\n`))
+
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await page.keyboard.press('ArrowRight')

@@ -34,14 +34,15 @@ test('⌘+t ouvre le panneau outils en mode LEVEL', async ({ page }) => {
   await expect(pane1(page).locator('.tools-panel')).toBeVisible()
 })
 
-test('⌘+t inactif hors mode LEVEL', async ({ page }) => {
+test('⌘+t hors mode LEVEL : ouvre le panneau sans l\'outil Consolider', async ({ page }) => {
   await page.goto('/')
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
   await page.keyboard.press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
   await page.keyboard.press('Meta+t')
-  await expect(pane1(page).locator('.tools-panel')).not.toBeAttached()
+  await expect(pane1(page).locator('.tools-panel')).toBeVisible()
+  await expect(pane1(page).locator('.tools-panel')).not.toContainText('Consolider')
 })
 
 // ── Esthétique ───────────────────────────────────────────────────────────────
@@ -70,8 +71,8 @@ test('panneau outils : item Consolider listé avec son raccourci ⌘⇧C', async
   await enterLevelMode(page, 3)
 
   await page.keyboard.press('Meta+t')
-  await expect(pane1(page).locator('.tools-panel .floating-panel__item')).toContainText('Consolider le niveau')
-  await expect(pane1(page).locator('.tools-panel .floating-panel__item')).toContainText('⌘')
+  await expect(pane1(page).locator('.tools-panel .floating-panel__item').first()).toContainText('Consolider le niveau')
+  await expect(pane1(page).locator('.tools-panel .floating-panel__item').first()).toContainText('⌘')
 })
 
 // ── TAB cycle ────────────────────────────────────────────────────────────────

@@ -1,5 +1,17 @@
 # Eventer - Options
 
+Dans l’absolu, il y a trois niveaux d’option, par ordre de précédence :
+
+1. Options d’évènemencier (`Lister`)
+2. Options de projet (`Project`)
+3. Options d’application (`main.db`)
+
+Bien sûr, ces niveaux ne s’appliquent pas pour toute chose.
+
+Un exemple d’application : **l’apparence des *events* dans un évènemencier**.
+
+cette apparence dépend aussi de l’« héritage des brins » : si un *event* n’a pas de brin, il prend le brin d’un de ses parents.
+
 ## Options du projet
 
 Les options par projet sont consignées dans le fichier `eventer.config.js`

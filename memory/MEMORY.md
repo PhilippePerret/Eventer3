@@ -1,1 +1,50 @@
-- 
+# MEMORY.md
+
+- **[Architecture Brief](reference_architecture_brief.md)** — LIRE EN PREMIER : `dev/_architecture-brief.md` contient entrypoints, fixtures, sélecteurs, dispatch clavier — économise ~40% tokens démarrage
+- **[FONDAMENTAL: item.type ≠ classe](feedback_item_type_vs_class.md)** — CRITIQUE: item.type = type MÉTIER ('roman','event'…) JAMAIS nom de classe; classe = itemClass.name.toLowerCase()
+- **[FONDAMENTAL: lister_id ≠ appartenance](architecture_lister_item_fondamental.md)** — CRITIQUE: lister_id définit enfant de l'item, PAS son appartenance; appartenance = item_ids du Lister
+- [Ne pas prendre initiative](feedback_ne_pas_prendre_initiative.md) — Faire uniquement ce qui est demandé, s'arrêter, attendre — ne jamais anticiper ni dicter la suite
+- [Ne pas dicter les actions de test](feedback_ne_pas_dicter_actions.md) — "Vérifie en live" suffit — ne jamais expliquer comment utiliser l'app pour tester
+- [Pas de workaround pour typos](feedback_pas_de_workaround_typos.md) — Incohérence dans les données → demander, jamais coder des aliases/fallbacks silencieux
+- [dev/Tests.md = choix de l'utilisateur](feedback_tests_md_autonomie.md) — Ne jamais lire Tests.md pour proposer la suite ; c'est l'utilisateur qui choisit
+- [Tests et actions](feedback_tests_et_actions.md) — Ne jamais lancer les tests ni toucher les données sans permission explicite
+- [Régressions par commits Claude](feedback_verifier_commits_claude.md) — Vérifier git log avant de corriger : des sessions Claude précédentes ont déjà réintroduit des bugs via commits non vérifiés
+- [Interdiction modifications système](feedback_interdiction_modifications_systeme.md) — NE JAMAIS modifier Terminal.app, keybindings.json, defaults write ou tout paramètre système sans demande explicite
+- **[TDD : boucle RED obligatoire](feedback_tdd_commentaires.md)** — CRITIQUE: tests → STOP → attendre confirmation RED explicite → THEN coder. Jamais tests+implémentation dans la même réponse.
+- [Docs existants : ne pas modifier](feedback_docs_existants.md) — Créer un fichier séparé, l'utilisateur copie-colle lui-même dans ses documents
+- **[CRITIQUE: Convention IDs](feedback_id_conventions.md)** — Event=e{N}, Brin=b{N}, Perso=c{N} — JAMAIS de slugs lisibles (a1, s3a1…) même dans les fixtures
+- [État avancement Eventer3](project_etat_avancement.md) — 2026-06-16 : 642 e2e + 101 unit tests verts, toutes régressions résolues, prochaine = mode TREE
+- **[Analyse trop longue → STOP](feedback_analyse_trop_longue.md)** — CRITIQUE: 2-3 recherches max avant STOP et question à l'utilisateur — jamais 20min d'analyse silencieuse
+- **[LOG dès que bloqué](feedback_utiliser_log_quand_bloque.md)** — CRITIQUE: tourner en rond → LOG immédiat (import + JSON.stringify + activation tardive) — jamais analyser dans sa tête
+- **[ctrlKey interdit sans mandat](feedback_ctrlKey_interdit.md)** — CRITIQUE: jamais `event.ctrlKey` dans les raccourcis sans demande explicite — app Mac = metaKey seulement
+- **[KeyboardablePanel](architecture_keyboardable_panel.md)** — classe abstraite UI panels : TAB cycle, faux-boutons, double filet, héritage obligatoire
+- **[Faux-boutons = zéro souris](feedback_faux_boutons.md)** — CRITIQUE: footer panels = `<span>`, aucun event souris, pas d'Escape pour fermer
+- **[Cache no-store obligatoire](feedback_cache_no_store.md)** — CRITIQUE: tout fetch GET dans ListerRepository doit avoir `cache:'no-store'` sinon données périmées après modif
+- [Loi de Déméter](feedback_loi_demeter.md) — Une classe délègue à une méthode statique de l'autre, ne câble jamais les détails d'une autre classe
+- [Lister/Item = cœur du système](feedback_lister_item_architecture.md) — Projects/Events/Brins/Persos héritent SANS réécrire ; ne jamais dupliquer dans une sous-classe ce qui existe dans Lister/Item
+- [Édition item → Item.handleEditionKeyDown](feedback_item_edition_dans_item.md) — Raccourcis/comportements en mode édition → Item.js, jamais Lister.js
+- [Séparation des responsabilités](feedback_separation_responsabilites.md) — Créer une classe dédiée (ex. FooterHelp) plutôt qu'inliner du contenu dans une classe non responsable
+- [Défauts live 2026-06-01](project_defauts_live.md) — 8 bugs trouvés en test live ; tous corrigés sauf 2 CSS directs (brin-texte-trop-petit, projet-edition-hauteur)
+- [Fichier remboursements](reference_remboursement.md) — `/Users/philippeperret/Programmes/Eventer3/claude-remboursement.md` — ajouter entrée à la FIN sans relire
+- [Emplacement fichiers tests](feedback_test_file_location.md) — Toujours annoncer le chemin complet des fichiers de test créés/déplacés avant d'agir
+- [Raccourcis depuis config.js](feedback_shortcuts_config.md) — Panneau raccourcis lit SHORTCUTS dans config.js par contexte, jamais de contenu en dur
+- [Nom défaut premier perso](feedback_default_perso_name.md) — Auto-créer "Votre protagoniste" si aucun perso (symétrique avec "Intrigue principale")
+- [SQLite3 boolean → integer](feedback_sqlite3_boolean.md) — SQLite3 gem 2.9.0 refuse TrueClass : convertir `v ? 1 : 0` avant tout db.execute
+- **[ARCHITECTURE DB FONDAMENTALE](project_db_architecture.md)** — CRITIQUE: main.db = registre global seulement (projects + app_settings) ; eventer.db = TOUT le reste
+- **[Design filtrage — décisions validées](project_filtrage_design.md)** — SelectorPanel générique, FilterState, item._visible, applyFilter O(affectés) via index, nav saute cachés — NE PAS dévier sans discussion
+- [TargetsPanel — cibles 'k'](project_targets_panel.md) — MAX_TARGETS=30 constante, persist eventer.db, pin system (cmd+↑/↓ traverse frontière), notifs, titre obligatoire sur tout KeyboardablePanel
+- **[␛ toujours à gauche](feedback_escape_left.md)** — CRITIQUE: dans tout footer/dialog, ␛/fermer TOUJOURS à gauche, action principale à droite
+- [Ne pas toucher sans validation](feedback_pas_toucher_sans_validation.md) — Ne jamais éditer des fichiers sans accord explicite, même si les fixes semblent évidents
+- [Réutiliser classes CSS](feedback_reutiliser_classes_css.md) — Ne jamais créer classe CSS si existante couvre le cas ; chercher d'abord dans styles.css
+- **[TDD : tests dans _tdd/ seulement](feedback_tdd_fichier_tdd.md)** — CRITIQUE: pendant TDD, modifier UNIQUEMENT `_tdd/`. Ne jamais toucher le fichier canonique. L'utilisateur déplace lui-même quand tout est vert.
+- **[Réutiliser composants UI existants](feedback_utiliser_composants_existants.md)** — CRITIQUE: avant tout nouveau composant UI, chercher dans `public/classes/ui/`. PopupSelect = toujours utiliser pour menus/dropdowns.
+- **[RÈGLE IMPÉRATIVE: timeout boucle](feedback_timeout_boucle.md)** — CRITIQUE: après 2-3 tentatives échouées sur même problème → STOP immédiat → signaler à l'utilisateur
+- **[ID projet = UUID obligatoire](feedback_project_id_uuid.md)** — CRITIQUE: jamais 'project-a', 'test-brins' etc. — UUID partout dans fixtures, scripts, data_ini_state
+- [Ne pas être présomptueux](feedback_pas_presompteux.md) — Jamais présenter une supposition comme une évidence ("c'est plus utile/fréquent") sans source réelle
+- **[RÈGLE ABSOLUE: timeout 3 min](feedback_timeout_3min.md)** — CRITIQUE: stop immédiat après 3 minutes de travail, où que j'en sois, sans exception
+- [Tests : ERRORS jamais en dur](feedback_errors_no_hardcode.md) — Importer ERRORS et utiliser ERRORS[N], jamais de texte litéral dans les tests
+- [Jouer les tests](feedback_jouer_tests.md) — Dire "Tu peux jouer les tests", jamais la commande npx
+- [Split-pane — architecture](project_split_pane_suite.md) — Alt+2/1/0/R, shell.js, SplitManager.js, currentState inline dans split-close
+- [Demander logs serveur](feedback_demander_logs_serveur.md) — Erreur réseau sans URL → demander le log serveur en premier, pas investiguer le code
+- **[Footer panels : classe commune](feedback_panel_footer_style.md)** — TOUJOURS `.floating-panel__footer` ; `var(--line)` pour filets ; `margin-top:12px` pour l'air ; hints = `.panel-footer-hint` (pas bouton)
+- **[CRITIQUE: régressions = un problème à la fois](feedback_tests_un_par_un.md)** — JAMAIS traiter toutes les erreurs ensemble. 1 problème (≠ 1 test) → régler → confirmer vert → seulement alors passer au suivant.
