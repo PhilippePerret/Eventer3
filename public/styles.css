@@ -159,6 +159,17 @@ body {
   cursor: default;
 }
 
+.arbre-item {
+  padding: 6px 12px;
+  cursor: default;
+  border-radius: 4px;
+}
+
+.arbre-item.selected {
+  background: var(--selected);
+  color: white;
+}
+
 .event-check-gutter {
   min-height: 44px;
   display: flex;
@@ -1050,13 +1061,13 @@ body#shell:has(#pane-2[data-split-active]) .pane-wrapper:has(iframe[data-focused
   min-width: 320px;
 }
 
-.tools-panel .floating-panel__item {
+.keyboardable-panel .floating-panel__item {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.tools-panel .floating-panel__item kbd {
+.keyboardable-panel .floating-panel__item kbd {
   display: inline-flex;
   align-items: center;
   justify-content: center;

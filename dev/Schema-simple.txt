@@ -1,0 +1,39 @@
+    Item                            Lister (list of items)
+—————————————————                    ——————————————————
+⎪  ItemCore     | -->    Func    <-- | ListerCore     |
+⎪  ItemRepo     | -->  Load/save <-- | ListerRepo     |        
+|  ItemDom      | -->    DOM     <-- | ListerDom      |
+|  ItemListener | -->   Keyboard <-- | ListerListener |
+—————————————————                    ——————————————————
+
+Inheritance
+-----------
+Event, Project, Brin, Perso, Style = Item
+EventLister, ProjectLister, BrinLister, PersoLister, StyleLister = Lister
+
+L'affichage d'un item, que ce soit un event, un brin, un project, etc. est TOUJOURS LA MÊME CHOSE : le title suivi des propriétés. Et il peut connaitre 3 états gérables par les classes .selected, .checked et .edited (CSS)
+
+                    ––––––––––––––––––––––––––––    .selected   (bleu)
+ItemDom.build() =>  | title            | props |    .checked    (coche)
+                    –––––––––––––––––––––––––––––   .editing     (vert)
+                      |>onkeydown attaché
+                      
+Donc, dans les classes spécialisées, il ne devrait y avoir que les props à traiter. Tout le reste, l'aspect, doit être géré par CSS.
++ Event.buildProps()
+  Project.buildProps()
+  Brin.buildPropos()
+  … etc. suivant classes spécialisées
+
+Pareil pour l'édition. Le listener de CHAQUE Item donc de CHAQUE les Event, Project, Brin, etc. doit être déclenché par un simple '↩︎'.
+
+ItemDom.edit() => Mise en édition de l'Item, quel qu'il soit.
+                      |>onkeydown attaché à chaque sous élément ou autre ?
++ Event.editProps()
+  Project.editProps()
+  … etc. suivant classe spécialisée
+  
+Utiliser une méthode comme Item.createInputFromElement comme c'est le cas aujourd'hui est POURRI. Créer un éditeur à chaque édition est POURRI (est-ce que quelqu'un fait vraiment ça ???). Pourquoi ne serait-il pas possible d'avoir des contenteditable qui préserveraient naturellement l'aspect ?
+
+
+Pour chaque sous-classe, l'aspect est différent, mais ça doit être traité par CSS.
+                         

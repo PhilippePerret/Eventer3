@@ -33,6 +33,11 @@ export default class StatusBar {
     StatusBar.update(StatusBar._currentListerType)
   }
 
+  static setDisplayMode(mode) {
+    StatusBar._displayMode = mode
+    StatusBar.update('events')
+  }
+
   static toggleDisplayMode() {
     StatusBar._displayMode = StatusBar._displayMode === 'NESTING' ? 'LEVEL' : 'NESTING'
     StatusBar.update('events')
