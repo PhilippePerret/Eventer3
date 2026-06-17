@@ -6,8 +6,8 @@
 
 # Test info
 
-- Name: filesystem/filepicker.spec.js >> ← remonte au niveau supérieur
-- Location: specs/e2e/filesystem/filepicker.spec.js:114:1
+- Name: filesystem/filepicker.spec.js >> Tab affiche le menu d'arborescence des dossiers parents
+- Location: specs/e2e/filesystem/filepicker.spec.js:175:1
 
 # Error details
 

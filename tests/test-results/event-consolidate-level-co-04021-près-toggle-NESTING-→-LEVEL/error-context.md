@@ -34,14 +34,13 @@ Call log:
 # Test source
 
 ```ts
-  1   | import { installFixtures } from '../../../helpers/install-fixtures.js'
   2   | import { test, expect, pane1 } from '../__setup__.js'
   3   | 
   4   | // Fixture consolidate-level (copie de depth-move, dédiée à ce module) :
   5   | //   depth=3 : e57, e68 (réels) + "Séquence 2 +1" + "Séquence 3 +1"  — 2 virtuels
   6   | 
   7   | test.beforeEach(() => {
-  8   |   installFixtures('consolidate-level')
+  8   |   installFixtures('consolidate-level-dup')
   9   | })
   10  | 
   11  | async function enterLevelMode(page, targetDepth) {
@@ -58,8 +57,7 @@ Call log:
   22  |     await expect(pane1(page).locator('#main-panel')).toHaveAttribute('data-depth', '3')
   23  |   }
   24  |   await page.keyboard.press('Meta+m')
-> 25  |   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
-      |                                                    ^ Error: expect(locator).toContainText(expected) failed
+  25  |   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
   26  | }
   27  | 
   28  | test("⌘+t ouvre le panneau d'outils en LEVEL mode", async ({ page }) => {
@@ -136,7 +134,8 @@ Call log:
   99  |   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE NESTING')
   100 | 
   101 |   await page.keyboard.press('Meta+m')
-  102 |   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
+> 102 |   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
+      |                                                    ^ Error: expect(locator).toContainText(expected) failed
   103 | 
   104 |   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(0)
   105 |   await expect(pane1(page).locator('.event-item')).toHaveCount(4)
@@ -160,4 +159,26 @@ Call log:
   123 |     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   124 |     await page.keyboard.press('ArrowRight')
   125 |     await expect(pane1(page).locator('#main-panel')).toHaveAttribute('data-depth', '2')
+  126 |     await page.keyboard.press('Meta+m')
+  127 |     await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
+  128 | 
+  129 |     await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(1)
+  130 |     await expect(pane1(page).locator('.event-item')).toHaveCount(3)
+  131 | 
+  132 |     await page.keyboard.press('Meta+t')
+  133 |     await page.keyboard.press('c')
+  134 |     await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(0)
+  135 |     await expect(pane1(page).locator('.event-item')).toHaveCount(3)
+  136 | 
+  137 |     await page.keyboard.press('Meta+m')
+  138 |     await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE NESTING')
+  139 | 
+  140 |     await page.keyboard.press('Meta+m')
+  141 |     await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
+  142 | 
+  143 |     await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(0)
+  144 |     await expect(pane1(page).locator('.event-item')).toHaveCount(3)
+  145 |   })
+  146 | })
+  147 | 
 ```
