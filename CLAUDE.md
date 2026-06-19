@@ -93,6 +93,7 @@ Node built-in test runner (`node --test`). Files in `tests/specs/unit/`.
 
 ## Development Philosophy
 
+- **PRINCIPE ABSOLU : DRY** — tout code répété 2 fois → extraction immédiate en méthode/fonction.
 - **TDD strict** : tests first. Test -> RED -> Code -> GREEN.
 - **Verbose logging**: `LOG.on(level)` (1–4), `LOG.m(level, message, data)`. Currently set to level 4 in `App.start()`.
 - If it can be handled by `Lister`/`Item`, don't add a new abstraction.

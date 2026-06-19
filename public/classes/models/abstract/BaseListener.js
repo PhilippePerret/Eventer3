@@ -1,0 +1,46 @@
+import { raise } from '../../../system/Error.js'
+import { ERRORS } from '../../../system/Locales.js'
+
+export default class BaseListener {
+
+  /**
+   * Dispatch keyboard event to the right method via LISTENERS table.
+   * LISTENERS = { 'key': { 'nokey': 'methodName', 'meta': 'otherMethod', ... } }
+   * null value = key explicitly disabled in this class.
+   */
+  getMethod(ev, dm) {
+    const meta = ev.metaKey, alt = ev.altKey, maj = ev.shiftKey, ctrl = ev.ctrlKey
+    let m = null
+    if (meta) {
+      if (alt  && (m = dm['meta+alt']))  return m
+      if (ctrl && (m = dm['meta+ctrl'])) return m
+      if (maj  && (m = dm['meta+maj']))  return m
+      if ((m = dm['meta'])) return m
+    } else if (alt) {
+      if (ctrl && (m = dm['ctrl+alt'])) return m
+      if (maj  && (m = dm['maj+alt']))  return m
+      if ((m = dm['alt'])) return m
+    } else if (ctrl) {
+      if ((m = dm['ctrl'])) return m
+    }
+    if ((m = dm['nokey'])) return m
+    return null
+  }
+
+  attach(el) {
+    el.addEventListener('keydown', ev => this.onkeydown(ev))
+  }
+
+  get target() { return this }
+
+  onkeydown(ev) {
+    const dm = this.constructor.LISTENERS?.[ev.key]
+    if (!dm) return
+    const method = this.getMethod(ev, dm)
+    // Il faut explicitement désactiver la key si nécessaire => erreur
+    this.target[method] || raise(ERRORS[100], ev.key, ev, this)
+    ev.preventDefault()
+    return this.target[method](ev)
+  }
+
+}

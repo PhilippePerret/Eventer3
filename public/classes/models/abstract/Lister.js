@@ -14,4 +14,25 @@ export default class Lister {
   get Dom()      { return this._dom   || (this._dom   = new ListerDom(this)) }
   get Repo()     { return this._repo  || (this._repo  = new ListerRepo(this)) }
   get Listener() { return this._listen|| (this._listen= new ListerListener(this)) }
+
+  selectAt(idx) {
+    const current = this.items[this.selectedIndex]
+    this.selectedIndex = idx
+    this.Dom.applySelection(current, this.items[idx])
+  }
+
+  selectPrev() {
+    const items = this.items
+    let idx = this.selectedIndex - 1
+    while (idx >= 0 && items[idx].filtered) idx--
+    if (idx >= 0) this.selectAt(idx)
+  }
+
+  selectNext() {
+    const items = this.items
+    let idx = this.selectedIndex + 1
+    while (idx < items.length && items[idx].filtered) idx++
+    if (idx < items.length) this.selectAt(idx)
+  }
+
 }

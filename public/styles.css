@@ -82,7 +82,8 @@ body {
   overflow: hidden;
 }
 
-[contenteditable="true"] {
+[contenteditable="true"],
+[tabindex="-1"]:focus {
   outline: none;
 }
 
