@@ -1,4 +1,4 @@
 import Item from '../abstract/Item.js'
-class Project extends Item {
+export default class Project extends Item {
   
 }

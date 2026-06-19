@@ -79,7 +79,7 @@ Style.Dom.LISTENERS = {
   
 //---
 Brin.Dom.LISTENERS = {
-  b: {}
+  b: null // pas de brins pour les brins…
   
 ~~~
 

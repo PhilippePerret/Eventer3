@@ -1,6 +1,8 @@
 import Lister from '../abstract/Lister.js'
-class ProjectLister extends Lister {
-  init(){
-    LOG(1, 'initialisation de la liste des projets.')
+import LOG from '../../../system/LOG.js'
+
+export default class ProjectLister extends Lister {
+  static async init(){
+    LOG.m(1, 'initialisation de la liste des projets.')
   }
 }
