@@ -1,4 +1,4 @@
-import ProjectLister from './models/ProjectLister.js'
+import ProjectLister from './models/core/ProjectLister.js'
 import LOG from '../system/LOG.js'
 
 export default class App {

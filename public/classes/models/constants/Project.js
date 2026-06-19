@@ -1,7 +1,7 @@
 // Constantes Project
 
 import {DEV_STATES} from './common.js'
-export const PROJECT_STATE = Object.assign(DEV_STATES, [
+export const PROJECT_STATES = Object.assign(DEV_STATES, [
    { value: 10, label: 'mise en ß-lecture' },
    { value: 11, label: 'récolte ß-lecture' },
    { value: 12, label: 'réécriture' },

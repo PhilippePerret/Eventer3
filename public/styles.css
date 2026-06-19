@@ -123,10 +123,6 @@ body {
   cursor: default;
 }
 
-.project-item:hover {
-  background: white;
-  border-color: #cfc6b8;
-}
 
 .project-item.selected {
   background: var(--selected) !important;
@@ -196,9 +192,7 @@ body {
   border-bottom: 1px solid transparent;
 }
 
-.event-item:hover .event-body {
-  background: rgba(236, 230, 218, .45);
-}
+
 
 .event-item.selected .event-check-gutter {
   color: #1f9d41;
@@ -316,9 +310,7 @@ body {
   transform: translateY(-1px);
 }
 
-.event-child-indicator:hover {
-  background: rgba(0, 0, 0, .16);
-}
+
 
 /* ─── Badges ──────────────────────────────────────────────────── */
 
@@ -390,10 +382,6 @@ body {
   cursor: pointer;
 }
 
-.breadcrumb-item:not(:disabled):hover {
-  background: rgba(10, 100, 255, .10);
-  opacity: .95;
-}
 
 .breadcrumb-item:disabled {
   cursor: default;
@@ -697,9 +685,7 @@ body#shell:has(#pane-2[data-split-active]) .pane-wrapper:has(iframe[data-focused
   position: relative;
 }
 
-.filter-widget__option:hover {
-  background: var(--hover, rgba(255,255,255,0.08));
-}
+
 
 .filter-widget__option.checked::before {
   content: '✓';
@@ -717,9 +703,7 @@ body#shell:has(#pane-2[data-split-active]) .pane-wrapper:has(iframe[data-focused
   opacity: .75;
 }
 
-.panel-close:hover {
-  opacity: 1;
-}
+
 
 .panel-check {
   /* color: #00a832; */
@@ -1637,9 +1621,7 @@ body:has(#filter-input:not(.hidden)) #main-panel {
   border-radius: 4px;
   font-family: inherit;
 }
-.file-picker__recents-btn:hover {
-  background: rgba(0, 122, 255, 0.08);
-}
+
 
 .file-picker__recents,
 .file-picker__path-menu {
@@ -1661,9 +1643,7 @@ body:has(#filter-input:not(.hidden)) #main-panel {
   text-overflow: ellipsis;
 }
 .file-picker__recents-item.selected,
-.file-picker__recents-item:hover,
-.file-picker__path-menu-item.selected,
-.file-picker__path-menu-item:hover {
+.file-picker__path-menu-item.selected {
   background: #007aff;
   color: #fff;
 }
@@ -1694,9 +1674,7 @@ body:has(#filter-input:not(.hidden)) #main-panel {
   background: #007aff;
   color: #fff;
 }
-.file-picker__entry:not(.selected):hover {
-  background: rgba(0, 0, 0, 0.04);
-}
+
 
 /* Icône dossier (CSS pur, style macOS) */
 .file-picker__entry-icon {
@@ -1821,9 +1799,7 @@ body:has(#filter-input:not(.hidden)) #main-panel {
   flex-shrink: 0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
-.file-picker__select-btn:hover:not(.disabled) {
-  background: #1ea833;
-}
+
 .file-picker__select-btn.disabled {
   background: #c8c8c8;
   color: #999;
@@ -2208,10 +2184,7 @@ body:has(#filter-input:not(.hidden)) #main-panel {
   background: transparent;
 }
 
-/* Pas de hover sur papier */
-#main-panel.roman-man .event-item:hover .event-body {
-  background: transparent;
-}
+
 
 /* Styles appliqués en édition en mode manuscrit/scénario */
 #main-panel.roman-man .event-item.editing .event-text {
