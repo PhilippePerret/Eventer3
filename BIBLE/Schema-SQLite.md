@@ -12,8 +12,6 @@ Gros changement du mercredi 10 juin : séparation de la base principale, `data/m
 
 ### main.db
 
-(non vérifié par Claude)
-
 ~~~sql
    project_refs {
       TEXT id UUID
@@ -22,6 +20,7 @@ Gros changement du mercredi 10 juin : séparation de la base principale, `data/m
      	TEXT db_path
    }
 
+-- Autres tables non documentées (À DOCUMENTER)
 ~~~
 
 

@@ -1,7 +1,7 @@
 // Constantes Project
 
 import {DEV_STATES} from './common.js'
-export const EVENT_STATE = Object.assign(DEV_STATES, [
+export const PROJECT_STATE = Object.assign(DEV_STATES, [
    { value: 10, label: 'mise en ß-lecture' },
    { value: 11, label: 'récolte ß-lecture' },
    { value: 12, label: 'réécriture' },
@@ -10,3 +10,10 @@ export const EVENT_STATE = Object.assign(DEV_STATES, [
    { value: 25, label: 'publication' },
    { value: 30, label: 'fin de vie' }
 ])
+
+export const PROJECT_TYPES = [
+      {name: 'roman'    , value: 'roman'     }
+   ,  {name: 'film'     , value: 'film'      }
+   ,  {name: 'BD'       , value: 'bd'        }
+   ,  {name: 'Théâtre'  , value: 'theatre'   }
+]

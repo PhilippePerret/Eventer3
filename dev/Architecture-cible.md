@@ -1,6 +1,59 @@
 # Architecture cible — Eventer3
 
-Décisions prises lors de la session du 2026-06-17.
+Décisions prises lors des sessions du 2026-06-17 et 2026-06-19.
+
+---
+
+## ⚠️ À LIRE IMPÉRATIVEMENT — Organisation des dossiers et délégation
+
+### CE N'EST PAS ça
+
+```js
+// ❌ PAS de classe imbriquée / DomClass statique
+class Item {
+  static DomClass = ItemDom
+  get Dom() { return new this.constructor.DomClass(this) }
+}
+
+// ❌ PAS d'imports circulaires (Item → ItemDom → Item)
+
+// ❌ PAS de prototype sur un getter d'instance (Dom = getter → undefined au niveau classe)
+ProjectLister.Dom.prototype.method = ...
+
+// ❌ PAS de classe avec méthodes d'instance dans dom/
+export default class ProjectListerDom {
+  method(lister, params){ }  // inaccessible via ProjectListerDom.method()
+}
+```
+
+### C'EST ça
+
+**Organisation par dossiers :**
+- `abstract/` — base classes communes (Item, Lister, ItemDom, ListerDom, ItemRepo, ListerRepo, ItemListener, ListerListener)
+- `core/` — classes domaine (Project, ProjectLister, Event, EventLister…)
+- `dom/` — **objet plain** avec fonctions DOM spécifiques à chaque classe domaine
+- `repo/` — fonctions repo spécifiques
+- `listener/` — fonctions listener spécifiques
+
+**Pattern délégation fonctionnelle :**
+
+```js
+// dom/ProjectLister.js — OBJET PLAIN (export default {})
+export default {
+  methodSpecifique(projectLister, params) {
+    // projectLister = instance explicite, pas this
+  }
+}
+
+// core/ProjectLister.js — wrapper de délégation
+import ProjectListerDom from '../dom/ProjectLister.js'
+
+export default class ProjectLister extends Lister {
+  methodSpecifique(params) {
+    return ProjectListerDom.methodSpecifique(this, params)
+  }
+}
+```
 
 ---
 
