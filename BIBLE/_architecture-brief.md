@@ -2,6 +2,8 @@
 
 > Lire en début de séance. Toute l'info nécessaire pour coder sans re-explorer.
 
+> ⚠️ **Avertissement** : ce fichier décrit l'ancienne architecture. Une refactorisation majeure est en cours (session 2026-06-17). En cas de conflit avec `dev/Architecture-cible.md`, c'est `Architecture-cible.md` qui fait foi.
+
 ---
 
 ## Entrypoints

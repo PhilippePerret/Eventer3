@@ -84,3 +84,12 @@ POINT 2
 - Nouveau test : meta+shift+, => aide contextuelle doit afficher l'aide contextuelle pour l'affichage par niveau ('display-per-level') => doit contenir "⌘ + ⇧ + c : Consolider le niveau (?)"
 - Le "(?)" est une marque à styliser (SVG ?) indiquant que : QUAND l'outil est sélectionné dans le panneau, SI on joue "?" (shilft+,), on affiche l'aide définie par un numéro dans la définition du raccourci (`{aide:2002}`)
 - Et inversement, quand il y a {:aide} est défini pour le raccourci => on ajoute le "?" stylisé
+
+
+KeyboardController => AppKeyboardManager
+
+Combinaison
+Cmd+?  attaché à : Item, Lister, App
+Cmd+Entrer attaché à : Panneau (compatibilité descendante, préférer Tab Cycle) — peut-être BrinLister et PersoLister pour confirmer le choix des brins et persos.
+Alt+1/2/3 : AppKeyboardManager
+Cmd+ ←/→    : passer de panneau en panneau 

@@ -26,7 +26,6 @@ export default class App {
 
   }
 
-  //QU'EST-CE QUE ÇA FAIT LÀ, ÇA ???
   static async navigateToItem(projectLister, targetId, projectId) {
     const kc = projectLister.keyboardController
     if (!projectId) {
