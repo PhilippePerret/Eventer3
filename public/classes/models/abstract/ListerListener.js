@@ -9,6 +9,7 @@ export default class ListerListener extends BaseListener {
   static LISTENERS = {
     ArrowUp:   { nokey: 'selectPrev' },
     ArrowDown: { nokey: 'selectNext' },
+    n:         { nokey: 'createNew'  },
   }
 
 }

@@ -1,4 +1,29 @@
-# CHANGELOG — Eventer3 refactoring
+# CHANGELOG — Eventer3
+
+## 2026-06-20 (suite 3)
+
+### FilePicker — bug frappe nouveau dossier
+- `FilePicker._el` listener : `StopEvent` déplacé dans `_handleKey` après guard `_creatingFolder` — le `preventDefault` précoce bloquait la frappe dans l'input
+- Test ajouté dans `filesystem/filepicker.spec.js` : `pressSequentially` pour valider la frappe réelle
+
+## 2026-06-20 (suite 2)
+
+### FilePicker — portage nouvelle architecture
+- `ui/FilePicker.js` : listener keydown sur `this._el` (tabindex="-1" + focus) — plus de document capture
+- `ListerListener` : touche `n` → `createNew()`
+- `ProjectLister` (core) : `createNew()` — ouvre FilePicker, crée projet via `POST /api/listers/1/items`, met à jour `project_order`, recharge et sélectionne le nouveau projet
+- Tests `filesystem/filepicker.spec.js` et `project/edit-project.spec.js` : 28/28 passent — remis en place depuis `_tdd/` avec marque `// Refactorisé — nouvelle architecture`
+
+## 2026-06-20 (suite)
+
+### Corrections bugs
+- `PopupSelect.handleKeyDown` : ArrowDown ne propagait plus vers ListerListener — refacto HANDLED_KEYS / NOT_STOPPED_KEYS / StopEvent
+- `DOM._applyValuesWidth` : largeur fixe sur champs select (basée sur le label le plus long) — évite le changement de taille à la sélection
+
+### Nouveaux fichiers
+- `utils/events.js` : `StopEvent(event)` extrait de DOM.js (évite import circulaire)
+- `ui/KeyboardablePanel.js` : portée depuis public-old — keyboardController remplacé par document capture, même pattern HANDLED_KEYS/NOT_STOPPED_KEYS
+- `ui/FilePicker.js` : portée depuis public-old — en cours (listener à déplacer sur `this._el` avec tabindex/focus)
 
 ## 2026-06-20
 

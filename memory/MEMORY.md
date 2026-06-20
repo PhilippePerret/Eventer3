@@ -36,7 +36,9 @@
 - **[Design filtrage — décisions validées](project_filtrage_design.md)**
 - [Ne pas toucher sans validation](feedback_pas_toucher_sans_validation.md) — Ne jamais éditer des fichiers sans accord explicite, même si les fixes semblent évidents
 - [Réutiliser classes CSS](feedback_reutiliser_classes_css.md) — Ne jamais créer classe CSS si existante couvre le cas ; chercher d'abord dans styles.css
-- **[TDD : tests dans _tdd/ seulement](feedback_tdd_fichier_tdd.md)** — CRITIQUE: pendant TDD, modifier UNIQUEMENT `_tdd/`. Ne jamais toucher le fichier canonique. L'utilisateur déplace lui-même quand tout est vert.
+- **[TDD : workflow complet](feedback/tdd-workflow.md)** — CRITIQUE: `mv` uniquement, jamais Write+rm. _tdd/ pendant refacto. Claude (pas user) déplace vers canonique quand vert.
+- [CHANGELOG vs TODO Fait](feedback/changelog-vs-todo.md) — CHANGELOG = détail technique ; TODO Fait = courte phrase sans parenthèses
+- **[CRITIQUE: panel-btn labels = texte simple](feedback/panel-btn-labels.md)** — JAMAIS ↩︎ ni ⇥ dans labels ; CSS gère les préfixes. TOUJOURS un titre dans KeyboardablePanel.
 - **[Réutiliser composants UI existants](feedback_utiliser_composants_existants.md)** — CRITIQUE: avant tout nouveau composant UI, chercher dans `public/classes/ui/`. PopupSelect = toujours utiliser pour menus/dropdowns.
 - **[ID projet = UUID obligatoire](feedback_project_id_uuid.md)** — CRITIQUE: jamais 'project-a', 'test-brins' etc. — UUID partout dans fixtures, scripts, data_ini_state
 - [Tests : ERRORS jamais en dur](feedback_errors_no_hardcode.md) — Importer ERRORS et utiliser ERRORS[N], jamais de texte litéral dans les tests

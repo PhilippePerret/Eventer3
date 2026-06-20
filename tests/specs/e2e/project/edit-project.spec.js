@@ -1,4 +1,4 @@
-// ORIGINE: tests/specs/e2e/project/edit-project.spec.js
+// Refactorisé — nouvelle architecture (2026-06-20)
 import { installFixtures } from '../../../helpers/install-fixtures'
 import { test, expect, pane1 } from '../__setup__.js'
 

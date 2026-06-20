@@ -55,7 +55,3 @@ BUG 1
 - Quand on colle plusieurs évènements/item, ça devrait sélectionner le premier <== TEST
 - Même chose pour les brins/personnages <== TESTS
 - cas spécial : 
-
-BUG 
-EFFET INDÉSIRABLE : Suivant l'item choisi, la taille de l'affichage du state et du type du Project 
-SOLUTION : donner une largeur fixe en fonction de plus longue valeur.

@@ -1822,21 +1822,20 @@ body:has(#filter-input:not(.hidden)) #main-panel {
 }
 
 .confirm-dialog {
-  width: 400px;
+  width: 500px;
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.18);
   border-radius: 12px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(0, 0, 0, 0.04);
-  padding: 32px 36px 28px;
+  padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
   font-size: var(--dialog-font-size);
   color: #1d1d1f;
   overflow: hidden;
 }
 
-.confirm-dialog:has(.confirm-dialog__title) {
-  padding: 0;
-}
+.confirm-dialog .floating-panel__separator { display: none; }
+.confirm-dialog .floating-panel__zone { min-height: auto; padding-top: 4px; }
 
 .confirm-dialog__title {
   padding: 14px 20px 12px;

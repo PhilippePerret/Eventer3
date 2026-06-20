@@ -149,7 +149,6 @@ Elle a été profondément modifiée le 12 juin 2026.
 - `commitNewItem` : après `item.id = created.id`, appeler `item.render(itemElement)` pour afficher l'id généré par le serveur
 - Notification titre vide : dans `handleEditionKeyDown`, Enter/Escape sur item temporaire sans titre → `Notification.show(...)` + `return` (garder l'éditeur ouvert)
 - Lister virtuel vide : `cancelEditor` sur lister avec `domItems.length === 0` → notification au lieu d'écran blanc
-- `config.js` est un script **classique** (sans `type="module"`) — mettre `export` dedans casse tout → `APP_UI_MODES` undefined
 - Pas de commentaires sauf WHY non-obvious
 
 ---
