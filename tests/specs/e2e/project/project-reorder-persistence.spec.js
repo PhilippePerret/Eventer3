@@ -15,7 +15,7 @@ test("l'ordre des projets est persisté après rechargement", async ({ page }) =
   await expect(items.nth(1)).toContainText('Projet B')
 
   // Déplacer Projet A après Projet B
-  await page.keyboard.press('Meta+ArrowDown')
+  await pane1(page).locator('body').press('Meta+ArrowDown')
   await expect(items.nth(0)).toContainText('Projet B')
   await expect(items.nth(1)).toContainText('Projet A')
 
@@ -37,8 +37,8 @@ test("plusieurs déplacements sont persistés", async ({ page }) => {
   const items = pane1(page).locator('.project-item')
 
   // Projet A → bas × 2 : [B, C, A, ...]
-  await page.keyboard.press('Meta+ArrowDown')
-  await page.keyboard.press('Meta+ArrowDown')
+  await pane1(page).locator('body').press('Meta+ArrowDown')
+  await pane1(page).locator('body').press('Meta+ArrowDown')
   await expect(items.nth(0)).toContainText('Projet B')
   await expect(items.nth(1)).toContainText('Projet C')
   await expect(items.nth(2)).toContainText('Projet A')

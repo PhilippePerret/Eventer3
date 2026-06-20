@@ -69,9 +69,9 @@ export default class ProjectLister extends Lister {
 
 ### Approche : rewrite radical (pas incrémental)
 
-1. **Copie de sauvegarde** de `public/` → `public_old/` (référence rapide sans git)
-2. **Destruction des classes existantes** — repartir à zéro
-3. **Squelettes vides** dans l'ordre :
+1. [FAIT] **Copie de sauvegarde** de `public/` → `public_old/` (référence rapide sans git)
+2. [FAIT] **Destruction des classes existantes** — repartir à zéro
+3. [FAIT] **Squelettes vides** dans l'ordre :
    - `Item`, `ItemCore`, `ItemDom`, `ItemListener`, `ItemRepo`
    - `Lister`, `ListerCore`, `ListerDom`, `ListerListener`, `ListerRepo`
    - Héritages vides : `Event`, `Brin`, `Perso`, `Style`, `Project` (< Item)

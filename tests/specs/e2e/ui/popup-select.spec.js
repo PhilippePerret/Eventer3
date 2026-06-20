@@ -32,9 +32,9 @@ test("single: Enter sélectionne l'option focalisée", async ({ page }) => {
     currentValue: null,
   })
 
-  await page.keyboard.press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowDown')
   await expect(pane1(page).locator('.popup-select__option.focused')).toHaveText('Option B')
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
 
   await expect(pane1(page).locator('.popup-select')).not.toBeVisible()
   const result = await page.frames().find(f => f.url().includes('app-frame')).evaluate(() => window.__testResult)
@@ -48,7 +48,7 @@ test("single: Escape annule sans sélection", async ({ page }) => {
     currentValue: null,
   })
 
-  await page.keyboard.press('Escape')
+  await pane1(page).locator('body').press('Escape')
 
   await expect(pane1(page).locator('.popup-select')).not.toBeVisible()
   const result = await page.frames().find(f => f.url().includes('app-frame')).evaluate(() => window.__testResult)
@@ -76,7 +76,7 @@ test("single: filter réduit les options", async ({ page }) => {
 
   await pane1(page).locator('.popup-select__search').type('alph')
   await expect(pane1(page).locator('.popup-select__option')).toHaveCount(2)
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
 
   const result = await page.frames().find(f => f.url().includes('app-frame')).evaluate(() => window.__testResult)
   expect(result).toBe(1)
@@ -94,11 +94,11 @@ test("multi: Space coche et décoche une option", async ({ page }) => {
 
   await expect(pane1(page).locator('.popup-select__footer')).toBeVisible()
 
-  await page.keyboard.press('ArrowDown')
-  await page.keyboard.press(' ')
+  await pane1(page).locator('body').press('ArrowDown')
+  await pane1(page).locator('body').press(' ')
   await expect(pane1(page).locator('.popup-select__option').nth(1)).toHaveClass(/checked/)
 
-  await page.keyboard.press(' ')
+  await pane1(page).locator('body').press(' ')
   await expect(pane1(page).locator('.popup-select__option').nth(1)).not.toHaveClass(/checked/)
 })
 
@@ -111,11 +111,11 @@ test("multi: Enter confirme la sélection multiple", async ({ page }) => {
   })
 
   // Cocher A et C
-  await page.keyboard.press(' ')            // cocher A (index 0)
-  await page.keyboard.press('ArrowDown')
-  await page.keyboard.press('ArrowDown')
-  await page.keyboard.press(' ')            // cocher C (index 2)
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press(' ')            // cocher A (index 0)
+  await pane1(page).locator('body').press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowDown')
+  await pane1(page).locator('body').press(' ')            // cocher C (index 2)
+  await pane1(page).locator('body').press('Enter')
 
   await expect(pane1(page).locator('.popup-select')).not.toBeVisible()
   const result = await page.frames().find(f => f.url().includes('app-frame')).evaluate(() => window.__testResult)
@@ -158,7 +158,7 @@ test("allowCustom: Enter sur valeur custom la sélectionne", async ({ page }) =>
   })
 
   await pane1(page).locator('.popup-select__search').type('custom-val')
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
 
   await expect(pane1(page).locator('.popup-select')).not.toBeVisible()
   const result = await page.frames().find(f => f.url().includes('app-frame')).evaluate(() => window.__testResult)

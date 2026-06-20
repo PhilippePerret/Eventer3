@@ -11,17 +11,17 @@ test.beforeEach(() => {
 async function enterLevelMode(page, targetDepth) {
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   if (targetDepth >= 2) {
-    await page.keyboard.press('ArrowRight')
+    await pane1(page).locator('body').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveAttribute('data-depth', '2')
   }
   if (targetDepth >= 3) {
-    await page.keyboard.press('ArrowRight')
+    await pane1(page).locator('body').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveAttribute('data-depth', '3')
   }
-  await page.keyboard.press('Meta+m')
+  await pane1(page).locator('body').press('Meta+m')
   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
 }
 
@@ -29,7 +29,7 @@ test("⌘+t ouvre le panneau d'outils en LEVEL mode", async ({ page }) => {
   await page.goto('/')
   await enterLevelMode(page, 3)
 
-  await page.keyboard.press('Meta+t')
+  await pane1(page).locator('body').press('Meta+t')
   await expect(pane1(page).locator('.tools-panel')).toBeVisible()
 })
 
@@ -37,10 +37,10 @@ test("hors LEVEL mode : panneau outils s'ouvre sans l'outil Consolider", async (
   await page.goto('/')
 
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
-  await page.keyboard.press('Meta+t')
+  await pane1(page).locator('body').press('Meta+t')
 
   await expect(pane1(page).locator('.tools-panel')).toBeVisible()
   await expect(pane1(page).locator('.tools-panel')).not.toContainText('Consolider')
@@ -50,7 +50,7 @@ test("panneau outils contient 'Consolider le niveau'", async ({ page }) => {
   await page.goto('/')
   await enterLevelMode(page, 3)
 
-  await page.keyboard.press('Meta+t')
+  await pane1(page).locator('body').press('Meta+t')
   await expect(pane1(page).locator('.tools-panel')).toBeVisible()
 
   await expect(pane1(page).locator('.tools-panel')).toContainText('Consolider le niveau')
@@ -62,10 +62,10 @@ test("consolidation via lettre dans le panneau outils", async ({ page }) => {
 
   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(2)
 
-  await page.keyboard.press('Meta+t')
+  await pane1(page).locator('body').press('Meta+t')
   await expect(pane1(page).locator('.tools-panel')).toBeVisible()
 
-  await page.keyboard.press('c')
+  await pane1(page).locator('body').press('c')
   await expect(pane1(page).locator('.tools-panel')).not.toBeVisible()
 
   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(0)
@@ -76,8 +76,8 @@ test("consolidation : titres des nouveaux events corrects", async ({ page }) => 
   await page.goto('/')
   await enterLevelMode(page, 3)
 
-  await page.keyboard.press('Meta+t')
-  await page.keyboard.press('c')
+  await pane1(page).locator('body').press('Meta+t')
+  await pane1(page).locator('body').press('c')
   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(0)
   await expect(pane1(page).locator('.event-item')).toHaveCount(4)
 
@@ -100,25 +100,25 @@ test.describe("persistance consolidation — item virtuel au niveau root", () =>
 
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-    await page.keyboard.press('ArrowRight')
+    await pane1(page).locator('body').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-    await page.keyboard.press('ArrowRight')
+    await pane1(page).locator('body').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveAttribute('data-depth', '2')
-    await page.keyboard.press('Meta+m')
+    await pane1(page).locator('body').press('Meta+m')
     await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
 
     await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(1)
     await expect(pane1(page).locator('.event-item')).toHaveCount(3)
 
-    await page.keyboard.press('Meta+t')
-    await page.keyboard.press('c')
+    await pane1(page).locator('body').press('Meta+t')
+    await pane1(page).locator('body').press('c')
     await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(0)
     await expect(pane1(page).locator('.event-item')).toHaveCount(3)
 
-    await page.keyboard.press('Meta+m')
+    await pane1(page).locator('body').press('Meta+m')
     await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE NESTING')
 
-    await page.keyboard.press('Meta+m')
+    await pane1(page).locator('body').press('Meta+m')
     await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
 
     await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(0)

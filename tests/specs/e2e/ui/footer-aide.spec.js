@@ -10,7 +10,7 @@ test.beforeEach(() => {
 test("le footer affiche des raccourcis sur la liste des projets", async ({ page }) => {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await page.keyboard.press(OPEN_KEY)
+  await pane1(page).locator('body').press(OPEN_KEY)
   const help = pane1(page).locator('.contextual-help')
   await expect(help).toBeVisible()
   await expect(help).not.toBeEmpty()
@@ -19,9 +19,9 @@ test("le footer affiche des raccourcis sur la liste des projets", async ({ page 
 test("le footer affiche des raccourcis dans un EventLister", async ({ page }) => {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-  await page.keyboard.press(OPEN_KEY)
+  await pane1(page).locator('body').press(OPEN_KEY)
   const help = pane1(page).locator('.contextual-help')
   await expect(help).toBeVisible()
   await expect(help).not.toBeEmpty()
@@ -30,7 +30,7 @@ test("le footer affiche des raccourcis dans un EventLister", async ({ page }) =>
 test("le footer mentionne au moins la navigation (↑↓) dans la liste des projets", async ({ page }) => {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await page.keyboard.press(OPEN_KEY)
+  await pane1(page).locator('body').press(OPEN_KEY)
   await expect(pane1(page).locator('.contextual-help')).toContainText('↑')
   await expect(pane1(page).locator('.contextual-help')).toContainText('↓')
 })
@@ -38,9 +38,9 @@ test("le footer mentionne au moins la navigation (↑↓) dans la liste des proj
 test("le footer mentionne au moins la navigation (↑↓) dans un EventLister", async ({ page }) => {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-  await page.keyboard.press(OPEN_KEY)
+  await pane1(page).locator('body').press(OPEN_KEY)
   await expect(pane1(page).locator('.contextual-help')).toContainText('↑')
   await expect(pane1(page).locator('.contextual-help')).toContainText('↓')
 })

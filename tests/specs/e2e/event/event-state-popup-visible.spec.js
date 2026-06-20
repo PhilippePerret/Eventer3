@@ -8,13 +8,13 @@ test.beforeEach(() => {
 async function openStatePopup(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
   await expect(pane1(page).locator('.event-item.selected input[name="title"]')).toBeFocused()
-  await page.keyboard.press('Tab')
+  await pane1(page).locator('body').press('Tab')
   await expect(pane1(page).locator('.event-item.selected [data-field-name="state"]')).toBeFocused()
-  await page.keyboard.press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowDown')
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
 }
 

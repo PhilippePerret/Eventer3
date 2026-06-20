@@ -12,17 +12,17 @@ test.beforeEach(async ({ page }) => {
 })
 
 test('projet seed → "Intrigue principale" dans le panneau brins', async ({ page }) => {
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-  await page.keyboard.press('b')
+  await pane1(page).locator('body').press('b')
   await expect(pane1(page).locator('#brin-panel')).toBeVisible()
   await expect(pane1(page).locator('.brin-item').first()).toContainText('Intrigue principale')
 })
 
 test('projet seed → "Votre protagoniste" dans le panneau persos', async ({ page }) => {
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-  await page.keyboard.press('p')
+  await pane1(page).locator('body').press('p')
   await expect(pane1(page).locator('#perso-panel')).toBeVisible()
   await expect(pane1(page).locator('.perso-item__title').first()).toContainText('Votre protagoniste')
 })

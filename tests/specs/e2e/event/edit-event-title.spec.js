@@ -13,7 +13,7 @@ test("dans un EventLister, Enter passe l'event sélectionné en édition du titr
 
   console.log('-> entrée dans l\'EventLister du premier projet')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
   console.log('-> vérification : premier event sélectionné')
@@ -21,7 +21,7 @@ test("dans un EventLister, Enter passe l'event sélectionné en édition du titr
   await expect(firstItem).toHaveClass(/selected/)
 
   console.log('-> appui sur Enter → mise en édition')
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
 
   console.log('-> vérification : input visible avec le titre courant')
   const input = firstItem.locator('input[name="title"]')
@@ -31,7 +31,7 @@ test("dans un EventLister, Enter passe l'event sélectionné en édition du titr
 
   console.log('-> saisie du nouveau titre et validation')
   await input.fill('Titre modifié')
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
 
   console.log('-> vérification : plus d\'input, titre mis à jour')
   await expect(firstItem.locator('input[name="title"]')).not.toBeVisible()
@@ -49,7 +49,7 @@ test("dans un EventLister, Escape annule l'édition et restaure le titre origina
 
   console.log('-> entrée dans l\'EventLister du premier projet')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
   console.log('-> vérification : premier event sélectionné')
@@ -57,7 +57,7 @@ test("dans un EventLister, Escape annule l'édition et restaure le titre origina
   await expect(firstItem).toHaveClass(/selected/)
 
   console.log('-> appui sur Enter → mise en édition')
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
 
   const input = firstItem.locator('input[name="title"]')
   await expect(input).toBeVisible()
@@ -65,7 +65,7 @@ test("dans un EventLister, Escape annule l'édition et restaure le titre origina
 
   console.log('-> saisie d\'un titre temporaire puis Escape')
   await input.fill('Titre temporaire')
-  await page.keyboard.press('Escape')
+  await pane1(page).locator('body').press('Escape')
 
   console.log('-> vérification : plus d\'input, titre original restauré')
   await expect(firstItem.locator('input[name="title"]')).not.toBeVisible()

@@ -12,9 +12,9 @@ test('Escape dans le FilePicker ne crée pas de projet', async ({ page }) => {
   const items = pane1(page).locator('.project-item')
   const countBefore = await items.count()
 
-  await page.keyboard.press('n')
+  await pane1(page).locator('body').press('n')
   await expect(pane1(page).locator('.file-picker')).toBeVisible()
-  await page.keyboard.press('Escape')
+  await pane1(page).locator('body').press('Escape')
   await expect(pane1(page).locator('.file-picker')).not.toBeVisible()
 
   await expect(items).toHaveCount(countBefore)
@@ -24,8 +24,8 @@ test('la touche Entrée sans titre : l\'éditeur reste visible', async ({ page }
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
 
-  await page.keyboard.press('n')
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('n')
+  await pane1(page).locator('body').press('Enter')
 
   await expect(pane1(page).locator('.project-item input[name="title"]')).toBeVisible()
 })
@@ -37,9 +37,9 @@ test('la touche Entrée sans titre : aucun projet créé', async ({ page }) => {
   const items = pane1(page).locator('.project-item')
   const countBefore = await items.count()
 
-  await page.keyboard.press('n')
-  await page.keyboard.press('Enter')
-  await page.keyboard.press('Escape')
+  await pane1(page).locator('body').press('n')
+  await pane1(page).locator('body').press('Enter')
+  await pane1(page).locator('body').press('Escape')
 
   await expect(items).toHaveCount(countBefore)
 })

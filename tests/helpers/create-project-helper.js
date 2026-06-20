@@ -27,19 +27,18 @@ export async function createAndSelectFolderInPicker(page, expect, folderName) {
   const frame = page.frameLocator('#pane-1')
   await expect(frame.locator('.file-picker')).toBeVisible()
 
-  // n dans le FilePicker = nouveau dossier
-  await page.keyboard.press('n')
+  // n dans le FilePicker = nouveau dossier — le FilePicker lui-même a le focus
+  await frame.locator('.file-picker').press('n')
 
   const input = frame.locator('.file-picker__new-folder-input')
   await expect(input).toBeVisible()
   await input.fill(folderName)
   await input.press('Enter')
 
-  // Attendre que l'entrée apparaisse dans la liste
-  await frame.locator('.file-picker__entry-name', { hasText: folderName }).waitFor({ state: 'visible' })
-
-  // Enter pour sélectionner le dossier
-  await page.keyboard.press('Enter')
+  // Attendre que l'entrée apparaisse, puis Enter dessus pour sélectionner
+  const entry = frame.locator('.file-picker__entry-name', { hasText: folderName })
+  await entry.waitFor({ state: 'visible' })
+  await entry.press('Enter')
 }
 
 /**
@@ -48,7 +47,7 @@ export async function createAndSelectFolderInPicker(page, expect, folderName) {
  */
 export async function createProjectViaFilePicker(page, expect) {
   const { folderName } = await setupProjectFolder(page)
-  await page.keyboard.press('n')
+  await page.frameLocator('#pane-1').locator('.project-item.selected').press('n')
   await createAndSelectFolderInPicker(page, expect, folderName)
   await page.waitForLoadState('networkidle')
   const idText = await page.frameLocator('#pane-1').locator('.project-item').nth(1).locator('.project-item__id').textContent()

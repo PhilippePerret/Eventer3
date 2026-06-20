@@ -10,7 +10,7 @@ async function createProjectAndGetFolderInfo(page, expect) {
   await page.goto('/')
   const { folderName, workDir } = await setupProjectFolder(page)
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await page.keyboard.press('n')
+  await pane1(page).locator('body').press('n')
   await createAndSelectFolderInPicker(page, expect, folderName)
   await page.waitForLoadState('networkidle')
   return { folderName, workDir }
@@ -22,9 +22,9 @@ async function tryPickExistingFolder(page, expect, workDir) {
     data: JSON.stringify({ value: workDir })
   })
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await page.keyboard.press('n')
+  await pane1(page).locator('body').press('n')
   await expect(pane1(page).locator('.file-picker')).toBeVisible()
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -48,12 +48,12 @@ test('confirmer l\'ouverture : le projet apparaît dans la liste avec ses events
   await tryPickExistingFolder(page, expect, workDir)
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
 
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
   await page.waitForLoadState('networkidle')
 
   await expect(pane1(page).locator('.project-item')).toHaveCount(countAfterFirst + 1)
 
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
   await expect(pane1(page).locator('.event-item')).toHaveCount(1)
@@ -69,7 +69,7 @@ test('annuler : aucun projet créé', async ({ page }) => {
   await tryPickExistingFolder(page, expect, workDir)
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
 
-  await page.keyboard.press('Escape')
+  await pane1(page).locator('body').press('Escape')
   await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
 
   await expect(pane1(page).locator('.project-item')).toHaveCount(countAfterFirst)
@@ -83,7 +83,7 @@ test('persistance : le projet survit au rechargement', async ({ page }) => {
   await page.goto('/')
   await tryPickExistingFolder(page, expect, workDir)
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
   await page.waitForLoadState('networkidle')
 
   await page.reload()

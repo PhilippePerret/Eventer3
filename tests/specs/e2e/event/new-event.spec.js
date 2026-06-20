@@ -16,7 +16,7 @@ test("dans un EventLister, la touche « n » crée un nouvel Event après celui 
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
   console.log('-> entrée dans le EventLister du premier projet')
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
   console.log('-> vérification : premier évènement sélectionné')
@@ -24,7 +24,7 @@ test("dans un EventLister, la touche « n » crée un nouvel Event après celui 
   const firstEventTitle = await pane1(page).locator('.event-item').nth(0).textContent()
 
   console.log('-> appui sur n')
-  await page.keyboard.press('n')
+  await pane1(page).locator('body').press('n')
 
   console.log('-> vérification : un champ de saisie est apparu')
   const input = pane1(page).locator('.event-item input[name="title"]')
@@ -33,7 +33,7 @@ test("dans un EventLister, la touche « n » crée un nouvel Event après celui 
 
   console.log('-> saisie du titre et validation')
   await page.keyboard.type('Nouvel évènement test')
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
 
   console.log('-> vérification : le nouvel évènement est visible')
   const items = pane1(page).locator('.event-item')

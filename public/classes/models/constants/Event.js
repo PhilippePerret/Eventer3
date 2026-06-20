@@ -39,4 +39,4 @@ export const EVENT_LIEU = {
 
 
 import {DEV_STATES} from './common.js'
-export const EVENT_STATE = DEV_STATES
+export const EVENT_STATE = [...DEV_STATES]

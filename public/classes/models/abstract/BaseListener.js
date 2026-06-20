@@ -1,5 +1,6 @@
 import { raise } from '../../../system/Error.js'
 import { ERRORS } from '../../../system/Locales.js'
+import LOG from '../../../system/LOG.js'
 
 export default class BaseListener {
 
@@ -34,13 +35,13 @@ export default class BaseListener {
   get target() { return this }
 
   onkeydown(ev) {
+    LOG.m(1, 'BaseListener.onkeydown', { key: ev.key, listener: this.constructor.name, target: ev.target?.className })
     const dm = this.constructor.LISTENERS?.[ev.key]
     if (!dm) return
     const method = this.getMethod(ev, dm)
-    // Il faut explicitement désactiver la key si nécessaire => erreur
     this.target[method] || raise(ERRORS[100], ev.key, ev, this)
     ev.preventDefault()
-    return this.target[method](ev)
+    if (this.target[method](ev) !== false) ev.stopPropagation()
   }
 
 }

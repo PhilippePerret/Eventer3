@@ -15,19 +15,19 @@ test.beforeEach(() => {
 async function goToEventLister(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 }
 
 async function openBrinPanel(page) {
   await goToEventLister(page)
-  await page.keyboard.press('b')
+  await pane1(page).locator('body').press('b')
   await expect(pane1(page).locator('#brin-panel')).toBeVisible()
 }
 
 async function openPersoPanelFromBrin(page) {
   await openBrinPanel(page)
-  await page.keyboard.press('p')
+  await pane1(page).locator('body').press('p')
   await expect(pane1(page).locator('#perso-panel')).toBeVisible()
 }
 
@@ -35,7 +35,7 @@ async function openPersoPanelFromBrin(page) {
 
 test("p ouvre le panneau des personnages depuis BrinLister", async ({ page }) => {
   await openBrinPanel(page)
-  await page.keyboard.press('p')
+  await pane1(page).locator('body').press('p')
   await expect(pane1(page).locator('#perso-panel')).toBeVisible()
 })
 
@@ -46,10 +46,10 @@ test("le panneau brins reste visible en fond pendant le panneau perso", async ({
 
 test("Escape ferme le panneau perso et remet le focus sur BrinLister", async ({ page }) => {
   await openPersoPanelFromBrin(page)
-  await page.keyboard.press('Escape')
+  await pane1(page).locator('body').press('Escape')
   await expect(pane1(page).locator('#perso-panel')).not.toBeVisible()
   // BrinLister reprend la main : ↓ change la sélection du brin
-  await page.keyboard.press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowDown')
   // pas d'erreur = BrinLister actif
 })
 
@@ -78,15 +78,15 @@ test("les persos du brin ne sont pas grisés (tous décochables depuis brin)", a
 test("Space coche un perso non-coché sur le brin (c1)", async ({ page }) => {
   await openPersoPanelFromBrin(page)
   await expect(pane1(page).locator('.perso-item').nth(0)).not.toHaveClass(/checked/)
-  await page.keyboard.press(' ')
+  await pane1(page).locator('body').press(' ')
   await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/checked/)
 })
 
 test("Space décoche un perso coché sur le brin (c2)", async ({ page }) => {
   await openPersoPanelFromBrin(page)
-  await page.keyboard.press('ArrowDown') // → c2
+  await pane1(page).locator('body').press('ArrowDown') // → c2
   await expect(pane1(page).locator('.perso-item').nth(1)).toHaveClass(/checked/)
-  await page.keyboard.press(' ')
+  await pane1(page).locator('body').press(' ')
   await expect(pane1(page).locator('.perso-item').nth(1)).not.toHaveClass(/checked/)
 })
 
@@ -100,9 +100,9 @@ test("la ligne de b1 affiche le badge de c2 (son perso)", async ({ page }) => {
 
 test("cocher c3 depuis le panneau perso de b1 ajoute son avatar sur la ligne du brin", async ({ page }) => {
   await openPersoPanelFromBrin(page)
-  await page.keyboard.press('ArrowDown')
-  await page.keyboard.press('ArrowDown') // → c3
-  await page.keyboard.press(' ')
+  await pane1(page).locator('body').press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowDown') // → c3
+  await pane1(page).locator('body').press(' ')
   const brinEl = pane1(page).locator('.brin-item').nth(0)
   // c3 a avatar 🎭 → affiché à la place du badge
   await expect(brinEl.locator('.brin-persos-marks')).toContainText('🎭')
@@ -122,7 +122,7 @@ test("retirer un brin d'un event met à jour les marques perso sur la ligne de l
   await openBrinPanel(page)
   // b1 est coché sur e1 (c2=RO via b1 s'affiche sur e1)
   // décocher b1
-  await page.keyboard.press(' ')
+  await pane1(page).locator('body').press(' ')
   const eventEl = pane1(page).locator('.event-item').nth(0)
   // c2 (RO) ne devrait plus apparaître (vient de b1)
   await expect(eventEl.locator('.event-persos-marks')).not.toContainText('RO')
@@ -132,10 +132,10 @@ test("retirer un brin d'un event met à jour les marques perso sur la ligne de l
 
 test("persistance : cochage sur brin survit au rechargement", async ({ page }) => {
   await openPersoPanelFromBrin(page)
-  await page.keyboard.press(' ') // cocher c1 sur b1
+  await pane1(page).locator('body').press(' ') // cocher c1 sur b1
   await page.waitForLoadState('networkidle')
   await page.reload()
   await openBrinPanel(page)
-  await page.keyboard.press('p')
+  await pane1(page).locator('body').press('p')
   await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/checked/)
 })

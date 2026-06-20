@@ -23,10 +23,10 @@ async function setupFolderWithDb(page) {
 
 async function openPickerAndSelectFolder(page) {
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await page.keyboard.press('n')
+  await pane1(page).locator('body').press('n')
   await expect(pane1(page).locator('.file-picker')).toBeVisible()
   await expect(pane1(page).locator('.file-picker__entry-name', { hasText: 'projet-existant' })).toBeVisible()
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
 }
 
 // ── Dialog ────────────────────────────────────────────────────────────────────
@@ -51,7 +51,7 @@ test('dialog eventer.db → Escape annule, aucun projet créé', async ({ page }
   const countBefore = await pane1(page).locator('.project-item').count()
   await openPickerAndSelectFolder(page)
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
-  await page.keyboard.press('Escape')
+  await pane1(page).locator('body').press('Escape')
   await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
   await expect(pane1(page).locator('.project-item')).toHaveCount(countBefore)
 })
@@ -62,7 +62,7 @@ test('dialog eventer.db → Enter (Oui) importe le projet existant', async ({ pa
   const countBefore = await pane1(page).locator('.project-item').count()
   await openPickerAndSelectFolder(page)
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
   await page.waitForLoadState('networkidle')
   await expect(pane1(page).locator('.project-item')).toHaveCount(countBefore + 1)
 })
@@ -73,7 +73,7 @@ test('dialog eventer.db → Delete (⌦ Non, la détruire) crée un nouveau proj
   const countBefore = await pane1(page).locator('.project-item').count()
   await openPickerAndSelectFolder(page)
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
-  await page.keyboard.press('Delete')
+  await pane1(page).locator('body').press('Delete')
   await page.waitForLoadState('networkidle')
   await expect(pane1(page).locator('.project-item')).toHaveCount(countBefore + 1)
 })

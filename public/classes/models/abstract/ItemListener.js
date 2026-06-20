@@ -7,7 +7,9 @@ export default class ItemListener extends BaseListener {
   get target() { return this.item }
 
   static LISTENERS = {
-    Enter: { nokey: 'startEditing' },
+    Enter:  { nokey: 'onEnter' },
+    Escape: { nokey: 'onEscape' },
+    Tab:    { nokey: 'onTab' },
   }
 
 }

@@ -16,7 +16,7 @@ test.beforeEach(() => {
 async function enterEventLister(page) {
   await page.goto('/')
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 }
 

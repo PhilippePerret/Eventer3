@@ -8,12 +8,12 @@ test.beforeEach(() => {
 async function goToEventLister(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 }
 
 async function startEditing(page) {
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
   const input = pane1(page).locator('.event-item.selected input[name="title"]')
   await expect(input).toBeFocused()  // attendre que le rAF ait focalisé l'input
   return input
@@ -23,14 +23,14 @@ test("Tab puis ArrowDown ouvre le popup de sélection d'état", async ({ page })
   await goToEventLister(page)
 
   await startEditing(page)
-  await page.keyboard.press('Tab')
+  await pane1(page).locator('body').press('Tab')
   const trigger = pane1(page).locator('.event-item.selected [data-field-name="state"]')
   await expect(trigger).toBeFocused()
 
-  await page.keyboard.press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowDown')
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
 
-  await page.keyboard.press('Escape')
+  await pane1(page).locator('body').press('Escape')
   await expect(pane1(page).locator('.popup-select')).not.toBeVisible()
   await expect(trigger).toBeFocused()
 })
@@ -39,8 +39,8 @@ test("le popup s'ouvre pré-positionné sur la valeur courante", async ({ page }
   await goToEventLister(page)
 
   await startEditing(page)
-  await page.keyboard.press('Tab')
-  await page.keyboard.press('ArrowDown')
+  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('body').press('ArrowDown')
 
   const focused = pane1(page).locator('.popup-select__option.focused')
   await expect(focused).toHaveText('—')
@@ -50,16 +50,16 @@ test("↑↓ naviguent dans les options du popup", async ({ page }) => {
   await goToEventLister(page)
 
   await startEditing(page)
-  await page.keyboard.press('Tab')
-  await page.keyboard.press('ArrowDown')
+  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('body').press('ArrowDown')
 
-  await page.keyboard.press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowDown')
   await expect(pane1(page).locator('.popup-select__option.focused')).toHaveText('ébauche')
 
-  await page.keyboard.press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowDown')
   await expect(pane1(page).locator('.popup-select__option.focused')).toHaveText('développement')
 
-  await page.keyboard.press('ArrowUp')
+  await pane1(page).locator('body').press('ArrowUp')
   await expect(pane1(page).locator('.popup-select__option.focused')).toHaveText('ébauche')
 })
 
@@ -67,11 +67,11 @@ test("Enter sélectionne l'option et ferme le popup", async ({ page }) => {
   await goToEventLister(page)
 
   const titleInput = await startEditing(page)
-  await page.keyboard.press('Tab')
-  await page.keyboard.press('ArrowDown')
+  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('body').press('ArrowDown')
 
-  await page.keyboard.press('ArrowDown')  // ébauche
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('ArrowDown')  // ébauche
+  await pane1(page).locator('body').press('Enter')
 
   await expect(pane1(page).locator('.popup-select')).not.toBeVisible()
 
@@ -86,12 +86,12 @@ test("valider l'édition commit le titre et l'état", async ({ page }) => {
   const titleInput = await startEditing(page)
   await titleInput.fill('Titre modifié')
 
-  await page.keyboard.press('Tab')
-  await page.keyboard.press('ArrowDown')
-  await page.keyboard.press('ArrowDown')  // ébauche
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('body').press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowDown')  // ébauche
+  await pane1(page).locator('body').press('Enter')
 
-  await page.keyboard.press('Enter')  // commit
+  await pane1(page).locator('body').press('Enter')  // commit
 
   const firstItem = pane1(page).locator('.event-item').nth(0)
   await expect(firstItem).toContainText('Titre modifié')
@@ -102,12 +102,12 @@ test("Escape en édition restaure l'état original même si popup a été utilis
   await goToEventLister(page)
 
   await startEditing(page)
-  await page.keyboard.press('Tab')
-  await page.keyboard.press('ArrowDown')
-  await page.keyboard.press('ArrowDown')  // ébauche
-  await page.keyboard.press('Enter')      // sélectionne ébauche
+  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('body').press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowDown')  // ébauche
+  await pane1(page).locator('body').press('Enter')      // sélectionne ébauche
 
-  await page.keyboard.press('Escape')
+  await pane1(page).locator('body').press('Escape')
 
   const firstItem = pane1(page).locator('.event-item').nth(0)
   await expect(firstItem.locator('.event-state')).toHaveText('—')
@@ -117,8 +117,8 @@ test("filtrer les options réduit la liste", async ({ page }) => {
   await goToEventLister(page)
 
   await startEditing(page)
-  await page.keyboard.press('Tab')
-  await page.keyboard.press('ArrowDown')
+  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('body').press('ArrowDown')
 
   await pane1(page).locator('.popup-select__search').type('jet')
   await expect(pane1(page).locator('.popup-select__option')).toHaveCount(1)
@@ -129,12 +129,12 @@ test("Enter sur résultat filtré sélectionne et ferme", async ({ page }) => {
   await goToEventLister(page)
 
   await startEditing(page)
-  await page.keyboard.press('Tab')
-  await page.keyboard.press('ArrowDown')
+  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('body').press('ArrowDown')
 
   await pane1(page).locator('.popup-select__search').type('reli')
   await expect(pane1(page).locator('.popup-select__option')).toHaveCount(1)
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
 
   const trigger = pane1(page).locator('.event-item.selected [data-field-name="state"]')
   await expect(trigger).toHaveText('à relire')
@@ -144,8 +144,8 @@ test("le menu d'état contient tous les libellés corrects", async ({ page }) =>
   await goToEventLister(page)
 
   await startEditing(page)
-  await page.keyboard.press('Tab')
-  await page.keyboard.press('ArrowDown')
+  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('body').press('ArrowDown')
 
   const options = pane1(page).locator('.popup-select__option')
   await expect(options).toHaveCount(10)
@@ -165,16 +165,16 @@ test("choisir un état en édition l'enregistre (persistance après rechargement
   await goToEventLister(page)
 
   await startEditing(page)
-  await page.keyboard.press('Tab')
-  await page.keyboard.press('ArrowDown')
-  await page.keyboard.press('ArrowDown')  // ébauche
-  await page.keyboard.press('Enter')
-  await page.keyboard.press('Enter')  // confirme l'édition
+  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('body').press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowDown')  // ébauche
+  await pane1(page).locator('body').press('Enter')
+  await pane1(page).locator('body').press('Enter')  // confirme l'édition
 
   await page.waitForLoadState('networkidle')
   await page.reload()
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
   await expect(pane1(page).locator('.event-item').nth(0).locator('.event-state')).toHaveText('ébauche')

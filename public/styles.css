@@ -132,6 +132,7 @@ body {
 }
 
 .project-item__title {
+  flex: 1;
   font-size: 32px;
   font-weight: 700;
 }

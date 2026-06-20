@@ -21,7 +21,7 @@ test.describe('Alt+n dans la liste des projets', () => {
     const items = pane1(page).locator('.project-item')
     await expect(items.nth(0)).toHaveClass(/selected/)
 
-    await page.keyboard.press('Alt+n')
+    await pane1(page).locator('body').press('Alt+n')
 
     await expect(items).toHaveCount(4)
     await expect(items.nth(1)).toContainText('Projet A')
@@ -50,13 +50,13 @@ test.describe("Alt+n dans un EventLister", () => {
   test("Alt+n crée un event AU-DESSUS de l'event sélectionné", async ({ page }) => {
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-    await page.keyboard.press('ArrowRight')
+    await pane1(page).locator('body').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
     const items = pane1(page).locator('.event-item')
     await expect(items.nth(0)).toHaveClass(/selected/)
 
-    await page.keyboard.press('Alt+n')
+    await pane1(page).locator('body').press('Alt+n')
 
     await expect(items.nth(1)).toContainText('Évènement un')
     await expect(items.nth(0)).toHaveClass(/selected/)
@@ -67,7 +67,7 @@ test.describe("Alt+n dans un EventLister", () => {
   test("⌥n Mac (key='˜') crée un event AU-DESSUS — comportement clavier réel", async ({ page }) => {
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-    await page.keyboard.press('ArrowRight')
+    await pane1(page).locator('body').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
     await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
 
@@ -86,15 +86,15 @@ test.describe("Alt+n dans un BrinLister", () => {
   test("Alt+n crée un brin AU-DESSUS du brin sélectionné", async ({ page }) => {
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-    await page.keyboard.press('ArrowRight')
+    await pane1(page).locator('body').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-    await page.keyboard.press('b')
+    await pane1(page).locator('body').press('b')
     await expect(pane1(page).locator('#brin-panel')).toBeVisible()
 
     const brins = pane1(page).locator('.brin-item')
     await expect(brins.nth(0)).toHaveClass(/selected/)
 
-    await page.keyboard.press('Alt+n')
+    await pane1(page).locator('body').press('Alt+n')
 
     await expect(brins.nth(0)).toHaveClass(/selected/)
     await expect(brins.nth(0).locator('input[name="title"]')).toBeVisible()

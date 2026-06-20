@@ -13,7 +13,7 @@ test.describe('Delete dans ProjectLister', () => {
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     const items = pane1(page).locator('.project-item')
     const initialCount = await items.count()
-    await page.keyboard.press('Delete')
+    await pane1(page).locator('body').press('Delete')
     await expect(items).toHaveCount(initialCount - 1)
   })
 
@@ -22,7 +22,7 @@ test.describe('Delete dans ProjectLister', () => {
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     const items = pane1(page).locator('.project-item')
     const initialCount = await items.count()
-    await page.keyboard.press('Delete')
+    await pane1(page).locator('body').press('Delete')
     await expect(items).toHaveCount(initialCount - 1)
     await page.waitForLoadState('networkidle')
     await page.reload()
@@ -32,9 +32,9 @@ test.describe('Delete dans ProjectLister', () => {
   test('l\'aide contextuelle mentionne ⌦ dans le ProjectLister avec plusieurs projets', async ({ page }) => {
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-    await page.keyboard.press('Meta+?')
+    await pane1(page).locator('body').press('Meta+?')
     await expect(pane1(page).locator('.contextual-help')).toContainText('⌦')
-    await page.keyboard.press('Escape')
+    await pane1(page).locator('body').press('Escape')
   })
 
   test('quand un seul projet reste, le footer ne mentionne plus ⌦', async ({ page }) => {
@@ -43,7 +43,7 @@ test.describe('Delete dans ProjectLister', () => {
     const items = pane1(page).locator('.project-item')
     const initialCount = await items.count()
     for (let i = 0; i < initialCount - 1; i++) {
-      await page.keyboard.press('Delete')
+      await pane1(page).locator('body').press('Delete')
       await expect(items).toHaveCount(initialCount - i - 1)
     }
     await expect(items).toHaveCount(1)
@@ -56,11 +56,11 @@ test.describe('Delete dans ProjectLister', () => {
     const items = pane1(page).locator('.project-item')
     const initialCount = await items.count()
     for (let i = 0; i < initialCount - 1; i++) {
-      await page.keyboard.press('Delete')
+      await pane1(page).locator('body').press('Delete')
       await expect(items).toHaveCount(initialCount - i - 1)
     }
     await expect(items).toHaveCount(1)
-    await page.keyboard.press('Delete')
+    await pane1(page).locator('body').press('Delete')
     await expect(items).toHaveCount(1)
     await expect(pane1(page).locator('#notification')).toBeVisible()
   })
@@ -77,27 +77,27 @@ test.describe('Delete dans EventLister', () => {
   test('Delete supprime l\'event sélectionné dans un EventLister', async ({ page }) => {
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-    await page.keyboard.press('ArrowRight')
+    await pane1(page).locator('body').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
     const items = pane1(page).locator('.event-item')
     const initialCount = await items.count()
-    await page.keyboard.press('Delete')
+    await pane1(page).locator('body').press('Delete')
     await expect(items).toHaveCount(initialCount - 1)
   })
 
   test('la suppression de l\'event est persistante (rechargement)', async ({ page }) => {
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-    await page.keyboard.press('ArrowRight')
+    await pane1(page).locator('body').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
     const items = pane1(page).locator('.event-item')
     const initialCount = await items.count()
-    await page.keyboard.press('Delete')
+    await pane1(page).locator('body').press('Delete')
     await expect(items).toHaveCount(initialCount - 1)
     await page.waitForLoadState('networkidle')
     await page.reload()
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-    await page.keyboard.press('ArrowRight')
+    await pane1(page).locator('body').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
     await expect(items).toHaveCount(initialCount - 1)
   })
@@ -105,11 +105,11 @@ test.describe('Delete dans EventLister', () => {
   test('l\'aide contextuelle mentionne ⌦ dans un EventLister avec plusieurs events', async ({ page }) => {
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-    await page.keyboard.press('ArrowRight')
+    await pane1(page).locator('body').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-    await page.keyboard.press('Meta+?')
+    await pane1(page).locator('body').press('Meta+?')
     await expect(pane1(page).locator('.contextual-help')).toContainText('⌦')
-    await page.keyboard.press('Escape')
+    await pane1(page).locator('body').press('Escape')
   })
 
 
@@ -126,13 +126,13 @@ test.describe('Delete dans le panneau des brins', () => {
   async function goToEventLister(page) {
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-    await page.keyboard.press('ArrowRight')
+    await pane1(page).locator('body').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   }
 
   async function openBrinPanel(page) {
     await goToEventLister(page)
-    await page.keyboard.press('b')
+    await pane1(page).locator('body').press('b')
     await expect(pane1(page).locator('#brin-panel')).toBeVisible()
   }
 
@@ -141,9 +141,9 @@ test.describe('Delete dans le panneau des brins', () => {
     const items = pane1(page).locator('.brin-item')
     const initialCount = await items.count()
     // Naviguer sur b2 (AUT, index 1)
-    await page.keyboard.press('ArrowDown')
+    await pane1(page).locator('body').press('ArrowDown')
     await expect(items.nth(1)).toHaveClass(/selected/)
-    await page.keyboard.press('Delete')
+    await pane1(page).locator('body').press('Delete')
     await expect(items).toHaveCount(initialCount - 1)
     // Le brin b2 (AUT) ne doit plus être dans la liste
     const titles = pane1(page).locator('.brin-item .brin-item__title')
@@ -156,22 +156,22 @@ test.describe('Delete dans le panneau des brins', () => {
     const eventRow = pane1(page).locator('.event-item.selected')
     await expect(eventRow.locator('.event-brins-badges .badge.brin')).toContainText('AUT')
     // Naviguer sur b2 (AUT) et le supprimer
-    await page.keyboard.press('ArrowDown')
-    await page.keyboard.press('Delete')
+    await pane1(page).locator('body').press('ArrowDown')
+    await pane1(page).locator('body').press('Delete')
     // Le badge AUT doit avoir disparu de la ligne de e1
     await expect(eventRow.locator('.event-brins-badges')).not.toContainText('AUT')
   })
 
   test('la suppression du brin est persistante : liste des brins du projet', async ({ page }) => {
     await openBrinPanel(page)
-    await page.keyboard.press('ArrowDown')
-    await page.keyboard.press('Delete')
+    await pane1(page).locator('body').press('ArrowDown')
+    await pane1(page).locator('body').press('Delete')
     await expect(pane1(page).locator('.brin-item')).toHaveCount(1)
     await page.waitForLoadState('networkidle')
     // Rechargement
     await page.reload()
     await goToEventLister(page)
-    await page.keyboard.press('b')
+    await pane1(page).locator('body').press('b')
     await expect(pane1(page).locator('#brin-panel')).toBeVisible()
     await expect(pane1(page).locator('.brin-item')).toHaveCount(1)
     await expect(pane1(page).locator('.brin-item .brin-item__title')).not.toContainText('Autre brin')
@@ -179,8 +179,8 @@ test.describe('Delete dans le panneau des brins', () => {
 
   test('la suppression du brin est persistante : badge absent de l\'event après rechargement', async ({ page }) => {
     await openBrinPanel(page)
-    await page.keyboard.press('ArrowDown')
-    await page.keyboard.press('Delete')
+    await pane1(page).locator('body').press('ArrowDown')
+    await pane1(page).locator('body').press('Delete')
     // Rechargement
     await page.reload()
     await goToEventLister(page)

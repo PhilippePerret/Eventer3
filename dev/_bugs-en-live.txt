@@ -56,40 +56,6 @@ BUG 1
 - Même chose pour les brins/personnages <== TESTS
 - cas spécial : 
 
-BUG 2
-- Quand j'édite l'event de type man, j'ai toujours le white-space:nowrap !!!
-- et je voudrais que le filet passe au vert (VERT, comme pour l'édition normale)
-
-BUG 3    
-Se produit lorsque je toggle l'affichage vers "par niveau", ET QUE le lister courant N'A PAS le niveau "man" défini pour le projet MAIS est de nature "man". Dans ce cas, l'application devrait NON PAS relever les events du niveau de l'event sélectionné, MAIS relever les events du niveau "man" défini pour le projet OU s'il n'existe pas pour une imbrication, rechercher un lister "man" avant ou après. FAIRE UN TEST POUR ÇA.
-Comprends-tu suffisamment bien la situation ? Décris-la moi avec tes mots pour qu'on soit sûr.
-
-
-mais on va certainement changer le comportement : Cmd+m va ouvrir une fenêtre pour choisir entre trois modes d'affichage : 
-- par imbrication (défaut)
-- par niveau 
-- total                     <--- sera à implémenter
-
-POINT 1
-- garder l'idée de la boite à outils MAIS :
-- l'ouvrir avec meta+t (VÉRIFIER AVANT LA DISPONIBILITÉ !!!!)
-- garder dedans l'outil "Consolider le niveau"
-- garder la lettre "c" pour le jouer 
-- MAIS ajouter "Consolider le niveau (⌘ + ⇧ + c)"
-- "c" sur panneau des outils lance la consolidation  <== LE TEST
-- meta+shift+c hors panneau outils lance la consolidation <== TEST À FAIRE
-- s'assurer que le panneau des outils fonctionne bien comme un panneau (keyboardablePanel, + TAB Cycle (outil → Fermer → Annuler → outil → etc.)) <== TEST (j'ai préparé e2e/_tdd/tools-panel.specs.js)
-
-POINT 2
-- Nouveau test : meta+shift+, => aide contextuelle doit afficher l'aide contextuelle pour l'affichage par niveau ('display-per-level') => doit contenir "⌘ + ⇧ + c : Consolider le niveau (?)"
-- Le "(?)" est une marque à styliser (SVG ?) indiquant que : QUAND l'outil est sélectionné dans le panneau, SI on joue "?" (shilft+,), on affiche l'aide définie par un numéro dans la définition du raccourci (`{aide:2002}`)
-- Et inversement, quand il y a {:aide} est défini pour le raccourci => on ajoute le "?" stylisé
-
-
-KeyboardController => AppKeyboardManager
-
-Combinaison
-Cmd+?  attaché à : Item, Lister, App
-Cmd+Entrer attaché à : Panneau (compatibilité descendante, préférer Tab Cycle) — peut-être BrinLister et PersoLister pour confirmer le choix des brins et persos.
-Alt+1/2/3 : AppKeyboardManager
-Cmd+ ←/→    : passer de panneau en panneau 
+BUG 
+EFFET INDÉSIRABLE : Suivant l'item choisi, la taille de l'affichage du state et du type du Project 
+SOLUTION : donner une largeur fixe en fonction de plus longue valeur.

@@ -16,11 +16,11 @@ test.describe('← depuis un EventLister vers la liste des projets', () => {
     await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
     console.log('-> entrée dans le EventLister du premier projet')
-    await page.keyboard.press('ArrowRight')
+    await pane1(page).locator('body').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
     console.log('-> appui sur ←')
-    await page.keyboard.press('ArrowLeft')
+    await pane1(page).locator('body').press('ArrowLeft')
 
     console.log('-> vérification : retour à la liste des projets')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
@@ -49,7 +49,7 @@ test.describe('← depuis un sous-EventLister vers le EventLister parent', () =>
     await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
     console.log('-> entrée dans le EventLister du projet')
-    await page.keyboard.press('ArrowRight')
+    await pane1(page).locator('body').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
     console.log('-> vérification : premier évènement (e1) sélectionné')
@@ -57,13 +57,13 @@ test.describe('← depuis un sous-EventLister vers le EventLister parent', () =>
     await expect(pane1(page).locator('.event-item').nth(0)).toContainText('Évènement un')
 
     console.log('-> entrée dans le sous-EventLister de e1')
-    await page.keyboard.press('ArrowRight')
+    await pane1(page).locator('body').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
     await expect(pane1(page).locator('.event-item')).toHaveCount(2)
     await expect(pane1(page).locator('.event-item').nth(0)).toContainText('Évènement e4')
 
     console.log('-> appui sur ←')
-    await page.keyboard.press('ArrowLeft')
+    await pane1(page).locator('body').press('ArrowLeft')
 
     console.log('-> vérification : retour au EventLister parent')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)

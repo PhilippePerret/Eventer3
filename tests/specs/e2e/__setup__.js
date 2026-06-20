@@ -5,11 +5,7 @@ export const test = base.extend({
     page.on('console', msg => console.log(msg.text()))
     const originalGoto = page.goto.bind(page)
     page.goto = async (url, options) => {
-      const response = await originalGoto(url, options)
-      try {
-        await page.frameLocator('#pane-1').locator('body').click({ timeout: 3000 })
-      } catch(e) { /* pas d'iframe pane-1 sur cette page */ }
-      return response
+      return await originalGoto(url, options)
     }
 
     const originalWaitForLoadState = page.waitForLoadState.bind(page)

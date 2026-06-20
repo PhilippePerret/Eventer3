@@ -10,9 +10,9 @@ async function goToEventLister(page, fixture = 'with-event-states') {
   installFixtures(fixture)
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-  await page.keyboard.press(':')
+  await pane1(page).locator('body').press(':')
   await expect(pane1(page).locator('#main-panel .filter-bar')).toBeVisible()
 }
 
@@ -27,7 +27,7 @@ test("EventLister : barre de filtres cachée par défaut", async ({ page }) => {
   installFixtures('with-event-states')
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   await expect(pane1(page).locator('#main-panel .filter-bar')).toBeHidden()
 })
@@ -36,9 +36,9 @@ test("EventLister : ':' révèle la barre et focus le titre", async ({ page }) =
   installFixtures('with-event-states')
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-  await page.keyboard.press(':')
+  await pane1(page).locator('body').press(':')
   await expect(pane1(page).locator('#main-panel .filter-bar')).toBeVisible()
   await expect(pane1(page).locator('#main-panel .panel-search')).toBeFocused()
 })
@@ -67,35 +67,35 @@ test("EventLister : widget effet présent dans la barre", async ({ page }) => {
 
 test("TAB depuis titre : focus widget état", async ({ page }) => {
   await goToEventLister(page)
-  await page.keyboard.press('Tab')
+  await pane1(page).locator('body').press('Tab')
   await expect(pane1(page).locator('#main-panel .filter-widget[data-field="state"] .filter-widget__btn')).toBeFocused()
 })
 
 test("TAB depuis état : focus widget météo", async ({ page }) => {
   await goToEventLister(page)
   await pane1(page).locator('#main-panel .filter-widget[data-field="state"] .filter-widget__btn').focus()
-  await page.keyboard.press('Tab')
+  await pane1(page).locator('body').press('Tab')
   await expect(pane1(page).locator('#main-panel .filter-widget[data-field="meteo"] .filter-widget__btn')).toBeFocused()
 })
 
 test("TAB depuis météo : focus widget effet", async ({ page }) => {
   await goToEventLister(page)
   await pane1(page).locator('#main-panel .filter-widget[data-field="meteo"] .filter-widget__btn').focus()
-  await page.keyboard.press('Tab')
+  await pane1(page).locator('body').press('Tab')
   await expect(pane1(page).locator('#main-panel .filter-widget[data-field="effet"] .filter-widget__btn')).toBeFocused()
 })
 
 test("TAB depuis dernier widget : revient au champ titre", async ({ page }) => {
   await goToEventLister(page)
   await pane1(page).locator('#main-panel .filter-widget[data-field="effet"] .filter-widget__btn').focus()
-  await page.keyboard.press('Tab')
+  await pane1(page).locator('body').press('Tab')
   await expect(pane1(page).locator('#main-panel .panel-search')).toBeFocused()
 })
 
 test("widget état focusé : ArrowDown ouvre le popup", async ({ page }) => {
   await goToEventLister(page)
   await pane1(page).locator('#main-panel .filter-widget[data-field="state"] .filter-widget__btn').focus()
-  await page.keyboard.press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowDown')
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
 })
 
@@ -104,14 +104,14 @@ test("widget état focusé : ArrowDown n'affecte pas la sélection d'items", asy
   const firstItem = pane1(page).locator('.event-item').first()
   await expect(firstItem).toHaveClass(/selected/)
   await pane1(page).locator('#main-panel .filter-widget[data-field="state"] .filter-widget__btn').focus()
-  await page.keyboard.press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowDown')
   await expect(firstItem).toHaveClass(/selected/)
 })
 
 test("TAB depuis popup ouvert : ferme popup et focus widget suivant", async ({ page }) => {
   await goToEventLister(page)
   await openWidgetPopup(page, 'state')
-  await page.keyboard.press('Tab')
+  await pane1(page).locator('body').press('Tab')
   await expect(pane1(page).locator('.popup-select')).toBeHidden()
   await expect(pane1(page).locator('#main-panel .filter-widget[data-field="meteo"] .filter-widget__btn')).toBeFocused()
 })
@@ -130,7 +130,7 @@ test("état : sélectionner 'ébauche' → filtre immédiat, 2 events visibles",
   await pane1(page).locator('.popup-select__option[data-value="1"]').click()
   await expect(pane1(page).locator('.event-item:not(.hidden)')).toHaveCount(2)
   await expect(pane1(page).locator('.event-item.hidden')).toHaveCount(1)
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
 })
 
 test("état : multi-sélection ébauche + développement → 3 events", async ({ page }) => {
@@ -140,7 +140,7 @@ test("état : multi-sélection ébauche + développement → 3 events", async ({
   await expect(pane1(page).locator('.event-item:not(.hidden)')).toHaveCount(2)
   await pane1(page).locator('.popup-select__option[data-value="2"]').click()
   await expect(pane1(page).locator('.event-item:not(.hidden)')).toHaveCount(3)
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
 })
 
 test("état : désélectionner réaffiche tout", async ({ page }) => {
@@ -150,7 +150,7 @@ test("état : désélectionner réaffiche tout", async ({ page }) => {
   await expect(pane1(page).locator('.event-item:not(.hidden)')).toHaveCount(2)
   await pane1(page).locator('.popup-select__option[data-value="1"]').click()
   await expect(pane1(page).locator('.event-item:not(.hidden)')).toHaveCount(3)
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
 })
 
 test("état + titre : filtre cumulatif", async ({ page }) => {
@@ -158,7 +158,7 @@ test("état + titre : filtre cumulatif", async ({ page }) => {
   await openWidgetPopup(page, 'state')
   await pane1(page).locator('.popup-select__option[data-value="1"]').click()
   await expect(pane1(page).locator('.event-item:not(.hidden)')).toHaveCount(2)
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
   await pane1(page).locator('#main-panel .panel-search').fill('bal')
   await expect(pane1(page).locator('.event-item:not(.hidden)')).toHaveCount(1)
 })
@@ -177,7 +177,7 @@ test("météo : sélectionner 'ps' → filtre immédiat, 2 events visibles (e1 +
   await pane1(page).locator('.popup-select__option[data-value="ps"]').click()
   await expect(pane1(page).locator('.event-item:not(.hidden)')).toHaveCount(2)
   await expect(pane1(page).locator('.event-item.hidden')).toHaveCount(1)
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
 })
 
 test("météo : sélectionner 'pl' → filtre immédiat, 1 event visible (e2)", async ({ page }) => {
@@ -185,7 +185,7 @@ test("météo : sélectionner 'pl' → filtre immédiat, 1 event visible (e2)", 
   await openWidgetPopup(page, 'meteo')
   await pane1(page).locator('.popup-select__option[data-value="pl"]').click()
   await expect(pane1(page).locator('.event-item:not(.hidden)')).toHaveCount(1)
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
 })
 
 // ─── Filtre effet ─────────────────────────────────────────────────────────────
@@ -201,7 +201,7 @@ test("effet : sélectionner 'nu' → filtre immédiat, 1 event visible (e2)", as
   await openWidgetPopup(page, 'effet')
   await pane1(page).locator('.popup-select__option[data-value="nu"]').click()
   await expect(pane1(page).locator('.event-item:not(.hidden)')).toHaveCount(1)
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
 })
 
 test("effet : sélectionner 'jr' → filtre immédiat, 1 event visible (e3)", async ({ page }) => {
@@ -209,7 +209,7 @@ test("effet : sélectionner 'jr' → filtre immédiat, 1 event visible (e3)", as
   await openWidgetPopup(page, 'effet')
   await pane1(page).locator('.popup-select__option[data-value="jr"]').click()
   await expect(pane1(page).locator('.event-item:not(.hidden)')).toHaveCount(1)
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
 })
 
 test("météo + effet : filtre cumulatif (ps + jr → e3 seul)", async ({ page }) => {
@@ -217,9 +217,9 @@ test("météo + effet : filtre cumulatif (ps + jr → e3 seul)", async ({ page }
   await openWidgetPopup(page, 'meteo')
   await pane1(page).locator('.popup-select__option[data-value="ps"]').click()
   await expect(pane1(page).locator('.event-item:not(.hidden)')).toHaveCount(2)
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
   await openWidgetPopup(page, 'effet')
   await pane1(page).locator('.popup-select__option[data-value="jr"]').click()
   await expect(pane1(page).locator('.event-item:not(.hidden)')).toHaveCount(1)
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
 })

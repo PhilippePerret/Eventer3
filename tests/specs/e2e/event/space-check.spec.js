@@ -8,7 +8,7 @@ test.beforeEach(() => {
 async function enterEventLister(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 }
 
@@ -19,7 +19,7 @@ test('Space coche visuellement l\'event sélectionné', async ({ page }) => {
   await expect(firstEvent).toHaveClass(/selected/)
   await expect(firstEvent.locator('.event-check')).not.toContainText('✓')
 
-  await page.keyboard.press(' ')
+  await pane1(page).locator('body').press(' ')
 
   await expect(firstEvent.locator('.event-check')).toContainText('✓')
 })
@@ -28,10 +28,10 @@ test('Space décoche un event déjà coché', async ({ page }) => {
   await enterEventLister(page)
 
   const firstEvent = pane1(page).locator('.event-item').nth(0)
-  await page.keyboard.press(' ')
+  await pane1(page).locator('body').press(' ')
   await expect(firstEvent.locator('.event-check')).toContainText('✓')
 
-  await page.keyboard.press(' ')
+  await pane1(page).locator('body').press(' ')
   await expect(firstEvent.locator('.event-check')).not.toContainText('✓')
 })
 
@@ -39,7 +39,7 @@ test('Space persiste la coche après rechargement', async ({ page }) => {
   await enterEventLister(page)
 
   const patchDone = page.waitForResponse(r => r.url().includes('/api/items/') && r.request().method() === 'PATCH')
-  await page.keyboard.press(' ')
+  await pane1(page).locator('body').press(' ')
   const patchResp = await patchDone
   await page.waitForLoadState('networkidle')
 
@@ -52,7 +52,7 @@ test('Space persiste la coche après rechargement', async ({ page }) => {
 
   await page.reload()
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
   const firstEvent = pane1(page).locator('.event-item').nth(0)

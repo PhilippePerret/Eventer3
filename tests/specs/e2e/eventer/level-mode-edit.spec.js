@@ -14,11 +14,11 @@ test.beforeEach(() => {
 
 async function enterLevelMode(page) {
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveAttribute('data-depth', '2')
-  await page.keyboard.press('Meta+m')
+  await pane1(page).locator('body').press('Meta+m')
   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
   await expect(pane1(page).locator('.event-item')).toHaveCount(3)
 }
@@ -33,11 +33,11 @@ test("LEVEL mode : item réel après un virtuel est sélectionnable et éditable
   await expect(pane1(page).locator('.event-item[data-id="e11"]')).toHaveClass(/selected/)
 
   console.log('-> ↓ : saute le virtuel, sélectionne e31')
-  await page.keyboard.press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowDown')
   await expect(pane1(page).locator('.event-item[data-id="e31"]')).toHaveClass(/selected/)
 
   console.log('-> Enter : édition de e31')
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
   const input = pane1(page).locator('.event-item[data-id="e31"] input[name="title"]')
   await expect(input).toBeVisible()
   await expect(input).toBeFocused()

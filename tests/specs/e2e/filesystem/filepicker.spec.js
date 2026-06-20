@@ -29,7 +29,7 @@ test.beforeEach(async ({ page }) => {
 
 // Helper : ouvre le picker via 'n' (nouveau comportement direct)
 async function openPickerViaN(page) {
-  await page.keyboard.press('n')
+  await pane1(page).locator('body').press('n')
   await expect(pane1(page).locator('.file-picker')).toBeVisible()
 }
 
@@ -41,7 +41,7 @@ async function waitForPath(page, expectedPath) {
 // ── Ouverture directe ─────────────────────────────────────────────────
 
 test('n ouvre directement le FilePicker sans demander le titre', async ({ page }) => {
-  await page.keyboard.press('n')
+  await pane1(page).locator('body').press('n')
   await expect(pane1(page).locator('.file-picker')).toBeVisible()
   // Aucun champ titre n'apparaît AVANT la sélection du dossier
   await expect(pane1(page).locator('.project-item.selected input[name="title"]')).not.toBeVisible()
@@ -72,7 +72,7 @@ test('FilePicker sélectionne la première entrée par défaut', async ({ page }
 test('Escape annule sans créer de projet', async ({ page }) => {
   const countBefore = await pane1(page).locator('.project-item').count()
   await openPickerViaN(page)
-  await page.keyboard.press('Escape')
+  await pane1(page).locator('body').press('Escape')
   await expect(pane1(page).locator('.file-picker')).not.toBeVisible()
   await expect(pane1(page).locator('.project-item')).toHaveCount(countBefore)
 })
@@ -80,8 +80,8 @@ test('Escape annule sans créer de projet', async ({ page }) => {
 test('sélectionner un dossier crée le projet directement (sans éditeur)', async ({ page }) => {
   const countBefore = await pane1(page).locator('.project-item').count()
   await openPickerViaN(page)
-  await page.keyboard.press('ArrowDown')  // Roman-Alpha (2ème, après notes.txt)
-  await page.keyboard.press('Enter')       // sélectionne → projet créé directement
+  await pane1(page).locator('body').press('ArrowDown')  // Roman-Alpha (2ème, après notes.txt)
+  await pane1(page).locator('body').press('Enter')       // sélectionne → projet créé directement
   await expect(pane1(page).locator('.file-picker')).not.toBeVisible()
   await page.waitForLoadState('networkidle')
   // Projet créé, pas d'éditeur visible
@@ -93,30 +93,30 @@ test('sélectionner un dossier crée le projet directement (sans éditeur)', asy
 
 test('↓ déplace la sélection vers le bas', async ({ page }) => {
   await openPickerViaN(page)
-  await page.keyboard.press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowDown')
   await expect(pane1(page).locator('.file-picker__entry').nth(1)).toHaveClass(/selected/)
 })
 
 test('↑ déplace la sélection vers le haut', async ({ page }) => {
   await openPickerViaN(page)
-  await page.keyboard.press('ArrowDown')
-  await page.keyboard.press('ArrowUp')
+  await pane1(page).locator('body').press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowUp')
   await expect(pane1(page).locator('.file-picker__entry').first()).toHaveClass(/selected/)
 })
 
 test('→ entre dans un dossier', async ({ page }) => {
   await openPickerViaN(page)
-  await page.keyboard.press('ArrowDown')  // Roman-Alpha (2ème, après notes.txt)
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowDown')  // Roman-Alpha (2ème, après notes.txt)
+  await pane1(page).locator('body').press('ArrowRight')
   await waitForPath(page, path.join(TEST_DIR, 'Roman-Alpha'))
 })
 
 test('← remonte au niveau supérieur', async ({ page }) => {
   await openPickerViaN(page)
-  await page.keyboard.press('ArrowDown')
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowRight')
   await waitForPath(page, path.join(TEST_DIR, 'Roman-Alpha'))
-  await page.keyboard.press('ArrowLeft')
+  await pane1(page).locator('body').press('ArrowLeft')
   await waitForPath(page, TEST_DIR)
 })
 
@@ -124,7 +124,7 @@ test('→ ne fait rien sur un fichier', async ({ page }) => {
   await openPickerViaN(page)
   // Première entrée = notes.txt (fichier) : déjà sélectionné
   await expect(pane1(page).locator('.file-picker__entry.selected')).toHaveAttribute('data-type', 'file')
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   // Path ne change pas
   await waitForPath(page, TEST_DIR)
 })
@@ -133,8 +133,8 @@ test('→ ne fait rien sur un fichier', async ({ page }) => {
 
 test('Enter sur un dossier ferme le picker', async ({ page }) => {
   await openPickerViaN(page)
-  await page.keyboard.press('ArrowDown')  // Roman-Alpha
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('ArrowDown')  // Roman-Alpha
+  await pane1(page).locator('body').press('Enter')
   await expect(pane1(page).locator('.file-picker')).not.toBeVisible()
 })
 
@@ -142,30 +142,30 @@ test('Enter sur un dossier ferme le picker', async ({ page }) => {
 
 test('n dans le picker affiche un champ de saisie pour nouveau dossier', async ({ page }) => {
   await openPickerViaN(page)
-  await page.keyboard.press('n')
+  await pane1(page).locator('body').press('n')
   await expect(pane1(page).locator('.file-picker__new-folder-input')).toBeVisible()
 })
 
 test('n + nom + Enter crée le dossier et l\'ajoute à la liste', async ({ page }) => {
   await openPickerViaN(page)
-  await page.keyboard.press('ArrowDown')   // Roman-Alpha
-  await page.keyboard.press('ArrowRight')  // entre dans Roman-Alpha
+  await pane1(page).locator('body').press('ArrowDown')   // Roman-Alpha
+  await pane1(page).locator('body').press('ArrowRight')  // entre dans Roman-Alpha
   await waitForPath(page, path.join(TEST_DIR, 'Roman-Alpha'))
-  await page.keyboard.press('n')
+  await pane1(page).locator('body').press('n')
   await pane1(page).locator('.file-picker__new-folder-input').fill('Mon-Nouveau-Dossier')
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
   await expect(pane1(page).locator('.file-picker__entry-name').filter({ hasText: 'Mon-Nouveau-Dossier' })).toBeVisible()
   expect(fs.existsSync(path.join(TEST_DIR, 'Roman-Alpha', 'Mon-Nouveau-Dossier'))).toBe(true)
 })
 
 test('Escape pendant création dossier annule sans créer', async ({ page }) => {
   await openPickerViaN(page)
-  await page.keyboard.press('ArrowDown')   // Roman-Alpha
-  await page.keyboard.press('ArrowRight')  // entre dans Roman-Alpha
+  await pane1(page).locator('body').press('ArrowDown')   // Roman-Alpha
+  await pane1(page).locator('body').press('ArrowRight')  // entre dans Roman-Alpha
   await waitForPath(page, path.join(TEST_DIR, 'Roman-Alpha'))
-  await page.keyboard.press('n')
+  await pane1(page).locator('body').press('n')
   await pane1(page).locator('.file-picker__new-folder-input').fill('Dossier-Annule')
-  await page.keyboard.press('Escape')
+  await pane1(page).locator('body').press('Escape')
   expect(fs.existsSync(path.join(TEST_DIR, 'Roman-Alpha', 'Dossier-Annule'))).toBe(false)
   await expect(pane1(page).locator('.file-picker')).toBeVisible()
 })
@@ -174,19 +174,19 @@ test('Escape pendant création dossier annule sans créer', async ({ page }) => 
 
 test('Tab affiche le menu d\'arborescence des dossiers parents', async ({ page }) => {
   await openPickerViaN(page)
-  await page.keyboard.press('ArrowDown')
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowRight')
   await waitForPath(page, path.join(TEST_DIR, 'Roman-Alpha'))
-  await page.keyboard.press('Tab')
+  await pane1(page).locator('body').press('Tab')
   await expect(pane1(page).locator('.file-picker__path-menu')).toBeVisible()
 })
 
 test('le menu arborescence contient le dossier courant et ses parents', async ({ page }) => {
   await openPickerViaN(page)
-  await page.keyboard.press('ArrowDown')
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowRight')
   await waitForPath(page, path.join(TEST_DIR, 'Roman-Alpha'))
-  await page.keyboard.press('Tab')
+  await pane1(page).locator('body').press('Tab')
   const items = pane1(page).locator('.file-picker__path-menu-item')
   await expect(items.first()).toContainText('Roman-Alpha')
   await expect(items.nth(1)).toContainText(path.basename(TEST_DIR))
@@ -206,7 +206,7 @@ test('bouton sélection désactivé sur fichier, actif sur dossier', async ({ pa
   await expect(pane1(page).locator('.file-picker__entry.selected')).toHaveAttribute('data-type', 'file')
   await expect(pane1(page).locator('.file-picker__select-btn')).toHaveClass(/disabled/)
   // Naviguer sur Roman-Alpha (dossier) → bouton actif
-  await page.keyboard.press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowDown')
   await expect(pane1(page).locator('.file-picker__entry.selected')).toHaveAttribute('data-type', 'directory')
   await expect(pane1(page).locator('.file-picker__select-btn')).not.toHaveClass(/disabled/)
 })

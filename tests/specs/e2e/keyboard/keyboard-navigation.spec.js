@@ -14,7 +14,7 @@ test(
     await expect(items.nth(0))
       .toHaveClass(/selected/)
 
-    await page.keyboard.press('ArrowDown')
+    await pane1(page).locator('body').press('ArrowDown')
 
     await expect(items.nth(0))
       .not.toHaveClass(/selected/)
@@ -22,7 +22,7 @@ test(
     await expect(items.nth(1))
       .toHaveClass(/selected/)
 
-    await page.keyboard.press('ArrowDown')
+    await pane1(page).locator('body').press('ArrowDown')
 
     await expect(items.nth(1))
       .not.toHaveClass(/selected/)
@@ -30,7 +30,7 @@ test(
     await expect(items.nth(2))
       .toHaveClass(/selected/)
 
-    await page.keyboard.press('ArrowUp')
+    await pane1(page).locator('body').press('ArrowUp')
 
     await expect(items.nth(2))
       .not.toHaveClass(/selected/)

@@ -23,10 +23,10 @@ test('la touche Escape après n annule complètement la création du projet', as
   const before = await beforeResp.json()
 
   console.log('-> création nouveau projet')
-  await page.keyboard.press('n')
+  await pane1(page).locator('body').press('n')
 
   console.log('-> annulation création')
-  await page.keyboard.press('Escape')
+  await pane1(page).locator('body').press('Escape')
 
   console.log('-> vérification nombre final projets')
   await expect(items).toHaveCount(3)

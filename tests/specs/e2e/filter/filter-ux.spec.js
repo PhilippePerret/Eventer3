@@ -9,20 +9,20 @@ test.describe('badge FILTRE dans la barre d\'état — couleur selon état', () 
   async function enterEventLister(page) {
     await page.goto('/')
     await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-    await page.keyboard.press('ArrowRight')
+    await pane1(page).locator('body').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   }
 
   test('badge FILTRE vert dès Cmd+: (mode filtre activé)', async ({ page }) => {
     await enterEventLister(page)
-    await page.keyboard.press('Meta+:')
+    await pane1(page).locator('body').press('Meta+:')
     await expect(pane1(page).locator('.status-filter-badge--mode')).toBeVisible()
   })
 
   test('badge FILTRE reste vert si aucun item masqué', async ({ page }) => {
     await enterEventLister(page)
-    await page.keyboard.press('Meta+:')
-    await page.keyboard.press('t')
+    await pane1(page).locator('body').press('Meta+:')
+    await pane1(page).locator('body').press('t')
     // "bal" → 2 visibles, 2 masqués — mais d'abord tester avec terme qui masque rien
     // "a" → tous contiennent "a" (Scène du bAl, Arrivée à Paris, lA trAhison, Retour Au bAl)
     await page.keyboard.type('a')
@@ -32,8 +32,8 @@ test.describe('badge FILTRE dans la barre d\'état — couleur selon état', () 
 
   test('badge FILTRE rouge quand items masqués', async ({ page }) => {
     await enterEventLister(page)
-    await page.keyboard.press('Meta+:')
-    await page.keyboard.press('t')
+    await pane1(page).locator('body').press('Meta+:')
+    await pane1(page).locator('body').press('t')
     // "Paris" → seul "Arrivée à Paris" correspond → 3 masqués
     await page.keyboard.type('Paris')
     await expect(pane1(page).locator('.status-filter-badge--active')).toBeVisible()
@@ -41,19 +41,19 @@ test.describe('badge FILTRE dans la barre d\'état — couleur selon état', () 
 
   test('badge FILTRE rouge après Enter quand items masqués', async ({ page }) => {
     await enterEventLister(page)
-    await page.keyboard.press('Meta+:')
-    await page.keyboard.press('t')
+    await pane1(page).locator('body').press('Meta+:')
+    await pane1(page).locator('body').press('t')
     await page.keyboard.type('Paris')
-    await page.keyboard.press('Enter')
+    await pane1(page).locator('body').press('Enter')
     await expect(pane1(page).locator('.status-filter-badge--active')).toBeVisible()
   })
 
   test('badge FILTRE absent après Escape dans l\'input', async ({ page }) => {
     await enterEventLister(page)
-    await page.keyboard.press('Meta+:')
-    await page.keyboard.press('t')
+    await pane1(page).locator('body').press('Meta+:')
+    await pane1(page).locator('body').press('t')
     await page.keyboard.type('Paris')
-    await page.keyboard.press('Escape')
+    await pane1(page).locator('body').press('Escape')
     await expect(pane1(page).locator('.status-filter-badge--mode')).not.toBeVisible()
     await expect(pane1(page).locator('.status-filter-badge--active')).not.toBeVisible()
   })
@@ -67,14 +67,14 @@ test.describe('panneau sélecteur de brins — présentation', () => {
   async function enterEventLister(page) {
     await page.goto('/')
     await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-    await page.keyboard.press('ArrowRight')
+    await pane1(page).locator('body').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   }
 
   test('titre du sélecteur sans raccourcis clavier', async ({ page }) => {
     await enterEventLister(page)
-    await page.keyboard.press('Meta+:')
-    await page.keyboard.press('b')
+    await pane1(page).locator('body').press('Meta+:')
+    await pane1(page).locator('body').press('b')
     await expect(pane1(page).locator('#filter-selector-panel')).toBeVisible()
     await expect(pane1(page).locator('.filter-selector-title')).not.toContainText('↑↓')
     await expect(pane1(page).locator('.filter-selector-title')).not.toContainText('naviguer')
@@ -89,14 +89,14 @@ test.describe('input filtre texte ne recouvre pas le contenu', () => {
   async function enterEventLister(page) {
     await page.goto('/')
     await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-    await page.keyboard.press('ArrowRight')
+    await pane1(page).locator('body').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   }
 
   test('premier item visible sous l\'input filtre (pas recouvert)', async ({ page }) => {
     await enterEventLister(page)
-    await page.keyboard.press('Meta+:')
-    await page.keyboard.press('t')
+    await pane1(page).locator('body').press('Meta+:')
+    await pane1(page).locator('body').press('t')
 
     const inputBox  = await pane1(page).locator('#filter-input').boundingBox()
     const firstItem = await pane1(page).locator('.event-item').first().boundingBox()
@@ -113,7 +113,7 @@ test.describe('position de l\'input selon le lister actif', () => {
   async function enterEventLister(page) {
     await page.goto('/')
     await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-    await page.keyboard.press('ArrowRight')
+    await pane1(page).locator('body').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   }
 
@@ -122,8 +122,8 @@ test.describe('position de l\'input selon le lister actif', () => {
 
     const panelRect = await pane1(page).locator('#main-panel').boundingBox()
 
-    await page.keyboard.press('Meta+:')
-    await page.keyboard.press('t')
+    await pane1(page).locator('body').press('Meta+:')
+    await pane1(page).locator('body').press('t')
 
     const inputRect = await pane1(page).locator('#filter-input').boundingBox()
     // l'input doit commencer au niveau vertical du lister (± 2px)
@@ -139,15 +139,15 @@ test.describe('filtre brins sans brins disponibles', () => {
   async function enterEventLister(page) {
     await page.goto('/')
     await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-    await page.keyboard.press('ArrowRight')
+    await pane1(page).locator('body').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   }
 
   test('Cmd+: puis b sans brins affiche notification', async ({ page }) => {
     await enterEventLister(page)
 
-    await page.keyboard.press('Meta+:')
-    await page.keyboard.press('b')
+    await pane1(page).locator('body').press('Meta+:')
+    await pane1(page).locator('body').press('b')
 
     await expect(pane1(page).locator('#notification')).toBeVisible()
     await expect(pane1(page).locator('#notification')).toContainText('Aucun brin')
@@ -156,8 +156,8 @@ test.describe('filtre brins sans brins disponibles', () => {
   test('Cmd+: puis b sans brins ne montre pas le sélecteur', async ({ page }) => {
     await enterEventLister(page)
 
-    await page.keyboard.press('Meta+:')
-    await page.keyboard.press('b')
+    await pane1(page).locator('body').press('Meta+:')
+    await pane1(page).locator('body').press('b')
 
     await expect(pane1(page).locator('#filter-selector-panel')).not.toBeVisible()
   })
@@ -171,17 +171,17 @@ test.describe('indicateur FILTRE dans la barre d\'état', () => {
   async function enterEventLister(page) {
     await page.goto('/')
     await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-    await page.keyboard.press('ArrowRight')
+    await pane1(page).locator('body').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   }
 
   test('status bar affiche FILTRE quand un filtre est actif', async ({ page }) => {
     await enterEventLister(page)
 
-    await page.keyboard.press('Meta+:')
-    await page.keyboard.press('t')
+    await pane1(page).locator('body').press('Meta+:')
+    await pane1(page).locator('body').press('t')
     await page.keyboard.type('bal')
-    await page.keyboard.press('Enter')
+    await pane1(page).locator('body').press('Enter')
 
     await expect(pane1(page).locator('#status-bar')).toContainText('FILTRE')
   })
@@ -189,13 +189,13 @@ test.describe('indicateur FILTRE dans la barre d\'état', () => {
   test('status bar n\'affiche plus FILTRE après effacement du filtre', async ({ page }) => {
     await enterEventLister(page)
 
-    await page.keyboard.press('Meta+:')
-    await page.keyboard.press('t')
+    await pane1(page).locator('body').press('Meta+:')
+    await pane1(page).locator('body').press('t')
     await page.keyboard.type('bal')
-    await page.keyboard.press('Enter')
+    await pane1(page).locator('body').press('Enter')
 
-    await page.keyboard.press('Meta+:')
-    await page.keyboard.press(':')
+    await pane1(page).locator('body').press('Meta+:')
+    await pane1(page).locator('body').press(':')
 
     await expect(pane1(page).locator('#status-bar')).not.toContainText('FILTRE')
   })
@@ -203,10 +203,10 @@ test.describe('indicateur FILTRE dans la barre d\'état', () => {
   test('Escape dans l\'input efface le filtre et retire FILTRE du status bar', async ({ page }) => {
     await enterEventLister(page)
 
-    await page.keyboard.press('Meta+:')
-    await page.keyboard.press('t')
+    await pane1(page).locator('body').press('Meta+:')
+    await pane1(page).locator('body').press('t')
     await page.keyboard.type('bal')
-    await page.keyboard.press('Escape')
+    await pane1(page).locator('body').press('Escape')
 
     await expect(pane1(page).locator('#status-bar')).not.toContainText('FILTRE')
   })

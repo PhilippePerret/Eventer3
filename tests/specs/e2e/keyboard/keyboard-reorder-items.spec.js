@@ -16,7 +16,7 @@ test('Cmd+flèche permet de déplacer les items', async ({ page }) => {
     await expect(items.nth(1))
       .toContainText('Projet B')
 
-    await page.keyboard.press(
+    await pane1(page).locator('body').press(
       'Meta+ArrowDown'
     )
 
@@ -26,7 +26,7 @@ test('Cmd+flèche permet de déplacer les items', async ({ page }) => {
     await expect(items.nth(1))
       .toContainText('Projet A')
 
-    await page.keyboard.press(
+    await pane1(page).locator('body').press(
       'Meta+ArrowUp'
     )
 

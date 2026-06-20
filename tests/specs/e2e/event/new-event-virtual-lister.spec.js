@@ -16,11 +16,11 @@ test("→ sur un projet sans lister : crée l'éditeur, Enter confirme, n crée 
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
   console.log('-> sélection du projet sans lister (project-b)')
-  await page.keyboard.press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowDown')
   await expect(pane1(page).locator('.project-item').nth(1)).toHaveClass(/selected/)
 
   console.log('-> flèche → : entre dans le EventLister vide')
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
   console.log('-> vérification : un éditeur est apparu automatiquement')
@@ -34,7 +34,7 @@ test("→ sur un projet sans lister : crée l'éditeur, Enter confirme, n crée 
   const savePromise = page.waitForResponse(resp =>
     resp.url().includes('/api/listers/') && resp.request().method() === 'PATCH'
   )
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
   await savePromise
 
   console.log('-> vérification : le premier event est créé dans le DOM')
@@ -54,13 +54,13 @@ test("→ sur un projet sans lister : crée l'éditeur, Enter confirme, n crée 
   console.log('-> vérification : project-b a maintenant un lister')
 
   console.log('-> appui sur n : doit créer un second event en dessous')
-  await page.keyboard.press('n')
+  await pane1(page).locator('body').press('n')
   const secondInput = pane1(page).locator('.event-item input[name="title"]')
   await expect(secondInput).toBeVisible()
   await expect(secondInput).toBeFocused()
 
   await page.keyboard.type('Mon second event')
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
 
   console.log('-> vérification : deux events dans le bon ordre')
   await expect(pane1(page).locator('.event-item')).toHaveCount(2)

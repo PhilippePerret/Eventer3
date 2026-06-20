@@ -12,16 +12,16 @@ test.beforeEach(() => {
 async function goToEventLister(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await page.keyboard.press('ArrowRight')
+  await pane1(page).locator('body').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 }
 
 async function applyStyle(page, styleName) {
-  await page.keyboard.press('s')
+  await pane1(page).locator('body').press('s')
   await expect(pane1(page).locator('#style-panel')).toBeVisible()
-  if (styleName === 'note-rouge') await page.keyboard.press('ArrowDown')
-  await page.keyboard.press(' ')
-  await page.keyboard.press('Meta+Enter')
+  if (styleName === 'note-rouge') await pane1(page).locator('body').press('ArrowDown')
+  await pane1(page).locator('body').press(' ')
+  await pane1(page).locator('body').press('Meta+Enter')
   await expect(pane1(page).locator('#style-panel')).not.toBeVisible()
 }
 
@@ -41,7 +41,7 @@ test("event non-sélectionné avec style color:red → texte rouge (pas overrid�
   await goToEventLister(page)
   await applyStyle(page, 'note-rouge')
   // sélectionner e2 → e1 n'est plus sélectionné
-  await page.keyboard.press('ArrowDown')
+  await pane1(page).locator('body').press('ArrowDown')
   await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/selected/)
   const color = await pane1(page).locator('.event-item').nth(0).locator('.event-text').evaluate(el =>
     getComputedStyle(el).color
@@ -54,7 +54,7 @@ test("event non-sélectionné avec style color:red → texte rouge (pas overrid�
 test("édition d'un event avec style : input a le fond normal (--bg)", async ({ page }) => {
   await goToEventLister(page)
   await applyStyle(page, 'note-rouge')
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/editing/)
   const bg = await pane1(page).locator('.event-item').nth(0).locator('.event-text').evaluate(el =>
     getComputedStyle(el).backgroundColor
@@ -65,7 +65,7 @@ test("édition d'un event avec style : input a le fond normal (--bg)", async ({ 
 test("édition d'un event avec style color:red : input a la couleur normale (--text)", async ({ page }) => {
   await goToEventLister(page)
   await applyStyle(page, 'note-rouge')
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/editing/)
   const color = await pane1(page).locator('.event-item').nth(0).locator('.event-text').evaluate(el =>
     getComputedStyle(el).color
@@ -76,7 +76,7 @@ test("édition d'un event avec style color:red : input a la couleur normale (--t
 test("édition d'un event avec margin-left dans le style : l'input a le margin-left appliqué", async ({ page }) => {
   await goToEventLister(page)
   await applyStyle(page, 'note-rouge') // note-rouge: margin-left:10vw
-  await page.keyboard.press('Enter')
+  await pane1(page).locator('body').press('Enter')
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/editing/)
   const ml = await pane1(page).locator('.event-item').nth(0).locator('.event-text').evaluate(el =>
     getComputedStyle(el).marginLeft
