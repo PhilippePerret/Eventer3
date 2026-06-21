@@ -1,5 +1,5 @@
 ---
-name: architecture-keyboardable-panel
+name: architecture-kpanel
 description: TAB cycle et KeyboardablePanel — pattern clavier générique pour tous les panneaux EventerX
 metadata:
   type: project

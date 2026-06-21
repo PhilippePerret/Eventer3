@@ -14,7 +14,7 @@ export default class ConfirmDialog extends KeyboardablePanel {
   }
 
   constructor({ title, message, buttons, onChoose }) {
-    super({ title, panelClass: 'confirm-dialog' })
+    super({ title, panelClass: '' })
     this._message  = message
     this._buttons  = buttons
     this._onChoose = onChoose
@@ -22,7 +22,6 @@ export default class ConfirmDialog extends KeyboardablePanel {
 
   _renderContent(zone) {
     const text = document.createElement('p')
-    text.className   = 'confirm-dialog__message'
     text.textContent = this._message
     zone.appendChild(text)
   }

@@ -29,11 +29,11 @@ export default class KeyboardablePanel {
     this._footerFocusIdx = -1
     this._render()
     this._boundKeyDown = (e) => this._handleKey(e)
-    document.addEventListener('keydown', this._boundKeyDown, { capture: true })
+    this.el.addEventListener('keydown', this._boundKeyDown, { capture: true })
   }
 
   close() {
-    document.removeEventListener('keydown', this._boundKeyDown, { capture: true })
+    this.el.removeEventListener('keydown', this._boundKeyDown, { capture: true })
     this._boundKeyDown = null
     this._el?.remove()
     this._el = null
@@ -43,22 +43,18 @@ export default class KeyboardablePanel {
 
   _render() {
     const el = document.createElement('div')
-    el.className = ('floating-panel keyboardable-panel ' + this._panelClass).trim()
+    el.className = ('ftpanel kpanel ' + this._panelClass).trim()
     el.setAttribute('tabindex', '-1')
 
     const titleEl = document.createElement('div')
-    titleEl.className   = 'floating-panel__title'
+    titleEl.className   = 'ftpanel__title'
     titleEl.textContent = this._title
     el.appendChild(titleEl)
 
-    const sep = document.createElement('div')
-    sep.className = 'floating-panel__separator'
-    el.appendChild(sep)
-
-    const zone = document.createElement('div')
-    zone.className = 'floating-panel__zone'
-    this._renderContent(zone)
-    el.appendChild(zone)
+    const body = document.createElement('div')
+    body.className = 'ftpanel__body'
+    this._renderContent(body)
+    el.appendChild(body)
 
     this._renderFooter(el)
 
@@ -72,11 +68,11 @@ export default class KeyboardablePanel {
     if (!buttons.length) return
 
     const footer = document.createElement('div')
-    footer.className = 'floating-panel__footer'
+    footer.className = 'ftpanel__footer'
 
     this._footerBtns = buttons.map(({ label, variant, action }) => {
       const span = document.createElement('span')
-      span.className = `panel-btn panel-btn--${variant}`
+      span.className = `ftpanel-btn ftpanel-btn--${variant}`
       span.textContent = label
       return { el: span, action }
     })
@@ -135,13 +131,13 @@ export default class KeyboardablePanel {
   }
 
   _updateItemSelection() {
-    const items = this._el?.querySelectorAll('.floating-panel__item') ?? []
+    const items = this._el?.querySelectorAll('.ftpanel__item') ?? []
     items.forEach((item, i) => item.classList.toggle('selected', i === this._selectedIndex))
   }
 
   _updateFooterFocus() {
     this._footerBtns.forEach(({ el }, i) =>
-      el.classList.toggle('panel-btn--focused', i === this._footerFocusIdx)
+      el.classList.toggle('ftpanel-btn--focused', i === this._footerFocusIdx)
     )
   }
 
