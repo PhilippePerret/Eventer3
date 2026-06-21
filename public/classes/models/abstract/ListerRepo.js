@@ -12,4 +12,25 @@ export default class ListerRepo {
       .map(id => data[id] ? new Cls({ ...data[id], id }) : null)
       .filter(Boolean)
   }
+
+  static async createLister(fields) {
+    const resp = await fetch('/api/listers', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(fields),
+    })
+    if (!resp.ok) throw new Error(`Impossible de créer le lister`)
+    return await resp.json()
+  }
+
+  static async createItem(listerId, fields, { project_id } = {}) {
+    const query = project_id ? `?project_id=${project_id}` : ''
+    const resp  = await fetch(`/api/listers/${listerId}/items${query}`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(fields),
+    })
+    if (!resp.ok) throw new Error(`Impossible de créer un item dans ${listerId}`)
+    return await resp.json()
+  }
 }

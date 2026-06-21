@@ -26,15 +26,15 @@ export default class KeyboardablePanel {
 
   open() {
     this._selectedIndex  = 0
-    this._footerFocusIdx = 0
+    this._footerFocusIdx = this._getItemCount() > 0 ? -1 : 0
     this._render()
     this._updateFooterFocus()
     this._boundKeyDown = (e) => this._handleKey(e)
-    this.el.addEventListener('keydown', this._boundKeyDown, { capture: true })
+    this._el.addEventListener('keydown', this._boundKeyDown, { capture: true })
   }
 
   close() {
-    this.el.removeEventListener('keydown', this._boundKeyDown, { capture: true })
+    this._el.removeEventListener('keydown', this._boundKeyDown, { capture: true })
     this._boundKeyDown = null
     this._el?.remove()
     this._el = null
@@ -88,13 +88,17 @@ export default class KeyboardablePanel {
   // ── Clavier ──────────────────────────────────────────────────────────────────
 
   _handleKey(event) {
+    const keyAction = this._footerKeyMap?.[event.key]
+    if (keyAction) { StopEvent(event); keyAction(); return }
     if (!KeyboardablePanel.HANDLED_KEYS[event.key]) return
     if (!KeyboardablePanel.NOT_STOPPED_KEYS[event.key]) StopEvent(event)
 
     switch (event.key) {
       case 'Tab':
         this._footerFocusIdx++
-        if (this._footerFocusIdx >= this._footerBtns.length) this._footerFocusIdx = -1
+        if (this._footerFocusIdx >= this._footerBtns.length) {
+          this._footerFocusIdx = this._getItemCount() > 0 ? -1 : 0
+        }
         this._updateFooterFocus()
         break
 

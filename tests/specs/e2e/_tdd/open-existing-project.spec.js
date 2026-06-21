@@ -36,8 +36,8 @@ test('choisir un dossier avec eventer.db affiche une boîte de confirmation', as
   await page.goto('/')
   await tryPickExistingFolder(page, expect, workDir)
 
-  await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
-  await expect(pane1(page).locator('.confirm-dialog')).toContainText('projet')
+  await expect(pane1(page).locator('.ftpanel.kpanel')).toBeVisible()
+  await expect(pane1(page).locator('.ftpanel.kpanel')).toContainText('projet')
 })
 
 test('confirmer l\'ouverture : le projet apparaît dans la liste avec ses events', async ({ page }) => {
@@ -47,9 +47,9 @@ test('confirmer l\'ouverture : le projet apparaît dans la liste avec ses events
 
   await page.goto('/')
   await tryPickExistingFolder(page, expect, workDir)
-  await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
+  await expect(pane1(page).locator('.ftpanel.kpanel')).toBeVisible()
 
-  await pane1(page).locator('.confirm-dialog').press('Enter')
+  await pane1(page).locator('.ftpanel.kpanel').press('Enter')
   await page.waitForLoadState('networkidle')
 
   await expect(pane1(page).locator('.project-item')).toHaveCount(countAfterFirst + 1)
@@ -68,11 +68,11 @@ test('annuler : aucun projet créé', async ({ page }) => {
 
   await page.goto('/')
   await tryPickExistingFolder(page, expect, workDir)
-  await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
+  await expect(pane1(page).locator('.ftpanel.kpanel')).toBeVisible()
 
-  await pane1(page).locator('.confirm-dialog').press('Tab')
-  await pane1(page).locator('.confirm-dialog').press('Enter')
-  await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
+  await pane1(page).locator('.ftpanel.kpanel').press('Tab')
+  await pane1(page).locator('.ftpanel.kpanel').press('Enter')
+  await expect(pane1(page).locator('.ftpanel.kpanel')).not.toBeVisible()
 
   await expect(pane1(page).locator('.project-item')).toHaveCount(countAfterFirst)
 })
@@ -84,8 +84,8 @@ test('persistance : le projet survit au rechargement', async ({ page }) => {
 
   await page.goto('/')
   await tryPickExistingFolder(page, expect, workDir)
-  await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
-  await pane1(page).locator('.confirm-dialog').press('Enter')
+  await expect(pane1(page).locator('.ftpanel.kpanel')).toBeVisible()
+  await pane1(page).locator('.ftpanel.kpanel').press('Enter')
   await page.waitForLoadState('networkidle')
 
   await page.reload()

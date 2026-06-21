@@ -1,4 +1,5 @@
 import Lister from '../abstract/Lister.js'
+import ListerRepo from '../abstract/ListerRepo.js'
 import Project from './Project.js'
 import FilePicker from '../../ui/FilePicker.js'
 import ConfirmDialog from '../../ui/ConfirmDialog.js'

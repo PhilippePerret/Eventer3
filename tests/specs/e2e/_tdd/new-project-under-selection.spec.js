@@ -1,8 +1,11 @@
+// Origine : tests/specs/e2e/project/new-project-under-selection.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures'
 import { setupProjectFolder, createAndSelectFolderInPicker } from '../../../helpers/create-project-helper.js'
-installFixtures('many-projects')
-
 import { test, expect, pane1 } from '../__setup__.js'
+
+test.beforeEach(() => {
+  installFixtures('many-projects')
+})
 
 test('la touche n crée un nouveau projet vide en dessous de la sélection', async ({ page }) => {
   await page.goto('/')
