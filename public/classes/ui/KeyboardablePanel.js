@@ -26,8 +26,9 @@ export default class KeyboardablePanel {
 
   open() {
     this._selectedIndex  = 0
-    this._footerFocusIdx = -1
+    this._footerFocusIdx = 0
     this._render()
+    this._updateFooterFocus()
     this._boundKeyDown = (e) => this._handleKey(e)
     this.el.addEventListener('keydown', this._boundKeyDown, { capture: true })
   }
@@ -70,21 +71,16 @@ export default class KeyboardablePanel {
     const footer = document.createElement('div')
     footer.className = 'ftpanel__footer'
 
-    this._footerBtns = buttons.map(({ label, variant, action }) => {
+    this._footerBtns = buttons.map(({ label, type, action }) => {
       const span = document.createElement('span')
-      span.className = `ftpanel-btn ftpanel-btn--${variant}`
+      span.className = type ? `ftpanel-btn ftpanel-btn--${type}` : 'ftpanel-btn'
       span.textContent = label
       return { el: span, action }
     })
 
-    const cancelIdx  = buttons.findIndex(b => b.variant === 'cancel')
-    const primaryIdx = buttons.findIndex(b => b.variant === 'primary')
-
-    if (cancelIdx  >= 0) footer.appendChild(this._footerBtns[cancelIdx].el)
-    this._footerBtns.forEach(({ el: span }, i) => {
-      if (i !== cancelIdx && i !== primaryIdx) footer.appendChild(span)
-    })
-    if (primaryIdx >= 0) footer.appendChild(this._footerBtns[primaryIdx].el)
+    for (let i = this._footerBtns.length - 1; i >= 0; i--) {
+      footer.appendChild(this._footerBtns[i].el)
+    }
 
     el.appendChild(footer)
   }

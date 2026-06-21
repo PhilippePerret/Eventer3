@@ -33,9 +33,9 @@ export default class ProjectLister extends Lister {
         title:   'Projet existant',
         message: 'Ce dossier contient déjà un projet (eventer.db). Que faire ?',
         buttons: [
-          { label: 'Annuler',  variant: 'cancel',    value: false     },
-          { label: 'Détruire', variant: 'secondary', value: 'destroy' },
-          { label: 'Utiliser', variant: 'primary',   value: 'use'     },
+          { label: 'Importer', type: '',       value: 'use'     },
+          { label: 'Détruire', type: 'danger', value: 'destroy' },
+          { label: 'Annuler',  type: 'cancel', value: false     },
         ],
       })
       if (!choice) return

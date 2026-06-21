@@ -1,5 +1,21 @@
 # CHANGELOG — Eventer3
 
+## 2026-06-21
+
+### Rationalisation CSS panneaux — ftpanel/kpanel
+- Toutes les classes `.floating-panel` et `__*` renommées en `.ftpanel` et `__*`
+- `.ftpanel__zone` → `.ftpanel__body` (padding 2em inclus)
+- Suppression de l'élément `__separator` (filet assuré par `border-bottom` du titre et `border-top` du footer)
+- Tout le bloc `.confirm-dialog` et `__*` supprimé (CSS mort ou doublon)
+- `.panel-btn` et variantes → `.ftpanel-btn`, `.ftpanel-btn--danger`, `.ftpanel-btn--cancel`
+- Clé `variant` → `type` dans les objets bouton
+- `primary`/`secondary` supprimés : seuls `danger` et `cancel` existent comme types
+- Bouton focusé par défaut à l'ouverture : `_footerFocusIdx = 0` dans `open()` → `_updateFooterFocus()`
+- Ordre boutons = droite à gauche (index 0 = droite = focusé par défaut)
+- Variables : `--dialog-font-size`, `--panel-title-font-size`, `--panel-btn-font-size`, `--ftpanel-padding-x` ; `--btn-danger-*` remplace `--btn-secondary-*`
+- `ProjectLister` : boutons réordonnés (Importer, Détruire, Annuler) avec types corrects
+- `app-frame.html` : `#constants-panel` → classe `ftpanel`
+
 ## 2026-06-20 (suite 3)
 
 ### FilePicker — bug frappe nouveau dossier

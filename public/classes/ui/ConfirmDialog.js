@@ -5,8 +5,8 @@ export default class ConfirmDialog extends KeyboardablePanel {
   static open({ title = 'Confirmation', message, buttons = null } = {}) {
     return new Promise((resolve) => {
       const resolvedButtons = buttons ?? [
-        { label: 'Confirmer', variant: 'primary', value: true  },
-        { label: 'Annuler',   variant: 'cancel',  value: false },
+        { label: 'Confirmer', type: '',       value: true  },
+        { label: 'Annuler',   type: 'cancel', value: false },
       ]
       const dialog = new ConfirmDialog({ title, message, buttons: resolvedButtons, onChoose: resolve })
       dialog.open()
@@ -27,9 +27,9 @@ export default class ConfirmDialog extends KeyboardablePanel {
   }
 
   _getFooterButtons() {
-    return this._buttons.map(({ label, variant, value }) => ({
+    return this._buttons.map(({ label, type, value }) => ({
       label,
-      variant,
+      type,
       action: () => this._choose(value),
     }))
   }
@@ -37,8 +37,7 @@ export default class ConfirmDialog extends KeyboardablePanel {
   _getItemCount() { return 0 }
 
   _onEnterItem() {
-    const primary = this._buttons.find(b => b.variant === 'primary')
-    if (primary) this._choose(primary.value)
+    this._choose(this._buttons[0].value)
   }
 
   _choose(value) {
