@@ -1,3 +1,14 @@
+BUG
+Quand on est dans le menu des ancêtres
+1- ArrowDown n'ouvre pas le menu
+2- ArrowLeft et ArrowDown NE DOIVENT AVOIR AUCUN effet. Il, elles choisissent et appliquent les valeurs !
+
+BUG (testé dans un autre module test concernant les projets, je crois)
+Annuler l'ouverture d'un dossier qui a déjà un eventer.db ne remet pas le focus au projet qui l'avait avant de commencer.
+
+
+
+
 Ci-dessous, quand j'écris CMD?, c'est que je fais Cmd+Maj+ pour faire apparaitre l'aide contextuelle,
 
 - Je suis sur le filepicker après "n" sur liste projet

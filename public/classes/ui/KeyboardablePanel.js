@@ -31,6 +31,7 @@ export default class KeyboardablePanel {
     this._updateFooterFocus()
     this._boundKeyDown = (e) => this._handleKey(e)
     this._el.addEventListener('keydown', this._boundKeyDown, { capture: true })
+    this._el.focus()
   }
 
   close() {

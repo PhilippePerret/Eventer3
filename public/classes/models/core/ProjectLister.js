@@ -19,7 +19,7 @@ export default class ProjectLister extends Lister {
 
   async createNew() {
     const folderPath = await FilePicker.open({ mode: 'folder' })
-    if (!folderPath) return
+    if (!folderPath) { this.Dom.focusSelected(); return }
 
     const folderName = folderPath.split('/').at(-1)
     const dbPath     = folderPath + '/eventer.db'

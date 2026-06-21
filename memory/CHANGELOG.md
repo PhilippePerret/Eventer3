@@ -1,5 +1,21 @@
 # CHANGELOG — Eventer3
 
+## 2026-06-21 (suite)
+
+### KeyboardablePanel — focus à l'ouverture
+- `open()` : ajout de `this._el.focus()` après attachment du listener — sans ça, les keydown (Tab, Enter) n'arrivaient jamais à l'élément KP en situation réelle
+
+### KeyboardablePanel — cycle Tab deux cas
+- `open()` : `_footerFocusIdx = _getItemCount() > 0 ? -1 : 0` (cas A items / cas B sans items)
+- `_handleKey Tab` : wrap vers `-1` (cas A) ou `0` (cas B) selon `_getItemCount()`
+
+### ListerRepo — méthodes statiques createLister / createItem
+- `static async createLister(fields)` : `POST /api/listers`
+- `static async createItem(listerId, fields, { project_id })` : `POST /api/listers/:id/items`
+
+### Tests _tdd/open-existing-project
+- Test "confirmer l'ouverture" séparé en deux : import seul / ArrowRight → event-list
+
 ## 2026-06-21
 
 ### Rationalisation CSS panneaux — ftpanel/kpanel

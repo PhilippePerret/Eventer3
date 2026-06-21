@@ -66,12 +66,10 @@ test('FilePicker sélectionne la première entrée par défaut', async ({ page }
 
 // ── Flot de création de projet ─────────────────────────────────────────
 
-test('Escape annule sans créer de projet', async ({ page }) => {
-  const countBefore = await pane1(page).locator('.project-item').count()
+test('Escape ne ferme pas le FilePicker en mode normal (interdit hors création dossier)', async ({ page }) => {
   await openPickerViaN(page)
   await fp(page).press('Escape')
-  await expect(fp(page)).not.toBeVisible()
-  await expect(pane1(page).locator('.project-item')).toHaveCount(countBefore)
+  await expect(fp(page)).toBeVisible()
 })
 
 test('sélectionner un dossier crée le projet directement (sans éditeur)', async ({ page }) => {
@@ -173,34 +171,119 @@ test('Escape pendant création dossier annule sans créer', async ({ page }) => 
   await expect(fp(page)).toBeVisible()
 })
 
-// ── Menu arborescence (Tab) ───────────────────────────────────────────
+// ── Tab cycle ─────────────────────────────────────────────────────────
 
-test('Tab affiche le menu d\'arborescence des dossiers parents', async ({ page }) => {
+test('Tab donne le focus au menu de chemin', async ({ page }) => {
   await openPickerViaN(page)
-  await fp(page).press('ArrowDown')
-  await fp(page).press('ArrowRight')
-  await waitForPath(page, path.join(TEST_DIR, 'Roman-Alpha'))
   await fp(page).press('Tab')
-  await expect(pane1(page).locator('.file-picker__path-menu')).toBeVisible()
+  await expect(fp(page).locator('.file-picker__path')).toHaveClass(/file-picker__path--focused/)
 })
 
-test('le menu arborescence contient le dossier courant et ses parents', async ({ page }) => {
+test('Tab + Tab donne le focus au faux-bouton Annuler', async ({ page }) => {
+  await openPickerViaN(page)
+  await fp(page).press('Tab')
+  await fp(page).press('Tab')
+  await expect(fp(page).locator('.ftpanel-btn').filter({ hasText: 'Annuler' })).toHaveClass(/ftpanel-btn--focused/)
+})
+
+test('Tab + Tab + Tab revient en mode liste (aucun bouton focusé)', async ({ page }) => {
+  await openPickerViaN(page)
+  await fp(page).press('Tab')
+  await fp(page).press('Tab')
+  await fp(page).press('Tab')
+  await expect(fp(page).locator('.ftpanel-btn--focused')).toHaveCount(0)
+})
+
+// ── Faux-bouton Fermer ────────────────────────────────────────────────
+
+test('footer a un faux-bouton "Annuler"', async ({ page }) => {
+  await openPickerViaN(page)
+  await expect(fp(page).locator('.ftpanel-btn').filter({ hasText: 'Annuler' })).toBeVisible()
+})
+
+test('Tab + Tab + Enter sur Annuler ferme le FilePicker sans créer de projet', async ({ page }) => {
+  const countBefore = await pane1(page).locator('.project-item').count()
+  await openPickerViaN(page)
+  await fp(page).press('Tab')
+  await fp(page).press('Tab')
+  await fp(page).press('Enter')
+  await expect(fp(page)).not.toBeVisible()
+  await expect(pane1(page).locator('.project-item')).toHaveCount(countBefore)
+})
+
+test('fermeture via Fermer restaure le focus sur l\'élément appelant', async ({ page }) => {
+  await openPickerViaN(page)
+  await fp(page).press('Tab')
+  await fp(page).press('Tab')
+  await fp(page).press('Enter')
+  await expect(pane1(page).locator('.project-item.selected')).toBeFocused()
+})
+
+// ── Bouton de chemin (path-btn) → PopupSelect ancêtres ───────────────
+
+test('FilePicker a un menu de chemin au-dessus de la liste', async ({ page }) => {
+  await openPickerViaN(page)
+  await expect(fp(page).locator('.file-picker__path')).toBeVisible()
+})
+
+test('le menu de chemin affiche le nom du dossier courant', async ({ page }) => {
+  await openPickerViaN(page)
+  await fp(page).press('ArrowDown')
+  await fp(page).press('ArrowRight')
+  await waitForPath(page, path.join(TEST_DIR, 'Roman-Alpha'))
+  await expect(fp(page).locator('.file-picker__path')).toContainText('Roman-Alpha')
+})
+
+test('Tab + ArrowDown ouvre le popup des ancêtres (comme Enter)', async ({ page }) => {
   await openPickerViaN(page)
   await fp(page).press('ArrowDown')
   await fp(page).press('ArrowRight')
   await waitForPath(page, path.join(TEST_DIR, 'Roman-Alpha'))
   await fp(page).press('Tab')
-  const items = pane1(page).locator('.file-picker__path-menu-item')
+  await fp(page).press('ArrowDown')
+  await expect(pane1(page).locator('.popup-select')).toBeVisible()
+})
+
+test('chemin focusé : ArrowLeft ne remonte pas au dossier parent', async ({ page }) => {
+  await openPickerViaN(page)
+  await fp(page).press('ArrowDown')
+  await fp(page).press('ArrowRight')
+  await waitForPath(page, path.join(TEST_DIR, 'Roman-Alpha'))
+  await fp(page).press('Tab')
+  await fp(page).press('ArrowLeft')
+  await page.waitForTimeout(400)  // laisse _goUp() se terminer si déclenché
+  await expect(fp(page)).toHaveAttribute('data-current-path', path.join(TEST_DIR, 'Roman-Alpha'))
+})
+
+test('Tab + Enter sur le bouton de chemin ouvre un PopupSelect des ancêtres', async ({ page }) => {
+  await openPickerViaN(page)
+  await fp(page).press('ArrowDown')
+  await fp(page).press('ArrowRight')
+  await waitForPath(page, path.join(TEST_DIR, 'Roman-Alpha'))
+  await fp(page).press('Tab')
+  await fp(page).press('Enter')
+  await expect(pane1(page).locator('.popup-select')).toBeVisible()
+})
+
+test('le PopupSelect contient le dossier courant et ses parents', async ({ page }) => {
+  await openPickerViaN(page)
+  await fp(page).press('ArrowDown')
+  await fp(page).press('ArrowRight')
+  await waitForPath(page, path.join(TEST_DIR, 'Roman-Alpha'))
+  await fp(page).press('Tab')
+  await fp(page).press('Enter')
+  const items = pane1(page).locator('.popup-select__option')
   await expect(items.first()).toContainText('Roman-Alpha')
   await expect(items.nth(1)).toContainText(path.basename(TEST_DIR))
 })
 
-// ── Footer ────────────────────────────────────────────────────────────
+// ── Bouton "Choisir" (au-dessus de la liste) ──────────────────────────
 
-test('Footer affiche ↩︎ (droite) et ␛ (gauche)', async ({ page }) => {
+test('bouton de sélection dit "Choisir" (pas "↩︎")', async ({ page }) => {
   await openPickerViaN(page)
-  await expect(pane1(page).locator('.file-picker__select-btn')).toContainText('↩︎')
-  await expect(pane1(page).locator('.file-picker__cancel-key')).toContainText('␛')
+  await fp(page).press('ArrowDown')  // sur un dossier
+  await expect(fp(page).locator('.file-picker__select-btn')).toContainText('Choisir')
+  await expect(fp(page).locator('.file-picker__select-btn')).not.toContainText('↩︎')
 })
 
 test('bouton sélection désactivé sur fichier, actif sur dossier', async ({ page }) => {

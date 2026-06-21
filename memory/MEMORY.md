@@ -1,4 +1,4 @@
-- **LIRE EN PREMIER** [**Architecture-cible.md**](BIBLE/Architecture-cible.md)
+- **LIRE EN PREMIER** [**Architecture-cible.md**](../BIBLE/Architecture-cible.md) — chemin RACINE du projet, pas dans memory/
 - **LIRE EN PREMIER** : [TODO.md](TODO.md) pour connaitre :
   - [le travail en cours](TODO.md#current),
   - [les tâches qui seront à réaliser](TODO.md#todo).
@@ -24,6 +24,7 @@
 - **[ctrlKey interdit sans mandat](feedback_ctrlKey_interdit.md)** — CRITIQUE: jamais `event.ctrlKey` dans les raccourcis sans demande explicite — app Mac = metaKey seulement
 - **[KeyboardablePanel](architecture_keyboardable_panel.md)** — classe abstraite UI panels : TAB cycle, faux-boutons, double filet, héritage obligatoire
 - **[Faux-boutons = zéro souris](feedback_faux_boutons.md)** — CRITIQUE: footer panels = `<span>`, aucun event souris, pas d'Escape pour fermer
+- **[Focus restauration — restoreFocusTo obligatoire](feedback_focus_restauration.md)** — CRITIQUE: jamais `document.activeElement` ; l'appelant passe `restoreFocusTo:el` au panel
 - **[Cache no-store obligatoire](feedback_cache_no_store.md)** — CRITIQUE: tout fetch GET dans ListerRepository doit avoir `cache:'no-store'` sinon données périmées après modif
 - [Loi de Déméter](feedback_loi_demeter.md) — Une classe délègue à une méthode statique de l'autre, ne câble jamais les détails d'une autre classe
 - [Lister/Item = cœur du système](feedback_lister_item_architecture.md) — Projects/Events/Brins/Persos héritent SANS réécrire ; ne jamais dupliquer dans une sous-classe ce qui existe dans Lister/Item
@@ -45,4 +46,5 @@
 - [Split-pane — architecture](project_split_pane_suite.md) — Alt+2/1/0/R, shell.js, SplitManager.js, currentState inline dans split-close
 - [Demander logs serveur](feedback_demander_logs_serveur.md) — Erreur réseau sans URL → demander le log serveur en premier, pas investiguer le code
 - **[Footer panels : classe commune](feedback_panel_footer_style.md)** — TOUJOURS `.floating-panel__footer` ; `var(--line)` pour filets ; `margin-top:12px` pour l'air ; hints = `.panel-footer-hint` (pas bouton)
+- **[Tests = héritages ancienne archi](feedback_tests_heritage_ancienne_archi.md)** — CRITIQUE: tests existants ≠ vérité absolue ; si test contredit nouvelle archi → corriger le test
 - **[CRITIQUE: régressions = un problème à la fois](feedback_tests_un_par_un.md)** — JAMAIS traiter toutes les erreurs ensemble. 1 problème (≠ 1 test) → régler → confirmer vert → seulement alors passer au suivant.
