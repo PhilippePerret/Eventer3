@@ -3,12 +3,12 @@
 :root {
   --dialog-font-size:      21px;
   --panel-title:          23px Arial, Helvetica, Geneva;
-  --panel-btn-font-size:   15px;
+  --panel-btn-font-size:   20px;
   --ftpanel-padding-x:     18px;
   --bg: #f3f1eb;
   --text: #2f2d29;
   --muted: #938c81;
-  --line: #e3ddd2;
+  --line: #dddad4;
   --selected: #4d9efe;
   --selected-bg: #4d9efe;
   --selected-bg-muted: #b8d8fd;
@@ -1192,14 +1192,14 @@ TOUT PANNEAU FLOTTANT A LA STRUCTURE :
 }
 
 .ftpanel__body {
-  padding: 2em;
+  padding: 1.4em 2em;
   flex: 1;
   overflow-y: auto;
   font-size: var(--dialog-font-size);
 }
 
 .ftpanel__footer {
-  padding: 10px var(--ftpanel-padding-x);
+  padding: 1em 2em;
   border-top: 1px solid var(--line);
   display: flex;
   align-items: center;
@@ -1215,9 +1215,6 @@ TOUT PANNEAU FLOTTANT A LA STRUCTURE :
 }
 
 /* kpanel : items avec raccourci clavier */
-.kpanel .ftpanel__body {
-  padding: 0;
-}
 .kpanel .ftpanel__body .ftpanel__item {
   display: flex;
   align-items: center;
