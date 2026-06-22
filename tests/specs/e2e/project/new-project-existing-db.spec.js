@@ -24,10 +24,10 @@ async function setupFolderWithDb(page) {
 
 async function openPickerAndSelectFolder(page) {
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await pane1(page).locator('body').press('n')
+  await pane1(page).locator('#main-panel').press('n')
   await expect(pane1(page).locator('.file-picker')).toBeVisible()
   await expect(pane1(page).locator('.file-picker__entry-name', { hasText: 'projet-existant' })).toBeVisible()
-  await pane1(page).locator('body').press('Enter')
+  await pane1(page).locator('#main-panel').press('Enter')
 }
 
 // ── Dialog ────────────────────────────────────────────────────────────────────

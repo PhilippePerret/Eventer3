@@ -11,9 +11,9 @@ test.beforeEach(() => {
 async function openPersoPanel(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await pane1(page).locator('body').press('ArrowRight')
+  await pane1(page).locator('#main-panel').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-  await pane1(page).locator('body').press('p')
+  await pane1(page).locator('#main-panel').press('p')
   await expect(pane1(page).locator('#perso-panel')).toBeVisible()
 }
 
@@ -35,9 +35,9 @@ test("'Votre protagoniste' survit au rechargement", async ({ page }) => {
   await page.waitForLoadState('networkidle')
   await page.reload()
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await pane1(page).locator('body').press('ArrowRight')
+  await pane1(page).locator('#main-panel').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-  await pane1(page).locator('body').press('p')
+  await pane1(page).locator('#main-panel').press('p')
   await expect(pane1(page).locator('#perso-panel')).toBeVisible()
   await expect(pane1(page).locator('.perso-item')).toHaveCount(1)
   await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-item__title')).toHaveText('Votre protagoniste')

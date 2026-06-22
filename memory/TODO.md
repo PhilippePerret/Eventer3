@@ -4,42 +4,20 @@
 
 ## En cours
 
-### FilePicker — corrections et conformité aux règles
+> **[LIRE TOUJOURS AVANT TOUT TRAVAIL SUR LES TESTS]**
+> - Trouver les tests e2e existants → les déplacer dans `e2e/_tdd/` (noter leur origine)
+> - S'inspirer de `public-old` pour le fonctionnement anciennement implémenté
+> - Tests existants ne respectent pas nouvelle archi — corriger APRÈS validation fonctionnelle
+> - Implémenter dans la nouvelle archi uniquement
 
-**Plan de bataille :**
-1. [x] `mv _tdd/new-project-existing-db|initial-data|under-selection|open-existing-project` → `e2e/project/` *(à reprendre, non verts — voir ci-dessous)*
-2. [x] `mv filesystem/filepicker.spec.js` → `_tdd/filepicker.spec.js`
-3. [ ] Modifier `_tdd/filepicker.spec.js` pour comportement attendu → RED
-4. [ ] Confirmer RED
-5. [ ] Corriger FilePicker → GREEN
+### Suppression item — touche Delete
 
-**Violations FilePicker à corriger :**
-- `Escape` ferme le FilePicker → INTERDIT (`Escape` = annuler édition seulement — reste valide en mode création dossier)
-- Tab = cycle : Liste → faux-bouton Arborescence (`ftpanel-btn--focused`) → faux-bouton Fermer → Liste
-  - Enter sur Arborescence focusée → ouvre PopupSelect (liste dossiers parents, `showSearch:false`)
-  - Enter sur Fermer focusé → ferme FilePicker
-- Arborescence = `PopupSelect` (remplacer `_pathMenuEl` maison) — `showSearch: false`
-- Bouton `↩︎` → renommer "Choisir" + remonter AU-DESSUS de la liste (à droite, pas dans footer) — pas dans cycle Tab, activé par Enter quand dossier sélectionné dans liste
-- Bouton "Fermer" = faux-bouton `<span class="ftpanel-btn">` dans footer (remplace `<kbd>␛</kbd>`) — CSS ajoute ⇥/↩︎ automatiquement
-- **Focus restauré : `ProjectLister` passe `restoreFocusTo: element` à `FilePicker.open()`** — `_close()` appelle `this._restoreFocusTo?.focus()` — JAMAIS `document.activeElement`
-- Même pattern `restoreFocusTo` pour `KeyboardablePanel.open()` / `close()`
-
-**Fichiers `e2e/project/` à reprendre :**
+### Fichiers `e2e/project/` à reprendre (non verts)
 - `new-project-existing-db.spec.js`
 - `new-project-initial-data.spec.js`
 - `new-project-under-selection.spec.js`
 - `open-existing-project.spec.js`
 
-### Bugs navigation (après FilePicker)
-
-**Bug 1 — Annuler coupe toutes les touches**  
-Après fermeture via bouton Fermer : focus perdu, plus aucune touche ne répond.  
-Fix : FilePicker (et KP) sauvegarde l'élément focusé avant ouverture, restaure à la fermeture.
-
-**Bug 2 — Flèches sautent de 2 en 2 après choix projet**  
-Après création/import d'un projet, ArrowUp/ArrowDown saute deux items à la fois.  
-Cause probable : `ListerDom.render()` appelle `Listener.attach(container)` à chaque rendu sans retirer l'ancien.  
-Fix attendu : `attach()` retire l'ancien listener, OU `render()` vérifie si déjà attaché.
 
 <a name="todo"></a>
 
@@ -49,10 +27,20 @@ Fix attendu : `attach()` retire l'ancien listener, OU `render()` vérifie si dé
 - [ ] `⌘↓` / `⌘↑` pour déplacer les projets
 - [ ] `Enter` pour éditer les évènements (event)
 
+## Réflexions
+
+- [ ] **RÉFLEXION — Majuscule = minuscule dans BaseListener** (`public/classes/models/abstract/BaseListener.js`) : actuellement les touches majuscules doivent être dupliquées explicitement dans chaque LISTENERS (ex: `n` ET `N` dans ListerListener). Réfléchir à un système "majuscule fallback sur minuscule SAUF si la majuscule est explicitement définie dans LISTENERS". Exemple actuel : `ListerListener.js` ligne 13 `N: { nokey: 'createNew' }`.
+
 <a name="done"></a>
 
 ## Fait
 
+- [x] 2026-06-22 — Bug flèches 2 en 2 : attach() retiré de ListerDom.render(), appelé une seule fois dans ProjectLister.init()
+- [x] 2026-06-22 — FilePicker "Choisir" : button → span (pas de click souris)
+- [x] 2026-06-22 — ProjectLister.createNew() : focus restauré après annulation ConfirmDialog
+- [x] 2026-06-21 — FilePicker : refactoring complet conformité règles (Escape, Tab cycle, PopupSelect ancêtres, Choisir, Annuler, focus restauré, N=n)
+- [x] 2026-06-21 — FilePicker tests : `_tdd/filepicker.spec.js` réécrit (31 tests verts)
+- [x] 2026-06-21 — ListerListener : `N` explicite = `n` (createNew)
 - [x] 2026-06-21 — KeyboardablePanel.open() : `this._el.focus()` pour recevoir les keydown
 - [x] 2026-06-21 — Test open-existing-project : séparé en 2 tests distincts (import / ArrowRight)
 - [x] 2026-06-21 — Rationalisation CSS panneaux : ftpanel/kpanel, suppression confirm-dialog, bouton focusé par défaut

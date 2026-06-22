@@ -26,6 +26,7 @@
 - **[Faux-boutons = zéro souris](feedback_faux_boutons.md)** — CRITIQUE: footer panels = `<span>`, aucun event souris, pas d'Escape pour fermer
 - **[Focus restauration — restoreFocusTo obligatoire](feedback_focus_restauration.md)** — CRITIQUE: jamais `document.activeElement` ; l'appelant passe `restoreFocusTo:el` au panel
 - **[Cache no-store obligatoire](feedback_cache_no_store.md)** — CRITIQUE: tout fetch GET dans ListerRepository doit avoir `cache:'no-store'` sinon données périmées après modif
+- **[CRITIQUE: Performance items](feedback_performance_items.md)** — items par million + touches en rafale : opération unitaire = 1 div, jamais re-render ; splice(idx) pas filter ; imports statiques
 - [Loi de Déméter](feedback_loi_demeter.md) — Une classe délègue à une méthode statique de l'autre, ne câble jamais les détails d'une autre classe
 - [Lister/Item = cœur du système](feedback_lister_item_architecture.md) — Projects/Events/Brins/Persos héritent SANS réécrire ; ne jamais dupliquer dans une sous-classe ce qui existe dans Lister/Item
 - [Édition item → Item.handleEditionKeyDown](feedback_item_edition_dans_item.md) — Raccourcis/comportements en mode édition → Item.js, jamais Lister.js

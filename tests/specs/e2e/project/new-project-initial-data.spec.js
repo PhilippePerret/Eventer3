@@ -11,7 +11,7 @@ async function createProject(page, expect) {
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
 
   const { folderName } = await setupProjectFolder(page)
-  await pane1(page).locator('body').press('n')
+  await pane1(page).locator('#main-panel').press('n')
   await createAndSelectFolderInPicker(page, expect, folderName)
   await page.waitForLoadState('networkidle')
 

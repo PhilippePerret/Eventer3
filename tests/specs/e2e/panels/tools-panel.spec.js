@@ -10,17 +10,17 @@ test.beforeEach(() => {
 async function enterLevelMode(page, targetDepth) {
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-  await pane1(page).locator('body').press('ArrowRight')
+  await pane1(page).locator('#main-panel').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   if (targetDepth >= 2) {
-    await pane1(page).locator('body').press('ArrowRight')
+    await pane1(page).locator('#main-panel').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveAttribute('data-depth', '2')
   }
   if (targetDepth >= 3) {
-    await pane1(page).locator('body').press('ArrowRight')
+    await pane1(page).locator('#main-panel').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveAttribute('data-depth', '3')
   }
-  await pane1(page).locator('body').press('Meta+m')
+  await pane1(page).locator('#main-panel').press('Meta+m')
   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
 }
 
@@ -30,17 +30,17 @@ test('⌘+t ouvre le panneau outils en mode LEVEL', async ({ page }) => {
   await page.goto('/')
   await enterLevelMode(page, 3)
 
-  await pane1(page).locator('body').press('Meta+t')
+  await pane1(page).locator('#main-panel').press('Meta+t')
   await expect(pane1(page).locator('.tools-panel')).toBeVisible()
 })
 
 test('⌘+t hors mode LEVEL : ouvre le panneau sans l\'outil Consolider', async ({ page }) => {
   await page.goto('/')
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-  await pane1(page).locator('body').press('ArrowRight')
+  await pane1(page).locator('#main-panel').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
-  await pane1(page).locator('body').press('Meta+t')
+  await pane1(page).locator('#main-panel').press('Meta+t')
   await expect(pane1(page).locator('.tools-panel')).toBeVisible()
   await expect(pane1(page).locator('.tools-panel')).not.toContainText('Consolider')
 })
@@ -51,7 +51,7 @@ test('panneau outils : titre visible', async ({ page }) => {
   await page.goto('/')
   await enterLevelMode(page, 3)
 
-  await pane1(page).locator('body').press('Meta+t')
+  await pane1(page).locator('#main-panel').press('Meta+t')
   await expect(pane1(page).locator('.tools-panel .floating-panel__title')).toBeVisible()
 })
 
@@ -59,7 +59,7 @@ test('panneau outils : footer avec faux-boutons Fermer et Exécuter', async ({ p
   await page.goto('/')
   await enterLevelMode(page, 3)
 
-  await pane1(page).locator('body').press('Meta+t')
+  await pane1(page).locator('#main-panel').press('Meta+t')
   const footer = pane1(page).locator('.tools-panel .floating-panel__footer')
   await expect(footer).toBeVisible()
   await expect(footer.locator('.panel-btn--cancel')).toContainText('Fermer')
@@ -70,7 +70,7 @@ test('panneau outils : item Consolider listé avec son raccourci ⌘⇧C', async
   await page.goto('/')
   await enterLevelMode(page, 3)
 
-  await pane1(page).locator('body').press('Meta+t')
+  await pane1(page).locator('#main-panel').press('Meta+t')
   await expect(pane1(page).locator('.tools-panel .floating-panel__item').first()).toContainText('Consolider le niveau')
   await expect(pane1(page).locator('.tools-panel .floating-panel__item').first()).toContainText('⌘')
 })
@@ -80,7 +80,7 @@ test('panneau outils : item Consolider listé avec son raccourci ⌘⇧C', async
 test('TAB : items → Exécuter → Fermer → items', async ({ page }) => {
   await page.goto('/')
   await enterLevelMode(page, 3)
-  await pane1(page).locator('body').press('Meta+t')
+  await pane1(page).locator('#main-panel').press('Meta+t')
 
   const panel = pane1(page).locator('.tools-panel')
 
@@ -88,17 +88,17 @@ test('TAB : items → Exécuter → Fermer → items', async ({ page }) => {
   await expect(panel.locator('.panel-btn--focused')).toHaveCount(0)
 
   console.log('-> TAB #1 : Exécuter focusé')
-  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('#main-panel').press('Tab')
   await expect(panel.locator('.panel-btn--primary.panel-btn--focused')).toBeVisible()
   await expect(panel.locator('.panel-btn--cancel.panel-btn--focused')).toHaveCount(0)
 
   console.log('-> TAB #2 : Fermer focusé')
-  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('#main-panel').press('Tab')
   await expect(panel.locator('.panel-btn--cancel.panel-btn--focused')).toBeVisible()
   await expect(panel.locator('.panel-btn--primary.panel-btn--focused')).toHaveCount(0)
 
   console.log('-> TAB #3 : retour aux items, aucun bouton focusé')
-  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('#main-panel').press('Tab')
   await expect(panel.locator('.panel-btn--focused')).toHaveCount(0)
   await expect(panel.locator('.floating-panel__item.selected')).toBeVisible()
 })
@@ -108,11 +108,11 @@ test('TAB + Enter sur Exécuter : consolide et ferme le panneau', async ({ page 
   await enterLevelMode(page, 3)
   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(2)
 
-  await pane1(page).locator('body').press('Meta+t')
-  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('#main-panel').press('Meta+t')
+  await pane1(page).locator('#main-panel').press('Tab')
   await expect(pane1(page).locator('.tools-panel .panel-btn--primary.panel-btn--focused')).toBeVisible()
 
-  await pane1(page).locator('body').press('Enter')
+  await pane1(page).locator('#main-panel').press('Enter')
   await expect(pane1(page).locator('.tools-panel')).not.toBeAttached()
   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(0)
 })
@@ -122,12 +122,12 @@ test('TAB + TAB + Enter sur Fermer : ferme sans consolider', async ({ page }) =>
   await enterLevelMode(page, 3)
   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(2)
 
-  await pane1(page).locator('body').press('Meta+t')
-  await pane1(page).locator('body').press('Tab')
-  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('#main-panel').press('Meta+t')
+  await pane1(page).locator('#main-panel').press('Tab')
+  await pane1(page).locator('#main-panel').press('Tab')
   await expect(pane1(page).locator('.tools-panel .panel-btn--cancel.panel-btn--focused')).toBeVisible()
 
-  await pane1(page).locator('body').press('Enter')
+  await pane1(page).locator('#main-panel').press('Enter')
   await expect(pane1(page).locator('.tools-panel')).not.toBeAttached()
   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(2)
 })
@@ -139,9 +139,9 @@ test('lettre C dans le panneau : consolide et ferme', async ({ page }) => {
   await enterLevelMode(page, 3)
   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(2)
 
-  await pane1(page).locator('body').press('Meta+t')
+  await pane1(page).locator('#main-panel').press('Meta+t')
   await expect(pane1(page).locator('.tools-panel')).toBeVisible()
-  await pane1(page).locator('body').press('c')
+  await pane1(page).locator('#main-panel').press('c')
 
   await expect(pane1(page).locator('.tools-panel')).not.toBeAttached()
   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(0)
@@ -153,9 +153,9 @@ test('Enter sur item sélectionné : consolide et ferme', async ({ page }) => {
   await enterLevelMode(page, 3)
   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(2)
 
-  await pane1(page).locator('body').press('Meta+t')
+  await pane1(page).locator('#main-panel').press('Meta+t')
   await expect(pane1(page).locator('.tools-panel .floating-panel__item').nth(0)).toHaveClass(/selected/)
-  await pane1(page).locator('body').press('Enter')
+  await pane1(page).locator('#main-panel').press('Enter')
 
   await expect(pane1(page).locator('.tools-panel')).not.toBeAttached()
   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(0)
@@ -168,7 +168,7 @@ test('⌘+⇧+C direct : consolide sans ouvrir le panneau', async ({ page }) => 
   await enterLevelMode(page, 3)
   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(2)
 
-  await pane1(page).locator('body').press('Meta+Shift+c')
+  await pane1(page).locator('#main-panel').press('Meta+Shift+c')
 
   await expect(pane1(page).locator('.tools-panel')).not.toBeAttached()
   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(0)
@@ -178,10 +178,10 @@ test('⌘+⇧+C direct : consolide sans ouvrir le panneau', async ({ page }) => 
 test('⌘+⇧+C inactif hors mode LEVEL', async ({ page }) => {
   await page.goto('/')
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-  await pane1(page).locator('body').press('ArrowRight')
+  await pane1(page).locator('#main-panel').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
-  await pane1(page).locator('body').press('Meta+Shift+c')
+  await pane1(page).locator('#main-panel').press('Meta+Shift+c')
 
   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(0)
   await expect(pane1(page).locator('.tools-panel')).not.toBeAttached()

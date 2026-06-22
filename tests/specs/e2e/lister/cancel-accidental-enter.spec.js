@@ -12,16 +12,16 @@ test.describe('← annule la création d\'un event dans un lister non-virtuel', 
     console.log('\n=== TEST ← ANNULE CRÉATION EVENT ===')
 
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-    await pane1(page).locator('body').press('ArrowRight')
+    await pane1(page).locator('#main-panel').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
     const eventCount = await pane1(page).locator('.event-item').count()
     console.log(`-> ${eventCount} events, appui sur n`)
-    await pane1(page).locator('body').press('n')
+    await pane1(page).locator('#main-panel').press('n')
     await expect(pane1(page).locator('.event-item input[name="title"]')).toBeVisible()
 
     console.log('-> ← pour annuler et revenir aux projets')
-    await pane1(page).locator('body').press('ArrowLeft')
+    await pane1(page).locator('#main-panel').press('ArrowLeft')
 
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
 
@@ -45,7 +45,7 @@ test.describe('Annulation entrée accidentelle dans un lister vide', () => {
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
 
     console.log('-> entrée dans le EventLister du projet A')
-    await pane1(page).locator('body').press('ArrowRight')
+    await pane1(page).locator('#main-panel').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
     const eventCount = await pane1(page).locator('.event-item').count()
@@ -53,11 +53,11 @@ test.describe('Annulation entrée accidentelle dans un lister vide', () => {
     await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
 
     console.log('-> → accidentel sur e1 (sans sous-lister) → lister virtuel + édition')
-    await pane1(page).locator('body').press('ArrowRight')
+    await pane1(page).locator('#main-panel').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel input.event-text')).toBeVisible()
 
     console.log('-> Escape pour annuler')
-    await pane1(page).locator('body').press('Escape')
+    await pane1(page).locator('#main-panel').press('Escape')
 
     console.log('-> vérification : retour au EventLister parent')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
@@ -77,18 +77,18 @@ test.describe('Annulation entrée accidentelle dans un lister vide', () => {
     console.log('\n=== TEST ANNULATION ENTRÉE ACCIDENTELLE AVEC ← ===')
 
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-    await pane1(page).locator('body').press('ArrowRight')
+    await pane1(page).locator('#main-panel').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
     const eventCount = await pane1(page).locator('.event-item').count()
     await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
 
     console.log('-> → accidentel sur e1')
-    await pane1(page).locator('body').press('ArrowRight')
+    await pane1(page).locator('#main-panel').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel input.event-text')).toBeVisible()
 
     console.log('-> ← pour annuler')
-    await pane1(page).locator('body').press('ArrowLeft')
+    await pane1(page).locator('#main-panel').press('ArrowLeft')
 
     console.log('-> vérification : retour au EventLister parent')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)

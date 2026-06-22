@@ -18,7 +18,7 @@ test("la touche n désélectionne l'item courant", async ({ page }) => {
   const { folderName } = await setupProjectFolder(page)
 
   console.log('-> appui sur n → FilePicker → sélection dossier')
-  await pane1(page).locator('body').press('n')
+  await pane1(page).locator('#main-panel').press('n')
   await createAndSelectFolderInPicker(page, expect, folderName)
   await page.waitForLoadState('networkidle')
 

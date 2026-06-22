@@ -13,6 +13,11 @@ export default class ListerRepo {
       .filter(Boolean)
   }
 
+  async deleteItem(item) {
+    const resp = await fetch(`/api/listers/${this.lister.id}/items/${item.id}`, { method: 'DELETE', cache: 'no-store' })
+    return resp.ok
+  }
+
   static async createLister(fields) {
     const resp = await fetch('/api/listers', {
       method:  'POST',

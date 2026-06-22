@@ -1,5 +1,42 @@
 # CHANGELOG — Eventer3
 
+## 2026-06-22
+
+### ListerDom — attach() séparé du render()
+- `render()` : suppression de `this.lister.Listener.attach(container)` — n'appartient pas au rendu
+- `ProjectLister.init()` : ajout explicite de `lister.Listener.attach(lister.Dom.container)` après `render()`
+- Corrige : ArrowUp/ArrowDown sautait de 2 en 2 après création/import projet (double listener)
+
+### FilePicker — "Choisir" non cliquable
+- `_selectBtn` : `button` → `span`, suppression du listener `click`
+- `styles.css` `.file-picker__select-btn` : `cursor: pointer` → `cursor: default`
+
+### ProjectLister — focus après annulation ConfirmDialog
+- `createNew()` : `if (!choice) return` → `if (!choice) { this.Dom.focusSelected(); return }`
+
+## 2026-06-21 (suite 2)
+
+### FilePicker — refactoring conformité règles
+
+- `Escape` ne ferme plus le picker en mode normal (reste valide pendant création dossier)
+- Tab cycle : Liste → `.file-picker__path` (menu chemin) → faux-btn `Annuler` → Liste
+  - `_focusableItems` avec `focusClass` dédié par élément (`file-picker__path--focused` / `ftpanel-btn--focused`)
+  - `file-picker--btns-focused` sur `_el` quand un bouton est focusé → liste visuellement inactive (opacity 0.45)
+- Bouton `↩︎` → "Choisir" repositionné au-dessus de la liste (à droite) dans `.file-picker__header`
+- `<kbd>␛</kbd>` remplacé par faux-btn `Annuler` (`span.ftpanel-btn`) dans footer
+- `.file-picker__path` : affiche le nom du dossier courant, ouvre `PopupSelect` (`showSearch:false`) sur Enter ou ArrowDown
+- `_pathMenuEl` maison supprimé — tout passe par `PopupSelect`
+- Bouton "Récents" supprimé
+- Titre fixe "Choisir un dossier" dans titlebar
+- ArrowLeft/Right bloqués quand `_focusIdx >= 0` (chemin ou Annuler focusé)
+- `n` et `N` créent un nouveau dossier dans le picker
+- `ProjectLister.createNew()` : appelle `this.Dom.focusSelected()` après annulation
+- 4 règles CSS ajoutées : focus path, select-btn à droite, liste inactive, selected grisé
+- `_tdd/filepicker.spec.js` réécrit — 31 tests verts
+
+### ListerListener — N = n
+- `N: { nokey: 'createNew' }` ajouté explicitement
+
 ## 2026-06-21 (suite)
 
 ### KeyboardablePanel — focus à l'ouverture

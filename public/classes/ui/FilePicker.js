@@ -78,16 +78,9 @@ export default class FilePicker {
     this._pathBtn = document.createElement('span')
     this._pathBtn.className = 'file-picker__path'
 
-    this._selectBtn = document.createElement('button')
-    this._selectBtn.type        = 'button'
+    this._selectBtn = document.createElement('span')
     this._selectBtn.className   = 'file-picker__select-btn disabled'
     this._selectBtn.textContent = 'Choisir'
-    this._selectBtn.addEventListener('click', () => {
-      const entry = this.entries[this.selectedIndex]
-      if (entry?.type === 'directory' || (this.mode === 'file' && entry)) {
-        this._select(entry.path).catch(console.error)
-      }
-    })
 
     pathRow.appendChild(this._pathBtn)
     pathRow.appendChild(this._selectBtn)

@@ -26,7 +26,7 @@ test("barre d'état passe en NESTING à l'entrée dans un EventLister", async ({
 
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-  await pane1(page).locator('body').press('ArrowRight')
+  await pane1(page).locator('#main-panel').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
   console.log('-> mode NESTING affiché dans EventLister')
@@ -38,16 +38,16 @@ test("⌘+m dans EventLister bascule NESTING → LEVEL → NESTING", async ({ pa
 
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-  await pane1(page).locator('body').press('ArrowRight')
+  await pane1(page).locator('#main-panel').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE NESTING')
 
   console.log('-> ⌘+m : bascule vers LEVEL')
-  await pane1(page).locator('body').press('Meta+m')
+  await pane1(page).locator('#main-panel').press('Meta+m')
   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
 
   console.log('-> ⌘+m : retour vers NESTING')
-  await pane1(page).locator('body').press('Meta+m')
+  await pane1(page).locator('#main-panel').press('Meta+m')
   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE NESTING')
 })
 
@@ -56,10 +56,10 @@ test("retour liste des projets repasse en PROJECTS", async ({ page }) => {
 
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-  await pane1(page).locator('body').press('ArrowRight')
+  await pane1(page).locator('#main-panel').press('ArrowRight')
   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE NESTING')
 
-  await pane1(page).locator('body').press('ArrowLeft')
+  await pane1(page).locator('#main-panel').press('ArrowLeft')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
 
   console.log('-> retour liste projets : status bar repasse en PROJECTS')
@@ -71,6 +71,6 @@ test("⌘+m inactif sur liste des projets", async ({ page }) => {
 
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
 
-  await pane1(page).locator('body').press('Meta+m')
+  await pane1(page).locator('#main-panel').press('Meta+m')
   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE PROJECTS')
 })

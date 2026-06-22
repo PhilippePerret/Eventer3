@@ -12,14 +12,14 @@ test('les events persistent après avoir navigué vers un autre projet et revenu
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
   // Entrer dans le premier projet → lister virtuel
-  await pane1(page).locator('body').press('ArrowRight')
+  await pane1(page).locator('#main-panel').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
   // Créer un événement
-  await pane1(page).locator('body').press('n')
+  await pane1(page).locator('#main-panel').press('n')
   await expect(pane1(page).locator('.event-item.selected input[name="title"]')).toBeFocused()
   await page.keyboard.type('Mon événement test')
-  await pane1(page).locator('body').press('Enter')
+  await pane1(page).locator('#main-panel').press('Enter')
   // Attendre fin des appels réseau (createLister + createItem + save)
   await page.waitForLoadState('networkidle')
 
@@ -27,22 +27,22 @@ test('les events persistent après avoir navigué vers un autre projet et revenu
   await expect(pane1(page).locator('.event-item').nth(0)).toContainText('Mon événement test')
 
   // Revenir à la liste des projets
-  await pane1(page).locator('body').press('ArrowLeft')
+  await pane1(page).locator('#main-panel').press('ArrowLeft')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
 
   // Entrer dans un autre projet (le second)
-  await pane1(page).locator('body').press('ArrowDown')
-  await pane1(page).locator('body').press('ArrowRight')
+  await pane1(page).locator('#main-panel').press('ArrowDown')
+  await pane1(page).locator('#main-panel').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
   // Revenir à la liste des projets
-  await pane1(page).locator('body').press('ArrowLeft')
+  await pane1(page).locator('#main-panel').press('ArrowLeft')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
 
   // Revenir au premier projet
-  await pane1(page).locator('body').press('ArrowUp')
+  await pane1(page).locator('#main-panel').press('ArrowUp')
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-  await pane1(page).locator('body').press('ArrowRight')
+  await pane1(page).locator('#main-panel').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
   // L'event doit toujours être là

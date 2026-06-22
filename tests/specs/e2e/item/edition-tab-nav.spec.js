@@ -10,27 +10,27 @@ test.describe('Tab navigation en mode édition', () => {
 
   test('Tab après sélection popup-select va au champ suivant, pas au title', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('body').press('ArrowRight')
+    await pane1(page).locator('#main-panel').press('ArrowRight')
     await expect(pane1(page).locator('.event-item').first()).toBeVisible()
 
     // Entrer en édition
-    await pane1(page).locator('body').press('Enter')
+    await pane1(page).locator('#main-panel').press('Enter')
     await expect(pane1(page).locator('.event-item.editing .event-text')).toBeFocused()
 
     // Tab → state button
-    await pane1(page).locator('body').press('Tab')
+    await pane1(page).locator('#main-panel').press('Tab')
     await expect(pane1(page).locator('.popup-select-trigger[data-field-name="state"]')).toBeFocused()
 
     // Ouvrir popup state + sélectionner première option
-    await pane1(page).locator('body').press('ArrowDown')
+    await pane1(page).locator('#main-panel').press('ArrowDown')
     await expect(pane1(page).locator('.popup-select')).toBeVisible()
-    await pane1(page).locator('body').press('Enter')
+    await pane1(page).locator('#main-panel').press('Enter')
 
     // state button doit rester focused (pas le title)
     await expect(pane1(page).locator('.popup-select-trigger[data-field-name="state"]')).toBeFocused()
 
     // Tab → meteo button (pas state de nouveau)
-    await pane1(page).locator('body').press('Tab')
+    await pane1(page).locator('#main-panel').press('Tab')
     await expect(pane1(page).locator('.popup-select-trigger[data-field-name="meteo"]')).toBeFocused()
   })
 

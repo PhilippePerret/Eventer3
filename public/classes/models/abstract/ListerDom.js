@@ -12,7 +12,6 @@ export default class ListerDom {
       if (i === this.lister.selectedIndex) el.classList.add('selected')
       container.appendChild(el)
     })
-    this.lister.Listener.attach(container)
     this.focusSelected()
     return container
   }
@@ -20,6 +19,10 @@ export default class ListerDom {
   focusSelected() {
     const item = this.lister.items[this.lister.selectedIndex]
     item?.Dom.el?.focus()
+  }
+
+  removeEl(item) {
+    item.Dom.el?.remove()
   }
 
   applySelection(prevItem, nextItem) {

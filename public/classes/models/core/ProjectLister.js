@@ -13,6 +13,7 @@ export default class ProjectLister extends Lister {
     const lister = new ProjectLister({ id: 1 })
     await lister.Repo.load()
     lister.Dom.render()
+    lister.Listener.attach(lister.Dom.container)
     LOG.m(1, 'ProjectLister ready')
     return lister
   }
@@ -39,7 +40,7 @@ export default class ProjectLister extends Lister {
           { label: 'Annuler',  type: 'cancel', value: false     },
         ],
       })
-      if (!choice) return
+      if (!choice) { this.Dom.focusSelected(); return }
 
       if (choice === 'use') {
         const resp = await fetch('/api/projects/open', {

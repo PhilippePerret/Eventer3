@@ -1,7 +1,13 @@
 BUG
-Quand on est dans le menu des ancêtres
-1- ArrowDown n'ouvre pas le menu
-2- ArrowLeft et ArrowDown NE DOIVENT AVOIR AUCUN effet. Il, elles choisissent et appliquent les valeurs !
+- "n"
+- FilePicker s'ouvre
+- je choisis un dossier avec eventer.db
+- Dialog de confirmation s'ouvre
+- J'annule
+- Dialog se ferme
+BUG : Plus rien ne réagit 
+CAUSE PROBABLE :le projet courant ne retrouve pas le focus
+
 
 BUG (testé dans un autre module test concernant les projets, je crois)
 Annuler l'ouverture d'un dossier qui a déjà un eventer.db ne remet pas le focus au projet qui l'avait avant de commencer.

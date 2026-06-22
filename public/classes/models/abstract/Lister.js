@@ -1,6 +1,7 @@
 import ListerDom from './ListerDom.js'
 import ListerRepo from './ListerRepo.js'
 import ListerListener from './ListerListener.js'
+import Notification from '../../ui/Notification.js'
 
 export default class Lister {
 
@@ -19,6 +20,24 @@ export default class Lister {
     const current = this.items[this.selectedIndex]
     this.selectedIndex = idx
     this.Dom.applySelection(current, this.items[idx])
+  }
+
+  async deleteSelected() {
+    if (this.items.length <= 1) {
+      Notification.show('Impossible de supprimer le dernier élément.')
+      return
+    }
+    const idx     = this.selectedIndex
+    const item    = this.items[idx]
+    const ok      = await this.Repo.deleteItem(item)
+    if (!ok) return
+    const newIdx  = Math.min(idx, this.items.length - 2)
+    const next    = this.items[newIdx === idx ? newIdx : newIdx]
+    this.items.splice(idx, 1)
+    this.item_ids.splice(idx, 1)
+    this.selectedIndex = newIdx
+    this.Dom.removeEl(item)
+    this.Dom.applySelection(null, this.items[newIdx])
   }
 
   selectPrev() {

@@ -18,7 +18,7 @@ test.describe('→ entre dans le Lister', () => {
     await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
     console.log('-> appui sur →')
-    await pane1(page).locator('body').press('ArrowRight')
+    await pane1(page).locator('#main-panel').press('ArrowRight')
 
     console.log('-> vérification : on est dans l\'EventLister du projet')
     await expect(pane1(page).locator('#main-panel')).not.toHaveClass(/project-list/)
@@ -43,7 +43,7 @@ test.describe('→ charge les events du projet', () => {
     await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
     console.log('-> appui sur →')
-    await pane1(page).locator('body').press('ArrowRight')
+    await pane1(page).locator('#main-panel').press('ArrowRight')
 
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 

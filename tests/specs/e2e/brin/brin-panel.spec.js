@@ -10,13 +10,13 @@ test.beforeEach(() => {
 async function goToEventLister(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await pane1(page).locator('body').press('ArrowRight')
+  await pane1(page).locator('#main-panel').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 }
 
 async function openBrinPanel(page) {
   await goToEventLister(page)
-  await pane1(page).locator('body').press('b')
+  await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('#brin-panel')).toBeVisible()
 }
 
@@ -24,7 +24,7 @@ async function openBrinPanel(page) {
 
 test("b ouvre le panneau des brins", async ({ page }) => {
   await goToEventLister(page)
-  await pane1(page).locator('body').press('b')
+  await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('#brin-panel')).toBeVisible()
 })
 
@@ -35,27 +35,27 @@ test("l'EventLister reste visible en fond pendant que le panneau est ouvert", as
 
 test("Escape ferme le panneau", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('body').press('Escape')
+  await pane1(page).locator('#main-panel').press('Escape')
   await expect(pane1(page).locator('#brin-panel')).not.toBeVisible()
 })
 
 test("b ferme le panneau des brins quand il est actif", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('body').press('b')
+  await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('#brin-panel')).not.toBeVisible()
 })
 
 test("Cmd+Enter ferme le panneau", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('body').press('Meta+Enter')
+  await pane1(page).locator('#main-panel').press('Meta+Enter')
   await expect(pane1(page).locator('#brin-panel')).not.toBeVisible()
 })
 
 test("après fermeture, l'EventLister redevient actif (↓ change la sélection d'event)", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('body').press('Escape')
+  await pane1(page).locator('#main-panel').press('Escape')
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
-  await pane1(page).locator('body').press('ArrowDown')
+  await pane1(page).locator('#main-panel').press('ArrowDown')
   await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/selected/)
 })
 
@@ -83,19 +83,19 @@ test("les brins cochés (ch:true) ont la classe checked", async ({ page }) => {
 test("seuls les brins de l'event sélectionné sont cochés à l'ouverture", async ({ page }) => {
   // e1 sélectionné : seul b2 coché (e1 a bi=["b2"])
   await goToEventLister(page)
-  await pane1(page).locator('body').press('b')
+  await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('.brin-item').nth(0)).not.toHaveClass(/checked/)
   await expect(pane1(page).locator('.brin-item').nth(1)).toHaveClass(/checked/)
-  await pane1(page).locator('body').press('Escape')
+  await pane1(page).locator('#main-panel').press('Escape')
   // e2 sélectionné : aucun brin coché (e2 n'a pas de bi)
-  await pane1(page).locator('body').press('ArrowDown')
-  await pane1(page).locator('body').press('b')
+  await pane1(page).locator('#main-panel').press('ArrowDown')
+  await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('.brin-item').nth(0)).not.toHaveClass(/checked/)
   await expect(pane1(page).locator('.brin-item').nth(1)).not.toHaveClass(/checked/)
-  await pane1(page).locator('body').press('Escape')
+  await pane1(page).locator('#main-panel').press('Escape')
   // retour à e1 : b2 doit de nouveau être coché (pas de stale state)
-  await pane1(page).locator('body').press('ArrowUp')
-  await pane1(page).locator('body').press('b')
+  await pane1(page).locator('#main-panel').press('ArrowUp')
+  await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('.brin-item').nth(0)).not.toHaveClass(/checked/)
   await expect(pane1(page).locator('.brin-item').nth(1)).toHaveClass(/checked/)
 })
@@ -109,20 +109,20 @@ test("le premier brin est sélectionné à l'ouverture", async ({ page }) => {
 
 test("↓ sélectionne le brin suivant", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('body').press('ArrowDown')
+  await pane1(page).locator('#main-panel').press('ArrowDown')
   await expect(pane1(page).locator('.brin-item').nth(1)).toHaveClass(/selected/)
 })
 
 test("↑ sélectionne le brin précédent", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('body').press('ArrowDown')
-  await pane1(page).locator('body').press('ArrowUp')
+  await pane1(page).locator('#main-panel').press('ArrowDown')
+  await pane1(page).locator('#main-panel').press('ArrowUp')
   await expect(pane1(page).locator('.brin-item').nth(0)).toHaveClass(/selected/)
 })
 
 test("↓↑ dans le panneau ne modifient pas la sélection de l'EventLister", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('body').press('ArrowDown')
+  await pane1(page).locator('#main-panel').press('ArrowDown')
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
 })
 
@@ -131,15 +131,15 @@ test("↓↑ dans le panneau ne modifient pas la sélection de l'EventLister", a
 test("Space coche un brin non-coché", async ({ page }) => {
   await openBrinPanel(page)
   await expect(pane1(page).locator('.brin-item').nth(0)).not.toHaveClass(/checked/)
-  await pane1(page).locator('body').press(' ')
+  await pane1(page).locator('#main-panel').press(' ')
   await expect(pane1(page).locator('.brin-item').nth(0)).toHaveClass(/checked/)
 })
 
 test("Space décoche un brin déjà coché", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('body').press('ArrowDown')
+  await pane1(page).locator('#main-panel').press('ArrowDown')
   await expect(pane1(page).locator('.brin-item').nth(1)).toHaveClass(/checked/)
-  await pane1(page).locator('body').press(' ')
+  await pane1(page).locator('#main-panel').press(' ')
   await expect(pane1(page).locator('.brin-item').nth(1)).not.toHaveClass(/checked/)
 })
 
@@ -147,25 +147,25 @@ test("Space décoche un brin déjà coché", async ({ page }) => {
 
 test("n ouvre l'éditeur pour un nouveau brin (input title focalisé)", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('body').press('n')
+  await pane1(page).locator('#main-panel').press('n')
   const titleInput = pane1(page).locator('.brin-item.selected input[name="title"]')
   await expect(titleInput).toBeFocused()
 })
 
 test("créer un brin : Enter valide et l'ajoute à la liste", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('body').press('n')
+  await pane1(page).locator('#main-panel').press('n')
   const titleInput = pane1(page).locator('.brin-item.selected input[name="title"]')
   await titleInput.fill('Nouveau brin')
-  await pane1(page).locator('body').press('Enter')
+  await pane1(page).locator('#main-panel').press('Enter')
   await expect(pane1(page).locator('.brin-item')).toHaveCount(3)
   await expect(pane1(page).locator('.brin-item').nth(1).locator('.brin-item__title')).toHaveText('Nouveau brin')
 })
 
 test("créer un brin : Escape annule, liste inchangée", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('body').press('n')
-  await pane1(page).locator('body').press('Escape')
+  await pane1(page).locator('#main-panel').press('n')
+  await pane1(page).locator('#main-panel').press('Escape')
   await expect(pane1(page).locator('.brin-item')).toHaveCount(2)
 })
 
@@ -173,7 +173,7 @@ test("créer un brin : Escape annule, liste inchangée", async ({ page }) => {
 
 test("Enter édite le brin sélectionné (input title focalisé avec valeur courante)", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('body').press('Enter')
+  await pane1(page).locator('#main-panel').press('Enter')
   const titleInput = pane1(page).locator('.brin-item.selected input[name="title"]')
   await expect(titleInput).toBeFocused()
   await expect(titleInput).toHaveValue('Mon brin')
@@ -181,9 +181,9 @@ test("Enter édite le brin sélectionné (input title focalisé avec valeur cour
 
 test("Tab en édition passe du titre au badge", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('body').press('Enter')
+  await pane1(page).locator('#main-panel').press('Enter')
   await expect(pane1(page).locator('.brin-item.selected input[name="title"]')).toBeFocused()
-  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('#main-panel').press('Tab')
   const badgeInput = pane1(page).locator('.brin-item.selected input[name="badge"]')
   await expect(badgeInput).toBeFocused()
   await expect(badgeInput).toHaveValue('MON')
@@ -191,46 +191,46 @@ test("Tab en édition passe du titre au badge", async ({ page }) => {
 
 test("Tab depuis la couleur revient au titre (cycle complet)", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('body').press('Enter')
+  await pane1(page).locator('#main-panel').press('Enter')
   await expect(pane1(page).locator('.brin-item.selected input[name="title"]')).toBeFocused()
-  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('#main-panel').press('Tab')
   await expect(pane1(page).locator('.brin-item.selected input[name="badge"]')).toBeFocused()
-  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('#main-panel').press('Tab')
   await expect(pane1(page).locator('.brin-item.selected select[data-property="type"]')).toBeFocused()
-  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('#main-panel').press('Tab')
   await expect(pane1(page).locator('.brin-item.selected input[data-property="color"]')).toBeFocused()
   // color → title (wrap-around)
-  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('#main-panel').press('Tab')
   await expect(pane1(page).locator('.brin-item.selected input[name="title"]')).toBeFocused()
 })
 
 test("Tab en édition cycle sur les 4 champs : title → badge → type → color", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('body').press('Enter')
+  await pane1(page).locator('#main-panel').press('Enter')
   await expect(pane1(page).locator('.brin-item.selected input[name="title"]')).toBeFocused()
-  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('#main-panel').press('Tab')
   await expect(pane1(page).locator('.brin-item.selected input[name="badge"]')).toBeFocused()
-  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('#main-panel').press('Tab')
   await expect(pane1(page).locator('.brin-item.selected select[data-property="type"]')).toBeFocused()
-  await pane1(page).locator('body').press('Tab')
+  await pane1(page).locator('#main-panel').press('Tab')
   await expect(pane1(page).locator('.brin-item.selected input[data-property="color"]')).toBeFocused()
 })
 
 test("édition : modifier le titre puis Enter met à jour l'affichage", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('body').press('Enter')
+  await pane1(page).locator('#main-panel').press('Enter')
   const titleInput = pane1(page).locator('.brin-item.selected input[name="title"]')
   await titleInput.fill('Brin renommé')
-  await pane1(page).locator('body').press('Enter')
+  await pane1(page).locator('#main-panel').press('Enter')
   await expect(pane1(page).locator('.brin-item').nth(0).locator('.brin-item__title')).toHaveText('Brin renommé')
 })
 
 test("édition : Escape restaure le titre original", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('body').press('Enter')
+  await pane1(page).locator('#main-panel').press('Enter')
   const titleInput = pane1(page).locator('.brin-item.selected input[name="title"]')
   await titleInput.fill('Titre temporaire')
-  await pane1(page).locator('body').press('Escape')
+  await pane1(page).locator('#main-panel').press('Escape')
   await expect(pane1(page).locator('.brin-item').nth(0).locator('.brin-item__title')).toHaveText('Mon brin')
 })
 
@@ -238,40 +238,40 @@ test("édition : Escape restaure le titre original", async ({ page }) => {
 
 test("persistance : brin créé survit au rechargement", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('body').press('n')
+  await pane1(page).locator('#main-panel').press('n')
   const titleInput = pane1(page).locator('.brin-item.selected input[name="title"]')
   await titleInput.fill('Brin persisté')
-  await pane1(page).locator('body').press('Enter')
+  await pane1(page).locator('#main-panel').press('Enter')
   await page.waitForLoadState('networkidle')
 
   await page.reload()
   await goToEventLister(page)
-  await pane1(page).locator('body').press('b')
+  await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('.brin-item')).toHaveCount(3)
   await expect(pane1(page).locator('.brin-item').nth(1).locator('.brin-item__title')).toHaveText('Brin persisté')
 })
 
 test("persistance : brin édité survit au rechargement", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('body').press('Enter')
+  await pane1(page).locator('#main-panel').press('Enter')
   const titleInput = pane1(page).locator('.brin-item.selected input[name="title"]')
   await titleInput.fill('Brin modifié')
-  await pane1(page).locator('body').press('Enter')
+  await pane1(page).locator('#main-panel').press('Enter')
   await page.waitForLoadState('networkidle')
 
   await page.reload()
   await goToEventLister(page)
-  await pane1(page).locator('body').press('b')
+  await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('.brin-item').nth(0).locator('.brin-item__title')).toHaveText('Brin modifié')
 })
 
 test("persistance : cochage survit au rechargement", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('body').press(' ')
+  await pane1(page).locator('#main-panel').press(' ')
   await page.waitForLoadState('networkidle')
 
   await page.reload()
   await goToEventLister(page)
-  await pane1(page).locator('body').press('b')
+  await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('.brin-item').nth(0)).toHaveClass(/checked/)
 })

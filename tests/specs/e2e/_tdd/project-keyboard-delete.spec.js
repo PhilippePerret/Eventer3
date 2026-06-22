@@ -1,3 +1,4 @@
+// Origine : tests/specs/e2e/project/keyboard-delete.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect, pane1 } from '../__setup__.js'
 
@@ -13,7 +14,7 @@ test.describe('Delete dans ProjectLister', () => {
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     const items = pane1(page).locator('.project-item')
     const initialCount = await items.count()
-    await pane1(page).locator('body').press('Delete')
+    await pane1(page).locator('#main-panel').press('Delete')
     await expect(items).toHaveCount(initialCount - 1)
   })
 
@@ -22,7 +23,7 @@ test.describe('Delete dans ProjectLister', () => {
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     const items = pane1(page).locator('.project-item')
     const initialCount = await items.count()
-    await pane1(page).locator('body').press('Delete')
+    await pane1(page).locator('#main-panel').press('Delete')
     await expect(items).toHaveCount(initialCount - 1)
     await page.waitForLoadState('networkidle')
     await page.reload()
@@ -32,9 +33,9 @@ test.describe('Delete dans ProjectLister', () => {
   test('l\'aide contextuelle mentionne ⌦ dans le ProjectLister avec plusieurs projets', async ({ page }) => {
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-    await pane1(page).locator('body').press('Meta+?')
+    await pane1(page).locator('#main-panel').press('Meta+?')
     await expect(pane1(page).locator('.contextual-help')).toContainText('⌦')
-    await pane1(page).locator('body').press('Escape')
+    await pane1(page).locator('#main-panel').press('Escape')
   })
 
   test('quand un seul projet reste, le footer ne mentionne plus ⌦', async ({ page }) => {
@@ -43,7 +44,7 @@ test.describe('Delete dans ProjectLister', () => {
     const items = pane1(page).locator('.project-item')
     const initialCount = await items.count()
     for (let i = 0; i < initialCount - 1; i++) {
-      await pane1(page).locator('body').press('Delete')
+      await pane1(page).locator('#main-panel').press('Delete')
       await expect(items).toHaveCount(initialCount - i - 1)
     }
     await expect(items).toHaveCount(1)
@@ -56,13 +57,30 @@ test.describe('Delete dans ProjectLister', () => {
     const items = pane1(page).locator('.project-item')
     const initialCount = await items.count()
     for (let i = 0; i < initialCount - 1; i++) {
-      await pane1(page).locator('body').press('Delete')
+      await pane1(page).locator('#main-panel').press('Delete')
       await expect(items).toHaveCount(initialCount - i - 1)
     }
     await expect(items).toHaveCount(1)
-    await pane1(page).locator('body').press('Delete')
+    await pane1(page).locator('#main-panel').press('Delete')
     await expect(items).toHaveCount(1)
     await expect(pane1(page).locator('#notification')).toBeVisible()
+  })
+
+  test('Delete sur le dernier projet sélectionne le projet précédent', async ({ page }) => {
+    await page.goto('/')
+    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+    const items = pane1(page).locator('.project-item')
+    const initialCount = await items.count()
+    // Naviguer jusqu'au dernier item
+    for (let i = 0; i < initialCount - 1; i++) {
+      await pane1(page).locator('#main-panel').press('ArrowDown')
+    }
+    await expect(items.last()).toHaveClass(/selected/)
+    // Supprimer le dernier
+    await pane1(page).locator('#main-panel').press('Delete')
+    await expect(items).toHaveCount(initialCount - 1)
+    // Le nouvel dernier item doit être sélectionné
+    await expect(items.last()).toHaveClass(/selected/)
   })
 
 })
