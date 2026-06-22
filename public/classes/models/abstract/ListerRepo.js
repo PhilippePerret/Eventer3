@@ -18,6 +18,15 @@ export default class ListerRepo {
     return resp.ok
   }
 
+  async countDescendants(item) {
+    const project_id = this.lister.project_id ?? item.id
+    const query = project_id ? `?project_id=${project_id}` : ''
+    const resp = await fetch(`/api/listers/${this.lister.id}/items/${item.id}/descendants/count${query}`, { cache: 'no-store' })
+    if (!resp.ok) return 0
+    const data = await resp.json()
+    return data.count ?? 0
+  }
+
   static async createLister(fields) {
     const resp = await fetch('/api/listers', {
       method:  'POST',

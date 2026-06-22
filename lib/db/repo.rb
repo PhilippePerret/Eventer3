@@ -609,18 +609,28 @@ module DB
     # ── Helpers privés ──────────────────────────────────────────────
 
     def self.collect_descendants_in_db(db, item_id)
-      ep = db.execute("SELECT item_id, lister_id FROM event_props WHERE lister_id IS NOT NULL")
-      ep_map = ep.each_with_object({}) { |r, h| h[r['item_id']] = r['lister_id'] }
-      lister_rows = db.execute("SELECT id, item_ids FROM listers")
-      lister_map = lister_rows.each_with_object({}) { |r, h| h[r['id']] = JSON.parse(r['item_ids'] || '[]') }
+
+      table  = item_id =~ /\A[0-9a-f]{8}-/i ? "project_meta" : "event_props"
+      id_col = table == "project_meta" ? "id" : "item_id"
+      meta = db.execute("SELECT lister_id FROM #{table} WHERE #{id_col} = ? LIMIT 1", [item_id]).first
+      return { item_ids: [], lister_ids: [] } unless meta && meta['lister_id']
+      ep_map = { item_id => meta['lister_id'] }
+
       item_ids = []
       lister_ids = []
       traverse = ->(id) {
         lid = ep_map[id]
         return unless lid
-        children = lister_map[lid] || []
+        row = db.execute("SELECT item_ids FROM listers WHERE id = ? LIMIT 1", [lid]).first
+        return unless row
+        children = JSON.parse(row['item_ids'] || '[]')
         lister_ids << lid
-        children.each { |cid| item_ids << cid; traverse.call(cid) }
+        children.each { |cid|
+          item_ids << cid
+          ep_row = db.execute("SELECT lister_id FROM event_props WHERE item_id = ? LIMIT 1", [cid]).first
+          ep_map[cid] = ep_row['lister_id'] if ep_row
+          traverse.call(cid)
+        }
       }
       traverse.call(item_id)
       { item_ids: item_ids, lister_ids: lister_ids }

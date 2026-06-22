@@ -2,6 +2,18 @@
 
 ## 2026-06-22
 
+### Suppression projet — confirmation cascade
+- `ConfirmDialog` : paramètre générique `expectedValue` (input à valider avant confirmation)
+- `ListerRepo.countDescendants(item)` : `GET /api/listers/:id/items/:item_id/descendants/count?project_id=`
+- `Lister.deleteSelected()` : si `cascadeCount > 0`, ouvre `ConfirmDialog` avec `expectedValue: cascadeCount`
+- `DB::Repo.collect_descendants_in_db` : détection UUID vs e{N}, requêtes ciblées par étape (plus de SELECT * FROM listers)
+- `project_meta` : colonne `id` (pas `item_id`) — corrigé dans la query initiale
+- Tests : `project/project-keyboard-delete.spec.js` (11 tests verts dont 5 cascade)
+
+### Lister — navigation circulaire
+- `selectPrev()` : ArrowUp sur premier item → sélectionne le dernier
+- `selectNext()` : ArrowDown sur dernier item → sélectionne le premier
+
 ### ListerDom — attach() séparé du render()
 - `render()` : suppression de `this.lister.Listener.attach(container)` — n'appartient pas au rendu
 - `ProjectLister.init()` : ajout explicite de `lister.Listener.attach(lister.Dom.container)` après `render()`

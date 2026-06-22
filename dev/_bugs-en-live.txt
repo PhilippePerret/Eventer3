@@ -1,12 +1,4 @@
-BUG
-- "n"
-- FilePicker s'ouvre
-- je choisis un dossier avec eventer.db
-- Dialog de confirmation s'ouvre
-- J'annule
-- Dialog se ferme
-BUG : Plus rien ne réagit 
-CAUSE PROBABLE :le projet courant ne retrouve pas le focus
+
 
 
 BUG (testé dans un autre module test concernant les projets, je crois)

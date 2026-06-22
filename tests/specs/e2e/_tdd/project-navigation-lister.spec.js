@@ -1,3 +1,4 @@
+// Origine : tests/specs/e2e/project/project-navigation-lister.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect, pane1 } from '../__setup__.js'
 
@@ -5,6 +6,27 @@ import { test, expect, pane1 } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('many-projects')
+})
+
+test('ArrowUp sur le premier projet sélectionne le dernier', async ({ page }) => {
+  await page.goto('/')
+  await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
+  await pane1(page).locator('#main-panel').press('ArrowUp')
+  const items = pane1(page).locator('.project-item')
+  const last  = items.nth(await items.count() - 1)
+  await expect(last).toHaveClass(/selected/)
+})
+
+test('ArrowDown sur le dernier projet sélectionne le premier', async ({ page }) => {
+  await page.goto('/')
+  const items = pane1(page).locator('.project-item')
+  const count = await items.count()
+  for (let i = 0; i < count - 1; i++) {
+    await pane1(page).locator('#main-panel').press('ArrowDown')
+  }
+  await expect(items.nth(count - 1)).toHaveClass(/selected/)
+  await pane1(page).locator('#main-panel').press('ArrowDown')
+  await expect(items.nth(0)).toHaveClass(/selected/)
 })
 
 test('les events persistent après avoir navigué vers un autre projet et revenu', async ({ page }) => {

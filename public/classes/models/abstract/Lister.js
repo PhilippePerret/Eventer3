@@ -2,6 +2,7 @@ import ListerDom from './ListerDom.js'
 import ListerRepo from './ListerRepo.js'
 import ListerListener from './ListerListener.js'
 import Notification from '../../ui/Notification.js'
+import ConfirmDialog from '../../ui/ConfirmDialog.js'
 
 export default class Lister {
 
@@ -27,12 +28,21 @@ export default class Lister {
       Notification.show('Impossible de supprimer le dernier élément.')
       return
     }
-    const idx     = this.selectedIndex
-    const item    = this.items[idx]
-    const ok      = await this.Repo.deleteItem(item)
+    const idx          = this.selectedIndex
+    const item         = this.items[idx]
+    const cascadeCount = await this.Repo.countDescendants(item)
+    if (cascadeCount > 0) {
+      const label     = cascadeCount === 1 ? 'évènement imbriqué' : 'évènements imbriqués'
+      const confirmed = await ConfirmDialog.open({
+        title:         item.title,
+        message:       `Cette destruction entraînera la destruction en cascade de ${cascadeCount} ${label}. Tapez ${cascadeCount} pour confirmer.`,
+        expectedValue: cascadeCount,
+      })
+      if (!confirmed) { this.Dom.focusSelected(); return }
+    }
+    const ok = await this.Repo.deleteItem(item)
     if (!ok) return
-    const newIdx  = Math.min(idx, this.items.length - 2)
-    const next    = this.items[newIdx === idx ? newIdx : newIdx]
+    const newIdx = Math.min(idx, this.items.length - 2)
     this.items.splice(idx, 1)
     this.item_ids.splice(idx, 1)
     this.selectedIndex = newIdx
@@ -43,15 +53,17 @@ export default class Lister {
   selectPrev() {
     const items = this.items
     let idx = this.selectedIndex - 1
-    while (idx >= 0 && items[idx].filtered) idx--
-    if (idx >= 0) this.selectAt(idx)
+    if (idx < 0) idx = items.length - 1
+    while (idx > 0 && items[idx].filtered) idx--
+    this.selectAt(idx)
   }
 
   selectNext() {
     const items = this.items
     let idx = this.selectedIndex + 1
-    while (idx < items.length && items[idx].filtered) idx++
-    if (idx < items.length) this.selectAt(idx)
+    if (idx >= items.length) idx = 0
+    while (idx < items.length - 1 && items[idx].filtered) idx++
+    this.selectAt(idx)
   }
 
 }

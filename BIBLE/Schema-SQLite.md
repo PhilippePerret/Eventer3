@@ -73,7 +73,7 @@ Chaque projet d’histoire possède son propre `eventer.db` contenant TOUTES ses
 
 
     event_props {
-        TEXT item_id PK
+        TEXT item_id PK // les données item générales
         
         TEXT lister_id DEFAULT NULL FK
         --- CHILD !!! NOT PARENT !!! ---

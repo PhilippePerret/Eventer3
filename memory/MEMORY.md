@@ -49,3 +49,5 @@
 - **[Footer panels : classe commune](feedback_panel_footer_style.md)** — TOUJOURS `.floating-panel__footer` ; `var(--line)` pour filets ; `margin-top:12px` pour l'air ; hints = `.panel-footer-hint` (pas bouton)
 - **[Tests = héritages ancienne archi](feedback_tests_heritage_ancienne_archi.md)** — CRITIQUE: tests existants ≠ vérité absolue ; si test contredit nouvelle archi → corriger le test
 - **[CRITIQUE: régressions = un problème à la fois](feedback_tests_un_par_un.md)** — JAMAIS traiter toutes les erreurs ensemble. 1 problème (≠ 1 test) → régler → confirmer vert → seulement alors passer au suivant.
+- [Dire "J'ai terminé"](feedback_fin_de_tache.md) — Toujours terminer par "J'ai terminé." quand une tâche est finie.
+- **[Descendants Project vs Event](architecture_descendants_project_vs_event.md)** — CRITIQUE: Project → `project_meta.lister_id` ; Event → `event_props.lister_id`

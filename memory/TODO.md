@@ -10,7 +10,7 @@
 > - Tests existants ne respectent pas nouvelle archi — corriger APRÈS validation fonctionnelle
 > - Implémenter dans la nouvelle archi uniquement
 
-### Suppression item — touche Delete
+### ArrowRight → event-list (EventLister nouvelle archi)
 
 ### Fichiers `e2e/project/` à reprendre (non verts)
 - `new-project-existing-db.spec.js`
@@ -22,8 +22,6 @@
 <a name="todo"></a>
 
 ## À faire
-
-- [ ] Implémenter ArrowRight → event-list (EventLister à créer dans nouvelle archi)
 - [ ] `⌘↓` / `⌘↑` pour déplacer les projets
 - [ ] `Enter` pour éditer les évènements (event)
 
@@ -35,6 +33,8 @@
 
 ## Fait
 
+- [x] 2026-06-22 — Suppression projet en cascade : ConfirmDialog.expectedValue, countDescendants, collect_descendants_in_db corrigé
+- [x] 2026-06-22 — Navigation circulaire : ArrowUp sur premier → dernier, ArrowDown sur dernier → premier
 - [x] 2026-06-22 — Bug flèches 2 en 2 : attach() retiré de ListerDom.render(), appelé une seule fois dans ProjectLister.init()
 - [x] 2026-06-22 — FilePicker "Choisir" : button → span (pas de click souris)
 - [x] 2026-06-22 — ProjectLister.createNew() : focus restauré après annulation ConfirmDialog
