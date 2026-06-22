@@ -1,5 +1,23 @@
 # CHANGELOG — Eventer3
 
+## 2026-06-22 (suite)
+
+### EventLister / Event — squelettes nouvelle archi
+- `public/classes/models/core/Event.js` : créé, PROPS `[{ name:'title', type:'text' }]`
+- `public/classes/models/core/EventLister.js` : créé, `ITEM_CLASS=Event`, `CHILD_CLASS=EventLister`, `TYPE='events'`
+
+### Item.enterChildren() — auto-create premier item
+- Si `child.items.length === 0` après chargement : `await child.createNew()` (un lister ne peut pas être vide)
+
+### Lister.leaveToParent() — guard supprimé
+- `if (!parent) return` retiré : `parentLister` est TOUJOURS défini, le guard masquait les bugs silencieusement
+
+### Test project-navigation-lister — réécriture
+- Fixture `many-projects` → `two-projects-events` (Projet A : 3 events, Projet B : 2 events)
+- `press('ArrowRight')` sur `.project-item.selected` (ItemListener, pas container)
+- `press('Enter')` sur `.event-item.selected` (ItemListener, pas container)
+- Test toujours en échec : 7 events reçus au lieu de 4 — création d'event non encore implémentée nouvelle archi
+
 ## 2026-06-22
 
 ### Suppression projet — confirmation cascade

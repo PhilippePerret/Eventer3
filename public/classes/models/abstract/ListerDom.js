@@ -4,10 +4,10 @@ export default class ListerDom {
   render() {
     const container = document.querySelector('#main-panel')
     container.innerHTML = ''
-    const minClass = this.lister.constructor.ITEM_CLASS?.name.toLowerCase()
-    if (minClass) container.className = `${minClass}-list`
+    if (this.lister.minClass) container.className = `${this.lister.minClass}-list`
     this.container = container
     this.lister.items.forEach((item, i) => {
+      item.parentLister = this.lister
       const el = item.Dom.build()
       if (i === this.lister.selectedIndex) el.classList.add('selected')
       container.appendChild(el)

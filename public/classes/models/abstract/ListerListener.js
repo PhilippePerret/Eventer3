@@ -7,11 +7,12 @@ export default class ListerListener extends BaseListener {
   get target() { return this.lister }
 
   static LISTENERS = {
-    ArrowUp:   { nokey: 'selectPrev'     },
-    ArrowDown: { nokey: 'selectNext'     },
-    n:         { nokey: 'createNew'      },
-    N:         { nokey: 'createNew'      },
-    Delete:    { nokey: 'deleteSelected' },
+    ArrowUp:    { nokey: 'selectPrev'     },
+    ArrowDown:  { nokey: 'selectNext'     },
+    ArrowLeft:  { nokey: 'leaveToParent'  },
+    n:          { nokey: 'createNew'      },
+    N:          { nokey: 'createNew'      },
+    Delete:     { nokey: 'deleteSelected' },
   }
 
 }

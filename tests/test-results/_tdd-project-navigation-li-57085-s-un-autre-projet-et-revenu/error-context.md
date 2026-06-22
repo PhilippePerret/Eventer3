@@ -12,23 +12,32 @@
 # Error details
 
 ```
-Error: expect(locator).toHaveClass(expected) failed
+Error: expect(locator).toHaveCount(expected) failed
 
-Locator: locator('#pane-1').contentFrame().locator('#main-panel')
-Expected pattern: /event-list/
-Received string:  "project-list"
-Timeout: 5000ms
+Locator:  locator('#pane-1').contentFrame().locator('.event-item')
+Expected: 4
+Received: 7
+Timeout:  5000ms
 
 Call log:
-  - Expect "toHaveClass" with timeout 5000ms
-  - waiting for locator('#pane-1').contentFrame().locator('#main-panel')
-    14 × locator resolved to <main id="main-panel" class="project-list">…</main>
-       - unexpected value "project-list"
+  - Expect "toHaveCount" with timeout 5000ms
+  - waiting for locator('#pane-1').contentFrame().locator('.event-item')
+    14 × locator resolved to 7 elements
+       - unexpected value "7"
 
 ```
 
+# Page snapshot
+
 ```yaml
-- main: Projet A --- roman Projet B --- roman Projet C --- roman Projet caché --- roman
+- iframe [active] [ref=e3]:
+  - generic [ref=f1e1]:
+    - main [ref=f1e2]:
+      - generic [ref=f1e4]: Évènement un
+      - generic [ref=f1e6]: Évènement deux
+      - generic [ref=f1e8]: Évènement trois
+    - contentinfo "Raccourcis clavier" [ref=f1e14]
+    - generic: AIDE ⇧⌘ ?
 ```
 
 # Test source
@@ -38,10 +47,10 @@ Call log:
   2  | import { installFixtures } from '../../../helpers/install-fixtures.js'
   3  | import { test, expect, pane1 } from '../__setup__.js'
   4  | 
-  5  | // Fixture many-projects : 4 projets, aucun n'a de lister_id (pas d'events créés)
+  5  | // Fixture two-projects-events : Projet A (3 events), Projet B (2 events)
   6  | 
   7  | test.beforeEach(() => {
-  8  |   installFixtures('many-projects')
+  8  |   installFixtures('two-projects-events')
   9  | })
   10 | 
   11 | test('ArrowUp sur le premier projet sélectionne le dernier', async ({ page }) => {
@@ -69,44 +78,45 @@ Call log:
   33 |   await page.goto('/')
   34 |   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
   35 | 
-  36 |   // Entrer dans le premier projet → lister virtuel
-  37 |   await pane1(page).locator('#main-panel').press('ArrowRight')
-> 38 |   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-     |                                                    ^ Error: expect(locator).toHaveClass(expected) failed
+  36 |   // Entrer dans Projet A
+  37 |   await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  38 |   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   39 | 
-  40 |   // Créer un événement
-  41 |   await pane1(page).locator('#main-panel').press('n')
-  42 |   await expect(pane1(page).locator('.event-item.selected input[name="title"]')).toBeFocused()
-  43 |   await page.keyboard.type('Mon événement test')
-  44 |   await pane1(page).locator('#main-panel').press('Enter')
-  45 |   // Attendre fin des appels réseau (createLister + createItem + save)
-  46 |   await page.waitForLoadState('networkidle')
-  47 | 
-  48 |   // L'event est visible
-  49 |   await expect(pane1(page).locator('.event-item').nth(0)).toContainText('Mon événement test')
-  50 | 
-  51 |   // Revenir à la liste des projets
-  52 |   await pane1(page).locator('#main-panel').press('ArrowLeft')
-  53 |   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  54 | 
-  55 |   // Entrer dans un autre projet (le second)
-  56 |   await pane1(page).locator('#main-panel').press('ArrowDown')
-  57 |   await pane1(page).locator('#main-panel').press('ArrowRight')
-  58 |   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-  59 | 
-  60 |   // Revenir à la liste des projets
-  61 |   await pane1(page).locator('#main-panel').press('ArrowLeft')
-  62 |   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  63 | 
-  64 |   // Revenir au premier projet
-  65 |   await pane1(page).locator('#main-panel').press('ArrowUp')
-  66 |   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-  67 |   await pane1(page).locator('#main-panel').press('ArrowRight')
-  68 |   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-  69 | 
-  70 |   // L'event doit toujours être là
-  71 |   await expect(pane1(page).locator('.event-item')).toHaveCount(1)
-  72 |   await expect(pane1(page).locator('.event-item').nth(0)).toContainText('Mon événement test')
-  73 | })
-  74 | 
+  40 |   // Naviguer entre les events existants
+  41 |   await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  42 |   await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  43 | 
+  44 |   // Créer un nouvel event
+  45 |   await pane1(page).locator('.event-item.selected').press('n')
+  46 |   await expect(pane1(page).locator('.event-item.selected [data-field="title"]')).toBeFocused()
+  47 |   await page.keyboard.type('Nouvel événement')
+  48 |   await pane1(page).locator('.event-item.selected').press('Enter')
+  49 |   await page.waitForLoadState('networkidle')
+> 50 |   await expect(pane1(page).locator('.event-item')).toHaveCount(4)
+     |                                                    ^ Error: expect(locator).toHaveCount(expected) failed
+  51 | 
+  52 |   // Revenir à la liste des projets
+  53 |   await pane1(page).locator('#main-panel').press('ArrowLeft')
+  54 |   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+  55 | 
+  56 |   // Entrer dans Projet B
+  57 |   await pane1(page).locator('#main-panel').press('ArrowDown')
+  58 |   await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  59 |   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  60 | 
+  61 |   // Revenir à la liste des projets
+  62 |   await pane1(page).locator('#main-panel').press('ArrowLeft')
+  63 |   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+  64 | 
+  65 |   // Revenir au Projet A
+  66 |   await pane1(page).locator('#main-panel').press('ArrowUp')
+  67 |   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
+  68 |   await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  69 |   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  70 | 
+  71 |   // Tous les events doivent être là (dont le nouveau)
+  72 |   await expect(pane1(page).locator('.event-item')).toHaveCount(4)
+  73 |   await expect(pane1(page).locator('.event-item').filter({ hasText: 'Nouvel événement' })).toHaveCount(1)
+  74 | })
+  75 | 
 ```

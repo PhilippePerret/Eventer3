@@ -10,6 +10,12 @@
 > - Tests existants ne respectent pas nouvelle archi — corriger APRÈS validation fonctionnelle
 > - Implémenter dans la nouvelle archi uniquement
 
+### Tester avant toute chose la création d'event (workflow TDD)
+- Création d'event PAS encore implémentée dans nouvelle archi (seule la création de projet l'est)
+- `_tdd/project-navigation-lister.spec.js` réécrit mais échoue (7 events au lieu de 4) — cause probable : `createNew()` de `Lister` ne convient pas pour les events, ou `ListerRepo.createItem` ne fonctionne pas bien dans ce contexte
+- Vérifier d'abord que 3 items sont présents avant de créer le 4e (sécurité test)
+- Fichier test existant à trouver, déplacer en `_tdd/`, adapter nouvelle archi avant d'implémenter
+
 ### ArrowRight → event-list (EventLister nouvelle archi)
 
 ### Fichiers `e2e/project/` à reprendre (non verts)
@@ -22,7 +28,7 @@
 <a name="todo"></a>
 
 ## À faire
-- [ ] `⌘↓` / `⌘↑` pour déplacer les projets
+- [ ] `⌘↓` / `⌘↑` pour déplacer les projets ou les events
 - [ ] `Enter` pour éditer les évènements (event)
 
 ## Réflexions

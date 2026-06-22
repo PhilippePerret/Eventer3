@@ -1,12 +1,14 @@
 import Lister from '../abstract/Lister.js'
 import ListerRepo from '../abstract/ListerRepo.js'
 import Project from './Project.js'
+import EventLister from './EventLister.js'
 import FilePicker from '../../ui/FilePicker.js'
 import ConfirmDialog from '../../ui/ConfirmDialog.js'
 import LOG from '../../../system/LOG.js'
 
 export default class ProjectLister extends Lister {
-  static ITEM_CLASS = Project
+  static ITEM_CLASS  = Project
+  static CHILD_CLASS = EventLister
 
   static async init() {
     LOG.m(1, 'Init projects')
@@ -72,6 +74,8 @@ export default class ProjectLister extends Lister {
       body:    JSON.stringify({ db_path: dbPath }),
     })
 
+    await this.constructor.ITEM_CLASS.onCreated?.(newId)
+
     await this._appendToOrder(prevIds, newId, insertIdx)
   }
 
@@ -83,8 +87,6 @@ export default class ProjectLister extends Lister {
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ value: JSON.stringify(newOrder) }),
     })
-    await this.Repo.load()
-    this.selectedIndex = insertIdx
-    this.Dom.render()
+    await this._reloadAt(insertIdx)
   }
 }

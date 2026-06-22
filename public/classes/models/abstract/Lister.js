@@ -11,11 +11,14 @@ export default class Lister {
     this.item_ids      = data.item_ids      ?? []
     this.items         = []
     this.selectedIndex = data.selectedIndex ?? 0
+    this.project_id    = data.project_id    ?? null
+    this.parentLister  = data.parentLister  ?? null
   }
 
-  get Dom()      { return this._dom   || (this._dom   = new ListerDom(this)) }
-  get Repo()     { return this._repo  || (this._repo  = new ListerRepo(this)) }
-  get Listener() { return this._listen|| (this._listen= new ListerListener(this)) }
+  get Dom()      { return this._dom      || (this._dom      = new ListerDom(this)) }
+  get Repo()     { return this._repo     || (this._repo     = new ListerRepo(this)) }
+  get Listener() { return this._listen   || (this._listen   = new ListerListener(this)) }
+  get minClass() { return this._minClass || (this._minClass = this.constructor.ITEM_CLASS?.name.toLowerCase()) }
 
   selectAt(idx) {
     const current = this.items[this.selectedIndex]
@@ -48,6 +51,29 @@ export default class Lister {
     this.selectedIndex = newIdx
     this.Dom.removeEl(item)
     this.Dom.applySelection(null, this.items[newIdx])
+  }
+
+  async createNew() {
+    const result = await ListerRepo.createItem(this.id, { title: '' }, { project_id: this.project_id })
+    if (!result?.id) { this.Dom.focusSelected(); return }
+    await this.Repo.load()
+    const idx = this.item_ids.indexOf(result.id)
+    this.selectedIndex = idx >= 0 ? idx : 0
+    this.Dom.render()
+    this.items[this.selectedIndex]?.startEditing()
+  }
+
+  async _reloadAt(insertIdx) {
+    await this.Repo.load()
+    this.selectedIndex = insertIdx
+    this.Dom.render()
+  }
+
+  leaveToParent() {
+    const parent = this.parentLister
+    this.Listener.detach()
+    parent.Dom.render()
+    parent.Listener.attach(parent.Dom.container)
   }
 
   selectPrev() {

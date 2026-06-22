@@ -59,7 +59,7 @@ end
 get '/api/listers/:id' do
   lister = DB::Repo.find_lister_by_id(DATA_DIR, params[:id], project_id: params[:project_id])
   content_type :json
-  JSON.generate(lister || { virtual: true })
+  JSON.generate(lister || { missing: true })
 end
 
 # TESTS ONLY — non utilisé par le frontend

@@ -29,7 +29,14 @@ export default class BaseListener {
   }
 
   attach(el) {
-    el.addEventListener('keydown', ev => this.onkeydown(ev))
+    this._abort?.abort()
+    this._abort = new AbortController()
+    el.addEventListener('keydown', ev => this.onkeydown(ev), { signal: this._abort.signal })
+  }
+
+  detach() {
+    this._abort?.abort()
+    this._abort = null
   }
 
   get target() { return this }

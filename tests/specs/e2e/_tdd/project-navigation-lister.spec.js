@@ -2,10 +2,10 @@
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect, pane1 } from '../__setup__.js'
 
-// Fixture many-projects : 4 projets, aucun n'a de lister_id (pas d'events créés)
+// Fixture two-projects-events : Projet A (3 events), Projet B (2 events)
 
 test.beforeEach(() => {
-  installFixtures('many-projects')
+  installFixtures('two-projects-events')
 })
 
 test('ArrowUp sur le premier projet sélectionne le dernier', async ({ page }) => {
@@ -33,41 +33,42 @@ test('les events persistent après avoir navigué vers un autre projet et revenu
   await page.goto('/')
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
-  // Entrer dans le premier projet → lister virtuel
-  await pane1(page).locator('#main-panel').press('ArrowRight')
+  // Entrer dans Projet A
+  await pane1(page).locator('.project-item.selected').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
-  // Créer un événement
-  await pane1(page).locator('#main-panel').press('n')
-  await expect(pane1(page).locator('.event-item.selected input[name="title"]')).toBeFocused()
-  await page.keyboard.type('Mon événement test')
-  await pane1(page).locator('#main-panel').press('Enter')
-  // Attendre fin des appels réseau (createLister + createItem + save)
+  // Naviguer entre les events existants
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+
+  // Créer un nouvel event
+  await pane1(page).locator('.event-item.selected').press('n')
+  await expect(pane1(page).locator('.event-item.selected [data-field="title"]')).toBeFocused()
+  await page.keyboard.type('Nouvel événement')
+  await pane1(page).locator('.event-item.selected').press('Enter')
   await page.waitForLoadState('networkidle')
-
-  // L'event est visible
-  await expect(pane1(page).locator('.event-item').nth(0)).toContainText('Mon événement test')
+  await expect(pane1(page).locator('.event-item')).toHaveCount(4)
 
   // Revenir à la liste des projets
   await pane1(page).locator('#main-panel').press('ArrowLeft')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
 
-  // Entrer dans un autre projet (le second)
+  // Entrer dans Projet B
   await pane1(page).locator('#main-panel').press('ArrowDown')
-  await pane1(page).locator('#main-panel').press('ArrowRight')
+  await pane1(page).locator('.project-item.selected').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
   // Revenir à la liste des projets
   await pane1(page).locator('#main-panel').press('ArrowLeft')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
 
-  // Revenir au premier projet
+  // Revenir au Projet A
   await pane1(page).locator('#main-panel').press('ArrowUp')
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-  await pane1(page).locator('#main-panel').press('ArrowRight')
+  await pane1(page).locator('.project-item.selected').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
-  // L'event doit toujours être là
-  await expect(pane1(page).locator('.event-item')).toHaveCount(1)
-  await expect(pane1(page).locator('.event-item').nth(0)).toContainText('Mon événement test')
+  // Tous les events doivent être là (dont le nouveau)
+  await expect(pane1(page).locator('.event-item')).toHaveCount(4)
+  await expect(pane1(page).locator('.event-item').filter({ hasText: 'Nouvel événement' })).toHaveCount(1)
 })

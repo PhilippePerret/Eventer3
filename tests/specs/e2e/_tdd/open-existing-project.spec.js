@@ -30,7 +30,7 @@ async function tryPickExistingFolder(page, expect, workDir) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-test.skip('choisir un dossier avec eventer.db affiche une boîte de confirmation', async ({ page }) => {
+test('choisir un dossier avec eventer.db affiche une boîte de confirmation', async ({ page }) => {
   const { workDir } = await createProjectAndGetFolderInfo(page, expect)
 
   await page.goto('/')
@@ -71,7 +71,7 @@ test('→ sur un projet ouvre la liste de ses events', async ({ page }) => {
   await expect(pane1(page).locator('.event-item').nth(0)).toContainText('Acte I')
 })
 
-test.skip('annuler : aucun projet créé', async ({ page }) => {
+test('annuler : aucun projet créé', async ({ page }) => {
   const { workDir } = await createProjectAndGetFolderInfo(page, expect)
 
   const countAfterFirst = await pane1(page).locator('.project-item').count()
@@ -87,7 +87,7 @@ test.skip('annuler : aucun projet créé', async ({ page }) => {
   await expect(pane1(page).locator('.project-item')).toHaveCount(countAfterFirst)
 })
 
-test.skip('persistance : le projet survit au rechargement', async ({ page }) => {
+test('persistance : le projet survit au rechargement', async ({ page }) => {
   const { workDir } = await createProjectAndGetFolderInfo(page, expect)
 
   const countAfterFirst = await pane1(page).locator('.project-item').count()

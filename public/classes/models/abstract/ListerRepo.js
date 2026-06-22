@@ -2,11 +2,16 @@ export default class ListerRepo {
   constructor(lister) { this.lister = lister }
 
   async load() {
-    const id  = this.lister.id
-    const def = await fetch(`/api/listers/${id}`, { cache: 'no-store' }).then(r => r.json())
+    const id    = this.lister.id
+    const pid   = this.lister.project_id
+    const query = pid ? `?project_id=${pid}` : ''
+    const def   = await fetch(`/api/listers/${id}${query}`, { cache: 'no-store' }).then(r => r.json())
+    if (!def) return
+    this.lister._missing = def.missing === true
+    if (def.id != null) this.lister.id = def.id
     this.lister.item_ids = def.item_ids ?? []
 
-    const data = await fetch(`/api/listers/${id}/items`, { cache: 'no-store' }).then(r => r.json())
+    const data = await fetch(`/api/listers/${id}/items${query}`, { cache: 'no-store' }).then(r => r.json())
     const Cls  = this.lister.constructor.ITEM_CLASS
     this.lister.items = this.lister.item_ids
       .map(id => data[id] ? new Cls({ ...data[id], id }) : null)
