@@ -1,5 +1,5 @@
 import PopupSelect from '../ui/PopupSelect.js'
-export { StopEvent } from './events.js'
+import { stopEvent } from './events.js'
 
 export default class DOM {
 
@@ -13,10 +13,20 @@ export default class DOM {
     const el = this._fieldEl(field, item)
     el.classList.add('display-select')
     const val = item[field.name]
-    const found = (field.values ?? []).find(v => v.value === val)
+    const values = this._normalizeValues(field.values)
+    const found = values.find(v => v.value === val)
     el.textContent = found ? (found.label ?? found.name ?? val) : (val ?? '---')
     this._applyValuesWidth(el, field)
     return el
+  }
+
+  BLOCKED_KEYS_IN_CONTENTEDITABLE = {
+    ArrowUp:   true,
+    ArrowDown: true,
+  }
+
+  blockKeysFromContenteditable(e) {
+    if (this.BLOCKED_KEYS_IN_CONTENTEDITABLE[e.key]) return stopEvent(e)
   }
 
   buildEditTextField(field, item) {
@@ -25,6 +35,7 @@ export default class DOM {
     el.setAttribute('data-field', field.name)
     el.setAttribute('tabindex', '0')
     el.textContent = item[field.name] ?? ''
+    el.addEventListener('keydown', e => this.blockKeysFromContenteditable(e))
     return el
   }
 
@@ -33,16 +44,17 @@ export default class DOM {
     el.classList.add('display-select')
     el.setAttribute('data-field', field.name)
     el.setAttribute('tabindex', '0')
-    const found = (field.values ?? []).find(v => v.value === item[field.name])
+    const values = this._normalizeValues(field.values)
+    const found = values.find(v => v.value === item[field.name])
     el.textContent = found ? (found.label ?? found.name ?? item[field.name]) : (item[field.name] ?? '---')
 
     const popup = new PopupSelect({
-      options: field.values,
+      options: values,
       currentValue: item[field.name],
       multi: field.multiple ?? false,
       onSelect: val => {
         item[field.name] = val
-        const f = (field.values ?? []).find(v => v.value === val)
+        const f = values.find(v => v.value === val)
         el.textContent = f ? (f.label ?? f.name ?? val) : val
         el.focus()
         if (field.onchange) item[field.onchange](val)
@@ -82,9 +94,25 @@ export default class DOM {
   }
 
   _applyValuesWidth(el, field) {
-    if (!field.values?.length) return
-    const maxLen = Math.max(...field.values.map(v => (v.label ?? v.name ?? '').length))
+    const values = this._normalizeValues(field.values)
+    if (!values.length) return
+    const maxLen = Math.max(...values.map(v => (v.label ?? v.name ?? '').length))
     el.style.minWidth = `${maxLen + 2}ch`
+  }
+
+  _normalizeValues(values) {
+    if (!values) return []
+    if (Array.isArray(values)) {
+      return values.map(v => {
+        if (v !== null && typeof v === 'object' && ('value' in v || 'label' in v)) return v
+        if (v !== null && typeof v === 'object') {
+          const [key, label] = Object.entries(v)[0] ?? []
+          return { value: key, label: label ?? key }
+        }
+        return { value: v, label: String(v) }
+      })
+    }
+    return Object.entries(values).map(([value, label]) => ({ value, label: String(label) }))
   }
 
   _fieldEl(field, item) {

@@ -128,24 +128,24 @@ body {
   color: white !important;
 }
 
-.project-item__title {
+.project-title {
   flex: 1;
   font-size: 32px;
   font-weight: 700;
 }
 
-.project-item__id {
+.project-id {
   color: var(--muted);
   font-size: 22px;
   white-space: nowrap;
 }
 
-.project-item.selected .project-item__id {
+.project-item.selected .project-id {
   color: rgba(255, 255, 255, .78);
 }
 
 .project-check-gutter { display: none; }
-.project-body { display: contents; }
+.project-body { flex: 1; }
 
 /* ─── Event list ──────────────────────────────────────────────── */
 

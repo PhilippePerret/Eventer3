@@ -31,7 +31,7 @@ export default class ItemDom {
     el.appendChild(gutter)
 
     const body = document.createElement('div')
-    body.className = `item-body ${minClass}-body`
+    body.className = `item-body ${minClass}-body${this.item.lister_id ? ' child-indicator' : ''}`
     const groups = {}
     for (const field of this.item.PROPS) {
       const w = field.warper

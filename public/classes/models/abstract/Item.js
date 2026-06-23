@@ -31,7 +31,7 @@ export default class Item {
     if (!this.parentLister) return
     const ChildClass = this.parentLister.constructor.CHILD_CLASS
     if (!ChildClass) return
-    const project_id = this.project_id ?? this.parentLister?.project_id
+    const project_id = this.project_id ?? this.parentLister?.project_id ?? this.id
     const child = new ChildClass({
       id:           this.lister_id ?? this.id,
       project_id,

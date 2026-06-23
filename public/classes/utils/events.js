@@ -1,4 +1,4 @@
-export function StopEvent(event) {
+export function stopEvent(event) {
   event.preventDefault()
   event.stopPropagation()
   return false

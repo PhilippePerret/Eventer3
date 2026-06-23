@@ -17,7 +17,7 @@ test("dans un EventLister, la touche « n » crée un nouvel Event après celui 
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
   console.log('-> entrée dans le EventLister du premier projet')
-  await pane1(page).locator('#main-panel').press('ArrowRight')
+  await pane1(page).locator('.project-item.selected').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
   console.log('-> vérification : premier évènement sélectionné')

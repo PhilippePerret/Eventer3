@@ -1,5 +1,6 @@
-TEST
-Choisir une fixture avec au moins un projet qui a trois niveaux 
+
+BUG
+⇧ + ⇥ devrait faire passer les propriétés dans le cycle inverse
 
 BUG (testé dans un autre module test concernant les projets, je crois)
 Annuler l'ouverture d'un dossier qui a déjà un eventer.db ne remet pas le focus au projet qui l'avait avant de commencer.

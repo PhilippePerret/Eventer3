@@ -13,7 +13,7 @@ async function enterVirtualEventLister(page) {
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await pane1(page).locator('#main-panel').press('ArrowDown')
   await expect(pane1(page).locator('.project-item').nth(1)).toHaveClass(/selected/)
-  await pane1(page).locator('#main-panel').press('ArrowRight')
+  await pane1(page).locator('.project-item.selected').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   const input = pane1(page).locator('.event-item [data-field="title"]')
   await expect(input).toBeVisible()

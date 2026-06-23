@@ -4,7 +4,9 @@ export default class ItemRepo {
   async save() {
     const payload = {}
     for (const field of (this.item.PROPS ?? [])) payload[field.name] = this.item[field.name]
-    await fetch(`/api/items/${this.item.id}`, {
+    const pid   = this.item.project_id ?? this.item.parentLister?.project_id
+    const query = pid ? `?project_id=${pid}` : ''
+    await fetch(`/api/items/${this.item.id}${query}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),

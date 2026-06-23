@@ -1,4 +1,4 @@
-import { StopEvent } from '../utils/events.js'
+import { stopEvent } from '../utils/events.js'
 
 export default class KeyboardablePanel {
 
@@ -90,9 +90,9 @@ export default class KeyboardablePanel {
 
   _handleKey(event) {
     const keyAction = this._footerKeyMap?.[event.key]
-    if (keyAction) { StopEvent(event); keyAction(); return }
+    if (keyAction) { stopEvent(event); keyAction(); return }
     if (!KeyboardablePanel.HANDLED_KEYS[event.key]) return
-    if (!KeyboardablePanel.NOT_STOPPED_KEYS[event.key]) StopEvent(event)
+    if (!KeyboardablePanel.NOT_STOPPED_KEYS[event.key]) stopEvent(event)
 
     switch (event.key) {
       case 'Tab':

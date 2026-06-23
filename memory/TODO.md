@@ -5,20 +5,24 @@
 ## En cours
 
 > **[LIRE TOUJOURS AVANT TOUT TRAVAIL SUR LES TESTS]**
-> - Trouver les tests e2e existants → les déplacer dans `e2e/_tdd/` (noter leur origine)
-> - S'inspirer de `public-old` pour le fonctionnement anciennement implémenté
-> - Tests existants ne respectent pas nouvelle archi — corriger APRÈS validation fonctionnelle
-> - Implémenter dans la nouvelle archi uniquement
+> - Déplacer les tests dans `e2e/_tdd/` avant de travailler dessus
+> - S'inspirer de `public-old` pour le fonctionnement anciennement implémenté (ne pas hésiter à reprendre du code, si valide)
+> - Tests existants ne respectent pas nouvelle archi — les corriger APRÈS validation fonctionnelle
+> - Implémenter dans la nouvelle archi uniquement (du bon sens, non ?
+> - si on rencontre le même échec après trois essais de correction, ON MET DES LOG(s) pour voir où ça coince.
 
-### Tester avant toute chose la création d'event (workflow TDD)
-- Création d'event PAS encore implémentée dans nouvelle archi (seule la création de projet l'est)
-- `_tdd/project-navigation-lister.spec.js` réécrit mais échoue (7 events au lieu de 4) — cause probable : `createNew()` de `Lister` ne convient pas pour les events, ou `ListerRepo.createItem` ne fonctionne pas bien dans ce contexte
-- Vérifier d'abord que 3 items sont présents avant de créer le 4e (sécurité test)
+Remettre les fichiers suivants dans `tests/specs/e2e/_tdd/` :
+- `event/new-event.spec.js` ← `_tdd/new-event.spec.js`
+- `event/new-event-titre-vide.spec.js` ← `_tdd/new-event-titre-vide.spec.js`
+- `event/new-event-virtual-lister.spec.js` ← `_tdd/new-event-virtual-lister.spec.js`
+- `keyboard/keyboard-alt-n.spec.js` ← `_tdd/keyboard-alt-n.spec.js`
+- `keyboard/keyboard-cmd-n.spec.js` ← `_tdd/keyboard-cmd-n.spec.js`
+- `project/open-existing-project.spec.js` ← `_tdd/open-existing-project.spec.js`
+- `project/project-navigation-lister.spec.js` ← `_tdd/project-navigation-lister.spec.js`
 
-- Tests de la CRÉATION D'UN EVENT déplacés dans `_tdd/` (2026-06-22)
-- **PREMIÈRE CHOSE À FAIRE : lancer les tests `_tdd/`**
+<a name="todo-after"></a>
 
-### ArrowRight → event-list (EventLister nouvelle archi)
+## À faire après
 
 ### Fichiers `e2e/project/` à reprendre (non verts)
 - `new-project-existing-db.spec.js`
@@ -26,10 +30,6 @@
 - `new-project-under-selection.spec.js`
 - `open-existing-project.spec.js`
 
-
-<a name="todo"></a>
-
-## À faire
 - [ ] `⌘↓` / `⌘↑` pour déplacer les projets ou les events
 - [ ] `Enter` pour éditer les évènements (event)
 
@@ -41,6 +41,8 @@
 
 ## Fait
 
+- [x] 2026-06-23 — Navigation projets → events → sous-events → retour (`keyboard/navigation-basique.spec.js` vert)
+- [x] 2026-06-23 — ArrowUp/Down bloqués pendant édition titre + titre persisté mémoire/DB (`event/edit-event-title.spec.js` vert)
 - [x] 2026-06-22 — Suppression projet en cascade : ConfirmDialog.expectedValue, countDescendants, collect_descendants_in_db corrigé
 - [x] 2026-06-22 — Navigation circulaire : ArrowUp sur premier → dernier, ArrowDown sur dernier → premier
 - [x] 2026-06-22 — Bug flèches 2 en 2 : attach() retiré de ListerDom.render(), appelé une seule fois dans ProjectLister.init()

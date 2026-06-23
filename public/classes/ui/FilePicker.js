@@ -1,4 +1,4 @@
-import { StopEvent } from '../utils/events.js'
+import { stopEvent } from '../utils/events.js'
 import PopupSelect from './PopupSelect.js'
 
 export default class FilePicker {
@@ -220,7 +220,7 @@ export default class FilePicker {
 
   _handleKey(event) {
     if (this._creatingFolder) return
-    StopEvent(event)
+    stopEvent(event)
 
     switch (event.key) {
       case 'Tab':

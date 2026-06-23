@@ -1,4 +1,4 @@
-import { StopEvent } from '../utils/events.js'
+import { stopEvent } from '../utils/events.js'
 
 export default class PopupSelect {
 
@@ -234,7 +234,7 @@ export default class PopupSelect {
 
   handleKeyDown(event, _controller) {
     if (!PopupSelect.HANDLEKEYS[event.key]) return
-    if (!PopupSelect.NOT_STOPPED_KEYS[event.key]) StopEvent(event)
+    if (!PopupSelect.NOT_STOPPED_KEYS[event.key]) stopEvent(event)
 
     switch (event.key) {
       case 'Tab':
@@ -251,7 +251,7 @@ export default class PopupSelect {
         this._focusOption(this.focusedIndex - 1)
         return
       case 'Enter':
-        StopEvent(event)
+        stopEvent(event)
         if (!this.popupElement) { this.open(this._anchor); return }
         if (this.allowCustom && this.searchInput.value.trim()) {
           const query = this.searchInput.value.trim()
@@ -264,7 +264,7 @@ export default class PopupSelect {
         return
       case ' ':
         if (this.multi && !this.searchInput?.value) {
-          StopEvent(event)
+          stopEvent(event)
           this._selectByIndex(this.focusedIndex)
         }
         return

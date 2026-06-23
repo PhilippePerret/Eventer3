@@ -1,5 +1,66 @@
 # CHANGELOG — Eventer3
 
+## 2026-06-23 (suite)
+
+### Navigation projets → events → sous-events
+
+**`public/classes/models/abstract/Item.js`**
+- `enterChildren()` : `project_id = this.project_id ?? this.parentLister?.project_id ?? this.id` — fallback sur `this.id` pour les Project items (leur UUID = project_id de l'EventLister enfant)
+
+**`public/classes/models/abstract/ItemRepo.js`**
+- `save()` : ajout `?project_id=` depuis `item.project_id ?? item.parentLister?.project_id` — sans ça, PATCH `/api/items/eN` renvoyait 500
+
+**`public/classes/utils/DOM.js`**
+- `_normalizeValues(values)` : normalise `field.values` en `[{value,label}]` quelle que soit la forme (objet plain, tableau de primitifs, tableau `{value,label}`)
+- `buildSelect()`, `buildEditSelectField()`, `_applyValuesWidth()` : utilisent `_normalizeValues`
+- `BLOCKED_KEYS_IN_CONTENTEDITABLE` + `blockKeysFromContenteditable(e)` : stoppe ArrowUp/ArrowDown dans les champs contenteditable
+- `buildEditTextField()` : attache `blockKeysFromContenteditable` sur `keydown`
+- `export { stopEvent } from './events.js'` → `import { stopEvent } from './events.js'` (portée locale)
+
+**`public/classes/models/abstract/ItemDom.js`**
+- `_buildContent()` : body reçoit la classe `child-indicator` si `item.lister_id` est défini
+
+**Tests**
+- `tests/specs/e2e/keyboard/navigation-basique.spec.js` : navigation projets→events→sous-events→retour (vert)
+- `tests/specs/e2e/_tdd/arrow-during-title-editing.spec.js` : ArrowUp/Down bloqués pendant édition + titre persisté en mémoire et en DB (4 tests verts)
+
+## 2026-06-23
+
+### Architecture DOM — refonte générique par PROPS + warper
+
+**`public/classes/models/abstract/ItemDom.js`**
+- `get minClass()` : getter centralisé `item.constructor.name.toLowerCase()`
+- `build()` : crée le div `${minClass}-item` puis délègue à `_buildContent(el)`
+- `_buildContent(el)` : génère `item-check-gutter ${minClass}-check-gutter`, `item-body ${minClass}-body`, et sous-groupes `item-${warper} ${minClass}-${warper}` selon `field.warper` dans PROPS. Champs avec `warper:'body'` (ou sans warper) vont directement dans body.
+- `startEditing()` : sélecteur CSS via `field.cssClass ?? (field.warper ? \`${minClass}-${field.name}\` : \`${minClass}-item__${field.name}\`)`
+- `stopEditing()` : appelle `_buildContent(el)` après `innerHTML = ''`
+- Suppression `?? []` sur `this.item.PROPS` (crash volontaire si absent)
+
+**`public/classes/utils/DOM.js`**
+- `_fieldEl()` : classe CSS = `field.cssClass ?? (field.warper ? \`${minClass}-${field.name}\` : \`${minClass}-item__${field.name}\`)`
+- `buildEditSelectField()` : `multi: field.multiple ?? false` passé à PopupSelect
+
+**`public/classes/models/core/Event.js`**
+- PROPS : `warper:'body'` sur title, `warper:'left-col'` sur state/meteo/effet
+- `onchange`/`onchoose` sur meteo et effet
+- Import `EVENT_STATE` (singulier) au lieu de `EVENT_STATES`
+
+**`public/classes/models/core/Project.js`**
+- PROPS : `warper:'body'` sur title, `warper:'left-col'` sur state et type
+
+### CSS — classes génériques item-*
+
+**`public/styles.css`**
+- `event-check-gutter` → `item-check-gutter`, `event-check` → `item-check` (génériques)
+- `event-body` → `item-body` (générique) ; `.item-body { display:grid; grid-template-columns:1fr auto auto }`
+- `event-col2` → `item-left-col` (générique) ; `event-col1` supprimé (orphelin)
+- `event-text` → `event-title` (cohérence `${minClass}-${field.name}`)
+- `.selected .item-body` et `.editing .item-body` : sélecteurs génériques (plus `event-item.selected`)
+- `#main-panel.roman-man/.film-man .selected .item-body` → `#main-panel.man .selected .item-body`
+- TODO : appliquer `.man` à `#main-panel` pour tous les listers de type "manuscrit"
+- `.project-check-gutter { display:none }`, `.project-body { flex:1 }`
+- `.project-item__title` → `.project-title`, `.project-item__id` → `.project-id`
+
 ## 2026-06-22 (suite)
 
 ### EventLister / Event — squelettes nouvelle archi
@@ -102,7 +163,7 @@
 ## 2026-06-20 (suite 3)
 
 ### FilePicker — bug frappe nouveau dossier
-- `FilePicker._el` listener : `StopEvent` déplacé dans `_handleKey` après guard `_creatingFolder` — le `preventDefault` précoce bloquait la frappe dans l'input
+- `FilePicker._el` listener : `stopEvent` déplacé dans `_handleKey` après guard `_creatingFolder` — le `preventDefault` précoce bloquait la frappe dans l'input
 - Test ajouté dans `filesystem/filepicker.spec.js` : `pressSequentially` pour valider la frappe réelle
 
 ## 2026-06-20 (suite 2)
@@ -116,11 +177,11 @@
 ## 2026-06-20 (suite)
 
 ### Corrections bugs
-- `PopupSelect.handleKeyDown` : ArrowDown ne propagait plus vers ListerListener — refacto HANDLED_KEYS / NOT_STOPPED_KEYS / StopEvent
+- `PopupSelect.handleKeyDown` : ArrowDown ne propagait plus vers ListerListener — refacto HANDLED_KEYS / NOT_STOPPED_KEYS / stopEvent
 - `DOM._applyValuesWidth` : largeur fixe sur champs select (basée sur le label le plus long) — évite le changement de taille à la sélection
 
 ### Nouveaux fichiers
-- `utils/events.js` : `StopEvent(event)` extrait de DOM.js (évite import circulaire)
+- `utils/events.js` : `stopEvent(event)` extrait de DOM.js (évite import circulaire)
 - `ui/KeyboardablePanel.js` : portée depuis public-old — keyboardController remplacé par document capture, même pattern HANDLED_KEYS/NOT_STOPPED_KEYS
 - `ui/FilePicker.js` : portée depuis public-old — en cours (listener à déplacer sur `this._el` avec tabindex/focus)
 

@@ -28,7 +28,7 @@ test.describe("Cmd+n dans un EventLister", () => {
   test("Cmd+n ne crée PAS de nouvel event (c'est Alt+n qui le fait)", async ({ page }) => {
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-    await pane1(page).locator('#main-panel').press('ArrowRight')
+    await pane1(page).locator('.project-item.selected').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
     const items = pane1(page).locator('.event-item')
