@@ -18,13 +18,13 @@ Pendant refactorisation de grande ampleur : tout fichier de test va dans `tests/
 2. Supprimer le commentaire `// Origine :` 
 3. Ajouter en tête : `// Refactorisé — nouvelle architecture (YYYY-MM-DD)`
 
-**Workflow TDD — 5 étapes IMPÉRATIVES (dans cet ordre) :**
-1. Trouver les tests existants couvrant la fonctionnalité à implémenter/actualiser/upgrader
-2. `mv` le fichier canonique vers `_tdd/`
-3. Ajouter `// Origine : <chemin/canonique.spec.js>` en tête
-4. Ajouter les nouveaux tests dans le fichier déplacé
-5. Dire "J'ai terminé" — jamais "Lance les tests", jamais s'arrêter avant
+**Workflow TDD — étapes IMPÉRATIVES (dans cet ordre) :**
+1. ÉTAPE IMPÉRATIVE : Trouver les tests existants couvrant la fonctionnalité à implémenter/actualiser/upgrader
+2. ÉTAPE IMPÉRATIVE : Ajouter `// Origine : <chemin/canonique.spec.js>` en tête du fichier canonique
+3. ÉTAPE IMPÉRATIVE : `mv` le fichier canonique vers `_tdd/`
+4. ÉTAPE OPTIONNELLE : S'il y a des tests à ajouter, les ajouter dans le fichier déplacé
+5. ÉTAPE IMPÉRATIVE : Dire "J'ai terminé" — jamais d'ordre, l'utilisateur n'est pas à mon service, c'est le contraire
 
-**Why:** L'utilisateur ne veut pas déplacer 300 fichiers lui-même. Write+rm crée des doublons si rm raté. La marque de refactorisation indique que le fichier a été traité pour la nouvelle architecture.
+**Why:** Simplement pour travailler intelligemment.
 
 **How to apply:** Toujours `mv source destination` en une seule commande Bash. Toujours ajouter la marque de refactorisation dans le fichier canonique.

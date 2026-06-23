@@ -1,3 +1,4 @@
+// Origine : tests/specs/e2e/event/new-event-virtual-lister.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures'
 import { test, expect, pane1 } from '../__setup__.js'
 

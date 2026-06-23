@@ -1,5 +1,5 @@
-
-
+TEST
+Choisir une fixture avec au moins un projet qui a trois niveaux 
 
 BUG (testé dans un autre module test concernant les projets, je crois)
 Annuler l'ouverture d'un dossier qui a déjà un eventer.db ne remet pas le focus au projet qui l'avait avant de commencer.
@@ -21,7 +21,7 @@ CORRECTION : Abandonner définitivement cette histoire de slug
     => ne plus afficher l'id du projet
     => supprimer toute la logique derrière. Maintenant, les identifiants de projets sont incrémentés comme le reste des données
 
-ATTENDU : Remplacer le slug par le menu des états du projet (en prenant la constante EVENT_STATES comme les events)
+ATTENDU : Remplacer le slug par le menu des états du projet (en prenant la constante EVENT_STATE comme les events)
 
 - édition du projet (title sélectionné)
 - CMD?

@@ -10,7 +10,7 @@ export default class Lister {
     this.id            = data.id            ?? null
     this.item_ids      = data.item_ids      ?? []
     this.items         = []
-    this.selectedIndex = data.selectedIndex ?? 0
+    this.selectedIndex = data.selectedIndex ?? -1
     this.project_id    = data.project_id    ?? null
     this.parentLister  = data.parentLister  ?? null
   }
@@ -54,12 +54,15 @@ export default class Lister {
   }
 
   async createNew() {
+    const insertIdx = this.selectedIndex + 1
+    const prevIds   = [...this.item_ids]
     const result = await ListerRepo.createItem(this.id, { title: '' }, { project_id: this.project_id })
     if (!result?.id) { this.Dom.focusSelected(); return }
-    await this.Repo.load()
-    const idx = this.item_ids.indexOf(result.id)
-    this.selectedIndex = idx >= 0 ? idx : 0
-    this.Dom.render()
+    const newOrder = [...prevIds]
+    newOrder.splice(insertIdx, 0, result.id)
+    this.item_ids = newOrder
+    await this.Repo.save()
+    await this._reloadAt(insertIdx)
     this.items[this.selectedIndex]?.startEditing()
   }
 

@@ -272,7 +272,7 @@ class Event extends Item {
     	},
     fields: [
       { name: 'title',  type: 'text' },
-      { name:'state', type: 'select',values: EVENT_STATES },
+      { name:'state', type: 'select',values: EVENT_STATE },
       { name:'meteo', type: 'select', values: EVENT_METEO,
        		onchange: 'setEffetValuesPerMeteo' },
       { name: 'effet',  type: 'select', values: EVENT_EFFETS,

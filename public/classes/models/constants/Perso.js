@@ -6,3 +6,20 @@ export const PERSO_AVATARS = [
   '🕵🏾‍♂️','👮🏻‍♀️','👮🏽','👩🏻‍🎓', '👩🏾‍🎓','🧑🏼‍🌾','🧑🏽‍🏫',
   '🦊','🦮','🐕‍🦺','🐩','🐴','🐒','🐈','🐈‍⬛','🦜','🦆','🐏'
 ]
+
+export const PERSO_TYPES = {
+    anta:   "Un antangoiste"
+  , prota:  "Un protagoniste"
+  , ambi:   "Un personnage ambivalent"
+}
+
+export const PERSO_FONCTIONS = [
+  'protagoniste',
+  'antagoniste',
+  'deutéragoniste',
+  'adjuvant',
+  'opposant',
+  'personnage secondaire',
+  'figurant',
+  'narrateur'
+]

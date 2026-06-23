@@ -1,3 +1,4 @@
+// Origine : tests/specs/e2e/event/new-event.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures'
 import { test, expect, pane1 } from '../__setup__.js'
 
@@ -27,13 +28,13 @@ test("dans un EventLister, la touche « n » crée un nouvel Event après celui 
   await pane1(page).locator('#main-panel').press('n')
 
   console.log('-> vérification : un champ de saisie est apparu')
-  const input = pane1(page).locator('.event-item input[name="title"]')
+  const input = pane1(page).locator('.event-item [data-field="title"]')
   await expect(input).toBeVisible()
   await expect(input).toBeFocused()
 
   console.log('-> saisie du titre et validation')
-  await page.keyboard.type('Nouvel évènement test')
-  await pane1(page).locator('#main-panel').press('Enter')
+  await input.fill('Nouvel évènement test')
+  await input.press('Enter')
 
   console.log('-> vérification : le nouvel évènement est visible')
   const items = pane1(page).locator('.event-item')

@@ -16,6 +16,7 @@ export default class ListerRepo {
     this.lister.items = this.lister.item_ids
       .map(id => data[id] ? new Cls({ ...data[id], id }) : null)
       .filter(Boolean)
+    this.lister.selectedIndex = this.lister.items.length ? 0 : -1
   }
 
   async deleteItem(item) {
@@ -30,6 +31,16 @@ export default class ListerRepo {
     if (!resp.ok) return 0
     const data = await resp.json()
     return data.count ?? 0
+  }
+
+  async save() {
+    const query = this.lister.project_id ? `?project_id=${this.lister.project_id}` : ''
+    await fetch(`/api/listers/${this.lister.id}${query}`, {
+      method:  'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ item_ids: this.lister.item_ids }),
+      cache:   'no-store',
+    })
   }
 
   static async createLister(fields) {

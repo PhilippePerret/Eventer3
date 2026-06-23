@@ -1,3 +1,4 @@
+// Origine : tests/specs/e2e/event/new-event-titre-vide.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures'
 import { test, expect, pane1 } from '../__setup__.js'
 
@@ -14,35 +15,41 @@ async function enterVirtualEventLister(page) {
   await expect(pane1(page).locator('.project-item').nth(1)).toHaveClass(/selected/)
   await pane1(page).locator('#main-panel').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-  await expect(pane1(page).locator('.event-item input[name="title"]')).toBeVisible()
+  const input = pane1(page).locator('.event-item [data-field="title"]')
+  await expect(input).toBeVisible()
+  return input
 }
 
 test('Enter avec titre vide dans lister vide : notification affichée', async ({ page }) => {
-  await enterVirtualEventLister(page)
-  await pane1(page).locator('#main-panel').press('Enter')
+  const input = await enterVirtualEventLister(page)
+  await input.press('Enter')
   await expect(pane1(page).locator('#notification')).toBeVisible()
 })
 
 test('Enter avec titre vide dans lister vide : notification mentionne "évènement"', async ({ page }) => {
-  await enterVirtualEventLister(page)
-  await pane1(page).locator('#main-panel').press('Enter')
+  const input = await enterVirtualEventLister(page)
+  await input.press('Enter')
   await expect(pane1(page).locator('#notification')).toContainText('évènement')
 })
 
 test('Enter avec titre vide dans lister vide : éditeur reste visible', async ({ page }) => {
-  await enterVirtualEventLister(page)
-  await pane1(page).locator('#main-panel').press('Enter')
-  await expect(pane1(page).locator('.event-item input[name="title"]')).toBeVisible()
+  const input = await enterVirtualEventLister(page)
+  await input.press('Enter')
+  await expect(pane1(page).locator('.event-item [data-field="title"]')).toBeVisible()
 })
 
 test('Escape avec titre vide dans lister vide : notification affichée', async ({ page }) => {
-  await enterVirtualEventLister(page)
-  await pane1(page).locator('#main-panel').press('Escape')
+  const input = await enterVirtualEventLister(page)
+  await input.press('Escape')
   await expect(pane1(page).locator('#notification')).toBeVisible()
 })
 
 test('Escape avec titre vide dans lister vide : pas de page blanche', async ({ page }) => {
-  await enterVirtualEventLister(page)
-  await pane1(page).locator('#main-panel').press('Escape')
+  const input = await enterVirtualEventLister(page)
+  console.log("#main-panel doit contenir le champ d'édition")
+  await expect(pane1(page).locator('#main-panel')).not.toBeEmpty()
+  console.log("Avant l'annulation")
+  await input.press('Escape')
+  await expect(pane1(page).locator('#notification')).toBeVisible()
   await expect(pane1(page).locator('#main-panel')).not.toBeEmpty()
 })

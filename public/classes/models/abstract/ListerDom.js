@@ -1,7 +1,11 @@
+import LOG from '../../../system/LOG.js'
+LOG.on(2)
+
 export default class ListerDom {
   constructor(lister) { this.lister = lister }
 
   render() {
+    LOG.m(2, 'ListerDom.render', { items: this.lister.items.length, selectedIndex: this.lister.selectedIndex })
     const container = document.querySelector('#main-panel')
     container.innerHTML = ''
     if (this.lister.minClass) container.className = `${this.lister.minClass}-list`
@@ -18,6 +22,7 @@ export default class ListerDom {
 
   focusSelected() {
     const item = this.lister.items[this.lister.selectedIndex]
+    LOG.m(2, 'ListerDom.focusSelected', { selectedIndex: this.lister.selectedIndex, itemExists: !!item, elExists: !!item?.Dom.el })
     item?.Dom.el?.focus()
   }
 

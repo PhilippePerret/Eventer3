@@ -3,6 +3,7 @@ import ItemRepo from './ItemRepo.js'
 import ItemListener from './ItemListener.js'
 import ListerRepo from './ListerRepo.js'
 import LOG from '../../../system/LOG.js'
+import Notification from '../../ui/Notification.js'
 
 export default class Item {
 
@@ -30,7 +31,7 @@ export default class Item {
     if (!this.parentLister) return
     const ChildClass = this.parentLister.constructor.CHILD_CLASS
     if (!ChildClass) return
-    const project_id = this.project_id ?? this.id
+    const project_id = this.project_id ?? this.parentLister?.project_id
     const child = new ChildClass({
       id:           this.lister_id ?? this.id,
       project_id,
@@ -72,11 +73,21 @@ export default class Item {
     this.Dom.startEditing()
   }
 
+  _warnIfEmptyTitle() {
+    if (!this.title.trim()) {
+      const wf = this.constructor.thingName
+      Notification.show(`Il faut définir le texte ${wf.of}${wf.thing}`)
+      return true
+    }
+    return false
+  }
+
   applyEdit() {
     LOG.m(1, 'Item.applyEdit', { id: this.id })
     try {
       this.Dom.collectValues()
       LOG.m(1, 'Item.applyEdit — collectValues OK')
+      if (this._warnIfEmptyTitle()) return
       this.Repo.save()
       this._stopEditing()
     } catch(e) {
@@ -85,6 +96,13 @@ export default class Item {
   }
 
   cancelEdit() {
+    LOG.on(2)
+    LOG.m(2, 'Item.cancelEdit', { parentLister: !!this.parentLister, itemsLength: this.parentLister?.items.length, title: JSON.stringify(this.title) })
+    if (this.parentLister?.items.length <= 1) {
+      LOG.m(2, 'Item.cancelEdit — seul item, blocage')
+      this._warnIfEmptyTitle()
+      return
+    }
     this.Dom.revertValues()
     this._stopEditing()
   }

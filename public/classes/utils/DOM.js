@@ -39,6 +39,7 @@ export default class DOM {
     const popup = new PopupSelect({
       options: field.values,
       currentValue: item[field.name],
+      multi: field.multiple ?? false,
       onSelect: val => {
         item[field.name] = val
         const f = (field.values ?? []).find(v => v.value === val)
@@ -89,7 +90,7 @@ export default class DOM {
   _fieldEl(field, item) {
     const minClass = item.constructor.name.toLowerCase()
     const el = document.createElement('span')
-    el.className = `${minClass}-item__${field.name}`
+    el.className = field.cssClass ?? (field.warper ? `${minClass}-${field.name}` : `${minClass}-item__${field.name}`)
     return el
   }
 

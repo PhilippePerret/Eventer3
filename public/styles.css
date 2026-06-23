@@ -144,6 +144,9 @@ body {
   color: rgba(255, 255, 255, .78);
 }
 
+.project-check-gutter { display: none; }
+.project-body { display: contents; }
+
 /* ─── Event list ──────────────────────────────────────────────── */
 
 .event-item {
@@ -165,7 +168,7 @@ body {
   color: white;
 }
 
-.event-check-gutter {
+.item-check-gutter {
   min-height: 44px;
   display: flex;
   align-items: center;
@@ -180,7 +183,7 @@ body {
   line-height: 1;
 }
 
-.event-body {
+.item-body {
   display: grid;
   grid-template-columns: 1fr auto auto;
   gap: 12px;
@@ -193,35 +196,31 @@ body {
 
 
 
-.event-item.selected .event-check-gutter {
+.event-item.selected .item-check-gutter {
   color: #1f9d41;
 }
 
-.event-item.selected .event-body {
+.selected .item-body {
   background: var(--selected);
   color: white;
   border-top: 1px solid rgba(255, 255, 255, .18);
   border-bottom: 1px solid rgba(255, 255, 255, .18);
 }
 
-.event-item.editing .event-text {
+.event-item.editing .event-title {
   background: var(--bg) !important;
   color: var(--text) !important;
   width: -webkit-fill-available !important;
 }
 
-.event-col1 {
-  min-width: 0;
-}
-
-.event-col2 {
+.item-left-col {
   display: flex;
   align-items: center;
   gap: 4px;
   flex-wrap: nowrap;
 }
 
-.event-text {
+.event-title {
   display: inline-block;
   line-height: 1.4;
   white-space: nowrap;
@@ -1028,7 +1027,7 @@ body#shell:has(#pane-2[data-split-active]) .pane-wrapper:has(iframe[data-focused
   border-color: #33bb60 !important;
 }
 
-.event-item.editing .event-body {
+.editing .item-body {
   background: #33bb60;
   border-color: rgba(255, 255, 255, .18);
 }
@@ -1966,12 +1965,12 @@ body:has(#filter-input:not(.hidden)) #main-panel {
 
 /* ─── Mode manuscrit / scénario ─────────────────────────────────────────────── */
 
-#main-panel.roman-man .event-text,
-#main-panel.film-man .event-text {
+#main-panel.roman-man .event-title,
+#main-panel.film-man .event-title {
   white-space: normal;
 }
 
-#main-panel.roman-man .event-text {
+#main-panel.roman-man .event-title {
   font-family: 'EB Garamond', Garamond, Georgia, serif;
   max-width: 680px;
   line-height: 1.7;
@@ -1979,7 +1978,7 @@ body:has(#filter-input:not(.hidden)) #main-panel {
   margin-left: 12vw;
 }
 
-#main-panel.film-man .event-text {
+#main-panel.film-man .event-title {
   font-family: 'Geneva', 'Helvetica Neue', sans-serif;
   line-height: 1.6;
 }
@@ -2019,25 +2018,25 @@ body:has(#filter-input:not(.hidden)) #main-panel {
 }
 
 /* Gutter transparent — élimine le fond blanc sur chaque ligne */
-#main-panel.roman-man .event-check-gutter {
+#main-panel.roman-man .item-check-gutter {
   background: transparent;
 }
 
 
 
 /* Styles appliqués en édition en mode manuscrit/scénario */
-#main-panel.roman-man .event-item.editing .event-text {
+#main-panel.roman-man .event-item.editing .event-title {
   font-family: 'EB Garamond', Garamond, Georgia, serif;
   white-space: normal;
   max-width: 680px;
 }
-#main-panel.film-man .event-item.editing .event-text {
+#main-panel.film-man .event-item.editing .event-title {
   white-space: normal;
 }
 
 /* Sélection discrète (filet bleu) en mode manuscrit/scénario */
-#main-panel.roman-man .event-item.selected .event-body,
-#main-panel.film-man .event-item.selected .event-body {
+/* TODO : appliquer la classe .man à #main-panel pour tous les Lister de type "manuscrit" */
+#main-panel.man .selected .item-body {
   background: transparent;
   color: inherit;
   border-color: transparent;

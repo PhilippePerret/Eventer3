@@ -1,0 +1,18 @@
+NOUVELLE ARCHITECTURE
+
+Différences avec ancienne
+==========================
+La seule vraie différence entre l'ancienne architecture et la nouvelle tient au fait que
+AVANT : un seul gestionnaire (KeyboardManager) gérait les évènement clavier.
+MAINTENANT : Chaque élément DOM possède son propre gestionnaire de keyboard events. 
+
+L'élément réagit soit parce qu'il est la cible originale (il a le focus) soit parce qu'il se trouve dan
+
+LES RESPONSABILITÉS SONT SOIGNEUSEMENT CHOISIES
+
+Voir par exemple la gestion de "←" et "→" : 
+- "→", qui permet de "rentrer" dans un event (de voir ses sous-events) NE CONCERNE EN RIEN l'EventLister qui est affiché et qui contient d'event
+- En revanche, la touche "←" qui permet de revenir au Lister Parent relève évidemment du EventLister sur lequel on se trouve.
+
+BACKEND/API/DB
+AUCUN CHANGEMENT N'EST À APPORTER AU NIVEAU BACKEND POUR LA NOUVELLE ARCHITECTURE. TOUTES LES ROUTES EXISTENT ET SONT TRAITÉES, EN TOUT CAS CELLE IMPLÉMENTÉES DANS L'ANCIENNE ARCHITECTUE

@@ -14,7 +14,9 @@
 - Création d'event PAS encore implémentée dans nouvelle archi (seule la création de projet l'est)
 - `_tdd/project-navigation-lister.spec.js` réécrit mais échoue (7 events au lieu de 4) — cause probable : `createNew()` de `Lister` ne convient pas pour les events, ou `ListerRepo.createItem` ne fonctionne pas bien dans ce contexte
 - Vérifier d'abord que 3 items sont présents avant de créer le 4e (sécurité test)
-- Fichier test existant à trouver, déplacer en `_tdd/`, adapter nouvelle archi avant d'implémenter
+
+- Tests de la CRÉATION D'UN EVENT déplacés dans `_tdd/` (2026-06-22)
+- **PREMIÈRE CHOSE À FAIRE : lancer les tests `_tdd/`**
 
 ### ArrowRight → event-list (EventLister nouvelle archi)
 
