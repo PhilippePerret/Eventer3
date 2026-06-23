@@ -18,13 +18,15 @@ Pendant refactorisation de grande ampleur : tout fichier de test va dans `tests/
 2. Supprimer le commentaire `// Origine :` 
 3. Ajouter en tête : `// Refactorisé — nouvelle architecture (YYYY-MM-DD)`
 
-**Workflow TDD — étapes IMPÉRATIVES (dans cet ordre) :**
+**Workflow TDD — ÉTAPES IMPÉRATIVES (dans cet ordre) :**
+
+**IMPÉRATIF : AVANT D’EXÉCUTER CHAQUE ÉTAPE, ÉCRIRE EN CONSOLE SON NUMÉRO ET CE QUI DOIT ÊTRE FAIT.**
+
 1. ÉTAPE IMPÉRATIVE : Trouver les tests existants couvrant la fonctionnalité à implémenter/actualiser/upgrader
-2. ÉTAPE IMPÉRATIVE : Ajouter `// Origine : <chemin/canonique.spec.js>` en tête du fichier canonique
+2. ÉTAPE IMPÉRATIVE : Ajouter `// Origine : <chemin/canonique.spec.js>` en tête du fichier canonique (pour les crétins : sauf s’il contient déjà ce commentaire)
 3. ÉTAPE IMPÉRATIVE : `mv` le fichier canonique vers `_tdd/`
 4. ÉTAPE OPTIONNELLE : S'il y a des tests à ajouter, les ajouter dans le fichier déplacé
-5. ÉTAPE IMPÉRATIVE : Dire "J'ai terminé" — jamais d'ordre, l'utilisateur n'est pas à mon service, c'est le contraire
+5. ÉTAPE IMPÉRATIVE : S’assurer que les tests respectent bien la nouvelle architecture. Corriger les erreurs décelables.
+6. ÉTAPE IMPÉRATIVE : Dire "J'ai terminé" — jamais d'ordre, l'utilisateur n'est pas à mon service, c'est le contraire
 
-**Why:** Simplement pour travailler intelligemment.
-
-**How to apply:** Toujours `mv source destination` en une seule commande Bash. Toujours ajouter la marque de refactorisation dans le fichier canonique.
+**Why:** Simplement pour travailler intelligemment, contrairement à ce que Claude fait naturellement.

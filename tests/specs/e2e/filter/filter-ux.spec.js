@@ -25,7 +25,7 @@ test.describe('badge FILTRE dans la barre d\'état — couleur selon état', () 
     await pane1(page).locator('#main-panel').press('t')
     // "bal" → 2 visibles, 2 masqués — mais d'abord tester avec terme qui masque rien
     // "a" → tous contiennent "a" (Scène du bAl, Arrivée à Paris, lA trAhison, Retour Au bAl)
-    await page.keyboard.type('a')
+    await pane1(page).locator('#filter-input').fill('a')
     await expect(pane1(page).locator('.status-filter-badge--mode')).toBeVisible()
     await expect(pane1(page).locator('.status-filter-badge--active')).not.toBeVisible()
   })
@@ -35,7 +35,7 @@ test.describe('badge FILTRE dans la barre d\'état — couleur selon état', () 
     await pane1(page).locator('#main-panel').press('Meta+:')
     await pane1(page).locator('#main-panel').press('t')
     // "Paris" → seul "Arrivée à Paris" correspond → 3 masqués
-    await page.keyboard.type('Paris')
+    await pane1(page).locator('#filter-input').fill('Paris')
     await expect(pane1(page).locator('.status-filter-badge--active')).toBeVisible()
   })
 
@@ -43,7 +43,7 @@ test.describe('badge FILTRE dans la barre d\'état — couleur selon état', () 
     await enterEventLister(page)
     await pane1(page).locator('#main-panel').press('Meta+:')
     await pane1(page).locator('#main-panel').press('t')
-    await page.keyboard.type('Paris')
+    await pane1(page).locator('#filter-input').fill('Paris')
     await pane1(page).locator('#main-panel').press('Enter')
     await expect(pane1(page).locator('.status-filter-badge--active')).toBeVisible()
   })
@@ -52,7 +52,7 @@ test.describe('badge FILTRE dans la barre d\'état — couleur selon état', () 
     await enterEventLister(page)
     await pane1(page).locator('#main-panel').press('Meta+:')
     await pane1(page).locator('#main-panel').press('t')
-    await page.keyboard.type('Paris')
+    await pane1(page).locator('#filter-input').fill('Paris')
     await pane1(page).locator('#main-panel').press('Escape')
     await expect(pane1(page).locator('.status-filter-badge--mode')).not.toBeVisible()
     await expect(pane1(page).locator('.status-filter-badge--active')).not.toBeVisible()
@@ -180,7 +180,7 @@ test.describe('indicateur FILTRE dans la barre d\'état', () => {
 
     await pane1(page).locator('#main-panel').press('Meta+:')
     await pane1(page).locator('#main-panel').press('t')
-    await page.keyboard.type('bal')
+    await pane1(page).locator('#filter-input').fill('bal')
     await pane1(page).locator('#main-panel').press('Enter')
 
     await expect(pane1(page).locator('#status-bar')).toContainText('FILTRE')
@@ -191,7 +191,7 @@ test.describe('indicateur FILTRE dans la barre d\'état', () => {
 
     await pane1(page).locator('#main-panel').press('Meta+:')
     await pane1(page).locator('#main-panel').press('t')
-    await page.keyboard.type('bal')
+    await pane1(page).locator('#filter-input').fill('bal')
     await pane1(page).locator('#main-panel').press('Enter')
 
     await pane1(page).locator('#main-panel').press('Meta+:')
@@ -205,7 +205,7 @@ test.describe('indicateur FILTRE dans la barre d\'état', () => {
 
     await pane1(page).locator('#main-panel').press('Meta+:')
     await pane1(page).locator('#main-panel').press('t')
-    await page.keyboard.type('bal')
+    await pane1(page).locator('#filter-input').fill('bal')
     await pane1(page).locator('#main-panel').press('Escape')
 
     await expect(pane1(page).locator('#status-bar')).not.toContainText('FILTRE')

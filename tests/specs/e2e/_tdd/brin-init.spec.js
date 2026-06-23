@@ -1,3 +1,4 @@
+// Origine : tests/specs/e2e/brin/brin-init.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures'
 import { test, expect, pane1 } from '../__setup__.js'
 
@@ -10,7 +11,7 @@ test.beforeEach(() => {
 async function goToEventLister(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await pane1(page).locator('#main-panel').press('ArrowRight')
+  await pane1(page).locator('.project-item.selected').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 }
 
@@ -19,7 +20,7 @@ test("un projet sans brins reçoit automatiquement b1 'Intrigue principale' à l
   await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('#brin-panel')).toBeVisible()
   await expect(pane1(page).locator('.brin-item')).toHaveCount(1)
-  await expect(pane1(page).locator('.brin-item').nth(0).locator('.brin-item__title')).toHaveText('Intrigue principale')
+  await expect(pane1(page).locator('.brin-item').nth(0).locator('.brin-title')).toHaveText('Intrigue principale')
 })
 
 test("b1 'Intrigue principale' est persisté dans la base de données", async ({ page }) => {

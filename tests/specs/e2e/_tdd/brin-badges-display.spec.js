@@ -1,3 +1,4 @@
+// Origine : tests/specs/e2e/event/brin-badges-display.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect, pane1 } from '../__setup__.js'
 
@@ -16,7 +17,7 @@ test.beforeEach(() => {
 async function enterEventLister(page) {
   await page.goto('/')
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-  await pane1(page).locator('#main-panel').press('ArrowRight')
+  await pane1(page).locator('.project-item.selected').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 }
 

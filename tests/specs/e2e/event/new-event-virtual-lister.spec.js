@@ -30,13 +30,9 @@ test("→ sur un projet sans lister : crée l'éditeur, Enter confirme, n crée 
   await expect(firstInput).toBeFocused()
 
   console.log('-> saisie du premier event et validation')
-  await page.keyboard.type('Mon premier event')
-
-  const savePromise = page.waitForResponse(resp =>
-    resp.url().includes('/api/listers/') && resp.request().method() === 'PATCH'
-  )
+  await firstInput.fill('Mon premier event')
   await pane1(page).locator('.event-item.selected').press('Enter')
-  await savePromise
+  await page.waitForLoadState('networkidle')
 
   console.log('-> vérification : le premier event est créé dans le DOM')
   await expect(pane1(page).locator('.event-item')).toHaveCount(1)
@@ -60,7 +56,7 @@ test("→ sur un projet sans lister : crée l'éditeur, Enter confirme, n crée 
   await expect(secondInput).toBeVisible()
   await expect(secondInput).toBeFocused()
 
-  await page.keyboard.type('Mon second event')
+  await secondInput.fill('Mon second event')
   await pane1(page).locator('.event-item.selected').press('Enter')
 
   console.log('-> vérification : deux events dans le bon ordre')

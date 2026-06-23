@@ -6,19 +6,13 @@
 
 > **[LIRE TOUJOURS AVANT TOUT TRAVAIL SUR LES TESTS]**
 > - Déplacer les tests dans `e2e/_tdd/` avant de travailler dessus
-> - S'inspirer de `public-old` pour le fonctionnement anciennement implémenté (ne pas hésiter à reprendre du code, si valide)
-> - Tests existants ne respectent pas nouvelle archi — les corriger APRÈS validation fonctionnelle
-> - Implémenter dans la nouvelle archi uniquement (du bon sens, non ?
-> - si on rencontre le même échec après trois essais de correction, ON MET DES LOG(s) pour voir où ça coince.
+> - S'inspirer de `public-old` pour le fonctionnement anciennement implémenté (ne pas hésiter à reprendre du code, si valide, surtout s’il ne concerne pas la gestion des keyboard events, radicalement différente dans la nouvelle architecture).
+> - Les tests existants, malgré les nombreuses migrations déjà effecutées, ne respectent peut-être pas nouvelle architecture — les corriger au besoin.
+> - **IMPÉRATIF** : si on rencontre le même échec **après trois essais de correction**, ON MET DES LOG(s) pour voir où ça coince.
 
-Remettre les fichiers suivants dans `tests/specs/e2e/_tdd/` :
-- `event/new-event.spec.js` ← `_tdd/new-event.spec.js`
-- `event/new-event-titre-vide.spec.js` ← `_tdd/new-event-titre-vide.spec.js`
-- `event/new-event-virtual-lister.spec.js` ← `_tdd/new-event-virtual-lister.spec.js`
-- `keyboard/keyboard-alt-n.spec.js` ← `_tdd/keyboard-alt-n.spec.js`
-- `keyboard/keyboard-cmd-n.spec.js` ← `_tdd/keyboard-cmd-n.spec.js`
-- `project/open-existing-project.spec.js` ← `_tdd/open-existing-project.spec.js`
-- `project/project-navigation-lister.spec.js` ← `_tdd/project-navigation-lister.spec.js`
+- Implémentation de BrinLister panel (`#brin-panel`). Tous les tests sont dans e2e/_tdd. Ils ont été migrés. Les lancer pour voir l’état actuel et corriger.
+
+  
 
 <a name="todo-after"></a>
 
@@ -41,6 +35,8 @@ Remettre les fichiers suivants dans `tests/specs/e2e/_tdd/` :
 
 ## Fait
 
+- [x] 2026-06-23 — `_tdd/` : 21 tests verts (keyboard-alt-n, keyboard-cmd-n, new-event, new-event-titre-vide, new-event-virtual-lister, open-existing-project, project-navigation-lister)
+- [x] 2026-06-23 — `createNewBefore()` / `_createAt()` + ListerListener ˜/alt+n + ItemListener guard édition
 - [x] 2026-06-23 — Navigation projets → events → sous-events → retour (`keyboard/navigation-basique.spec.js` vert)
 - [x] 2026-06-23 — ArrowUp/Down bloqués pendant édition titre + titre persisté mémoire/DB (`event/edit-event-title.spec.js` vert)
 - [x] 2026-06-22 — Suppression projet en cascade : ConfirmDialog.expectedValue, countDescendants, collect_descendants_in_db corrigé

@@ -96,7 +96,6 @@ export default class Item {
   }
 
   cancelEdit() {
-    LOG.on(2)
     LOG.m(2, 'Item.cancelEdit', { parentLister: !!this.parentLister, itemsLength: this.parentLister?.items.length, title: JSON.stringify(this.title) })
     if (this.parentLister?.items.length <= 1) {
       LOG.m(2, 'Item.cancelEdit — seul item, blocage')

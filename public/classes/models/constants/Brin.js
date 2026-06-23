@@ -1,14 +1,14 @@
 
-export const BRIN_TYPES = [
-    'intrigue principale',
-    'intrigue amoureuse',
-    'intrigue',
-    'personnage',
-    'relation',
-    'thème',
-    'accessoire',
-    'autre'
-  ]
+export const BRIN_TYPES = {
+      mainint: 'intrigue principale'
+    , lovint: 'intrigue amoureuse'
+    , int: 'intrigue'
+    , perso: 'personnage'
+    , relperso: 'relation'
+    , theme: 'thème'
+    , acce: 'accessoire'
+    , other: 'autre'
+  }
   
 export const BRIN_COLORS = [
     '#d9c8a9', '#c8d9a9', '#a9d9c8', '#a9c8d9',

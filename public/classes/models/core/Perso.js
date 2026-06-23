@@ -9,8 +9,8 @@ export default class Perso extends Item {
   get PROPS() {
     return this._props || (this._props = [
         { name: 'title', type: 'text'   , warper: 'body'}
-      , { name: 'type', type: 'select' , warper: 'left',  values: PERSO_TYPES }
-      , { name: 'fonction', type: 'select-and-text' , multiple: true, warper: 'left',  values: PERSO_FONCTIONS }
+      , { name: 'type', type: 'select' , warper: 'edits',  values: PERSO_TYPES }
+      , { name: 'fonction', type: 'select-and-text' , multiple: true, warper: 'edits',  values: PERSO_FONCTIONS }
     ])
   }
 }

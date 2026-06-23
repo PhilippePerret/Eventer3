@@ -1,5 +1,36 @@
 # CHANGELOG — Eventer3
 
+## 2026-06-23 (suite 2)
+
+### createNewBefore + keyboard + guards édition
+
+**`public/classes/models/abstract/Lister.js`**
+- `_createAt(insertIdx)` : logique commune extraite de `createNew()`
+- `createNew()` → `_createAt(selectedIndex + 1)` ; `createNewBefore()` → `_createAt(selectedIndex)`
+
+**`public/classes/models/abstract/ListerListener.js`**
+- `n: { nokey: 'createNew', alt: 'createNewBefore' }` ; `N:` supprimé (toLowerCase gère la majuscule)
+- `'˜': { nokey: 'createNewBefore' }` — vraie touche Mac ⌥n
+
+**`public/classes/models/abstract/BaseListener.js`**
+- `onkeydown` : `LISTENERS[ev.key] ?? LISTENERS[ev.key.toLowerCase()]` — fallback insensible à la casse
+
+**`public/classes/models/abstract/ItemListener.js`**
+- `onkeydown` : si `item.editing` et touche absente de LISTENERS → `stopEvent(ev)` — empêche les touches de remonter jusqu'à ListerListener pendant l'édition
+
+**`public/classes/models/abstract/ListerDom.js`**
+- `LOG.on(2)` retiré
+
+**`public/classes/models/abstract/Item.js`**
+- `LOG.on(2)` retiré de `cancelEdit()`
+
+**Tests `_tdd/`**
+- Sélecteurs corrigés : `#main-panel.press('ArrowRight')` → `.project-item.selected.press('ArrowRight')` (5 fichiers)
+- `input[name="title"]` → `[data-field="title"]` (keyboard-alt-n, new-event-virtual-lister)
+- `#main-panel.press('Enter')` → `.event-item.selected.press('Enter')` (new-event-virtual-lister)
+- `pressAltNMac` : dispatch sur `#main-panel` au lieu de `document`
+- `page.keyboard.type()` supprimé partout → `locator.fill()`
+
 ## 2026-06-23 (suite)
 
 ### Navigation projets → events → sous-events

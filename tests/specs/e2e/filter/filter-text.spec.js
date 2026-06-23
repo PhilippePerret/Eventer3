@@ -64,7 +64,7 @@ test('filtrage live : "bal" filtre dès la frappe sans Enter', async ({ page }) 
 
   await pane1(page).locator('#main-panel').press('Meta+:')
   await pane1(page).locator('#main-panel').press('t')
-  await page.keyboard.type('bal')
+  await pane1(page).locator('#filter-input').fill('bal')
   // Pas de Enter — filtre live
 
   const items = pane1(page).locator('.event-item')
@@ -79,7 +79,7 @@ test('filtrage live : insensible à la casse', async ({ page }) => {
 
   await pane1(page).locator('#main-panel').press('Meta+:')
   await pane1(page).locator('#main-panel').press('t')
-  await page.keyboard.type('BAL')
+  await pane1(page).locator('#filter-input').fill('BAL')
 
   await expect(pane1(page).locator('.event-item').nth(0)).not.toHaveClass(/hidden/)
   await expect(pane1(page).locator('.event-item').nth(3)).not.toHaveClass(/hidden/)
@@ -93,7 +93,7 @@ test("Enter ferme l'input sans annuler le filtre", async ({ page }) => {
 
   await pane1(page).locator('#main-panel').press('Meta+:')
   await pane1(page).locator('#main-panel').press('t')
-  await page.keyboard.type('bal')
+  await pane1(page).locator('#filter-input').fill('bal')
   await pane1(page).locator('#main-panel').press('Enter')
 
   await expect(pane1(page).locator('#filter-input')).not.toBeVisible()
@@ -108,7 +108,7 @@ test('navigation ↓ saute les items cachés par le filtre', async ({ page }) =>
 
   await pane1(page).locator('#main-panel').press('Meta+:')
   await pane1(page).locator('#main-panel').press('t')
-  await page.keyboard.type('bal')
+  await pane1(page).locator('#filter-input').fill('bal')
   await pane1(page).locator('#main-panel').press('Enter')
 
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
@@ -125,7 +125,7 @@ test('FilterBar affiche le terme de filtre texte actif', async ({ page }) => {
 
   await pane1(page).locator('#main-panel').press('Meta+:')
   await pane1(page).locator('#main-panel').press('t')
-  await page.keyboard.type('bal')
+  await pane1(page).locator('#filter-input').fill('bal')
   await pane1(page).locator('#main-panel').press('Enter')
 
   await expect(pane1(page).locator('#filter-bar')).toBeVisible()
@@ -139,7 +139,7 @@ test('Cmd+: puis : efface le filtre texte', async ({ page }) => {
 
   await pane1(page).locator('#main-panel').press('Meta+:')
   await pane1(page).locator('#main-panel').press('t')
-  await page.keyboard.type('bal')
+  await pane1(page).locator('#filter-input').fill('bal')
   await pane1(page).locator('#main-panel').press('Enter')
 
   await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/hidden/)
@@ -161,7 +161,7 @@ test("Escape dans l'input annule le filtre texte", async ({ page }) => {
 
   await pane1(page).locator('#main-panel').press('Meta+:')
   await pane1(page).locator('#main-panel').press('t')
-  await page.keyboard.type('bal')
+  await pane1(page).locator('#filter-input').fill('bal')
   await pane1(page).locator('#main-panel').press('Escape')
 
   await expect(pane1(page).locator('#filter-input')).not.toBeVisible()

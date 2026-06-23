@@ -43,7 +43,7 @@ export default class BaseListener {
 
   onkeydown(ev) {
     LOG.m(1, 'BaseListener.onkeydown', { key: ev.key, listener: this.constructor.name, target: ev.target?.className })
-    const dm = this.constructor.LISTENERS?.[ev.key]
+    const dm = this.constructor.LISTENERS?.[ev.key] ?? this.constructor.LISTENERS?.[ev.key.toLowerCase()]
     if (!dm) return
     const method = this.getMethod(ev, dm)
     this.target[method] || raise(ERRORS[100], ev.key, ev, this)

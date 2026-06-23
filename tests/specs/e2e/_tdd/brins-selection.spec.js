@@ -1,3 +1,4 @@
+// Origine : tests/specs/e2e/brin/brins-selection.spec.js
 import { test, expect, pane1 } from '../__setup__.js'
 import { setupTestBrinsFixture } from '../../../helpers/fixture-setup.js'
 
@@ -6,11 +7,11 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
   await page.goto('/')
 
   // Naviguer au premier project
-  await page.press('body', 'ArrowRight')
+  await pane1(page).locator('.project-item.selected').press('ArrowRight')
   await expect(pane1(page).locator('.event-item')).toHaveCount(3)
 
   // Ouvrir brins pour e1 (doit avoir A et B cochés)
-  await page.press('body', 'b')
+  await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('#brin-panel')).toBeVisible()
 
   let brinsItems = pane1(page).locator('.brin-item')
@@ -22,7 +23,7 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
   for (let i = 0; i < await brinsItems.count(); i++) {
     const item = brinsItems.nth(i)
     const hasChecked = await item.evaluate(el => el.classList.contains('checked'))
-    const title = await item.locator('.brin-item__title').textContent()
+    const title = await item.locator('.brin-title').textContent()
     console.log(`  - "${title}" (checked: ${hasChecked})`)
     if (hasChecked) {
       checkedCount++
@@ -36,37 +37,31 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
   expect(uncheckedCount).toBe(2)
 
   // Fermer
-  await page.press('body', 'Escape')
-  await page.waitForTimeout(200)
-
+  await pane1(page).locator('#main-panel').press('Escape')
+  
   // Ouvrir brins pour e3 (aucun coché)
-  await page.press('body', 'ArrowDown')
-  await page.waitForTimeout(200)
-  await page.press('body', 'b')
-  await page.waitForTimeout(300)
-
+  await pane1(page).locator('#main-panel').press('ArrowDown')
+    await pane1(page).locator('#main-panel').press('b')
+  
   brinsItems = pane1(page).locator('.brin-item')
   checkedCount = 0
 
   for (let i = 0; i < await brinsItems.count(); i++) {
     const item = brinsItems.nth(i)
     const hasChecked = await item.evaluate(el => el.classList.contains('checked'))
-    const title = await item.locator('.brin-item__title').textContent()
+    const title = await item.locator('.brin-title').textContent()
     expect(hasChecked).toBe(false)
     if (hasChecked) checkedCount++
   }
   expect(checkedCount).toBe(0)
 
   // Fermer
-  await page.press('body', 'Escape')
-  await page.waitForTimeout(200)
-
+  await pane1(page).locator('#main-panel').press('Escape')
+  
   // Ouvrir brins pour e2 (doit avoir B et C cochés)
-  await page.press('body', 'ArrowDown')
-  await page.waitForTimeout(200)
-  await page.press('body', 'b')
-  await page.waitForTimeout(300)
-
+  await pane1(page).locator('#main-panel').press('ArrowDown')
+    await pane1(page).locator('#main-panel').press('b')
+  
   brinsItems = pane1(page).locator('.brin-item')
   checkedCount = 0
   uncheckedCount = 0
@@ -74,7 +69,7 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
   for (let i = 0; i < await brinsItems.count(); i++) {
     const item = brinsItems.nth(i)
     const hasChecked = await item.evaluate(el => el.classList.contains('checked'))
-    const title = await item.locator('.brin-item__title').textContent()
+    const title = await item.locator('.brin-title').textContent()
     if (hasChecked) {
       checkedCount++
       expect(title).toMatch(/Brin [BC]/)
@@ -89,31 +84,24 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
   // Cocher D
   const brinDItem = pane1(page).locator('.brin-item').filter({ hasText: /Brin D/ })
   await brinDItem.click()
-  await page.waitForTimeout(200)
-
+  
   // Fermer
-  await page.press('body', 'Escape')
-  await page.waitForTimeout(200)
-
+  await pane1(page).locator('#main-panel').press('Escape')
+  
   // Naviguer back à e1 et vérifier que A et B sont encore cochés
-  await page.press('body', 'ArrowLeft')
-  await page.waitForTimeout(200)
-  await page.press('body', 'ArrowUp')
-  await page.waitForTimeout(200)
-  await page.press('body', 'ArrowUp')
-  await page.waitForTimeout(200)
-  await page.press('body', 'ArrowRight')
-  await page.waitForTimeout(500)
-  await page.press('body', 'b')
-  await page.waitForTimeout(300)
-
+  await pane1(page).locator('#main-panel').press('ArrowLeft')
+    await pane1(page).locator('#main-panel').press('ArrowUp')
+    await pane1(page).locator('#main-panel').press('ArrowUp')
+    await pane1(page).locator('.project-item.selected').press('ArrowRight')
+    await pane1(page).locator('#main-panel').press('b')
+  
   brinsItems = pane1(page).locator('.brin-item')
   checkedCount = 0
 
   for (let i = 0; i < await brinsItems.count(); i++) {
     const item = brinsItems.nth(i)
     const hasChecked = await item.evaluate(el => el.classList.contains('checked'))
-    const title = await item.locator('.brin-item__title').textContent()
+    const title = await item.locator('.brin-title').textContent()
     if (hasChecked) {
       checkedCount++
       expect(title).toMatch(/Brin [AB]/)

@@ -78,9 +78,9 @@ test.describe('Token replacement dans les titres', () => {
     await expect(pane1(page).locator('.constants-row').first()).toBeVisible()
     await pane1(page).locator('#main-panel').press('ArrowDown')
     await pane1(page).locator('#main-panel').press('Tab')
-    await page.keyboard.type('PAYS')
+    await pane1(page).locator('.constants-row__name').nth(1).fill('PAYS')
     await pane1(page).locator('#main-panel').press('Tab')
-    await page.keyboard.type('France')
+    await pane1(page).locator('.constants-row__value').nth(1).fill('France')
     await pane1(page).locator('#main-panel').press('Meta+Enter')
     await expect(pane1(page).locator('#constants-panel')).not.toBeVisible()
     // Créer un nouvel event avec /PAYS/

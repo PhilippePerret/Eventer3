@@ -127,9 +127,9 @@ test.describe('ConstantsPanel', () => {
     await pane1(page).locator('#main-panel').press('q')
     await expect(pane1(page).locator('.constants-row').first()).toBeVisible()
     await pane1(page).locator('#main-panel').press('Tab')
-    await page.keyboard.type('VILLE')
+    await pane1(page).locator('.constants-row__name').first().fill('VILLE')
     await pane1(page).locator('#main-panel').press('Tab')
-    await page.keyboard.type('Paris')
+    await pane1(page).locator('.constants-row__value').first().fill('Paris')
     await pane1(page).locator('#main-panel').press('Escape')
     await expect(pane1(page).locator('#constants-panel')).not.toBeVisible()
     // Réouverture
@@ -144,7 +144,7 @@ test.describe('ConstantsPanel', () => {
     await pane1(page).locator('#main-panel').press('q')
     await pane1(page).locator('#main-panel').press('Tab')          // focus name (vide)
     await pane1(page).locator('#main-panel').press('Tab')          // focus value
-    await page.keyboard.type('Paris')
+    await pane1(page).locator('.constants-row__value').first().fill('Paris')
     await pane1(page).locator('#main-panel').press('Escape')
     await pane1(page).locator('#main-panel').press('q')
     await expect(pane1(page).locator('.constants-row__value').first()).toHaveValue('')
@@ -154,7 +154,7 @@ test.describe('ConstantsPanel', () => {
     await page.goto('/')
     await pane1(page).locator('#main-panel').press('q')
     await pane1(page).locator('#main-panel').press('Tab')
-    await page.keyboard.type('VILLE')         // nom sans valeur
+    await pane1(page).locator('.constants-row__name').first().fill('VILLE')         // nom sans valeur
     await pane1(page).locator('#main-panel').press('Escape')
     await pane1(page).locator('#main-panel').press('q')
     await expect(pane1(page).locator('.constants-row__name').first()).toHaveValue('')
@@ -166,17 +166,17 @@ test.describe('ConstantsPanel', () => {
     await expect(pane1(page).locator('.constants-row').first()).toBeVisible()
     // Ligne 0 : VILLE / Paris
     await pane1(page).locator('#main-panel').press('Tab')
-    await page.keyboard.type('VILLE')
+    await pane1(page).locator('.constants-row__name').first().fill('VILLE')
     await pane1(page).locator('#main-panel').press('Tab')
-    await page.keyboard.type('Paris')
+    await pane1(page).locator('.constants-row__value').first().fill('Paris')
     // Ligne 1 : vide (skip)
     await pane1(page).locator('#main-panel').press('ArrowDown')
     // Ligne 2 : HEROS / Arthur
     await pane1(page).locator('#main-panel').press('ArrowDown')
     await pane1(page).locator('#main-panel').press('Tab')
-    await page.keyboard.type('HEROS')
+    await pane1(page).locator('.constants-row__name').nth(2).fill('HEROS')
     await pane1(page).locator('#main-panel').press('Tab')
-    await page.keyboard.type('Arthur')
+    await pane1(page).locator('.constants-row__value').nth(2).fill('Arthur')
     await pane1(page).locator('#main-panel').press('Escape')
     await expect(pane1(page).locator('#constants-panel')).not.toBeVisible()
     // Vérification

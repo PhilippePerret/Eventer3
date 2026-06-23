@@ -43,8 +43,9 @@ test('les events persistent après avoir navigué vers un autre projet et revenu
 
   // Créer un nouvel event
   await pane1(page).locator('.event-item.selected').press('n')
-  await expect(pane1(page).locator('.event-item.selected [data-field="title"]')).toBeFocused()
-  await page.keyboard.type('Nouvel événement')
+  const titleField = pane1(page).locator('.event-item.selected [data-field="title"]')
+  await expect(titleField).toBeFocused()
+  await titleField.fill('Nouvel événement')
   await pane1(page).locator('.event-item.selected').press('Enter')
   await page.waitForLoadState('networkidle')
   await expect(pane1(page).locator('.event-item')).toHaveCount(4)

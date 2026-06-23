@@ -53,9 +53,8 @@ export default class Lister {
     this.Dom.applySelection(null, this.items[newIdx])
   }
 
-  async createNew() {
-    const insertIdx = this.selectedIndex + 1
-    const prevIds   = [...this.item_ids]
+  async _createAt(insertIdx) {
+    const prevIds = [...this.item_ids]
     const result = await ListerRepo.createItem(this.id, { title: '' }, { project_id: this.project_id })
     if (!result?.id) { this.Dom.focusSelected(); return }
     const newOrder = [...prevIds]
@@ -65,6 +64,9 @@ export default class Lister {
     await this._reloadAt(insertIdx)
     this.items[this.selectedIndex]?.startEditing()
   }
+
+  async createNew()       { await this._createAt(this.selectedIndex + 1) }
+  async createNewBefore() { await this._createAt(this.selectedIndex)     }
 
   async _reloadAt(insertIdx) {
     await this.Repo.load()

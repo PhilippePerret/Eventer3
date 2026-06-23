@@ -1,3 +1,4 @@
+// Origine : tests/specs/e2e/brin/keyboard-delete.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect, pane1 } from '../__setup__.js'
 
@@ -12,7 +13,7 @@ test.describe('Delete dans le panneau des brins', () => {
   async function goToEventLister(page) {
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-    await pane1(page).locator('#main-panel').press('ArrowRight')
+    await pane1(page).locator('.project-item.selected').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   }
 
@@ -32,7 +33,7 @@ test.describe('Delete dans le panneau des brins', () => {
     await pane1(page).locator('#main-panel').press('Delete')
     await expect(items).toHaveCount(initialCount - 1)
     // Le brin b2 (AUT) ne doit plus être dans la liste
-    const titles = pane1(page).locator('.brin-item .brin-item__title')
+    const titles = pane1(page).locator('.brin-item .brin-title')
     await expect(titles).not.toContainText('Autre brin')
   })
 
@@ -60,7 +61,7 @@ test.describe('Delete dans le panneau des brins', () => {
     await pane1(page).locator('#main-panel').press('b')
     await expect(pane1(page).locator('#brin-panel')).toBeVisible()
     await expect(pane1(page).locator('.brin-item')).toHaveCount(1)
-    await expect(pane1(page).locator('.brin-item .brin-item__title')).not.toContainText('Autre brin')
+    await expect(pane1(page).locator('.brin-item .brin-title')).not.toContainText('Autre brin')
   })
 
   test('la suppression du brin est persistante : badge absent de l\'event après rechargement', async ({ page }) => {

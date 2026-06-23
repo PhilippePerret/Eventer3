@@ -1,4 +1,5 @@
 // Origine : tests/specs/e2e/keyboard/keyboard-alt-n.spec.js
+
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect, pane1 } from '../__setup__.js'
 
@@ -6,7 +7,8 @@ import { test, expect, pane1 } from '../__setup__.js'
 async function pressAltNMac(page) {
   const frame = page.frames().find(f => f.url().includes('app-frame'))
   await frame.evaluate(() => {
-    document.dispatchEvent(new KeyboardEvent('keydown', {
+    const el = document.querySelector('#main-panel') ?? document
+    el.dispatchEvent(new KeyboardEvent('keydown', {
       key: '˜', code: 'KeyN', altKey: true, bubbles: true, cancelable: true
     }))
   })

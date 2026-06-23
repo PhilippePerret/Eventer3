@@ -1,3 +1,4 @@
+// Origine : tests/specs/e2e/brin/brin-nouveau.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures'
 import { test, expect, pane1 } from '../__setup__.js'
 
@@ -10,7 +11,7 @@ test.beforeEach(() => {
 async function openBrinPanel(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await pane1(page).locator('#main-panel').press('ArrowRight')
+  await pane1(page).locator('.project-item.selected').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('#brin-panel')).toBeVisible()
@@ -19,7 +20,7 @@ async function openBrinPanel(page) {
 test("nouveau brin : il est sélectionné juste après création", async ({ page }) => {
   await openBrinPanel(page)
   await pane1(page).locator('#main-panel').press('n')
-  const titleInput = pane1(page).locator('.brin-item.selected input[name="title"]')
+  const titleInput = pane1(page).locator('.brin-item.selected [data-field="title"]')
   await titleInput.fill('Brin créé')
   await pane1(page).locator('#main-panel').press('Enter')
   // Le nouveau brin (inséré après le premier) doit être sélectionné
@@ -29,7 +30,7 @@ test("nouveau brin : il est sélectionné juste après création", async ({ page
 test("nouveau brin : il s'affiche avec les bonnes classes CSS (panel-row brin-row)", async ({ page }) => {
   await openBrinPanel(page)
   await pane1(page).locator('#main-panel').press('n')
-  const titleInput = pane1(page).locator('.brin-item.selected input[name="title"]')
+  const titleInput = pane1(page).locator('.brin-item.selected [data-field="title"]')
   await titleInput.fill('Brin CSS')
   await pane1(page).locator('#main-panel').press('Enter')
   const newBrin = pane1(page).locator('.brin-item').nth(1)
@@ -52,7 +53,7 @@ test("nouveau brin : sa couleur est différente de celle du brin précédent", a
   const lastColor = await lastBrin.locator('input[type="color"]').inputValue()
   // Créer un nouveau brin
   await pane1(page).locator('#main-panel').press('n')
-  await pane1(page).locator('.brin-item.selected input[name="title"]').fill('Nouveau brin couleur')
+  await pane1(page).locator('.brin-item.selected [data-field="title"]').fill('Nouveau brin couleur')
   await pane1(page).locator('#main-panel').press('Enter')
   // La couleur du nouveau brin doit être différente
   const newBrinColor = await pane1(page).locator('.brin-item').nth(1).locator('input[type="color"]').inputValue()

@@ -69,16 +69,24 @@ export default class DOM {
 
   buildEditField(field, item) {
     switch (field.type) {
-      case 'select': return this.buildEditSelectField(field, item)
-      default:       return this.buildEditTextField(field, item)
+      case 'select':  return this.buildEditSelectField(field, item)
+      case 'no-edit': return this.buildNoEditField(field, item)
+      default:        return this.buildEditTextField(field, item)
     }
+  }
+
+  buildNoEditField(field, item) {
+    const el = this._fieldEl(field, item)
+    el.innerHTML = item[field.value]?.() ?? ''
+    return el
   }
 
   buildField(field, item) {
     switch (field.type) {
-      case 'text':   return this.buildTextField(field, item)
-      case 'select': return this.buildSelect(field, item)
-      default:       return this.buildTextField(field, item)
+      case 'text':    return this.buildTextField(field, item)
+      case 'select':  return this.buildSelect(field, item)
+      case 'no-edit': return this.buildNoEditField(field, item)
+      default:        return this.buildTextField(field, item)
     }
   }
 

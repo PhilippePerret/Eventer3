@@ -1,5 +1,4 @@
 import LOG from '../../../system/LOG.js'
-LOG.on(2)
 
 export default class ListerDom {
   constructor(lister) { this.lister = lister }
