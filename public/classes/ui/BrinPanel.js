@@ -29,27 +29,42 @@ export default class BrinPanel {
     this._event?.el?.focus()
   }
 
+  static HANDLED_KEYS = {
+      ArrowDown: 'selectNext'
+    , ArrowUp:    'selectPrev'
+    , ' ':        'toggleChecked'
+    , Enter:      true
+    , n:          'createNew'
+    , Delete:     'deleteSelected'
+    , b:          true
+    /* RÈGLE ABSOLUE : La touche Escape ne sert JAMAIS à fermer un panneau */
+  }
+
   _handleKey(e) {
+    const handledKey = BrinPanel.HANDLED_KEYS[e.key]
+
+    if (undefined == handledKey) return
+
     const lb = this._listerBrin
     const selected = lb?.items[lb?.selectedIndex]
 
     if (selected?.editing) return
 
-    if (e.key === 'b' || e.key === 'Escape' || (e.key === 'Enter' && e.metaKey)) {
-      stopEvent(e)
-      this.close()
-      return
-    }
+    stopEvent(e)
 
-    if (!lb) return
-
-    switch (e.key) {
-      case 'ArrowDown': stopEvent(e); lb.selectNext(); break
-      case 'ArrowUp':   stopEvent(e); lb.selectPrev(); break
-      case ' ':         stopEvent(e); lb.toggleChecked(); break
-      case 'Enter':     stopEvent(e); selected?.startEditing(); break
-      case 'n':         stopEvent(e); lb.createNew(); break
-      case 'Delete':    stopEvent(e); lb.deleteSelected(); break
+    if (handledKey === true) {
+      switch (e.key) {
+        case 'Enter':
+          if (e.metaKey) return this.close()
+          else selected?.startEditing(); 
+          break
+        case 'b' :      
+          return this.close()
+          break
+      }
+    } else {
+      if (!lb) return
+      lb[handledKey]()
     }
   }
 

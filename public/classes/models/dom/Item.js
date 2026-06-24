@@ -53,7 +53,8 @@ export default {
   },
 
   startEditing() {
-    LOG.m(1, 'Item.startEditing', { id: this.id })
+    LOG.m(1, 'Item.startEditing', { id: this.id, elExists: !!this.el, elInDOM: !!this.el?.isConnected, elClass: this.el?.className })
+    LOG.m(1, 'Item.startEditing — title field before replace', this.el?.querySelector('.brin-title')?.outerHTML ?? 'NOT FOUND')
     this.editing = true
     for (const field of this.PROPS) field._curvalue = this[field.name]
     this.el.classList.add('editing')
@@ -62,7 +63,9 @@ export default {
       const old = this.el.querySelector(`.${cls}`)
       if (old) old.replaceWith(dom.buildEditField(field, this))
     }
-    this.el.querySelector('[data-field="title"]')?.focus()
+    const titleEl = this.el.querySelector('[data-field="title"]')
+    LOG.m(1, 'Item.startEditing — title field after replace', titleEl?.outerHTML ?? 'NOT FOUND', 'visible:', titleEl?.offsetParent)
+    titleEl?.focus()
   },
 
   revertValues() {

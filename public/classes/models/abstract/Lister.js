@@ -58,11 +58,13 @@ export default class Lister extends KeyDispatcher {
     const prevIds = [...this.item_ids]
     const result = await this.createItem({ title: '' })
     if (!result?.id) { this.focusSelected(); return }
+    await this._afterCreate?.(result, insertIdx)
     const newOrder = [...prevIds]
     newOrder.splice(insertIdx, 0, result.id)
     this.item_ids = newOrder
     await this.save()
     await this._reloadAt(insertIdx)
+    LOG.m(1, '_createAt after _reloadAt', { selectedIndex: this.selectedIndex, itemsLen: this.items.length, item: this.items[this.selectedIndex]?.id, elExists: !!this.items[this.selectedIndex]?.el })
     this.items[this.selectedIndex]?.startEditing()
   }
 

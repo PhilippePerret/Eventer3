@@ -34,11 +34,6 @@ test("l'ListerEvent reste visible en fond pendant que le panneau est ouvert", as
   await expect(pane1(page).locator('#main-panel')).toBeVisible()
 })
 
-test("Escape ferme le panneau", async ({ page }) => {
-  await openBrinPanel(page)
-  await pane1(page).locator('#main-panel').press('Escape')
-  await expect(pane1(page).locator('#brin-panel')).not.toBeVisible()
-})
 
 test("b ferme le panneau des brins quand il est actif", async ({ page }) => {
   await openBrinPanel(page)
@@ -54,7 +49,7 @@ test("Cmd+Enter ferme le panneau", async ({ page }) => {
 
 test("après fermeture, l'ListerEvent redevient actif (↓ change la sélection d'event)", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('#main-panel').press('Escape')
+  await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
   await pane1(page).locator('#main-panel').press('ArrowDown')
   await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/selected/)
@@ -71,8 +66,8 @@ test("le panneau affiche tous les brins existants", async ({ page }) => {
 
 test("les badges sont affichés", async ({ page }) => {
   await openBrinPanel(page)
-  await expect(pane1(page).locator('.brin-item').nth(0).locator('.brin-item__badge')).toHaveText('MON')
-  await expect(pane1(page).locator('.brin-item').nth(1).locator('.brin-item__badge')).toHaveText('AUT')
+  await expect(pane1(page).locator('.brin-item').nth(0).locator('.brin-badge')).toHaveText('MON')
+  await expect(pane1(page).locator('.brin-item').nth(1).locator('.brin-badge')).toHaveText('AUT')
 })
 
 test("les brins cochés (ch:true) ont la classe checked", async ({ page }) => {
@@ -87,13 +82,13 @@ test("seuls les brins de l'event sélectionné sont cochés à l'ouverture", asy
   await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('.brin-item').nth(0)).not.toHaveClass(/checked/)
   await expect(pane1(page).locator('.brin-item').nth(1)).toHaveClass(/checked/)
-  await pane1(page).locator('#main-panel').press('Escape')
+  await pane1(page).locator('#main-panel').press('b')
   // e2 sélectionné : aucun brin coché (e2 n'a pas de bi)
   await pane1(page).locator('#main-panel').press('ArrowDown')
   await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('.brin-item').nth(0)).not.toHaveClass(/checked/)
   await expect(pane1(page).locator('.brin-item').nth(1)).not.toHaveClass(/checked/)
-  await pane1(page).locator('#main-panel').press('Escape')
+  await pane1(page).locator('#main-panel').press('b')
   // retour à e1 : b2 doit de nouveau être coché (pas de stale state)
   await pane1(page).locator('#main-panel').press('ArrowUp')
   await pane1(page).locator('#main-panel').press('b')

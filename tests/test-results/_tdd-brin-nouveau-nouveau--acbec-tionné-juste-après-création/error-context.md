@@ -6,15 +6,20 @@
 
 # Test info
 
-- Name: _tdd/brin-nouveau.spec.js >> nouveau brin : sa couleur est différente de celle du brin précédent
-- Location: specs/e2e/_tdd/brin-nouveau.spec.js:48:1
+- Name: _tdd/brin-nouveau.spec.js >> nouveau brin : il est sélectionné juste après création
+- Location: specs/e2e/_tdd/brin-nouveau.spec.js:20:1
 
 # Error details
 
 ```
-Error: expect(received).not.toBe(expected) // Object.is equality
+Test timeout of 15000ms exceeded.
+```
 
-Expected: not "#888888"
+```
+Error: locator.fill: Test timeout of 15000ms exceeded.
+Call log:
+  - waiting for locator('#pane-1').contentFrame().locator('.brin-item.selected [data-field="title"]')
+
 ```
 
 # Page snapshot
@@ -42,17 +47,20 @@ Expected: not "#888888"
       - generic [ref=f1e26]:
         - generic [ref=f1e27]: Mon brin
         - generic [ref=f1e28]:
-          - generic [ref=f1e29]: "#888888"
+          - generic [ref=f1e29]: "#d9c8a9"
           - generic [ref=f1e30]: MON
           - generic [ref=f1e31]: brin
-      - generic [active] [ref=f1e32]:
-        - generic [ref=f1e34]: ✓
-        - generic [ref=f1e35]:
-          - generic [ref=f1e36]: Nouveau brin couleur
-          - generic [ref=f1e37]:
-            - generic [ref=f1e38]: "#888888"
-            - generic [ref=f1e39]: AUT
-            - generic [ref=f1e40]: brin
+      - generic [ref=f1e35]:
+        - generic [ref=f1e36]: "#c8d9a9"
+        - generic [ref=f1e37]: "---"
+      - generic [ref=f1e38]:
+        - generic [ref=f1e40]: ✓
+        - generic [ref=f1e41]:
+          - generic [ref=f1e42]: Autre brin
+          - generic [ref=f1e43]:
+            - generic [ref=f1e44]: "#a9d9c8"
+            - generic [ref=f1e45]: AUT
+            - generic [ref=f1e46]: brin
 ```
 
 # Test source
@@ -81,7 +89,8 @@ Expected: not "#888888"
   21 |   await openBrinPanel(page)
   22 |   await pane1(page).locator('#main-panel').press('n')
   23 |   const titleInput = pane1(page).locator('.brin-item.selected [data-field="title"]')
-  24 |   await titleInput.fill('Brin créé')
+> 24 |   await titleInput.fill('Brin créé')
+     |                    ^ Error: locator.fill: Test timeout of 15000ms exceeded.
   25 |   await pane1(page).locator('#main-panel').press('Enter')
   26 |   // Le nouveau brin (inséré après le premier) doit être sélectionné
   27 |   await expect(pane1(page).locator('.brin-item').nth(1)).toHaveClass(/selected/)
@@ -105,15 +114,4 @@ Expected: not "#888888"
   45 |   await expect(editor).toHaveClass(/editing/)
   46 | })
   47 | 
-  48 | test("nouveau brin : sa couleur est différente de celle du brin précédent", async ({ page }) => {
-  49 |   await openBrinPanel(page)
-  50 |   const lastColor = await pane1(page).locator('.brin-item').last().locator('.brin-color').textContent()
-  51 |   await pane1(page).locator('#main-panel').press('n')
-  52 |   await pane1(page).locator('.brin-item.selected [data-field="title"]').fill('Nouveau brin couleur')
-  53 |   await pane1(page).locator('#main-panel').press('Enter')
-  54 |   const newBrinColor = await pane1(page).locator('.brin-item').nth(1).locator('.brin-color').textContent()
-> 55 |   expect(newBrinColor).not.toBe(lastColor)
-     |                            ^ Error: expect(received).not.toBe(expected) // Object.is equality
-  56 | })
-  57 | 
 ```

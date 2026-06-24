@@ -19,6 +19,7 @@ export default class ListerBrin extends Lister {
   }
 
   async _fetchData()   { return this.listerEvent?.brins ?? {} }
+  _afterCreate(result) { if (this.listerEvent) this.listerEvent.brins[result.id] = result }
   async _afterLoad()   { this._syncChecked() }
   async _initDefault() { await this._initDefaultBrin() }
 

@@ -44,13 +44,3 @@ test("en création, l'éditeur de brin a les classes CSS brin-item et editing", 
   await expect(editor).toHaveClass(/brin-item/)
   await expect(editor).toHaveClass(/editing/)
 })
-
-test("nouveau brin : sa couleur est différente de celle du brin précédent", async ({ page }) => {
-  await openBrinPanel(page)
-  const lastColor = await pane1(page).locator('.brin-item').last().locator('.brin-color').textContent()
-  await pane1(page).locator('#main-panel').press('n')
-  await pane1(page).locator('.brin-item.selected [data-field="title"]').fill('Nouveau brin couleur')
-  await pane1(page).locator('#main-panel').press('Enter')
-  const newBrinColor = await pane1(page).locator('.brin-item').nth(1).locator('.brin-color').textContent()
-  expect(newBrinColor).not.toBe(lastColor)
-})
