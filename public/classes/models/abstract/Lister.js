@@ -1,12 +1,14 @@
+import BaseListener from './BaseListener.js'
 import ListerDom from './ListerDom.js'
-import ListerListener from './ListerListener.js'
 import ListerRepo from '../repo/Lister.js'
+import { ListerLi } from '../listen/Lister.js'
 import Notification from '../../ui/Notification.js'
 import ConfirmDialog from '../../ui/ConfirmDialog.js'
 
-export default class Lister {
+export default class Lister extends BaseListener {
 
   constructor(data = {}) {
+    super()
     this.id            = data.id            ?? null
     this.item_ids      = data.item_ids      ?? []
     this.items         = []
@@ -16,8 +18,9 @@ export default class Lister {
   }
 
   get Dom()      { return this._dom      || (this._dom      = new ListerDom(this)) }
-  get Listener() { return this._listen   || (this._listen   = new ListerListener(this)) }
   get minClass() { return this._minClass || (this._minClass = this.constructor.ITEM_CLASS?.name.toLowerCase()) }
+
+  static LISTENERS = { ...ListerLi }
 
   selectAt(idx) {
     const current = this.items[this.selectedIndex]
@@ -75,9 +78,9 @@ export default class Lister {
 
   leaveToParent() {
     const parent = this.parentLister
-    this.Listener.detach()
+    this.detach()
     parent.Dom.render()
-    parent.Listener.attach(parent.Dom.container)
+    parent.attach(parent.Dom.container)
   }
 
   selectPrev() {

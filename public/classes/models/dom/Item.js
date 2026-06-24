@@ -14,7 +14,7 @@ export default {
     el.setAttribute('tabindex', '-1')
     this._buildContent(el)
     this.el = el
-    this.Listener.attach(el)
+    this.attach(el)
     return el
   },
 

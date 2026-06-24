@@ -1,13 +1,16 @@
+import BaseListener from './BaseListener.js'
 import ItemDom from '../dom/Item.js'
 import ItemRepo from '../repo/Item.js'
-import ItemListener from './ItemListener.js'
+import { ItemLi } from '../listen/Item.js'
+import { stopEvent } from '../../utils/events.js'
 import Lister from './Lister.js'
 import LOG from '../../../system/LOG.js'
 import Notification from '../../ui/Notification.js'
 
-export default class Item {
+export default class Item extends BaseListener {
 
   constructor(data = {}) {
+    super()
     this.id         = data.id         ?? null
     this.title      = data.title      ?? ''
     this.type       = data.type       ?? null
@@ -23,7 +26,12 @@ export default class Item {
     this.editing = false
   }
 
-  get Listener() { return this._listen || (this._listen = new ItemListener(this)) }
+  onkeydown(ev) {
+    if (this.editing && !this.constructor.LISTENERS[ev.key]) return stopEvent(ev)
+    super.onkeydown(ev)
+  }
+
+  static LISTENERS = { ...ItemLi }
 
   async enterChildren() {
     if (!this.parentLister) return
@@ -43,9 +51,9 @@ export default class Item {
       await this.onChildListerCreated?.(child)
       await child.load()
     }
-    this.parentLister.Listener.detach()
+    this.parentLister.detach()
     child.Dom.render()
-    child.Listener.attach(child.Dom.container)
+    child.attach(child.Dom.container)
     if (child.items.length === 0) await child.createNew()
   }
 

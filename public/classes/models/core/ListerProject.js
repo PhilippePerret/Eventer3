@@ -14,7 +14,7 @@ export default class ListerProject extends Lister {
     const lister = new ListerProject({ id: 1 })
     await lister.load()
     lister.Dom.render()
-    lister.Listener.attach(lister.Dom.container)
+    lister.attach(lister.Dom.container)
     LOG.m(1, 'ListerProject ready')
     return lister
   }
