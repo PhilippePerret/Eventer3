@@ -9,7 +9,7 @@ test.beforeEach(() => {
 //   project-a, events e1/e2, brins b1/b2
 //   themes/default.css : .titre (font-size:26px, underline), .note-rouge (font-size:9px, red, margin)
 
-async function goToEventLister(page) {
+async function goToListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await pane1(page).locator('#main-panel').press('ArrowRight')
@@ -17,20 +17,20 @@ async function goToEventLister(page) {
 }
 
 async function openStylePanel(page) {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('s')
   await expect(pane1(page).locator('#style-panel')).toBeVisible()
 }
 
 // ─── Ouverture / fermeture ──────────────────────────────────────────────────
 
-test("s ouvre le panneau des styles depuis l'EventLister", async ({ page }) => {
-  await goToEventLister(page)
+test("s ouvre le panneau des styles depuis l'ListerEvent", async ({ page }) => {
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('s')
   await expect(pane1(page).locator('#style-panel')).toBeVisible()
 })
 
-test("l'EventLister reste visible en fond pendant que le panneau est ouvert", async ({ page }) => {
+test("l'ListerEvent reste visible en fond pendant que le panneau est ouvert", async ({ page }) => {
   await openStylePanel(page)
   await expect(pane1(page).locator('#main-panel')).toBeVisible()
 })
@@ -53,7 +53,7 @@ test("Cmd+Enter ferme le panneau des styles", async ({ page }) => {
   await expect(pane1(page).locator('#style-panel')).not.toBeVisible()
 })
 
-test("après fermeture, l'EventLister redevient actif (↓ change la sélection)", async ({ page }) => {
+test("après fermeture, l'ListerEvent redevient actif (↓ change la sélection)", async ({ page }) => {
   await openStylePanel(page)
   await pane1(page).locator('#main-panel').press('Escape')
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
@@ -111,7 +111,7 @@ test("↑ sélectionne le style précédent", async ({ page }) => {
   await expect(pane1(page).locator('.style-item').nth(0)).toHaveClass(/selected/)
 })
 
-test("↓↑ ne modifient pas la sélection de l'EventLister", async ({ page }) => {
+test("↓↑ ne modifient pas la sélection de l'ListerEvent", async ({ page }) => {
   await openStylePanel(page)
   await pane1(page).locator('#main-panel').press('ArrowDown')
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
@@ -245,7 +245,7 @@ test("persistance : style coché survit au rechargement", async ({ page }) => {
   await page.waitForLoadState('networkidle')
 
   await page.reload()
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('s')
   await expect(pane1(page).locator('#style-panel')).toBeVisible()
   await expect(pane1(page).locator('.style-item').nth(0)).toHaveClass(/checked/)
@@ -258,7 +258,7 @@ test("persistance : style décoché survit au rechargement", async ({ page }) =>
   await page.waitForLoadState('networkidle')
 
   await page.reload()
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('s')
   await expect(pane1(page).locator('.style-item').nth(0)).not.toHaveClass(/checked/)
 })
@@ -269,7 +269,7 @@ test("persistance : font-size correcte sur .event-text après rechargement", asy
   await page.waitForLoadState('networkidle')
 
   await page.reload()
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await expect(pane1(page).locator('.event-item').nth(0).locator('.event-text'))
     .toHaveCSS('font-size', '26px')
 })
@@ -284,7 +284,7 @@ test("persistance : ordre inversé survit au rechargement (titre après note-rou
   await page.waitForLoadState('networkidle')
 
   await page.reload()
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await expect(pane1(page).locator('.event-item').nth(0).locator('.event-text'))
     .toHaveCSS('font-size', '26px')
 })

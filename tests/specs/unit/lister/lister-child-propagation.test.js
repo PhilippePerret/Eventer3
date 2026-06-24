@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 
 import Lister from '../../../../public/classes/models/Lister.js'
-import ProjectLister from '../../../../public/classes/models/ProjectLister.js'
+import ListerProject from '../../../../public/classes/models/ListerProject.js'
 import Item from '../../../../public/classes/models/Item.js'
 
 test('Lister._childListerData propage project_id depuis le lister parent', () => {
@@ -25,8 +25,8 @@ test('Lister._childListerData sans project_id — project_id null dans le child'
   assert.equal(data.project_id, null)
 })
 
-test('ProjectLister._childListerData utilise item.id comme project_id', () => {
-  const projectLister = new ProjectLister({ id: 1 })
+test('ListerProject._childListerData utilise item.id comme project_id', () => {
+  const projectLister = new ListerProject({ id: 1 })
   const projectItem = new Item({ id: 'roman-1', lister_id: 2 })
 
   const data = projectLister._childListerData(projectItem)

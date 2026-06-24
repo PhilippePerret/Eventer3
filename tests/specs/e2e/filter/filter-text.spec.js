@@ -11,7 +11,7 @@ test.beforeEach(() => {
 //   e3 "La trahison"      brin_ids: [b1,b2]
 //   e4 "Retour au bal"    brin_ids: []
 
-async function enterEventLister(page) {
+async function enterListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
@@ -23,7 +23,7 @@ async function enterEventLister(page) {
 // ── Cmd+: affiche le hint immédiatement ───────────────────────────
 
 test('Cmd+: affiche filter-bar avec hint des sous-commandes', async ({ page }) => {
-  await enterEventLister(page)
+  await enterListerEvent(page)
   await expect(pane1(page).locator('#filter-bar')).not.toBeVisible()
 
   await pane1(page).locator('#main-panel').press('Meta+:')
@@ -35,7 +35,7 @@ test('Cmd+: affiche filter-bar avec hint des sous-commandes', async ({ page }) =
 })
 
 test('Escape depuis filter-sequence ferme le hint', async ({ page }) => {
-  await enterEventLister(page)
+  await enterListerEvent(page)
   await pane1(page).locator('#main-panel').press('Meta+:')
   await expect(pane1(page).locator('#filter-bar')).toBeVisible()
 
@@ -47,7 +47,7 @@ test('Escape depuis filter-sequence ferme le hint', async ({ page }) => {
 // ── Cmd+: + t : ouvre l'input de filtre texte ─────────────────────
 
 test('Cmd+: puis t affiche un input de filtre texte', async ({ page }) => {
-  await enterEventLister(page)
+  await enterListerEvent(page)
   await expect(pane1(page).locator('#filter-input')).not.toBeVisible()
 
   await pane1(page).locator('#main-panel').press('Meta+:')
@@ -60,7 +60,7 @@ test('Cmd+: puis t affiche un input de filtre texte', async ({ page }) => {
 // ── filtrage live (sans Enter) ─────────────────────────────────────
 
 test('filtrage live : "bal" filtre dès la frappe sans Enter', async ({ page }) => {
-  await enterEventLister(page)
+  await enterListerEvent(page)
 
   await pane1(page).locator('#main-panel').press('Meta+:')
   await pane1(page).locator('#main-panel').press('t')
@@ -75,7 +75,7 @@ test('filtrage live : "bal" filtre dès la frappe sans Enter', async ({ page }) 
 })
 
 test('filtrage live : insensible à la casse', async ({ page }) => {
-  await enterEventLister(page)
+  await enterListerEvent(page)
 
   await pane1(page).locator('#main-panel').press('Meta+:')
   await pane1(page).locator('#main-panel').press('t')
@@ -89,7 +89,7 @@ test('filtrage live : insensible à la casse', async ({ page }) => {
 // ── Enter ferme l'input, filtre reste actif ────────────────────────
 
 test("Enter ferme l'input sans annuler le filtre", async ({ page }) => {
-  await enterEventLister(page)
+  await enterListerEvent(page)
 
   await pane1(page).locator('#main-panel').press('Meta+:')
   await pane1(page).locator('#main-panel').press('t')
@@ -104,7 +104,7 @@ test("Enter ferme l'input sans annuler le filtre", async ({ page }) => {
 // ── navigation saute les items cachés ─────────────────────────────
 
 test('navigation ↓ saute les items cachés par le filtre', async ({ page }) => {
-  await enterEventLister(page)
+  await enterListerEvent(page)
 
   await pane1(page).locator('#main-panel').press('Meta+:')
   await pane1(page).locator('#main-panel').press('t')
@@ -121,7 +121,7 @@ test('navigation ↓ saute les items cachés par le filtre', async ({ page }) =>
 // ── FilterBar affiche le filtre actif ─────────────────────────────
 
 test('FilterBar affiche le terme de filtre texte actif', async ({ page }) => {
-  await enterEventLister(page)
+  await enterListerEvent(page)
 
   await pane1(page).locator('#main-panel').press('Meta+:')
   await pane1(page).locator('#main-panel').press('t')
@@ -135,7 +135,7 @@ test('FilterBar affiche le terme de filtre texte actif', async ({ page }) => {
 // ── Cmd+: puis : efface le filtre ─────────────────────────────────
 
 test('Cmd+: puis : efface le filtre texte', async ({ page }) => {
-  await enterEventLister(page)
+  await enterListerEvent(page)
 
   await pane1(page).locator('#main-panel').press('Meta+:')
   await pane1(page).locator('#main-panel').press('t')
@@ -157,7 +157,7 @@ test('Cmd+: puis : efface le filtre texte', async ({ page }) => {
 // ── Escape annule le filtre texte ─────────────────────────────────
 
 test("Escape dans l'input annule le filtre texte", async ({ page }) => {
-  await enterEventLister(page)
+  await enterListerEvent(page)
 
   await pane1(page).locator('#main-panel').press('Meta+:')
   await pane1(page).locator('#main-panel').press('t')
@@ -176,7 +176,7 @@ test("Escape dans l'input annule le filtre texte", async ({ page }) => {
 // ── Cmd+: + b/p : sélecteur brins / persos ────────────────────────
 
 test('Cmd+: puis b ouvre le sélecteur de brins pour filtre', async ({ page }) => {
-  await enterEventLister(page)
+  await enterListerEvent(page)
 
   await pane1(page).locator('#main-panel').press('Meta+:')
   await pane1(page).locator('#main-panel').press('b')
@@ -185,7 +185,7 @@ test('Cmd+: puis b ouvre le sélecteur de brins pour filtre', async ({ page }) =
 })
 
 test('Cmd+: puis p ouvre le sélecteur de persos pour filtre', async ({ page }) => {
-  await enterEventLister(page)
+  await enterListerEvent(page)
 
   await pane1(page).locator('#main-panel').press('Meta+:')
   await pane1(page).locator('#main-panel').press('p')

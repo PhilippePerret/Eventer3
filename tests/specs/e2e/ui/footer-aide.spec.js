@@ -16,7 +16,7 @@ test("le footer affiche des raccourcis sur la liste des projets", async ({ page 
   await expect(help).not.toBeEmpty()
 })
 
-test("le footer affiche des raccourcis dans un EventLister", async ({ page }) => {
+test("le footer affiche des raccourcis dans un ListerEvent", async ({ page }) => {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await pane1(page).locator('#main-panel').press('ArrowRight')
@@ -35,7 +35,7 @@ test("le footer mentionne au moins la navigation (↑↓) dans la liste des proj
   await expect(pane1(page).locator('.contextual-help')).toContainText('↓')
 })
 
-test("le footer mentionne au moins la navigation (↑↓) dans un EventLister", async ({ page }) => {
+test("le footer mentionne au moins la navigation (↑↓) dans un ListerEvent", async ({ page }) => {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await pane1(page).locator('#main-panel').press('ArrowRight')

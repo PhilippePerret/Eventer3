@@ -11,7 +11,7 @@ test.describe('→ entre dans le Lister', () => {
 
     console.log('\n=== TEST ENTRÉE DANS UN LISTER ===')
 
-    console.log('-> vérification état initial : ProjectLister affiché')
+    console.log('-> vérification état initial : ListerProject affiché')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
 
     console.log('-> vérification : premier projet sélectionné')
@@ -20,7 +20,7 @@ test.describe('→ entre dans le Lister', () => {
     console.log('-> appui sur →')
     await pane1(page).locator('#main-panel').press('ArrowRight')
 
-    console.log('-> vérification : on est dans l\'EventLister du projet')
+    console.log('-> vérification : on est dans l\'ListerEvent du projet')
     await expect(pane1(page).locator('#main-panel')).not.toHaveClass(/project-list/)
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 

@@ -4,7 +4,7 @@ import { test, expect, pane1 } from '../__setup__.js'
 // ─── PROJETS ───────────────────────────────────────────────────────────────
 // many-projects : Projet A (index 0), Projet B (index 1), Projet C (index 2)
 
-test.describe('Delete dans ProjectLister', () => {
+test.describe('Delete dans ListerProject', () => {
 
   test.beforeEach(() => installFixtures('many-projects'))
 
@@ -29,7 +29,7 @@ test.describe('Delete dans ProjectLister', () => {
     await expect(items).toHaveCount(initialCount - 1)
   })
 
-  test('l\'aide contextuelle mentionne ⌦ dans le ProjectLister avec plusieurs projets', async ({ page }) => {
+  test('l\'aide contextuelle mentionne ⌦ dans le ListerProject avec plusieurs projets', async ({ page }) => {
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await pane1(page).locator('#main-panel').press('Meta+?')
@@ -70,11 +70,11 @@ test.describe('Delete dans ProjectLister', () => {
 // ─── EVENTS ────────────────────────────────────────────────────────────────
 // many-events : project-a (hl:true, events e1/e2/e3), project-b
 
-test.describe('Delete dans EventLister', () => {
+test.describe('Delete dans ListerEvent', () => {
 
   test.beforeEach(() => installFixtures('many-events'))
 
-  test('Delete supprime l\'event sélectionné dans un EventLister', async ({ page }) => {
+  test('Delete supprime l\'event sélectionné dans un ListerEvent', async ({ page }) => {
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await pane1(page).locator('#main-panel').press('ArrowRight')
@@ -102,7 +102,7 @@ test.describe('Delete dans EventLister', () => {
     await expect(items).toHaveCount(initialCount - 1)
   })
 
-  test('l\'aide contextuelle mentionne ⌦ dans un EventLister avec plusieurs events', async ({ page }) => {
+  test('l\'aide contextuelle mentionne ⌦ dans un ListerEvent avec plusieurs events', async ({ page }) => {
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await pane1(page).locator('#main-panel').press('ArrowRight')
@@ -123,7 +123,7 @@ test.describe('Delete dans le panneau des brins', () => {
 
   test.beforeEach(() => installFixtures('with-brins'))
 
-  async function goToEventLister(page) {
+  async function goToListerEvent(page) {
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await pane1(page).locator('#main-panel').press('ArrowRight')
@@ -131,7 +131,7 @@ test.describe('Delete dans le panneau des brins', () => {
   }
 
   async function openBrinPanel(page) {
-    await goToEventLister(page)
+    await goToListerEvent(page)
     await pane1(page).locator('#main-panel').press('b')
     await expect(pane1(page).locator('#brin-panel')).toBeVisible()
   }
@@ -170,7 +170,7 @@ test.describe('Delete dans le panneau des brins', () => {
     await page.waitForLoadState('networkidle')
     // Rechargement
     await page.reload()
-    await goToEventLister(page)
+    await goToListerEvent(page)
     await pane1(page).locator('#main-panel').press('b')
     await expect(pane1(page).locator('#brin-panel')).toBeVisible()
     await expect(pane1(page).locator('.brin-item')).toHaveCount(1)
@@ -183,7 +183,7 @@ test.describe('Delete dans le panneau des brins', () => {
     await pane1(page).locator('#main-panel').press('Delete')
     // Rechargement
     await page.reload()
-    await goToEventLister(page)
+    await goToListerEvent(page)
     // Le badge AUT ne doit pas apparaître dans e1 même après rechargement
     const eventRow = pane1(page).locator('.event-item.selected')
     await expect(eventRow.locator('.event-brins-badges')).not.toContainText('AUT')

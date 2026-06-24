@@ -1,7 +1,7 @@
 import { installFixtures } from '../../../helpers/install-fixtures'
 import { test, expect, pane1 } from '../__setup__.js'
 
-test.describe('← depuis un EventLister vers la liste des projets', () => {
+test.describe('← depuis un ListerEvent vers la liste des projets', () => {
 
   test.beforeEach(() => installFixtures('many-events'))
 
@@ -15,7 +15,7 @@ test.describe('← depuis un EventLister vers la liste des projets', () => {
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
-    console.log('-> entrée dans le EventLister du premier projet')
+    console.log('-> entrée dans le ListerEvent du premier projet')
     await pane1(page).locator('#main-panel').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
@@ -34,11 +34,11 @@ test.describe('← depuis un EventLister vers la liste des projets', () => {
 
 })
 
-test.describe('← depuis un sous-EventLister vers le EventLister parent', () => {
+test.describe('← depuis un sous-ListerEvent vers le ListerEvent parent', () => {
 
   test.beforeEach(() => installFixtures('deep-events'))
 
-  test("← retourne au EventLister parent avec l'évènement courant sélectionné", async ({ page }) => {
+  test("← retourne au ListerEvent parent avec l'évènement courant sélectionné", async ({ page }) => {
 
     await page.goto('/')
 
@@ -48,7 +48,7 @@ test.describe('← depuis un sous-EventLister vers le EventLister parent', () =>
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
-    console.log('-> entrée dans le EventLister du projet')
+    console.log('-> entrée dans le ListerEvent du projet')
     await pane1(page).locator('#main-panel').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
@@ -56,7 +56,7 @@ test.describe('← depuis un sous-EventLister vers le EventLister parent', () =>
     await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
     await expect(pane1(page).locator('.event-item').nth(0)).toContainText('Évènement un')
 
-    console.log('-> entrée dans le sous-EventLister de e1')
+    console.log('-> entrée dans le sous-ListerEvent de e1')
     await pane1(page).locator('#main-panel').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
     await expect(pane1(page).locator('.event-item')).toHaveCount(2)
@@ -65,7 +65,7 @@ test.describe('← depuis un sous-EventLister vers le EventLister parent', () =>
     console.log('-> appui sur ←')
     await pane1(page).locator('#main-panel').press('ArrowLeft')
 
-    console.log('-> vérification : retour au EventLister parent')
+    console.log('-> vérification : retour au ListerEvent parent')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
     await expect(pane1(page).locator('.event-item')).toHaveCount(3)
 

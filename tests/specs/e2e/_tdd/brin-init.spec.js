@@ -8,7 +8,7 @@ test.beforeEach(() => {
   installFixtures('many-events')
 })
 
-async function goToEventLister(page) {
+async function goToListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
@@ -16,7 +16,7 @@ async function goToEventLister(page) {
 }
 
 test("un projet sans brins reçoit automatiquement b1 'Intrigue principale' à l'ouverture du panneau", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('#brin-panel')).toBeVisible()
   await expect(pane1(page).locator('.brin-item')).toHaveCount(1)
@@ -24,7 +24,7 @@ test("un projet sans brins reçoit automatiquement b1 'Intrigue principale' à l
 })
 
 test("b1 'Intrigue principale' est persisté dans la base de données", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('#brin-panel')).toBeVisible()
   await page.waitForLoadState('networkidle')

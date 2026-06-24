@@ -5,7 +5,7 @@ test.beforeEach(() => {
   installFixtures('many-events')
 })
 
-async function goToEventLister(page) {
+async function goToListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await pane1(page).locator('#main-panel').press('ArrowRight')
@@ -20,7 +20,7 @@ async function startEditing(page) {
 }
 
 test("Tab puis ArrowDown ouvre le popup de sélection d'état", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
 
   await startEditing(page)
   await pane1(page).locator('#main-panel').press('Tab')
@@ -36,7 +36,7 @@ test("Tab puis ArrowDown ouvre le popup de sélection d'état", async ({ page })
 })
 
 test("le popup s'ouvre pré-positionné sur la valeur courante", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
 
   await startEditing(page)
   await pane1(page).locator('#main-panel').press('Tab')
@@ -47,7 +47,7 @@ test("le popup s'ouvre pré-positionné sur la valeur courante", async ({ page }
 })
 
 test("↑↓ naviguent dans les options du popup", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
 
   await startEditing(page)
   await pane1(page).locator('#main-panel').press('Tab')
@@ -64,7 +64,7 @@ test("↑↓ naviguent dans les options du popup", async ({ page }) => {
 })
 
 test("Enter sélectionne l'option et ferme le popup", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
 
   const titleInput = await startEditing(page)
   await pane1(page).locator('#main-panel').press('Tab')
@@ -81,7 +81,7 @@ test("Enter sélectionne l'option et ferme le popup", async ({ page }) => {
 })
 
 test("valider l'édition commit le titre et l'état", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
 
   const titleInput = await startEditing(page)
   await titleInput.fill('Titre modifié')
@@ -99,7 +99,7 @@ test("valider l'édition commit le titre et l'état", async ({ page }) => {
 })
 
 test("Escape en édition restaure l'état original même si popup a été utilisé", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
 
   await startEditing(page)
   await pane1(page).locator('#main-panel').press('Tab')
@@ -114,7 +114,7 @@ test("Escape en édition restaure l'état original même si popup a été utilis
 })
 
 test("filtrer les options réduit la liste", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
 
   await startEditing(page)
   await pane1(page).locator('#main-panel').press('Tab')
@@ -126,7 +126,7 @@ test("filtrer les options réduit la liste", async ({ page }) => {
 })
 
 test("Enter sur résultat filtré sélectionne et ferme", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
 
   await startEditing(page)
   await pane1(page).locator('#main-panel').press('Tab')
@@ -141,7 +141,7 @@ test("Enter sur résultat filtré sélectionne et ferme", async ({ page }) => {
 })
 
 test("le menu d'état contient tous les libellés corrects", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
 
   await startEditing(page)
   await pane1(page).locator('#main-panel').press('Tab')
@@ -162,7 +162,7 @@ test("le menu d'état contient tous les libellés corrects", async ({ page }) =>
 })
 
 test("choisir un état en édition l'enregistre (persistance après rechargement)", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
 
   await startEditing(page)
   await pane1(page).locator('#main-panel').press('Tab')

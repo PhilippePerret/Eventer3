@@ -12,7 +12,7 @@ test.beforeEach(() => {
 //   c3 Christian (CH, non assigné,        avatar 🎭)
 //   c4 Valvert   (VA, non assigné,        avatar 👑)
 
-async function goToEventLister(page) {
+async function goToListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await pane1(page).locator('#main-panel').press('ArrowRight')
@@ -20,20 +20,20 @@ async function goToEventLister(page) {
 }
 
 async function openPersoPanel(page) {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('p')
   await expect(pane1(page).locator('#perso-panel')).toBeVisible()
 }
 
 // ─── Ouverture / fermeture ───────────────────────────────────────────────────
 
-test("p ouvre le panneau des personnages depuis EventLister", async ({ page }) => {
-  await goToEventLister(page)
+test("p ouvre le panneau des personnages depuis ListerEvent", async ({ page }) => {
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('p')
   await expect(pane1(page).locator('#perso-panel')).toBeVisible()
 })
 
-test("l'EventLister reste visible en fond pendant que le panneau est ouvert", async ({ page }) => {
+test("l'ListerEvent reste visible en fond pendant que le panneau est ouvert", async ({ page }) => {
   await openPersoPanel(page)
   await expect(pane1(page).locator('#main-panel')).toBeVisible()
 })
@@ -56,7 +56,7 @@ test("Cmd+Enter ferme le panneau perso", async ({ page }) => {
   await expect(pane1(page).locator('#perso-panel')).not.toBeVisible()
 })
 
-test("après fermeture, l'EventLister redevient actif (↓ change la sélection d'event)", async ({ page }) => {
+test("après fermeture, l'ListerEvent redevient actif (↓ change la sélection d'event)", async ({ page }) => {
   await openPersoPanel(page)
   await pane1(page).locator('#main-panel').press('Escape')
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
@@ -135,7 +135,7 @@ test("Space ne décroche pas un perso hérité (grisé)", async ({ page }) => {
 })
 
 test("e2 (sans brins ni persos directs) : aucun perso coché", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('ArrowDown') // e2
   await pane1(page).locator('#main-panel').press('p')
   await expect(pane1(page).locator('.perso-item').nth(0)).not.toHaveClass(/checked/)
@@ -159,7 +159,7 @@ test("↑ sélectionne le perso précédent", async ({ page }) => {
   await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/selected/)
 })
 
-test("↓↑ dans le panneau ne modifient pas la sélection de l'EventLister", async ({ page }) => {
+test("↓↑ dans le panneau ne modifient pas la sélection de l'ListerEvent", async ({ page }) => {
   await openPersoPanel(page)
   await pane1(page).locator('#main-panel').press('ArrowDown')
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
@@ -370,7 +370,7 @@ test("persistance : perso créé survit au rechargement", async ({ page }) => {
   await pane1(page).locator('#main-panel').press('Enter')
   await page.waitForLoadState('networkidle')
   await page.reload()
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('p')
   await expect(pane1(page).locator('.perso-item')).toHaveCount(5)
   await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-item__title')).toHaveText('Perso persisté')
@@ -383,7 +383,7 @@ test("persistance : cochage direct survit au rechargement", async ({ page }) => 
   await pane1(page).locator('#main-panel').press(' ')
   await page.waitForLoadState('networkidle')
   await page.reload()
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('p')
   await expect(pane1(page).locator('.perso-item').nth(2)).toHaveClass(/checked/)
 })

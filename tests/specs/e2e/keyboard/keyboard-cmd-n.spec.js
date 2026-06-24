@@ -22,7 +22,7 @@ test.describe('Cmd+n dans la liste des projets', () => {
   })
 })
 
-test.describe("Cmd+n dans un EventLister", () => {
+test.describe("Cmd+n dans un ListerEvent", () => {
   test.beforeEach(() => installFixtures('many-events'))
 
   test("Cmd+n ne crée PAS de nouvel event (c'est Alt+n qui le fait)", async ({ page }) => {

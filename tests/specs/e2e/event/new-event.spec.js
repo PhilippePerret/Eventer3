@@ -6,7 +6,7 @@ test.beforeEach(() => {
   installFixtures('many-events')
 })
 
-test("dans un EventLister, la touche « n » crée un nouvel Event après celui sélectionné", async ({ page }) => {
+test("dans un ListerEvent, la touche « n » crée un nouvel Event après celui sélectionné", async ({ page }) => {
 
   await page.goto('/')
 
@@ -16,7 +16,7 @@ test("dans un EventLister, la touche « n » crée un nouvel Event après celui 
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
-  console.log('-> entrée dans le EventLister du premier projet')
+  console.log('-> entrée dans le ListerEvent du premier projet')
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 

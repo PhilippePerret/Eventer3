@@ -4,11 +4,11 @@ import { test, expect, pane1 } from '../__setup__.js'
 // ─── EVENTS ────────────────────────────────────────────────────────────────
 // many-events : project-a (hl:true, events e1/e2/e3), project-b
 
-test.describe('Delete dans EventLister', () => {
+test.describe('Delete dans ListerEvent', () => {
 
   test.beforeEach(() => installFixtures('many-events'))
 
-  test('Delete supprime l\'event sélectionné dans un EventLister', async ({ page }) => {
+  test('Delete supprime l\'event sélectionné dans un ListerEvent', async ({ page }) => {
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await pane1(page).locator('#main-panel').press('ArrowRight')
@@ -36,7 +36,7 @@ test.describe('Delete dans EventLister', () => {
     await expect(items).toHaveCount(initialCount - 1)
   })
 
-  test('l\'aide contextuelle mentionne ⌦ dans un EventLister avec plusieurs events', async ({ page }) => {
+  test('l\'aide contextuelle mentionne ⌦ dans un ListerEvent avec plusieurs events', async ({ page }) => {
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await pane1(page).locator('#main-panel').press('ArrowRight')

@@ -20,7 +20,7 @@ test("→ sur un projet sans lister : crée l'éditeur, Enter confirme, n crée 
   await pane1(page).locator('#main-panel').press('ArrowDown')
   await expect(pane1(page).locator('.project-item').nth(1)).toHaveClass(/selected/)
 
-  console.log('-> flèche → : entre dans le EventLister vide')
+  console.log('-> flèche → : entre dans le ListerEvent vide')
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 

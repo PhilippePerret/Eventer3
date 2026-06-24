@@ -11,7 +11,7 @@ async function goToProjectList(page) {
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
 }
 
-async function goToEventLister(page) {
+async function goToListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await pane1(page).locator('#main-panel').press('ArrowRight')
@@ -55,20 +55,20 @@ test("'t' dans project list → popup projet nature (pas nature-panel)", async (
 })
 
 test("'t' dans event lister → panneau .nature-panel s'ouvre", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('t')
   await expect(pane1(page).locator('.nature-panel')).toBeVisible()
   await expect(pane1(page).locator('.popup-select')).not.toBeVisible()
 })
 
 test("panneau nature → titre mentionne le niveau courant", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('t')
   await expect(pane1(page).locator('.nature-panel .floating-panel__title')).toContainText('niv. 1')
 })
 
 test("panneau nature → contient 'Nature projet' et 'Nature évènemencier'", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('t')
   const panel = pane1(page).locator('.nature-panel')
   await expect(panel).toContainText('Nature projet')
@@ -76,7 +76,7 @@ test("panneau nature → contient 'Nature projet' et 'Nature évènemencier'", a
 })
 
 test("panneau nature → footer a boutons 'Annuler' et 'Appliquer' alternables par Tab", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('t')
   const footer = pane1(page).locator('.nature-panel .floating-panel__footer')
   await expect(footer).toBeVisible()
@@ -89,7 +89,7 @@ test("panneau nature → footer a boutons 'Annuler' et 'Appliquer' alternables p
 // ─── Navigation et menus ──────────────────────────────────────────────────────
 
 test("Enter sur champ projet → popup avec 'roman' et 'film'", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('t')
   await pane1(page).locator('#main-panel').press('Enter')
   const popup = pane1(page).locator('.popup-select')
@@ -99,7 +99,7 @@ test("Enter sur champ projet → popup avec 'roman' et 'film'", async ({ page })
 })
 
 test("choix 'roman' → champ évènemencier activé par ArrowDown, Enter ouvre popup 'manuscrit'", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('t')
   await pane1(page).locator('#main-panel').press('Enter')
   await pane1(page).locator('#main-panel').press('ArrowUp')   // film/BD
@@ -114,7 +114,7 @@ test("choix 'roman' → champ évènemencier activé par ArrowDown, Enter ouvre 
 })
 
 test("projet 'film' → popup évènemencier propose 'scénario'", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('t')
   await pane1(page).locator('#main-panel').press('Enter')
   await pane1(page).locator('#main-panel').press('ArrowUp')    // film/BD (index 1 depuis —)
@@ -127,7 +127,7 @@ test("projet 'film' → popup évènemencier propose 'scénario'", async ({ page
 // ─── Escape / Annuler ─────────────────────────────────────────────────────────
 
 test("Escape ferme le panneau sans appliquer", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('t')
   await expect(pane1(page).locator('.nature-panel')).toBeVisible()
   await pane1(page).locator('#main-panel').press('Escape')
@@ -138,13 +138,13 @@ test("Escape ferme le panneau sans appliquer", async ({ page }) => {
 // ─── Appliquer ────────────────────────────────────────────────────────────────
 
 test("roman+manuscrit → #main-panel a la classe 'roman-man'", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await setRomanMan(page)
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/roman-man/)
 })
 
 test("film+scénario → #main-panel a la classe 'film-man'", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('t')
   await pane1(page).locator('#main-panel').press('Enter')
   await pane1(page).locator('#main-panel').press('ArrowUp')   // film/BD (index 1 depuis —)
@@ -163,7 +163,7 @@ test("film+scénario → #main-panel a la classe 'film-man'", async ({ page }) =
 // ─── Confirmation man_depth ───────────────────────────────────────────────────
 
 test("nature man et depth ≠ man_depth → ConfirmDialog s'ouvre avec 'niveau par défaut'", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('t')
   await pane1(page).locator('#main-panel').press('Enter')
   await pane1(page).locator('#main-panel').press('ArrowUp')   // film/BD
@@ -303,7 +303,7 @@ test("nature null à man_depth → panneau affiche 'manuscrit', popup focused su
 // ─── CSS roman-man ────────────────────────────────────────────────────────────
 
 test("roman-man → event-text sans white-space nowrap", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await setRomanMan(page)
   const ws = await pane1(page).locator('.event-text').first().evaluate(el =>
     getComputedStyle(el).whiteSpace
@@ -312,7 +312,7 @@ test("roman-man → event-text sans white-space nowrap", async ({ page }) => {
 })
 
 test(`roman-man → event-text max-width = MANUSCRIT_WIDTH`, async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await setRomanMan(page)
   const mw = await pane1(page).locator('.event-text').first().evaluate(el =>
     getComputedStyle(el).maxWidth
@@ -323,7 +323,7 @@ test(`roman-man → event-text max-width = MANUSCRIT_WIDTH`, async ({ page }) =>
 // ─── Persistance ──────────────────────────────────────────────────────────────
 
 test("roman-man persiste → page.goto('/') puis ArrowRight → #main-panel roman-man", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await setRomanMan(page)
   await page.goto('/')
   await pane1(page).locator('#main-panel').press('ArrowRight')
@@ -333,7 +333,7 @@ test("roman-man persiste → page.goto('/') puis ArrowRight → #main-panel roma
 // ─── Tab cycle avec retour à "aucun bouton" ───────────────────────────────────
 
 test("Tab×3 ramène à aucun footer sélectionné → Enter ouvre le popup", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('t')
   await expect(pane1(page).locator('.nature-panel')).toBeVisible()
   // Cycler à travers tous les boutons footer

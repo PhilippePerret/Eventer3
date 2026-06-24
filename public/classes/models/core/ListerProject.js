@@ -1,22 +1,21 @@
 import Lister from '../abstract/Lister.js'
-import ListerRepo from '../abstract/ListerRepo.js'
 import Project from './Project.js'
-import EventLister from './EventLister.js'
+import ListerEvent from './ListerEvent.js'
 import FilePicker from '../../ui/FilePicker.js'
 import ConfirmDialog from '../../ui/ConfirmDialog.js'
 import LOG from '../../../system/LOG.js'
 
-export default class ProjectLister extends Lister {
+export default class ListerProject extends Lister {
   static ITEM_CLASS  = Project
-  static CHILD_CLASS = EventLister
+  static CHILD_CLASS = ListerEvent
 
   static async init() {
     LOG.m(1, 'Init projects')
-    const lister = new ProjectLister({ id: 1 })
-    await lister.Repo.load()
+    const lister = new ListerProject({ id: 1 })
+    await lister.load()
     lister.Dom.render()
     lister.Listener.attach(lister.Dom.container)
-    LOG.m(1, 'ProjectLister ready')
+    LOG.m(1, 'ListerProject ready')
     return lister
   }
 

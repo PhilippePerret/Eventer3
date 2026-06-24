@@ -14,7 +14,7 @@ test.beforeEach(() => {
   installFixtures('filter-events')
 })
 
-async function enterEventLister(page) {
+async function enterListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
@@ -22,20 +22,20 @@ async function enterEventLister(page) {
 }
 
 test('event avec un brin affiche son badge', async ({ page }) => {
-  await enterEventLister(page)
+  await enterListerEvent(page)
   const e1 = pane1(page).locator('.event-item').nth(0)
-  await expect(e1.locator('.event-brins-badges')).toContainText('AMO')
+  await expect(e1.locator('.event-brins-marks')).toContainText('AMO')
 })
 
 test('event avec deux brins affiche les deux badges', async ({ page }) => {
-  await enterEventLister(page)
+  await enterListerEvent(page)
   const e3 = pane1(page).locator('.event-item').nth(2)
-  await expect(e3.locator('.event-brins-badges')).toContainText('AMO')
-  await expect(e3.locator('.event-brins-badges')).toContainText('INT')
+  await expect(e3.locator('.event-brins-marks')).toContainText('AMO')
+  await expect(e3.locator('.event-brins-marks')).toContainText('INT')
 })
 
 test('event sans brin a badges vide', async ({ page }) => {
-  await enterEventLister(page)
+  await enterListerEvent(page)
   const e4 = pane1(page).locator('.event-item').nth(3)
-  await expect(e4.locator('.event-brins-badges')).toBeEmpty()
+  await expect(e4.locator('.event-brins-marks')).toBeEmpty()
 })

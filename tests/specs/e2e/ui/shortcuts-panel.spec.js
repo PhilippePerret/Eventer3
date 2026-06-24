@@ -24,7 +24,7 @@ test('l\'aide contextuelle ferme avec Escape', async ({ page }) => {
   await expect(pane1(page).locator('.contextual-help')).not.toBeVisible()
 })
 
-test('après fermeture du panneau, l\'EventLister reste actif (navigation fonctionne)', async ({ page }) => {
+test('après fermeture du panneau, l\'ListerEvent reste actif (navigation fonctionne)', async ({ page }) => {
   await page.goto('/')
   await pane1(page).locator('#main-panel').press(OPEN_KEY)
   await expect(pane1(page).locator('.contextual-help')).toBeVisible()

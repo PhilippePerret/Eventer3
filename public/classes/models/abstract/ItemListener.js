@@ -15,7 +15,7 @@ export default class ItemListener extends BaseListener {
   static LISTENERS = {
     Enter:      { nokey: 'onEnter'       },
     Escape:     { nokey: 'onEscape'      },
-    Tab:        { nokey: 'onTab'         },
+    Tab:        { nokey: 'onTab'         }, // 2 modes : édition/display
     ArrowRight: { nokey: 'enterChildren' },
   }
 

@@ -5,7 +5,7 @@ test.beforeEach(() => {
   installFixtures('many-events')
 })
 
-async function goToEventLister(page) {
+async function goToListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await pane1(page).locator('#main-panel').press('ArrowRight')
@@ -13,13 +13,13 @@ async function goToEventLister(page) {
 }
 
 test("un event sans état affiche '—' (valeur neutre)", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   const stateEl = pane1(page).locator('.event-item').nth(0).locator('.event-state')
   await expect(stateEl).toHaveText('—')
 })
 
 test("un event avec état affiche sa pastille", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   // On met le premier event en état "ébauche" via Tab+Enter en édition
   await pane1(page).locator('#main-panel').press('Enter')
   await expect(pane1(page).locator('.event-item.selected input[name="title"]')).toBeFocused()

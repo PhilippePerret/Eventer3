@@ -44,7 +44,7 @@ test.describe('Annulation entrée accidentelle dans un lister vide', () => {
     console.log('-> attente liste des projets')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
 
-    console.log('-> entrée dans le EventLister du projet A')
+    console.log('-> entrée dans le ListerEvent du projet A')
     await pane1(page).locator('#main-panel').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
@@ -59,7 +59,7 @@ test.describe('Annulation entrée accidentelle dans un lister vide', () => {
     console.log('-> Escape pour annuler')
     await pane1(page).locator('#main-panel').press('Escape')
 
-    console.log('-> vérification : retour au EventLister parent')
+    console.log('-> vérification : retour au ListerEvent parent')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
     await expect(pane1(page).locator('.event-item')).toHaveCount(eventCount)
 
@@ -90,7 +90,7 @@ test.describe('Annulation entrée accidentelle dans un lister vide', () => {
     console.log('-> ← pour annuler')
     await pane1(page).locator('#main-panel').press('ArrowLeft')
 
-    console.log('-> vérification : retour au EventLister parent')
+    console.log('-> vérification : retour au ListerEvent parent')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
     await expect(pane1(page).locator('.event-item')).toHaveCount(eventCount)
     await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)

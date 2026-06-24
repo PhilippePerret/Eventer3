@@ -1,6 +1,6 @@
 import ListerDom from './ListerDom.js'
-import ListerRepo from './ListerRepo.js'
 import ListerListener from './ListerListener.js'
+import ListerRepo from '../repo/Lister.js'
 import Notification from '../../ui/Notification.js'
 import ConfirmDialog from '../../ui/ConfirmDialog.js'
 
@@ -16,7 +16,6 @@ export default class Lister {
   }
 
   get Dom()      { return this._dom      || (this._dom      = new ListerDom(this)) }
-  get Repo()     { return this._repo     || (this._repo     = new ListerRepo(this)) }
   get Listener() { return this._listen   || (this._listen   = new ListerListener(this)) }
   get minClass() { return this._minClass || (this._minClass = this.constructor.ITEM_CLASS?.name.toLowerCase()) }
 
@@ -33,7 +32,7 @@ export default class Lister {
     }
     const idx          = this.selectedIndex
     const item         = this.items[idx]
-    const cascadeCount = await this.Repo.countDescendants(item)
+    const cascadeCount = await this.countDescendants(item)
     if (cascadeCount > 0) {
       const label     = cascadeCount === 1 ? 'évènement imbriqué' : 'évènements imbriqués'
       const confirmed = await ConfirmDialog.open({
@@ -43,7 +42,7 @@ export default class Lister {
       })
       if (!confirmed) { this.Dom.focusSelected(); return }
     }
-    const ok = await this.Repo.deleteItem(item)
+    const ok = await this.deleteItem(item)
     if (!ok) return
     const newIdx = Math.min(idx, this.items.length - 2)
     this.items.splice(idx, 1)
@@ -55,12 +54,12 @@ export default class Lister {
 
   async _createAt(insertIdx) {
     const prevIds = [...this.item_ids]
-    const result = await ListerRepo.createItem(this.id, { title: '' }, { project_id: this.project_id })
+    const result = await this.createItem({ title: '' })
     if (!result?.id) { this.Dom.focusSelected(); return }
     const newOrder = [...prevIds]
     newOrder.splice(insertIdx, 0, result.id)
     this.item_ids = newOrder
-    await this.Repo.save()
+    await this.save()
     await this._reloadAt(insertIdx)
     this.items[this.selectedIndex]?.startEditing()
   }
@@ -69,7 +68,7 @@ export default class Lister {
   async createNewBefore() { await this._createAt(this.selectedIndex)     }
 
   async _reloadAt(insertIdx) {
-    await this.Repo.load()
+    await this.load()
     this.selectedIndex = insertIdx
     this.Dom.render()
   }
@@ -97,4 +96,16 @@ export default class Lister {
     this.selectAt(idx)
   }
 
+  static async createLister(fields) {
+    const resp = await fetch('/api/listers', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(fields),
+    })
+    if (!resp.ok) throw new Error(`Impossible de créer le lister`)
+    return await resp.json()
+  }
+
 }
+
+Object.assign(Lister.prototype, ListerRepo)

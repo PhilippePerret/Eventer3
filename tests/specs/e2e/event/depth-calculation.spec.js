@@ -7,7 +7,7 @@ import { test, expect, pane1 } from '../__setup__.js'
 //   séquences (niv.2)  → depth=2
 //   scènes (niv.3)     → depth=3
 
-test("état initial : depth=0 liste des projets, depth=1/2/2/3 pour les EventListers", async ({ page }) => {
+test("état initial : depth=0 liste des projets, depth=1/2/2/3 pour les ListerEvents", async ({ page }) => {
 
   installFixtures('depth-move')
   await page.goto('/')

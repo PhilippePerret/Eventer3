@@ -106,9 +106,9 @@ test('créer un perso → persiste après rechargement', async ({ page }) => {
   await expect(pane1(page).locator('.perso-item').filter({ hasText: 'Perso régression' })).toBeVisible()
 })
 
-// ── EventLister depth-2 : brins/persos sans 500 ────────────────────────
+// ── ListerEvent depth-2 : brins/persos sans 500 ────────────────────────
 
-test('entrer EventLister depth-2 → aucun 500 sur brins/persos', async ({ page }) => {
+test('entrer ListerEvent depth-2 → aucun 500 sur brins/persos', async ({ page }) => {
   const errors = []
   page.on('response', r => { if (r.status() >= 500) errors.push(r.url()) })
 

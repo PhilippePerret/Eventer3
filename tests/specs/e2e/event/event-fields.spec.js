@@ -6,7 +6,7 @@ import { test, expect, pane1 } from '../__setup__.js'
 //   e2="Arrivée à Paris" meteo='pl'(🌨️) effet='nu'(Nuit)  lieu=null
 //   e3="La trahison"     meteo='ps'(☀️)  effet='jr'(Jour)  lieu=null
 
-async function goToEventLister(page) {
+async function goToListerEvent(page) {
   installFixtures('with-event-states')
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
@@ -24,31 +24,31 @@ async function enterEditionOnFirst(page) {
 // ─── Affichage ────────────────────────────────────────────────────────────────
 
 test("event row : badge météo affiché (e1 → ☀️)", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await expect(pane1(page).locator('.event-item').first().locator('.event-meteo')).toHaveText('☀️')
 })
 
 test("event row : badge effet affiché (e1 → Matin)", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await expect(pane1(page).locator('.event-item').first().locator('.event-effet')).toHaveText('Matin')
 })
 
 test("event row : badge lieu vide si non défini", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await expect(pane1(page).locator('.event-item').first().locator('.event-lieu')).toHaveText('')
 })
 
 // ─── TAB en mode édition ──────────────────────────────────────────────────────
 
 test("édition : TAB depuis titre focus trigger état", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await enterEditionOnFirst(page)
   await pane1(page).locator('#main-panel').press('Tab')
   await expect(pane1(page).locator('.event-item.editing button[data-field-name="state"]')).toBeFocused()
 })
 
 test("édition : TAB depuis état focus trigger météo", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await enterEditionOnFirst(page)
   await pane1(page).locator('#main-panel').press('Tab') // → state
   await pane1(page).locator('#main-panel').press('Tab') // → meteo
@@ -56,7 +56,7 @@ test("édition : TAB depuis état focus trigger météo", async ({ page }) => {
 })
 
 test("édition : TAB depuis météo focus trigger effet", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await enterEditionOnFirst(page)
   await pane1(page).locator('#main-panel').press('Tab') // → state
   await pane1(page).locator('#main-panel').press('Tab') // → meteo
@@ -65,7 +65,7 @@ test("édition : TAB depuis météo focus trigger effet", async ({ page }) => {
 })
 
 test("édition : TAB depuis effet focus trigger lieu", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await enterEditionOnFirst(page)
   await pane1(page).locator('#main-panel').press('Tab') // → state
   await pane1(page).locator('#main-panel').press('Tab') // → meteo
@@ -75,7 +75,7 @@ test("édition : TAB depuis effet focus trigger lieu", async ({ page }) => {
 })
 
 test("édition : TAB depuis lieu revient au titre", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await enterEditionOnFirst(page)
   for (let i = 0; i < 5; i++) await pane1(page).locator('#main-panel').press('Tab') // titre→state→meteo→effet→lieu→titre
   await expect(pane1(page).locator('.event-item.editing input[name="title"]')).toBeFocused()
@@ -84,7 +84,7 @@ test("édition : TAB depuis lieu revient au titre", async ({ page }) => {
 // ─── Ouverture popup ─────────────────────────────────────────────────────────
 
 test("édition : ArrowDown sur trigger météo ouvre popup", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await enterEditionOnFirst(page)
   await pane1(page).locator('#main-panel').press('Tab') // → state
   await pane1(page).locator('#main-panel').press('Tab') // → meteo
@@ -93,7 +93,7 @@ test("édition : ArrowDown sur trigger météo ouvre popup", async ({ page }) =>
 })
 
 test("édition : ArrowDown sur trigger effet ouvre popup", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await enterEditionOnFirst(page)
   await pane1(page).locator('#main-panel').press('Tab') // → state
   await pane1(page).locator('#main-panel').press('Tab') // → meteo
@@ -103,7 +103,7 @@ test("édition : ArrowDown sur trigger effet ouvre popup", async ({ page }) => {
 })
 
 test("édition : ArrowDown sur trigger lieu ouvre popup", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await enterEditionOnFirst(page)
   await pane1(page).locator('#main-panel').press('Tab') // → state
   await pane1(page).locator('#main-panel').press('Tab') // → meteo
@@ -116,7 +116,7 @@ test("édition : ArrowDown sur trigger lieu ouvre popup", async ({ page }) => {
 // ─── Persistance ─────────────────────────────────────────────────────────────
 
 test("météo : sélection 'pl' persiste après sauvegarde", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await enterEditionOnFirst(page)
   await pane1(page).locator('#main-panel').press('Tab') // → state
   await pane1(page).locator('#main-panel').press('Tab') // → meteo
@@ -134,7 +134,7 @@ test("météo : sélection 'pl' persiste après sauvegarde", async ({ page }) =>
 })
 
 test("lieu : sélection 'ext' persiste après sauvegarde", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await enterEditionOnFirst(page)
   await pane1(page).locator('#main-panel').press('Tab') // → state
   await pane1(page).locator('#main-panel').press('Tab') // → meteo
@@ -157,7 +157,7 @@ test("lieu : sélection 'ext' persiste après sauvegarde", async ({ page }) => {
 
 // e1 a meteo='ps' → effets incompatibles : au, cr, nu
 test("incompatibilité : meteo=ps → effet popup grise au/cr/nu", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await enterEditionOnFirst(page) // e1 : meteo='ps'
   await pane1(page).locator('#main-panel').press('Tab') // → state
   await pane1(page).locator('#main-panel').press('Tab') // → meteo
@@ -173,7 +173,7 @@ test("incompatibilité : meteo=ps → effet popup grise au/cr/nu", async ({ page
 
 // e2 a effet='nu' → météos incompatibles : ps, vo, di
 test("incompatibilité : effet=nu → météo popup grise ps/vo/di", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   // sélectionner e2
   await pane1(page).locator('#main-panel').press('ArrowDown')
   await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/selected/)
@@ -192,7 +192,7 @@ test("incompatibilité : effet=nu → météo popup grise ps/vo/di", async ({ pa
 })
 
 test("incompatibilité : option grisée non sélectionnable (Space ignoré)", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await enterEditionOnFirst(page) // e1 : meteo='ps', effet='ma'
   await pane1(page).locator('#main-panel').press('Tab') // → state
   await pane1(page).locator('#main-panel').press('Tab') // → meteo

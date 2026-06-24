@@ -14,13 +14,13 @@ async function enterEventList(page) {
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 }
 
-test("dans un EventLister, Enter passe l'event sélectionné en édition du titre", async ({ page }) => {
+test("dans un ListerEvent, Enter passe l'event sélectionné en édition du titre", async ({ page }) => {
 
   await page.goto('/')
 
   console.log('\n=== TEST ÉDITION TITRE EVENT ===')
 
-  console.log('-> entrée dans l\'EventLister du premier projet')
+  console.log('-> entrée dans l\'ListerEvent du premier projet')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await pane1(page).locator('#main-panel').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
@@ -50,13 +50,13 @@ test("dans un EventLister, Enter passe l'event sélectionné en édition du titr
 
 })
 
-test("dans un EventLister, Escape annule l'édition et restaure le titre original", async ({ page }) => {
+test("dans un ListerEvent, Escape annule l'édition et restaure le titre original", async ({ page }) => {
 
   await page.goto('/')
 
   console.log('\n=== TEST ANNULATION ÉDITION EVENT ===')
 
-  console.log('-> entrée dans l\'EventLister du premier projet')
+  console.log('-> entrée dans l\'ListerEvent du premier projet')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await pane1(page).locator('#main-panel').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)

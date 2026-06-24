@@ -5,7 +5,7 @@ test.beforeEach(() => {
   installFixtures('with-styles')
 })
 
-async function goToEventLister(page) {
+async function goToListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await pane1(page).locator('#main-panel').press('ArrowRight')
@@ -13,7 +13,7 @@ async function goToEventLister(page) {
 }
 
 async function openStylePanel(page) {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('s')
   await expect(pane1(page).locator('#style-panel')).toBeVisible()
 }
@@ -81,7 +81,7 @@ test("Ctrl+Shift+↓ déplace le panneau raccourcis de 50px", async ({ page }) =
 // ─── Tools panel ─────────────────────────────────────────────────────────────
 
 test("Ctrl+Shift+↓ déplace le panneau outils de 50px", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('Meta+t')
   await expect(pane1(page).locator('.tools-panel')).toBeVisible()
   const before = await pane1(page).locator('.tools-panel').boundingBox()

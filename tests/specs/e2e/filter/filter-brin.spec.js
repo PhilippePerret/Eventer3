@@ -10,7 +10,7 @@ test.beforeEach(() => {
   installFixtures('filter-events')
 })
 
-async function enterEventLister(page) {
+async function enterListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
   await pane1(page).locator('#main-panel').press('ArrowRight')
@@ -20,14 +20,14 @@ async function enterEventLister(page) {
 // ── Panneau ───────────────────────────────────────────────────────
 
 test('Cmd+: puis b ouvre le sélecteur de brins', async ({ page }) => {
-  await enterEventLister(page)
+  await enterListerEvent(page)
   await pane1(page).locator('#main-panel').press('Meta+:')
   await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('#filter-selector-panel')).toBeVisible()
 })
 
 test('le sélecteur affiche les brins du projet', async ({ page }) => {
-  await enterEventLister(page)
+  await enterListerEvent(page)
   await pane1(page).locator('#main-panel').press('Meta+:')
   await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('.filter-selector-row')).toHaveCount(2)
@@ -36,7 +36,7 @@ test('le sélecteur affiche les brins du projet', async ({ page }) => {
 // ── Filtrage réel ─────────────────────────────────────────────────
 
 test('sélectionner b1 masque les events sans b1', async ({ page }) => {
-  await enterEventLister(page)
+  await enterListerEvent(page)
   await pane1(page).locator('#main-panel').press('Meta+:')
   await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('#filter-selector-panel')).toBeVisible()
@@ -51,7 +51,7 @@ test('sélectionner b1 masque les events sans b1', async ({ page }) => {
 })
 
 test('Escape dans le sélecteur n\'applique pas le filtre', async ({ page }) => {
-  await enterEventLister(page)
+  await enterListerEvent(page)
   await pane1(page).locator('#main-panel').press('Meta+:')
   await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('#filter-selector-panel')).toBeVisible()
@@ -66,7 +66,7 @@ test('Escape dans le sélecteur n\'applique pas le filtre', async ({ page }) => 
 })
 
 test('Cmd+:: efface le filtre brin et réaffiche tous les events', async ({ page }) => {
-  await enterEventLister(page)
+  await enterListerEvent(page)
   await pane1(page).locator('#main-panel').press('Meta+:')
   await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('#filter-selector-panel')).toBeVisible()

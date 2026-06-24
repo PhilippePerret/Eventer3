@@ -21,7 +21,7 @@ test("barre d'état visible au démarrage avec mode PROJECTS", async ({ page }) 
   console.log('\n=== FIN ===\n')
 })
 
-test("barre d'état passe en NESTING à l'entrée dans un EventLister", async ({ page }) => {
+test("barre d'état passe en NESTING à l'entrée dans un ListerEvent", async ({ page }) => {
   await page.goto('/')
 
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
@@ -29,11 +29,11 @@ test("barre d'état passe en NESTING à l'entrée dans un EventLister", async ({
   await pane1(page).locator('#main-panel').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
 
-  console.log('-> mode NESTING affiché dans EventLister')
+  console.log('-> mode NESTING affiché dans ListerEvent')
   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE NESTING')
 })
 
-test("⌘+m dans EventLister bascule NESTING → LEVEL → NESTING", async ({ page }) => {
+test("⌘+m dans ListerEvent bascule NESTING → LEVEL → NESTING", async ({ page }) => {
   await page.goto('/')
 
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)

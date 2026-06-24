@@ -5,7 +5,7 @@ test.beforeEach(() => {
   installFixtures('many-events')
 })
 
-async function goToEventLister(page) {
+async function goToListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await pane1(page).locator('#main-panel').press('ArrowRight')
@@ -28,7 +28,7 @@ async function setEventState(page, stateName) {
 }
 
 test("l'état d'un event est sauvegardé en base et récupéré après rechargement", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
 
   await setEventState(page, 'ébauche')
 
@@ -41,7 +41,7 @@ test("l'état d'un event est sauvegardé en base et récupéré après rechargem
 
   // Rechargement de la page
   await page.reload()
-  await goToEventLister(page)
+  await goToListerEvent(page)
 
   // L'état doit être préservé
   const stateElAfterReload = pane1(page).locator('.event-item').nth(0).locator('.event-state')
@@ -49,7 +49,7 @@ test("l'état d'un event est sauvegardé en base et récupéré après rechargem
 })
 
 test("l'état 'premier jet' persiste après rechargement", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
 
   await setEventState(page, 'premier jet')
 
@@ -58,7 +58,7 @@ test("l'état 'premier jet' persiste après rechargement", async ({ page }) => {
 
   // Rechargement
   await page.reload()
-  await goToEventLister(page)
+  await goToListerEvent(page)
 
   await expect(pane1(page).locator('.event-item').nth(0).locator('.event-state')).toHaveText('premier jet')
 })

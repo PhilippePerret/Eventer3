@@ -55,6 +55,48 @@ export default class ProjectLister extends Lister {
 }
 ```
 
+
+
+Bien comprendre que les dossiers **ne servent qu’à savoir où se trouvent les choses, où elles sont définies**. Mais pour le reste, les méthodes et les données sont TOUTES définies soit dans `Item` (et ses descendants) pour les objets (event, projet, brin, etc.) soit dans `Lister` (et ses descendants pour les listes d’items.
+
+On ne prémunie des collisions de nom de fonction/variables/constantes/propriétés en dévelopant en TDD.
+
+~~~javascript
+// dans repo/Lister.js
+export default {
+~~~
+
+Et : 
+
+~~~javascript
+// dans abstract/Lister.js
+import ListerRepo form '../repo/Lister.js
+
+export default class Lister {
+  ...
+}
+  
+Object.assign(Lister.prototype, ListerRepo)
+~~~
+
+Et la classe descendantes peut hériter de tout ça:
+
+~~~javascript
+// Dans core/Event.js
+
+import Item from '../abstract/Item.js'
+
+export default Event extends Item {
+  ...
+}
+~~~
+
+
+
+
+
+
+
 ---
 
 ## Todo (Claude — ne pas effacer)
@@ -64,21 +106,6 @@ export default class ProjectLister extends Lister {
 - [ ] `⌘⇧C` : retirer `consolidateLevel` — réaffecter à "copier tous les items cochés" (`ListerListener`)
 
 ---
-
-## Plan d'implémentation — Prochaine session
-
-### Approche : rewrite radical (pas incrémental)
-
-1. [FAIT] **Copie de sauvegarde** de `public/` → `public_old/` (référence rapide sans git)
-2. [FAIT] **Destruction des classes existantes** — repartir à zéro
-3. [FAIT] **Squelettes vides** dans l'ordre :
-   - `Item`, `ItemCore`, `ItemDom`, `ItemListener`, `ItemRepo`
-   - `Lister`, `ListerCore`, `ListerDom`, `ListerListener`, `ListerRepo`
-   - Héritages vides : `Event`, `Brin`, `Perso`, `Style`, `Project` (< Item)
-   - Héritages vides : `EventLister`, `BrinLister`, `PersoLister`, `StyleLister`, `ProjectLister` (< Lister)
-   - Suppression de `KeyboardController` → `AppKeyboardManager` (window-level fallback uniquement)
-4. **Implémenter fonctionnalité par fonctionnalité** en partant du cas le plus simple (liste des projets)
-5. **Filet de sécurité** : tests E2E existants — ils testent le comportement DOM/clavier, pas l'implémentation interne → valides pour un rewrite complet
 
 ### Principe
 Les tests E2E passent = l'app fonctionne. Avancer fonctionnalité par fonctionnalité jusqu'à ce que toute la suite soit verte.
@@ -264,13 +291,7 @@ Cette donnée définit aussi les raccourcis clavier qui seront *réactifs* suiva
 
 ```js
 class Event extends Item {
-  static get PROPS() { return {
-    watchedKeys: { /* REQUIS POUR TOUTES LES CLASSES */
-      	b: 'openBrinPanel', 
-      	p: 'openPersoPanel',
-      	// etc.
-    	},
-    fields: [
+  static get PROPS() { return [
       { name: 'title',  type: 'text' },
       { name:'state', type: 'select',values: EVENT_STATE },
       { name:'meteo', type: 'select', values: EVENT_METEO,
@@ -279,9 +300,9 @@ class Event extends Item {
        		validIf:  'checkEffetValidity' },
       { name: 'lieu', type: 'select', values: EVENT_LIEU },
       { name: 'color',  type: 'color' },
-      { name: 'brins-marks',  type: 'custom', 
+      { name: 'brins-marks',  type: 'no-edit', 
        		editable: false, value: 'brinsBadgeMarks' },
-      { name: 'persos-marks', type: 'custom', 
+      { name: 'persos-marks', type: 'no-edit', 
        		editable: false, value: 'persosMarks' },
     ]
   }

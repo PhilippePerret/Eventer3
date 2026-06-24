@@ -9,13 +9,13 @@ test.describe('ConstantsPanel', () => {
 
   // ─── Ouverture ─────────────────────────────────────────────────────────────
 
-  test('q ouvre le panneau depuis ProjectLister', async ({ page }) => {
+  test('q ouvre le panneau depuis ListerProject', async ({ page }) => {
     await page.goto('/')
     await pane1(page).locator('#main-panel').press('q')
     await expect(pane1(page).locator('#constants-panel')).toBeVisible()
   })
 
-  test('q ouvre le panneau depuis EventLister', async ({ page }) => {
+  test('q ouvre le panneau depuis ListerEvent', async ({ page }) => {
     await page.goto('/')
     await pane1(page).locator('#main-panel').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)

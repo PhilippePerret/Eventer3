@@ -6,7 +6,7 @@ import { test, expect, pane1 } from '../__setup__.js'
 
 test.describe('Aide contextuelle — contenus par contexte', () => {
 
-  test.describe('ProjectLister', () => {
+  test.describe('ListerProject', () => {
 
     test.beforeEach(() => installFixtures('many-projects'))
 

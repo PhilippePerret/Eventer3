@@ -1,4 +1,4 @@
-import ProjectLister from './models/core/ProjectLister.js'
+import ListerProject from './models/core/ListerProject.js'
 import LOG from '../system/LOG.js'
 
 export default class App {
@@ -10,7 +10,7 @@ export default class App {
 
     LOG.m(1, 'Start application')
 
-    const projectLister = await ProjectLister.init()
+    const projectLister = await ListerProject.init()
 
     window.addEventListener('message', async (event) => {
       if (event.data?.type !== 'app-action') return
@@ -42,7 +42,7 @@ export default class App {
     if (typeof lister.navigateToItem === 'function') {
       await lister.navigateToItem(targetId)
     } else {
-      // ProjectLister : entrer d'abord dans le bon projet
+      // ListerProject : entrer d'abord dans le bon projet
       const projectItem = lister.items.find(item => item.id === projectId)
       if (!projectItem) return
       lister.selectItemAt(lister.items.indexOf(projectItem))

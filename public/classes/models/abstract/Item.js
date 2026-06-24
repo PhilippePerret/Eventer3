@@ -1,7 +1,7 @@
 import ItemDom from './ItemDom.js'
 import ItemRepo from './ItemRepo.js'
 import ItemListener from './ItemListener.js'
-import ListerRepo from './ListerRepo.js'
+import Lister from './Lister.js'
 import LOG from '../../../system/LOG.js'
 import Notification from '../../ui/Notification.js'
 
@@ -39,7 +39,7 @@ export default class Item {
     })
     await child.Repo.load()
     if (child._missing) {
-      const result   = await ListerRepo.createLister({ type: `${child.minClass}s`, parent_item_id: this.id, project_id })
+      const result   = await Lister.createLister({ type: `${child.minClass}s`, parent_item_id: this.id, project_id })
       child.id       = result.id
       child._missing = false
       await this.onChildListerCreated?.(child)

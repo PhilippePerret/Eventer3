@@ -8,7 +8,7 @@ test.beforeEach(() => {
 
 // fixture with-brins : project-a (hl:true), events e1/e2, brins b1 (MON, non-coché) / b2 (AUT, coché)
 
-async function goToEventLister(page) {
+async function goToListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
@@ -16,7 +16,7 @@ async function goToEventLister(page) {
 }
 
 async function openBrinPanel(page) {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('#brin-panel')).toBeVisible()
 }
@@ -24,12 +24,12 @@ async function openBrinPanel(page) {
 // --- Ouverture / fermeture ---
 
 test("b ouvre le panneau des brins", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('#brin-panel')).toBeVisible()
 })
 
-test("l'EventLister reste visible en fond pendant que le panneau est ouvert", async ({ page }) => {
+test("l'ListerEvent reste visible en fond pendant que le panneau est ouvert", async ({ page }) => {
   await openBrinPanel(page)
   await expect(pane1(page).locator('#main-panel')).toBeVisible()
 })
@@ -52,7 +52,7 @@ test("Cmd+Enter ferme le panneau", async ({ page }) => {
   await expect(pane1(page).locator('#brin-panel')).not.toBeVisible()
 })
 
-test("après fermeture, l'EventLister redevient actif (↓ change la sélection d'event)", async ({ page }) => {
+test("après fermeture, l'ListerEvent redevient actif (↓ change la sélection d'event)", async ({ page }) => {
   await openBrinPanel(page)
   await pane1(page).locator('#main-panel').press('Escape')
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
@@ -83,7 +83,7 @@ test("les brins cochés (ch:true) ont la classe checked", async ({ page }) => {
 
 test("seuls les brins de l'event sélectionné sont cochés à l'ouverture", async ({ page }) => {
   // e1 sélectionné : seul b2 coché (e1 a bi=["b2"])
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('.brin-item').nth(0)).not.toHaveClass(/checked/)
   await expect(pane1(page).locator('.brin-item').nth(1)).toHaveClass(/checked/)
@@ -121,7 +121,7 @@ test("↑ sélectionne le brin précédent", async ({ page }) => {
   await expect(pane1(page).locator('.brin-item').nth(0)).toHaveClass(/selected/)
 })
 
-test("↓↑ dans le panneau ne modifient pas la sélection de l'EventLister", async ({ page }) => {
+test("↓↑ dans le panneau ne modifient pas la sélection de l'ListerEvent", async ({ page }) => {
   await openBrinPanel(page)
   await pane1(page).locator('#main-panel').press('ArrowDown')
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
@@ -246,7 +246,7 @@ test("persistance : brin créé survit au rechargement", async ({ page }) => {
   await page.waitForLoadState('networkidle')
 
   await page.reload()
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('.brin-item')).toHaveCount(3)
   await expect(pane1(page).locator('.brin-item').nth(1).locator('.brin-title')).toHaveText('Brin persisté')
@@ -261,7 +261,7 @@ test("persistance : brin édité survit au rechargement", async ({ page }) => {
   await page.waitForLoadState('networkidle')
 
   await page.reload()
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('.brin-item').nth(0).locator('.brin-title')).toHaveText('Brin modifié')
 })
@@ -272,7 +272,7 @@ test("persistance : cochage survit au rechargement", async ({ page }) => {
   await page.waitForLoadState('networkidle')
 
   await page.reload()
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('.brin-item').nth(0)).toHaveClass(/checked/)
 })

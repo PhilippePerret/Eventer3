@@ -72,12 +72,12 @@ test('Alt+0 pane-1 focusé → pane-1 reste dans son état courant', async ({ pa
   await expect(pane1(page).locator('.project-item').first()).toHaveClass(/selected/)
 })
 
-// ─── Cas ProjectLister en pane-2, EventLister en pane-1 ──────────────────────
+// ─── Cas ListerProject en pane-2, ListerEvent en pane-1 ──────────────────────
 
-test('Alt+0 pane-2 niveau projets, pane-1 en EventLister → pane-1 revient à la liste projets', async ({ page }) => {
+test('Alt+0 pane-2 niveau projets, pane-1 en ListerEvent → pane-1 revient à la liste projets', async ({ page }) => {
   await gotoApp(page)
   await openSplit(page)
-  // pane-1 : entrer dans le projet (EventLister)
+  // pane-1 : entrer dans le projet (ListerEvent)
   await page.keyboard.press('Alt+1')
   await pane1(page).locator('.project-item').first().click()
   await page.keyboard.press('ArrowRight')

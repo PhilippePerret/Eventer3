@@ -10,7 +10,7 @@ test.describe('Delete dans le panneau des brins', () => {
 
   test.beforeEach(() => installFixtures('with-brins'))
 
-  async function goToEventLister(page) {
+  async function goToListerEvent(page) {
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await pane1(page).locator('.project-item.selected').press('ArrowRight')
@@ -18,7 +18,7 @@ test.describe('Delete dans le panneau des brins', () => {
   }
 
   async function openBrinPanel(page) {
-    await goToEventLister(page)
+    await goToListerEvent(page)
     await pane1(page).locator('#main-panel').press('b')
     await expect(pane1(page).locator('#brin-panel')).toBeVisible()
   }
@@ -57,7 +57,7 @@ test.describe('Delete dans le panneau des brins', () => {
     await page.waitForLoadState('networkidle')
     // Rechargement
     await page.reload()
-    await goToEventLister(page)
+    await goToListerEvent(page)
     await pane1(page).locator('#main-panel').press('b')
     await expect(pane1(page).locator('#brin-panel')).toBeVisible()
     await expect(pane1(page).locator('.brin-item')).toHaveCount(1)
@@ -70,7 +70,7 @@ test.describe('Delete dans le panneau des brins', () => {
     await pane1(page).locator('#main-panel').press('Delete')
     // Rechargement
     await page.reload()
-    await goToEventLister(page)
+    await goToListerEvent(page)
     // Le badge AUT ne doit pas apparaître dans e1 même après rechargement
     const eventRow = pane1(page).locator('.event-item.selected')
     await expect(eventRow.locator('.event-brins-badges')).not.toContainText('AUT')

@@ -5,7 +5,7 @@ test.beforeEach(() => {
   installFixtures('with-styles')
 })
 
-async function goToEventLister(page) {
+async function goToListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
   await pane1(page).locator('#main-panel').press('ArrowRight')
@@ -15,7 +15,7 @@ async function goToEventLister(page) {
 // ─── PopupSelect : currentValue null doit être focused ───────────────────────
 
 test("popup nature projet : option '—' focused quand currentValue est null", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('t')
   await expect(pane1(page).locator('.nature-panel')).toBeVisible()
   // Nature projet null → ouvre popup → '— (aucun)' doit être focused
@@ -26,7 +26,7 @@ test("popup nature projet : option '—' focused quand currentValue est null", a
 })
 
 test("popup nature évènemencier : option 'défaut' focused quand currentValue est null", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('t')
   await expect(pane1(page).locator('.nature-panel')).toBeVisible()
   // Sélectionner roman (ArrowUp×2 depuis —)
@@ -43,7 +43,7 @@ test("popup nature évènemencier : option 'défaut' focused quand currentValue 
 })
 
 test("popup nature projet : option 'roman' focused après avoir choisi roman", async ({ page }) => {
-  await goToEventLister(page)
+  await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('t')
   // Sélectionner roman (ArrowUp×2 depuis —)
   await pane1(page).locator('#main-panel').press('Enter')

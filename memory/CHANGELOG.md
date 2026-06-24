@@ -1,5 +1,37 @@
 # CHANGELOG — Eventer3
 
+## 2026-06-23 (suite 3)
+
+### Brins marks dans EventLister + pattern dom/ injection
+
+**`public/classes/models/dom/Event.js`** *(nouveau)*
+- Objet plain exporté : `brinsMarks()`, `persosMarks()` (stub)
+- Injecté dans `Event.prototype` via `Object.assign(Event.prototype, EventDom)`
+
+**`public/classes/models/core/Event.js`**
+- `constructor` : `this.brin_ids`, `this.perso_ids`
+- PROPS : ajout `{ name:'brins-marks', type:'no-edit', warper:'marks', value:'brinsMarks' }` et `persos-marks`
+- Warpers `left-col` → `edits`
+
+**`public/classes/models/core/EventLister.js`**
+- `EventListerRepo extends ListerRepo` (local) : `load()` fetch aussi `/${pid}-brins/items` → `this.lister.brins`
+- `get Repo()` → `EventListerRepo`
+
+**`public/classes/utils/DOM.js`**
+- `buildNoEditField(field, item)` : appelle `item[field.value]?.()`, innerHTML
+- `buildField` + `buildEditField` : cas `'no-edit'`
+
+**Warpers renommés — tous les core/**
+- `left-col` → `edits` (Event, Project)
+- `left` → `edits` (Brin color/badge/type, Perso)
+- `left` → `marks` (Brin persos)
+
+**`public/styles.css`**
+- `.item-left-col` → `.item-edits`
+
+**Tests**
+- `_tdd/brin-badges-display.spec.js` : `.event-brins-badges` → `.event-brins-marks` — 3 tests verts
+
 ## 2026-06-23 (suite 2)
 
 ### createNewBefore + keyboard + guards édition

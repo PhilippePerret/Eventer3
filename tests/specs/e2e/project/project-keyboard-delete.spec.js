@@ -5,7 +5,7 @@ import { test, expect, pane1 } from '../__setup__.js'
 // ─── PROJETS ───────────────────────────────────────────────────────────────
 // many-projects : Projet A (index 0), Projet B (index 1), Projet C (index 2)
 
-test.describe('Delete dans ProjectLister', () => {
+test.describe('Delete dans ListerProject', () => {
 
   test.beforeEach(() => installFixtures('many-projects'))
 
@@ -79,7 +79,7 @@ test.describe('Delete dans ProjectLister', () => {
 // ─── PROJETS AVEC EVENTS ────────────────────────────────────────────────────
 // two-projects-events : Projet 1 (index 0, 3 events), Projet 2 (index 1, 2 events)
 
-test.describe('Delete dans ProjectLister — cascade', () => {
+test.describe('Delete dans ListerProject — cascade', () => {
 
   test.beforeEach(() => installFixtures('two-projects-events'))
 

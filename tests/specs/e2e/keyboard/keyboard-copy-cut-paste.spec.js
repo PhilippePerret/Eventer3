@@ -4,11 +4,11 @@ import { test, expect, pane1 } from '../__setup__.js'
 // ─── COPY ⌘+c ───────────────────────────────────────────────────────────────
 // many-events : project-a (hl:true, e1/e2/e3), project-b (sans events)
 
-test.describe('⌘+c dans EventLister', () => {
+test.describe('⌘+c dans ListerEvent', () => {
 
   test.beforeEach(() => installFixtures('many-events'))
 
-  async function goToEventLister(page) {
+  async function goToListerEvent(page) {
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await pane1(page).locator('#main-panel').press('ArrowRight')
@@ -16,7 +16,7 @@ test.describe('⌘+c dans EventLister', () => {
   }
 
   test('⌘+c ne retire pas l\'item original de la liste', async ({ page }) => {
-    await goToEventLister(page)
+    await goToListerEvent(page)
     const items = pane1(page).locator('.event-item')
     const countBefore = await items.count()
     await pane1(page).locator('#main-panel').press('Meta+c')
@@ -24,7 +24,7 @@ test.describe('⌘+c dans EventLister', () => {
   })
 
   test('⌘+c + ⌘+v ajoute un item au-dessus de la sélection', async ({ page }) => {
-    await goToEventLister(page)
+    await goToListerEvent(page)
     const items = pane1(page).locator('.event-item')
     const countBefore = await items.count()
     const selectedTitle = await pane1(page).locator('.event-item.selected').textContent()
@@ -36,7 +36,7 @@ test.describe('⌘+c dans EventLister', () => {
   })
 
   test('⌘+c + ⌘+v : l\'item collé est sélectionné', async ({ page }) => {
-    await goToEventLister(page)
+    await goToListerEvent(page)
     await pane1(page).locator('#main-panel').press('Meta+c')
     await pane1(page).locator('#main-panel').press('Meta+v')
     await expect(pane1(page).locator('.event-item.selected')).toBeVisible()
@@ -44,7 +44,7 @@ test.describe('⌘+c dans EventLister', () => {
   })
 
   test('⌘+c + ⌘+v : l\'item collé a un id différent de l\'original', async ({ page }) => {
-    await goToEventLister(page)
+    await goToListerEvent(page)
     const items = pane1(page).locator('.event-item')
     const originalId = await items.nth(0).getAttribute('data-id')
     await pane1(page).locator('#main-panel').press('Meta+c')
@@ -54,14 +54,14 @@ test.describe('⌘+c dans EventLister', () => {
   })
 
   test('après ⌘+c + ⌘+v, le collage est persistant', async ({ page }) => {
-    await goToEventLister(page)
+    await goToListerEvent(page)
     const items = pane1(page).locator('.event-item')
     const countBefore = await items.count()
     await pane1(page).locator('#main-panel').press('Meta+c')
     await pane1(page).locator('#main-panel').press('Meta+v')
     await page.waitForLoadState('networkidle')
     await page.reload()
-    await goToEventLister(page)
+    await goToListerEvent(page)
     await expect(items).toHaveCount(countBefore + 1)
   })
 
@@ -69,11 +69,11 @@ test.describe('⌘+c dans EventLister', () => {
 
 // ─── CUT ⌘+x ────────────────────────────────────────────────────────────────
 
-test.describe('⌘+x dans EventLister', () => {
+test.describe('⌘+x dans ListerEvent', () => {
 
   test.beforeEach(() => installFixtures('many-events'))
 
-  async function goToEventLister(page) {
+  async function goToListerEvent(page) {
     await page.goto('/')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
     await pane1(page).locator('#main-panel').press('ArrowRight')
@@ -81,7 +81,7 @@ test.describe('⌘+x dans EventLister', () => {
   }
 
   test('⌘+x retire l\'item sélectionné de la liste', async ({ page }) => {
-    await goToEventLister(page)
+    await goToListerEvent(page)
     const items = pane1(page).locator('.event-item')
     const countBefore = await items.count()
     await pane1(page).locator('#main-panel').press('Meta+x')
@@ -89,7 +89,7 @@ test.describe('⌘+x dans EventLister', () => {
   })
 
   test('⌘+x + ⌘+v restitue l\'item au-dessus de la sélection', async ({ page }) => {
-    await goToEventLister(page)
+    await goToListerEvent(page)
     const items = pane1(page).locator('.event-item')
     const countBefore = await items.count()
     // Mémoriser le titre de e1
@@ -104,7 +104,7 @@ test.describe('⌘+x dans EventLister', () => {
   })
 
   test('⌘+x + ⌘+v : l\'item collé conserve le même id que l\'original', async ({ page }) => {
-    await goToEventLister(page)
+    await goToListerEvent(page)
     const items = pane1(page).locator('.event-item')
     const originalId = await items.nth(0).getAttribute('data-id')
     await pane1(page).locator('#main-panel').press('Meta+x')
@@ -113,14 +113,14 @@ test.describe('⌘+x dans EventLister', () => {
   })
 
   test('après ⌘+x + ⌘+v, la suppression initiale est annulée (persistance)', async ({ page }) => {
-    await goToEventLister(page)
+    await goToListerEvent(page)
     const items = pane1(page).locator('.event-item')
     const countBefore = await items.count()
     await pane1(page).locator('#main-panel').press('Meta+x')
     await pane1(page).locator('#main-panel').press('Meta+v')
     await page.waitForLoadState('networkidle')
     await page.reload()
-    await goToEventLister(page)
+    await goToListerEvent(page)
     await expect(items).toHaveCount(countBefore)
   })
 
@@ -171,7 +171,7 @@ test.describe('⌘+x interdit sur le dernier item', () => {
 
 })
 
-test.describe('⌘+x interdit sur le dernier projet (ProjectLister)', () => {
+test.describe('⌘+x interdit sur le dernier projet (ListerProject)', () => {
 
   test.beforeEach(() => installFixtures('many-projects'))
 
@@ -198,7 +198,7 @@ test.describe('⌘+x interdit sur le dernier projet (ProjectLister)', () => {
 // ─── COPY + PASTE DANS PROJECTLISTER ────────────────────────────────────────
 // many-projects : Projet A, Projet B, Projet C
 
-test.describe('⌘+c + ⌘+v dans ProjectLister', () => {
+test.describe('⌘+c + ⌘+v dans ListerProject', () => {
 
   test.beforeEach(() => installFixtures('many-projects'))
 
@@ -265,7 +265,7 @@ test.describe('⌘+c + ⌘+v dans ProjectLister', () => {
 // ─── CUT + PASTE DANS PROJECTLISTER ─────────────────────────────────────────
 // many-projects : Projet A, Projet B, Projet C
 
-test.describe('⌘+x + ⌘+v dans ProjectLister', () => {
+test.describe('⌘+x + ⌘+v dans ListerProject', () => {
 
   test.beforeEach(() => installFixtures('many-projects'))
 
@@ -287,7 +287,7 @@ test.describe('⌘+x + ⌘+v dans ProjectLister', () => {
 // ─── PASTE CROSS-PANEL MÊME TYPE ────────────────────────────────────────────
 // two-projects-events : project-a (e1/e2/e3), project-b (e4/e5)
 
-test.describe('⌘+v colle dans un autre EventLister (même type)', () => {
+test.describe('⌘+v colle dans un autre ListerEvent (même type)', () => {
 
   test.beforeEach(() => installFixtures('two-projects-events'))
 

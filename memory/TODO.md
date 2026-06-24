@@ -10,7 +10,14 @@
 > - Les tests existants, malgré les nombreuses migrations déjà effecutées, ne respectent peut-être pas nouvelle architecture — les corriger au besoin.
 > - **IMPÉRATIF** : si on rencontre le même échec **après trois essais de correction**, ON MET DES LOG(s) pour voir où ça coince.
 
-- Implémentation de BrinLister panel (`#brin-panel`). Tous les tests sont dans e2e/_tdd. Ils ont été migrés. Les lancer pour voir l’état actuel et corriger.
+- **BrinPanel** (`#brin-panel`) — 3/22 tests verts (`brin-badges-display` ✓). 19 échecs restants : tous bloqués sur `b` qui n’ouvre pas `#brin-panel`.
+
+  **Architecture décidée (pas encore codée) :**
+  - `EventItemListener extends ItemListener` avec LISTENERS mergés : `{ ...ItemListener.LISTENERS, b: { nokey: ‘openBrinPanel’ }, p: { nokey: ‘openPersoPanel’ } }`
+  - `Event` override `get Listener()` → `EventItemListener`
+  - `openBrinPanel()` dans `dom/Event.js` (injecté via `Object.assign`)
+  - `BrinLister extends Lister` (core/BrinLister.js)
+  - `BrinPanel extends KeyboardablePanel` (ui/BrinPanel.js) — wraps BrinLister, rendu dans `#brin-panel`
 
   
 

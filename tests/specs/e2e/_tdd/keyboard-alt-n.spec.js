@@ -47,7 +47,7 @@ test.describe('Alt+n dans la liste des projets', () => {
   })
 })
 
-test.describe("Alt+n dans un EventLister", () => {
+test.describe("Alt+n dans un ListerEvent", () => {
   test.beforeEach(() => installFixtures('many-events'))
 
   test("Alt+n crée un event AU-DESSUS de l'event sélectionné", async ({ page }) => {
@@ -83,7 +83,7 @@ test.describe("Alt+n dans un EventLister", () => {
   })
 })
 
-test.describe("Alt+n dans un BrinLister", () => {
+test.describe("Alt+n dans un ListerBrin", () => {
   test.beforeEach(() => installFixtures('with-brins'))
 
   test("Alt+n crée un brin AU-DESSUS du brin sélectionné", async ({ page }) => {
