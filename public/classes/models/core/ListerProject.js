@@ -13,15 +13,15 @@ export default class ListerProject extends Lister {
     LOG.m(1, 'Init projects')
     const lister = new ListerProject({ id: 1 })
     await lister.load()
-    lister.Dom.render()
-    lister.attach(lister.Dom.container)
+    lister.render()
+    lister.attach(lister.container)
     LOG.m(1, 'ListerProject ready')
     return lister
   }
 
   async createNew() {
     const folderPath = await FilePicker.open({ mode: 'folder' })
-    if (!folderPath) { this.Dom.focusSelected(); return }
+    if (!folderPath) { this.focusSelected(); return }
 
     const folderName = folderPath.split('/').at(-1)
     const dbPath     = folderPath + '/eventer.db'
@@ -41,7 +41,7 @@ export default class ListerProject extends Lister {
           { label: 'Annuler',  type: 'cancel', value: false     },
         ],
       })
-      if (!choice) { this.Dom.focusSelected(); return }
+      if (!choice) { this.focusSelected(); return }
 
       if (choice === 'use') {
         const resp = await fetch('/api/projects/open', {

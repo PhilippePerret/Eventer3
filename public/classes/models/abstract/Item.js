@@ -52,8 +52,8 @@ export default class Item extends BaseListener {
       await child.load()
     }
     this.parentLister.detach()
-    child.Dom.render()
-    child.attach(child.Dom.container)
+    child.render()
+    child.attach(child.container)
     if (child.items.length === 0) await child.createNew()
   }
 

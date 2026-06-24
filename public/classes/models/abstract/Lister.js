@@ -1,5 +1,5 @@
 import BaseListener from './BaseListener.js'
-import ListerDom from './ListerDom.js'
+import ListerDom from '../dom/Lister.js'
 import ListerRepo from '../repo/Lister.js'
 import { ListerLi } from '../listen/Lister.js'
 import Notification from '../../ui/Notification.js'
@@ -17,7 +17,6 @@ export default class Lister extends BaseListener {
     this.parentLister  = data.parentLister  ?? null
   }
 
-  get Dom()      { return this._dom      || (this._dom      = new ListerDom(this)) }
   get minClass() { return this._minClass || (this._minClass = this.constructor.ITEM_CLASS?.name.toLowerCase()) }
 
   static LISTENERS = { ...ListerLi }
@@ -25,7 +24,7 @@ export default class Lister extends BaseListener {
   selectAt(idx) {
     const current = this.items[this.selectedIndex]
     this.selectedIndex = idx
-    this.Dom.applySelection(current, this.items[idx])
+    this.applySelection(current, this.items[idx])
   }
 
   async deleteSelected() {
@@ -43,7 +42,7 @@ export default class Lister extends BaseListener {
         message:       `Cette destruction entraînera la destruction en cascade de ${cascadeCount} ${label}. Tapez ${cascadeCount} pour confirmer.`,
         expectedValue: cascadeCount,
       })
-      if (!confirmed) { this.Dom.focusSelected(); return }
+      if (!confirmed) { this.focusSelected(); return }
     }
     const ok = await this.deleteItem(item)
     if (!ok) return
@@ -51,14 +50,14 @@ export default class Lister extends BaseListener {
     this.items.splice(idx, 1)
     this.item_ids.splice(idx, 1)
     this.selectedIndex = newIdx
-    this.Dom.removeEl(item)
-    this.Dom.applySelection(null, this.items[newIdx])
+    this.removeEl(item)
+    this.applySelection(null, this.items[newIdx])
   }
 
   async _createAt(insertIdx) {
     const prevIds = [...this.item_ids]
     const result = await this.createItem({ title: '' })
-    if (!result?.id) { this.Dom.focusSelected(); return }
+    if (!result?.id) { this.focusSelected(); return }
     const newOrder = [...prevIds]
     newOrder.splice(insertIdx, 0, result.id)
     this.item_ids = newOrder
@@ -73,14 +72,14 @@ export default class Lister extends BaseListener {
   async _reloadAt(insertIdx) {
     await this.load()
     this.selectedIndex = insertIdx
-    this.Dom.render()
+    this.render()
   }
 
   leaveToParent() {
     const parent = this.parentLister
     this.detach()
-    parent.Dom.render()
-    parent.attach(parent.Dom.container)
+    parent.render()
+    parent.attach(parent.container)
   }
 
   selectPrev() {
@@ -111,4 +110,5 @@ export default class Lister extends BaseListener {
 
 }
 
+Object.assign(Lister.prototype, ListerDom)
 Object.assign(Lister.prototype, ListerRepo)
