@@ -1,15 +1,16 @@
 import Item from '../abstract/Item.js'
 import { WORD_FORMS } from '../../../constants/constants.js'
-import { BRIN_TYPE } from '../constants/Brin.js'
+import { BRIN_TYPE, BRIN_COLORS } from '../constants/Brin.js'
+import BrinDom from '../dom/Brin.js'
 
 
 export default class Brin extends Item {
   static get thingName() { return WORD_FORMS.Brin }
+  static COLORS = BRIN_COLORS
 
   constructor(data = {}) {
     super(data)
     this.badge  = data.badge  ?? ''
-    this.color  = data.color  ?? '#888888'
     this.type   = data.type   ?? null
     this.persos = data.persos ?? []
   }
@@ -24,3 +25,5 @@ export default class Brin extends Item {
     ])
   }
 }
+
+Object.assign(Brin.prototype, BrinDom)

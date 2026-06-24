@@ -1,5 +1,10 @@
 // Constantes Project
 
+export const PROJECT_COLORS = [
+  '#d9d1a9', '#a9d1d9', '#b0a9d9', '#d9a9b0',
+  '#a9d9b0', '#d9b0a9', '#b0d9c8', '#c8b0d9'
+]
+
 import {DEV_STATES} from './common.js'
 export const PROJECT_STATES = [
   ...DEV_STATES,

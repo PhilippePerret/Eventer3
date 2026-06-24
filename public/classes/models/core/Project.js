@@ -1,9 +1,10 @@
 import Item from '../abstract/Item.js'
 import Lister from '../abstract/Lister.js'
-import {PROJECT_STATES, PROJECT_TYPES} from '../constants/Project.js'
+import { PROJECT_STATES, PROJECT_TYPES, PROJECT_COLORS } from '../constants/Project.js'
 
 
 export default class Project extends Item {
+  static COLORS = PROJECT_COLORS
 
   get PROPS(){ return this._props || (this._props = [
         {name: 'title', type: 'text',   warper: 'body'}

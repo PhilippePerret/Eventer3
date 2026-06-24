@@ -1,21 +1,15 @@
 export default {
 
-  async load() {
+  async _fetchData() {
     const id    = this.id
     const pid   = this.project_id
     const query = pid ? `?project_id=${pid}` : ''
     const def   = await fetch(`/api/listers/${id}${query}`, { cache: 'no-store' }).then(r => r.json())
-    if (!def) return
+    if (!def) return null
     this._missing = def.missing === true
     if (def.id != null) this.id = def.id
     this.item_ids = def.item_ids ?? []
-
-    const data = await fetch(`/api/listers/${id}/items${query}`, { cache: 'no-store' }).then(r => r.json())
-    const Cls  = this.constructor.ITEM_CLASS
-    this.items = this.item_ids
-      .map(id => data[id] ? new Cls({ ...data[id], id }) : null)
-      .filter(Boolean)
-    this.selectedIndex = this.items.length ? 0 : -1
+    return await fetch(`/api/listers/${id}/items${query}`, { cache: 'no-store' }).then(r => r.json())
   },
 
   async deleteItem(item) {

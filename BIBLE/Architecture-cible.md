@@ -309,7 +309,7 @@ class Event extends Item {
       { name: 'lieu', type: 'select', values: EVENT_LIEU },
       { name: 'color',  type: 'color' },
       { name: 'brins-marks',  type: 'no-edit', 
-       		editable: false, value: 'brinsBadgeMarks' },
+       		editable: false, value: 'brinsMarks' },
       { name: 'persos-marks', type: 'no-edit', 
        		editable: false, value: 'persosMarks' },
     ]

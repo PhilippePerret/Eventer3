@@ -1,5 +1,12 @@
 // Constantes communes
 
+export const DEFAULT_COLOR = {
+  brin:    '#888888',
+  event:   'transparent',
+  project: 'transparent',
+  perso:   'transparent',
+}
+
 export const DEV_STATES = [ // event et projet
   { value: 0, label: '—' },
   { value: 1, label: 'ébauche' },

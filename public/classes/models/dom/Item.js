@@ -97,4 +97,14 @@ export default {
     fields[(idx + 1) % fields.length]?.focus()
   },
 
+  colorFor(index) {
+    const colors = this.constructor.COLORS
+    if (!colors?.length) return null
+    return colors[index % colors.length]
+  },
+
+  customInit(index) {
+    this.color = this.colorFor(index)
+  },
+
 }

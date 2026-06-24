@@ -27,35 +27,30 @@ test("nouveau brin : il est sélectionné juste après création", async ({ page
   await expect(pane1(page).locator('.brin-item').nth(1)).toHaveClass(/selected/)
 })
 
-test("nouveau brin : il s'affiche avec les bonnes classes CSS (panel-row brin-row)", async ({ page }) => {
+test("nouveau brin : il s'affiche avec la classe CSS brin-item", async ({ page }) => {
   await openBrinPanel(page)
   await pane1(page).locator('#main-panel').press('n')
   const titleInput = pane1(page).locator('.brin-item.selected [data-field="title"]')
   await titleInput.fill('Brin CSS')
   await pane1(page).locator('#main-panel').press('Enter')
   const newBrin = pane1(page).locator('.brin-item').nth(1)
-  await expect(newBrin).toHaveClass(/panel-row/)
-  await expect(newBrin).toHaveClass(/brin-row/)
+  await expect(newBrin).toHaveClass(/brin-item/)
 })
 
-test("en création, l'éditeur de brin a les classes CSS panel-row et brin-row", async ({ page }) => {
+test("en création, l'éditeur de brin a les classes CSS brin-item et editing", async ({ page }) => {
   await openBrinPanel(page)
   await pane1(page).locator('#main-panel').press('n')
   const editor = pane1(page).locator('.brin-item.selected')
-  await expect(editor).toHaveClass(/panel-row/)
-  await expect(editor).toHaveClass(/brin-row/)
+  await expect(editor).toHaveClass(/brin-item/)
+  await expect(editor).toHaveClass(/editing/)
 })
 
 test("nouveau brin : sa couleur est différente de celle du brin précédent", async ({ page }) => {
   await openBrinPanel(page)
-  // Récupérer la couleur du dernier brin existant (b2)
-  const lastBrin = pane1(page).locator('.brin-item').last()
-  const lastColor = await lastBrin.locator('input[type="color"]').inputValue()
-  // Créer un nouveau brin
+  const lastColor = await pane1(page).locator('.brin-item').last().locator('.brin-color').textContent()
   await pane1(page).locator('#main-panel').press('n')
   await pane1(page).locator('.brin-item.selected [data-field="title"]').fill('Nouveau brin couleur')
   await pane1(page).locator('#main-panel').press('Enter')
-  // La couleur du nouveau brin doit être différente
-  const newBrinColor = await pane1(page).locator('.brin-item').nth(1).locator('input[type="color"]').inputValue()
+  const newBrinColor = await pane1(page).locator('.brin-item').nth(1).locator('.brin-color').textContent()
   expect(newBrinColor).not.toBe(lastColor)
 })

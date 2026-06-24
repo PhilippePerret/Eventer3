@@ -10,7 +10,7 @@
 > - Les tests existants, malgré les nombreuses migrations déjà effecutées, ne respectent peut-être pas nouvelle architecture — les corriger au besoin.
 > - **IMPÉRATIF** : si on rencontre le même échec **après trois essais de correction**, ON MET DES LOG(s) pour voir où ça coince.
 
-- **BrinPanel** (`#brin-panel`) — 3/22 tests verts (`brin-badges-display` ✓). 19 échecs restants : tous bloqués sur `b` qui n’ouvre pas `#brin-panel`.
+- **BrinPanel** (`#brin-panel`) — 3/22 tests verts (`brin-marks-display` ✓). 19 échecs restants : tous bloqués sur `b` qui n’ouvre pas `#brin-panel`.
 
   **Architecture décidée (pas encore codée) :**
   - `EventItemListener extends ItemListener` avec LISTENERS mergés : `{ ...ItemListener.LISTENERS, b: { nokey: ‘openBrinPanel’ }, p: { nokey: ‘openPersoPanel’ } }`

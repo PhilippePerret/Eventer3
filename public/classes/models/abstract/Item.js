@@ -6,6 +6,7 @@ import { stopEvent } from '../../utils/events.js'
 import Lister from './Lister.js'
 import LOG from '../../../system/LOG.js'
 import Notification from '../../ui/Notification.js'
+import { DEFAULT_COLOR } from '../constants/common.js'
 
 export default class Item extends KeyDispatcher {
 
@@ -15,7 +16,7 @@ export default class Item extends KeyDispatcher {
     this.title      = data.title      ?? ''
     this.type       = data.type       ?? null
     this.state      = data.state      ?? null
-    this.color      = data.color      ?? null
+    this.color      = data.color      ?? (DEFAULT_COLOR[this.constructor.name.toLowerCase()] ?? null)
     this.lister_id  = data.lister_id  ?? null
     this.active     = data.active     ?? true
     this.checked    = data.checked    ?? false
@@ -24,6 +25,7 @@ export default class Item extends KeyDispatcher {
     this.project_id = data.project_id ?? null
     this.parentLister = data.parentLister ?? null
     this.editing = false
+    if (data._index !== undefined) this.customInit(data._index)
   }
 
   onkeydown(ev) {

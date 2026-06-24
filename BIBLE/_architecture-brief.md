@@ -115,10 +115,8 @@ Elle a été profondément modifiée le 12 juin 2026.
 | Panneau persos | `#perso-panel` |
 | Items brins | `.brin-item` |
 | Titre brin | `.brin-item__title` |
-| Badge brin dans event | `.event-brins-badges .badge.brin` |
 | Brin sélectionné | `.brin-item.selected` |
 | Footer raccourcis | `#shortcuts-footer` |
-| Badge brin | `.brin-item__badge` |
 | Item id (sur chaque item) | `[data-id]` ex: `.event-item[data-id="e1"]` |
 | Notification | `#notification` (géré par `public/classes/ui/Notification.js`) |
 | Panneau raccourcis | `#shortcuts-panel` (géré par `ShortcutsPanel.js`) |

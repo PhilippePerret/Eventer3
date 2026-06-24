@@ -98,6 +98,24 @@ export default class Lister extends KeyDispatcher {
     this.selectAt(idx)
   }
 
+  async load() {
+    const rawData = await this._fetchData()
+    if (!rawData) return
+    this.items = this._instantiateItems(rawData)
+    if (!this.item_ids.length) this.item_ids = this.items.map(item => item.id)
+    if (this.items.length === 0) await this._initDefault?.()
+    if (this.selectedIndex < 0 && this.items.length) this.selectedIndex = 0
+    await this._afterLoad?.()
+  }
+
+  _instantiateItems(data) {
+    const Cls = this.constructor.ITEM_CLASS
+    const ids = this.item_ids.length ? this.item_ids : Object.keys(data)
+    return ids
+      .map((id, idx) => data[id] ? new Cls({ ...data[id], id, _index: idx }) : null)
+      .filter(Boolean)
+  }
+
   static async createLister(fields) {
     const resp = await fetch('/api/listers', {
       method:  'POST',

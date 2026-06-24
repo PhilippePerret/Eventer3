@@ -18,14 +18,9 @@ export default class ListerBrin extends Lister {
     return le?.items[le.selectedIndex] ?? null
   }
 
-  async load() {
-    const brinsData = this.listerEvent?.brins ?? {}
-    this.items = Object.entries(brinsData).map(([id, d]) => new Brin({ ...d, id }))
-    this.item_ids = this.items.map(b => b.id)
-    if (this.items.length === 0) await this._initDefaultBrin()
-    if (this.selectedIndex < 0 && this.items.length) this.selectedIndex = 0
-    this._syncChecked()
-  }
+  async _fetchData()   { return this.listerEvent?.brins ?? {} }
+  async _afterLoad()   { this._syncChecked() }
+  async _initDefault() { await this._initDefaultBrin() }
 
   async _initDefaultBrin() {
     const result = await this.createItem({ title: 'Intrigue principale', badge: 'IP' })
@@ -33,7 +28,7 @@ export default class ListerBrin extends Lister {
     if (!result?.id) return
     this.item_ids = [result.id]
     await this.save()
-    const brin = new Brin({ ...result, id: result.id })
+    const brin = new Brin({ ...result, id: result.id, _index: 0 })
     this.items = [brin]
     if (this.listerEvent) this.listerEvent.brins = { [result.id]: result }
   }

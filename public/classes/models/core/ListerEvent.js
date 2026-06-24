@@ -6,8 +6,7 @@ export default class ListerEvent extends Lister {
   static CHILD_CLASS = ListerEvent
   static TYPE        = 'events'
 
-  async load() {
-    await super.load()
+  async _afterLoad() {
     const pid = this.project_id
     if (!pid) return
     const q = `?project_id=${pid}`

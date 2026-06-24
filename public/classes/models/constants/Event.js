@@ -1,5 +1,10 @@
 // Constantes Event
 
+export const EVENT_COLORS = [
+  '#a9c8d9', '#d9c8a9', '#c8d9a9', '#d9a9c8',
+  '#a9d9c8', '#c8a9d9', '#d9b0a9', '#d9d1a9'
+]
+
 export const EVENT_METEO = {
  ps: '☀️', //"ps" pour "plein soleil"
  vo: '🌤️', //"vo" pour "voilé"
