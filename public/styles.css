@@ -848,7 +848,7 @@ body#shell:has(#pane-2[data-split-active]) .pane-wrapper:has(iframe[data-focused
   color: #00a832;
 }
 
-.panel-badge {
+.panel-mark {
   display: inline-flex;
   align-items: center;
   justify-content: center;

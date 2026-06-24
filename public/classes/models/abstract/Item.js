@@ -108,5 +108,5 @@ export default class Item extends KeyDispatcher {
 
 }
 
-Object.assign(Item.prototype, ItemDom)
+Object.defineProperties(Item.prototype, Object.getOwnPropertyDescriptors(ItemDom))
 Object.assign(Item.prototype, ItemRepo)

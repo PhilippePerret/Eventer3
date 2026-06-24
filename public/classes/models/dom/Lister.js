@@ -14,6 +14,7 @@ export default {
       if (i === this.selectedIndex) el.classList.add('selected')
       container.appendChild(el)
     })
+    LOG.m(2, 'Lister.render done', { children: container.children.length, firstClass: container.children[0]?.className })
     this.focusSelected()
     return container
   },

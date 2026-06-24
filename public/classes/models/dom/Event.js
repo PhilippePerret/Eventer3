@@ -14,7 +14,7 @@ export default {
       const b = brins[id]
       if (!b) return ''
       const style = b.color ? ` style="background:${b.color}"` : ''
-      return `<span class="panel-badge"${style}>${b.badge ?? '?'}</span>`
+      return `<span class="panel-mark"${style}>${b.badge ?? '?'}</span>`
     }).join('')
   }
 }

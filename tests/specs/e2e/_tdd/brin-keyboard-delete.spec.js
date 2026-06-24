@@ -41,12 +41,12 @@ test.describe('Delete dans le panneau des brins', () => {
     await openBrinPanel(page)
     // Vérifier que le badge AUT est présent dans la ligne de e1 (event sélectionné)
     const eventRow = pane1(page).locator('.event-item.selected')
-    await expect(eventRow.locator('.event-brins-badges .badge.brin')).toContainText('AUT')
+    await expect(eventRow.locator('.event-brins-marks .panel-mark')).toContainText('AUT')
     // Naviguer sur b2 (AUT) et le supprimer
     await pane1(page).locator('#main-panel').press('ArrowDown')
     await pane1(page).locator('#main-panel').press('Delete')
     // Le badge AUT doit avoir disparu de la ligne de e1
-    await expect(eventRow.locator('.event-brins-badges')).not.toContainText('AUT')
+    await expect(eventRow.locator('.event-brins-marks')).not.toContainText('AUT')
   })
 
   test('la suppression du brin est persistante : liste des brins du projet', async ({ page }) => {
@@ -73,7 +73,7 @@ test.describe('Delete dans le panneau des brins', () => {
     await goToListerEvent(page)
     // Le badge AUT ne doit pas apparaître dans e1 même après rechargement
     const eventRow = pane1(page).locator('.event-item.selected')
-    await expect(eventRow.locator('.event-brins-badges')).not.toContainText('AUT')
+    await expect(eventRow.locator('.event-brins-marks')).not.toContainText('AUT')
   })
 
 })

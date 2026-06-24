@@ -1,5 +1,6 @@
 import Lister from '../abstract/Lister.js'
 import Brin from './Brin.js'
+import LOG from '../../../system/LOG.js'
 
 export default class ListerBrin extends Lister {
 
@@ -8,6 +9,8 @@ export default class ListerBrin extends Lister {
   constructor(data = {}) {
     super(data)
     this.listerEvent = data.listerEvent ?? null
+    this.project_id  = this.listerEvent?.project_id ?? null
+    this.id = this.project_id ? this.project_id + '-brins' : null
   }
 
   get selectedEvent() {
@@ -15,12 +18,24 @@ export default class ListerBrin extends Lister {
     return le?.items[le.selectedIndex] ?? null
   }
 
-  load() {
+  async load() {
     const brinsData = this.listerEvent?.brins ?? {}
     this.items = Object.entries(brinsData).map(([id, d]) => new Brin({ ...d, id }))
     this.item_ids = this.items.map(b => b.id)
+    if (this.items.length === 0) await this._initDefaultBrin()
     if (this.selectedIndex < 0 && this.items.length) this.selectedIndex = 0
     this._syncChecked()
+  }
+
+  async _initDefaultBrin() {
+    const result = await this.createItem({ title: 'Intrigue principale', badge: 'IP' })
+    LOG.m(1, 'ListerBrin._initDefaultBrin', { id: result?.id, title: result?.title, badge: result?.badge })
+    if (!result?.id) return
+    this.item_ids = [result.id]
+    await this.save()
+    const brin = new Brin({ ...result, id: result.id })
+    this.items = [brin]
+    if (this.listerEvent) this.listerEvent.brins = { [result.id]: result }
   }
 
   _syncChecked() {
@@ -52,6 +67,25 @@ export default class ListerBrin extends Lister {
     nextItem?.el?.classList.add('selected')
   }
 
+  async deleteSelected() {
+    const brin = this.items[this.selectedIndex]
+    const ev   = this.selectedEvent
+    await super.deleteSelected()
+    if (!brin || !ev) return
+    ev.brin_ids = (ev.brin_ids ?? []).filter(id => id !== brin.id)
+    this._refreshEventMarks(ev)
+    ev.save()
+  }
+
+  async deleteItem(item) {
+    const query = this.project_id ? `?project_id=${this.project_id}` : ''
+    const url = `/api/listers/${this.id}/items/${item.id}${query}`
+    LOG.m(1, 'ListerBrin.deleteItem', { url, id: this.id, project_id: this.project_id, itemId: item.id })
+    const resp = await fetch(url, { method: 'DELETE', cache: 'no-store' })
+    LOG.m(1, 'ListerBrin.deleteItem response', { ok: resp.ok, status: resp.status })
+    return resp.ok
+  }
+
   toggleChecked() {
     const brin = this.items[this.selectedIndex]
     const ev = this.selectedEvent
@@ -74,7 +108,7 @@ export default class ListerBrin extends Lister {
       const b = brins[id]
       if (!b) return ''
       const style = b.color ? ` style="background:${b.color}"` : ''
-      return `<span class="panel-badge"${style}>${b.badge ?? '?'}</span>`
+      return `<span class="panel-mark"${style}>${b.badge ?? '?'}</span>`
     }).join('')
   }
 

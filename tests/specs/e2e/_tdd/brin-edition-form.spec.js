@@ -15,12 +15,12 @@ async function openBrinPanel(page) {
   await expect(pane1(page).locator('#brin-panel')).toBeVisible()
 }
 
-test("en édition, le brin conserve ses classes panel-row et brin-row", async ({ page }) => {
+test("en édition, le brin conserve sa classe brin-item", async ({ page }) => {
   await openBrinPanel(page)
   await pane1(page).locator('#main-panel').press('Enter')
   const editingBrin = pane1(page).locator('.brin-item.selected')
-  await expect(editingBrin).toHaveClass(/panel-row/)
-  await expect(editingBrin).toHaveClass(/brin-row/)
+  await expect(editingBrin).toHaveClass(/brin-item/)
+  await expect(editingBrin).toHaveClass(/editing/)
 })
 
 test("en édition, le badge reste visible et dans son conteneur d'origine", async ({ page }) => {
@@ -28,7 +28,7 @@ test("en édition, le badge reste visible et dans son conteneur d'origine", asyn
   await pane1(page).locator('#main-panel').press('Enter')
   const badgeInput = pane1(page).locator('.brin-item.selected [data-field="badge"]')
   await expect(badgeInput).toBeVisible()
-  await expect(badgeInput).toHaveValue('MON')
+  await expect(badgeInput).toHaveText('MON')
 })
 
 test("en édition, le titre reste dans le flux visuel du brin (pas de saut de ligne)", async ({ page }) => {

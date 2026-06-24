@@ -11,6 +11,7 @@ export default {
   openPersoPanel() { dom.openPersoPanel(this) },
 
   build() {
+    LOG.m(1, 'Item.build', this.constructor.name, this.id)
     const el = document.createElement('div')
     el.className = `${this.minClass}-item`
     el.dataset.id = this.id

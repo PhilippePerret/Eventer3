@@ -9,10 +9,10 @@ export default class BrinPanel {
     this._mainPanel      = null
   }
 
-  open(event, listerEvent) {
+  async open(event, listerEvent) {
     this._event       = event
     this._listerBrin  = new ListerBrin({ listerEvent })
-    this._listerBrin.load()
+    await this._listerBrin.load()
     this._listerBrin.render()
     this._mainPanel      = document.querySelector('#main-panel')
     this._captureHandler = e => this._handleKey(e)
@@ -49,6 +49,7 @@ export default class BrinPanel {
       case ' ':         stopEvent(e); lb.toggleChecked(); break
       case 'Enter':     stopEvent(e); selected?.startEditing(); break
       case 'n':         stopEvent(e); lb.createNew(); break
+      case 'Delete':    stopEvent(e); lb.deleteSelected(); break
     }
   }
 
