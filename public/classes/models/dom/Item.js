@@ -7,6 +7,9 @@ export default {
 
   get minClass() { return this.constructor.name.toLowerCase() },
 
+  openBrinPanel()  { dom.openBrinPanel(this) },
+  openPersoPanel() { dom.openPersoPanel(this) },
+
   build() {
     const el = document.createElement('div')
     el.className = `${this.minClass}-item`

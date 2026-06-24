@@ -1,5 +1,6 @@
 import ListerProject from './models/core/ListerProject.js'
 import LOG from '../system/LOG.js'
+import './models/dom/DomMethods.js'
 
 export default class App {
 
