@@ -16,6 +16,7 @@ Error: expect(locator).toHaveClass(expected) failed
 
 Locator: locator('#pane-1').contentFrame().locator('.project-item').first()
 Expected pattern: /selected/
+Timeout: 5000ms
 Error: element(s) not found
 
 Call log:
@@ -25,7 +26,7 @@ Call log:
 ```
 
 ```yaml
-- main
+- main: Projet A --- roman
 - contentinfo "Raccourcis clavier"
 - text: AIDE ⇧⌘ ?
 ```
