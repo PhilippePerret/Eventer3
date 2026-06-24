@@ -1,5 +1,5 @@
 
-export const BRIN_TYPES = {
+export const BRIN_TYPE = {
       mainint: 'intrigue principale'
     , lovint: 'intrigue amoureuse'
     , int: 'intrigue'

@@ -1,6 +1,6 @@
 import Item from '../abstract/Item.js'
 import { WORD_FORMS } from '../../../constants/constants.js'
-import { BRIN_TYPES } from '../constants/Brins.js'
+import { BRIN_TYPE } from '../constants/Brins.js'
 s
 
 export default class Brin extends Item {
