@@ -91,7 +91,15 @@ export default Event extends Item {
 }
 ~~~
 
+Donc, après ça : 
 
+~~~javascript
+event = new Event({...})
+                   
+event.save() // sauve l'item event
+~~~
+
+Les dossiers
 
 
 

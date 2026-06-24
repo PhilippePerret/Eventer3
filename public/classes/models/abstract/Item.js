@@ -1,5 +1,5 @@
-import ItemDom from './ItemDom.js'
-import ItemRepo from './ItemRepo.js'
+import ItemDom from '../dom/Item.js'
+import ItemRepo from '../repo/Item.js'
 import ItemListener from './ItemListener.js'
 import Lister from './Lister.js'
 import LOG from '../../../system/LOG.js'
@@ -23,9 +23,7 @@ export default class Item {
     this.editing = false
   }
 
-  get Dom()      { return this._dom   || (this._dom   = new ItemDom(this)) }
-  get Repo()     { return this._repo  || (this._repo  = new ItemRepo(this)) }
-  get Listener() { return this._listen|| (this._listen= new ItemListener(this)) }
+  get Listener() { return this._listen || (this._listen = new ItemListener(this)) }
 
   async enterChildren() {
     if (!this.parentLister) return
@@ -37,13 +35,13 @@ export default class Item {
       project_id,
       parentLister: this.parentLister,
     })
-    await child.Repo.load()
+    await child.load()
     if (child._missing) {
       const result   = await Lister.createLister({ type: `${child.minClass}s`, parent_item_id: this.id, project_id })
       child.id       = result.id
       child._missing = false
       await this.onChildListerCreated?.(child)
-      await child.Repo.load()
+      await child.load()
     }
     this.parentLister.Listener.detach()
     child.Dom.render()
@@ -64,13 +62,7 @@ export default class Item {
 
   onTab() {
     if (!this.editing) return false
-    this.Dom.focusNextField()
-  }
-
-  startEditing() {
-    LOG.m(1, 'Item.startEditing', { id: this.id })
-    this.editing = true
-    this.Dom.startEditing()
+    this.focusNextField()
   }
 
   _warnIfEmptyTitle() {
@@ -85,10 +77,10 @@ export default class Item {
   applyEdit() {
     LOG.m(1, 'Item.applyEdit', { id: this.id })
     try {
-      this.Dom.collectValues()
+      this.collectValues()
       LOG.m(1, 'Item.applyEdit — collectValues OK')
       if (this._warnIfEmptyTitle()) return
-      this.Repo.save()
+      this.save()
       this._stopEditing()
     } catch(e) {
       LOG.m(1, 'Item.applyEdit — ERREUR', e.message, e.stack)
@@ -102,15 +94,11 @@ export default class Item {
       this._warnIfEmptyTitle()
       return
     }
-    this.Dom.revertValues()
+    this.revertValues()
     this._stopEditing()
   }
 
-  _stopEditing() {
-    LOG.m(1, 'Item._stopEditing', { id: this.id })
-    this.editing = false
-    this.Dom.stopEditing()
-    LOG.m(1, 'Item._stopEditing DONE')
-  }
-
 }
+
+Object.assign(Item.prototype, ItemDom)
+Object.assign(Item.prototype, ItemRepo)

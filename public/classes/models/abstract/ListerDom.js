@@ -11,7 +11,7 @@ export default class ListerDom {
     this.container = container
     this.lister.items.forEach((item, i) => {
       item.parentLister = this.lister
-      const el = item.Dom.build()
+      const el = item.build()
       if (i === this.lister.selectedIndex) el.classList.add('selected')
       container.appendChild(el)
     })
@@ -21,17 +21,17 @@ export default class ListerDom {
 
   focusSelected() {
     const item = this.lister.items[this.lister.selectedIndex]
-    LOG.m(2, 'ListerDom.focusSelected', { selectedIndex: this.lister.selectedIndex, itemExists: !!item, elExists: !!item?.Dom.el })
-    item?.Dom.el?.focus()
+    LOG.m(2, 'ListerDom.focusSelected', { selectedIndex: this.lister.selectedIndex, itemExists: !!item, elExists: !!item?.el })
+    item?.el?.focus()
   }
 
   removeEl(item) {
-    item.Dom.el?.remove()
+    item.el?.remove()
   }
 
   applySelection(prevItem, nextItem) {
-    prevItem?.Dom.el?.classList.remove('selected')
-    nextItem?.Dom.el?.classList.add('selected')
-    nextItem?.Dom.el?.focus()
+    prevItem?.el?.classList.remove('selected')
+    nextItem?.el?.classList.add('selected')
+    nextItem?.el?.focus()
   }
 }

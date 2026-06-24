@@ -3,21 +3,20 @@ import LOG from '../../../system/LOG.js'
 
 const dom = new DOM()
 
-export default class ItemDom {
-  constructor(item) { this.item = item }
+export default {
 
-  get minClass() { return this.item.constructor.name.toLowerCase() }
+  get minClass() { return this.constructor.name.toLowerCase() },
 
   build() {
     const el = document.createElement('div')
     el.className = `${this.minClass}-item`
-    el.dataset.id = this.item.id
+    el.dataset.id = this.id
     el.setAttribute('tabindex', '-1')
     this._buildContent(el)
     this.el = el
-    this.item.Listener.attach(el)
+    this.Listener.attach(el)
     return el
-  }
+  },
 
   _buildContent(el) {
     const minClass = this.minClass
@@ -26,68 +25,72 @@ export default class ItemDom {
     gutter.className = `item-check-gutter ${minClass}-check-gutter`
     const checkEl = document.createElement('span')
     checkEl.className = `item-check ${minClass}-check`
-    checkEl.textContent = this.item.checked ? '✓' : ''
+    checkEl.textContent = this.checked ? '✓' : ''
     gutter.appendChild(checkEl)
     el.appendChild(gutter)
 
     const body = document.createElement('div')
-    body.className = `item-body ${minClass}-body${this.item.lister_id ? ' child-indicator' : ''}`
+    body.className = `item-body ${minClass}-body${this.lister_id ? ' child-indicator' : ''}`
     const groups = {}
-    for (const field of this.item.PROPS) {
+    for (const field of this.PROPS) {
       const w = field.warper
       if (!w || w === 'body') {
-        body.appendChild(dom.buildField(field, this.item))
+        body.appendChild(dom.buildField(field, this))
       } else {
         if (!groups[w]) {
           groups[w] = document.createElement('div')
           groups[w].className = `item-${w} ${minClass}-${w}`
           body.appendChild(groups[w])
         }
-        groups[w].appendChild(dom.buildField(field, this.item))
+        groups[w].appendChild(dom.buildField(field, this))
       }
     }
     el.appendChild(body)
-  }
+  },
 
   startEditing() {
-    for (const field of this.item.PROPS) field._curvalue = this.item[field.name]
+    LOG.m(1, 'Item.startEditing', { id: this.id })
+    this.editing = true
+    for (const field of this.PROPS) field._curvalue = this[field.name]
     this.el.classList.add('editing')
-    for (const field of this.item.PROPS) {
+    for (const field of this.PROPS) {
       const cls = field.cssClass ?? (field.warper ? `${this.minClass}-${field.name}` : `${this.minClass}-item__${field.name}`)
       const old = this.el.querySelector(`.${cls}`)
-      if (old) old.replaceWith(dom.buildEditField(field, this.item))
+      if (old) old.replaceWith(dom.buildEditField(field, this))
     }
     this.el.querySelector('[data-field="title"]')?.focus()
-  }
+  },
 
   revertValues() {
-    for (const field of this.item.PROPS) this.item[field.name] = field._curvalue
-  }
+    for (const field of this.PROPS) this[field.name] = field._curvalue
+  },
 
-  stopEditing() {
-    LOG.m(1, 'ItemDom.stopEditing START')
+  _stopEditing() {
+    LOG.m(1, 'Item._stopEditing', { id: this.id })
+    this.editing = false
     try {
       this.el.classList.remove('editing')
       this.el.innerHTML = ''
       this._buildContent(this.el)
       this.el.focus()
-      LOG.m(1, 'ItemDom.stopEditing DONE')
+      LOG.m(1, 'Item._stopEditing DONE')
     } catch(e) {
-      LOG.m(1, 'ItemDom.stopEditing ERREUR', e.message, e.stack)
+      LOG.m(1, 'Item._stopEditing ERREUR', e.message, e.stack)
     }
-  }
+  },
 
   collectValues() {
-    for (const field of this.item.PROPS) {
+    for (const field of this.PROPS) {
       if (field.type !== 'text') continue
       const el = this.el.querySelector(`[data-field="${field.name}"]`)
-      if (el) this.item[field.name] = el.textContent
+      if (el) this[field.name] = el.textContent
     }
-  }
+  },
 
   focusNextField() {
     const fields = [...this.el.querySelectorAll('[data-field]')]
     const idx = fields.indexOf(document.activeElement)
     fields[(idx + 1) % fields.length]?.focus()
-  }
+  },
+
 }
