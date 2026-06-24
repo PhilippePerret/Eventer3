@@ -1,4 +1,4 @@
-import BaseListener from './BaseListener.js'
+import KeyDispatcher from './KeyDispatcher.js'
 import ItemDom from '../dom/Item.js'
 import ItemRepo from '../repo/Item.js'
 import { ItemLi } from '../listen/Item.js'
@@ -7,7 +7,7 @@ import Lister from './Lister.js'
 import LOG from '../../../system/LOG.js'
 import Notification from '../../ui/Notification.js'
 
-export default class Item extends BaseListener {
+export default class Item extends KeyDispatcher {
 
   constructor(data = {}) {
     super()

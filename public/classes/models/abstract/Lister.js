@@ -1,11 +1,11 @@
-import BaseListener from './BaseListener.js'
+import KeyDispatcher from './KeyDispatcher.js'
 import ListerDom from '../dom/Lister.js'
 import ListerRepo from '../repo/Lister.js'
 import { ListerLi } from '../listen/Lister.js'
 import Notification from '../../ui/Notification.js'
 import ConfirmDialog from '../../ui/ConfirmDialog.js'
 
-export default class Lister extends BaseListener {
+export default class Lister extends KeyDispatcher {
 
   constructor(data = {}) {
     super()
