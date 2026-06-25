@@ -10,10 +10,18 @@
 > - Les tests existants, malgré les nombreuses migrations déjà effecutées, ne respectent peut-être pas nouvelle architecture — les corriger au besoin.
 > - **IMPÉRATIF** : si on rencontre le même échec **après trois essais de correction**, ON MET DES LOG(s) pour voir où ça coince.
 
-- **BrinPanel** (`#brins-panel`) — 32 tests verts, 1 régression (probablement déjà résolue par le fix d'import LOG du 2026-06-25, à confirmer), ~15 tests non passés.
-  - Régression : "nouveau brin : il est sélectionné juste après création" — `startEditing()` ne mettait pas le brin en mode édition visible après `_reloadAt`. Cause trouvée le 2026-06-25 : import `LOG` manquant dans `abstract/Lister.js` (même fonction `_createAt` que pour les events).
-  - Tests non passés : à investiguer après confirmation de la régression résolue.
-  - Fichiers à remettre dans `e2e/_tdd/` pour reprendre (origines canoniques) :
+- **Corriger tous les tests visant `#main-panel`** : `#main-panel` n'existe plus (supprimé d'`app-frame.html`, orphelin depuis le passage à `PANEL_ID` par classe — `projects-panel` pour `ListerProject`, `events-panel` pour `ListerEvent`). Des dizaines de tests font encore `locator('#main-panel')` — à corriger vers `#projects-panel` ou `#events-panel` selon le contexte.
+
+- **Éliminer BrinPanel / PersoPanel** — remplacer par système générique KeyDispatcher/LISTENERS
+  - **Principe fondamental** : tous les Listers (Project, Event, Brin, Perso) ont STRICTEMENT le MÊME fonctionnement — ne diffèrent que par l'aspect (CSS) et quelques comportements spécifiques
+  - Refonte terminée (`dom/Lister.js` : render idempotent, `_ensurePanelStructure`, `this.attach(this.container)`)
+  - **Suite** : 
+    1. Rapatrier `ListerBrin.LISTENERS` + keyboard logic du `ui/BrinPanel.js` vers `core/ListerBrin.js`
+    2. Rapatrier `ListerPerso.LISTENERS` vers `core/ListerPerso.js` (même pattern)
+    3. Supprimer `ui/BrinPanel.js` et `ui/PersoPanel.js` entièrement
+    4. Mettre à jour `models/dom/DomMethods.js` : `openBrinPanel(item)` → `item.parentLister.enterInside()` / `openPersoPanel(item)` → `item.parentLister.enterInside()`
+  - Tests en `_tdd/` : 1 régression confirmée résolue (LOG import fix 2026-06-25), reste ~15 tests non passés
+  - Fichiers à tester après refonte :
     - `tests/specs/e2e/event/brin-badges-display.spec.js`
     - `tests/specs/e2e/brin/brin-edition-form.spec.js`
     - `tests/specs/e2e/brin/brin-init.spec.js`

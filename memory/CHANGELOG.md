@@ -1,5 +1,23 @@
 # CHANGELOG — Eventer3
 
+## 2026-06-25 (suite 2)
+
+### Refonte render() — idempotence et unification Lister
+
+**`public/classes/models/dom/Lister.js`**
+- Ajout `_ensurePanelStructure(container)` : crée `.lister-panel > header/body/footer` une seule fois via `querySelector`, jamais redétruit
+- `render()` refactorisé :
+  - `this.container = this._ensureContainer()` (le conteneur principal, reçoit l'écoute clavier)
+  - Appel `_ensurePanelStructure(this.container)` pour trouver/créer la structure stable
+  - Vidage UNIQUEMENT de `.lister-panel__body` (pas du conteneur entier)
+  - Ajout `this.attach(this.container)` pour enregistrer le listener KeyDispatcher
+  - Suppression `return this.container` (propriété d'instance suffit)
+- Clarification : `this.container` = l'élément racine qui reçoit clavier (pas une "panel" physique pour Events, mais logiquement le panneau)
+
+**`public/classes/ui/BrinPanel.js`**
+- Changement : listener keydown attaché à `this._listerBrin.container` au lieu de `document.getElementById(listerEvent.constructor.PANEL_ID)` — corrige le problème où BrinPanel écoutait `#events-panel` (frère) au lieu de `#brins-panel` (le vrai conteneur)
+- **À faire (suite 3)** : Cette classe UI séparate devient inutile — tous les Listers (Project, Event, Brin, Perso) doivent fonctionner identiquement via le système KeyDispatcher/LISTENERS. BrinPanel et PersoPanel à fusionner dans `ListerBrin`/`ListerPerso` directement.
+
 ## 2026-06-25
 
 ### Refonte enterInside / découplage Project / pools brins-persos

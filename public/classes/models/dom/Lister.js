@@ -16,15 +16,12 @@ export default {
     return el
   },
 
-  render() {
-    LOG.m(2, 'Lister.render', { items: this.items.length, selectedIndex: this.selectedIndex })
-    const container = this._ensureContainer()
-    container.innerHTML = ''
+  _ensurePanelStructure(container) {
+    let panel = container.querySelector(':scope > .lister-panel')
+    if (panel) return panel
 
-    const panel = document.createElement('div')
+    panel = document.createElement('div')
     panel.className = 'lister-panel'
-    if (this.minClass) panel.classList.add(`${this.minClass}-list`)
-    container.appendChild(panel)
 
     const header = document.createElement('div')
     header.className = 'lister-panel__header'
@@ -41,14 +38,25 @@ export default {
     footer.className = 'lister-panel__footer'
     panel.appendChild(footer)
 
-    this.container = body
+    container.appendChild(panel)
+    return panel
+  },
+
+  render() {
+    LOG.m(2, 'Lister.render', { items: this.items.length, selectedIndex: this.selectedIndex })
+    this.container = this._ensureContainer()
+    this.container.classList.remove('hidden')
+    const panel = this._ensurePanelStructure(this.container)
+    const body  = panel.querySelector('.lister-panel__body')
+
+    body.innerHTML = ''
     this.items.forEach(item => {
       item.parentLister = this
       body.appendChild(item.build())
     })
+    this.attach(this.container)
     LOG.m(2, 'Lister.render done', { children: body.children.length, firstClass: body.children[0]?.className })
     this.focusSelected()
-    return container
   },
 
   focusSelected() {

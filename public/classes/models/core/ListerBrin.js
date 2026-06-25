@@ -52,30 +52,6 @@ export default class ListerBrin extends Lister {
     this.items.forEach(b => { b.checked = brinIds.includes(b.id) })
   }
 
-  render() {
-    const panel = document.querySelector('#brins-panel')
-    panel.innerHTML = ''
-    panel.classList.remove('hidden')
-    this.container = panel
-    this.items.forEach((item, i) => {
-      item.parentLister = this
-      const el = item.build()
-      if (i === this.selectedIndex) el.classList.add('selected')
-      if (item.checked) el.classList.add('checked')
-      panel.appendChild(el)
-    })
-  }
-
-  focusSelected() {
-    const items = this.container?.querySelectorAll('.brin-item')
-    items?.forEach((el, i) => el.classList.toggle('selected', i === this.selectedIndex))
-  }
-
-  applySelection(prevItem, nextItem) {
-    prevItem?.el?.classList.remove('selected')
-    nextItem?.el?.classList.add('selected')
-  }
-
   async deleteSelected() {
     const brin = this.items[this.selectedIndex]
     const ev   = this.selectedEvent

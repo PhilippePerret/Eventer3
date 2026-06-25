@@ -14,7 +14,7 @@ export default class BrinPanel {
     this._listerBrin  = new ListerBrin({ listerEvent })
     await this._listerBrin.load()
     this._listerBrin.render()
-    this._mainPanel      = document.querySelector('#main-panel')
+    this._mainPanel      = this._listerBrin.container
     this._captureHandler = e => this._handleKey(e)
     this._mainPanel.addEventListener('keydown', this._captureHandler, { capture: true })
   }
