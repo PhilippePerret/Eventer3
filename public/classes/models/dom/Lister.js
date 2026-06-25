@@ -1,20 +1,52 @@
 import LOG from '../../../system/LOG.js'
+import { raise } from '../../../system/Error.js'
+import { ERRORS } from '../../../system/Locales.js'
 
 export default {
 
+  _ensureContainer() {
+    const id = this.constructor.PANEL_ID || raise(ERRORS[50], this.constructor.name)
+    let el = document.getElementById(id)
+    if (!el) {
+      el = document.createElement('div')
+      el.id = id
+      el.classList.add('hidden')
+      document.querySelector('#main-panels-container').appendChild(el)
+    }
+    return el
+  },
+
   render() {
     LOG.m(2, 'Lister.render', { items: this.items.length, selectedIndex: this.selectedIndex })
-    const container = document.querySelector('#main-panel')
+    const container = this._ensureContainer()
     container.innerHTML = ''
-    if (this.minClass) container.className = `${this.minClass}-list`
-    this.container = container
-    this.items.forEach((item, i) => {
+
+    const panel = document.createElement('div')
+    panel.className = 'lister-panel'
+    if (this.minClass) panel.classList.add(`${this.minClass}-list`)
+    container.appendChild(panel)
+
+    const header = document.createElement('div')
+    header.className = 'lister-panel__header'
+    const title = document.createElement('div')
+    title.className = 'panel__title'
+    header.appendChild(title)
+    panel.appendChild(header)
+
+    const body = document.createElement('div')
+    body.className = 'lister-panel__body'
+    panel.appendChild(body)
+
+    const footer = document.createElement('div')
+    footer.className = 'lister-panel__footer'
+    panel.appendChild(footer)
+
+    this.container = body
+    this.items.forEach(item => {
       item.parentLister = this
-      const el = item.build()
-      if (i === this.selectedIndex) el.classList.add('selected')
-      container.appendChild(el)
+      body.appendChild(item.build())
     })
-    LOG.m(2, 'Lister.render done', { children: container.children.length, firstClass: container.children[0]?.className })
+    LOG.m(2, 'Lister.render done', { children: body.children.length, firstClass: body.children[0]?.className })
     this.focusSelected()
     return container
   },

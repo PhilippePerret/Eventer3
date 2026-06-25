@@ -132,6 +132,16 @@ Toute donnée est soit un `Item`, soit un `Lister`. Les sous-classes (`Event`, `
 
 ---
 
+## Volatilité des données — quand un Lister doit re-render
+
+Naviguer (entrer/sortir d'une vue) ne déclenche PAS forcément un nouveau rendu — ça dépend de la volatilité réelle de la donnée (on ne considère pas ici une modification de la DB pendant l'exécution, hors scope) :
+
+- **Liste des projets** — FIXE. Ne change que par création/suppression DANS l'app (sync cache+persistance immédiate à ce moment-là). `render()` ne tourne qu'au démarrage et lors d'une vraie modification de la liste — jamais en simple retour de navigation.
+- **Liste des brins / des personnages d'un projet** — FIXE pour toute la durée de vie du projet ouvert. Chargée UNE FOIS à l'entrée du projet (`Project.enterInside()`, pools `ListerBrin.pool`/`ListerPerso.pool`). Le rendu (construction DOM) n'a lieu QU'UNE FOIS aussi : changer d'event ne reconstruit jamais cette liste, ça met seulement à jour la relation "coché pour CET event" sur des éléments déjà construits.
+- **Liste des events** — seule donnée VRAIMENT volatile (créée/détruite/réordonnée souvent, à tous les niveaux d'imbrication). Volontairement gardée SIMPLE : `render()` détruit et reconstruit tout à chaque appel, UNE SEULE `ListerEvent` active à la fois. Pas de mise à jour incrémentale ici — complexité jugée non rentable, décision actée.
+
+---
+
 ## Structure des classes de base
 
 Chaque côté (Item / Lister) est composé de 4 couches distinctes :

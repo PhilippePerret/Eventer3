@@ -60,3 +60,4 @@
 - **[Numéroter les paragraphes](feedback/numeroter_paragraphes.md)** — réponses à plusieurs points : numéroter pour qu'on puisse répondre par numéro
 - **[CRITIQUE: pas de défense "code antérieur"](feedback/pas_de_defense_code_anterieur.md)** — jamais invoquer "c'était déjà là avant moi" pour différer une correction ; traiter le problème, peu importe l'origine
 - **[Pas d'autorité de décision](feedback/pas_affirmer_autorite_decision.md)** — jamais "je maintiens X" / défendre un choix comme perso ; présenter faits/options, j'exécute ce qui est demandé
+- **[Pas de cadrage temporel](feedback/pas_de_cadrage_temporel.md)** — jamais "ce soir"/"aujourd'hui" pour qualifier un défaut ; les corrections sont permanentes, à chaque session

@@ -16,6 +16,8 @@ export default {
     el.className = `${this.minClass}-item`
     el.dataset.id = this.id
     el.setAttribute('tabindex', '-1')
+    if (this === this.parentLister?.items[this.parentLister?.selectedIndex]) el.classList.add('selected')
+    if (this.checked) el.classList.add('checked')
     this._buildContent(el)
     this.el = el
     this.attach(el)
