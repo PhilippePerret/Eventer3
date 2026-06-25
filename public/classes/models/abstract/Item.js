@@ -35,21 +35,22 @@ export default class Item extends KeyDispatcher {
 
   static LISTENERS = { ...ItemLi }
 
-  async enterChildren() {
+  async enterInside() {
     if (!this.parentLister) return
     const ChildClass = this.parentLister.constructor.CHILD_CLASS
     if (!ChildClass) return
-    const project_id = this.project_id ?? this.parentLister?.project_id ?? this.id
-    const child = new ChildClass({
-      id:           this.lister_id ?? this.id,
-      project_id,
-      parentLister: this.parentLister,
-    })
-    await child.load()
-    if (child._missing) {
-      const result   = await Lister.createLister({ type: `${child.minClass}s`, parent_item_id: this.id, project_id })
+    await this._enterChildLister(ChildClass, this.lister_id, this.project_id)
+  }
+
+  /* Partagé avec Project (qui possède son propre enterInside) */
+  async _enterChildLister(ChildClass, childId, projectId) {
+    const child = new ChildClass({ id: childId, project_id: projectId, parentLister: this.parentLister })
+    if (childId) await child.load()
+    if (!childId || child._missing) {
+      const result   = await Lister.createLister({ type: `${child.minClass}s`, itemId: this.id, project_id: projectId })
       child.id       = result.id
       child._missing = false
+      this.lister_id = result.id
       await this.onChildListerCreated?.(child)
       await child.load()
     }

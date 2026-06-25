@@ -5,11 +5,12 @@ import LOG from '../../../system/LOG.js'
 export default class ListerBrin extends Lister {
 
   static ITEM_CLASS = Brin
+  static pool = {}
 
   constructor(data = {}) {
     super(data)
     this.listerEvent = data.listerEvent ?? null
-    this.project_id  = this.listerEvent?.project_id ?? null
+    this.project_id  = data.project_id ?? this.listerEvent?.project_id ?? null
     this.id = this.project_id ? this.project_id + '-brins' : null
   }
 
@@ -18,9 +19,20 @@ export default class ListerBrin extends Lister {
     return le?.items[le.selectedIndex] ?? null
   }
 
-  async _fetchData()   { return this.listerEvent?.brins ?? {} }
-  _afterCreate(result) { if (this.listerEvent) this.listerEvent.brins[result.id] = result }
-  async _afterLoad()   { this._syncChecked() }
+  async _fetchData() {
+    if (this.listerEvent) return this.listerEvent.brins ?? {}
+    return await super._fetchData()
+  }
+
+  _afterCreate(result) {
+    if (this.listerEvent) this.listerEvent.brins[result.id] = result
+    ListerBrin.pool[result.id] = result
+  }
+
+  async _afterLoad() {
+    ListerBrin.pool = Object.fromEntries(this.items.map(b => [b.id, b]))
+    this._syncChecked()
+  }
   async _initDefault() { await this._initDefaultBrin() }
 
   async _initDefaultBrin() {

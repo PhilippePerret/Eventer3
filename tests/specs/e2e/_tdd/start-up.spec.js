@@ -1,3 +1,4 @@
+// Origine : tests/specs/e2e/bootstrap/start-up.spec.js
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { test, expect, pane1 } from '../__setup__.js'

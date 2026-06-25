@@ -6,20 +6,23 @@
 
 > **[LIRE TOUJOURS AVANT TOUT TRAVAIL SUR LES TESTS]**
 > - Déplacer les tests dans `e2e/_tdd/` avant de travailler dessus
-> - S'inspirer de `public-old` pour le fonctionnement anciennement implémenté (ne pas hésiter à reprendre du code, si valide, surtout s’il ne concerne pas la gestion des keyboard events, radicalement différente dans la nouvelle architecture).
+> - S’inspirer de `public-old` pour le fonctionnement anciennement implémenté (ne pas hésiter à reprendre du code, si valide, surtout s’il ne concerne pas la gestion des keyboard events, radicalement différente dans la nouvelle architecture).
 > - Les tests existants, malgré les nombreuses migrations déjà effecutées, ne respectent peut-être pas nouvelle architecture — les corriger au besoin.
 > - **IMPÉRATIF** : si on rencontre le même échec **après trois essais de correction**, ON MET DES LOG(s) pour voir où ça coince.
 
-- **BrinPanel** (`#brin-panel`) — 3/22 tests verts (`brin-marks-display` ✓). 19 échecs restants : tous bloqués sur `b` qui n’ouvre pas `#brin-panel`.
-
-  **Architecture décidée (pas encore codée) :**
-  - `EventItemListener extends ItemListener` avec LISTENERS mergés : `{ ...ItemListener.LISTENERS, b: { nokey: ‘openBrinPanel’ }, p: { nokey: ‘openPersoPanel’ } }`
-  - `Event` override `get Listener()` → `EventItemListener`
-  - `openBrinPanel()` dans `dom/Event.js` (injecté via `Object.assign`)
-  - `BrinLister extends Lister` (core/BrinLister.js)
-  - `BrinPanel extends KeyboardablePanel` (ui/BrinPanel.js) — wraps BrinLister, rendu dans `#brin-panel`
-
-  
+- **BrinPanel** (`#brin-panel`) — 32 tests verts, 1 régression (probablement déjà résolue par le fix d'import LOG du 2026-06-25, à confirmer), ~15 tests non passés.
+  - Régression : "nouveau brin : il est sélectionné juste après création" — `startEditing()` ne mettait pas le brin en mode édition visible après `_reloadAt`. Cause trouvée le 2026-06-25 : import `LOG` manquant dans `abstract/Lister.js` (même fonction `_createAt` que pour les events).
+  - Tests non passés : à investiguer après confirmation de la régression résolue.
+  - Fichiers à remettre dans `e2e/_tdd/` pour reprendre (origines canoniques) :
+    - `tests/specs/e2e/event/brin-badges-display.spec.js`
+    - `tests/specs/e2e/brin/brin-edition-form.spec.js`
+    - `tests/specs/e2e/brin/brin-init.spec.js`
+    - `tests/specs/e2e/brin/keyboard-delete.spec.js`
+    - `tests/specs/e2e/brin/brin-nouveau.spec.js`
+    - `tests/specs/e2e/brin/brin-panel.spec.js`
+    - `tests/specs/e2e/brin/brin-persistence.spec.js`
+    - `tests/specs/e2e/brin/brins-selection.spec.js`
+    - `tests/specs/e2e/keyboard/keyboard-alt-n.spec.js`
 
 <a name="todo-after"></a>
 
@@ -42,6 +45,7 @@
 
 ## Fait
 
+- [x] 2026-06-25 — `enterChildren` renommé `enterInside`, `Project` découplé (charge ListerBrin/ListerPerso/ListerEvent via son propre `lister_id`), pools `ListerBrin.pool`/`ListerPerso.pool`, fix import LOG manquant dans `abstract/Lister.js`
 - [x] 2026-06-23 — `_tdd/` : 21 tests verts (keyboard-alt-n, keyboard-cmd-n, new-event, new-event-titre-vide, new-event-virtual-lister, open-existing-project, project-navigation-lister)
 - [x] 2026-06-23 — `createNewBefore()` / `_createAt()` + ListerListener ˜/alt+n + ItemListener guard édition
 - [x] 2026-06-23 — Navigation projets → events → sous-events → retour (`keyboard/navigation-basique.spec.js` vert)

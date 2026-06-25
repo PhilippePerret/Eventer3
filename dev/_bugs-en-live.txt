@@ -2,15 +2,12 @@
 BUG
 ⇧ + ⇥ devrait faire passer les propriétés dans le cycle inverse
 
-BUG (testé dans un autre module test concernant les projets, je crois)
-Annuler l'ouverture d'un dossier qui a déjà un eventer.db ne remet pas le focus au projet qui l'avait avant de commencer.
 
 
 
+Ci-dessous, quand j'écris CMD?, c'est que je fais "Cmd+Maj+," pour faire apparaitre l'aide contextuelle,
 
-Ci-dessous, quand j'écris CMD?, c'est que je fais Cmd+Maj+ pour faire apparaitre l'aide contextuelle,
-
-- Je suis sur le filepicker après "n" sur liste projet
+- Je suis sur le Filepicker après "n" sur liste projet
 - CMD?,
 BUG Ça devrait m'afficher l'aide du contexte "filepicker-folder-mode", ça m'affiche l'aide du contexte "liste des projets"
 - Je choisis un dossier

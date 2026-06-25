@@ -53,3 +53,10 @@
 - [Dire "J'ai terminé"](feedback/fin_de_tache.md) — Toujours terminer par "J'ai terminé." quand une tâche est finie.
 - **[Descendants Project vs Event](architecture_descendants_project_vs_event.md)** — CRITIQUE: Project → `project_meta.lister_id` ; Event → `event_props.lister_id`
 - **[FONDAMENTAL: seule diff nouvelle archi](feedback/nouvelle_archi_difference.md)** — CRITIQUE: seule diff = focus/keyboard ; tout le reste (backend, logique) se reprend de `public-old` tel quel
+- **[CRITIQUE: pas de bug, implémentation à faire](feedback/pas_de_bug_mais_implementation.md)** — reconstruction volontaire depuis +700 tests ; test rouge = manque à câbler, jamais "bug"/"régression" sauf preuve de casse
+- **[CRITIQUE: exploiter, pas inventer](feedback/exploiter_pas_inventer.md)** — rien à ajouter (constantes/algos/structures déjà là, schéma DB) ; jamais de noms/mécanismes parallèles inventés, réutiliser les noms réels existants
+- **[CRITIQUE: cssClass interdit dans PROPS](feedback/cssclass_interdit.md)** — classe CSS = minClass + :name + :warper UNIQUEMENT, jamais d'override cssClass ; commentaire posé au-dessus de chaque PROPS (Event/Brin/Perso/Project)
+- **[CRITIQUE: méthodes DOM custom possèdent leur classe](feedback/dom_methods_proprietaires_de_leur_classe.md)** — champ PROPS `value:methodName` (ex. brinsMarks/persosMarks) retourne SON conteneur avec classe générique + `${minClass}-xxx`, découplé du :name (qui reste la vraie propriété)
+- **[Numéroter les paragraphes](feedback/numeroter_paragraphes.md)** — réponses à plusieurs points : numéroter pour qu'on puisse répondre par numéro
+- **[CRITIQUE: pas de défense "code antérieur"](feedback/pas_de_defense_code_anterieur.md)** — jamais invoquer "c'était déjà là avant moi" pour différer une correction ; traiter le problème, peu importe l'origine
+- **[Pas d'autorité de décision](feedback/pas_affirmer_autorite_decision.md)** — jamais "je maintiens X" / défendre un choix comme perso ; présenter faits/options, j'exécute ce qui est demandé

@@ -5,9 +5,7 @@ import './models/dom/DomMethods.js'
 export default class App {
 
   async start() {
-    // LOG.on(4)
-    // LOG.on(1)
-    LOG.on(2)
+    // LOG.on(4) // POUR METTRE EN ROUTE LES TESTS (NE PAS DUPLIQUER CETTE LIGNE !!!!)
 
     LOG.m(1, 'Start application')
 

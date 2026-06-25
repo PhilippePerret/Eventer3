@@ -16,3 +16,60 @@ Voir par exemple la gestion de "←" et "→" :
 
 BACKEND/API/DB
 AUCUN CHANGEMENT N'EST À APPORTER AU NIVEAU BACKEND POUR LA NOUVELLE ARCHITECTURE. TOUTES LES ROUTES EXISTENT ET SONT TRAITÉES, EN TOUT CAS CELLE IMPLÉMENTÉES DANS L'ANCIENNE ARCHITECTUE
+
+LES RESPONSABILITÉS BIEN DISPATCHÉES
+
+Placer les modules aux bons endroits est capital. D'autant que dans la nouvelle architecture, toutes les fonctions sont rassemblées dans la même classe.
+⛔️ Claude met persosMarks dans dom/Event.js parce que c'est l'Event qui a besoin des marques de personnages
+⛔️ Forcément, ensuite, il va dupliquer le code dans dom/Brin.js qui a lui aussi besoin des personnages
+
+
+SYNOPSIS GÉNÉRAL
+================
+L'application, en tout premier lieu, dans une toute première utilisation, charge la liste des projets, un seul, modèle, pour le moment.
+Ensuite, sans changement des préférences, elle charge toujours la :
+  --> LISTE DES PROJETS
+  
+  L'utilisateur, grâce aux "↑" et "↓", choisit un projet et "entre dedans" en jouant "→".
+  L'application charge le projet, c'est-à-dire :
+  --> charge les options (pour les appliquer)
+  --> charge le premier évènemencier (ListerEvent)
+  --> charge tous les brins (=> ListerBrin UNIQUE pour le projet)
+  --> charge tous les personnages (=> ListerPerso UNIQUE pour le projet)
+  --> affiche le premier évènemencier (niveau 1)
+  
+  
+  ++++++++++++++++++++++++++++++++++++++
+  +++ GESTIONNAIRE DE KEYBOARD EVENT +++
+  ++++++++++++++++++++++++++++++++++++++
+  
+  Fonctionnement traditionnel (banni pour cette app) :
+  
+  onkeydown(event) {
+    switch(event.key) {
+      case 'a':
+        ... etc.
+      case 'b':
+        ... etc.
+    }
+  }
+  
+  Fonctionnement optimisé pour cette app : 
+  
+  HANDLED_KEYS = {
+    'b' : {nokey: "fonctionPure", 'alt': 'fonctionAvecAlt'}
+  }
+  NOT_STOPPED_KEYS = {b: true}
+  
+  onkeydown(event){
+    var hk
+    const key = event.key
+    if (! (hk = HANDLED_KEYS[key]) ) return ;
+    if (! NOT_STOPPED_KEYS[key]) stopEvent(event)
+    
+    if (event.altKey && hk['alt']) { // toutes les conditions seront testées dans KeyDispatcher
+      this[hk.alt]()
+    } else {
+      this[hk.nokey]()
+    }
+  }

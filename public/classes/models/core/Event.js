@@ -17,14 +17,15 @@ export default class Event extends Item {
     this.perso_ids = data.perso_ids ?? []
   }
 
+  // INTERDICTION FORMELLE D'AJOUTER UNE PROPRIÉTÉ cssClass OU CONSORT !!! TOUTES LES PROPRIÉTÉS CSS DÉCOULENT NATURELLEMENT DE LA CLASSE MINUSCULE, DU :name ET DU :warper. CES TROIS VALEURS SUFFISENT AMPLEMENT POUR DÉSIGNER PRÉCISÉMENT L'ÉLÉMENT.
   get PROPS() {
     return this._props || (this._props = [
         { name: 'title'         , type: 'text'    , warper: 'body'}
       , { name: 'state'         , type: 'select'  , warper: 'edits', values: EVENT_STATE }
       , { name: 'meteo'         , type: 'select'  , warper: 'edits', values: EVENT_METEO, onchange: 'setEffetPerMeteo', onchoose: 'checkCompatibiliteMeteoEffet' }
       , { name: 'effet'         , type: 'select'  , warper: 'edits', values: EVENT_EFFET, onchange: 'setMeteoPerEffet', onchoose: 'checkCompatibiliteMeteoEffet' }
-      , { name: 'brins-marks'   , type: 'no-edit' , warper: 'marks', value: 'brinsMarks' }
-      , { name: 'persos-marks'  , type: 'no-edit' , warper: 'marks', value: 'persosMarks' }
+      , { name: 'brin_ids'      , type: 'no-edit' , warper: 'marks', value: 'brinsMarks' }
+      , { name: 'perso_ids'     , type: 'no-edit' , warper: 'marks', value: 'persosMarks' }
     ])
   }
 }

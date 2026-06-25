@@ -1,5 +1,49 @@
 # CHANGELOG — Eventer3
 
+## 2026-06-25
+
+### Refonte enterInside / découplage Project / pools brins-persos
+
+**`public/classes/models/abstract/Item.js`**
+- `enterChildren()` → `enterInside()`, simplifié (`project_id` lu directement, plus de repli `?? this.id`)
+- Extraction `_enterChildLister(ChildClass, childId, project_id)` — logique partagée création/chargement/rendu d'un lister, réutilisable par `Project` sans passer par `enterInside`
+
+**`public/classes/models/listen/Item.js`**
+- `ArrowRight: { nokey: 'enterChildren' }` → `'enterInside'`
+
+**`public/classes/models/core/Project.js`**
+- `enterInside()` dédié (jamais de `super.enterInside()`) : charge `ListerBrin`/`ListerPerso` (project_id explicite) puis son `ListerEvent` via `this.lister_id` (entier réel, plus jamais `this.id`)
+- `onCreated()` : `parent_item_id` → `itemId` dans l'appel à `Lister.createLister`
+
+**`public/classes/models/core/ListerBrin.js`** / **`ListerPerso.js`**
+- `static pool = {}`, peuplé dans `_afterLoad()`
+- `ListerBrin` : constructeur accepte `project_id` direct (plus seulement via `listerEvent`), `_fetchData()` retombe sur le fetch générique si pas de `listerEvent`
+
+**`public/classes/models/dom/Event.js`** / **`dom/Brin.js`**
+- `brinsMarks()`/`persosMarks()` retournent leur propre conteneur (`class="brins-marks ${minClass}-brins-marks"`), découplé du `:name` du champ PROPS
+- Délégation du calcul de la marque à `Brin.markOf`/`Perso.markOf`
+
+**`public/classes/models/core/Brin.js`** / **`Perso.js`**
+- `Brin` : `this.persos` → `this.perso_ids` (cohérent avec PROPS), `static markOf(data) { return data.badge }`
+- `Perso` : `this.avatar`, `this.badge`, `static markOf(data) { return data.avatar || data.badge }`
+
+**`lib/db/repo.rb`**
+- `_fetch_project_items` + boucle `active` : ajout `lister_id` (depuis `project_meta`)
+- `find_lister_by_id` / `find_items_by_lister_id` : suppression du cas spécial mort `id == project_id`
+- `create_item` (branche events) : `lister_id.to_i` pour cohérence avec `delete_item` (sans impact réel, SQLite gère déjà l'affinité)
+- `create_lister` : paramètre `parent_item_id:` → `item_id:`
+
+**`app.rb`**
+- `POST /api/listers` : payload `parent_item_id` → `itemId`
+
+**Bug trouvé et corrigé — cause probable de la régression BrinPanel** : `abstract/Lister.js` n'importait jamais `LOG`, utilisé dans `_createAt()`. `ReferenceError` silencieuse (promesse rejetée non gérée, pas de `pageerror` dans les tests concernés) empêchant `startEditing()` de jamais s'exécuter après création d'un item via `n`/`createNew()` — touche aussi bien `ListerEvent` que `ListerBrin`.
+
+**Tests** : `_tdd/start-up.spec.js`, `_tdd/project-navigation-lister.spec.js`, `_tdd/open-existing-project.spec.js` (nouveau test marques brins/persos via fixture `with-brins-and-persos`) — tous verts, remis à leur emplacement canonique.
+
+## 2026-06-24
+
+Rien de fonctionnel livré. Régression introduite sur la création de brin (`startEditing` non fonctionnel après `_reloadAt`). Tests supprimés (couleur brin, Escape ferme panneau). LOGs de diagnostic en place.
+
 ## 2026-06-23 (suite 3)
 
 ### Brins marks dans EventLister + pattern dom/ injection

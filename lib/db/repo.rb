@@ -153,30 +153,30 @@ module DB
       end
     end
 
-    def self.create_lister(data_dir, type:, parent_item_id:, item_ids: [], project_id: nil)
-      return { id: "#{parent_item_id}-brins"  } if type == 'brins'
-      return { id: "#{parent_item_id}-persos" } if type == 'persos'
+    def self.create_lister(data_dir, type:, item_id:, item_ids: [], project_id: nil)
+      return { id: "#{item_id}-brins"  } if type == 'brins'
+      return { id: "#{item_id}-persos" } if type == 'persos'
 
       now = Time.now.strftime('%Y-%m-%dT%H:%M:%S')
-      db_project_id = project_id || parent_item_id
+      db_project_id = project_id || item_id
       new_id = with_project_db(data_dir, db_project_id) do |db|
         db.execute("INSERT INTO listers (type, item_ids, created_at, updated_at) VALUES (?, ?, ?, ?)",
           [type, JSON.generate(item_ids), now, now])
         lid = db.last_insert_row_id
-        meta_row = db.execute("SELECT 1 FROM project_meta WHERE id = ? LIMIT 1", [parent_item_id]).first
+        meta_row = db.execute("SELECT 1 FROM project_meta WHERE id = ? LIMIT 1", [item_id]).first
         if meta_row
-          db.execute("UPDATE project_meta SET lister_id = ? WHERE id = ?", [lid, parent_item_id])
+          db.execute("UPDATE project_meta SET lister_id = ? WHERE id = ?", [lid, item_id])
         else
-          item_row = db.execute("SELECT 1 FROM items WHERE id = ? LIMIT 1", [parent_item_id]).first
+          item_row = db.execute("SELECT 1 FROM items WHERE id = ? LIMIT 1", [item_id]).first
           if item_row
-            ep_row = db.execute("SELECT 1 FROM event_props WHERE item_id = ? LIMIT 1", [parent_item_id]).first
+            ep_row = db.execute("SELECT 1 FROM event_props WHERE item_id = ? LIMIT 1", [item_id]).first
             if ep_row
-              db.execute("UPDATE event_props SET lister_id = ? WHERE item_id = ?", [lid, parent_item_id])
+              db.execute("UPDATE event_props SET lister_id = ? WHERE item_id = ?", [lid, item_id])
             else
-              db.execute("INSERT INTO event_props (item_id, lister_id) VALUES (?, ?)", [parent_item_id, lid])
+              db.execute("INSERT INTO event_props (item_id, lister_id) VALUES (?, ?)", [item_id, lid])
             end
           else
-            db.execute("INSERT INTO project_meta (id, lister_id) VALUES (?, ?)", [parent_item_id, lid])
+            db.execute("INSERT INTO project_meta (id, lister_id) VALUES (?, ?)", [item_id, lid])
           end
         end
         lid
@@ -205,14 +205,8 @@ module DB
       end
       if project_id
         return with_project_db(data_dir, project_id) do |db|
-          actual_id = if id.to_s == project_id.to_s
-            meta = db.execute("SELECT lister_id FROM project_meta LIMIT 1").first
-            meta ? meta['lister_id'] : nil
-          else
-            id
-          end
-          next nil unless actual_id
-          row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [actual_id]).first
+          next nil unless id
+          row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [id]).first
           next nil unless row
           lister_data = { id: row['id'], item_ids: JSON.parse(row['item_ids'] || '[]'), updated_at: row['updated_at'], nature: row['nature'] }
           meta = db.execute("SELECT brin_ids, perso_ids, link_targets, nature, man_depth FROM project_meta LIMIT 1").first
@@ -270,14 +264,8 @@ module DB
             perso_ids = JSON.parse(meta['perso_ids'] || '[]') rescue []
             _fetch_items(db, perso_ids)
           else
-            actual_id = if lister_id.to_s == project_id.to_s
-              meta = db.execute("SELECT lister_id FROM project_meta LIMIT 1").first
-              meta ? meta['lister_id'] : nil
-            else
-              lister_id
-            end
-            next {} unless actual_id
-            lister_row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [actual_id]).first
+            next {} unless lister_id
+            lister_row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [lister_id]).first
             next {} unless lister_row
             _fetch_items(db, JSON.parse(lister_row['item_ids'] || '[]'))
           end
@@ -318,11 +306,11 @@ module DB
       end
       projects.each do |id, item|
         begin
-          active = with_project_db(data_dir, id) do |db|
-            meta = db.execute("SELECT active FROM project_meta LIMIT 1").first rescue nil
-            meta ? meta['active'].to_i : 1
+          meta = with_project_db(data_dir, id) do |db|
+            db.execute("SELECT active, lister_id FROM project_meta LIMIT 1").first rescue nil
           end
-          item['active'] = active
+          item['active']    = meta ? meta['active'].to_i : 1
+          item['lister_id'] = meta ? meta['lister_id'] : nil
         rescue
           item['active'] = 1
         end
@@ -421,7 +409,7 @@ module DB
         end
         # Event dans eventer.db
         return with_project_db(data_dir, project_id) do |db|
-          lister_row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [lister_id]).first
+          lister_row = db.execute("SELECT * FROM listers WHERE id = ? LIMIT 1", [lister_id.to_i]).first
           next nil unless lister_row
           item_class = _lister_item_class(lister_row['type'])
           next nil unless item_class
@@ -433,7 +421,7 @@ module DB
           )
           _insert_props(db, item_id, fields, item_class)
           item_ids = JSON.parse(lister_row['item_ids'] || '[]') << item_id
-          db.execute("UPDATE listers SET item_ids = ?, updated_at = ? WHERE id = ?", [JSON.generate(item_ids), now, lister_id])
+          db.execute("UPDATE listers SET item_ids = ?, updated_at = ? WHERE id = ?", [JSON.generate(item_ids), now, lister_id.to_i])
           { 'id' => item_id, 'title' => fields['title'], 'type' => fields['type'] }
         end
       end

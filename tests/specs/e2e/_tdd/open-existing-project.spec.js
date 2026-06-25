@@ -1,4 +1,4 @@
-// Origine : tests/specs/e2e/project/open-existing-project.spec.js
+// Refactorisé — nouvelle architecture (2026-06-25)
 import { test, expect, pane1 } from '../__setup__.js'
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { setupProjectFolder, createAndSelectFolderInPicker } from '../../../helpers/create-project-helper.js'
@@ -85,6 +85,22 @@ test('annuler : aucun projet créé', async ({ page }) => {
   await expect(pane1(page).locator('.ftpanel.kpanel')).not.toBeVisible()
 
   await expect(pane1(page).locator('.project-item')).toHaveCount(countAfterFirst)
+})
+
+// Fixture with-brins-and-persos : Projet A, e1 (brin b1 'MON', perso c1 'CY'), e2 (sans brin/perso)
+
+test('ouverture d\'un projet existant : ses events affichent les marques de brins et de personnages', async ({ page }) => {
+  installFixtures('with-brins-and-persos')
+  await page.goto('/')
+  await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
+
+  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('.event-item')).toHaveCount(2)
+
+  const e1 = pane1(page).locator('.event-item').nth(0)
+  await expect(e1.locator('.event-brins-marks')).toContainText('MON')
+  await expect(e1.locator('.event-persos-marks')).toContainText('CY')
 })
 
 test('persistance : le projet survit au rechargement', async ({ page }) => {
