@@ -1,4 +1,4 @@
-// Origine : tests/specs/e2e/brin/brin-panel.spec.js
+// Origine : tests/specs/e2e/brin/brins-panel.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures'
 import { test, expect, pane1 } from '../__setup__.js'
 
@@ -18,7 +18,7 @@ async function goToListerEvent(page) {
 async function openBrinPanel(page) {
   await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('b')
-  await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+  await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 }
 
 // --- Ouverture / fermeture ---
@@ -26,7 +26,7 @@ async function openBrinPanel(page) {
 test("b ouvre le panneau des brins", async ({ page }) => {
   await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('b')
-  await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+  await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 })
 
 test("l'ListerEvent reste visible en fond pendant que le panneau est ouvert", async ({ page }) => {
@@ -38,13 +38,13 @@ test("l'ListerEvent reste visible en fond pendant que le panneau est ouvert", as
 test("b ferme le panneau des brins quand il est actif", async ({ page }) => {
   await openBrinPanel(page)
   await pane1(page).locator('#main-panel').press('b')
-  await expect(pane1(page).locator('#brin-panel')).not.toBeVisible()
+  await expect(pane1(page).locator('#brins-panel')).not.toBeVisible()
 })
 
 test("Cmd+Enter ferme le panneau", async ({ page }) => {
   await openBrinPanel(page)
   await pane1(page).locator('#main-panel').press('Meta+Enter')
-  await expect(pane1(page).locator('#brin-panel')).not.toBeVisible()
+  await expect(pane1(page).locator('#brins-panel')).not.toBeVisible()
 })
 
 test("après fermeture, l'ListerEvent redevient actif (↓ change la sélection d'event)", async ({ page }) => {

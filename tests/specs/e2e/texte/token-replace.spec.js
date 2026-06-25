@@ -41,7 +41,7 @@ test.describe('Token replacement dans les titres', () => {
     await pane1(page).locator('#main-panel').press('ArrowRight')
     await expect(pane1(page).locator('.event-text').first()).toBeVisible()
     await pane1(page).locator('#main-panel').press('b')
-    await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+    await expect(pane1(page).locator('#brins-panel')).toBeVisible()
     await expect(pane1(page).locator('.brin-item__title').first()).toHaveText('Le brin de Paris')
   })
 
@@ -52,7 +52,7 @@ test.describe('Token replacement dans les titres', () => {
     await pane1(page).locator('#main-panel').press('ArrowRight')
     await expect(pane1(page).locator('.event-text').first()).toBeVisible()
     await pane1(page).locator('#main-panel').press('p')
-    await expect(pane1(page).locator('#perso-panel')).toBeVisible()
+    await expect(pane1(page).locator('#persos-panel')).toBeVisible()
     await expect(pane1(page).locator('.perso-item__title').nth(1)).toHaveText('Héros de Paris')
   })
 
@@ -63,8 +63,8 @@ test.describe('Token replacement dans les titres', () => {
     await pane1(page).locator('#main-panel').press('ArrowRight')
     await expect(pane1(page).locator('.event-text').first()).toBeVisible()
     await pane1(page).locator('#main-panel').press('b')
-    await expect(pane1(page).locator('#brin-panel')).toBeVisible()
-    await expect(pane1(page).locator('#brin-panel .panel-title')).toContainText('Paris est belle')
+    await expect(pane1(page).locator('#brins-panel')).toBeVisible()
+    await expect(pane1(page).locator('#brins-panel .panel-title')).toContainText('Paris est belle')
   })
 
   // ─── Nouvel item après définition constante ─────────────────────────────────

@@ -22,7 +22,7 @@ export default class BrinPanel {
   close() {
     this._mainPanel?.removeEventListener('keydown', this._captureHandler, { capture: true })
     this._captureHandler = null
-    const panel = document.querySelector('#brin-panel')
+    const panel = document.querySelector('#brins-panel')
     panel.classList.add('hidden')
     panel.innerHTML = ''
     this._listerBrin = null

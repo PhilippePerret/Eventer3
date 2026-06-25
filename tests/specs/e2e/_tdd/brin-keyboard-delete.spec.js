@@ -20,7 +20,7 @@ test.describe('Delete dans le panneau des brins', () => {
   async function openBrinPanel(page) {
     await goToListerEvent(page)
     await pane1(page).locator('#main-panel').press('b')
-    await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+    await expect(pane1(page).locator('#brins-panel')).toBeVisible()
   }
 
   test('Delete supprime le brin sélectionné dans le panneau des brins', async ({ page }) => {
@@ -59,7 +59,7 @@ test.describe('Delete dans le panneau des brins', () => {
     await page.reload()
     await goToListerEvent(page)
     await pane1(page).locator('#main-panel').press('b')
-    await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+    await expect(pane1(page).locator('#brins-panel')).toBeVisible()
     await expect(pane1(page).locator('.brin-item')).toHaveCount(1)
     await expect(pane1(page).locator('.brin-item .brin-title')).not.toContainText('Autre brin')
   })

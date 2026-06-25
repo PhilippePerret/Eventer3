@@ -92,12 +92,12 @@ export default class BrinLister extends Lister {
 
   render() {
     ContextualHelp.setContext('brin-list')
-    const panel = document.querySelector('#brin-panel')
+    const panel = document.querySelector('#brins-panel')
     panel.innerHTML = ''
     panel.classList.remove('hidden')
 
     const card = document.createElement('div')
-    card.className = 'brin-panel__inner'
+    card.className = 'brins-panel__inner'
     panel.appendChild(card)
 
     this._renderPanelHeader(card, `Brins · ${this._renderTokens(this.selectedEvent?.title ?? this.eventLister?.parentItem?.title ?? '')}`)
@@ -274,8 +274,8 @@ export default class BrinLister extends Lister {
 
   close() {
     ContextualHelp.restoreContext()
-    document.querySelector('#brin-panel').classList.add('hidden')
-    document.querySelector('#brin-panel').innerHTML = ''
+    document.querySelector('#brins-panel').classList.add('hidden')
+    document.querySelector('#brins-panel').innerHTML = ''
     this.keyboardController.register(this.eventLister)
   }
 

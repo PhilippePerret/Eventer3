@@ -53,7 +53,7 @@ test('créer un brin → persiste après rechargement', async ({ page }) => {
 
   // Ouvrir le panel brins
   await pane1(page).locator('#main-panel').press('b')
-  await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+  await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 
   // Créer un nouveau brin
   await pane1(page).locator('#main-panel').press('n')
@@ -70,7 +70,7 @@ test('créer un brin → persiste après rechargement', async ({ page }) => {
   await page.reload()
   await enterProject(page)
   await pane1(page).locator('#main-panel').press('b')
-  await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+  await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 
   // Le brin doit toujours être là
   await expect(pane1(page).locator('.brin-item').filter({ hasText: 'Brin régression' })).toBeVisible()
@@ -83,7 +83,7 @@ test('créer un perso → persiste après rechargement', async ({ page }) => {
 
   // Ouvrir le panel persos
   await pane1(page).locator('#main-panel').press('p')
-  await expect(pane1(page).locator('#perso-panel')).toBeVisible()
+  await expect(pane1(page).locator('#persos-panel')).toBeVisible()
 
   // Créer un nouveau perso
   await pane1(page).locator('#main-panel').press('n')
@@ -100,7 +100,7 @@ test('créer un perso → persiste après rechargement', async ({ page }) => {
   await page.reload()
   await enterProject(page)
   await pane1(page).locator('#main-panel').press('p')
-  await expect(pane1(page).locator('#perso-panel')).toBeVisible()
+  await expect(pane1(page).locator('#persos-panel')).toBeVisible()
 
   // Le perso doit toujours être là
   await expect(pane1(page).locator('.perso-item').filter({ hasText: 'Perso régression' })).toBeVisible()

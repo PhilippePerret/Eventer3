@@ -10,7 +10,7 @@
 > - Les tests existants, malgré les nombreuses migrations déjà effecutées, ne respectent peut-être pas nouvelle architecture — les corriger au besoin.
 > - **IMPÉRATIF** : si on rencontre le même échec **après trois essais de correction**, ON MET DES LOG(s) pour voir où ça coince.
 
-- **BrinPanel** (`#brin-panel`) — 32 tests verts, 1 régression (probablement déjà résolue par le fix d'import LOG du 2026-06-25, à confirmer), ~15 tests non passés.
+- **BrinPanel** (`#brins-panel`) — 32 tests verts, 1 régression (probablement déjà résolue par le fix d'import LOG du 2026-06-25, à confirmer), ~15 tests non passés.
   - Régression : "nouveau brin : il est sélectionné juste après création" — `startEditing()` ne mettait pas le brin en mode édition visible après `_reloadAt`. Cause trouvée le 2026-06-25 : import `LOG` manquant dans `abstract/Lister.js` (même fonction `_createAt` que pour les events).
   - Tests non passés : à investiguer après confirmation de la régression résolue.
   - Fichiers à remettre dans `e2e/_tdd/` pour reprendre (origines canoniques) :
@@ -19,7 +19,7 @@
     - `tests/specs/e2e/brin/brin-init.spec.js`
     - `tests/specs/e2e/brin/keyboard-delete.spec.js`
     - `tests/specs/e2e/brin/brin-nouveau.spec.js`
-    - `tests/specs/e2e/brin/brin-panel.spec.js`
+    - `tests/specs/e2e/brin/brins-panel.spec.js`
     - `tests/specs/e2e/brin/brin-persistence.spec.js`
     - `tests/specs/e2e/brin/brins-selection.spec.js`
     - `tests/specs/e2e/keyboard/keyboard-alt-n.spec.js`

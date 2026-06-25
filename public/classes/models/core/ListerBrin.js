@@ -5,6 +5,7 @@ import LOG from '../../../system/LOG.js'
 export default class ListerBrin extends Lister {
 
   static ITEM_CLASS = Brin
+  static PANEL_ID   = 'brins-panel'
   static pool = {}
 
   constructor(data = {}) {
@@ -52,7 +53,7 @@ export default class ListerBrin extends Lister {
   }
 
   render() {
-    const panel = document.querySelector('#brin-panel')
+    const panel = document.querySelector('#brins-panel')
     panel.innerHTML = ''
     panel.classList.remove('hidden')
     this.container = panel

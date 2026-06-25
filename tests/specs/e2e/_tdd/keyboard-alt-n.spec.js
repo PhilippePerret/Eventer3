@@ -92,7 +92,7 @@ test.describe("Alt+n dans un ListerBrin", () => {
     await pane1(page).locator('.project-item.selected').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
     await pane1(page).locator('#main-panel').press('b')
-    await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+    await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 
     const brins = pane1(page).locator('.brin-item')
     await expect(brins.nth(0)).toHaveClass(/selected/)

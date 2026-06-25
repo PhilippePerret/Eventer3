@@ -15,7 +15,7 @@ import { ERRORS } from './system/Locales.js'
 export default class KeyboardController {
 
   // Panels ordered by z-index ascending (reversed = highest first)
-  static MOVABLE_PANEL_IDS = ['#filter-selector-panel', '#brin-panel', '#perso-panel', '#style-panel', '#shortcuts-panel', '.keyboardable-panel']
+  static MOVABLE_PANEL_IDS = ['#filter-selector-panel', '#brins-panel', '#persos-panel', '#style-panel', '#shortcuts-panel', '.keyboardable-panel']
 
   constructor() {
     this.activeLister = null

@@ -13,7 +13,7 @@
 | `app.rb` | Sinatra ; routes `GET/PATCH /data/*` ; `Bootstrap.ensure_initial_data!` sur chaque requête |
 | `public/app.js` | `App.start()` → `ProjectLister.init()` |
 | `public/config.js` | `window.APP_UI_MODES` (raccourcis footer) + `window.APP_CONFIG` (brinTypes, brinColors) |
-| `public/index.html` | Structure DOM : `#main-panel`, `#shortcuts-footer`, `#shortcuts-panel`, `#notification`, `#brin-panel`, `#panel-overlay>#panel` |
+| `public/index.html` | Structure DOM : `#main-panel`, `#shortcuts-footer`, `#shortcuts-panel`, `#notification`, `#brins-panel`, `#panel-overlay>#panel` |
 | `public/constants.js` | ES module — `export const SHORTCUTS` (format doc, 4 contextes) — chargé comme `<script type="module">` |
 | `public/config.js` | **Script classique** (pas `type="module"`) — `window.APP_UI_MODES` + `window.APP_CONFIG` — NE PAS y mettre `export` |
 | `public/KeyboardController.js` | Switch central `onKeyDown` ; `pushMode/popMode` pour modaux |
@@ -31,7 +31,7 @@
 Lister
 ├── ProjectLister   (uiModes: ['projects']) ???
 ├── EventLister     (uiModes: ['listerRoot','eventsRoot']) childListerClass: EventLister ???
-└── BrinLister      (uiModes: ['listerRoot','modalPanel'])  ??? rendu dans #brin-panel, pas #main-panel
+└── BrinLister      (uiModes: ['listerRoot','modalPanel'])  ??? rendu dans #brins-panel, pas #main-panel
 
 Lister
 ├── ProjectLister    	items: Project
@@ -111,8 +111,8 @@ Elle a été profondément modifiée le 12 juin 2026.
 | Items projets | `.project-item` |
 | Items events | `.event-item` |
 | Event sélectionné | `.event-item.selected` |
-| Panneau brins | `#brin-panel` |
-| Panneau persos | `#perso-panel` |
+| Panneau brins | `#brins-panel` |
+| Panneau persos | `#persos-panel` |
 | Items brins | `.brin-item` |
 | Titre brin | `.brin-item__title` |
 | Brin sélectionné | `.brin-item.selected` |

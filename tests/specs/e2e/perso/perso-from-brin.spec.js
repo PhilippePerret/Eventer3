@@ -22,13 +22,13 @@ async function goToListerEvent(page) {
 async function openBrinPanel(page) {
   await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('b')
-  await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+  await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 }
 
 async function openPersoPanelFromBrin(page) {
   await openBrinPanel(page)
   await pane1(page).locator('#main-panel').press('p')
-  await expect(pane1(page).locator('#perso-panel')).toBeVisible()
+  await expect(pane1(page).locator('#persos-panel')).toBeVisible()
 }
 
 // ─── Ouverture depuis ListerBrin ──────────────────────────────────────────────
@@ -36,18 +36,18 @@ async function openPersoPanelFromBrin(page) {
 test("p ouvre le panneau des personnages depuis ListerBrin", async ({ page }) => {
   await openBrinPanel(page)
   await pane1(page).locator('#main-panel').press('p')
-  await expect(pane1(page).locator('#perso-panel')).toBeVisible()
+  await expect(pane1(page).locator('#persos-panel')).toBeVisible()
 })
 
 test("le panneau brins reste visible en fond pendant le panneau perso", async ({ page }) => {
   await openPersoPanelFromBrin(page)
-  await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+  await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 })
 
 test("Escape ferme le panneau perso et remet le focus sur ListerBrin", async ({ page }) => {
   await openPersoPanelFromBrin(page)
   await pane1(page).locator('#main-panel').press('Escape')
-  await expect(pane1(page).locator('#perso-panel')).not.toBeVisible()
+  await expect(pane1(page).locator('#persos-panel')).not.toBeVisible()
   // ListerBrin reprend la main : ↓ change la sélection du brin
   await pane1(page).locator('#main-panel').press('ArrowDown')
   // pas d'erreur = ListerBrin actif

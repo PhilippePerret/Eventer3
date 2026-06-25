@@ -8,6 +8,7 @@ import LOG from '../../../system/LOG.js'
 export default class ListerProject extends Lister {
   static ITEM_CLASS  = Project
   static CHILD_CLASS = ListerEvent
+  static PANEL_ID     = 'projects-panel'
 
   static async init() {
     LOG.m(1, 'Init projects')

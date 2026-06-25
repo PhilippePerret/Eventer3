@@ -12,7 +12,7 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
 
   // Ouvrir brins pour e1 (doit avoir A et B cochés)
   await pane1(page).locator('#main-panel').press('b')
-  await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+  await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 
   let brinsItems = pane1(page).locator('.brin-item')
   let checkedCount = 0

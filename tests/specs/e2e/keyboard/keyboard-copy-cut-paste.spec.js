@@ -157,7 +157,7 @@ test.describe('⌘+x interdit sur le dernier item', () => {
     await pane1(page).locator('#main-panel').press('ArrowRight')
     await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
     await pane1(page).locator('#main-panel').press('b')
-    await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+    await expect(pane1(page).locator('#brins-panel')).toBeVisible()
     const items = pane1(page).locator('.brin-item')
     // Couper jusqu'à 1 brin restant
     await pane1(page).locator('#main-panel').press('Meta+x')
@@ -367,7 +367,7 @@ test.describe('⌘+v bloqué entre types différents', () => {
 
     // Ouvrir le panneau brins
     await pane1(page).locator('#main-panel').press('b')
-    await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+    await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 
     const brins = pane1(page).locator('.brin-item')
     const countBefore = await brins.count()

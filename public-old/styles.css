@@ -42,13 +42,13 @@ h1 {
 }
 
 /* Sélection atténuée dans les listings arrière-plan quand un panneau est au premier plan */
-body:has(#brin-panel:not(.hidden)) #main-panel .selected,
-body:has(#perso-panel:not(.hidden)) #main-panel .selected,
+body:has(#brins-panel:not(.hidden)) #main-panel .selected,
+body:has(#persos-panel:not(.hidden)) #main-panel .selected,
 body:has(#style-panel:not(.hidden)) #main-panel .selected,
-body:has(#perso-panel:not(.hidden)) #brin-panel .selected,
+body:has(#persos-panel:not(.hidden)) #brins-panel .selected,
 body:has(#shortcuts-panel:not(.hidden)) #main-panel .selected,
-body:has(#shortcuts-panel:not(.hidden)) #brin-panel .selected,
-body:has(#shortcuts-panel:not(.hidden)) #perso-panel .selected,
+body:has(#shortcuts-panel:not(.hidden)) #brins-panel .selected,
+body:has(#shortcuts-panel:not(.hidden)) #persos-panel .selected,
 body:has(.tools-panel) #main-panel .selected {
   --selected: var(--selected-bg-muted);
 }
@@ -423,7 +423,7 @@ body {
   z-index: 100;
 }
 
-#brin-panel {
+#brins-panel {
   position: fixed;
   inset: 0;
   background: rgba(20, 20, 20, .10);
@@ -512,7 +512,7 @@ body {
   text-overflow: ellipsis;
 }
 
-#perso-panel {
+#persos-panel {
   position: fixed;
   top: 0;
   left: 13vw;
@@ -524,7 +524,7 @@ body {
   z-index: 101;
 }
 
-.perso-panel__inner {
+.persos-panel__inner {
   width: calc(100% - 32px);
   min-height: 320px;
   max-height: 80vh;
@@ -537,7 +537,7 @@ body {
 }
 
 #panel,
-.brin-panel__inner {
+.brins-panel__inner {
   width: min(95vw, 1020px);
   max-height: 80vh;
   overflow: auto;

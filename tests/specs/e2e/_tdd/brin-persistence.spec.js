@@ -14,7 +14,7 @@ async function openBrinPanel(page) {
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   await pane1(page).locator('#main-panel').press('b')
-  await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+  await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 }
 
 test("brin créé persiste après rechargement de la page", async ({ page }) => {
@@ -35,7 +35,7 @@ test("brin créé persiste après rechargement de la page", async ({ page }) => 
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   await pane1(page).locator('#main-panel').press('b')
-  await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+  await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 
   // Le brin créé doit être visible
   const brins = pane1(page).locator('.brin-item')
@@ -64,7 +64,7 @@ test("brin créé a bien un badge affiché après rechargement", async ({ page }
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   await pane1(page).locator('#main-panel').press('b')
-  await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+  await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 
   // Le second brin (inséré après le premier) doit avoir un badge non vide
   const newBrin = pane1(page).locator('.brin-item').nth(1)

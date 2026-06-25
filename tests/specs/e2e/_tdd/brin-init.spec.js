@@ -18,7 +18,7 @@ async function goToListerEvent(page) {
 test("un projet sans brins reçoit automatiquement b1 'Intrigue principale' à l'ouverture du panneau", async ({ page }) => {
   await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('b')
-  await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+  await expect(pane1(page).locator('#brins-panel')).toBeVisible()
   await expect(pane1(page).locator('.brin-item')).toHaveCount(1)
   await expect(pane1(page).locator('.brin-item').nth(0).locator('.brin-title')).toHaveText('Intrigue principale')
 })
@@ -26,7 +26,7 @@ test("un projet sans brins reçoit automatiquement b1 'Intrigue principale' à l
 test("b1 'Intrigue principale' est persisté dans la base de données", async ({ page }) => {
   await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('b')
-  await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+  await expect(pane1(page).locator('#brins-panel')).toBeVisible()
   await page.waitForLoadState('networkidle')
 
   const eventsListerResp = await page.request.get('/api/items/00000000-0000-0000-0000-000000000001/lister')

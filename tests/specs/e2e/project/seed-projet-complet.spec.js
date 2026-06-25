@@ -15,7 +15,7 @@ test('projet seed → "Intrigue principale" dans le panneau brins', async ({ pag
   await pane1(page).locator('#main-panel').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   await pane1(page).locator('#main-panel').press('b')
-  await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+  await expect(pane1(page).locator('#brins-panel')).toBeVisible()
   await expect(pane1(page).locator('.brin-item').first()).toContainText('Intrigue principale')
 })
 
@@ -23,6 +23,6 @@ test('projet seed → "Votre protagoniste" dans le panneau persos', async ({ pag
   await pane1(page).locator('#main-panel').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   await pane1(page).locator('#main-panel').press('p')
-  await expect(pane1(page).locator('#perso-panel')).toBeVisible()
+  await expect(pane1(page).locator('#persos-panel')).toBeVisible()
   await expect(pane1(page).locator('.perso-item__title').first()).toContainText('Votre protagoniste')
 })

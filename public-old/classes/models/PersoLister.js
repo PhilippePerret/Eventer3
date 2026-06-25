@@ -100,12 +100,12 @@ export default class PersoLister extends Lister {
 
   render() {
     ContextualHelp.setContext('perso-list')
-    const panel = document.querySelector('#perso-panel')
+    const panel = document.querySelector('#persos-panel')
     panel.innerHTML = ''
     panel.classList.remove('hidden')
 
     const card = document.createElement('div')
-    card.className = 'perso-panel__inner'
+    card.className = 'persos-panel__inner'
     panel.appendChild(card)
 
     this._renderPanelHeader(card, `Personnages · ${this._renderTokens(this.contextItem?.title ?? '')}`)
@@ -240,7 +240,7 @@ export default class PersoLister extends Lister {
 
   close() {
     ContextualHelp.restoreContext()
-    const panel = document.querySelector('#perso-panel')
+    const panel = document.querySelector('#persos-panel')
     panel.classList.add('hidden')
     panel.innerHTML = ''
     this.keyboardController.register(this.parentLister)

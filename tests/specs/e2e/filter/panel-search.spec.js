@@ -24,17 +24,17 @@ async function revealFilter(page, panelSelector = '#main-panel') {
 test("panneau brins : champ .panel-search visible après ':'", async ({ page }) => {
   await goToListerEvent(page, 'with-brins-and-persos')
   await pane1(page).locator('#main-panel').press('b')
-  await expect(pane1(page).locator('#brin-panel')).toBeVisible()
-  await revealFilter(page, '#brin-panel')
-  await expect(pane1(page).locator('#brin-panel .panel-search')).toBeVisible()
+  await expect(pane1(page).locator('#brins-panel')).toBeVisible()
+  await revealFilter(page, '#brins-panel')
+  await expect(pane1(page).locator('#brins-panel .panel-search')).toBeVisible()
 })
 
 test("panneau brins : taper 'mon' cache 'Autre brin'", async ({ page }) => {
   await goToListerEvent(page, 'with-brins-and-persos')
   await pane1(page).locator('#main-panel').press('b')
   await expect(pane1(page).locator('.brin-row')).toHaveCount(2)
-  await revealFilter(page, '#brin-panel')
-  await pane1(page).locator('#brin-panel .panel-search').fill('mon')
+  await revealFilter(page, '#brins-panel')
+  await pane1(page).locator('#brins-panel .panel-search').fill('mon')
   await expect(pane1(page).locator('.brin-row:not(.hidden)')).toHaveCount(1)
   await expect(pane1(page).locator('.brin-row.hidden')).toHaveCount(1)
 })
@@ -42,23 +42,23 @@ test("panneau brins : taper 'mon' cache 'Autre brin'", async ({ page }) => {
 test("panneau brins : vider le champ réaffiche tout", async ({ page }) => {
   await goToListerEvent(page, 'with-brins-and-persos')
   await pane1(page).locator('#main-panel').press('b')
-  await revealFilter(page, '#brin-panel')
-  await pane1(page).locator('#brin-panel .panel-search').fill('mon')
+  await revealFilter(page, '#brins-panel')
+  await pane1(page).locator('#brins-panel .panel-search').fill('mon')
   await expect(pane1(page).locator('.brin-row:not(.hidden)')).toHaveCount(1)
-  await pane1(page).locator('#brin-panel .panel-search').fill('')
+  await pane1(page).locator('#brins-panel .panel-search').fill('')
   await expect(pane1(page).locator('.brin-row:not(.hidden)')).toHaveCount(2)
 })
 
 test("panneau brins : filtre remis à zéro à la fermeture/réouverture", async ({ page }) => {
   await goToListerEvent(page, 'with-brins-and-persos')
   await pane1(page).locator('#main-panel').press('b')
-  await revealFilter(page, '#brin-panel')
-  await pane1(page).locator('#brin-panel .panel-search').fill('mon')
+  await revealFilter(page, '#brins-panel')
+  await pane1(page).locator('#brins-panel .panel-search').fill('mon')
   await expect(pane1(page).locator('.brin-row:not(.hidden)')).toHaveCount(1)
   await pane1(page).locator('#main-panel').press('Escape') // fermer
   await pane1(page).locator('#main-panel').press('b')     // rouvrir
   await expect(pane1(page).locator('.brin-row:not(.hidden)')).toHaveCount(2)
-  const inputVal = await pane1(page).locator('#brin-panel .panel-search').inputValue()
+  const inputVal = await pane1(page).locator('#brins-panel .panel-search').inputValue()
   expect(inputVal).toBe('')
 })
 
@@ -67,17 +67,17 @@ test("panneau brins : filtre remis à zéro à la fermeture/réouverture", async
 test("panneau persos : champ .panel-search visible après ':'", async ({ page }) => {
   await goToListerEvent(page, 'with-brins-and-persos')
   await pane1(page).locator('#main-panel').press('p')
-  await expect(pane1(page).locator('#perso-panel')).toBeVisible()
-  await revealFilter(page, '#perso-panel')
-  await expect(pane1(page).locator('#perso-panel .panel-search')).toBeVisible()
+  await expect(pane1(page).locator('#persos-panel')).toBeVisible()
+  await revealFilter(page, '#persos-panel')
+  await expect(pane1(page).locator('#persos-panel .panel-search')).toBeVisible()
 })
 
 test("panneau persos : taper 'cyr' cache 'Roxane'", async ({ page }) => {
   await goToListerEvent(page, 'with-brins-and-persos')
   await pane1(page).locator('#main-panel').press('p')
   await expect(pane1(page).locator('.perso-row')).toHaveCount(2)
-  await revealFilter(page, '#perso-panel')
-  await pane1(page).locator('#perso-panel .panel-search').fill('cyr')
+  await revealFilter(page, '#persos-panel')
+  await pane1(page).locator('#persos-panel .panel-search').fill('cyr')
   await expect(pane1(page).locator('.perso-row:not(.hidden)')).toHaveCount(1)
   await expect(pane1(page).locator('.perso-row.hidden')).toHaveCount(1)
 })

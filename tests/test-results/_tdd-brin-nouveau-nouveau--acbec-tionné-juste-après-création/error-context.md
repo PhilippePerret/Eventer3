@@ -97,7 +97,7 @@ Call log:
   14 |   await pane1(page).locator('.project-item.selected').press('ArrowRight')
   15 |   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   16 |   await pane1(page).locator('#main-panel').press('b')
-  17 |   await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+  17 |   await expect(pane1(page).locator('#brins-panel')).toBeVisible()
   18 | }
   19 | 
   20 | test.only("nouveau brin : il est sélectionné juste après création", async ({ page }) => {

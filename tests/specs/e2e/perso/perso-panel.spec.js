@@ -22,7 +22,7 @@ async function goToListerEvent(page) {
 async function openPersoPanel(page) {
   await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('p')
-  await expect(pane1(page).locator('#perso-panel')).toBeVisible()
+  await expect(pane1(page).locator('#persos-panel')).toBeVisible()
 }
 
 // ─── Ouverture / fermeture ───────────────────────────────────────────────────
@@ -30,7 +30,7 @@ async function openPersoPanel(page) {
 test("p ouvre le panneau des personnages depuis ListerEvent", async ({ page }) => {
   await goToListerEvent(page)
   await pane1(page).locator('#main-panel').press('p')
-  await expect(pane1(page).locator('#perso-panel')).toBeVisible()
+  await expect(pane1(page).locator('#persos-panel')).toBeVisible()
 })
 
 test("l'ListerEvent reste visible en fond pendant que le panneau est ouvert", async ({ page }) => {
@@ -41,19 +41,19 @@ test("l'ListerEvent reste visible en fond pendant que le panneau est ouvert", as
 test("Escape ferme le panneau perso", async ({ page }) => {
   await openPersoPanel(page)
   await pane1(page).locator('#main-panel').press('Escape')
-  await expect(pane1(page).locator('#perso-panel')).not.toBeVisible()
+  await expect(pane1(page).locator('#persos-panel')).not.toBeVisible()
 })
 
 test("p ferme le panneau des persos quand il est actif", async ({ page }) => {
   await openPersoPanel(page)
   await pane1(page).locator('#main-panel').press('p')
-  await expect(pane1(page).locator('#perso-panel')).not.toBeVisible()
+  await expect(pane1(page).locator('#persos-panel')).not.toBeVisible()
 })
 
 test("Cmd+Enter ferme le panneau perso", async ({ page }) => {
   await openPersoPanel(page)
   await pane1(page).locator('#main-panel').press('Meta+Enter')
-  await expect(pane1(page).locator('#perso-panel')).not.toBeVisible()
+  await expect(pane1(page).locator('#persos-panel')).not.toBeVisible()
 })
 
 test("après fermeture, l'ListerEvent redevient actif (↓ change la sélection d'event)", async ({ page }) => {
@@ -413,9 +413,9 @@ test("après édition (Enter), le perso modifié reste sélectionné", async ({ 
 test("réouverture : le premier perso est sélectionné", async ({ page }) => {
   await openPersoPanel(page)
   await pane1(page).locator('#main-panel').press('Escape')
-  await expect(pane1(page).locator('#perso-panel')).not.toBeVisible()
+  await expect(pane1(page).locator('#persos-panel')).not.toBeVisible()
   await pane1(page).locator('#main-panel').press('p')
-  await expect(pane1(page).locator('#perso-panel')).toBeVisible()
+  await expect(pane1(page).locator('#persos-panel')).toBeVisible()
   await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/selected/)
 })
 
@@ -423,7 +423,7 @@ test("réouverture : ↓ change bien la sélection", async ({ page }) => {
   await openPersoPanel(page)
   await pane1(page).locator('#main-panel').press('Escape')
   await pane1(page).locator('#main-panel').press('p')
-  await expect(pane1(page).locator('#perso-panel')).toBeVisible()
+  await expect(pane1(page).locator('#persos-panel')).toBeVisible()
   await pane1(page).locator('#main-panel').press('ArrowDown')
   await expect(pane1(page).locator('.perso-item').nth(1)).toHaveClass(/selected/)
   await expect(pane1(page).locator('.perso-item').nth(0)).not.toHaveClass(/selected/)

@@ -4,6 +4,7 @@ import Perso from './Perso.js'
 export default class ListerPerso extends Lister {
 
   static ITEM_CLASS = Perso
+  static PANEL_ID   = 'persos-panel'
   static pool = {}
 
   constructor(data = {}) {

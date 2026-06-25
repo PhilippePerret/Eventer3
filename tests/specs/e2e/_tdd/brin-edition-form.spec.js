@@ -12,7 +12,7 @@ async function openBrinPanel(page) {
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
   await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
   await pane1(page).locator('#main-panel').press('b')
-  await expect(pane1(page).locator('#brin-panel')).toBeVisible()
+  await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 }
 
 test("en édition, le brin conserve sa classe brin-item", async ({ page }) => {
