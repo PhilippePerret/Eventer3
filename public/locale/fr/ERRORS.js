@@ -1,6 +1,6 @@
 export const ERRORS = {
 
-    10:  'La propriété `title’ d’un élément doit toujours être définie.'
+    10:  'La propriété `title’ d’un élément ($1) doit toujours être définie.'
     
   , 50:  'La classe $1 doit impérativement définir sa constante PANEL_ID'
 

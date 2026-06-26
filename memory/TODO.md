@@ -4,6 +4,31 @@
 
 ## En cours
 
+### Chantier clipboard + badges (interrompu 2026-06-26)
+
+**Contexte :** déviation depuis test 13 de `contextual-help.spec.js` (`⌘+v apparaît si clipboard compatible`).
+Test 13 est en `test.only` — en attente de l'implémentation clipboard.
+
+**Fait :**
+- `public/classes/models/abstract/Clipboard.js` créé (singleton)
+- `tests/specs/unit/_tdd/brin-badge.test.js` déplacé + réécrit (nouvelle sémantique)
+
+**À faire dans l'ordre :**
+
+1. `Brin.generateBadge` — corriger (`core/Brin.js`) : JAMAIS `'---'`/padding `'-'` ; vide/null → `null` ; court → répète dernière lettre
+2. `Brin.generateUniqueBadge` — créer (`core/Brin.js`) : 3 chars, jamais `'-'`, combos du titre puis `B01`/`B02`…
+3. `Perso.generateBadge` — porter+corriger (`core/Perso.js`) : prénom seul → 2 premières lettres ; prénom+nom → INITIALES (`'Jean Valjean'`→`'JV'`) ; vide/null → `null`
+4. `Perso.generateUniqueBadge` — porter (`core/Perso.js`) : 2 chars, jamais `'-'`, combos puis `C1`/`C2`…
+5. `Perso.badgeSource` — porter depuis `public-old/classes/models/Perso.js`
+6. Créer `tests/specs/unit/_tdd/perso-badge.test.js`
+7. `unique: true` dans `Brin.PROPS.badge` et `Perso.PROPS.badge` (ajouter badge à Perso.PROPS si absent)
+8. `Item.toClipboardData()` dans `abstract/Item.js` : `PROPS.filter(f => !f.unique).map(f => [f.name, this[f.name]])`
+9. `Lister.copySelectedItem()` dans `abstract/Lister.js` + import `Clipboard`
+10. `c: { meta: 'copySelectedItem' }` dans `listen/Lister.js`
+11. `ContextualHelp._buildShortcuts()` : vérifier `Clipboard.isCompatible(this._item.minClass)` → ajouter `⌘+v` si oui
+
+**Après tout ça :** retirer `test.only` du test 13, vérifier qu'il passe, puis enchaîner test 15.
+
 > **[LIRE TOUJOURS AVANT TOUT TRAVAIL SUR LES TESTS]**
 > - Déplacer les tests dans `e2e/_tdd/` avant de travailler dessus
 > - S’inspirer de `public-old` pour le fonctionnement anciennement implémenté (ne pas hésiter à reprendre du code, si valide, surtout s’il ne concerne pas la gestion des keyboard events, radicalement différente dans la nouvelle architecture).
