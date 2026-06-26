@@ -15,7 +15,7 @@ test.describe('Delete avec cascade — évènement', () => {
 
   test('Delete sur évènement sans enfants → pas de dialog', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('.project-item.selected').press('ArrowRight').press(\'ArrowRight\')
+    await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
     await expect(pane1(page).locator('#events-panel')).toBeVisible()
     await pane1(page).locator('.event-item.selected').press('ArrowDown')    // e2 sélectionné (sans enfants)
     await pane1(page).locator('.event-item.selected').press('Delete')
@@ -25,7 +25,7 @@ test.describe('Delete avec cascade — évènement', () => {
 
   test('Delete sur évènement avec enfants → dialog affiché', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('.project-item.selected').press('ArrowRight').press(\'ArrowRight\')
+    await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
     await expect(pane1(page).locator('#events-panel')).toBeVisible()
     // e1 sélectionné (2 enfants)
     await pane1(page).locator('.event-item.selected').press('Delete')
@@ -34,7 +34,7 @@ test.describe('Delete avec cascade — évènement', () => {
 
   test('dialog : titre contient "Destruction de" et le titre de l\'évènement', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('.project-item.selected').press('ArrowRight').press(\'ArrowRight\')
+    await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
     await expect(pane1(page).locator('#events-panel')).toBeVisible()
     await pane1(page).locator('.event-item.selected').press('Delete')
     await expect(pane1(page).locator('.confirm-dialog__title')).toContainText('Destruction de')
@@ -43,7 +43,7 @@ test.describe('Delete avec cascade — évènement', () => {
 
   test('dialog : corps mentionne le bon nombre d\'évènements imbriqués', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('.project-item.selected').press('ArrowRight').press(\'ArrowRight\')
+    await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
     await expect(pane1(page).locator('#events-panel')).toBeVisible()
     await pane1(page).locator('.event-item.selected').press('Delete')
     await expect(pane1(page).locator('.confirm-dialog__message')).toContainText('2')
@@ -52,7 +52,7 @@ test.describe('Delete avec cascade — évènement', () => {
 
   test('Escape dans le dialog → annulation, évènement intact', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('.project-item.selected').press('ArrowRight').press(\'ArrowRight\')
+    await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
     await expect(pane1(page).locator('#events-panel')).toBeVisible()
     await pane1(page).locator('.event-item.selected').press('Delete')
     await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
@@ -63,7 +63,7 @@ test.describe('Delete avec cascade — évènement', () => {
 
   test('saisie incorrecte + Enter → dialog reste, rien n\'est effacé', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('.project-item.selected').press('ArrowRight').press(\'ArrowRight\')
+    await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
     await expect(pane1(page).locator('#events-panel')).toBeVisible()
     await pane1(page).locator('.event-item.selected').press('Delete')
     await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
@@ -75,7 +75,7 @@ test.describe('Delete avec cascade — évènement', () => {
 
   test('saisie correcte (2) + Enter → cascade détruite, dialog fermé', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('.project-item.selected').press('ArrowRight').press(\'ArrowRight\')
+    await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
     await expect(pane1(page).locator('#events-panel')).toBeVisible()
     await pane1(page).locator('.event-item.selected').press('Delete')
     await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
@@ -87,7 +87,7 @@ test.describe('Delete avec cascade — évènement', () => {
 
   test('suppression cascade persistante après rechargement', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('.project-item.selected').press('ArrowRight').press(\'ArrowRight\')
+    await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
     await expect(pane1(page).locator('#events-panel')).toBeVisible()
     await pane1(page).locator('.event-item.selected').press('Delete')
     await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()

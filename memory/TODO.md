@@ -50,6 +50,7 @@
 
 ## Fait
 
+- [x] 2026-06-26 — 60 tests `_tdd/` verts : brin-panel, brin-persistence, brin-keyboard-delete, brins-selection, keyboard-alt-n, open-existing-project, start-up
 - [x] 2026-06-26 — `#main-panel` corrigé dans tous les fichiers tests → `#projects-panel` / `#events-panel`
 - [x] 2026-06-25 — `enterChildren` renommé `enterInside`, `Project` découplé (charge ListerBrin/ListerPerso/ListerEvent via son propre `lister_id`), pools `ListerBrin.pool`/`ListerPerso.pool`, fix import LOG manquant dans `abstract/Lister.js`
 - [x] 2026-06-23 — `_tdd/` : 21 tests verts (keyboard-alt-n, keyboard-cmd-n, new-event, new-event-titre-vide, new-event-virtual-lister, open-existing-project, project-navigation-lister)

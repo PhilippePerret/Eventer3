@@ -1,6 +1,6 @@
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect, pane1 } from '../__setup__.js'
-import { MANUSCRIT_WIDTH } from '../../../../public/constants.js'
+import { MANUSCRIT_WIDTH } from '../../../../public/constants/constants.js'
 
 test.beforeEach(() => {
   installFixtures('with-styles')

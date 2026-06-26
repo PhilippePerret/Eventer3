@@ -2,6 +2,17 @@
 
 ## 2026-06-26
 
+### Tests _tdd/ — 60 tests verts
+
+- **`Brin.js`** : `static generateBadge(title)` ajouté (copie old arch) + constructeur : `this.badge = data.badge || Brin.generateBadge(this.title)`
+- **`dom/Lister.js`** : `render()` ajoute `${minClass}-list` au container → `#projects-panel.project-list`, `#events-panel.event-list`
+- **`abstract/Item.js`** : `_enterChildLister` reset `child.selectedIndex = 0` avant render
+- **`core/ListerBrin.js`** : `static LISTENERS = { ...Lister.LISTENERS, ' ': { nokey: 'toggleChecked' } }` + `deleteSelected` await `ev.save()`
+- **`ui/BrinPanel.js`** : `HANDLED_KEYS` réduit à `Enter` + `b` (ArrowUp/Down/Delete/Space/n délégués au KeyDispatcher de ListerBrin)
+- **`tests/brins-selection.spec.js`** : attente `nth(0).toHaveClass(/selected/)` après ArrowRight avant press('b')
+- **`tests/brin-persistence.spec.js`** : `[data-field="badge"]` → `.brin-badge`
+- Suppression de tous les `console.log` explicites dans les fichiers de test
+
 ### Tests — #main-panel → #projects-panel / #events-panel
 
 - Tous les `locator('#main-panel')` dans les fichiers de tests corrigés vers `#projects-panel` (ListerProject) ou `#events-panel` (ListerEvent) selon contexte
