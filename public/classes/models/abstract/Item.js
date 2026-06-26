@@ -8,6 +8,7 @@ import Lister from './Lister.js'
 import LOG from '../../../system/LOG.js'
 import Notification from '../../ui/Notification.js'
 import { DEFAULT_COLOR } from '../constants/common.js'
+import ContextualHelp from '../../ui/ContextualHelp.js'
 
 export default class Item extends KeyDispatcher {
 
@@ -77,6 +78,8 @@ export default class Item extends KeyDispatcher {
     if (!this.editing) return false
     this.focusNextField()
   }
+
+  openContextualHelp() { ContextualHelp.open(this) }
 
   _warnIfEmptyTitle() {
     if (!this.title.trim()) {

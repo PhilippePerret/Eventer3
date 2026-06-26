@@ -118,6 +118,7 @@ export default class KeyboardablePanel {
         break
 
       case 'Enter':
+        if (event.metaKey) { this.close(); break }
         if (this._footerFocusIdx >= 0) {
           this._footerBtns[this._footerFocusIdx]?.action()
         } else {

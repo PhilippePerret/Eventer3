@@ -1,3 +1,8 @@
+BUG
+1. Panneau projets mal placé (devrait être centré dans la page) <== mauvais CSS
+2. Panneau des projets reste ouvert quand panneau des events s'ouvre
+3. Meta+"↑"/"↓" toujours pas implémenté
+
 
 BUG
 ⇧ + ⇥ devrait faire passer les propriétés dans le cycle inverse

@@ -4,10 +4,12 @@ import ListerBrin from './ListerBrin.js'
 import ListerPerso from './ListerPerso.js'
 import ListerEvent from './ListerEvent.js'
 import { PROJECT_STATES, PROJECT_TYPES, PROJECT_COLORS } from '../constants/Project.js'
+import { WORD_FORMS } from '../../../constants/constants.js'
 
 
 export default class Project extends Item {
-  static COLORS = PROJECT_COLORS
+  static COLORS    = PROJECT_COLORS
+  static get thingName() { return WORD_FORMS.Project }
 
   async enterInside() {
     await new ListerBrin({ project_id: this.id }).load()
