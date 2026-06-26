@@ -10,9 +10,15 @@ export default class Brin extends Item {
 
   static markOf(data) { return data.badge }
 
+  static generateBadge(title) {
+    const flat = (title ?? '').replace(/\s+/g, '')
+    if (!flat) return '---'
+    return flat.substring(0, 3).toUpperCase().padEnd(3, '-')
+  }
+
   constructor(data = {}) {
     super(data)
-    this.badge     = data.badge     ?? ''
+    this.badge     = data.badge     || Brin.generateBadge(this.title)
     this.type      = data.type      ?? null
     this.perso_ids = data.perso_ids ?? []
   }
@@ -21,9 +27,9 @@ export default class Brin extends Item {
   get PROPS() {
     return this._props || (this._props = [
         { name: 'title', type: 'text'   , warper: 'body', onchange: 'checkAndSetBadge'}
-      , { name: 'color', type: 'color'   , warper: 'edits'}
       , { name: 'badge', type: 'text'    , warper: 'edits', onchange: 'checkBadgeValue'}
       , { name: 'type',  type: 'select'  , warper: 'edits', values: BRIN_TYPE }
+      , { name: 'color', type: 'color'   , warper: 'edits'}
       , { name: 'perso_ids', type: 'no-edit', warper: 'marks', value: 'persosMarks' }
     ])
   }

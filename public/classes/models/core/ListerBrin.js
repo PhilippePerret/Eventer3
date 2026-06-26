@@ -7,6 +7,7 @@ export default class ListerBrin extends Lister {
   static ITEM_CLASS = Brin
   static PANEL_ID   = 'brins-panel'
   static pool = {}
+  static LISTENERS  = { ...Lister.LISTENERS, ' ': { nokey: 'toggleChecked' } }
 
   constructor(data = {}) {
     super(data)
@@ -59,15 +60,13 @@ export default class ListerBrin extends Lister {
     if (!brin || !ev) return
     ev.brin_ids = (ev.brin_ids ?? []).filter(id => id !== brin.id)
     this._refreshEventMarks(ev)
-    ev.save()
+    await ev.save()
   }
 
   async deleteItem(item) {
     const query = this.project_id ? `?project_id=${this.project_id}` : ''
     const url = `/api/listers/${this.id}/items/${item.id}${query}`
-    LOG.m(1, 'ListerBrin.deleteItem', { url, id: this.id, project_id: this.project_id, itemId: item.id })
     const resp = await fetch(url, { method: 'DELETE', cache: 'no-store' })
-    LOG.m(1, 'ListerBrin.deleteItem response', { ok: resp.ok, status: resp.status })
     return resp.ok
   }
 

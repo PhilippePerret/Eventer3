@@ -51,7 +51,7 @@ test("après fermeture, l'ListerEvent redevient actif (↓ change la sélection 
   await openBrinPanel(page)
   await pane1(page).locator('.brin-item.selected').press('b')
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
-  await pane1(page).locator('.brin-item.selected').press('ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
   await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/selected/)
 })
 
@@ -172,7 +172,7 @@ test("Enter édite le brin sélectionné (input title focalisé avec valeur cour
   await pane1(page).locator('.brin-item.selected').press('Enter')
   const titleInput = pane1(page).locator('.brin-item.selected [data-field="title"]')
   await expect(titleInput).toBeFocused()
-  await expect(titleInput).toHaveValue('Mon brin')
+  await expect(titleInput).toHaveText("Mon brin")
 })
 
 test("Tab en édition passe du titre au badge", async ({ page }) => {
@@ -182,7 +182,7 @@ test("Tab en édition passe du titre au badge", async ({ page }) => {
   await pane1(page).locator('.brin-item.selected').press('Tab')
   const badgeInput = pane1(page).locator('.brin-item.selected [data-field="badge"]')
   await expect(badgeInput).toBeFocused()
-  await expect(badgeInput).toHaveValue('MON')
+  await expect(badgeInput).toHaveText('MON')
 })
 
 test("Tab depuis la couleur revient au titre (cycle complet)", async ({ page }) => {

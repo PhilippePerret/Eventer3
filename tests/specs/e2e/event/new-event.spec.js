@@ -10,40 +10,30 @@ test("dans un ListerEvent, la touche « n » crée un nouvel Event après celui 
 
   await page.goto('/')
 
-  console.log('\n=== TEST CRÉATION NOUVEL EVENT ===')
 
-  console.log('-> attente du rendu initial')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
-  console.log('-> entrée dans le ListerEvent du premier projet')
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
 
-  console.log('-> vérification : premier évènement sélectionné')
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
   const firstEventTitle = await pane1(page).locator('.event-item').nth(0).textContent()
 
-  console.log('-> appui sur n')
   await pane1(page).locator('.event-item.selected').press('n')
 
-  console.log('-> vérification : un champ de saisie est apparu')
   const input = pane1(page).locator('.event-item [data-field="title"]')
   await expect(input).toBeVisible()
   await expect(input).toBeFocused()
 
-  console.log('-> saisie du titre et validation')
   await input.fill('Nouvel évènement test')
   await input.press('Enter')
 
-  console.log('-> vérification : le nouvel évènement est visible')
   const items = pane1(page).locator('.event-item')
   await expect(items).toHaveCount(4)
 
-  console.log('-> vérification : le nouvel évènement est après le premier')
   await expect(items.nth(0)).toContainText(firstEventTitle.trim())
   await expect(items.nth(1)).toContainText('Nouvel évènement test')
 
-  console.log('\n=== FIN TEST CRÉATION NOUVEL EVENT ===\n')
 
 })

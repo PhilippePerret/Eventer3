@@ -1,0 +1,14 @@
+- ATTENDRE que l'utilisateur donne le résultat des tests
+- faire une liste de liens cliquables, avec numéros de ligne, pour le terminal VSCode pour un fichier terminal sous la forme : 
+  echo "<numéro> Erreur rencontrée
+        ./<path relatif vers fichier>:<numero ligne>
+        "
+- Mettre cette liste dans le fichier ./tests/open-last.sh (en l'écrasant si nécessaire)
+- Mettre 'clear;clear;bash tests/open-last.sh' dans le presse-papier
+- Terminer en donnant les instructions à l'utilisateur (PAS DANS LE FICHIER BASH, CRÉTIN !!! EN CONSOLE, POUR TERMINER CETTE TÂCHE):
+   ✅ Dans VSCode, ouvrir deux fenêtres l'une au-dessus de l'autre
+   ✅ Ctrl-Click sur celle du bas -> New Terminal
+   ✅ copier et jouer commande dans presse-papier
+   ✅ Cmd-click sur les  liens pour les ouvrir dans l'autre fenêtre 
+
+

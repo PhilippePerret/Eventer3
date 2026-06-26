@@ -30,13 +30,8 @@ export default class BrinPanel {
   }
 
   static HANDLED_KEYS = {
-      ArrowDown: 'selectNext'
-    , ArrowUp:    'selectPrev'
-    , ' ':        'toggleChecked'
-    , Enter:      true
-    , n:          'createNew'
-    , Delete:     'deleteSelected'
-    , b:          true
+      Enter: true
+    , b:     true
     /* RÈGLE ABSOLUE : La touche Escape ne sert JAMAIS à fermer un panneau */
   }
 

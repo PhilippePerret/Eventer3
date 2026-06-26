@@ -46,9 +46,7 @@ test('Escape avec titre vide dans lister vide : notification affichée', async (
 
 test('Escape avec titre vide dans lister vide : pas de page blanche', async ({ page }) => {
   const input = await enterVirtualListerEvent(page)
-  console.log("#main-panel doit contenir le champ d'édition")
   await expect(pane1(page).locator('#events-panel')).not.toBeEmpty()
-  console.log("Avant l'annulation")
   await input.press('Escape')
   await expect(pane1(page).locator('#notification')).toBeVisible()
   await expect(pane1(page).locator('#events-panel')).not.toBeEmpty()

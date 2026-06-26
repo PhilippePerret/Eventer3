@@ -10,7 +10,6 @@
 > - Les tests existants, malgré les nombreuses migrations déjà effecutées, ne respectent peut-être pas nouvelle architecture — les corriger au besoin.
 > - **IMPÉRATIF** : si on rencontre le même échec **après trois essais de correction**, ON MET DES LOG(s) pour voir où ça coince.
 
-- **Corriger tous les tests visant `#main-panel`** : `#main-panel` n'existe plus (supprimé d'`app-frame.html`, orphelin depuis le passage à `PANEL_ID` par classe — `projects-panel` pour `ListerProject`, `events-panel` pour `ListerEvent`). Des dizaines de tests font encore `locator('#main-panel')` — à corriger vers `#projects-panel` ou `#events-panel` selon le contexte.
 - **Éliminer BrinPanel / PersoPanel** — remplacer par système générique KeyDispatcher/LISTENERS
   - **Principe fondamental** : tous les Listers (Project, Event, Brin, Perso) ont STRICTEMENT le MÊME fonctionnement — ne diffèrent que par l'aspect (CSS) et quelques comportements spécifiques
   - Refonte terminée (`dom/Lister.js` : render idempotent, `_ensurePanelStructure`, `this.attach(this.container)`)
@@ -51,6 +50,7 @@
 
 ## Fait
 
+- [x] 2026-06-26 — `#main-panel` corrigé dans tous les fichiers tests → `#projects-panel` / `#events-panel`
 - [x] 2026-06-25 — `enterChildren` renommé `enterInside`, `Project` découplé (charge ListerBrin/ListerPerso/ListerEvent via son propre `lister_id`), pools `ListerBrin.pool`/`ListerPerso.pool`, fix import LOG manquant dans `abstract/Lister.js`
 - [x] 2026-06-23 — `_tdd/` : 21 tests verts (keyboard-alt-n, keyboard-cmd-n, new-event, new-event-titre-vide, new-event-virtual-lister, open-existing-project, project-navigation-lister)
 - [x] 2026-06-23 — `createNewBefore()` / `_createAt()` + ListerListener ˜/alt+n + ItemListener guard édition

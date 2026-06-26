@@ -1,5 +1,6 @@
 import KeyDispatcher from './KeyDispatcher.js'
 import ItemDom from '../dom/Item.js'
+import { raise } from '../../../system/Error.js'
 import ItemRepo from '../repo/Item.js'
 import { ItemLi } from '../listen/Item.js'
 import { stopEvent } from '../../utils/events.js'
@@ -13,7 +14,7 @@ export default class Item extends KeyDispatcher {
   constructor(data = {}) {
     super()
     this.id         = data.id         ?? null
-    this.title      = data.title      ?? ''
+    this.title      = data.title      ?? raise(10)
     this.type       = data.type       ?? null
     this.state      = data.state      ?? null
     this.color      = data.color      ?? (DEFAULT_COLOR[this.constructor.name.toLowerCase()] ?? null)
@@ -54,6 +55,7 @@ export default class Item extends KeyDispatcher {
       await this.onChildListerCreated?.(child)
       await child.load()
     }
+    child.selectedIndex = 0
     this.parentLister.detach()
     child.render()
     child.attach(child.container)

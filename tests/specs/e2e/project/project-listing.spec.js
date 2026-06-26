@@ -10,20 +10,14 @@ test('la liste des projets possède les bonnes classes CSS', async ({ page }) =>
   const listing = pane1(page).locator('#projects-panel').first()
   const item = pane1(page).locator('.project-item')
   const title = pane1(page).locator('.project-item__title')
-  console.log('\n=== TEST CLASSES CSS PROJECT LISTING ===')
 
-  console.log('-> vérification #main-panel.project-list')
   await expect(mainPanel).toHaveClass(/project-list/)
 
-  console.log('-> vérification .project-list')
   await expect(listing).toHaveCount(1)
 
-  console.log('-> vérification .project-item')
   await expect(item).toHaveCount(3)
 
-  console.log('-> vérification .project-item__title')
   await expect(title.nth(0)).toContainText('Projet A')
 
-  console.log('\n=== FIN TEST CLASSES CSS PROJECT LISTING ===\n')
 
 })

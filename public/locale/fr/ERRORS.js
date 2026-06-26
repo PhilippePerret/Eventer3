@@ -1,6 +1,8 @@
 export const ERRORS = {
 
-    50:  'La classe $1 doit impérativement définir sa constante PANEL_ID'
+    10:  'La propriété `title’ d’un élément doit toujours être définie.'
+    
+  , 50:  'La classe $1 doit impérativement définir sa constante PANEL_ID'
 
   , 100: 'La fonction pour la touche $1 (et modifier — cf. event) devrait être définie.'
 

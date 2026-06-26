@@ -84,20 +84,16 @@ test('TAB : items → Exécuter → Fermer → items', async ({ page }) => {
 
   const panel = pane1(page).locator('.tools-panel')
 
-  console.log('-> aucun faux-bouton focusé à l\'ouverture')
   await expect(panel.locator('.panel-btn--focused')).toHaveCount(0)
 
-  console.log('-> TAB #1 : Exécuter focusé')
   await pane1(page).locator('.event-item.selected').press('Tab')
   await expect(panel.locator('.panel-btn--primary.panel-btn--focused')).toBeVisible()
   await expect(panel.locator('.panel-btn--cancel.panel-btn--focused')).toHaveCount(0)
 
-  console.log('-> TAB #2 : Fermer focusé')
   await pane1(page).locator('.event-item.selected').press('Tab')
   await expect(panel.locator('.panel-btn--cancel.panel-btn--focused')).toBeVisible()
   await expect(panel.locator('.panel-btn--primary.panel-btn--focused')).toHaveCount(0)
 
-  console.log('-> TAB #3 : retour aux items, aucun bouton focusé')
   await pane1(page).locator('.event-item.selected').press('Tab')
   await expect(panel.locator('.panel-btn--focused')).toHaveCount(0)
   await expect(panel.locator('.floating-panel__item.selected')).toBeVisible()

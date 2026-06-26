@@ -43,7 +43,7 @@ test("brin créé persiste après rechargement de la page", async ({ page }) => 
   await expect(brinPersistant).toBeVisible()
 
   // Le badge du nouveau brin doit être non vide (stocké en DB)
-  const badge = brinPersistant.locator('[data-field="badge"]')
+  const badge = brinPersistant.locator('.brin-badge')
   await expect(badge).not.toHaveText('')
 })
 
@@ -69,5 +69,5 @@ test("brin créé a bien un badge affiché après rechargement", async ({ page }
   // Le second brin (inséré après le premier) doit avoir un badge non vide
   const newBrin = pane1(page).locator('.brin-item').nth(1)
   await expect(newBrin).toContainText('Nouveau Brin')
-  await expect(newBrin.locator('[data-field="badge"]')).not.toHaveText('')
+  await expect(newBrin.locator('.brin-badge')).not.toHaveText('')
 })

@@ -55,19 +55,21 @@ export default {
   },
 
   startEditing() {
-    LOG.m(1, 'Item.startEditing', { id: this.id, elExists: !!this.el, elInDOM: !!this.el?.isConnected, elClass: this.el?.className })
-    LOG.m(1, 'Item.startEditing — title field before replace', this.el?.querySelector('.brin-title')?.outerHTML ?? 'NOT FOUND')
     this.editing = true
     for (const field of this.PROPS) field._curvalue = this[field.name]
+    this._editingFields = []
+    this._editingFieldIdx = 0
     this.el.classList.add('editing')
     for (const field of this.PROPS) {
+      if (field.type === 'no-edit') continue
       const cls = field.cssClass ?? (field.warper ? `${this.minClass}-${field.name}` : `${this.minClass}-item__${field.name}`)
       const old = this.el.querySelector(`.${cls}`)
-      if (old) old.replaceWith(dom.buildEditField(field, this))
+      if (!old) continue
+      const editEl = dom.buildEditField(field, this)
+      old.replaceWith(editEl)
+      this._editingFields.push(editEl)
     }
-    const titleEl = this.el.querySelector('[data-field="title"]')
-    LOG.m(1, 'Item.startEditing — title field after replace', titleEl?.outerHTML ?? 'NOT FOUND', 'visible:', titleEl?.offsetParent)
-    titleEl?.focus()
+    this._editingFields[0]?.focus()
   },
 
   revertValues() {
@@ -75,14 +77,14 @@ export default {
   },
 
   _stopEditing() {
-    LOG.m(1, 'Item._stopEditing', { id: this.id })
     this.editing = false
+    this._editingFields = []
+    this._editingFieldIdx = 0
     try {
       this.el.classList.remove('editing')
       this.el.innerHTML = ''
       this._buildContent(this.el)
       this.el.focus()
-      LOG.m(1, 'Item._stopEditing DONE')
     } catch(e) {
       LOG.m(1, 'Item._stopEditing ERREUR', e.message, e.stack)
     }
@@ -97,9 +99,9 @@ export default {
   },
 
   focusNextField() {
-    const fields = [...this.el.querySelectorAll('[data-field]')]
-    const idx = fields.indexOf(document.activeElement)
-    fields[(idx + 1) % fields.length]?.focus()
+    if (this._editingFields.length < 2) return
+    this._editingFieldIdx = (this._editingFieldIdx + 1) % this._editingFields.length
+    this._editingFields[this._editingFieldIdx]?.focus()
   },
 
   colorFor(index) {

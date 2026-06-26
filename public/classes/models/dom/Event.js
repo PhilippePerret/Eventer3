@@ -21,7 +21,7 @@ export default {
    */
   brinsMarks() {
     const brins = ListerBrin.pool
-    const content = (this.brin_ids ?? []).map(id => {
+const content = (this.brin_ids ?? []).map(id => {
       const b = brins[id]
       if (!b) return ''
       const style = b.color ? ` style="background:${b.color}"` : ''

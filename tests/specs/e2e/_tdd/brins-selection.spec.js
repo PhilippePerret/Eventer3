@@ -18,13 +18,11 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
   let checkedCount = 0
   let uncheckedCount = 0
 
-  console.log(`e1: ${await brinsItems.count()} brins trouvés`)
 
   for (let i = 0; i < await brinsItems.count(); i++) {
     const item = brinsItems.nth(i)
     const hasChecked = await item.evaluate(el => el.classList.contains('checked'))
     const title = await item.locator('.brin-title').textContent()
-    console.log(`  - "${title}" (checked: ${hasChecked})`)
     if (hasChecked) {
       checkedCount++
       expect(title).toMatch(/Brin [AB]/)
@@ -93,6 +91,7 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
     await pane1(page).locator('.project-item.selected').press('ArrowUp')
     await pane1(page).locator('.project-item.selected').press('ArrowUp')
     await pane1(page).locator('.project-item.selected').press('ArrowRight')
+    await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
     await pane1(page).locator('.event-item.selected').press('b')
   
   brinsItems = pane1(page).locator('.brin-item')

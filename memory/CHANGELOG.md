@@ -1,5 +1,11 @@
 # CHANGELOG — Eventer3
 
+## 2026-06-26
+
+### Tests — #main-panel → #projects-panel / #events-panel
+
+- Tous les `locator('#main-panel')` dans les fichiers de tests corrigés vers `#projects-panel` (ListerProject) ou `#events-panel` (ListerEvent) selon contexte
+
 ## 2026-06-25 (suite 2)
 
 ### Refonte render() — idempotence et unification Lister

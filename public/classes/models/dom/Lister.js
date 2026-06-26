@@ -46,6 +46,7 @@ export default {
     LOG.m(2, 'Lister.render', { items: this.items.length, selectedIndex: this.selectedIndex })
     this.container = this._ensureContainer()
     this.container.classList.remove('hidden')
+    this.container.classList.add(`${this.minClass}-list`)
     const panel = this._ensurePanelStructure(this.container)
     const body  = panel.querySelector('.lister-panel__body')
 

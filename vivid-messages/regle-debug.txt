@@ -1,0 +1,19 @@
+Règles stricte pour corriger les bugs révélés par les tests
+------------------------------------------------
+• INTERDICTION FORMELLE d'essayer de résoudre tous les tests à la fois. RÈGLE ABSOLUE : Procéder TEST PAR TEST
+• INTERDICTION FORMELLE de chercher la cause du bug plus de 1 MINUTE. Au bout d'une minute, ARRÊTER DE CHERCHER
+• Après une minute de recherche : 
+- placer des logs (LOG) aux endroits stratégiques (pas un seul, au moins 3)
+- allumer les logs (LOG.on(x) au BON ENDROIT)
+- mettre le test en test.only
+- dire à l'utilisateur quand tout ça est terminé
+
+[Attendre le ]
+
+- Dire à l'utilisateur qu'on a terminé.
+[L'utilisateur lance les tests quand il veut]
+Si confirmation que le test passe :
+- Éteindre le logging (commenter LOG.on())
+- Retirer les LOGS
+- Remettre le 'test.only' en 'test'
+- dire à l'utilisateur quand c'est fini

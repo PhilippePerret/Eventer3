@@ -27,21 +27,16 @@ test("LEVEL mode : item réel après un virtuel est sélectionnable et éditable
   await page.goto('/')
   await enterLevelMode(page)
 
-  console.log('\n=== TEST ÉDITION DERNIER ITEM RÉEL EN LEVEL MODE ===')
 
-  console.log('-> sélection initiale : e11')
   await expect(pane1(page).locator('.event-item[data-id="e11"]')).toHaveClass(/selected/)
 
-  console.log('-> ↓ : saute le virtuel, sélectionne e31')
   await pane1(page).locator('.event-item.selected').press('ArrowDown')
   await expect(pane1(page).locator('.event-item[data-id="e31"]')).toHaveClass(/selected/)
 
-  console.log('-> Enter : édition de e31')
   await pane1(page).locator('.event-item.selected').press('Enter')
   const input = pane1(page).locator('.event-item[data-id="e31"] input[name="title"]')
   await expect(input).toBeVisible()
   await expect(input).toBeFocused()
   await expect(input).toHaveValue('Séquence 1 de Acte III')
 
-  console.log('\n=== FIN ===\n')
 })
