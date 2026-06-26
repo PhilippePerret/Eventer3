@@ -3,10 +3,10 @@ import { installFixtures } from '../../../helpers/install-fixtures.js'
 
 async function openStylePanel(page) {
   await page.goto('/')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await pane1(page).locator('#main-panel').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-  await pane1(page).locator('#main-panel').press('s')
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
+  await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
+  await pane1(page).locator('.event-item.selected').press('s')
   await expect(pane1(page).locator('#style-panel')).toBeVisible()
 }
 
@@ -16,15 +16,15 @@ test('Enter coche le style sélectionné', async ({ page }) => {
   installFixtures('with-styles')
   await openStylePanel(page)
   await expect(pane1(page).locator('.style-item').nth(0)).not.toHaveClass(/checked/)
-  await pane1(page).locator('#main-panel').press('Enter')
+  await pane1(page).locator('.event-item.selected').press('Enter')
   await expect(pane1(page).locator('.style-item').nth(0)).toHaveClass(/checked/)
 })
 
 test('Enter décoche le style déjà coché', async ({ page }) => {
   installFixtures('with-styles')
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press('Enter')
-  await pane1(page).locator('#main-panel').press('Enter')
+  await pane1(page).locator('.event-item.selected').press('Enter')
+  await pane1(page).locator('.event-item.selected').press('Enter')
   await expect(pane1(page).locator('.style-item').nth(0)).not.toHaveClass(/checked/)
 })
 
@@ -33,18 +33,18 @@ test('Enter décoche le style déjà coché', async ({ page }) => {
 test("'a' coche/décoche le premier style", async ({ page }) => {
   installFixtures('with-styles')
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press('a')
+  await pane1(page).locator('.event-item.selected').press('a')
   await expect(pane1(page).locator('.style-item').nth(0)).toHaveClass(/checked/)
-  await pane1(page).locator('#main-panel').press('a')
+  await pane1(page).locator('.event-item.selected').press('a')
   await expect(pane1(page).locator('.style-item').nth(0)).not.toHaveClass(/checked/)
 })
 
 test("'b' coche/décoche le deuxième style", async ({ page }) => {
   installFixtures('with-styles')
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press('b')
+  await pane1(page).locator('.event-item.selected').press('b')
   await expect(pane1(page).locator('.style-item').nth(1)).toHaveClass(/checked/)
-  await pane1(page).locator('#main-panel').press('b')
+  await pane1(page).locator('.event-item.selected').press('b')
   await expect(pane1(page).locator('.style-item').nth(1)).not.toHaveClass(/checked/)
 })
 
@@ -62,10 +62,10 @@ test("lettre affichée dans le style-item (data-letter ou classe visuelle)", asy
 test('Escape annule les styles cochés et restaure le CSS initial', async ({ page }) => {
   installFixtures('with-styles')
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press(' ')  // cocher .titre → font-size 26px
+  await pane1(page).locator('.event-item.selected').press(' ')  // cocher .titre → font-size 26px
   await expect(pane1(page).locator('.event-item').nth(0).locator('.event-text'))
     .toHaveCSS('font-size', '26px')
-  await pane1(page).locator('#main-panel').press('Escape')
+  await pane1(page).locator('.event-item.selected').press('Escape')
   // CSS restauré : plus de 26px
   const fontSize = await pane1(page).locator('.event-item').nth(0).locator('.event-text').evaluate(el =>
     parseFloat(getComputedStyle(el).fontSize)
@@ -76,10 +76,10 @@ test('Escape annule les styles cochés et restaure le CSS initial', async ({ pag
 test('Escape → à la réouverture, aucun style coché', async ({ page }) => {
   installFixtures('with-styles')
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press(' ')  // cocher .titre
-  await pane1(page).locator('#main-panel').press('Escape')
+  await pane1(page).locator('.event-item.selected').press(' ')  // cocher .titre
+  await pane1(page).locator('.event-item.selected').press('Escape')
   await expect(pane1(page).locator('#style-panel')).not.toBeVisible()
-  await pane1(page).locator('#main-panel').press('s')
+  await pane1(page).locator('.event-item.selected').press('s')
   await expect(pane1(page).locator('#style-panel')).toBeVisible()
   await expect(pane1(page).locator('.style-item').nth(0)).not.toHaveClass(/checked/)
 })
@@ -87,8 +87,8 @@ test('Escape → à la réouverture, aucun style coché', async ({ page }) => {
 test('Cmd+Enter applique et conserve les changements', async ({ page }) => {
   installFixtures('with-styles')
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press(' ')  // cocher .titre
-  await pane1(page).locator('#main-panel').press('Meta+Enter')
+  await pane1(page).locator('.event-item.selected').press(' ')  // cocher .titre
+  await pane1(page).locator('.event-item.selected').press('Meta+Enter')
   await expect(pane1(page).locator('#style-panel')).not.toBeVisible()
   // CSS conservé
   await expect(pane1(page).locator('.event-item').nth(0).locator('.event-text'))

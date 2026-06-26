@@ -9,9 +9,9 @@ test.beforeEach(() => {
 
 async function enterEventList(page) {
   await page.goto('/')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
 }
 
 test("dans un ListerEvent, Enter passe l'event sélectionné en édition du titre", async ({ page }) => {
@@ -21,16 +21,16 @@ test("dans un ListerEvent, Enter passe l'event sélectionné en édition du titr
   console.log('\n=== TEST ÉDITION TITRE EVENT ===')
 
   console.log('-> entrée dans l\'ListerEvent du premier projet')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await pane1(page).locator('#main-panel').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
+  await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
 
   console.log('-> vérification : premier event sélectionné')
   const firstItem = pane1(page).locator('.event-item').nth(0)
   await expect(firstItem).toHaveClass(/selected/)
 
   console.log('-> appui sur Enter → mise en édition')
-  await pane1(page).locator('#main-panel').press('Enter')
+  await pane1(page).locator('.event-item.selected').press('Enter')
 
   console.log('-> vérification : input visible avec le titre courant')
   const input = firstItem.locator('input[name="title"]')
@@ -40,7 +40,7 @@ test("dans un ListerEvent, Enter passe l'event sélectionné en édition du titr
 
   console.log('-> saisie du nouveau titre et validation')
   await input.fill('Titre modifié')
-  await pane1(page).locator('#main-panel').press('Enter')
+  await pane1(page).locator('.event-item.selected').press('Enter')
 
   console.log('-> vérification : plus d\'input, titre mis à jour')
   await expect(firstItem.locator('input[name="title"]')).not.toBeVisible()
@@ -57,16 +57,16 @@ test("dans un ListerEvent, Escape annule l'édition et restaure le titre origina
   console.log('\n=== TEST ANNULATION ÉDITION EVENT ===')
 
   console.log('-> entrée dans l\'ListerEvent du premier projet')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await pane1(page).locator('#main-panel').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
+  await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
 
   console.log('-> vérification : premier event sélectionné')
   const firstItem = pane1(page).locator('.event-item').nth(0)
   await expect(firstItem).toHaveClass(/selected/)
 
   console.log('-> appui sur Enter → mise en édition')
-  await pane1(page).locator('#main-panel').press('Enter')
+  await pane1(page).locator('.event-item.selected').press('Enter')
 
   const input = firstItem.locator('input[name="title"]')
   await expect(input).toBeVisible()
@@ -74,7 +74,7 @@ test("dans un ListerEvent, Escape annule l'édition et restaure le titre origina
 
   console.log('-> saisie d\'un titre temporaire puis Escape')
   await input.fill('Titre temporaire')
-  await pane1(page).locator('#main-panel').press('Escape')
+  await pane1(page).locator('.event-item.selected').press('Escape')
 
   console.log('-> vérification : plus d\'input, titre original restauré')
   await expect(firstItem.locator('input[name="title"]')).not.toBeVisible()
@@ -86,7 +86,7 @@ test("dans un ListerEvent, Escape annule l'édition et restaure le titre origina
 
 test('ArrowDown pendant édition du titre ne sélectionne pas le suivant', async ({ page }) => {
   await enterEventList(page)
-  await pane1(page).locator('#main-panel').press('ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
   await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/selected/)
   await pane1(page).locator('.event-item.selected').press('Enter')
   await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/editing/)
@@ -99,7 +99,7 @@ test('ArrowDown pendant édition du titre ne sélectionne pas le suivant', async
 
 test('ArrowUp pendant édition du titre ne sélectionne pas le précédent', async ({ page }) => {
   await enterEventList(page)
-  await pane1(page).locator('#main-panel').press('ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
   await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/selected/)
   await pane1(page).locator('.event-item.selected').press('Enter')
   await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/editing/)
@@ -112,27 +112,27 @@ test('ArrowUp pendant édition du titre ne sélectionne pas le précédent', asy
 
 test('titre persisté en mémoire : retour et re-entrée dans le projet', async ({ page }) => {
   await enterEventList(page)
-  await pane1(page).locator('#main-panel').press('n')
+  await pane1(page).locator('.event-item.selected').press('n')
   const input = pane1(page).locator('.event-item.editing [data-field="title"]')
   await expect(input).toBeVisible()
   await input.fill(EVENT_TITLE)
   await pane1(page).locator('.event-item.selected').press('Enter')
-  await pane1(page).locator('#main-panel').press('ArrowLeft')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+  await pane1(page).locator('.event-item.selected').press('ArrowLeft')
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
   await expect(pane1(page).locator('.event-item').filter({ hasText: EVENT_TITLE })).toBeVisible()
 })
 
 test('titre persisté en DB : rechargement de la page', async ({ page }) => {
   await enterEventList(page)
-  await pane1(page).locator('#main-panel').press('n')
+  await pane1(page).locator('.event-item.selected').press('n')
   const input = pane1(page).locator('.event-item.editing [data-field="title"]')
   await expect(input).toBeVisible()
   await input.fill(EVENT_TITLE)
   await pane1(page).locator('.event-item.selected').press('Enter')
   await page.reload()
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
   await expect(pane1(page).locator('.event-item').filter({ hasText: EVENT_TITLE })).toBeVisible()
 })

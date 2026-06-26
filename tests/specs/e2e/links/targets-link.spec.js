@@ -9,8 +9,8 @@ test.beforeEach(() => {
 async function selectFirstEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('.project-item').first()).toHaveClass(/selected/)
-  await pane1(page).locator('#main-panel').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await pane1(page).locator('.event-item.selected').press('ArrowRight')
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
   await expect(pane1(page).locator('.event-item').first()).toBeVisible()
 }
 
@@ -18,7 +18,7 @@ test('k sur item sélectionné → mémorise la cible + notification', async ({ 
   await selectFirstEvent(page)
   const title = await pane1(page).locator('.event-item.selected .event-text').textContent()
   const id    = await pane1(page).locator('.event-item.selected').getAttribute('data-id')
-  await pane1(page).locator('#main-panel').press('k')
+  await pane1(page).locator('.event-item.selected').press('k')
   await expect(pane1(page).locator('.notification')).toBeVisible()
   const notif = await pane1(page).locator('.notification').textContent()
   expect(notif).toContain(title.trim())
@@ -26,10 +26,10 @@ test('k sur item sélectionné → mémorise la cible + notification', async ({ 
 
 test('k deux fois sur le même item → alerte doublon, pas de doublon dans targets', async ({ page }) => {
   await selectFirstEvent(page)
-  await pane1(page).locator('#main-panel').press('k')
+  await pane1(page).locator('.event-item.selected').press('k')
   await expect(pane1(page).locator('.notification')).toBeVisible()
   await pane1(page).locator('.notification').waitFor({ state: 'hidden' })
-  await pane1(page).locator('#main-panel').press('k')
+  await pane1(page).locator('.event-item.selected').press('k')
   await expect(pane1(page).locator('.notification')).toBeVisible()
   const notif = await pane1(page).locator('.notification').textContent()
   expect(notif.toLowerCase()).toMatch(/déjà|doublon/)
@@ -39,16 +39,16 @@ test('⌘+k en édition → TargetsPanel s\'ouvre avec la cible mémorisée', as
   await selectFirstEvent(page)
   const id    = await pane1(page).locator('.event-item.selected').getAttribute('data-id')
   const title = await pane1(page).locator('.event-item.selected .event-text').textContent()
-  await pane1(page).locator('#main-panel').press('k')
+  await pane1(page).locator('.event-item.selected').press('k')
   await expect(pane1(page).locator('.notification')).toBeVisible()
   await pane1(page).locator('.notification').waitFor({ state: 'hidden' })
 
   // Passe sur un autre event + entre en édition
-  await pane1(page).locator('#main-panel').press('ArrowDown')
-  await pane1(page).locator('#main-panel').press('Enter')
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('Enter')
   await expect(pane1(page).locator('.event-item.editing input[name="title"]')).toBeFocused()
 
-  await pane1(page).locator('#main-panel').press('Meta+k')
+  await pane1(page).locator('.event-item.selected').press('Meta+k')
   await expect(pane1(page).locator('.targets-panel')).toBeVisible()
   await expect(pane1(page).locator('.floating-panel__item')).toHaveCount(1)
   await expect(pane1(page).locator('.floating-panel__item').first()).toContainText(title.trim())
@@ -58,18 +58,18 @@ test('Enter dans TargetsPanel → insère [title](id) au curseur', async ({ page
   await selectFirstEvent(page)
   const id    = await pane1(page).locator('.event-item.selected').getAttribute('data-id')
   const title = await pane1(page).locator('.event-item.selected .event-text').textContent()
-  await pane1(page).locator('#main-panel').press('k')
+  await pane1(page).locator('.event-item.selected').press('k')
   await pane1(page).locator('.notification').waitFor({ state: 'hidden' })
 
-  await pane1(page).locator('#main-panel').press('ArrowDown')
-  await pane1(page).locator('#main-panel').press('Enter')
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('Enter')
   const field = pane1(page).locator('.event-item.editing input[name="title"]')
   await expect(field).toBeFocused()
   await field.fill('avant ')
 
-  await pane1(page).locator('#main-panel').press('Meta+k')
+  await pane1(page).locator('.event-item.selected').press('Meta+k')
   await expect(pane1(page).locator('.targets-panel')).toBeVisible()
-  await pane1(page).locator('#main-panel').press('Enter')
+  await pane1(page).locator('.event-item.selected').press('Enter')
   await expect(pane1(page).locator('.targets-panel')).not.toBeVisible()
 
   const val = await field.inputValue()
@@ -85,18 +85,18 @@ test('Enter dans TargetsPanel → insère [title](id) au curseur', async ({ page
 
 test('⌘+Enter dans TargetsPanel → ferme sans insérer', async ({ page }) => {
   await selectFirstEvent(page)
-  await pane1(page).locator('#main-panel').press('k')
+  await pane1(page).locator('.event-item.selected').press('k')
   await pane1(page).locator('.notification').waitFor({ state: 'hidden' })
 
-  await pane1(page).locator('#main-panel').press('ArrowDown')
-  await pane1(page).locator('#main-panel').press('Enter')
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('Enter')
   const field = pane1(page).locator('.event-item.editing input[name="title"]')
   await expect(field).toBeFocused()
   const before = await field.inputValue()
 
-  await pane1(page).locator('#main-panel').press('Meta+k')
+  await pane1(page).locator('.event-item.selected').press('Meta+k')
   await expect(pane1(page).locator('.targets-panel')).toBeVisible()
-  await pane1(page).locator('#main-panel').press('Meta+Enter')
+  await pane1(page).locator('.event-item.selected').press('Meta+Enter')
   await expect(pane1(page).locator('.targets-panel')).not.toBeVisible()
 
   const after = await field.inputValue()
@@ -107,18 +107,18 @@ test('targets persistées : rechargement → cibles toujours présentes', async 
   await selectFirstEvent(page)
   const id    = await pane1(page).locator('.event-item.selected').getAttribute('data-id')
   const title = await pane1(page).locator('.event-item.selected .event-text').textContent()
-  await pane1(page).locator('#main-panel').press('k')
+  await pane1(page).locator('.event-item.selected').press('k')
   await pane1(page).locator('.notification').waitFor({ state: 'hidden' })
 
   await page.reload()
   await expect(pane1(page).locator('.project-item').first()).toHaveClass(/selected/)
-  await pane1(page).locator('#main-panel').press('ArrowRight')
+  await pane1(page).locator('.event-item.selected').press('ArrowRight')
   await expect(pane1(page).locator('.event-item').first()).toBeVisible()
-  await pane1(page).locator('#main-panel').press('ArrowDown')
-  await pane1(page).locator('#main-panel').press('Enter')
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('Enter')
   await expect(pane1(page).locator('.event-item.editing input[name="title"]')).toBeFocused()
 
-  await pane1(page).locator('#main-panel').press('Meta+k')
+  await pane1(page).locator('.event-item.selected').press('Meta+k')
   await expect(pane1(page).locator('.targets-panel')).toBeVisible()
   await expect(pane1(page).locator('.floating-panel__item').first()).toContainText(title.trim())
 })

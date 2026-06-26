@@ -13,23 +13,23 @@ test.beforeEach(() => {
 async function enterListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-  await pane1(page).locator('#main-panel').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await pane1(page).locator('.event-item.selected').press('ArrowRight')
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
 }
 
 // ── Panneau ───────────────────────────────────────────────────────
 
 test('Cmd+: puis b ouvre le sélecteur de brins', async ({ page }) => {
   await enterListerEvent(page)
-  await pane1(page).locator('#main-panel').press('Meta+:')
-  await pane1(page).locator('#main-panel').press('b')
+  await pane1(page).locator('.event-item.selected').press('Meta+:')
+  await pane1(page).locator('.event-item.selected').press('b')
   await expect(pane1(page).locator('#filter-selector-panel')).toBeVisible()
 })
 
 test('le sélecteur affiche les brins du projet', async ({ page }) => {
   await enterListerEvent(page)
-  await pane1(page).locator('#main-panel').press('Meta+:')
-  await pane1(page).locator('#main-panel').press('b')
+  await pane1(page).locator('.event-item.selected').press('Meta+:')
+  await pane1(page).locator('.event-item.selected').press('b')
   await expect(pane1(page).locator('.filter-selector-row')).toHaveCount(2)
 })
 
@@ -37,11 +37,11 @@ test('le sélecteur affiche les brins du projet', async ({ page }) => {
 
 test('sélectionner b1 masque les events sans b1', async ({ page }) => {
   await enterListerEvent(page)
-  await pane1(page).locator('#main-panel').press('Meta+:')
-  await pane1(page).locator('#main-panel').press('b')
+  await pane1(page).locator('.event-item.selected').press('Meta+:')
+  await pane1(page).locator('.event-item.selected').press('b')
   await expect(pane1(page).locator('#filter-selector-panel')).toBeVisible()
-  await pane1(page).locator('#main-panel').press(' ')      // coche b1 (premier brin)
-  await pane1(page).locator('#main-panel').press('Enter')  // applique
+  await pane1(page).locator('.event-item.selected').press(' ')      // coche b1 (premier brin)
+  await pane1(page).locator('.event-item.selected').press('Enter')  // applique
 
   const items = pane1(page).locator('.event-item')
   await expect(items.nth(0)).not.toHaveClass(/hidden/)  // e1 a b1 → visible
@@ -52,11 +52,11 @@ test('sélectionner b1 masque les events sans b1', async ({ page }) => {
 
 test('Escape dans le sélecteur n\'applique pas le filtre', async ({ page }) => {
   await enterListerEvent(page)
-  await pane1(page).locator('#main-panel').press('Meta+:')
-  await pane1(page).locator('#main-panel').press('b')
+  await pane1(page).locator('.event-item.selected').press('Meta+:')
+  await pane1(page).locator('.event-item.selected').press('b')
   await expect(pane1(page).locator('#filter-selector-panel')).toBeVisible()
-  await pane1(page).locator('#main-panel').press(' ')      // coche b1
-  await pane1(page).locator('#main-panel').press('Escape') // annule
+  await pane1(page).locator('.event-item.selected').press(' ')      // coche b1
+  await pane1(page).locator('.event-item.selected').press('Escape') // annule
 
   const items = pane1(page).locator('.event-item')
   await expect(items.nth(0)).not.toHaveClass(/hidden/)
@@ -67,18 +67,18 @@ test('Escape dans le sélecteur n\'applique pas le filtre', async ({ page }) => 
 
 test('Cmd+:: efface le filtre brin et réaffiche tous les events', async ({ page }) => {
   await enterListerEvent(page)
-  await pane1(page).locator('#main-panel').press('Meta+:')
-  await pane1(page).locator('#main-panel').press('b')
+  await pane1(page).locator('.event-item.selected').press('Meta+:')
+  await pane1(page).locator('.event-item.selected').press('b')
   await expect(pane1(page).locator('#filter-selector-panel')).toBeVisible()
-  await pane1(page).locator('#main-panel').press(' ')
-  await pane1(page).locator('#main-panel').press('Enter')
+  await pane1(page).locator('.event-item.selected').press(' ')
+  await pane1(page).locator('.event-item.selected').press('Enter')
 
   // filtre actif : e2 et e4 masqués
   await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/hidden/)
 
   // effacement
-  await pane1(page).locator('#main-panel').press('Meta+:')
-  await pane1(page).locator('#main-panel').press(':')
+  await pane1(page).locator('.event-item.selected').press('Meta+:')
+  await pane1(page).locator('.event-item.selected').press(':')
 
   const items = pane1(page).locator('.event-item')
   await expect(items.nth(0)).not.toHaveClass(/hidden/)

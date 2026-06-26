@@ -11,14 +11,14 @@ test.beforeEach(() => {
 
 async function goToListerEvent(page) {
   await page.goto('/')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await pane1(page).locator('#main-panel').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
+  await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
 }
 
 async function openStylePanel(page) {
   await goToListerEvent(page)
-  await pane1(page).locator('#main-panel').press('s')
+  await pane1(page).locator('.event-item.selected').press('s')
   await expect(pane1(page).locator('#style-panel')).toBeVisible()
 }
 
@@ -26,38 +26,38 @@ async function openStylePanel(page) {
 
 test("s ouvre le panneau des styles depuis l'ListerEvent", async ({ page }) => {
   await goToListerEvent(page)
-  await pane1(page).locator('#main-panel').press('s')
+  await pane1(page).locator('.event-item.selected').press('s')
   await expect(pane1(page).locator('#style-panel')).toBeVisible()
 })
 
 test("l'ListerEvent reste visible en fond pendant que le panneau est ouvert", async ({ page }) => {
   await openStylePanel(page)
-  await expect(pane1(page).locator('#main-panel')).toBeVisible()
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
 })
 
 test("Escape ferme le panneau des styles", async ({ page }) => {
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press('Escape')
+  await pane1(page).locator('.event-item.selected').press('Escape')
   await expect(pane1(page).locator('#style-panel')).not.toBeVisible()
 })
 
 test("s ferme le panneau quand il est actif", async ({ page }) => {
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press('s')
+  await pane1(page).locator('.event-item.selected').press('s')
   await expect(pane1(page).locator('#style-panel')).not.toBeVisible()
 })
 
 test("Cmd+Enter ferme le panneau des styles", async ({ page }) => {
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press('Meta+Enter')
+  await pane1(page).locator('.event-item.selected').press('Meta+Enter')
   await expect(pane1(page).locator('#style-panel')).not.toBeVisible()
 })
 
 test("après fermeture, l'ListerEvent redevient actif (↓ change la sélection)", async ({ page }) => {
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press('Escape')
+  await pane1(page).locator('.event-item.selected').press('Escape')
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
-  await pane1(page).locator('#main-panel').press('ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
   await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/selected/)
 })
 
@@ -99,21 +99,21 @@ test("aucun style n'est coché à l'ouverture (event sans css)", async ({ page }
 
 test("↓ sélectionne le style suivant", async ({ page }) => {
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press('ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
   await expect(pane1(page).locator('.style-item').nth(1)).toHaveClass(/selected/)
   await expect(pane1(page).locator('.style-item').nth(0)).not.toHaveClass(/selected/)
 })
 
 test("↑ sélectionne le style précédent", async ({ page }) => {
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press('ArrowDown')
-  await pane1(page).locator('#main-panel').press('ArrowUp')
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('ArrowUp')
   await expect(pane1(page).locator('.style-item').nth(0)).toHaveClass(/selected/)
 })
 
 test("↓↑ ne modifient pas la sélection de l'ListerEvent", async ({ page }) => {
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press('ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
 })
 
@@ -122,14 +122,14 @@ test("↓↑ ne modifient pas la sélection de l'ListerEvent", async ({ page }) 
 test("Space coche un style non-coché", async ({ page }) => {
   await openStylePanel(page)
   await expect(pane1(page).locator('.style-item').nth(0)).not.toHaveClass(/checked/)
-  await pane1(page).locator('#main-panel').press(' ')
+  await pane1(page).locator('.event-item.selected').press(' ')
   await expect(pane1(page).locator('.style-item').nth(0)).toHaveClass(/checked/)
 })
 
 test("Space décoche un style coché", async ({ page }) => {
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press(' ')
-  await pane1(page).locator('#main-panel').press(' ')
+  await pane1(page).locator('.event-item.selected').press(' ')
+  await pane1(page).locator('.event-item.selected').press(' ')
   await expect(pane1(page).locator('.style-item').nth(0)).not.toHaveClass(/checked/)
 })
 
@@ -139,25 +139,25 @@ test("cocher .titre applique font-size:26px à .event-text de l'event courant", 
   await openStylePanel(page)
   const name0 = await pane1(page).locator('.style-item').nth(0).getAttribute('data-name')
   expect(name0).toBe('titre')
-  await pane1(page).locator('#main-panel').press(' ')
+  await pane1(page).locator('.event-item.selected').press(' ')
   await expect(pane1(page).locator('.event-item').nth(0).locator('.event-text'))
     .toHaveCSS('font-size', '26px')
 })
 
 test("cocher .note-rouge applique font-size:9px à .event-text", async ({ page }) => {
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press('ArrowDown') // → note-rouge
+  await pane1(page).locator('.event-item.selected').press('ArrowDown') // → note-rouge
   const name1 = await pane1(page).locator('.style-item').nth(1).getAttribute('data-name')
   expect(name1).toBe('note-rouge')
-  await pane1(page).locator('#main-panel').press(' ')
+  await pane1(page).locator('.event-item.selected').press(' ')
   await expect(pane1(page).locator('.event-item').nth(0).locator('.event-text'))
     .toHaveCSS('font-size', '9px')
 })
 
 test("cocher .note-rouge applique margin-left à .event-text (inline-block requis)", async ({ page }) => {
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press('ArrowDown') // → note-rouge
-  await pane1(page).locator('#main-panel').press(' ')
+  await pane1(page).locator('.event-item.selected').press('ArrowDown') // → note-rouge
+  await pane1(page).locator('.event-item.selected').press(' ')
   const ml = await pane1(page).locator('.event-item').nth(0).locator('.event-text').evaluate(el =>
     getComputedStyle(el).marginLeft
   )
@@ -166,8 +166,8 @@ test("cocher .note-rouge applique margin-left à .event-text (inline-block requi
 
 test("décocher un style retire son effet CSS de .event-text", async ({ page }) => {
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press(' ') // cocher .titre
-  await pane1(page).locator('#main-panel').press(' ') // décocher
+  await pane1(page).locator('.event-item.selected').press(' ') // cocher .titre
+  await pane1(page).locator('.event-item.selected').press(' ') // décocher
   const fontSize = await pane1(page).locator('.event-item').nth(0).locator('.event-text').evaluate(el =>
     parseFloat(getComputedStyle(el).fontSize)
   )
@@ -178,9 +178,9 @@ test("décocher un style retire son effet CSS de .event-text", async ({ page }) 
 
 test("ordre [titre, note-rouge] → font-size 9px (note-rouge appliqué en dernier, gagne)", async ({ page }) => {
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press(' ')           // cocher .titre (index 0)
-  await pane1(page).locator('#main-panel').press('ArrowDown')   // → .note-rouge
-  await pane1(page).locator('#main-panel').press(' ')           // cocher .note-rouge
+  await pane1(page).locator('.event-item.selected').press(' ')           // cocher .titre (index 0)
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')   // → .note-rouge
+  await pane1(page).locator('.event-item.selected').press(' ')           // cocher .note-rouge
   // ordre panel : [titre, note-rouge] → note-rouge appliqué en dernier → 9px
   await expect(pane1(page).locator('.event-item').nth(0).locator('.event-text'))
     .toHaveCSS('font-size', '9px')
@@ -188,12 +188,12 @@ test("ordre [titre, note-rouge] → font-size 9px (note-rouge appliqué en derni
 
 test("inverser l'ordre [note-rouge, titre] → font-size 26px (titre appliqué en dernier)", async ({ page }) => {
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press(' ')           // cocher .titre (index 0, sélectionné)
-  await pane1(page).locator('#main-panel').press('ArrowDown')
-  await pane1(page).locator('#main-panel').press(' ')           // cocher .note-rouge (index 1)
-  await pane1(page).locator('#main-panel').press('ArrowUp')     // revenir sur .titre (index 0)
+  await pane1(page).locator('.event-item.selected').press(' ')           // cocher .titre (index 0, sélectionné)
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  await pane1(page).locator('.event-item.selected').press(' ')           // cocher .note-rouge (index 1)
+  await pane1(page).locator('.event-item.selected').press('ArrowUp')     // revenir sur .titre (index 0)
   // ⌘↓ déplace .titre après .note-rouge → ordre [note-rouge, titre]
-  await pane1(page).locator('#main-panel').press('Meta+ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('Meta+ArrowDown')
   // titre appliqué en dernier → 26px
   await expect(pane1(page).locator('.event-item').nth(0).locator('.event-text'))
     .toHaveCSS('font-size', '26px')
@@ -204,16 +204,16 @@ test("inverser l'ordre [note-rouge, titre] → font-size 26px (titre appliqué e
 test("⌘↓ déplace le style vers le bas dans le panneau", async ({ page }) => {
   await openStylePanel(page)
   const nameBefore = await pane1(page).locator('.style-item').nth(0).getAttribute('data-name')
-  await pane1(page).locator('#main-panel').press('Meta+ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('Meta+ArrowDown')
   const nameAfter = await pane1(page).locator('.style-item').nth(0).getAttribute('data-name')
   expect(nameAfter).not.toBe(nameBefore)
 })
 
 test("⌘↑ déplace le style vers le haut dans le panneau", async ({ page }) => {
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press('ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
   const nameAt1 = await pane1(page).locator('.style-item').nth(1).getAttribute('data-name')
-  await pane1(page).locator('#main-panel').press('Meta+ArrowUp')
+  await pane1(page).locator('.event-item.selected').press('Meta+ArrowUp')
   const nameAt0After = await pane1(page).locator('.style-item').nth(0).getAttribute('data-name')
   expect(nameAt0After).toBe(nameAt1)
 })
@@ -222,17 +222,17 @@ test("⌘↑ déplace le style vers le haut dans le panneau", async ({ page }) =
 
 test("⌥↓ passe à l'event suivant en fond, mise à jour des styles cochés", async ({ page }) => {
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press(' ') // cocher .titre sur e1
-  await pane1(page).locator('#main-panel').press('Alt+ArrowDown') // passer à e2
+  await pane1(page).locator('.event-item.selected').press(' ') // cocher .titre sur e1
+  await pane1(page).locator('.event-item.selected').press('Alt+ArrowDown') // passer à e2
   await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/selected/)
   await expect(pane1(page).locator('.style-item').nth(0)).not.toHaveClass(/checked/)
 })
 
 test("⌥↑ revient à l'event précédent, styles cochés restaurés", async ({ page }) => {
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press(' ') // cocher .titre sur e1
-  await pane1(page).locator('#main-panel').press('Alt+ArrowDown')
-  await pane1(page).locator('#main-panel').press('Alt+ArrowUp')
+  await pane1(page).locator('.event-item.selected').press(' ') // cocher .titre sur e1
+  await pane1(page).locator('.event-item.selected').press('Alt+ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('Alt+ArrowUp')
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
   await expect(pane1(page).locator('.style-item').nth(0)).toHaveClass(/checked/)
 })
@@ -241,31 +241,31 @@ test("⌥↑ revient à l'event précédent, styles cochés restaurés", async (
 
 test("persistance : style coché survit au rechargement", async ({ page }) => {
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press(' ') // cocher .titre
+  await pane1(page).locator('.event-item.selected').press(' ') // cocher .titre
   await page.waitForLoadState('networkidle')
 
   await page.reload()
   await goToListerEvent(page)
-  await pane1(page).locator('#main-panel').press('s')
+  await pane1(page).locator('.event-item.selected').press('s')
   await expect(pane1(page).locator('#style-panel')).toBeVisible()
   await expect(pane1(page).locator('.style-item').nth(0)).toHaveClass(/checked/)
 })
 
 test("persistance : style décoché survit au rechargement", async ({ page }) => {
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press(' ')
-  await pane1(page).locator('#main-panel').press(' ') // cocher puis décocher
+  await pane1(page).locator('.event-item.selected').press(' ')
+  await pane1(page).locator('.event-item.selected').press(' ') // cocher puis décocher
   await page.waitForLoadState('networkidle')
 
   await page.reload()
   await goToListerEvent(page)
-  await pane1(page).locator('#main-panel').press('s')
+  await pane1(page).locator('.event-item.selected').press('s')
   await expect(pane1(page).locator('.style-item').nth(0)).not.toHaveClass(/checked/)
 })
 
 test("persistance : font-size correcte sur .event-text après rechargement", async ({ page }) => {
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press(' ') // cocher .titre → 26px
+  await pane1(page).locator('.event-item.selected').press(' ') // cocher .titre → 26px
   await page.waitForLoadState('networkidle')
 
   await page.reload()
@@ -276,11 +276,11 @@ test("persistance : font-size correcte sur .event-text après rechargement", asy
 
 test("persistance : ordre inversé survit au rechargement (titre après note-rouge → 26px)", async ({ page }) => {
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press(' ')           // cocher .titre
-  await pane1(page).locator('#main-panel').press('ArrowDown')
-  await pane1(page).locator('#main-panel').press(' ')           // cocher .note-rouge
-  await pane1(page).locator('#main-panel').press('ArrowUp')
-  await pane1(page).locator('#main-panel').press('Meta+ArrowDown') // ordre → [note-rouge, titre]
+  await pane1(page).locator('.event-item.selected').press(' ')           // cocher .titre
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  await pane1(page).locator('.event-item.selected').press(' ')           // cocher .note-rouge
+  await pane1(page).locator('.event-item.selected').press('ArrowUp')
+  await pane1(page).locator('.event-item.selected').press('Meta+ArrowDown') // ordre → [note-rouge, titre]
   await page.waitForLoadState('networkidle')
 
   await page.reload()
@@ -299,7 +299,7 @@ test("le panneau styles n'affiche pas 'nouveau après' dans le footer", async ({
 
 test("le panneau styles affiche 'monter'/'descendre' dans l'aide contextuelle", async ({ page }) => {
   await openStylePanel(page)
-  await pane1(page).locator('#main-panel').press('Meta+?')
+  await pane1(page).locator('.event-item.selected').press('Meta+?')
   const helpText = await pane1(page).locator('.contextual-help').textContent()
   expect(helpText.toLowerCase()).toContain('monter')
   expect(helpText.toLowerCase()).toContain('descendre')

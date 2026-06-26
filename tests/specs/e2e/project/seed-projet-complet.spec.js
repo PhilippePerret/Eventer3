@@ -12,17 +12,17 @@ test.beforeEach(async ({ page }) => {
 })
 
 test('projet seed → "Intrigue principale" dans le panneau brins', async ({ page }) => {
-  await pane1(page).locator('#main-panel').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-  await pane1(page).locator('#main-panel').press('b')
+  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
+  await pane1(page).locator('.event-item.selected').press('b')
   await expect(pane1(page).locator('#brins-panel')).toBeVisible()
   await expect(pane1(page).locator('.brin-item').first()).toContainText('Intrigue principale')
 })
 
 test('projet seed → "Votre protagoniste" dans le panneau persos', async ({ page }) => {
-  await pane1(page).locator('#main-panel').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-  await pane1(page).locator('#main-panel').press('p')
+  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
+  await pane1(page).locator('.event-item.selected').press('p')
   await expect(pane1(page).locator('#persos-panel')).toBeVisible()
   await expect(pane1(page).locator('.perso-item__title').first()).toContainText('Votre protagoniste')
 })

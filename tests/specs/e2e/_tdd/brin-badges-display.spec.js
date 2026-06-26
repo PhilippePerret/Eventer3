@@ -18,7 +18,7 @@ async function enterListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
 }
 
 test('event avec un brin affiche son badge', async ({ page }) => {

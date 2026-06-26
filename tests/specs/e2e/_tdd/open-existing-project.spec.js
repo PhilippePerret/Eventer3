@@ -10,7 +10,7 @@ test.beforeEach(() => {
 async function createProjectAndGetFolderInfo(page, expect) {
   await page.goto('/')
   const { folderName, workDir } = await setupProjectFolder(page)
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#projects-panel')).toHaveClass(/project-list/)
   await pane1(page).locator('.project-item.selected').press('n')
   await createAndSelectFolderInPicker(page, expect, folderName)
   await page.waitForLoadState('networkidle')
@@ -22,7 +22,7 @@ async function tryPickExistingFolder(page, expect, workDir) {
     headers: { 'Content-Type': 'application/json' },
     data: JSON.stringify({ value: workDir })
   })
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#projects-panel')).toHaveClass(/project-list/)
   await pane1(page).locator('.project-item.selected').press('n')
   await expect(pane1(page).locator('.file-picker')).toBeVisible()
   await pane1(page).locator('.file-picker').press('Enter')
@@ -65,7 +65,7 @@ test('→ sur un projet ouvre la liste de ses events', async ({ page }) => {
   await page.waitForLoadState('networkidle')
 
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#events-panel')).toHaveClass(/event-list/)
 
   await expect(pane1(page).locator('.event-item')).toHaveCount(1)
   await expect(pane1(page).locator('.event-item').nth(0)).toContainText('Acte I')
@@ -95,7 +95,7 @@ test('ouverture d\'un projet existant : ses events affichent les marques de brin
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#events-panel')).toHaveClass(/event-list/)
   await expect(pane1(page).locator('.event-item')).toHaveCount(2)
 
   const e1 = pane1(page).locator('.event-item').nth(0)

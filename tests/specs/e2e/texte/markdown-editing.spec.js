@@ -9,10 +9,10 @@ test.beforeEach(() => {
 async function enterEditFirstEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('.project-item').first()).toHaveClass(/selected/)
-  await pane1(page).locator('#main-panel').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await pane1(page).locator('.event-item.selected').press('ArrowRight')
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
   await expect(pane1(page).locator('.event-item').first()).toBeVisible()
-  await pane1(page).locator('#main-panel').press('Enter')
+  await pane1(page).locator('.event-item.selected').press('Enter')
   const field = pane1(page).locator('.event-item.editing input[name="title"]')
   await expect(field).toBeFocused()
   // Sélectionner tout + remplacer par "hello world"
@@ -22,14 +22,14 @@ async function enterEditFirstEvent(page) {
 
 // Helper : sélectionne les N derniers caractères dans le champ
 async function selectLastNChars(page, n) {
-  for (let i = 0; i < n; i++) await pane1(page).locator('#main-panel').press('Shift+ArrowLeft')
+  for (let i = 0; i < n; i++) await pane1(page).locator('.event-item.selected').press('Shift+ArrowLeft')
 }
 
 test('⌘+i entoure la sélection avec *...* (italique)', async ({ page }) => {
   await enterEditFirstEvent(page)
   await selectLastNChars(page, 5) // sélectionne "world"
-  await pane1(page).locator('#main-panel').press('Meta+i')
-  await pane1(page).locator('#main-panel').press('Enter')
+  await pane1(page).locator('.event-item.selected').press('Meta+i')
+  await pane1(page).locator('.event-item.selected').press('Enter')
   const html = await pane1(page).locator('.event-item.selected .event-text').innerHTML()
   expect(html).toContain('<em>world</em>')
 })
@@ -37,8 +37,8 @@ test('⌘+i entoure la sélection avec *...* (italique)', async ({ page }) => {
 test('⌘+g entoure la sélection avec **...** (gras)', async ({ page }) => {
   await enterEditFirstEvent(page)
   await selectLastNChars(page, 5)
-  await pane1(page).locator('#main-panel').press('Meta+g')
-  await pane1(page).locator('#main-panel').press('Enter')
+  await pane1(page).locator('.event-item.selected').press('Meta+g')
+  await pane1(page).locator('.event-item.selected').press('Enter')
   const html = await pane1(page).locator('.event-item.selected .event-text').innerHTML()
   expect(html).toContain('<strong>world</strong>')
 })
@@ -46,8 +46,8 @@ test('⌘+g entoure la sélection avec **...** (gras)', async ({ page }) => {
 test('⌘+b entoure la sélection avec ~~...~~ (barré)', async ({ page }) => {
   await enterEditFirstEvent(page)
   await selectLastNChars(page, 5)
-  await pane1(page).locator('#main-panel').press('Meta+b')
-  await pane1(page).locator('#main-panel').press('Enter')
+  await pane1(page).locator('.event-item.selected').press('Meta+b')
+  await pane1(page).locator('.event-item.selected').press('Enter')
   const html = await pane1(page).locator('.event-item.selected .event-text').innerHTML()
   expect(html).toContain('<s>world</s>')
 })
@@ -55,8 +55,8 @@ test('⌘+b entoure la sélection avec ~~...~~ (barré)', async ({ page }) => {
 test('⌘+u entoure la sélection avec __...__ (souligné)', async ({ page }) => {
   await enterEditFirstEvent(page)
   await selectLastNChars(page, 5)
-  await pane1(page).locator('#main-panel').press('Meta+u')
-  await pane1(page).locator('#main-panel').press('Enter')
+  await pane1(page).locator('.event-item.selected').press('Meta+u')
+  await pane1(page).locator('.event-item.selected').press('Enter')
   const html = await pane1(page).locator('.event-item.selected .event-text').innerHTML()
   expect(html).toContain('<u>world</u>')
 })
@@ -65,8 +65,8 @@ test('⌘+i sur [*world*] sélection inclut marques → retire italique', async 
   const field = await enterEditFirstEvent(page)
   await field.fill('*world*')
   await field.evaluate(el => el.setSelectionRange(0, 7))
-  await pane1(page).locator('#main-panel').press('Meta+i')
-  await pane1(page).locator('#main-panel').press('Enter')
+  await pane1(page).locator('.event-item.selected').press('Meta+i')
+  await pane1(page).locator('.event-item.selected').press('Enter')
   const html = await pane1(page).locator('.event-item.selected .event-text').innerHTML()
   expect(html).not.toContain('<em>')
   expect(html).not.toContain('*')
@@ -76,8 +76,8 @@ test('⌘+i sur *[world]* sélection exclut marques → retire italique', async 
   const field = await enterEditFirstEvent(page)
   await field.fill('*world*')
   await field.evaluate(el => el.setSelectionRange(1, 6))
-  await pane1(page).locator('#main-panel').press('Meta+i')
-  await pane1(page).locator('#main-panel').press('Enter')
+  await pane1(page).locator('.event-item.selected').press('Meta+i')
+  await pane1(page).locator('.event-item.selected').press('Enter')
   const html = await pane1(page).locator('.event-item.selected .event-text').innerHTML()
   expect(html).not.toContain('<em>')
   expect(html).not.toContain('*')

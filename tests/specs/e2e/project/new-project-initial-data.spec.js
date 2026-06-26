@@ -8,10 +8,10 @@ test.beforeEach(() => {
 
 async function createProject(page, expect) {
   await page.goto('/')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
 
   const { folderName } = await setupProjectFolder(page)
-  await pane1(page).locator('#main-panel').press('n')
+  await pane1(page).locator('.project-item.selected').press('n')
   await createAndSelectFolderInPicker(page, expect, folderName)
   await page.waitForLoadState('networkidle')
 

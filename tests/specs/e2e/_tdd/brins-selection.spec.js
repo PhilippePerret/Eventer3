@@ -11,7 +11,7 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
   await expect(pane1(page).locator('.event-item')).toHaveCount(3)
 
   // Ouvrir brins pour e1 (doit avoir A et B cochés)
-  await pane1(page).locator('#main-panel').press('b')
+  await pane1(page).locator('.event-item.selected').press('b')
   await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 
   let brinsItems = pane1(page).locator('.brin-item')
@@ -37,11 +37,11 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
   expect(uncheckedCount).toBe(2)
 
   // Fermer
-  await pane1(page).locator('#main-panel').press('Escape')
-  
+  await pane1(page).locator('.brin-item.selected').press('Meta+Enter')
+
   // Ouvrir brins pour e3 (aucun coché)
-  await pane1(page).locator('#main-panel').press('ArrowDown')
-    await pane1(page).locator('#main-panel').press('b')
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+    await pane1(page).locator('.event-item.selected').press('b')
   
   brinsItems = pane1(page).locator('.brin-item')
   checkedCount = 0
@@ -56,11 +56,11 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
   expect(checkedCount).toBe(0)
 
   // Fermer
-  await pane1(page).locator('#main-panel').press('Escape')
-  
+  await pane1(page).locator('.brin-item.selected').press('Meta+Enter')
+
   // Ouvrir brins pour e2 (doit avoir B et C cochés)
-  await pane1(page).locator('#main-panel').press('ArrowDown')
-    await pane1(page).locator('#main-panel').press('b')
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+    await pane1(page).locator('.event-item.selected').press('b')
   
   brinsItems = pane1(page).locator('.brin-item')
   checkedCount = 0
@@ -86,14 +86,14 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
   await brinDItem.click()
   
   // Fermer
-  await pane1(page).locator('#main-panel').press('Escape')
-  
+  await pane1(page).locator('.brin-item.selected').press('Meta+Enter')
+
   // Naviguer back à e1 et vérifier que A et B sont encore cochés
-  await pane1(page).locator('#main-panel').press('ArrowLeft')
-    await pane1(page).locator('#main-panel').press('ArrowUp')
-    await pane1(page).locator('#main-panel').press('ArrowUp')
+  await pane1(page).locator('.event-item.selected').press('ArrowLeft')
+    await pane1(page).locator('.project-item.selected').press('ArrowUp')
+    await pane1(page).locator('.project-item.selected').press('ArrowUp')
     await pane1(page).locator('.project-item.selected').press('ArrowRight')
-    await pane1(page).locator('#main-panel').press('b')
+    await pane1(page).locator('.event-item.selected').press('b')
   
   brinsItems = pane1(page).locator('.brin-item')
   checkedCount = 0

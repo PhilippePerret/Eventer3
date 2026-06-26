@@ -13,19 +13,19 @@ test("dans un ListerEvent, la touche « n » crée un nouvel Event après celui 
   console.log('\n=== TEST CRÉATION NOUVEL EVENT ===')
 
   console.log('-> attente du rendu initial')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
   console.log('-> entrée dans le ListerEvent du premier projet')
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
 
   console.log('-> vérification : premier évènement sélectionné')
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
   const firstEventTitle = await pane1(page).locator('.event-item').nth(0).textContent()
 
   console.log('-> appui sur n')
-  await pane1(page).locator('#main-panel').press('n')
+  await pane1(page).locator('.event-item.selected').press('n')
 
   console.log('-> vérification : un champ de saisie est apparu')
   const input = pane1(page).locator('.event-item [data-field="title"]')

@@ -11,7 +11,6 @@
 > - **IMPÉRATIF** : si on rencontre le même échec **après trois essais de correction**, ON MET DES LOG(s) pour voir où ça coince.
 
 - **Corriger tous les tests visant `#main-panel`** : `#main-panel` n'existe plus (supprimé d'`app-frame.html`, orphelin depuis le passage à `PANEL_ID` par classe — `projects-panel` pour `ListerProject`, `events-panel` pour `ListerEvent`). Des dizaines de tests font encore `locator('#main-panel')` — à corriger vers `#projects-panel` ou `#events-panel` selon le contexte.
-
 - **Éliminer BrinPanel / PersoPanel** — remplacer par système générique KeyDispatcher/LISTENERS
   - **Principe fondamental** : tous les Listers (Project, Event, Brin, Perso) ont STRICTEMENT le MÊME fonctionnement — ne diffèrent que par l'aspect (CSS) et quelques comportements spécifiques
   - Refonte terminée (`dom/Lister.js` : render idempotent, `_ensurePanelStructure`, `this.attach(this.container)`)
@@ -20,7 +19,6 @@
     2. Rapatrier `ListerPerso.LISTENERS` vers `core/ListerPerso.js` (même pattern)
     3. Supprimer `ui/BrinPanel.js` et `ui/PersoPanel.js` entièrement
     4. Mettre à jour `models/dom/DomMethods.js` : `openBrinPanel(item)` → `item.parentLister.enterInside()` / `openPersoPanel(item)` → `item.parentLister.enterInside()`
-  - Tests en `_tdd/` : 1 régression confirmée résolue (LOG import fix 2026-06-25), reste ~15 tests non passés
   - Fichiers à tester après refonte :
     - `tests/specs/e2e/event/brin-badges-display.spec.js`
     - `tests/specs/e2e/brin/brin-edition-form.spec.js`

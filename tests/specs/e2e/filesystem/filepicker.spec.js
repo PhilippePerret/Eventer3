@@ -26,7 +26,7 @@ test.beforeEach(async ({ page }) => {
     headers: { 'Content-Type': 'application/json' }
   })
   await page.goto('/')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
 })
 
 async function openPickerViaN(page) {

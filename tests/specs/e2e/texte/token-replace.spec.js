@@ -18,19 +18,19 @@ test.describe('Token replacement dans les titres', () => {
 
   test('constante /VILLE/ remplacée dans le titre de l\'event', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('ArrowRight')
+    await pane1(page).locator('.event-item.selected').press('ArrowRight')
     await expect(pane1(page).locator('.event-text').first()).toHaveText('Paris est belle')
   })
 
   test('badge PP remplacé par le titre du personnage', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('ArrowRight')
+    await pane1(page).locator('.event-item.selected').press('ArrowRight')
     await expect(pane1(page).locator('.event-text').nth(1)).toHaveText('Phil arrive à Paris')
   })
 
   test('badge PPpat remplacé par le patronyme du personnage', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('ArrowRight')
+    await pane1(page).locator('.event-item.selected').press('ArrowRight')
     await expect(pane1(page).locator('.event-text').nth(2)).toHaveText('Philippe Perret arrive à Paris')
   })
 
@@ -38,9 +38,9 @@ test.describe('Token replacement dans les titres', () => {
 
   test('constante /VILLE/ remplacée dans le titre du brin', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('ArrowRight')
+    await pane1(page).locator('.event-item.selected').press('ArrowRight')
     await expect(pane1(page).locator('.event-text').first()).toBeVisible()
-    await pane1(page).locator('#main-panel').press('b')
+    await pane1(page).locator('.event-item.selected').press('b')
     await expect(pane1(page).locator('#brins-panel')).toBeVisible()
     await expect(pane1(page).locator('.brin-item__title').first()).toHaveText('Le brin de Paris')
   })
@@ -49,9 +49,9 @@ test.describe('Token replacement dans les titres', () => {
 
   test('constante /VILLE/ remplacée dans le titre du perso', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('ArrowRight')
+    await pane1(page).locator('.event-item.selected').press('ArrowRight')
     await expect(pane1(page).locator('.event-text').first()).toBeVisible()
-    await pane1(page).locator('#main-panel').press('p')
+    await pane1(page).locator('.event-item.selected').press('p')
     await expect(pane1(page).locator('#persos-panel')).toBeVisible()
     await expect(pane1(page).locator('.perso-item__title').nth(1)).toHaveText('Héros de Paris')
   })
@@ -60,9 +60,9 @@ test.describe('Token replacement dans les titres', () => {
 
   test('titre du panneau brins utilise le titre rendu (tokens remplacés)', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('ArrowRight')
+    await pane1(page).locator('.event-item.selected').press('ArrowRight')
     await expect(pane1(page).locator('.event-text').first()).toBeVisible()
-    await pane1(page).locator('#main-panel').press('b')
+    await pane1(page).locator('.event-item.selected').press('b')
     await expect(pane1(page).locator('#brins-panel')).toBeVisible()
     await expect(pane1(page).locator('#brins-panel .panel-title')).toContainText('Paris est belle')
   })
@@ -71,23 +71,23 @@ test.describe('Token replacement dans les titres', () => {
 
   test('nouvel event créé après définition constante : remplacement immédiat', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('ArrowRight')
+    await pane1(page).locator('.event-item.selected').press('ArrowRight')
     await expect(pane1(page).locator('.event-text').first()).toBeVisible()
     // Définir PAYS=France
-    await pane1(page).locator('#main-panel').press('q')
+    await pane1(page).locator('.event-item.selected').press('q')
     await expect(pane1(page).locator('.constants-row').first()).toBeVisible()
-    await pane1(page).locator('#main-panel').press('ArrowDown')
-    await pane1(page).locator('#main-panel').press('Tab')
+    await pane1(page).locator('.event-item.selected').press('ArrowDown')
+    await pane1(page).locator('.event-item.selected').press('Tab')
     await pane1(page).locator('.constants-row__name').nth(1).fill('PAYS')
-    await pane1(page).locator('#main-panel').press('Tab')
+    await pane1(page).locator('.event-item.selected').press('Tab')
     await pane1(page).locator('.constants-row__value').nth(1).fill('France')
-    await pane1(page).locator('#main-panel').press('Meta+Enter')
+    await pane1(page).locator('.event-item.selected').press('Meta+Enter')
     await expect(pane1(page).locator('#constants-panel')).not.toBeVisible()
     // Créer un nouvel event avec /PAYS/
-    await pane1(page).locator('#main-panel').press('n')
+    await pane1(page).locator('.event-item.selected').press('n')
     const titleInput = pane1(page).locator('.event-item.editing input[name="title"]')
     await titleInput.fill('/PAYS/ est grand')
-    await pane1(page).locator('#main-panel').press('Enter')
+    await pane1(page).locator('.event-item.selected').press('Enter')
     await expect(pane1(page).locator('.event-text').nth(1)).toHaveText('France est grand')
   })
 

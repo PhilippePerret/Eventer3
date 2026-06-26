@@ -7,9 +7,9 @@ test.beforeEach(() => {
 
 async function enterListerEvent(page) {
   await page.goto('/')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await pane1(page).locator('#main-panel').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
+  await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
 }
 
 test('Space coche visuellement l\'event sélectionné', async ({ page }) => {
@@ -19,7 +19,7 @@ test('Space coche visuellement l\'event sélectionné', async ({ page }) => {
   await expect(firstEvent).toHaveClass(/selected/)
   await expect(firstEvent.locator('.event-check')).not.toContainText('✓')
 
-  await pane1(page).locator('#main-panel').press(' ')
+  await pane1(page).locator('.event-item.selected').press(' ')
 
   await expect(firstEvent.locator('.event-check')).toContainText('✓')
 })
@@ -28,10 +28,10 @@ test('Space décoche un event déjà coché', async ({ page }) => {
   await enterListerEvent(page)
 
   const firstEvent = pane1(page).locator('.event-item').nth(0)
-  await pane1(page).locator('#main-panel').press(' ')
+  await pane1(page).locator('.event-item.selected').press(' ')
   await expect(firstEvent.locator('.event-check')).toContainText('✓')
 
-  await pane1(page).locator('#main-panel').press(' ')
+  await pane1(page).locator('.event-item.selected').press(' ')
   await expect(firstEvent.locator('.event-check')).not.toContainText('✓')
 })
 
@@ -39,7 +39,7 @@ test('Space persiste la coche après rechargement', async ({ page }) => {
   await enterListerEvent(page)
 
   const patchDone = page.waitForResponse(r => r.url().includes('/api/items/') && r.request().method() === 'PATCH')
-  await pane1(page).locator('#main-panel').press(' ')
+  await pane1(page).locator('.event-item.selected').press(' ')
   const patchResp = await patchDone
   await page.waitForLoadState('networkidle')
 
@@ -51,9 +51,9 @@ test('Space persiste la coche après rechargement', async ({ page }) => {
   expect(checkedValue, `checked DB après PATCH = ${checkedValue}`).toBeTruthy()
 
   await page.reload()
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await pane1(page).locator('#main-panel').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
+  await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
 
   const firstEvent = pane1(page).locator('.event-item').nth(0)
   await expect(firstEvent.locator('.event-check')).toContainText('✓')

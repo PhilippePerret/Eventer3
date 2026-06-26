@@ -17,7 +17,7 @@ async function openBrinPanel(page) {
   await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 }
 
-test.only("nouveau brin : il est sélectionné juste après création", async ({ page }) => {
+test("nouveau brin : il est sélectionné juste après création", async ({ page }) => {
   await openBrinPanel(page)
   await pane1(page).locator('#brins-panel').press('n')
   const titleInput = pane1(page).locator('.brin-item.selected [data-field="title"]')

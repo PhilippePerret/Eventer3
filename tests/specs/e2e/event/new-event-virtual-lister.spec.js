@@ -13,16 +13,16 @@ test("→ sur un projet sans lister : crée l'éditeur, Enter confirme, n crée 
   console.log('\n=== TEST PREMIER EVENT + SECOND EVENT ===')
 
   console.log('-> attente du rendu initial')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
   console.log('-> sélection du projet sans lister (project-b)')
-  await pane1(page).locator('#main-panel').press('ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
   await expect(pane1(page).locator('.project-item').nth(1)).toHaveClass(/selected/)
 
   console.log('-> flèche → : entre dans le ListerEvent vide')
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
 
   console.log('-> vérification : un éditeur est apparu automatiquement')
   const firstInput = pane1(page).locator('.event-item [data-field="title"]')
@@ -51,7 +51,7 @@ test("→ sur un projet sans lister : crée l'éditeur, Enter confirme, n crée 
   console.log('-> vérification : project-b a maintenant un lister')
 
   console.log('-> appui sur n : doit créer un second event en dessous')
-  await pane1(page).locator('#main-panel').press('n')
+  await pane1(page).locator('.event-item.selected').press('n')
   const secondInput = pane1(page).locator('.event-item [data-field="title"]')
   await expect(secondInput).toBeVisible()
   await expect(secondInput).toBeFocused()

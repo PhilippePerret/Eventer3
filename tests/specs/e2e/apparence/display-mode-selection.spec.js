@@ -12,10 +12,10 @@ test.beforeEach(() => {
 })
 
 async function enterProject(page) {
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-  await pane1(page).locator('#main-panel').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await pane1(page).locator('.event-item.selected').press('ArrowRight')
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
 }
 
 // ─── Bug 1 : item sélectionné préservé au toggle LEVEL ───────────────────────
@@ -23,15 +23,15 @@ async function enterProject(page) {
 test("Bug 1 — LEVEL : item sélectionné initialement reste sélectionné", async ({ page }) => {
   await page.goto('/')
   await enterProject(page)
-  await pane1(page).locator('#main-panel').press('ArrowRight')  // depth=2 (lister#3 : e31, e45)
-  await expect(pane1(page).locator('#main-panel')).toHaveAttribute('data-depth', '2')
+  await pane1(page).locator('.event-item.selected').press('ArrowRight')  // depth=2 (lister#3 : e31, e45)
+  await expect(pane1(page).locator('#events-panel')).toHaveAttribute('data-depth', '2')
 
   // Sélectionner e45 (2e item, pas le premier)
-  await pane1(page).locator('#main-panel').press('ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
   await expect(pane1(page).locator('.event-item[data-id="e45"]')).toHaveClass(/selected/)
 
   // Toggle LEVEL
-  await pane1(page).locator('#main-panel').press('Meta+m')
+  await pane1(page).locator('.event-item.selected').press('Meta+m')
   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
   await expect(pane1(page).locator('.event-item')).toHaveCount(3)  // attendre render async
 
@@ -45,26 +45,26 @@ test("Bug 1 — LEVEL : item sélectionné initialement reste sélectionné", as
 test("Bug 2b — LEVEL + ← : navigue vers le lister de l'item sélectionné (pas leaveToParent du lister courant)", async ({ page }) => {
   await page.goto('/')
   await enterProject(page)
-  await pane1(page).locator('#main-panel').press('ArrowRight')  // depth=2 (lister#3 : e31, e45)
-  await expect(pane1(page).locator('#main-panel')).toHaveAttribute('data-depth', '2')
+  await pane1(page).locator('.event-item.selected').press('ArrowRight')  // depth=2 (lister#3 : e31, e45)
+  await expect(pane1(page).locator('#events-panel')).toHaveAttribute('data-depth', '2')
 
-  await pane1(page).locator('#main-panel').press('Meta+m')  // LEVEL mode
+  await pane1(page).locator('.event-item.selected').press('Meta+m')  // LEVEL mode
   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
   await expect(pane1(page).locator('.event-item')).toHaveCount(3)
 
   // Naviguer à e88 (dans lister#5, sous e23 — branche différente du lister courant lister#3)
   const e88 = pane1(page).locator('.event-item[data-id="e88"]')
   while (!(await e88.getAttribute('class')).includes('selected')) {
-    await pane1(page).locator('#main-panel').press('ArrowDown')
+    await pane1(page).locator('.event-item.selected').press('ArrowDown')
   }
   await expect(e88).toHaveClass(/selected/)
 
   // ← doit naviguer vers le lister de e88 (lister#5, depth=2, sous e23), pas vers lister#2
-  await pane1(page).locator('#main-panel').press('ArrowLeft')
+  await pane1(page).locator('.event-item.selected').press('ArrowLeft')
   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE NESTING')
 
   // lister#5 affiché (depth=2, sous e23), e88 sélectionné
-  await expect(pane1(page).locator('#main-panel')).toHaveAttribute('data-depth', '2')
+  await expect(pane1(page).locator('#events-panel')).toHaveAttribute('data-depth', '2')
   await expect(pane1(page).locator('.event-item[data-id="e88"]')).toHaveClass(/selected/)
   // Dans lister#5, e31 et e45 ne sont pas visibles (ils sont dans lister#3)
   await expect(pane1(page).locator('.event-item[data-id="e31"]')).not.toBeVisible()
@@ -75,15 +75,15 @@ test("Bug 2b — LEVEL + ← : navigue vers le lister de l'item sélectionné (p
 test("Bug 2 — NEST←LEVEL : item sélectionné en LEVEL détermine le lister (pas l'item initial)", async ({ page }) => {
   await page.goto('/')
   await enterProject(page)
-  await pane1(page).locator('#main-panel').press('ArrowRight')  // depth=2 (lister#3 : e31, e45)
-  await expect(pane1(page).locator('#main-panel')).toHaveAttribute('data-depth', '2')
+  await pane1(page).locator('.event-item.selected').press('ArrowRight')  // depth=2 (lister#3 : e31, e45)
+  await expect(pane1(page).locator('#events-panel')).toHaveAttribute('data-depth', '2')
 
   // Sélectionner e45 (2e item = item "initial" pour ce test)
-  await pane1(page).locator('#main-panel').press('ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
   await expect(pane1(page).locator('.event-item[data-id="e45"]')).toHaveClass(/selected/)
 
   // Toggle LEVEL
-  await pane1(page).locator('#main-panel').press('Meta+m')
+  await pane1(page).locator('.event-item.selected').press('Meta+m')
   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
   await expect(pane1(page).locator('.event-item')).toHaveCount(3)
 
@@ -93,12 +93,12 @@ test("Bug 2 — NEST←LEVEL : item sélectionné en LEVEL détermine le lister 
   await expect(e88).toBeVisible()
   // ArrowDown jusqu'à e88
   while (!(await e88.getAttribute('class')).includes('selected')) {
-    await pane1(page).locator('#main-panel').press('ArrowDown')
+    await pane1(page).locator('.event-item.selected').press('ArrowDown')
   }
   await expect(e88).toHaveClass(/selected/)
 
   // Toggle NESTING
-  await pane1(page).locator('#main-panel').press('Meta+m')
+  await pane1(page).locator('.event-item.selected').press('Meta+m')
   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE NESTING')
 
   // Doit être dans le lister de e88 (Liste#5, depth=2, sous e23)

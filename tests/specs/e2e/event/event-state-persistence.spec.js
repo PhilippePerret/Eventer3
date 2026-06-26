@@ -7,24 +7,24 @@ test.beforeEach(() => {
 
 async function goToListerEvent(page) {
   await page.goto('/')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await pane1(page).locator('#main-panel').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
+  await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
 }
 
 async function setEventState(page, stateName) {
-  await pane1(page).locator('#main-panel').press('Enter')
+  await pane1(page).locator('.event-item.selected').press('Enter')
   await expect(pane1(page).locator('.event-item.selected input[name="title"]')).toBeFocused()
-  await pane1(page).locator('#main-panel').press('Tab')
+  await pane1(page).locator('.event-item.selected').press('Tab')
   await expect(pane1(page).locator('.event-item.selected [data-field-name="state"]')).toBeFocused()
-  await pane1(page).locator('#main-panel').press('ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
   // Filtrer pour trouver l'option rapidement
   await pane1(page).locator('.popup-select__search').fill(stateName)
   await expect(pane1(page).locator('.popup-select__option')).toHaveCount(1)
-  await pane1(page).locator('#main-panel').press('Enter')
+  await pane1(page).locator('.event-item.selected').press('Enter')
   // Confirmer l'édition
-  await pane1(page).locator('#main-panel').press('Enter')
+  await pane1(page).locator('.event-item.selected').press('Enter')
 }
 
 test("l'état d'un event est sauvegardé en base et récupéré après rechargement", async ({ page }) => {

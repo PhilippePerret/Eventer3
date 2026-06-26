@@ -10,7 +10,7 @@ test.beforeEach(() => {
 
 async function startEditingFirstProject(page) {
   await page.goto('/')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
   await pane1(page).locator('.project-item.selected').press('Enter')
   const titleInput = pane1(page).locator('.project-item.selected [contenteditable][data-field="title"]')
   await expect(titleInput).toBeFocused()
@@ -19,7 +19,7 @@ async function startEditingFirstProject(page) {
 
 async function startEditingSecondProject(page) {
   await page.goto('/')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
   await pane1(page).locator('.project-item.selected').press('ArrowDown')
   await pane1(page).locator('.project-item.selected').press('Enter')
   const titleInput = pane1(page).locator('.project-item.selected [contenteditable][data-field="title"]')
@@ -35,7 +35,7 @@ test("un projet créé via FilePicker apparaît sélectionné dans la liste", as
   const { setupProjectFolder, createAndSelectFolderInPicker } = await import('../../../helpers/create-project-helper.js')
 
   await page.goto('/')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
 
   const { folderName } = await setupProjectFolder(page)
   await pane1(page).locator('.project-item.selected').press('n')
@@ -52,7 +52,7 @@ test("un projet créé via FilePicker apparaît sélectionné dans la liste", as
 
 test("la hauteur du project-item reste identique en édition", async ({ page }) => {
   await page.goto('/')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
   const item = pane1(page).locator('.project-item.selected')
   const heightBefore = (await item.boundingBox()).height
   await item.press('Enter')

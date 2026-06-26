@@ -8,14 +8,14 @@ import { test, expect, pane1 } from '../__setup__.js'
 async function goToListerEvent(page, fixture) {
   installFixtures(fixture)
   await page.goto('/')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await pane1(page).locator('#main-panel').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
+  await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
 }
 
-async function revealFilter(page, panelSelector = '#main-panel') {
+async function revealFilter(page, panelSelector = '#events-panel') {
   await expect(pane1(page).locator(panelSelector)).toBeVisible()
-  await pane1(page).locator('#main-panel').press(':')
+  await pane1(page).locator('.event-item.selected').press(':')
   await expect(pane1(page).locator(`${panelSelector} .filter-bar`)).toBeVisible()
 }
 
@@ -23,7 +23,7 @@ async function revealFilter(page, panelSelector = '#main-panel') {
 
 test("panneau brins : champ .panel-search visible après ':'", async ({ page }) => {
   await goToListerEvent(page, 'with-brins-and-persos')
-  await pane1(page).locator('#main-panel').press('b')
+  await pane1(page).locator('.event-item.selected').press('b')
   await expect(pane1(page).locator('#brins-panel')).toBeVisible()
   await revealFilter(page, '#brins-panel')
   await expect(pane1(page).locator('#brins-panel .panel-search')).toBeVisible()
@@ -31,7 +31,7 @@ test("panneau brins : champ .panel-search visible après ':'", async ({ page }) 
 
 test("panneau brins : taper 'mon' cache 'Autre brin'", async ({ page }) => {
   await goToListerEvent(page, 'with-brins-and-persos')
-  await pane1(page).locator('#main-panel').press('b')
+  await pane1(page).locator('.event-item.selected').press('b')
   await expect(pane1(page).locator('.brin-row')).toHaveCount(2)
   await revealFilter(page, '#brins-panel')
   await pane1(page).locator('#brins-panel .panel-search').fill('mon')
@@ -41,7 +41,7 @@ test("panneau brins : taper 'mon' cache 'Autre brin'", async ({ page }) => {
 
 test("panneau brins : vider le champ réaffiche tout", async ({ page }) => {
   await goToListerEvent(page, 'with-brins-and-persos')
-  await pane1(page).locator('#main-panel').press('b')
+  await pane1(page).locator('.event-item.selected').press('b')
   await revealFilter(page, '#brins-panel')
   await pane1(page).locator('#brins-panel .panel-search').fill('mon')
   await expect(pane1(page).locator('.brin-row:not(.hidden)')).toHaveCount(1)
@@ -51,12 +51,12 @@ test("panneau brins : vider le champ réaffiche tout", async ({ page }) => {
 
 test("panneau brins : filtre remis à zéro à la fermeture/réouverture", async ({ page }) => {
   await goToListerEvent(page, 'with-brins-and-persos')
-  await pane1(page).locator('#main-panel').press('b')
+  await pane1(page).locator('.event-item.selected').press('b')
   await revealFilter(page, '#brins-panel')
   await pane1(page).locator('#brins-panel .panel-search').fill('mon')
   await expect(pane1(page).locator('.brin-row:not(.hidden)')).toHaveCount(1)
-  await pane1(page).locator('#main-panel').press('Escape') // fermer
-  await pane1(page).locator('#main-panel').press('b')     // rouvrir
+  await pane1(page).locator('.event-item.selected').press('Escape') // fermer
+  await pane1(page).locator('.event-item.selected').press('b')     // rouvrir
   await expect(pane1(page).locator('.brin-row:not(.hidden)')).toHaveCount(2)
   const inputVal = await pane1(page).locator('#brins-panel .panel-search').inputValue()
   expect(inputVal).toBe('')
@@ -66,7 +66,7 @@ test("panneau brins : filtre remis à zéro à la fermeture/réouverture", async
 
 test("panneau persos : champ .panel-search visible après ':'", async ({ page }) => {
   await goToListerEvent(page, 'with-brins-and-persos')
-  await pane1(page).locator('#main-panel').press('p')
+  await pane1(page).locator('.event-item.selected').press('p')
   await expect(pane1(page).locator('#persos-panel')).toBeVisible()
   await revealFilter(page, '#persos-panel')
   await expect(pane1(page).locator('#persos-panel .panel-search')).toBeVisible()
@@ -74,7 +74,7 @@ test("panneau persos : champ .panel-search visible après ':'", async ({ page })
 
 test("panneau persos : taper 'cyr' cache 'Roxane'", async ({ page }) => {
   await goToListerEvent(page, 'with-brins-and-persos')
-  await pane1(page).locator('#main-panel').press('p')
+  await pane1(page).locator('.event-item.selected').press('p')
   await expect(pane1(page).locator('.perso-row')).toHaveCount(2)
   await revealFilter(page, '#persos-panel')
   await pane1(page).locator('#persos-panel .panel-search').fill('cyr')
@@ -86,7 +86,7 @@ test("panneau persos : taper 'cyr' cache 'Roxane'", async ({ page }) => {
 
 test("panneau styles : champ .panel-search visible après ':'", async ({ page }) => {
   await goToListerEvent(page, 'with-styles')
-  await pane1(page).locator('#main-panel').press('s')
+  await pane1(page).locator('.event-item.selected').press('s')
   await expect(pane1(page).locator('#style-panel')).toBeVisible()
   await revealFilter(page, '#style-panel')
   await expect(pane1(page).locator('#style-panel .panel-search')).toBeVisible()
@@ -94,7 +94,7 @@ test("panneau styles : champ .panel-search visible après ':'", async ({ page })
 
 test("panneau styles : taper 'titre' cache 'note-rouge'", async ({ page }) => {
   await goToListerEvent(page, 'with-styles')
-  await pane1(page).locator('#main-panel').press('s')
+  await pane1(page).locator('.event-item.selected').press('s')
   await expect(pane1(page).locator('.style-row')).toHaveCount(2)
   await revealFilter(page, '#style-panel')
   await pane1(page).locator('#style-panel .panel-search').fill('titre')
@@ -106,45 +106,45 @@ test("panneau styles : taper 'titre' cache 'note-rouge'", async ({ page }) => {
 
 test("liste events : champ .panel-search visible après ':'", async ({ page }) => {
   await goToListerEvent(page, 'with-brins-and-persos')
-  await revealFilter(page, '#main-panel')
-  await expect(pane1(page).locator('#main-panel .panel-search')).toBeVisible()
+  await revealFilter(page, '#events-panel')
+  await expect(pane1(page).locator('#events-panel .panel-search')).toBeVisible()
 })
 
 test("liste projets : champ .panel-search visible après ':'", async ({ page }) => {
   installFixtures('with-brins-and-persos')
   await page.goto('/')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await revealFilter(page, '#main-panel')
-  await expect(pane1(page).locator('#main-panel .panel-search')).toBeVisible()
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
+  await revealFilter(page, '#events-panel')
+  await expect(pane1(page).locator('#events-panel .panel-search')).toBeVisible()
 })
 
 test("liste events : taper '1' cache 'Événement 2'", async ({ page }) => {
   await goToListerEvent(page, 'with-brins-and-persos')
-  await revealFilter(page, '#main-panel')
+  await revealFilter(page, '#events-panel')
   await expect(pane1(page).locator('.event-item')).toHaveCount(2)
-  await pane1(page).locator('#main-panel .panel-search').fill('1')
+  await pane1(page).locator('#events-panel .panel-search').fill('1')
   await expect(pane1(page).locator('.event-item:not(.hidden)')).toHaveCount(1)
   await expect(pane1(page).locator('.event-item.hidden')).toHaveCount(1)
 })
 
 test("liste events : vider le champ réaffiche tout", async ({ page }) => {
   await goToListerEvent(page, 'with-brins-and-persos')
-  await revealFilter(page, '#main-panel')
-  await pane1(page).locator('#main-panel .panel-search').fill('1')
+  await revealFilter(page, '#events-panel')
+  await pane1(page).locator('#events-panel .panel-search').fill('1')
   await expect(pane1(page).locator('.event-item:not(.hidden)')).toHaveCount(1)
-  await pane1(page).locator('#main-panel .panel-search').fill('')
+  await pane1(page).locator('#events-panel .panel-search').fill('')
   await expect(pane1(page).locator('.event-item:not(.hidden)')).toHaveCount(2)
 })
 
 test("liste events : filtre remis à zéro quand on revient à la liste", async ({ page }) => {
   await goToListerEvent(page, 'with-brins-and-persos')
-  await revealFilter(page, '#main-panel')
-  await pane1(page).locator('#main-panel .panel-search').fill('1')
+  await revealFilter(page, '#events-panel')
+  await pane1(page).locator('#events-panel .panel-search').fill('1')
   await expect(pane1(page).locator('.event-item:not(.hidden)')).toHaveCount(1)
-  await pane1(page).locator('#main-panel').press('ArrowLeft') // retour projets
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await pane1(page).locator('#main-panel').press('ArrowRight') // retour events
+  await pane1(page).locator('.event-item.selected').press('ArrowLeft') // retour projets
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
+  await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight') // retour events
   await expect(pane1(page).locator('.event-item:not(.hidden)')).toHaveCount(2)
-  const inputVal = await pane1(page).locator('#main-panel .panel-search').inputValue()
+  const inputVal = await pane1(page).locator('#events-panel .panel-search').inputValue()
   expect(inputVal).toBe('')
 })

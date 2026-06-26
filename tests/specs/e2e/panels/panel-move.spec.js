@@ -7,14 +7,14 @@ test.beforeEach(() => {
 
 async function goToListerEvent(page) {
   await page.goto('/')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await pane1(page).locator('#main-panel').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
+  await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
 }
 
 async function openStylePanel(page) {
   await goToListerEvent(page)
-  await pane1(page).locator('#main-panel').press('s')
+  await pane1(page).locator('.event-item.selected').press('s')
   await expect(pane1(page).locator('#style-panel')).toBeVisible()
 }
 
@@ -23,7 +23,7 @@ async function openStylePanel(page) {
 test("Ctrl+Shift+↓ déplace le style panel de 50px vers le bas", async ({ page }) => {
   await openStylePanel(page)
   const before = await pane1(page).locator('.style-panel__inner').boundingBox()
-  await pane1(page).locator('#main-panel').press('Control+Shift+ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('Control+Shift+ArrowDown')
   const after = await pane1(page).locator('.style-panel__inner').boundingBox()
   expect(Math.round(after.y - before.y)).toBe(50)
 })
@@ -31,7 +31,7 @@ test("Ctrl+Shift+↓ déplace le style panel de 50px vers le bas", async ({ page
 test("Ctrl+Shift+↑ déplace le style panel de 50px vers le haut", async ({ page }) => {
   await openStylePanel(page)
   const before = await pane1(page).locator('.style-panel__inner').boundingBox()
-  await pane1(page).locator('#main-panel').press('Control+Shift+ArrowUp')
+  await pane1(page).locator('.event-item.selected').press('Control+Shift+ArrowUp')
   const after = await pane1(page).locator('.style-panel__inner').boundingBox()
   expect(Math.round(before.y - after.y)).toBe(50)
 })
@@ -39,7 +39,7 @@ test("Ctrl+Shift+↑ déplace le style panel de 50px vers le haut", async ({ pag
 test("Ctrl+Shift+→ déplace le style panel de 50px vers la droite", async ({ page }) => {
   await openStylePanel(page)
   const before = await pane1(page).locator('.style-panel__inner').boundingBox()
-  await pane1(page).locator('#main-panel').press('Control+Shift+ArrowRight')
+  await pane1(page).locator('.event-item.selected').press('Control+Shift+ArrowRight')
   const after = await pane1(page).locator('.style-panel__inner').boundingBox()
   expect(Math.round(after.x - before.x)).toBe(50)
 })
@@ -47,7 +47,7 @@ test("Ctrl+Shift+→ déplace le style panel de 50px vers la droite", async ({ p
 test("Ctrl+Shift+← déplace le style panel de 50px vers la gauche", async ({ page }) => {
   await openStylePanel(page)
   const before = await pane1(page).locator('.style-panel__inner').boundingBox()
-  await pane1(page).locator('#main-panel').press('Control+Shift+ArrowLeft')
+  await pane1(page).locator('.event-item.selected').press('Control+Shift+ArrowLeft')
   const after = await pane1(page).locator('.style-panel__inner').boundingBox()
   expect(Math.round(before.x - after.x)).toBe(50)
 })
@@ -55,8 +55,8 @@ test("Ctrl+Shift+← déplace le style panel de 50px vers la gauche", async ({ p
 test("deux Ctrl+Shift+↓ accumulent : 100px total", async ({ page }) => {
   await openStylePanel(page)
   const before = await pane1(page).locator('.style-panel__inner').boundingBox()
-  await pane1(page).locator('#main-panel').press('Control+Shift+ArrowDown')
-  await pane1(page).locator('#main-panel').press('Control+Shift+ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('Control+Shift+ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('Control+Shift+ArrowDown')
   const after = await pane1(page).locator('.style-panel__inner').boundingBox()
   expect(Math.round(after.y - before.y)).toBe(100)
 })
@@ -73,7 +73,7 @@ test("Ctrl+Shift+↓ déplace le panneau raccourcis de 50px", async ({ page }) =
   })
   await expect(pane1(page).locator('#shortcuts-panel')).toBeVisible()
   const before = await pane1(page).locator('.shortcuts-panel__inner').boundingBox()
-  await pane1(page).locator('#main-panel').press('Control+Shift+ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('Control+Shift+ArrowDown')
   const after = await pane1(page).locator('.shortcuts-panel__inner').boundingBox()
   expect(Math.round(after.y - before.y)).toBe(50)
 })
@@ -82,10 +82,10 @@ test("Ctrl+Shift+↓ déplace le panneau raccourcis de 50px", async ({ page }) =
 
 test("Ctrl+Shift+↓ déplace le panneau outils de 50px", async ({ page }) => {
   await goToListerEvent(page)
-  await pane1(page).locator('#main-panel').press('Meta+t')
+  await pane1(page).locator('.event-item.selected').press('Meta+t')
   await expect(pane1(page).locator('.tools-panel')).toBeVisible()
   const before = await pane1(page).locator('.tools-panel').boundingBox()
-  await pane1(page).locator('#main-panel').press('Control+Shift+ArrowDown')
+  await pane1(page).locator('.event-item.selected').press('Control+Shift+ArrowDown')
   const after = await pane1(page).locator('.tools-panel').boundingBox()
   expect(Math.round(after.y - before.y)).toBe(50)
 })

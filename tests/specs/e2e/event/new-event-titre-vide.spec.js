@@ -10,11 +10,11 @@ test.beforeEach(() => {
 
 async function enterVirtualListerEvent(page) {
   await page.goto('/')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-  await pane1(page).locator('#main-panel').press('ArrowDown')
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
+  await pane1(page).locator('.event-item.selected').press('ArrowDown')
   await expect(pane1(page).locator('.project-item').nth(1)).toHaveClass(/selected/)
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
   const input = pane1(page).locator('.event-item [data-field="title"]')
   await expect(input).toBeVisible()
   return input
@@ -47,9 +47,9 @@ test('Escape avec titre vide dans lister vide : notification affichée', async (
 test('Escape avec titre vide dans lister vide : pas de page blanche', async ({ page }) => {
   const input = await enterVirtualListerEvent(page)
   console.log("#main-panel doit contenir le champ d'édition")
-  await expect(pane1(page).locator('#main-panel')).not.toBeEmpty()
+  await expect(pane1(page).locator('#events-panel')).not.toBeEmpty()
   console.log("Avant l'annulation")
   await input.press('Escape')
   await expect(pane1(page).locator('#notification')).toBeVisible()
-  await expect(pane1(page).locator('#main-panel')).not.toBeEmpty()
+  await expect(pane1(page).locator('#events-panel')).not.toBeEmpty()
 })

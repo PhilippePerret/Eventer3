@@ -6,8 +6,8 @@ test('la liste des projets possède les bonnes classes CSS', async ({ page }) =>
 
   await page.goto('/')
 
-  const mainPanel = pane1(page).locator('#main-panel')
-  const listing = pane1(page).locator('#main-panel.project-list').first()
+  const mainPanel = pane1(page).locator('#projects-panel')
+  const listing = pane1(page).locator('#projects-panel').first()
   const item = pane1(page).locator('.project-item')
   const title = pane1(page).locator('.project-item__title')
   console.log('\n=== TEST CLASSES CSS PROJECT LISTING ===')

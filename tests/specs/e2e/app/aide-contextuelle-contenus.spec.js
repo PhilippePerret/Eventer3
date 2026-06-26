@@ -12,10 +12,10 @@ test.describe('Aide contextuelle — contenus par contexte', () => {
 
     test('⌦ présent quand plusieurs projets', async ({ page }) => {
       await page.goto('/')
-      await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
-      await pane1(page).locator('#main-panel').press('Meta+?')
+      await expect(pane1(page).locator('#projects-panel')).toBeVisible()
+      await pane1(page).locator('.event-item.selected').press('Meta+?')
       await expect(pane1(page).locator('.contextual-help')).toContainText('⌦')
-      await pane1(page).locator('#main-panel').press('Escape')
+      await pane1(page).locator('.event-item.selected').press('Escape')
     })
 
   })

@@ -12,14 +12,14 @@ test.describe('Delete dans le panneau des brins', () => {
 
   async function goToListerEvent(page) {
     await page.goto('/')
-    await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+    await expect(pane1(page).locator('#projects-panel')).toBeVisible()
     await pane1(page).locator('.project-item.selected').press('ArrowRight')
-    await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+    await expect(pane1(page).locator('#events-panel')).toBeVisible()
   }
 
   async function openBrinPanel(page) {
     await goToListerEvent(page)
-    await pane1(page).locator('#main-panel').press('b')
+    await pane1(page).locator('.event-item.selected').press('b')
     await expect(pane1(page).locator('#brins-panel')).toBeVisible()
   }
 
@@ -28,9 +28,9 @@ test.describe('Delete dans le panneau des brins', () => {
     const items = pane1(page).locator('.brin-item')
     const initialCount = await items.count()
     // Naviguer sur b2 (AUT, index 1)
-    await pane1(page).locator('#main-panel').press('ArrowDown')
+    await pane1(page).locator('.brin-item.selected').press('ArrowDown')
     await expect(items.nth(1)).toHaveClass(/selected/)
-    await pane1(page).locator('#main-panel').press('Delete')
+    await pane1(page).locator('.brin-item.selected').press('Delete')
     await expect(items).toHaveCount(initialCount - 1)
     // Le brin b2 (AUT) ne doit plus être dans la liste
     const titles = pane1(page).locator('.brin-item .brin-title')
@@ -43,22 +43,22 @@ test.describe('Delete dans le panneau des brins', () => {
     const eventRow = pane1(page).locator('.event-item.selected')
     await expect(eventRow.locator('.event-brins-marks .panel-mark')).toContainText('AUT')
     // Naviguer sur b2 (AUT) et le supprimer
-    await pane1(page).locator('#main-panel').press('ArrowDown')
-    await pane1(page).locator('#main-panel').press('Delete')
+    await pane1(page).locator('.brin-item.selected').press('ArrowDown')
+    await pane1(page).locator('.brin-item.selected').press('Delete')
     // Le badge AUT doit avoir disparu de la ligne de e1
     await expect(eventRow.locator('.event-brins-marks')).not.toContainText('AUT')
   })
 
   test('la suppression du brin est persistante : liste des brins du projet', async ({ page }) => {
     await openBrinPanel(page)
-    await pane1(page).locator('#main-panel').press('ArrowDown')
-    await pane1(page).locator('#main-panel').press('Delete')
+    await pane1(page).locator('.brin-item.selected').press('ArrowDown')
+    await pane1(page).locator('.brin-item.selected').press('Delete')
     await expect(pane1(page).locator('.brin-item')).toHaveCount(1)
     await page.waitForLoadState('networkidle')
     // Rechargement
     await page.reload()
     await goToListerEvent(page)
-    await pane1(page).locator('#main-panel').press('b')
+    await pane1(page).locator('.event-item.selected').press('b')
     await expect(pane1(page).locator('#brins-panel')).toBeVisible()
     await expect(pane1(page).locator('.brin-item')).toHaveCount(1)
     await expect(pane1(page).locator('.brin-item .brin-title')).not.toContainText('Autre brin')
@@ -66,8 +66,8 @@ test.describe('Delete dans le panneau des brins', () => {
 
   test('la suppression du brin est persistante : badge absent de l\'event après rechargement', async ({ page }) => {
     await openBrinPanel(page)
-    await pane1(page).locator('#main-panel').press('ArrowDown')
-    await pane1(page).locator('#main-panel').press('Delete')
+    await pane1(page).locator('.brin-item.selected').press('ArrowDown')
+    await pane1(page).locator('.brin-item.selected').press('Delete')
     // Rechargement
     await page.reload()
     await goToListerEvent(page)

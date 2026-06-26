@@ -11,7 +11,7 @@ test.beforeEach(() => {
 test('ArrowUp sur le premier projet sélectionne le dernier', async ({ page }) => {
   await page.goto('/')
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-  await pane1(page).locator('#main-panel').press('ArrowUp')
+  await pane1(page).locator('.project-item.selected').press('ArrowUp')
   const items = pane1(page).locator('.project-item')
   const last  = items.nth(await items.count() - 1)
   await expect(last).toHaveClass(/selected/)
@@ -22,10 +22,10 @@ test('ArrowDown sur le dernier projet sélectionne le premier', async ({ page })
   const items = pane1(page).locator('.project-item')
   const count = await items.count()
   for (let i = 0; i < count - 1; i++) {
-    await pane1(page).locator('#main-panel').press('ArrowDown')
+    await pane1(page).locator('.project-item.selected').press('ArrowDown')
   }
   await expect(items.nth(count - 1)).toHaveClass(/selected/)
-  await pane1(page).locator('#main-panel').press('ArrowDown')
+  await pane1(page).locator('.project-item.selected').press('ArrowDown')
   await expect(items.nth(0)).toHaveClass(/selected/)
 })
 
@@ -35,7 +35,7 @@ test('les events persistent après avoir navigué vers un autre projet et revenu
 
   // Entrer dans Projet A
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
 
   // Naviguer entre les events existants
   await pane1(page).locator('.event-item.selected').press('ArrowDown')
@@ -51,23 +51,23 @@ test('les events persistent après avoir navigué vers un autre projet et revenu
   await expect(pane1(page).locator('.event-item')).toHaveCount(4)
 
   // Revenir à la liste des projets
-  await pane1(page).locator('#main-panel').press('ArrowLeft')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+  await pane1(page).locator('.event-item.selected').press('ArrowLeft')
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
 
   // Entrer dans Projet B
-  await pane1(page).locator('#main-panel').press('ArrowDown')
+  await pane1(page).locator('.project-item.selected').press('ArrowDown')
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
 
   // Revenir à la liste des projets
-  await pane1(page).locator('#main-panel').press('ArrowLeft')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/project-list/)
+  await pane1(page).locator('.event-item.selected').press('ArrowLeft')
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
 
   // Revenir au Projet A
-  await pane1(page).locator('#main-panel').press('ArrowUp')
+  await pane1(page).locator('.project-item.selected').press('ArrowUp')
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
   await pane1(page).locator('.project-item.selected').press('ArrowRight')
-  await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
 
   // Tous les events doivent être là (dont le nouveau)
   await expect(pane1(page).locator('.event-item')).toHaveCount(4)

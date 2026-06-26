@@ -14,12 +14,12 @@ test('la touche n crée un nouveau projet vide en dessous de la sélection', asy
 
   await expect(items).toHaveCount(3)
 
-  await pane1(page).locator('#main-panel').press('ArrowDown')
+  await pane1(page).locator('.project-item.selected').press('ArrowDown')
   await expect(items.nth(1)).toHaveClass(/selected/)
 
   const { folderName } = await setupProjectFolder(page)
 
-  await pane1(page).locator('#main-panel').press('n')
+  await pane1(page).locator('.project-item.selected').press('n')
   await createAndSelectFolderInPicker(page, expect, folderName)
   await page.waitForLoadState('networkidle')
 

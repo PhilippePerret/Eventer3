@@ -11,23 +11,23 @@ test.describe('ConstantsPanel', () => {
 
   test('q ouvre le panneau depuis ListerProject', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('q')
+    await pane1(page).locator('.event-item.selected').press('q')
     await expect(pane1(page).locator('#constants-panel')).toBeVisible()
   })
 
   test('q ouvre le panneau depuis ListerEvent', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('ArrowRight')
-    await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-    await pane1(page).locator('#main-panel').press('q')
+    await pane1(page).locator('.event-item.selected').press('ArrowRight')
+    await expect(pane1(page).locator('#events-panel')).toBeVisible()
+    await pane1(page).locator('.event-item.selected').press('q')
     await expect(pane1(page).locator('#constants-panel')).toBeVisible()
   })
 
   test('Escape ferme le panneau', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('q')
+    await pane1(page).locator('.event-item.selected').press('q')
     await expect(pane1(page).locator('#constants-panel')).toBeVisible()
-    await pane1(page).locator('#main-panel').press('Escape')
+    await pane1(page).locator('.event-item.selected').press('Escape')
     await expect(pane1(page).locator('#constants-panel')).not.toBeVisible()
   })
 
@@ -35,13 +35,13 @@ test.describe('ConstantsPanel', () => {
 
   test('le panneau a exactement deux colonnes', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('q')
+    await pane1(page).locator('.event-item.selected').press('q')
     await expect(pane1(page).locator('.constants-panel__column')).toHaveCount(2)
   })
 
   test('chaque colonne contient des lignes constante/valeur', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('q')
+    await pane1(page).locator('.event-item.selected').press('q')
     await expect(pane1(page).locator('.constants-row').first()).toBeVisible()
     const rows = pane1(page).locator('.constants-row')
     const count = await rows.count()
@@ -54,26 +54,26 @@ test.describe('ConstantsPanel', () => {
 
   test('la première ligne est sélectionnée à l\'ouverture', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('q')
+    await pane1(page).locator('.event-item.selected').press('q')
     await expect(pane1(page).locator('.constants-row').first()).toHaveClass(/selected/)
   })
 
   test('↓ sélectionne la ligne suivante', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('q')
+    await pane1(page).locator('.event-item.selected').press('q')
     await expect(pane1(page).locator('.constants-row').first()).toBeVisible()
-    await pane1(page).locator('#main-panel').press('ArrowDown')
+    await pane1(page).locator('.event-item.selected').press('ArrowDown')
     await expect(pane1(page).locator('.constants-row').nth(1)).toHaveClass(/selected/)
     await expect(pane1(page).locator('.constants-row').first()).not.toHaveClass(/selected/)
   })
 
   test('↑ remonte d\'une ligne', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('q')
+    await pane1(page).locator('.event-item.selected').press('q')
     await expect(pane1(page).locator('.constants-row').first()).toBeVisible()
-    await pane1(page).locator('#main-panel').press('ArrowDown')
-    await pane1(page).locator('#main-panel').press('ArrowDown')
-    await pane1(page).locator('#main-panel').press('ArrowUp')
+    await pane1(page).locator('.event-item.selected').press('ArrowDown')
+    await pane1(page).locator('.event-item.selected').press('ArrowDown')
+    await pane1(page).locator('.event-item.selected').press('ArrowUp')
     await expect(pane1(page).locator('.constants-row').nth(1)).toHaveClass(/selected/)
   })
 
@@ -81,40 +81,40 @@ test.describe('ConstantsPanel', () => {
 
   test('Tab met le focus sur le champ constante de la ligne sélectionnée', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('q')
+    await pane1(page).locator('.event-item.selected').press('q')
     await expect(pane1(page).locator('.constants-row').first()).toBeVisible()
-    await pane1(page).locator('#main-panel').press('Tab')
+    await pane1(page).locator('.event-item.selected').press('Tab')
     await expect(pane1(page).locator('.constants-row').first().locator('.constants-row__name')).toBeFocused()
   })
 
   test('Tab depuis le champ constante met le focus sur le champ valeur', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('q')
+    await pane1(page).locator('.event-item.selected').press('q')
     await expect(pane1(page).locator('.constants-row').first()).toBeVisible()
-    await pane1(page).locator('#main-panel').press('Tab')
-    await pane1(page).locator('#main-panel').press('Tab')
+    await pane1(page).locator('.event-item.selected').press('Tab')
+    await pane1(page).locator('.event-item.selected').press('Tab')
     await expect(pane1(page).locator('.constants-row').first().locator('.constants-row__value')).toBeFocused()
   })
 
   test('Shift+Tab depuis le champ valeur revient sur le champ constante (même ligne)', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('q')
+    await pane1(page).locator('.event-item.selected').press('q')
     await expect(pane1(page).locator('.constants-row').first()).toBeVisible()
-    await pane1(page).locator('#main-panel').press('Tab')
-    await pane1(page).locator('#main-panel').press('Tab')
+    await pane1(page).locator('.event-item.selected').press('Tab')
+    await pane1(page).locator('.event-item.selected').press('Tab')
     await expect(pane1(page).locator('.constants-row').first().locator('.constants-row__value')).toBeFocused()
-    await pane1(page).locator('#main-panel').press('Shift+Tab')
+    await pane1(page).locator('.event-item.selected').press('Shift+Tab')
     await expect(pane1(page).locator('.constants-row').first().locator('.constants-row__name')).toBeFocused()
   })
 
   test('Shift+Tab depuis le champ constante va sur la valeur de la ligne précédente', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('q')
+    await pane1(page).locator('.event-item.selected').press('q')
     await expect(pane1(page).locator('.constants-row').first()).toBeVisible()
-    await pane1(page).locator('#main-panel').press('ArrowDown')
-    await pane1(page).locator('#main-panel').press('Tab')
+    await pane1(page).locator('.event-item.selected').press('ArrowDown')
+    await pane1(page).locator('.event-item.selected').press('Tab')
     await expect(pane1(page).locator('.constants-row').nth(1).locator('.constants-row__name')).toBeFocused()
-    await pane1(page).locator('#main-panel').press('Shift+Tab')
+    await pane1(page).locator('.event-item.selected').press('Shift+Tab')
     await expect(pane1(page).locator('.constants-row').first().locator('.constants-row__value')).toBeFocused()
   })
 
@@ -122,18 +122,18 @@ test.describe('ConstantsPanel', () => {
 
   test('constante + valeur : sauvegardée à la fermeture', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('ArrowRight')
-    await expect(pane1(page).locator('#main-panel')).toHaveClass(/event-list/)
-    await pane1(page).locator('#main-panel').press('q')
+    await pane1(page).locator('.event-item.selected').press('ArrowRight')
+    await expect(pane1(page).locator('#events-panel')).toBeVisible()
+    await pane1(page).locator('.event-item.selected').press('q')
     await expect(pane1(page).locator('.constants-row').first()).toBeVisible()
-    await pane1(page).locator('#main-panel').press('Tab')
+    await pane1(page).locator('.event-item.selected').press('Tab')
     await pane1(page).locator('.constants-row__name').first().fill('VILLE')
-    await pane1(page).locator('#main-panel').press('Tab')
+    await pane1(page).locator('.event-item.selected').press('Tab')
     await pane1(page).locator('.constants-row__value').first().fill('Paris')
-    await pane1(page).locator('#main-panel').press('Escape')
+    await pane1(page).locator('.event-item.selected').press('Escape')
     await expect(pane1(page).locator('#constants-panel')).not.toBeVisible()
     // Réouverture
-    await pane1(page).locator('#main-panel').press('q')
+    await pane1(page).locator('.event-item.selected').press('q')
     await expect(pane1(page).locator('.constants-row').first()).toBeVisible()
     await expect(pane1(page).locator('.constants-row__name').first()).toHaveValue('VILLE')
     await expect(pane1(page).locator('.constants-row__value').first()).toHaveValue('Paris')
@@ -141,46 +141,46 @@ test.describe('ConstantsPanel', () => {
 
   test('valeur sans constante : ignorée', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('q')
-    await pane1(page).locator('#main-panel').press('Tab')          // focus name (vide)
-    await pane1(page).locator('#main-panel').press('Tab')          // focus value
+    await pane1(page).locator('.event-item.selected').press('q')
+    await pane1(page).locator('.event-item.selected').press('Tab')          // focus name (vide)
+    await pane1(page).locator('.event-item.selected').press('Tab')          // focus value
     await pane1(page).locator('.constants-row__value').first().fill('Paris')
-    await pane1(page).locator('#main-panel').press('Escape')
-    await pane1(page).locator('#main-panel').press('q')
+    await pane1(page).locator('.event-item.selected').press('Escape')
+    await pane1(page).locator('.event-item.selected').press('q')
     await expect(pane1(page).locator('.constants-row__value').first()).toHaveValue('')
   })
 
   test('constante sans valeur : ignorée', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('q')
-    await pane1(page).locator('#main-panel').press('Tab')
+    await pane1(page).locator('.event-item.selected').press('q')
+    await pane1(page).locator('.event-item.selected').press('Tab')
     await pane1(page).locator('.constants-row__name').first().fill('VILLE')         // nom sans valeur
-    await pane1(page).locator('#main-panel').press('Escape')
-    await pane1(page).locator('#main-panel').press('q')
+    await pane1(page).locator('.event-item.selected').press('Escape')
+    await pane1(page).locator('.event-item.selected').press('q')
     await expect(pane1(page).locator('.constants-row__name').first()).toHaveValue('')
   })
 
   test('lignes vides intercalées : les lignes valides restent sauvegardées', async ({ page }) => {
     await page.goto('/')
-    await pane1(page).locator('#main-panel').press('q')
+    await pane1(page).locator('.event-item.selected').press('q')
     await expect(pane1(page).locator('.constants-row').first()).toBeVisible()
     // Ligne 0 : VILLE / Paris
-    await pane1(page).locator('#main-panel').press('Tab')
+    await pane1(page).locator('.event-item.selected').press('Tab')
     await pane1(page).locator('.constants-row__name').first().fill('VILLE')
-    await pane1(page).locator('#main-panel').press('Tab')
+    await pane1(page).locator('.event-item.selected').press('Tab')
     await pane1(page).locator('.constants-row__value').first().fill('Paris')
     // Ligne 1 : vide (skip)
-    await pane1(page).locator('#main-panel').press('ArrowDown')
+    await pane1(page).locator('.event-item.selected').press('ArrowDown')
     // Ligne 2 : HEROS / Arthur
-    await pane1(page).locator('#main-panel').press('ArrowDown')
-    await pane1(page).locator('#main-panel').press('Tab')
+    await pane1(page).locator('.event-item.selected').press('ArrowDown')
+    await pane1(page).locator('.event-item.selected').press('Tab')
     await pane1(page).locator('.constants-row__name').nth(2).fill('HEROS')
-    await pane1(page).locator('#main-panel').press('Tab')
+    await pane1(page).locator('.event-item.selected').press('Tab')
     await pane1(page).locator('.constants-row__value').nth(2).fill('Arthur')
-    await pane1(page).locator('#main-panel').press('Escape')
+    await pane1(page).locator('.event-item.selected').press('Escape')
     await expect(pane1(page).locator('#constants-panel')).not.toBeVisible()
     // Vérification
-    await pane1(page).locator('#main-panel').press('q')
+    await pane1(page).locator('.event-item.selected').press('q')
     await expect(pane1(page).locator('.constants-row').first()).toBeVisible()
     await expect(pane1(page).locator('.constants-row__name').first()).toHaveValue('VILLE')
     await expect(pane1(page).locator('.constants-row__name').nth(2)).toHaveValue('HEROS')
