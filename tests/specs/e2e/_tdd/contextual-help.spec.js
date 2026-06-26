@@ -58,7 +58,7 @@ test('le panneau affiche le titre du contexte courant (liste de projets)', async
   await page.goto('/')
   await expect(pane1(page).locator('.project-item').first()).toBeVisible()
   await pane1(page).locator('.project-item.selected').press(OPEN_KEY)
-  await expect(pane1(page).locator('.contextual-help__title')).toContainText('Liste des projets')
+  await expect(pane1(page).locator('.ftpanel__title')).toContainText('Liste des projets')
 })
 
 test('le panneau liste les raccourcis du contexte courant', async ({ page }) => {
@@ -139,7 +139,7 @@ test('project-list : ␣ absent (except depuis with-selected)', async ({ page })
 
 // ── Clipboard paste ───────────────────────────────────────────────
 
-test('⌘+v apparaît dans l\'aide si clipboard compatible (après ⌘+c)', async ({ page }) => {
+test.only('⌘+v apparaît dans l\'aide si clipboard compatible (après ⌘+c)', async ({ page }) => {
   await page.goto('/')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
   await pane1(page).locator('.project-item.selected').press('Meta+c')

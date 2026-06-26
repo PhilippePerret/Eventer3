@@ -25,9 +25,9 @@ export default class ContextualHelp extends KeyboardablePanel {
   constructor(item) {
     super({ panelClass: 'contextual-help' })
     this._item       = item
-    this._contextKey = item.editing
-      ? `${item.minClass}-edition`
-      : `${item.minClass}-list`
+    this.itemMode = item.editing ? 'editing' : 'list'
+    this._contextKey = `${item.minClass}-${this.itemMode}`
+    console.log("Contexte d'aide demandé : %s", this._contextKey)
     this._shortcuts  = []
     this._renderItems = []
     this._buildShortcuts()
@@ -63,7 +63,7 @@ export default class ContextualHelp extends KeyboardablePanel {
         continue
       }
       const row = document.createElement('div')
-      row.className = 'contextual-help__row'
+      row.className = 'contextual-help__row ftpanel__item'
       const kbd = document.createElement('kbd')
       kbd.className   = 'contextual-help__key'
       kbd.textContent = item.sc
@@ -74,6 +74,11 @@ export default class ContextualHelp extends KeyboardablePanel {
       row.appendChild(ef)
       ;(currentGroup ?? zone).appendChild(row)
     }
+  }
+
+  close() {
+    super.close()
+    this._item.el?.focus()
   }
 
   _onEnterItem(index) {
