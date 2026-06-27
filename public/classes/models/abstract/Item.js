@@ -90,21 +90,47 @@ export default class Item extends KeyDispatcher {
     return false
   }
 
-  applyEdit() {
-    LOG.m(1, 'Item.applyEdit', { id: this.id })
+  async applyEdit() {
+    LOG.m(1, 'Item.applyEdit', { id: this.id, isTemporary: !!this.__isTemporary })
     try {
       this.collectValues()
       LOG.m(1, 'Item.applyEdit — collectValues OK')
       if (this._warnIfEmptyTitle()) return
-      this.save()
+      if (this.__isTemporary) {
+        await this._commitTemporary()
+      } else {
+        this.save()
+      }
       this._stopEditing()
     } catch(e) {
       LOG.m(1, 'Item.applyEdit — ERREUR', e.message, e.stack)
     }
   }
 
+  async _commitTemporary() {
+    const payload = {}
+    for (const field of (this.PROPS ?? [])) payload[field.name] = this[field.name]
+    const result = await this.parentLister.createItem(payload)
+    if (!result?.id) throw new Error('_commitTemporary: pas d\'id retourné')
+    this.id = result.id
+    this.__isTemporary = false
+    const insertIdx = this.parentLister.items.indexOf(this)
+    const newOrder  = [...this.parentLister.item_ids]
+    newOrder.splice(insertIdx, 0, result.id)
+    this.parentLister.item_ids = newOrder
+    await this.parentLister.save()
+    await this.parentLister._afterCreate?.(result, insertIdx)
+  }
+
   cancelEdit() {
     LOG.m(2, 'Item.cancelEdit', { parentLister: !!this.parentLister, itemsLength: this.parentLister?.items.length, title: JSON.stringify(this.title) })
+    if (this.__isTemporary) {
+      const idx = this.parentLister.items.indexOf(this)
+      if (idx >= 0) this.parentLister.items.splice(idx, 1)
+      this.parentLister.selectedIndex = Math.max(0, idx - 1)
+      this.parentLister.render()
+      return
+    }
     if (this.parentLister?.items.length <= 1) {
       LOG.m(2, 'Item.cancelEdit — seul item, blocage')
       this._warnIfEmptyTitle()

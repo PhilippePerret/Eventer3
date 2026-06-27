@@ -2,6 +2,7 @@ import Item from '../abstract/Item.js'
 import { WORD_FORMS } from '../../../constants/constants.js'
 import { PERSO_TYPES, PERSO_FONCTIONS, PERSO_COLORS, PERSO_AVATARS } from '../constants/Perso.js'
 import PersoDom from '../dom/Perso.js'
+import { raise } from '../../../system/Error.js'
 
 
 export default class Perso extends Item {
@@ -55,8 +56,8 @@ export default class Perso extends Item {
 
   static generateUniqueBadge(perso) {
     const taken = perso.parentLister.existingBadges
-    const pseudo = perso.title.toUpperCase()
-    const patron = perso.patronyme.toUpperCase()
+    const pseudo = (perso.title     ?? raise(11, perso.id)).toUpperCase()
+    const patron = (perso.patronyme ?? '').toUpperCase()
 
     const badge = patron
       ? this.generateUniqueBadgeFromPatronyme(taken, patron)
@@ -66,7 +67,7 @@ export default class Perso extends Item {
   }
   static generateUniqueBadgeFromPatronyme(taken, base){
     let bg
-    const words = base.split(/\s+/), word1 = words[0], word2 = words[1]
+    const words = base.split(/\s+/), word1 = words[0], word2 = words[1] || 'A'
     for(var i1 = 0, len1 = word1.length; i1 < len1; ++ i1) {
       for(var i2 = 0, len2 = word2.length; i2 < len2; ++i2){
         if (!taken.has(bg = word1[i1] + word2[i2])) return bg
@@ -83,22 +84,22 @@ export default class Perso extends Item {
     for (var i = 1; i < len; ++i){
       if (!taken.has(bg = root + base[i])) return bg
     }
-    return badgePerDepit(root, taken)
+    return this.badgePerDepit(root, taken)
   }
 
   static badgePerDepit(root, taken){
     let bg
     // On essaie avec toutes les lettres avec la première (A->Z)
-    for(var c=65;c<90;++c){if (!taken.has(bg = root + String.fromCharCode(c))){ return bg}}
+    for(var c=65;c<=90;++c){if (!taken.has(bg = root + String.fromCharCode(c))){ return bg}}
     // On essaie toutes les combinaisons de lettres
-    for(c=65;c<90;++c){
+    for(c=65;c<=90;++c){
       root = String.fromCharCode(c)
-      for(var c2=65;c2<90;++c2){
+      for(var c2=65;c2<=90;++c2){
         if (!taken.has(bg = root + String.fromCharCode(c2))){ return bg}
       }
     }
     // Par dépit, on met un nombre de 10 à 99
-    for (i = 10; i < 100; ++i) {if (!taken.has(bg = String(i))) return bg }
+    for (var i = 10; i < 100; ++i) {if (!taken.has(bg = String(i))) return bg }
   }
 
 } // class Perso

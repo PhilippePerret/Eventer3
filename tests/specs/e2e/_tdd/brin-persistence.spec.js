@@ -1,6 +1,6 @@
 // Origine : tests/specs/e2e/brin/brin-persistence.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures.js'
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, getErr } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('with-brins')
@@ -70,4 +70,33 @@ test("brin créé a bien un badge affiché après rechargement", async ({ page }
   const newBrin = pane1(page).locator('.brin-item').nth(1)
   await expect(newBrin).toContainText('Nouveau Brin')
   await expect(newBrin.locator('.brin-badge')).not.toHaveText('')
+})
+
+// ─── Unicité badge (checkBadgeValue) ─────────────────────────────────────────
+
+test("modifier le badge d'un brin vers une valeur déjà prise → notification immédiate + badge non modifié", async ({ page }) => {
+  await openBrinPanel(page)
+  // b1 badge=MON, b2 badge=AUT
+  await pane1(page).locator('.brin-item.selected').press('Enter') // édite b1
+  await pane1(page).locator('.brin-item.selected').press('Tab')   // title → badge
+  // Taper AUT (déjà pris par b2) → notification immédiate, sans Enter
+  await pane1(page).locator('.brin-item.selected [data-field="badge"]').fill('AUT')
+  await expect(pane1(page).locator('.notification')).toBeVisible()
+  await expect(pane1(page).locator('.notification')).toContainText(getErr(2010, 'AUT'))
+  // Valider → badge doit être resté MON
+  await pane1(page).locator('.brin-item.selected').press('Enter')
+  await expect(pane1(page).locator('.brin-item').nth(0).locator('.brin-badge')).toHaveText('MON')
+})
+
+test("remettre son propre badge après changement temporaire → pas de notification", async ({ page }) => {
+  await openBrinPanel(page)
+  // Sélectionner b2 (badge=AUT)
+  await pane1(page).locator('.brin-item.selected').press('ArrowDown')
+  await pane1(page).locator('.brin-item.selected').press('Enter') // édite b2
+  await pane1(page).locator('.brin-item.selected').press('Tab')   // title → badge
+  // Changer vers PRE (pas encore Enter), puis remettre AUT
+  await pane1(page).locator('.brin-item.selected [data-field="badge"]').fill('PRE')
+  await pane1(page).locator('.brin-item.selected [data-field="badge"]').fill('AUT')
+  // Pas de notification
+  await expect(pane1(page).locator('.notification')).not.toBeVisible()
 })

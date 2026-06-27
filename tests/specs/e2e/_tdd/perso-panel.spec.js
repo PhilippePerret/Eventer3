@@ -1,5 +1,6 @@
+// Origine: tests/specs/e2e/perso/perso-panel.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures'
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, getErr } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('with-persos')
@@ -15,7 +16,7 @@ test.beforeEach(() => {
 async function goToListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
+  await pane1(page).locator('.project-item.selected').press('ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
 }
 
@@ -271,31 +272,31 @@ test("n ouvre l'éditeur pour un nouveau perso (input title focalisé)", async (
 
 test("créer un perso avec patronyme → badge calculé depuis le patronyme", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('n')
-  await pane1(page).locator('.perso-item.selected input[name="title"]').fill('Jean')
-  await pane1(page).locator('.event-item.selected').press('Tab') // → patronyme
-  await pane1(page).locator('.perso-item.selected input[name="patronyme"]').fill('Valjean')
+  await pane1(page).locator('.perso-item.selected').press('n')
+  await pane1(page).locator('.perso-item.selected [data-field="title"]').fill('Jean')
+  await pane1(page).locator('.perso-item.selected').press('Tab') // → patronyme
+  await pane1(page).locator('.perso-item.selected [data-field="patronyme"]').fill('Valjean')
   // badge vide : laisser auto-calc
-  await pane1(page).locator('.event-item.selected').press('Enter')
+  await pane1(page).locator('.perso-item.selected').press('Enter')
   // 'Valjean' sans espaces → 'VA'
   await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-item__badge')).toHaveText('VA')
 })
 
 test("créer un perso sans patronyme → badge calculé depuis le titre", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('n')
-  await pane1(page).locator('.perso-item.selected input[name="title"]').fill('Cosette')
+  await pane1(page).locator('.perso-item.selected').press('n')
+  await pane1(page).locator('.perso-item.selected [data-field="title"]').fill('Cosette')
   // pas de patronyme, badge vide
-  await pane1(page).locator('.event-item.selected').press('Enter')
+  await pane1(page).locator('.perso-item.selected').press('Enter')
   await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-item__badge')).toHaveText('CO')
 })
 
 test("badge unique si collision avec un badge existant", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('n')
+  await pane1(page).locator('.perso-item.selected').press('n')
   // 'Cyrus' → 'CY' → collision avec c1 → doit être différent
-  await pane1(page).locator('.perso-item.selected input[name="title"]').fill('Cyrus')
-  await pane1(page).locator('.event-item.selected').press('Enter')
+  await pane1(page).locator('.perso-item.selected [data-field="title"]').fill('Cyrus')
+  await pane1(page).locator('.perso-item.selected').press('Enter')
   const badgeEl = pane1(page).locator('.perso-item').nth(1).locator('.perso-item__badge')
   await expect(badgeEl).not.toHaveText('CY')
   const badge = await badgeEl.textContent()
@@ -304,13 +305,42 @@ test("badge unique si collision avec un badge existant", async ({ page }) => {
 
 test("éditer un perso et vider le badge → recalculé depuis le patronyme", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('Enter') // édite c1 (title='Cyrano', patronyme='de Bergerac')
-  await pane1(page).locator('.event-item.selected').press('Tab') // → patronyme
-  await pane1(page).locator('.event-item.selected').press('Tab') // → badge
-  await pane1(page).locator('.perso-item.selected input[name="badge"]').fill('') // vider
-  await pane1(page).locator('.event-item.selected').press('Enter')
+  await pane1(page).locator('.perso-item.selected').press('Enter') // édite c1 (title='Cyrano', patronyme='de Bergerac')
+  await pane1(page).locator('.perso-item.selected').press('Tab') // → patronyme
+  await pane1(page).locator('.perso-item.selected').press('Tab') // → avatar
+  await pane1(page).locator('.perso-item.selected').press('Tab') // → badge
+  await pane1(page).locator('.perso-item.selected [data-field="badge"]').fill('') // vider
+  await pane1(page).locator('.perso-item.selected').press('Enter')
   // patronyme 'de Bergerac' → 'debergerac'.toUpperCase() → 'DE'
   await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-item__badge')).toHaveText('DE')
+})
+
+test("modifier le badge d'un perso vers une valeur déjà prise → notification immédiate + badge non modifié", async ({ page }) => {
+  await openPersoPanel(page)
+  // c1 badge=CY, c2 badge=RO
+  await pane1(page).locator('.perso-item.selected').press('Enter') // édite c1
+  await pane1(page).locator('.perso-item.selected').press('Tab')   // title → patronyme
+  await pane1(page).locator('.perso-item.selected').press('Tab')   // patronyme → avatar
+  await pane1(page).locator('.perso-item.selected').press('Tab')   // avatar → badge
+  // Taper RO (déjà pris par c2) → notification immédiate, sans Enter
+  await pane1(page).locator('.perso-item.selected [data-field="badge"]').fill('RO')
+  await expect(pane1(page).locator('.notification')).toBeVisible()
+  await expect(pane1(page).locator('.notification')).toContainText(getErr(3010, 'RO'))
+  // Valider → badge doit être resté CY
+  await pane1(page).locator('.perso-item.selected').press('Enter')
+  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-item__badge')).toHaveText('CY')
+})
+
+test("remettre son propre badge après changement temporaire → pas de notification", async ({ page }) => {
+  await openPersoPanel(page)
+  // c1 badge=CY — on édite c1, change badge, on remet CY
+  await pane1(page).locator('.perso-item.selected').press('Enter')
+  await pane1(page).locator('.perso-item.selected').press('Tab')   // title → patronyme
+  await pane1(page).locator('.perso-item.selected').press('Tab')   // patronyme → avatar
+  await pane1(page).locator('.perso-item.selected').press('Tab')   // avatar → badge
+  await pane1(page).locator('.perso-item.selected [data-field="badge"]').fill('XX')
+  await pane1(page).locator('.perso-item.selected [data-field="badge"]').fill('CY')
+  await expect(pane1(page).locator('.notification')).not.toBeVisible()
 })
 
 test("créer un perso : Enter valide et l'ajoute à la liste", async ({ page }) => {

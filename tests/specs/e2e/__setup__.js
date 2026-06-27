@@ -20,6 +20,8 @@ export const test = base.extend({
 })
 
 export { expect } from '@playwright/test'
+export { ERRORS } from '../../../public/locale/fr/ERRORS.js'
+export { getErr } from '../../../public/system/Error.js'
 
 export function pane1(page) {
   return page.frameLocator('#pane-1')

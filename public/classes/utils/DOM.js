@@ -36,6 +36,7 @@ export default class DOM {
     el.setAttribute('tabindex', '0')
     el.textContent = item[field.name] ?? ''
     el.addEventListener('keydown', e => this.blockKeysFromContenteditable(e))
+    if (field.onchange) el.addEventListener('input', () => item[field.onchange](el))
     return el
   }
 
