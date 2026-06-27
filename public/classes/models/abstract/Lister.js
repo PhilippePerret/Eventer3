@@ -1,5 +1,6 @@
 import KeyDispatcher from './KeyDispatcher.js'
 import LOG from '../../../system/LOG.js'
+import { raise } from '../../../system/Error.js'
 import ListerDom from '../dom/Lister.js'
 import ListerRepo from '../repo/Lister.js'
 import { ListerLi } from '../listen/Lister.js'
@@ -10,12 +11,12 @@ export default class Lister extends KeyDispatcher {
 
   constructor(data = {}) {
     super()
-    this.id            = data.id            ?? null
-    this.item_ids      = data.item_ids      ?? []
-    this.items         = []
-    this.selectedIndex = data.selectedIndex ?? -1
-    this.project_id    = data.project_id    ?? null
-    this.parentLister  = data.parentLister  ?? null
+    this.id             = data.id            ?? null
+    this.item_ids       = data.item_ids      ?? []
+    this.items          = []
+    this.selectedIndex  = data.selectedIndex ?? -1
+    this.project        = data.project  || raise(1000)
+    this.parentLister   = data.parentLister  ?? null
   }
 
   get minClass() { return this._minClass || (this._minClass = this.constructor.ITEM_CLASS?.name.toLowerCase()) }
@@ -57,7 +58,7 @@ export default class Lister extends KeyDispatcher {
 
   async _createAt(insertIdx) {
     const Cls      = this.constructor.ITEM_CLASS
-    const tempItem = new Cls({ title: '', lister_id: this.id, project_id: this.project_id, parentLister: this })
+    const tempItem = new Cls({ title: '', lister_id: this.id, project: this.project, parentLister: this })
     tempItem.__isTemporary = true
     this.items.splice(insertIdx, 0, tempItem)
     this.selectedIndex = insertIdx
@@ -117,7 +118,7 @@ export default class Lister extends KeyDispatcher {
     const Cls = this.constructor.ITEM_CLASS
     const ids = this.item_ids.length ? this.item_ids : Object.keys(data)
     return ids
-      .map((id, idx) => data[id] ? new Cls({ ...data[id], id, _index: idx }) : null)
+      .map((id, idx) => data[id] ? new Cls({ ...data[id], id, _index: idx, project: this.project }) : null)
       .filter(Boolean)
   }
 

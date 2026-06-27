@@ -8,7 +8,7 @@ export default {
   async save() {
     const payload = {}
     for (const field of (this.PROPS ?? [])) payload[field.name] = this[field.name]
-    const pid   = this.project_id ?? this.parentLister?.project_id
+    const pid   = (this.project ?? this.parentLister?.project).id
     const query = pid ? `?project_id=${pid}` : ''
     await fetch(`/api/items/${this.id}${query}`, {
       method:  'PATCH',

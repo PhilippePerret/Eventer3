@@ -77,7 +77,7 @@ export default class ListerBrin extends Lister {
   }
 
   async deleteItem(item) {
-    const query = this.project_id ? `?project_id=${this.project_id}` : ''
+    const query = `project.id=${this.project.id}`
     const url = `/api/listers/${this.id}/items/${item.id}${query}`
     const resp = await fetch(url, { method: 'DELETE', cache: 'no-store' })
     return resp.ok

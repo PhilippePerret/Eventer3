@@ -74,7 +74,7 @@ export default class ListerProject extends Lister {
       body:    JSON.stringify({ db_path: dbPath }),
     })
 
-    await this.constructor.ITEM_CLASS.onCreated?.(newId)
+    await this.constructor.ITEM_CLASS.onCreated?.(newId) // ICI IL FAUDRAIT LE PROJET (INSTANCE)
 
     await this._appendToOrder(prevIds, newId, insertIdx)
   }

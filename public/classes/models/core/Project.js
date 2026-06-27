@@ -31,9 +31,9 @@ export default class Project extends Item {
       , {name: 'type',  type: 'select', warper: 'edits', values: PROJECT_TYPES}
     ])}
 
-  static async onCreated(id) {
-    const evtLister = await Lister.createLister({ type: 'events', itemId: id, project_id: id })
-    if (evtLister?.id) await new Lister({ id: evtLister.id, project_id: id }).createItem({ title: 'Acte I' })
+  static async onCreated(project) {
+    const evtLister = await Lister.createLister({ type: 'events', itemId: id, project: project })
+    if (evtLister?.id) await new Lister({ id: evtLister.id, project: project }).createItem({ title: 'Acte I' })
   }
 
 }
