@@ -1,6 +1,7 @@
 import Lister from '../abstract/Lister.js'
 import Brin from './Brin.js'
 import LOG from '../../../system/LOG.js'
+import { raise } from '../../../system/Error.js'
 
 export default class ListerBrin extends Lister {
 
@@ -11,9 +12,19 @@ export default class ListerBrin extends Lister {
 
   constructor(data = {}) {
     super(data)
-    this.listerEvent = data.listerEvent ?? null // C'EST QUOI, ÇA ????
-    this.project_id  = data.project_id ?? this.listerEvent?.project_id ?? null
-    this.id = this.project_id ? this.project_id + '-brins' : null
+    this.project     = data.project || raise(2000)
+    this.listerEvent = data.listerEvent ?? null
+    this.id          = this.project.id + '-brins'
+  }
+
+  async open(eventItem) {
+    const le         = eventItem.parentLister
+    this.listerEvent  = le
+    this.parentLister = le
+    if (!this.items.length) await this.load()
+    else this._syncChecked()
+    le.detach()
+    this.render()
   }
 
   get selectedEvent() {
@@ -45,7 +56,7 @@ export default class ListerBrin extends Lister {
     if (!result?.id) return
     this.item_ids = [result.id]
     await this.save()
-    const brin = new Brin({ ...result, id: result.id, _index: 0 })
+    const brin = new Brin({ ...result, id: result.id, _index: 0, project: this.project })
     this.items = [brin]
     if (this.listerEvent) this.listerEvent.brins = { [result.id]: result }
   }

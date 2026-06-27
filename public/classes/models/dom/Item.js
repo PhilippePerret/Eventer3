@@ -7,9 +7,6 @@ export default {
 
   get minClass() { return this.constructor.name.toLowerCase() },
 
-  openBrinPanel()  { dom.openBrinPanel(this) /* DÉBILE (c'est ListerBrin qui doit savoir faire ça */ },
-  openPersoPanel() { dom.openPersoPanel(this) /* DÉBILE (c'est ListerPerso qui doit savoir faire ça */},
-
   build() {
     LOG.m(1, 'Item.build', this.constructor.name, this.id)
     const el = document.createElement('div')

@@ -9,9 +9,11 @@ export const ERRORS = {
   , 5200: "Aucune cible n'est sélectionnée."
 
   /* -- 2000 : BRINS -- */
+  , 2000: "L'instance du projet doit être transmis au constructeur de ListerBrin"
   , 2010: "Le badge '$1' est déjà utilisé pour un brin"
 
   /* -- 3000 : PERSOS -- */
+  , 3000: "L'instance du projet doit être transmis au constructeur de ListerPerso"
   , 3010: "Le badge '$1' est déjà utilisé pour un personnage"
 
     /* -- 6000 : Double fenêtre  -- */

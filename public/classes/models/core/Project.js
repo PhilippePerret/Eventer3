@@ -10,13 +10,11 @@ import { WORD_FORMS } from '../../../constants/constants.js'
 export default class Project extends Item {
   static COLORS    = PROJECT_COLORS
   static get thingName() { return WORD_FORMS.Project }
-  static get current() { return Project._current }
 
-  get listerBrins()  { return this._lbrins  ?? (this._lbrins  = new ListerBrin({ project_id: this.id })) }
-  get listerPersos() { return this._lpersos ?? (this._lpersos = new ListerPerso({ project_id: this.id })) }
+  get listerBrins()  { return this._lbrins  ?? (this._lbrins  = new ListerBrin({ project: this })) }
+  get listerPersos() { return this._lpersos ?? (this._lpersos = new ListerPerso({ project: this })) }
 
   async enterInside() {
-    Project._current = this
     await this.listerBrins.load()
     await this.listerPersos.load()
     await this._enterChildLister(ListerEvent, this.lister_id, this.id)

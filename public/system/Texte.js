@@ -58,7 +58,7 @@ export default class Texte {
       const result = Texte.toggleMark(el.value, start, end, before, after)
       el.value = result.value
       el.setSelectionRange(result.selStart, result.selEnd)
-      el.dispatchEvent(new Event('input', { bubbles: true }))
+      el.dispatchEvent(new Event('input', { bubbles: true })) // project va sûrement manquer
     } else {
       const sel = window.getSelection()
       if (!sel || sel.isCollapsed) return

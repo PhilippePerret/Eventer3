@@ -1,13 +1,14 @@
-import Item from '../abstract/Item.js'
-import { WORD_FORMS } from '../../../constants/constants.js'
-import { BRIN_TYPE, BRIN_COLORS } from '../constants/Brin.js'
-import BrinDom from '../dom/Brin.js'
 import { raise, getErr } from '../../../system/Error.js'
 import Notification from '../../ui/Notification.js'
-
+import { BRIN_TYPE, BRIN_COLORS } from '../constants/Brin.js'
+import { WORD_FORMS } from '../../../constants/constants.js'
+import Item from '../abstract/Item.js'
+import { BrinLi } from '../listen/Brin.js'
+import BrinDom from '../dom/Brin.js'
 
 export default class Brin extends Item {
   static get thingName() { return WORD_FORMS.Brin }
+  static LISTENERS = { ...Item.LISTENERS, ...BrinLi }
   static COLORS = BRIN_COLORS
 
   static markOf(data) { return data.badge }

@@ -1,6 +1,6 @@
 import ListerProject from './models/core/ListerProject.js'
 import LOG from '../system/LOG.js'
-import './models/dom/DomMethods.js'
+
 
 export default class App {
 
@@ -28,6 +28,13 @@ export default class App {
 
   //QU'EST-CE QUE ÇA FAIT LÀ, ÇA ???
   static async navigateToItem(projectLister, targetId, projectId) {
+    /**
+     * 
+     * 
+     * 
+     * CETTE MÉTHODE EST À REPENSER COMPLÈTEMENT EN FONCTION DE LA NOUVELLE ARCHITECTURE
+     * (ELLE SERT AUX IFRAMES — DOUBLE FENÊTRE — ET FONCTIONNAIT AVANT AVEC LE 
+     *  KEYBOARDCONTROLER DE L'ANCINNE ARCHITECTURE)
     const kc = projectLister.keyboardController
     if (!projectId) {
       // projectId null = revenir à la liste projets, sélectionner le projet targetId
@@ -48,6 +55,7 @@ export default class App {
       await lister.enterSelectedItem()
       await kc.activeLister.navigateToItem(targetId)
     }
+    //*/
   }
 
 }

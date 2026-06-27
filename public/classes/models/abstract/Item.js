@@ -14,6 +14,8 @@ export default class Item extends KeyDispatcher {
 
   constructor(data = {}) {
     super()
+
+    this.project    = data.project    ?? null
     this.id         = data.id         ?? null
     this.title      = data.title      ?? raise(10)
     this.type       = data.type       ?? null
@@ -24,7 +26,6 @@ export default class Item extends KeyDispatcher {
     this.checked    = data.checked    ?? false
     this.created_at = data.created_at ?? null
     this.updated_at = data.updated_at ?? null
-    this.project_id = data.project_id ?? null
     this.parentLister = data.parentLister ?? null
     this.editing = false
     if (data._index !== undefined) this.customInit(data._index)
@@ -53,9 +54,9 @@ export default class Item extends KeyDispatcher {
       child.id       = result.id
       child._missing = false
       this.lister_id = result.id
-      await this.onChildListerCreated?.(child)
       await child.load()
     }
+    await this.onChildListerCreated?.(child)
     child.selectedIndex = 0
     this.parentLister.detach()
     child.render()
@@ -138,6 +139,10 @@ export default class Item extends KeyDispatcher {
     }
     this.revertValues()
     this._stopEditing()
+  }
+
+  openPersosPanel(){
+    this.project.listerPerso.openPanel(this)
   }
 
 }
