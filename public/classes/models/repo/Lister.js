@@ -18,7 +18,7 @@ export default {
   },
 
   async countDescendants(item) {
-    const project_id = this.project.id ?? item.id
+    const project = this.project.id ?? item.id
     const query = project ? `?project_id=${project.id}` : ''
     const resp = await fetch(`/api/listers/${this.id}/items/${item.id}/descendants/count${query}`, { cache: 'no-store' })
     if (!resp.ok) return 0
@@ -27,7 +27,7 @@ export default {
   },
 
   async save() {
-    const query = this.project ? `?project_id=${this.project_id}` : ''
+    const query = this.project ? `?project_id=${this.project.id}` : ''
     await fetch(`/api/listers/${this.id}${query}`, {
       method:  'PATCH',
       headers: { 'Content-Type': 'application/json' },

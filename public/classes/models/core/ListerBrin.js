@@ -17,7 +17,7 @@ export default class ListerBrin extends Lister {
     this.id          = this.project.id + '-brins'
   }
 
-  async open(eventItem) {
+  async openPanel(eventItem) {
     const le         = eventItem.parentLister
     this.listerEvent  = le
     this.parentLister = le
@@ -77,7 +77,7 @@ export default class ListerBrin extends Lister {
   }
 
   async deleteItem(item) {
-    const query = `project.id=${this.project.id}`
+    const query = `?project.id=${this.project.id}`
     const url = `/api/listers/${this.id}/items/${item.id}${query}`
     const resp = await fetch(url, { method: 'DELETE', cache: 'no-store' })
     return resp.ok

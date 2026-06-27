@@ -141,7 +141,7 @@ export default class Item extends KeyDispatcher {
     this._stopEditing()
   }
 
-  openPersosPanel(){
+  openPersoPanel(){
     this.project.listerPerso.openPanel(this)
   }
 
