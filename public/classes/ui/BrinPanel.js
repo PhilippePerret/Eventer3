@@ -32,11 +32,13 @@ export default class BrinPanel {
   static HANDLED_KEYS = {
       Enter: true
     , b:     true
+    , p:     true
     /* RÈGLE ABSOLUE : La touche Escape ne sert JAMAIS à fermer un panneau */
   }
 
   _handleKey(e) {
-    const handledKey = BrinPanel.HANDLED_KEYS[e.key]
+    const key        = e.key.length === 1 ? e.key.toLowerCase() : e.key
+    const handledKey = BrinPanel.HANDLED_KEYS[key]
 
     if (undefined == handledKey) return
 
@@ -48,13 +50,15 @@ export default class BrinPanel {
     stopEvent(e)
 
     if (handledKey === true) {
-      switch (e.key) {
+      switch (key) {
         case 'Enter':
           if (e.metaKey) return this.close()
-          else selected?.startEditing(); 
+          else selected?.startEditing();
           break
-        case 'b' :      
+        case 'b':
           return this.close()
+        case 'p':
+          selected?.openPersoPanel()
           break
       }
     } else {

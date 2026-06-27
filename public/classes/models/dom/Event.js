@@ -6,8 +6,15 @@ import ListerPerso from '../core/ListerPerso.js'
 export default {
   /** Retourne les marks des personnages (avatar ou badge) de l'event et de tous ses brins */
   persosMarks() {
-    const persos = ListerPerso.pool
-    const content = (this.perso_ids ?? []).map(id => {
+    const persos  = ListerPerso.pool
+    const rawBrins = this.parentLister?.brins ?? {}
+    const allIds  = new Set(this.perso_ids ?? [])
+    for (const brinId of (this.brin_ids ?? [])) {
+      const brin = ListerBrin.pool[brinId]
+      const pids = brin ? brin.perso_ids : (rawBrins[brinId]?.brin_perso_ids ?? [])
+      pids.forEach(pid => allIds.add(pid))
+    }
+    const content = [...allIds].map(id => {
       const p = persos[id]
       if (!p) return ''
       const style = p.color ? ` style="background:${p.color}"` : ''

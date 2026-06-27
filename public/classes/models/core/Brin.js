@@ -16,7 +16,7 @@ export default class Brin extends Item {
     super(data)
     this.badge     = data.badge     || Brin.generateUniqueBadge(this)
     this.type      = data.type      ?? null
-    this.perso_ids = data.perso_ids ?? []
+    this.perso_ids = data.brin_perso_ids ?? data.perso_ids ?? []
   }
 
   // INTERDICTION FORMELLE D'AJOUTER UNE PROPRIÉTÉ cssClass OU CONSORT !!! TOUTES LES PROPRIÉTÉS CSS DÉCOULENT NATURELLEMENT DE LA CLASSE MINUSCULE, DU :name ET DU :warper. CES TROIS VALEURS SUFFISENT AMPLEMENT POUR DÉSIGNER PRÉCISÉMENT L'ÉLÉMENT.

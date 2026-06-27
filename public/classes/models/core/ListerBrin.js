@@ -6,6 +6,7 @@ export default class ListerBrin extends Lister {
 
   static ITEM_CLASS = Brin
   static PANEL_ID   = 'brins-panel'
+  static CHECK_KEY  = 'brin_ids'
   static pool = {}
   static LISTENERS  = { ...Lister.LISTENERS, ' ': { nokey: 'toggleChecked' } }
 
@@ -20,6 +21,8 @@ export default class ListerBrin extends Lister {
     const le = this.listerEvent
     return le?.items[le.selectedIndex] ?? null
   }
+
+  get contextItem() { return this.selectedEvent }
 
   async _fetchData() {
     if (this.listerEvent) return this.listerEvent.brins ?? {}
@@ -70,18 +73,8 @@ export default class ListerBrin extends Lister {
     return resp.ok
   }
 
-  toggleChecked() {
-    const brin = this.items[this.selectedIndex]
-    const ev = this.selectedEvent
-    if (!brin || !ev) return
-    ev.brin_ids = ev.brin_ids ?? []
-    const i = ev.brin_ids.indexOf(brin.id)
-    if (i > -1) ev.brin_ids.splice(i, 1)
-    else ev.brin_ids.push(brin.id)
-    brin.checked = ev.brin_ids.includes(brin.id)
-    brin.el?.classList.toggle('checked', brin.checked)
+  _afterToggle(_brin, ev) {
     this._refreshEventMarks(ev)
-    ev.save()
   }
 
   _refreshEventMarks(ev) {

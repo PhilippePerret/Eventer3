@@ -75,10 +75,11 @@ export default class Lister extends KeyDispatcher {
   }
 
   leaveToParent() {
+    this.container.classList.add('hidden')
+    this.container.innerHTML = ''
     const parent = this.parentLister
     this.detach()
     parent.render()
-    parent.attach(parent.container)
   }
 
   selectPrev() {
@@ -95,6 +96,29 @@ export default class Lister extends KeyDispatcher {
     if (idx >= items.length) idx = 0
     while (idx < items.length - 1 && items[idx].filtered) idx++
     this.selectAt(idx)
+  }
+
+  get contextItem() { return null }
+
+  _canToggle(_item)          { return true }
+  _afterToggle(_item, _ctx)  {}
+
+  toggleChecked() {
+    const item = this.items[this.selectedIndex]
+    const ctx  = this.contextItem
+    const key  = this.constructor.CHECK_KEY
+    if (!item || !ctx || !key) return
+    if (!this._canToggle(item)) return
+    ctx[key] = ctx[key] ?? []
+    const i = ctx[key].indexOf(item.id)
+    if (i > -1) ctx[key].splice(i, 1)
+    else ctx[key].push(item.id)
+    item.checked = ctx[key].includes(item.id)
+    item.el?.classList.toggle('checked', item.checked)
+    const checkEl = item.el?.querySelector('.panel-check')
+    if (checkEl) checkEl.textContent = item.checked ? '✓' : ''
+    this._afterToggle(item, ctx)
+    ctx.scheduleSave()
   }
 
   async load() {

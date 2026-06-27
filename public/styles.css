@@ -207,6 +207,15 @@ body {
   border-bottom: 1px solid rgba(255, 255, 255, .18);
 }
 
+.perso-item.selected, .brin-item.selected {
+  background: var(--selected);
+}
+
+.perso-item.selected.checked .panel-check,
+.brin-item.selected.checked .panel-check {
+  color: white;
+}
+
 .event-item.editing .event-title {
   background: var(--bg) !important;
   color: var(--text) !important;

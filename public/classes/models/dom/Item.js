@@ -17,7 +17,8 @@ export default {
     el.dataset.id = this.id
     el.setAttribute('tabindex', '-1')
     if (this === this.parentLister?.items[this.parentLister?.selectedIndex]) el.classList.add('selected')
-    if (this.checked) el.classList.add('checked')
+    if (this.checked)   el.classList.add('checked')
+    if (this.inherited) el.classList.add('inherited')
     this._buildContent(el)
     this.el = el
     this.attach(el)
@@ -30,7 +31,7 @@ export default {
     const gutter = document.createElement('div')
     gutter.className = `item-check-gutter ${minClass}-check-gutter`
     const checkEl = document.createElement('span')
-    checkEl.className = `item-check ${minClass}-check`
+    checkEl.className = `item-check ${minClass}-check panel-check`
     checkEl.textContent = this.checked ? '✓' : ''
     gutter.appendChild(checkEl)
     el.appendChild(gutter)

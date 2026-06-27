@@ -92,14 +92,14 @@ test("le panneau affiche tous les personnages du projet", async ({ page }) => {
 
 test("les pseudos sont affichés", async ({ page }) => {
   await openPersoPanel(page)
-  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-item__title')).toHaveText('Cyrano')
-  await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-item__title')).toHaveText('Roxane')
+  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-title')).toHaveText('Cyrano')
+  await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-title')).toHaveText('Roxane')
 })
 
 test("les badges sont affichés (2 lettres)", async ({ page }) => {
   await openPersoPanel(page)
-  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-item__badge')).toHaveText('CY')
-  await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-item__badge')).toHaveText('RO')
+  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-badge')).toHaveText('CY')
+  await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-badge')).toHaveText('RO')
 })
 
 test("le premier perso est sélectionné à l'ouverture", async ({ page }) => {
@@ -199,8 +199,7 @@ test("la ligne de e1 affiche le badge de c2 (hérité via brin b1) quand le pann
 })
 
 test("la ligne de e2 n'affiche aucun badge perso", async ({ page }) => {
-  await page.goto('/')
-  await pane1(page).locator('.event-item.selected').press('ArrowRight')
+  await goToListerEvent(page)
   const eventEl = pane1(page).locator('.event-item').nth(1)
   await expect(eventEl.locator('.event-persos-marks .perso-mark')).toHaveCount(0)
 })
@@ -219,19 +218,19 @@ test("cocher c3 depuis le panneau perso de e1 ajoute son avatar sur la ligne de 
 test("la colonne badge affiche l'avatar si disponible, sinon le badge", async ({ page }) => {
   await openPersoPanel(page)
   // c3 a avatar 🎭 ET badge CH → badge circle doit montrer 🎭 (avatar gagne)
-  await expect(pane1(page).locator('.perso-item').nth(2).locator('.perso-item__badge')).toHaveText('🎭')
-  await expect(pane1(page).locator('.perso-item').nth(3).locator('.perso-item__badge')).toHaveText('👑')
+  await expect(pane1(page).locator('.perso-item').nth(2).locator('.perso-badge')).toHaveText('🎭')
+  await expect(pane1(page).locator('.perso-item').nth(3).locator('.perso-badge')).toHaveText('👑')
   // c1, c2 sans avatar → badge text
-  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-item__badge')).not.toHaveText('🎭')
+  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-badge')).not.toHaveText('🎭')
 })
 
-test("la colonne avatar affiche l'avatar si défini, sinon '—'", async ({ page }) => {
+test("la colonne avatar affiche l'avatar si défini, sinon '🫥'", async ({ page }) => {
   await openPersoPanel(page)
-  // c1, c2 sans avatar → '—'
-  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-item__avatar')).toHaveText('—')
+  // c1, c2 sans avatar → '🫥'
+  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-avatar')).toHaveText('🫥')
   // c3 avatar 🎭
-  await expect(pane1(page).locator('.perso-item').nth(2).locator('.perso-item__avatar')).toHaveText('🎭')
-  await expect(pane1(page).locator('.perso-item').nth(3).locator('.perso-item__avatar')).toHaveText('👑')
+  await expect(pane1(page).locator('.perso-item').nth(2).locator('.perso-avatar')).toHaveText('🎭')
+  await expect(pane1(page).locator('.perso-item').nth(3).locator('.perso-avatar')).toHaveText('👑')
 })
 
 test("si perso assigné à l'event a un avatar, la ligne event affiche l'avatar pas le badge", async ({ page }) => {
@@ -248,7 +247,7 @@ test("si perso assigné à l'event a un avatar, la ligne event affiche l'avatar 
 test("les avatars déjà utilisés ne sont pas proposés lors du choix pour un autre perso", async ({ page }) => {
   await openPersoPanel(page)
   await pane1(page).locator('.event-item.selected').press('Enter') // éditer c1
-  await expect(pane1(page).locator('.perso-item.selected input[name="title"]')).toBeFocused()
+  await expect(pane1(page).locator('.perso-item.selected [data-field="title"]')).toBeFocused()
   await pane1(page).locator('.event-item.selected').press('Tab') // → patronyme
   await pane1(page).locator('.event-item.selected').press('Tab') // → badge
   await pane1(page).locator('.event-item.selected').press('Tab') // → avatar trigger
@@ -265,7 +264,7 @@ test("les avatars déjà utilisés ne sont pas proposés lors du choix pour un a
 test("n ouvre l'éditeur pour un nouveau perso (input title focalisé)", async ({ page }) => {
   await openPersoPanel(page)
   await pane1(page).locator('.event-item.selected').press('n')
-  await expect(pane1(page).locator('.perso-item.selected input[name="title"]')).toBeFocused()
+  await expect(pane1(page).locator('.perso-item.selected [data-field="title"]')).toBeFocused()
 })
 
 // ─── Badge auto-calcul ───────────────────────────────────────────────────────
@@ -279,7 +278,7 @@ test("créer un perso avec patronyme → badge calculé depuis le patronyme", as
   // badge vide : laisser auto-calc
   await pane1(page).locator('.perso-item.selected').press('Enter')
   // 'Valjean' sans espaces → 'VA'
-  await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-item__badge')).toHaveText('VA')
+  await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-badge')).toHaveText('VA')
 })
 
 test("créer un perso sans patronyme → badge calculé depuis le titre", async ({ page }) => {
@@ -288,7 +287,7 @@ test("créer un perso sans patronyme → badge calculé depuis le titre", async 
   await pane1(page).locator('.perso-item.selected [data-field="title"]').fill('Cosette')
   // pas de patronyme, badge vide
   await pane1(page).locator('.perso-item.selected').press('Enter')
-  await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-item__badge')).toHaveText('CO')
+  await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-badge')).toHaveText('CO')
 })
 
 test("badge unique si collision avec un badge existant", async ({ page }) => {
@@ -297,7 +296,7 @@ test("badge unique si collision avec un badge existant", async ({ page }) => {
   // 'Cyrus' → 'CY' → collision avec c1 → doit être différent
   await pane1(page).locator('.perso-item.selected [data-field="title"]').fill('Cyrus')
   await pane1(page).locator('.perso-item.selected').press('Enter')
-  const badgeEl = pane1(page).locator('.perso-item').nth(1).locator('.perso-item__badge')
+  const badgeEl = pane1(page).locator('.perso-item').nth(1).locator('.perso-badge')
   await expect(badgeEl).not.toHaveText('CY')
   const badge = await badgeEl.textContent()
   expect(badge.trim().length).toBe(2)
@@ -312,7 +311,7 @@ test("éditer un perso et vider le badge → recalculé depuis le patronyme", as
   await pane1(page).locator('.perso-item.selected [data-field="badge"]').fill('') // vider
   await pane1(page).locator('.perso-item.selected').press('Enter')
   // patronyme 'de Bergerac' → 'debergerac'.toUpperCase() → 'DE'
-  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-item__badge')).toHaveText('DE')
+  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-badge')).toHaveText('DE')
 })
 
 test("modifier le badge d'un perso vers une valeur déjà prise → notification immédiate + badge non modifié", async ({ page }) => {
@@ -328,7 +327,7 @@ test("modifier le badge d'un perso vers une valeur déjà prise → notification
   await expect(pane1(page).locator('.notification')).toContainText(getErr(3010, 'RO'))
   // Valider → badge doit être resté CY
   await pane1(page).locator('.perso-item.selected').press('Enter')
-  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-item__badge')).toHaveText('CY')
+  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-badge')).toHaveText('CY')
 })
 
 test("remettre son propre badge après changement temporaire → pas de notification", async ({ page }) => {
@@ -346,7 +345,7 @@ test("remettre son propre badge après changement temporaire → pas de notifica
 test("créer un perso : Enter valide et l'ajoute à la liste", async ({ page }) => {
   await openPersoPanel(page)
   await pane1(page).locator('.event-item.selected').press('n')
-  await pane1(page).locator('.perso-item.selected input[name="title"]').fill('Nouveau perso')
+  await pane1(page).locator('.perso-item.selected [data-field="title"]').fill('Nouveau perso')
   await pane1(page).locator('.event-item.selected').press('Enter')
   await expect(pane1(page).locator('.perso-item')).toHaveCount(5)
   await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-item__title')).toHaveText('Nouveau perso')
@@ -364,19 +363,19 @@ test("créer un perso : Escape annule, liste inchangée", async ({ page }) => {
 test("Enter édite le perso sélectionné (input title avec valeur courante)", async ({ page }) => {
   await openPersoPanel(page)
   await pane1(page).locator('.event-item.selected').press('Enter')
-  const titleInput = pane1(page).locator('.perso-item.selected input[name="title"]')
+  const titleInput = pane1(page).locator('.perso-item.selected [data-field="title"]')
   await expect(titleInput).toBeFocused()
-  await expect(titleInput).toHaveValue('Cyrano')
+  await expect(titleInput).toHaveText('Cyrano')
 })
 
 test("Tab en édition cycle : title → patronyme → badge → avatar → fonction", async ({ page }) => {
   await openPersoPanel(page)
   await pane1(page).locator('.event-item.selected').press('Enter')
-  await expect(pane1(page).locator('.perso-item.selected input[name="title"]')).toBeFocused()
+  await expect(pane1(page).locator('.perso-item.selected [data-field="title"]')).toBeFocused()
   await pane1(page).locator('.event-item.selected').press('Tab')
-  await expect(pane1(page).locator('.perso-item.selected input[name="patronyme"]')).toBeFocused()
+  await expect(pane1(page).locator('.perso-item.selected [data-field="patronyme"]')).toBeFocused()
   await pane1(page).locator('.event-item.selected').press('Tab')
-  await expect(pane1(page).locator('.perso-item.selected input[name="badge"]')).toBeFocused()
+  await expect(pane1(page).locator('.perso-item.selected [data-field="badge"]')).toBeFocused()
   await pane1(page).locator('.event-item.selected').press('Tab')
   await expect(pane1(page).locator('.perso-item.selected [data-property="avatar"]')).toBeFocused()
   await pane1(page).locator('.event-item.selected').press('Tab')
@@ -386,7 +385,7 @@ test("Tab en édition cycle : title → patronyme → badge → avatar → fonct
 test("édition : modifier le titre puis Enter met à jour l'affichage", async ({ page }) => {
   await openPersoPanel(page)
   await pane1(page).locator('.event-item.selected').press('Enter')
-  await pane1(page).locator('.perso-item.selected input[name="title"]').fill('Cyrano de Bergerac')
+  await pane1(page).locator('.perso-item.selected [data-field="title"]').fill('Cyrano de Bergerac')
   await pane1(page).locator('.event-item.selected').press('Enter')
   await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-item__title')).toHaveText('Cyrano de Bergerac')
 })
@@ -396,7 +395,7 @@ test("édition : modifier le titre puis Enter met à jour l'affichage", async ({
 test("persistance : perso créé survit au rechargement", async ({ page }) => {
   await openPersoPanel(page)
   await pane1(page).locator('.event-item.selected').press('n')
-  await pane1(page).locator('.perso-item.selected input[name="title"]').fill('Perso persisté')
+  await pane1(page).locator('.perso-item.selected [data-field="title"]').fill('Perso persisté')
   await pane1(page).locator('.event-item.selected').press('Enter')
   await page.waitForLoadState('networkidle')
   await page.reload()
@@ -423,7 +422,7 @@ test("persistance : cochage direct survit au rechargement", async ({ page }) => 
 test("après création (Enter), le nouveau perso est sélectionné", async ({ page }) => {
   await openPersoPanel(page)
   await pane1(page).locator('.event-item.selected').press('n')
-  await pane1(page).locator('.perso-item.selected input[name="title"]').fill('Nouveau')
+  await pane1(page).locator('.perso-item.selected [data-field="title"]').fill('Nouveau')
   await pane1(page).locator('.event-item.selected').press('Enter')
   await expect(pane1(page).locator('.perso-item').nth(1)).toHaveClass(/selected/)
 })
@@ -433,7 +432,7 @@ test("après création (Enter), le nouveau perso est sélectionné", async ({ pa
 test("après édition (Enter), le perso modifié reste sélectionné", async ({ page }) => {
   await openPersoPanel(page)
   await pane1(page).locator('.event-item.selected').press('Enter') // édite c1
-  await pane1(page).locator('.perso-item.selected input[name="title"]').fill('Cyrano modifié')
+  await pane1(page).locator('.perso-item.selected [data-field="title"]').fill('Cyrano modifié')
   await pane1(page).locator('.event-item.selected').press('Enter')
   await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/selected/)
 })

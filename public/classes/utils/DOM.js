@@ -4,8 +4,9 @@ import { stopEvent } from './events.js'
 export default class DOM {
 
   buildTextField(field, item) {
-    const el = this._fieldEl(field, item)
-    el.textContent = item[field.name] ?? ''
+    const el  = this._fieldEl(field, item)
+    const val = field.value ? item[field.value]?.() : item[field.name]
+    el.textContent = val ?? ''
     return el
   }
 
@@ -36,7 +37,8 @@ export default class DOM {
     el.setAttribute('tabindex', '0')
     el.textContent = item[field.name] ?? ''
     el.addEventListener('keydown', e => this.blockKeysFromContenteditable(e))
-    if (field.onchange) el.addEventListener('input', () => item[field.onchange](el))
+    if (field.onchange)   el.addEventListener('input', () => item[field.onchange](el, field))
+    if (field.oncreating) el.addEventListener('input', () => item[field.oncreating](el, field))
     return el
   }
 
@@ -113,7 +115,8 @@ export default class DOM {
     if (!values) return []
     if (Array.isArray(values)) {
       return values.map(v => {
-        if (v !== null && typeof v === 'object' && ('value' in v || 'label' in v)) return v
+        if (typeof v === 'object' && v !== null && ('value' in v || 'label' in v)) return v
+        if (v === null) return { value: null, label: '' }
         if (v !== null && typeof v === 'object') {
           const [key, label] = Object.entries(v)[0] ?? []
           return { value: key, label: label ?? key }

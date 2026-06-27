@@ -2,7 +2,8 @@ import Item from '../abstract/Item.js'
 import { WORD_FORMS } from '../../../constants/constants.js'
 import { PERSO_TYPES, PERSO_FONCTIONS, PERSO_COLORS, PERSO_AVATARS } from '../constants/Perso.js'
 import PersoDom from '../dom/Perso.js'
-import { raise } from '../../../system/Error.js'
+import { raise, getErr } from '../../../system/Error.js'
+import Notification from '../../ui/Notification.js'
 
 
 export default class Perso extends Item {
@@ -10,6 +11,7 @@ export default class Perso extends Item {
   static COLORS = PERSO_COLORS
 
   static markOf(data) { return data.avatar || data.badge }
+  markOf() { return Perso.markOf(this) }
 
   constructor(data = {}) {
     super(data)
@@ -24,7 +26,7 @@ export default class Perso extends Item {
         { name: 'title', type: 'text'   , warper: 'body', oncreating: 'setBadgeOnCreating', unique: true}
       , { name: 'patronyme', type: 'text'   , warper: 'edits', oncreating: 'setBadgeOnCreating', unique: true}
       , { name: 'avatar', type: 'select'   , warper: 'edits', values: PERSO_AVATARS}
-      , { name: 'badge', type: 'text'   , warper: 'edits', onchange: 'checkBadgeValue', unique: true}
+      , { name: 'badge', type: 'text'   , warper: 'edits', onchange: 'checkBadgeValue', unique: true, value: 'markOf'}
       , { name: 'type', type: 'select' , warper: 'edits',  values: PERSO_TYPES }
       , { name: 'fonction', type: 'select-and-text' , multiple: true, warper: 'edits',  values: PERSO_FONCTIONS }
     ])
@@ -42,16 +44,28 @@ export default class Perso extends Item {
    * Reçoit le champ (title ou patronyme), trouve le badge unique et renseigne le
    * champ badge
   */
-  setBadgeOnCreating(field){
-
+  setBadgeOnCreating(el, field) {
+    const val = el.textContent?.trim()
+    if (!val || (this.badge && !this.__isTemporary)) return
+    const oldVal        = this[field.name]
+    this[field.name]    = val
+    this.badge          = Perso.generateUniqueBadge(this)
+    this[field.name]    = oldVal
+    const badgeEl = this.el?.querySelector('[data-field="badge"]') ?? this.el?.querySelector('.perso-badge')
+    if (badgeEl) badgeEl.textContent = this.markOf()
   }
 
   /**
    * Méthode appelé quand on change le badge du personnage
    * S'assure qu'il est unique
    */
-  checkBadgeValue(field){
-
+  checkBadgeValue(el, field) {
+    const val = el.textContent?.trim()
+    if (val === field._curvalue) return
+    if (this.parentLister.existingBadges.has(val)) {
+      Notification.show(getErr(3010, val))
+      el.textContent = field._curvalue
+    }
   }
 
   static generateUniqueBadge(perso) {

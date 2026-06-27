@@ -1,5 +1,10 @@
 export default {
 
+  scheduleSave() {
+    clearTimeout(this._saveTimer)
+    this._saveTimer = setTimeout(() => this.save(), 300)
+  },
+
   async save() {
     const payload = {}
     for (const field of (this.PROPS ?? [])) payload[field.name] = this[field.name]
