@@ -11,6 +11,50 @@ export default class Brin extends Item {
 
   static markOf(data) { return data.badge }
 
+  constructor(data = {}) {
+    super(data)
+    this.badge     = data.badge     || Brin.generateUniqueBadge(this)
+    this.type      = data.type      ?? null
+    this.perso_ids = data.perso_ids ?? []
+  }
+
+  // INTERDICTION FORMELLE D'AJOUTER UNE PROPRIÉTÉ cssClass OU CONSORT !!! TOUTES LES PROPRIÉTÉS CSS DÉCOULENT NATURELLEMENT DE LA CLASSE MINUSCULE, DU :name ET DU :warper. CES TROIS VALEURS SUFFISENT AMPLEMENT POUR DÉSIGNER PRÉCISÉMENT L'ÉLÉMENT.
+  get PROPS() {
+    return this._props || (this._props = [
+        { name: 'title', type: 'text'   , warper: 'body', oncreating: 'setBadgeOnCreating'}
+      , { name: 'badge', type: 'text'    , warper: 'edits', onchange: 'checkBadgeValue', unique: true}
+      , { name: 'type',  type: 'select'  , warper: 'edits', values: BRIN_TYPE }
+      , { name: 'color', type: 'color'   , warper: 'edits'}
+      , { name: 'perso_ids', type: 'no-edit', warper: 'marks', value: 'persosMarks' }
+    ])
+  }
+
+
+
+  /**
+   * 
+   * ================================================================
+   *        MÉTHODES (CLASS/INSTANCE) POUR LES ***BADGES***
+   */
+
+  /** 
+   * Méthode appelée par le pseudo (title) et le patronyme à la première création
+   * du personnage
+   * Reçoit le champ (title ou patronyme), trouve le badge unique et renseigne le
+   * champ badge
+  */
+  setBadgeOnCreating(field){
+
+  }
+
+  /**
+   * Méthode appelé quand on change le badge du personnage
+   * S'assure qu'il est unique
+   */
+  checkBadgeValue(field){
+    
+  }
+
   static generateUniqueBadge(brin) {
     const taken = brin.parentLister.existingBadges
     let badge
@@ -64,23 +108,6 @@ export default class Brin extends Item {
     }
   }
 
-  constructor(data = {}) {
-    super(data)
-    this.badge     = data.badge     || Brin.generateUniqueBadge(this)
-    this.type      = data.type      ?? null
-    this.perso_ids = data.perso_ids ?? []
-  }
-
-  // INTERDICTION FORMELLE D'AJOUTER UNE PROPRIÉTÉ cssClass OU CONSORT !!! TOUTES LES PROPRIÉTÉS CSS DÉCOULENT NATURELLEMENT DE LA CLASSE MINUSCULE, DU :name ET DU :warper. CES TROIS VALEURS SUFFISENT AMPLEMENT POUR DÉSIGNER PRÉCISÉMENT L'ÉLÉMENT.
-  get PROPS() {
-    return this._props || (this._props = [
-        { name: 'title', type: 'text'   , warper: 'body', onchange: 'checkAndSetBadge'}
-      , { name: 'badge', type: 'text'    , warper: 'edits', onchange: 'checkBadgeValue'}
-      , { name: 'type',  type: 'select'  , warper: 'edits', values: BRIN_TYPE }
-      , { name: 'color', type: 'color'   , warper: 'edits'}
-      , { name: 'perso_ids', type: 'no-edit', warper: 'marks', value: 'persosMarks' }
-    ])
-  }
-}
+} // class Brin
 
 Object.assign(Brin.prototype, BrinDom)

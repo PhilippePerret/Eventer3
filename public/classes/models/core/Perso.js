@@ -1,6 +1,6 @@
 import Item from '../abstract/Item.js'
 import { WORD_FORMS } from '../../../constants/constants.js'
-import { PERSO_TYPES, PERSO_FONCTIONS, PERSO_COLORS } from '../constants/Perso.js'
+import { PERSO_TYPES, PERSO_FONCTIONS, PERSO_COLORS, PERSO_AVATARS } from '../constants/Perso.js'
 import PersoDom from '../dom/Perso.js'
 
 
@@ -10,16 +10,47 @@ export default class Perso extends Item {
 
   static markOf(data) { return data.avatar || data.badge }
 
-  static generateBadge(patronyme, title) {
-    if (patronyme && patronyme.trim()) {
-      const parts = patronyme.trim().split(/\s+/)
-      if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase()
-      const p = parts[0].toUpperCase()
-      return p.length >= 2 ? p.slice(0, 2) : p.padEnd(2, p[0])
-    }
-    if (!title || !title.trim()) return null
-    const t = title.trim().toUpperCase()
-    return t.length >= 2 ? t.slice(0, 2) : t.padEnd(2, t[0])
+  constructor(data = {}) {
+    super(data)
+    this.badge  = data.badge  || Perso.generateUniqueBadge(this)
+    this.avatar = data.avatar ?? null
+    this.patronyme = data.patronyme ?? null
+  }
+
+  // INTERDICTION FORMELLE D'AJOUTER UNE PROPRIÉTÉ cssClass OU CONSORT !!! TOUTES LES PROPRIÉTÉS CSS DÉCOULENT NATURELLEMENT DE LA CLASSE MINUSCULE, DU :name ET DU :warper. CES TROIS VALEURS SUFFISENT AMPLEMENT POUR DÉSIGNER PRÉCISÉMENT L'ÉLÉMENT.
+  get PROPS() {
+    return this._props || (this._props = [
+        { name: 'title', type: 'text'   , warper: 'body', oncreating: 'setBadgeOnCreating', unique: true}
+      , { name: 'patronyme', type: 'text'   , warper: 'edits', oncreating: 'setBadgeOnCreating', unique: true}
+      , { name: 'avatar', type: 'select'   , warper: 'edits', values: PERSO_AVATARS}
+      , { name: 'badge', type: 'text'   , warper: 'edits', onchange: 'checkBadgeValue', unique: true}
+      , { name: 'type', type: 'select' , warper: 'edits',  values: PERSO_TYPES }
+      , { name: 'fonction', type: 'select-and-text' , multiple: true, warper: 'edits',  values: PERSO_FONCTIONS }
+    ])
+  }
+
+  /**
+   * 
+   * ================================================================
+   *        MÉTHODES (CLASS/INSTANCE) POUR LES ***BADGES***
+   */
+
+  /** 
+   * Méthode appelée par le pseudo (title) et le patronyme à la première création
+   * du personnage
+   * Reçoit le champ (title ou patronyme), trouve le badge unique et renseigne le
+   * champ badge
+  */
+  setBadgeOnCreating(field){
+
+  }
+
+  /**
+   * Méthode appelé quand on change le badge du personnage
+   * S'assure qu'il est unique
+   */
+  checkBadgeValue(field){
+
   }
 
   static generateUniqueBadge(perso) {
@@ -70,27 +101,6 @@ export default class Perso extends Item {
     for (i = 10; i < 100; ++i) {if (!taken.has(bg = String(i))) return bg }
   }
 
-  constructor(data = {}) {
-    super(data)
-    this.badge  = data.badge  || Perso.generateBadge(this.patronyme, this.title)
-    this.avatar = data.avatar ?? null
-  }
-
-  existingBadges() {
-    return (this.parentLister?.items ?? [])
-      .filter(p => p.id !== this.id)
-      .map(p => p.badge)
-      .filter(Boolean)
-  }
-
-  // INTERDICTION FORMELLE D'AJOUTER UNE PROPRIÉTÉ cssClass OU CONSORT !!! TOUTES LES PROPRIÉTÉS CSS DÉCOULENT NATURELLEMENT DE LA CLASSE MINUSCULE, DU :name ET DU :warper. CES TROIS VALEURS SUFFISENT AMPLEMENT POUR DÉSIGNER PRÉCISÉMENT L'ÉLÉMENT.
-  get PROPS() {
-    return this._props || (this._props = [
-        { name: 'title', type: 'text'   , warper: 'body'}
-      , { name: 'type', type: 'select' , warper: 'edits',  values: PERSO_TYPES }
-      , { name: 'fonction', type: 'select-and-text' , multiple: true, warper: 'edits',  values: PERSO_FONCTIONS }
-    ])
-  }
-}
+} // class Perso
 
 Object.assign(Perso.prototype, PersoDom)

@@ -4,24 +4,37 @@
 
 ## En cours
 
-### Chantier clipboard + badges (interrompu 2026-06-26)
+### Chantier clipboard + badges (en cours 2026-06-27)
 
 **Contexte :** déviation depuis test 13 de `contextual-help.spec.js` (`⌘+v apparaît si clipboard compatible`).
 Test 13 est en `test.only` — en attente de l'implémentation clipboard.
 
 **Fait :**
 - `public/classes/models/abstract/Clipboard.js` créé (singleton)
-- `tests/specs/unit/_tdd/brin-badge.test.js` déplacé + réécrit (nouvelle sémantique)
+- `tests/specs/unit/_tdd/brin-badge.test.js` déplacé
+- `oncreating`/`onchange` posés dans `Brin.PROPS` et `Perso.PROPS` (stubs en place)
+- `patronyme` ajouté à `Perso.PROPS` + constructor
+- `generateUniqueBadge` / `generateBadge` implémentés dans `Brin.js` et `Perso.js`
+- `unique: true` dans `Brin.PROPS.badge` et `Perso.PROPS.badge`
 
 **À faire dans l'ordre :**
 
-1. `Brin.generateBadge` — corriger (`core/Brin.js`) : JAMAIS `'---'`/padding `'-'` ; vide/null → `null` ; court → répète dernière lettre
-2. `Brin.generateUniqueBadge` — créer (`core/Brin.js`) : 3 chars, jamais `'-'`, combos du titre puis `B01`/`B02`…
-3. `Perso.generateBadge` — porter+corriger (`core/Perso.js`) : prénom seul → 2 premières lettres ; prénom+nom → INITIALES (`'Jean Valjean'`→`'JV'`) ; vide/null → `null`
-4. `Perso.generateUniqueBadge` — porter (`core/Perso.js`) : 2 chars, jamais `'-'`, combos puis `C1`/`C2`…
-5. `Perso.badgeSource` — porter depuis `public-old/classes/models/Perso.js`
-6. Créer `tests/specs/unit/_tdd/perso-badge.test.js`
-7. `unique: true` dans `Brin.PROPS.badge` et `Perso.PROPS.badge` (ajouter badge à Perso.PROPS si absent)
+#### Câblage `oncreating` / `onchange` — `dom/Item.js`
+1. Modifier `collectValues()` : après `this[field.name] = newVal`, si `field.oncreating` ET `!field._curvalue` ET `newVal` ET `!this.badge` → `this[field.oncreating](newVal)` ; sinon si `field.onchange` ET `newVal !== field._curvalue` → `this[field.onchange](newVal)`
+
+#### Implémentation méthodes badge — `core/Brin.js`
+2. Implémenter `setBadgeOnCreating(val)` : si `!val?.trim()` ou `this.badge` → return ; `this.badge = Brin.generateUniqueBadge(this)` ; mettre à jour `this.el?.querySelector('[data-field="badge"]')?.textContent`
+3. Implémenter `checkBadgeValue(val)` : si vide → `this.badge = null` ; construire `Set` des badges siblings (items sans self) ; si pris → `Notification.show(...)` + revert via `this.PROPS.find(f => f.name === 'badge')._curvalue`
+
+#### Implémentation méthodes badge — `core/Perso.js`
+4. Implémenter `setBadgeOnCreating(val)` : même logique que Brin mais `Perso.generateUniqueBadge(this)`
+5. Implémenter `checkBadgeValue(val)` : même logique Brin (siblings sans self)
+
+#### Tests unitaires — `tests/specs/unit/_tdd/`
+6. Réécrire `brin-badge.test.js` : faux brin+lister (objet avec `parentLister.existingBadges`) ; tester `generateUniqueBadge(brin)` ; tester `setBadgeOnCreating` (badge null → généré, badge déjà set → inchangé) ; tester `checkBadgeValue` (unique → OK, dupliqué → revert + notification)
+7. Créer `perso-badge.test.js` : même structure ; tester `generateBadge(patronyme, title)` ; `generateUniqueBadgeFromPatronyme` vs `FromPseudo` ; `badgePerDepit`
+
+#### Clipboard (suite)
 8. `Item.toClipboardData()` dans `abstract/Item.js` : `PROPS.filter(f => !f.unique).map(f => [f.name, this[f.name]])`
 9. `Lister.copySelectedItem()` dans `abstract/Lister.js` + import `Clipboard`
 10. `c: { meta: 'copySelectedItem' }` dans `listen/Lister.js`
