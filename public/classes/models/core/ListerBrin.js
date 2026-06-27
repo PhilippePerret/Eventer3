@@ -8,7 +8,6 @@ export default class ListerBrin extends Lister {
   static PANEL_ID   = 'brins-panel'
   static CHECK_KEY  = 'brin_ids'
   static pool = {}
-  static LISTENERS  = { ...Lister.LISTENERS, ' ': { nokey: 'toggleChecked' } }
 
   constructor(data = {}) {
     super(data)

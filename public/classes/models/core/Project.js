@@ -10,11 +10,20 @@ import { WORD_FORMS } from '../../../constants/constants.js'
 export default class Project extends Item {
   static COLORS    = PROJECT_COLORS
   static get thingName() { return WORD_FORMS.Project }
+  static get current() { return Project._current }
+
+  get listerBrins()  { return this._lbrins  ?? (this._lbrins  = new ListerBrin({ project_id: this.id })) }
+  get listerPersos() { return this._lpersos ?? (this._lpersos = new ListerPerso({ project_id: this.id })) }
 
   async enterInside() {
-    await new ListerBrin({ project_id: this.id }).load()
-    await new ListerPerso({ project_id: this.id }).load()
+    Project._current = this
+    await this.listerBrins.load()
+    await this.listerPersos.load()
     await this._enterChildLister(ListerEvent, this.lister_id, this.id)
+  }
+
+  async onChildListerCreated(child) {
+    child.project = this
   }
 
   // INTERDICTION FORMELLE D'AJOUTER UNE PROPRIÉTÉ cssClass OU CONSORT !!! TOUTES LES PROPRIÉTÉS CSS DÉCOULENT NATURELLEMENT DE LA CLASSE MINUSCULE, DU :name ET DU :warper. CES TROIS VALEURS SUFFISENT AMPLEMENT POUR DÉSIGNER PRÉCISÉMENT L'ÉLÉMENT.
