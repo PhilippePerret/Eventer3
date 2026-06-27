@@ -11,7 +11,7 @@ export default class ListerBrin extends Lister {
 
   constructor(data = {}) {
     super(data)
-    this.listerEvent = data.listerEvent ?? null
+    this.listerEvent = data.listerEvent ?? null // C'EST QUOI, ÇA ????
     this.project_id  = data.project_id ?? this.listerEvent?.project_id ?? null
     this.id = this.project_id ? this.project_id + '-brins' : null
   }

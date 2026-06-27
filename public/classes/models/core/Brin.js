@@ -12,7 +12,7 @@ export default class Brin extends Item {
   static markOf(data) { return data.badge }
 
   static generateUniqueBadge(brin) {
-    const taken = new Set(this.existingBadges)
+    const taken = brin.parentLister.existingBadges
     let badge
     const title = brin.title || raise(10, brin.id)
     const words = title.trim().toUpperCase().split(/\s+/).filter(Boolean)
@@ -27,7 +27,10 @@ export default class Brin extends Item {
           for (iw3, lenw3 = words[2].length; iw3 < lenw3; ++ iw3){
             let l3 = words[2][iw3]
             let badge = l1+l2+l3
-            if (!taken.has(badge)) return badge
+            if (!taken.has(badge)) {
+              taken.add(badge)
+              return badge
+            }
           }
         }
       }
@@ -66,13 +69,6 @@ export default class Brin extends Item {
     this.badge     = data.badge     || Brin.generateUniqueBadge(this)
     this.type      = data.type      ?? null
     this.perso_ids = data.perso_ids ?? []
-  }
-
-  existingBadges() {
-    return (this.parentLister?.items ?? [])
-      .filter(b => b.id !== this.id)
-      .map(b => b.badge)
-      .filter(Boolean)
   }
 
   // INTERDICTION FORMELLE D'AJOUTER UNE PROPRIÉTÉ cssClass OU CONSORT !!! TOUTES LES PROPRIÉTÉS CSS DÉCOULENT NATURELLEMENT DE LA CLASSE MINUSCULE, DU :name ET DU :warper. CES TROIS VALEURS SUFFISENT AMPLEMENT POUR DÉSIGNER PRÉCISÉMENT L'ÉLÉMENT.

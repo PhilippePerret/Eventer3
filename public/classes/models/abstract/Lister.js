@@ -129,6 +129,18 @@ export default class Lister extends KeyDispatcher {
     return await resp.json()
   }
 
+  /** Pour ListerBrin et ListerPerso (pour le moment) */
+  get existingBadges(){
+    return this._extbdgs || ( this._extbdgs = this.getExistingBadges() )
+  }
+  getExistingBadges(){
+    const bdgs = this.items
+      .filter(b => b.id !== this.id)
+      .map(b => b.badge)
+      .filter(Boolean)
+    return new Set(bdgs)
+  }
+
 }
 
 Object.assign(Lister.prototype, ListerDom)

@@ -22,44 +22,52 @@ export default class Perso extends Item {
     return t.length >= 2 ? t.slice(0, 2) : t.padEnd(2, t[0])
   }
 
-  static generateUniqueBadge(patronyme, title, existingBadges) {
-    const taken = new Set(existingBadges)
-    const try_ = c => (c && !taken.has(c)) ? c : null
-    const fallback = () => { for (let n = 1; ; n++) { const b = 'C' + n; if (!taken.has(b)) return b } }
+  static generateUniqueBadge(perso) {
+    const taken = perso.parentLister.existingBadges
+    const pseudo = perso.title.toUpperCase()
+    const patron = perso.patronyme.toUpperCase()
 
-    if (patronyme && patronyme.trim()) {
-      const parts = patronyme.trim().toUpperCase().split(/\s+/)
-      const c1  = parts[0]?.[0]
-      const nom = parts[1] ?? ''
-      if (!c1) return fallback()
-      // step 1: c1 + nom[0]
-      if (nom) { const r = try_(c1 + nom[0]); if (r) return r }
-      // step 2: c1 + nom[1], nom[2]…
-      for (let i = 1; i < nom.length; i++) { const r = try_(c1 + nom[i]); if (r) return r }
-      // step 3: c1 + nextAlpha(nom[i])
-      for (let i = 0; i < nom.length; i++) {
-        const r = try_(c1 + String.fromCharCode(((nom.charCodeAt(i) - 65 + 1) % 26) + 65))
-        if (r) return r
+    const badge = patron
+      ? this.generateUniqueBadgeFromPatronyme(taken, patron)
+      : this.generateUniqueBadgeFromPseudo(taken, pseudo)
+    taken.add(badge)
+    return badge
+  }
+  static generateUniqueBadgeFromPatronyme(taken, base){
+    let bg
+    const words = base.split(/\s+/), word1 = words[0], word2 = words[1]
+    for(var i1 = 0, len1 = word1.length; i1 < len1; ++ i1) {
+      for(var i2 = 0, len2 = word2.length; i2 < len2; ++i2){
+        if (!taken.has(bg = word1[i1] + word2[i2])) return bg
       }
-      return fallback()
     }
+    return this.badgePerDepit(word1[0], taken)
+  }
+  static generateUniqueBadgeFromPseudo(taken, base) {
+    const len = base.length
+    let root = base[0]
+    var i = 1
+    var bg
+    // On essaie avec toutes les lettres du pseudo
+    for (var i = 1; i < len; ++i){
+      if (!taken.has(bg = root + base[i])) return bg
+    }
+    return badgePerDepit(root, taken)
+  }
 
-    if (!title || !title.trim()) return fallback()
-    const t = title.trim().toUpperCase()
-    if (t.length === 1) {
-      for (let k = 65; k <= 90; k++) { const r = try_(t[0] + String.fromCharCode(k)); if (r) return r }
-      return fallback()
+  static badgePerDepit(root, taken){
+    let bg
+    // On essaie avec toutes les lettres avec la première (A->Z)
+    for(var c=65;c<90;++c){if (!taken.has(bg = root + String.fromCharCode(c))){ return bg}}
+    // On essaie toutes les combinaisons de lettres
+    for(c=65;c<90;++c){
+      root = String.fromCharCode(c)
+      for(var c2=65;c2<90;++c2){
+        if (!taken.has(bg = root + String.fromCharCode(c2))){ return bg}
+      }
     }
-    // step 1: t[0] + t[1]
-    { const r = try_(t[0] + t[1]); if (r) return r }
-    // step 2: t[0] + t[2], t[3]…
-    for (let i = 2; i < t.length; i++) { const r = try_(t[0] + t[i]); if (r) return r }
-    // step 3: t[0] + nextAlpha(t[i])
-    for (let i = 1; i < t.length; i++) {
-      const r = try_(t[0] + String.fromCharCode(((t.charCodeAt(i) - 65 + 1) % 26) + 65))
-      if (r) return r
-    }
-    return fallback()
+    // Par dépit, on met un nombre de 10 à 99
+    for (i = 10; i < 100; ++i) {if (!taken.has(bg = String(i))) return bg }
   }
 
   constructor(data = {}) {
