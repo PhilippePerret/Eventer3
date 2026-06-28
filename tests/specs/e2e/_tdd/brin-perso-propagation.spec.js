@@ -8,7 +8,7 @@
 // ne propage aux events qu'à la FERMETURE du panneau brins, et seulement aux events
 // qui possèdent ce brin. Un event qui a le perso EN DIRECT (e3) n'est pas affecté.
 import { installFixtures } from '../../../helpers/install-fixtures.js'
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press, focusInfo, hasFocus } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('persos-brin-propagation')
@@ -16,24 +16,48 @@ test.beforeEach(() => {
 
 const marks = (page, n) => pane1(page).locator('.event-item').nth(n).locator('.event-persos-marks')
 
+// ── TEST SONDE : vérifier que le bon élément est focusé à chaque étape ──
+// (log de la vérité + assertion hasFocus → pas de faux positif possible)
+test.only("SONDE — focus suit le panneau actif à chaque transition", async ({ page }) => {
+  await page.goto('/')
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
+  console.log('[FOCUS] après goto :', await focusInfo(page))
+  await hasFocus(page, '.project-item.selected')
+
+  await press(page, 'ArrowRight')
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
+  console.log('[FOCUS] après → (entrée projet) :', await focusInfo(page))
+  await hasFocus(page, '.event-item.selected')
+
+  await press(page, 'b')
+  await expect(pane1(page).locator('#brins-panel')).toBeVisible()
+  console.log('[FOCUS] après b (panneau brins) :', await focusInfo(page))
+  await hasFocus(page, '.brin-item.selected')
+
+  await press(page, 'p')
+  await expect(pane1(page).locator('#persos-panel')).toBeVisible()
+  console.log('[FOCUS] après p (panneau persos) :', await focusInfo(page))
+  await hasFocus(page, '.perso-item.selected')
+})
+
 async function goToBrinPanel(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
-  await pane1(page).locator('.event-item.selected').press('b')
+  await press(page, 'b')
   await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 }
 
 async function openPersosFromB1(page) {
-  await pane1(page).locator('.brin-item.selected').press('p')
+  await press(page, 'p')
   await expect(pane1(page).locator('#persos-panel')).toBeVisible()
 }
 
 async function closePersosThenBrins(page) {
-  await pane1(page).locator('.brin-item.selected').press('p')
+  await press(page, 'p')
   await expect(pane1(page).locator('#persos-panel')).not.toBeVisible()
-  await pane1(page).locator('.brin-item.selected').press('b')
+  await press(page, 'b')
   await expect(pane1(page).locator('#brins-panel')).not.toBeVisible()
 }
 
@@ -41,7 +65,7 @@ async function closePersosThenBrins(page) {
 async function removeC1fromB1(page) {
   await openPersosFromB1(page)
   await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/checked/)
-  await pane1(page).locator('.brin-item.selected').press(' ')
+  await press(page, ' ')
   await expect(pane1(page).locator('.perso-item').nth(0)).not.toHaveClass(/checked/)
   await closePersosThenBrins(page)
 }
@@ -66,9 +90,9 @@ test("cas 2 — ajouter un perso à un brin n'apparaît pas sur les events sans 
 
   // cocher c2 (index 1) sur b1
   await openPersosFromB1(page)
-  await pane1(page).locator('.brin-item.selected').press('ArrowDown')
+  await press(page, 'ArrowDown')
   await expect(pane1(page).locator('.perso-item').nth(1)).toHaveClass(/selected/)
-  await pane1(page).locator('.brin-item.selected').press(' ')
+  await press(page, ' ')
   await expect(pane1(page).locator('.perso-item').nth(1)).toHaveClass(/checked/)
   await closePersosThenBrins(page)
 
