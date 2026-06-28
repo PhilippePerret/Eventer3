@@ -8,44 +8,33 @@ export default class ListerBrin extends Lister {
   static ITEM_CLASS = Brin
   static PANEL_ID   = 'brins-panel'
   static CHECK_KEY  = 'brin_ids'
-  static pool = {}
 
   constructor(data = {}) {
     super(data)
-    this.project     = data.project || raise(2000)
-    this.listerEvent = data.listerEvent ?? null
-    this.id          = this.project.id + '-brins'
+    this.project      = data.project || raise(2000)
+    this.id           = this.project.id + '-brins'
+    this._contextItem = null // Event depuis lequel on a ouvert le panneau
   }
 
-  async openPanel(eventItem) {
-    const le         = eventItem.parentLister
-    this.listerEvent  = le
-    this.parentLister = le
+  get contextItem() { return this._contextItem }
+
+  async openPanel(contextItem) {
+    this._contextItem = contextItem
     if (!this.items.length) await this.load()
-    else this._syncChecked()
-    le.detach()
+    this._syncChecked()
+    contextItem.parentLister.detach()
     this.render()
   }
 
-  get selectedEvent() {
-    const le = this.listerEvent
-    return le?.items[le.selectedIndex] ?? null
-  }
-
-  get contextItem() { return this.selectedEvent }
-
-  async _fetchData() {
-    if (this.listerEvent) return this.listerEvent.brins ?? {}
-    return await super._fetchData()
-  }
-
-  _afterCreate(result) {
-    if (this.listerEvent) this.listerEvent.brins[result.id] = result
-    ListerBrin.pool[result.id] = result
+  closePanel() {
+    const ctx = this._contextItem
+    this.container.classList.add('hidden')
+    this.container.innerHTML = ''
+    this.detach()
+    ctx.parentLister.render()
   }
 
   async _afterLoad() {
-    ListerBrin.pool = Object.fromEntries(this.items.map(b => [b.id, b]))
     this._syncChecked()
   }
   async _initDefault() { await this._initDefaultBrin() }
@@ -58,22 +47,21 @@ export default class ListerBrin extends Lister {
     await this.save()
     const brin = new Brin({ ...result, id: result.id, _index: 0, project: this.project })
     this.items = [brin]
-    if (this.listerEvent) this.listerEvent.brins = { [result.id]: result }
   }
 
   _syncChecked() {
-    const brinIds = this.selectedEvent?.brin_ids ?? []
+    const brinIds = this.contextItem?.brin_ids ?? []
     this.items.forEach(b => { b.checked = brinIds.includes(b.id) })
   }
 
   async deleteSelected() {
     const brin = this.items[this.selectedIndex]
-    const ev   = this.selectedEvent
+    const ctx  = this.contextItem
     await super.deleteSelected()
-    if (!brin || !ev) return
-    ev.brin_ids = (ev.brin_ids ?? []).filter(id => id !== brin.id)
-    this._refreshEventMarks(ev)
-    await ev.save()
+    if (!brin || !ctx) return
+    ctx.brin_ids = (ctx.brin_ids ?? []).filter(id => id !== brin.id)
+    this._refreshEventMarks(ctx)
+    await ctx.save()
   }
 
   async deleteItem(item) {
@@ -83,6 +71,7 @@ export default class ListerBrin extends Lister {
     return resp.ok
   }
 
+  // Brins : rafraîchissement DIRECT au toggle (≠ persos, qui se rafraîchissent à la fermeture)
   _afterToggle(_brin, ev) {
     this._refreshEventMarks(ev)
   }
@@ -90,7 +79,7 @@ export default class ListerBrin extends Lister {
   _refreshEventMarks(ev) {
     const marksEl = ev.el?.querySelector('.event-brins-marks')
     if (!marksEl) return
-    const brins = this.listerEvent?.brins ?? {}
+    const brins = this.byId
     marksEl.innerHTML = (ev.brin_ids ?? []).map(id => {
       const b = brins[id]
       if (!b) return ''

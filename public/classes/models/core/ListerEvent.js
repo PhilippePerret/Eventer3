@@ -11,12 +11,4 @@ export default class ListerEvent extends Lister {
     super(data)
     this.project = data.project ?? null
   }
-
-  async _afterLoad() {
-    const pid = this.project.id
-    if (!pid) return
-    const q = `?project_id=${pid}`
-    const data = await fetch(`/api/listers/${pid}-brins/items${q}`, { cache: 'no-store' }).then(r => r.json())
-    this.brins = data ?? {}
-  }
 }

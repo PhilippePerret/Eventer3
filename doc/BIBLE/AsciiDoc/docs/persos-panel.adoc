@@ -1,0 +1,24 @@
+=== Panneau des personnages ===
+
+On peut ouvrir le panneau des personnages, pour les choisir : 
+
+- sur un <<Event>>,
+- sur un <<Brin>>.
+
+==== Ouverture sur un event ====
+
+Il faut comprendre qu'un event possède : 
+
+- tous les personnages de ses brins, sans exception
+- ses propres personnage, définis explicitement
+
+personnage des brins cochés mais grisés (on ne peut pas les retirer)
+personnage propre à l'event : normal
+
+==== Cocher/décocher les personnages ====
+
+Le 
+ouverture sur event => actualiser en direct les marques en directe
+ouverture sur brin => actualiser en direct les marques dans les trins (mais pas dans les events)
+fermeture de la fenêtre des brins
+=> si color ou persos d'un brin au moins modifié => actualisation de tous les events affichés

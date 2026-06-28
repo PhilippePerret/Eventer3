@@ -1,5 +1,64 @@
 # CHANGELOG — Eventer3
 
+## 2026-06-28 — Panneau persos : openPanel, toggle générique, marques factorisées
+
+- **`ListerPerso.openPanel(contextItem)`** implémenté : pose `_directIds` (= `contextItem.perso_ids`)
+  et `_inheritedIds` (Event seulement : union des `perso_ids` des brins via `itemsById['brins']`,
+  distinction `contextItem.minClass === 'event'`), `load` si besoin, `_syncChecked`, detach appelant, render.
+  Invariant noté : persos directs d'un Event ∩ persos de ses brins = ∅ (pas de guard).
+- **`dom/Item.js toggleChecked`** recâblé (était cassé, `ctx` undefined) — **générique** pour tous les
+  panneaux : `parentLister._canToggle(this)`, écrit `ctx[parentLister.CHECK_KEY]` (`brin_ids`/`perso_ids`),
+  `parentLister._afterToggle(this, ctx)`, `ctx.scheduleSave()`. `ctx = parentLister.contextItem`.
+- **Marques persos factorisées** (zéro duplication) : `persosMarks()` + `refreshPersosMarks()` partagés
+  dans `dom/Item.js` ; seul l'ensemble d'ids diffère via `_persoIdsForMarks()` (défaut = `perso_ids` pour
+  Brin ; Event override = direct + hérités). Lookup `this.project.itemsById['persos']`, marque via
+  `p.markOf?.()` (méthode d'instance) → **aucun import circulaire**.
+- **`ListerPerso._afterToggle`** = `ctx.refreshPersosMarks()` (refresh direct, responsabilité à l'item) ;
+  l'ancien bloc « MERDIQUE » (sélecteur `.event-persos-marks` codé en dur, `_contextBrin` fantôme) supprimé.
+
+## 2026-06-28 — Généralisation `byId` / `Project.itemsById` (concept utilisateur)
+
+- **Table `{id → item}` centralisée dans la base `Lister`** (`abstract/Lister.js`), nom uniforme `byId`.
+  Tenue à jour génériquement : init au constructeur, construction en bloc dans `load()`, ajout unitaire
+  dans `_afterCreate(result)` (appelé via `Item.js` à la création), suppression dans `deleteSelected`.
+  → Plus aucune duplication par sous-type de Lister.
+- **`ListerBrin`** : suppression de la table d'instance `this.brins` et de son `_afterCreate`/`_afterLoad`
+  spécifiques (la base gère `byId`). `_refreshEventMarks` lit `this.byId`.
+- **`ListerPerso`** : suppression du `static pool` et du peuplement dans `_afterLoad` (base gère `byId`).
+- **`Project.itemsById`** : getter `{ brins: listerBrins.byId, persos: listerPersos.byId }` — **seul point**
+  à maintenir si on ajoute une classe d'item.
+- **`abstract/Item.js`** : suppression du getter `projectBrins` (remplacé par `this.project.itemsById[type]`).
+- **`dom/Event.js`** (`persosMarks`/`brinsMarks`) : lit `this.project.itemsById['brins'|'persos']`.
+- **Suppression du legacy `ListerEvent.brins`** : `ListerEvent._afterLoad` faisait un fetch séparé de tous
+  les brins du projet (doublon de `listerBrins.byId`, chargé par `enterInside` avant les events) ; le
+  fallback `rawBrins` dans `persosMarks` qui le lisait a aussi été retiré.
+
+## 2026-06-28 — Stabilisation après tentative point-2 ratée
+
+- **`repo/Lister.js` `countDescendants`** : `const query = project ? ...` référençait
+  `project` non déclaré (crash `ReferenceError`) → corrigé en `pid` (la const ligne au-dessus,
+  `this.project.id ?? item.id`). Rôle de la méthode : compter les descendants côté serveur
+  (`/api/listers/:id/items/:item_id/descendants/count?project_id=…`) pour l'avertissement de
+  destruction en cascade dans `Lister.deleteSelected`. Le fallback `item.id` couvre `ListerProject`
+  (pas de projet parent : le projet supprimé EST l'item).
+- **`core/ListerBrin.js`** : la migration point-2 (`open(eventItem)` → `openPanel`/`closePanel`,
+  suppression `listerEvent`) avait introduit des régressions (`deleteSelected` cassé, `_afterToggle`
+  supprimé à tort, refresh-fermeture appliqué aux brins par erreur) → **rollback** vers `bc7f487`
+  (`git checkout`, commit `a6a5946 "Récupération du fichier"`), **puis refaite proprement** :
+  - `open(eventItem)` → `openPanel(contextItem)` + `closePanel()` ; `contextItem` = item d'ouverture.
+  - Suppression `listerEvent` / `selectedEvent` / override `_fetchData`.
+  - Brins = refresh **direct** au toggle (`_afterToggle` → `_refreshEventMarks`) — conservé.
+- **Suppression de `ListerBrin.pool`** (static partagé : risque de clobber multi-projet + doublon de
+  `this.items`) → table d'**instance** `this.brins` ({id → brin}), peuplée dans `_afterLoad` /
+  `_afterCreate` / `_initDefaultBrin`, nettoyée dans `deleteSelected`.
+- **Getter `projectBrins`** ajouté dans `abstract/Item.js` (= `this.project.listerBrins.brins`).
+  `dom/Event.js` (`persosMarks`/`brinsMarks`) lit désormais `this.projectBrins` (import `ListerBrin` retiré).
+- **Correctif de compréhension** : le rafraîchissement des marks à la fermeture du panneau =
+  **persos uniquement**. Les brins se rafraîchissent en **direct** au toggle.
+- **`package.json`** déplacé à la racine → `public/` (committé avant cette session). Rappel : sert
+  uniquement à `"type":"module"` pour que les tests `node --test` importent les `.js` de `public/`
+  comme modules ES.
+
 ## 2026-06-27 — Centralisation sur le Project courant
 
 > ⚠️ Avant cette session, beaucoup de travail avait déjà été fait sur cette

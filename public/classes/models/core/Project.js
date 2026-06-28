@@ -14,6 +14,14 @@ export default class Project extends Item {
   get listerBrins()  { return this._lbrins  ?? (this._lbrins  = new ListerBrin({ project: this })) }
   get listerPersos() { return this._lpersos ?? (this._lpersos = new ListerPerso({ project: this })) }
 
+  // Seul point à tenir à jour si on ajoute une classe d'item : type → table { id → item }
+  get itemsById() {
+    return {
+      brins:  this.listerBrins.byId,
+      persos: this.listerPersos.byId,
+    }
+  }
+
   async enterInside() {
     await this.listerBrins.load()
     await this.listerPersos.load()

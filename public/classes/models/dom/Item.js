@@ -113,13 +113,43 @@ export default {
   },
 
   toggleChecked() {
-    const item = this
+    const lister = this.parentLister
+    if (lister && !lister._canToggle(this)) return
+    const ctx = lister?.contextItem
     this.checked = !this.checked
     this.el?.classList.toggle('checked', this.checked)
     const checkEl = this.el?.querySelector('.panel-check')
     if (checkEl) checkEl.textContent = this.checked ? '✓' : ''
-    this._afterToggle(this, ctx) //????
-    ctx.scheduleSave() // ??????
+    if (!ctx) return
+    const key = lister.constructor.CHECK_KEY
+    const ids = ctx[key] ?? (ctx[key] = [])
+    if (this.checked) { if (!ids.includes(this.id)) ids.push(this.id) }
+    else { const i = ids.indexOf(this.id); if (i >= 0) ids.splice(i, 1) }
+    lister._afterToggle(this, ctx)
+    ctx.scheduleSave()
+  },
+
+  // Marques persos partagées (Event + Brin) : ne diffèrent que par l'ensemble d'ids
+  persosMarks() {
+    const persos = this.project.itemsById['persos']
+    const content = this._persoIdsForMarks().map(id => {
+      const p = persos[id]
+      if (!p) return ''
+      const style = p.color ? ` style="background:${p.color}"` : ''
+      return `<span class="panel-mark"${style}>${p.markOf?.() ?? ''}</span>`
+    }).join('')
+    return `<div class="persos-marks ${this.minClass}-persos-marks">${content}</div>`
+  },
+
+  // Ids des persos à afficher. Défaut = persos directs (Brin). Event override (ajoute les hérités).
+  _persoIdsForMarks() { return this.perso_ids ?? [] },
+
+  refreshPersosMarks() {
+    const el = this.el?.querySelector(`.${this.minClass}-persos-marks`)
+    if (!el) return
+    const tmp = document.createElement('template')
+    tmp.innerHTML = this.persosMarks()
+    el.replaceWith(tmp.content.firstChild)
   }
 
 }

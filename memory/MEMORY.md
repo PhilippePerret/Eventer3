@@ -37,6 +37,7 @@
 - [Nom défaut premier perso](feedback_default_perso_name.md) — Auto-créer "Votre protagoniste" si aucun perso (symétrique avec "Intrigue principale")
 - **[ARCHITECTURE DB FONDAMENTALE](project_db_architecture.md)** — CRITIQUE: main.db = registre global seulement (méta data de projects + app_settings) ; eventer.db = TOUT le reste
 - **[Design filtrage — décisions validées](project_filtrage_design.md)**
+- **[CRITIQUE: refresh marques persos](feedback/project_persos_marks_refresh.md)** — Event(`p`)=direct sur l'event (direct+hérités) ; Brin(`p`)=direct sur le brin SEUL, + refresh global différé des events à la **fermeture du panneau brins** SI persos de brins modifiés (perf: milliers d'events)
 - [Ne pas toucher sans validation](feedback_pas_toucher_sans_validation.md) — Ne jamais éditer des fichiers sans accord explicite, même si les fixes semblent évidents
 - [Réutiliser classes CSS](feedback_reutiliser_classes_css.md) — Ne jamais créer classe CSS si existante couvre le cas ; chercher d'abord dans styles.css
 - **[TDD : workflow complet](feedback/tdd-workflow.md)** — CRITIQUE: `mv` uniquement, jamais Write+rm. _tdd/ pendant refacto. Claude (pas user) déplace vers canonique quand vert.

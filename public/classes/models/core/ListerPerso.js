@@ -7,7 +7,6 @@ export default class ListerPerso extends Lister {
   static ITEM_CLASS = Perso
   static PANEL_ID   = 'persos-panel'
   static CHECK_KEY  = 'perso_ids'
-  static pool = {}
 
   constructor(data = {}) {
     super(data)
@@ -16,19 +15,26 @@ export default class ListerPerso extends Lister {
     this._contextItem = null // Brin ou Event
   }
 
-  openPanel(contextItem){
-    this._contextItem = contextItem
-    /* ???
-     _directIds = ???
-     _inheritedIds = ???
-      - si contextItem instanceof Event : direct = perso_ids, inherited = union des perso_ids des brins de brin_ids (via ListerBrin.pool).
-      - si contextItem instanceof Brin : direct = perso_ids, inherited = ∅.
-  //*/
+  async openPanel(contextItem) {
+    this._contextItem  = contextItem
+    this._directIds    = new Set(contextItem.perso_ids ?? [])
+    this._inheritedIds = new Set()
+    // Event hérite des persos de ses brins ; un Brin n'a pas d'héritage.
+    // direct ∩ brins = ∅ par invariant → pas de guard.
+    if (contextItem.minClass === 'event') {
+      const brins = this.project.itemsById['brins']
+      for (const bid of (contextItem.brin_ids ?? [])) {
+        brins[bid]?.perso_ids?.forEach(pid => this._inheritedIds.add(pid))
+      }
+    }
+    if (!this.items.length) await this.load()
+    this._syncChecked()
+    contextItem.parentLister.detach()
+    this.render()
   }
 
   
   async _afterLoad() {
-    ListerPerso.pool = Object.fromEntries(this.items.map(p => [p.id, p]))
     this._syncChecked()
   }
 
@@ -45,25 +51,12 @@ export default class ListerPerso extends Lister {
   }
 
 
-  get contextItem() { return this._contextEvent }
+  get contextItem() { return this._contextItem }
 
   _canToggle(item) { return !item.inherited }
 
   _afterToggle(_perso, ctx) {
-    /* CODE DE CLAUDE = MERDIQUE (VIOLATION DE LA RÈGLE DE RESPONSABILITÉ )
-      DE TOUTE FAÇON, MAINTENANT :
-        L'actualisation de la ligne de l'élément contextuel (Brin ou Event) ne
-        se fait qu'à la fermeture du panneau, pas en direct.
-        Et pour le respect des responsabilité (on se fiche de savoir ce qu'est
-        l'item contextuel), on doit faire :
-        this.contextualItem.refreshPersosMarks
-    */
-    if (this._contextBrin) return
-    const el = ctx.el?.querySelector('.event-persos-marks')
-    if (!el) return
-    const tmp = document.createElement('template')
-    tmp.innerHTML = ctx.persosMarks()
-    el.replaceWith(tmp.content.firstChild)
+    ctx.refreshPersosMarks()
   }
 
 

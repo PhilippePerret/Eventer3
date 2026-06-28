@@ -15,6 +15,7 @@ export default class Lister extends KeyDispatcher {
     this.id             = data.id             ?? null
     this.item_ids       = data.item_ids       ?? []
     this.items          = []
+    this.byId           = {}   // table { id → item }, tenue à jour par la base
     this.selectedIndex  = data.selectedIndex  ?? -1
     this.parentLister   = data.parentLister   ?? null
   }
@@ -51,6 +52,7 @@ export default class Lister extends KeyDispatcher {
     const newIdx = Math.min(idx, this.items.length - 2)
     this.items.splice(idx, 1)
     this.item_ids.splice(idx, 1)
+    delete this.byId[item.id]
     this.selectedIndex = newIdx
     this.removeEl(item)
     this.applySelection(null, this.items[newIdx])
@@ -103,6 +105,7 @@ export default class Lister extends KeyDispatcher {
 
   _canToggle(_item)          { return true }
   _afterToggle(_item, _ctx)  {}
+  _afterCreate(result)       { if (result?.id) this.byId[result.id] = result }
 
   async load() {
     const rawData = await this._fetchData()
@@ -111,6 +114,7 @@ export default class Lister extends KeyDispatcher {
     if (!this.item_ids.length) this.item_ids = this.items.map(item => item.id)
     if (this.items.length === 0) await this._initDefault?.()
     if (this.selectedIndex < 0 && this.items.length) this.selectedIndex = 0
+    this.byId = Object.fromEntries(this.items.map(i => [i.id, i]))
     await this._afterLoad?.()
   }
 
