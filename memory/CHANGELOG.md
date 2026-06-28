@@ -1,5 +1,22 @@
 # CHANGELOG — Eventer3
 
+## 2026-06-28 — Invariant persos directs / brins (TDD)
+
+- **`ListerBrin._afterToggle`** : quand un brin est coché pour un event, les persos portés par ce brin
+  sont retirés des persos **directs** de l'event (`ev.perso_ids`). Garantit qu'un perso n'est jamais à la
+  fois direct et hérité. Décocher ne touche à rien.
+- L'autre sens (ajout d'un perso direct déjà porté par un brin) est déjà bloqué structurellement :
+  `_syncChecked` marque ces persos `inherited`, `_canToggle` (`!item.inherited`) les verrouille.
+- Test (TDD, RED→GREEN) : `tests/specs/unit/models/brin/brin-invariant-direct-persos.test.js`.
+
+## 2026-06-28 — Ouverture panneaux : méthodes relais sur Item
+
+- **`Item.openBrinPanel()` / `Item.openPersoPanel()`** (abstrait, donc Event/Brin/Project sans duplication)
+  délèguent à `this.project.listerBrins.openPanel(this)` / `listerPersos.openPanel(this)`. Appelées par le
+  dispatcher via LISTENERS (`b`/`p` nokey, cf. `listen/Event.js`, `listen/Brin.js`).
+- Bug corrigé : `openPersoPanel` appelait `this.project.listerPerso` (singulier, inexistant) → `listerPersos`.
+  `openBrinPanel` était absent (touche `b` sur Event aurait planté) → ajouté.
+
 ## 2026-06-28 — Panneau persos : openPanel, toggle générique, marques factorisées
 
 - **`ListerPerso.openPanel(contextItem)`** implémenté : pose `_directIds` (= `contextItem.perso_ids`)

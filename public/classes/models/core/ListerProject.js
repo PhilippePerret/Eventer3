@@ -12,7 +12,7 @@ export default class ListerProject extends Lister {
 
   static async init() {
     LOG.m(1, 'Init projects')
-    const lister = new ListerProject({ id: 1 })
+    const lister = new ListerProject({ project: 'none' })
     await lister.load()
     lister.render()
     lister.attach(lister.container)

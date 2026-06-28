@@ -11,8 +11,10 @@
 brins / persos). On transmet `project` (l'objet), jamais `project_id`. Les
 panneaux s'ouvrent/ferment via **`openPanel(item)` / `closePanel()`** portés
 sur `ListerBrin` / `ListerPerso` (cf. `feedback_panel_methods`).
-**Point de nommage acté par l'utilisateur :** `project.listerBrins.openPanel(item)`
-est le bon point d'entrée — PAS de wrapper `openBrinPanel()` sur l'item.
+**Point de nommage acté par l'utilisateur (28/06) :** méthodes relais `openBrinPanel()` /
+`openPersoPanel()` portées sur `Item` (abstrait, donc Event/Brin/Project sans duplication),
+déléguant à `this.project.listerBrins.openPanel(this)` / `listerPersos.openPanel(this)`.
+Appelées par le dispatcher via LISTENERS (`b`/`p` nokey).
 
 **À faire tout de suite :**
 
@@ -35,17 +37,17 @@ est le bon point d'entrée — PAS de wrapper `openBrinPanel()` sur l'item.
      `itemsById['brins']`, distinction par `contextItem.minClass === 'event'`) avant `_syncChecked()`.
    - [x] `_afterToggle` = `ctx.refreshPersosMarks()` (refresh direct de l'item contexte).
 
-3bis. **Garantir l'invariant direct ∩ brins = ∅** (cf. [feedback/project_persos_marks_refresh.md]) :
-   - Ajout perso direct à l'event : s'il est déjà dans un de ses brins → alerte + refus.
-   - Choix d'un brin pour l'event : retirer des persos directs de l'event ceux que le brin porte.
+3bis. **Invariant direct ∩ brins = ∅** (cf. [feedback/project_persos_marks_refresh.md]) :
+   - [x] Ajout perso direct à l'event : déjà garanti structurellement (perso d'un brin = `inherited`
+     dans `_syncChecked` → verrouillé par `_canToggle`). Pas d'alerte explicite (silencieux).
+   - [x] Choix d'un brin pour l'event : `ListerBrin._afterToggle` retire de `ev.perso_ids` les persos
+     portés par le brin coché. Test : `tests/specs/unit/models/brin/brin-invariant-direct-persos.test.js` (vert).
 
-4. **`Item` / `dom/Item.js`** :
+4. **[FAIT 2026-06-28] `Item` / `dom/Item.js`** :
    - [x] `toggleChecked` recâblé : générique via `parentLister` (`_canToggle`, `CHECK_KEY`,
      écrit `ctx[CHECK_KEY]`, `_afterToggle`, `ctx.scheduleSave()`). `ctx` = `parentLister.contextItem`.
-   - RESTE : touche `b`/`p` (LISTENERS `openBrinPanel`/`openPersoPanel`) → déclencher
-     `project.listerBrins.openPanel(this)` / `listerPersos.openPanel(this)` — décider le nom
-     de méthode appelé par le dispatcher (NB `Item.js:148` appelle `this.project.listerPerso`
-     SINGULIER, inexistant → getter = `listerPersos`).
+   - [x] Méthodes relais `openBrinPanel`/`openPersoPanel` sur `Item` (typo `listerPerso`→`listerPersos`
+     corrigée, `openBrinPanel` ajouté).
 
 5. Rafraîchissement des marks à la **fermeture** du panneau via l'item
    contextuel (`contextItem.refreshPersosMarks()`) — **PERSOS UNIQUEMENT**.

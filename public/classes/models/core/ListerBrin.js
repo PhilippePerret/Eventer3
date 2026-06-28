@@ -72,7 +72,12 @@ export default class ListerBrin extends Lister {
   }
 
   // Brins : rafraîchissement DIRECT au toggle (≠ persos, qui se rafraîchissent à la fermeture)
-  _afterToggle(_brin, ev) {
+  _afterToggle(brin, ev) {
+    // Invariant : un perso porté par le brin ne reste pas en perso direct de l'event
+    if (brin.checked) {
+      const pids = brin.perso_ids ?? []
+      if (pids.length) ev.perso_ids = (ev.perso_ids ?? []).filter(id => !pids.includes(id))
+    }
     this._refreshEventMarks(ev)
   }
 
