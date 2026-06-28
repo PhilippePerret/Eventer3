@@ -1,0 +1,50 @@
+== Principes fondateurs ==
+
+- xref:tout-clavier[Tout clavier]
+  - xref:delegation[Gestion des keyboard events par délégation]
+  - xref:tab-cycle[Cycle des TABulations]
+- xref:aide-contextuelle[]
+
+
+[[tout-clavier]]
+=== Zéro souris / Tout clavier ===
+
+L'application est entièrement pensée pour être pilotée au clavier.
+
+Tout a été fait pour décourager l'usage de la souris.
+
+[[aide-contextuelle, Aide contextuelle]]
+=== Aide contextuelle ===
+
+Un soin tout particulier est apporté à l'aide contextuelle
+
+
+=== Fonctionnalités impliquées ===
+
+[[delegation]]
+=== Délégation ===
+
+Pas de “Keyboard Manager” impliqué dans la gestion des keyboard events. Chaque élément qui a le focus est responsable de ses keyboard events.
+
+Généralement, les choses se déroulent ainsi :
+
+- Le listener d'event clavier (`keydown`) est posé sur l'Item (par exemple l'Event).
+- Si l'Item définit une réation à la combinaison clavier pressée, il la traite et stoppe la propagation.
+- Si l'Itme ne définit pas de réaction à la combinaison clavier, il la laisse se propager jusqu'à son **Lister** (sa liste parente) qui le traite.
+- Au pire, la combinaison est capturée par le gestion général.
+
+[[tab-cycle, Le Cycle des Tabulations]]
+==== “Cycle des tabulations” ====
+
+Tab Cycle
+
+|====
+| Combinaison | Effet
+| kbd:[F11]
+| Pour voir
+
+| kbd: [⇥+↩︎] | Pour aller
+| kbd: [Tab+Enter] | Pour aller
+|====
+
+==== LISTENERS ====

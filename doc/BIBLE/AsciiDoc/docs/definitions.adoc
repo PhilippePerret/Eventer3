@@ -1,0 +1,51 @@
+== Définitions ==
+
+Cette section définit de façon littéraire tous les termes propres à l'application.
+
+=== Classes abstraites ===
+
+Lister:: Une liste abstraite. Contient des `Item`s, affiche un `Panel`
+Item:: Un  `item` quelconque qui peut être un `Event`, un `Project`, un `Brin` etc.
+
+[IMPORTANT]
+Toute classe d'élément, les projets, les évènements (events), les brins, les personnages (persos) héritent de ces deux classes abstraites.
+
+
+=== Project ===
+
+|====
+| Classe d'un élément   | Classe de la liste          | Unique (propriétaire)
+| `Project` < `Item`    | `ListerProject` < `Lister`  | Oui (Application)
+|====
+
+Projet en anglais. C'est le container de tous les autres éléments <<events>>, <<brins>>, <<Personnages>>, etc.
+
+=== Events ===
+
+|====
+| Classe d'un élément | Classe de la liste        | Unique 
+| `Evetn` < `Item`    | `ListerEvent` < `Lister`  | Non 
+|====
+
+Diminutif pour “évènement”. C'est simplement “quelque chose qui se passe dans une histoire”. Ça peut aller d'une simple action (évènement atomique) à une guerre (évènement de grand échelle).
+
+=== Brins ===
+
+|====
+| Classe d'un élément | Classe de la liste        | Unique (propriétaire)
+| `Brin` < `Item`     | `ListerBrin` < `Lister`   | Oui (Project)
+|====
+
+Synonyme de “intrigue”, en sachant qu'une histoire est toujours composée de nombreuses intrigues plus ou moins longues, donc certaines s'étendent du début à la fin et d'autres sont plus localisées.
+
+Mais la notion de **brin** couvre plus de choses et permet de suivre les évolutions dans l'histoire (l'évolution d'un thème, d'une relation entre personnages) ou l'utilisation d'un élément (utilisation d'un accessoire).
+
+
+=== Personnages ===
+
+|====
+| Classe d'un élément | Classe de la liste        | Unique (propriétaire)
+| `Perso` < `Item`    | `ListerPerso` < `Lister`  | Oui (Project)
+|====
+
+Les personnages en tant qu'élément constitutionnel indispensable d'une histoire, même lorsque c'est une théière ou un pneu.

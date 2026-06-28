@@ -440,8 +440,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_définitions">DÉFINITIONS</h2>
+<h2 id="_définitions">Définitions</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>Cette section définit de façon littéraire tous les termes propres à l&#8217;application.</p>
+</div>
+<div class="sect2">
+<h3 id="_classes_abstraites">Classes abstraites</h3>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">Lister</dt>
@@ -465,6 +470,209 @@ Toute classe d&#8217;élément, les projets, les évènements (events), les brin
 </td>
 </tr>
 </table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_project">Project</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Classe d&#8217;un élément</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Classe de la liste</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unique</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Project</code> &lt; <code>Item</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerProject</code> &lt; <code>Lister</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Projet en anglais. C&#8217;est le container de tous les autres éléments <a href="#events">[events]</a>, <a href="#brins">[brins]</a>, <a href="#_personnages">Personnages</a>, etc.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_events">Events</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Classe d&#8217;un élément</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Classe de la liste</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unique</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Evetn</code> &lt; <code>Item</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerEvent</code> &lt; <code>Lister</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Non</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Diminutif pour “évènement”. C&#8217;est simplement “quelque chose qui se passe dans une histoire”. Ça peut aller d&#8217;une simple action (évènement atomique) à une guerre (évènement de grand échelle).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_brins">Brins</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Classe d&#8217;un élément</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Classe de la liste</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unique</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Brin</code> &lt; <code>Item</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerBrin</code> &lt; <code>Lister</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">oui</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Synonyme de “intrigue”, en sachant qu&#8217;une histoire est toujours composée de nombreuses intrigues plus ou moins longues, donc certaines s&#8217;étendent du début à la fin et d&#8217;autres sont plus localisées.</p>
+</div>
+<div class="paragraph">
+<p>Mais la notion de <strong>brin</strong> couvre plus de choses et permet de suivre les évolutions dans l&#8217;histoire (l&#8217;évolution d&#8217;un thème, d&#8217;une relation entre personnages) ou l&#8217;utilisation d&#8217;un élément (utilisation d&#8217;un accessoire).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_personnages">Personnages</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Classe d&#8217;un élément</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Classe de la liste</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unique</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Perso</code> &lt; <code>Item</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerPerso</code> &lt; <code>Lister</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Les personnages en tant qu&#8217;élément constitutionnel indispensable d&#8217;une histoire, même lorsque c&#8217;est une théière ou un pneu.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_principes_fondateurs">Principes fondateurs</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#tout-clavier">Tout clavier</a></p>
+</li>
+<li>
+<p><a href="#delegation">Gestion des keyboard events par délégation</a></p>
+</li>
+<li>
+<p><a href="#tab-cycle">Cycle des TABulations</a></p>
+</li>
+<li>
+<p><a href="#aide-contextuelle">Aide contextuelle</a></p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="tout-clavier">Zéro souris / Tout clavier</h3>
+<div class="paragraph">
+<p>L&#8217;application est entièrement pensée pour être pilotée au clavier.</p>
+</div>
+<div class="paragraph">
+<p>Tout a été fait pour décourager l&#8217;usage de la souris.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="aide-contextuelle">Aide contextuelle</h3>
+<div class="paragraph">
+<p>Un soin tout particulier est apporté à l&#8217;aide contextuelle</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_fonctionnalités_impliquées">Fonctionnalités impliquées</h3>
+
+</div>
+<div class="sect2">
+<h3 id="delegation">Délégation</h3>
+<div class="paragraph">
+<p>Pas de “Keyboard Manager” impliqué dans la gestion des keyboard events. Chaque élément qui a le focus est responsable de ses keyboard events.</p>
+</div>
+<div class="paragraph">
+<p>Généralement, les choses se déroulent ainsi :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Le listener d&#8217;event clavier (<code>keydown</code>) est posé sur l&#8217;Item (par exemple l&#8217;Event).</p>
+</li>
+<li>
+<p>Si l&#8217;Item définit une réation à la combinaison clavier pressée, il la traite et stoppe la propagation.</p>
+</li>
+<li>
+<p>Si l&#8217;Itme ne définit pas de réaction à la combinaison clavier, il la laisse se propager jusqu&#8217;à son <strong>Lister</strong> (sa liste parente) qui le traite.</p>
+</li>
+<li>
+<p>Au pire, la combinaison est capturée par le gestion général.</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="tab-cycle">“Cycle des tabulations”</h4>
+<div class="paragraph">
+<p>Tab Cycle</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Combinaison</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Effet</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd>F11</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pour voir</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">kbd: [⇥+↩︎]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pour aller</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">kbd: [Tab+Enter]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pour aller</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_listeners">LISTENERS</h4>
+
+</div>
 </div>
 </div>
 </div>
@@ -504,6 +712,31 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 </div>
 </div>
 <div class="sect1">
+<h2 id="_fonctionnement_général">Fonctionnement général</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>On affiche la liste des projets, on en choisit un et ensuite on bascule véritablement dans le travail.</p>
+</div>
+<div class="paragraph">
+<p>Le projet courant depuis la référence. Il est envoyé à chaque instance</p>
+</div>
+<div class="paragraph">
+<p>Un projet comprend :
+- une infinité d&#8217;évènemenciers (<code>ListerEvent</code> contenant des <code>Event</code>)
+- une liste de Brins (<code>ListerBrin</code> contenant des <code>Brin</code>)
+  Les brins sont ordonnés par la définition de la propriété persistante <code>brin_ids</code>
+- une liste de personnages (<code>ListerPerso</code> contenant des <code>Perso</code>)
+  Les personnages sont ordonnés dans la propriété persistante <code>perso_ids</code> dans la table meta_project du fichier <code>eventer.db</code> du projet.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_synopsis">Synopsis</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
 <h2 id="_action_suivant_les_modes">Action suivant les modes</h2>
 <div class="sectionbody">
 <div class="sect2">
@@ -521,7 +754,7 @@ MODE DISPLAY | se déplacer de lien vers cible en lien vers cible s&#8217;il y e
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-06-27 16:58:26 +0200
+Last updated 2026-06-28 08:27:21 +0200
 </div>
 </div>
 </body>

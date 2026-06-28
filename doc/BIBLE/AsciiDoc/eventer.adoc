@@ -1,17 +1,13 @@
 = Eventer X =
+:experimental:
 
 :app: **EventerX**
 :enter: `↩︎`
 :up: ↑
 
-== DÉFINITIONS ==
+include::docs/definitions.adoc[]
 
-Lister:: Une liste abstraite. Contient des `Item`s, affiche un `Panel`
-Item:: Un  `item` quelconque qui peut être un `Event`, un `Project`, un `Brin` etc.
-
-[IMPORTANT]
-Toute classe d'élément, les projets, les évènements (events), les brins, les personnages (persos) héritent de ces deux classes abstraites.
-
+include::docs/principes-fondateurs.adoc[]
 
 == RESPONSABILITÉS ==
 
