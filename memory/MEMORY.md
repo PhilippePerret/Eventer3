@@ -1,11 +1,11 @@
-- **LIRE EN PREMIER** [**Architecture-cible.md**](../BIBLE/Architecture-cible.md) — chemin RACINE du projet, pas dans memory/
+- **LIRE EN PREMIER** [**Architecture-cible.md**](../doc/BIBLE/Architecture-cible.md) — chemin RACINE du projet, pas dans memory/
 - **IMPÉRATIF** : tout fichier `feedback_*.md` va dans `memory/feedback/` — jamais directement dans `memory/`
 - **LIRE EN PREMIER** : [TODO.md](TODO.md) pour connaitre :
   - [le travail en cours](TODO.md#current),
   - [les tâches qui seront à réaliser](TODO.md#todo).
 - Pour rafraichissement sur le développement, lire [CHANGELOG.md](CHANGELOG.md).
 - IMPÉRATIF À CHAQUE SESSION : les fichiers [TODO](TODO.md) et [CHANGELOG](CHANGELOG.md) sont à **tenir à jour** AU COURS de chaque session.
-- LIRE SI NÉCESSAIRE l’ancienne architecture **[Architecture Brief](reference_architecture_brief.md)** : `dev/_architecture-brief.md` contient entrypoints, fixtures, sélecteurs, dispatch clavier — économise ~40% tokens démarrage
+- LIRE SI NÉCESSAIRE l’ancienne architecture **[Architecture Brief](reference_architecture_brief.md)** : `doc/dev/_architecture-brief.md` contient entrypoints, fixtures, sélecteurs, dispatch clavier — économise ~40% tokens démarrage
 - **[RÈGLE ABSOLUE: timeout 3 min](feedback_timeout_3min.md)** — CRITIQUE: stop immédiat après 3 minutes de travail, où que j'en sois, sans exception
 - **[RÈGLE IMPÉRATIVE: timeout boucle](feedback_timeout_boucle.md)** — CRITIQUE: après 2-3 tentatives échouées sur même problème → STOP immédiat → signaler à l'utilisateur
 - **[FONDAMENTAL: item.type ≠ classe](feedback_item_type_vs_class.md)** — CRITIQUE: item.type = type MÉTIER ('roman','event'…) JAMAIS nom de classe; classe = itemClass.name.toLowerCase()
@@ -13,7 +13,7 @@
 - [Ne pas prendre initiative](feedback_ne_pas_prendre_initiative.md) — Faire uniquement ce qui est demandé, s'arrêter, attendre — ne jamais anticiper ni dicter la suite
 - [Ne pas dicter les actions de test](feedback_ne_pas_dicter_actions.md) — "Vérifie en live" suffit — ne jamais expliquer comment utiliser l'app pour tester
 - [Pas de workaround pour typos](feedback_pas_de_workaround_typos.md) — Incohérence dans les données → demander, jamais coder des aliases/fallbacks silencieux
-- [dev/Tests.md = choix de l'utilisateur](feedback_tests_md_autonomie.md) — Ne jamais lire Tests.md pour proposer la suite ; c'est l'utilisateur qui choisit
+- [doc/dev/Tests.md = choix de l'utilisateur](feedback_tests_md_autonomie.md) — Ne jamais lire Tests.md pour proposer la suite ; c'est l'utilisateur qui choisit
 - [Tests et actions](feedback_tests_et_actions.md) — Ne jamais lancer les tests ni toucher les données sans permission explicite
 - [Régressions par commits Claude](feedback_verifier_commits_claude.md) — Vérifier git log avant de corriger : des sessions Claude précédentes ont déjà réintroduit des bugs via commits non vérifiés
 - [Interdiction modifications système](feedback_interdiction_modifications_systeme.md) — NE JAMAIS modifier Terminal.app, keybindings.json, defaults write ou tout paramètre système sans demande explicite

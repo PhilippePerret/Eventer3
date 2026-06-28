@@ -1,0 +1,58 @@
+= Eventer X =
+
+:app: **EventerX**
+:enter: `↩︎`
+:up: ↑
+
+== DÉFINITIONS ==
+
+Lister:: Une liste abstraite. Contient des `Item`s, affiche un `Panel`
+Item:: Un  `item` quelconque qui peut être un `Event`, un `Project`, un `Brin` etc.
+
+[IMPORTANT]
+Toute classe d'élément, les projets, les évènements (events), les brins, les personnages (persos) héritent de ces deux classes abstraites.
+
+
+== RESPONSABILITÉS ==
+
+Un soin tout particulier est apporté, dans le code à la *distribution des responsabilités*. Une méthode est toujours confiée au responsable le plus désigné. 
+
+[WARNING]
+Attention, contrairement aux apparences, ça n'est pas toujours aussi évident que ça à déterminer.
+
+=== Quelques exemples de responsabilité ===
+
+Mettre un item en édition:: Ça relève de lui-même, c'est donc une fonction de l'`Item`. Dans {app}, on joue la touche {enter} pour le faire.
+Remonter un item:: Ça relève non pas de l'item, mais de sa liste, donc de son `ListerEvent`. Dans {app}, on joue la touche {up} pour le faire.
+
+== Fonctionnement général ==
+
+On affiche la liste des projets, on en choisit un et ensuite on bascule véritablement dans le travail.
+
+Le projet courant depuis la référence. Il est envoyé à chaque instance
+
+Un projet comprend : 
+- une infinité d'évènemenciers (`ListerEvent` contenant des `Event`)
+- une liste de Brins (`ListerBrin` contenant des `Brin`)
+  Les brins sont ordonnés par la définition de la propriété persistante `brin_ids`
+- une liste de personnages (`ListerPerso` contenant des `Perso`)
+  Les personnages sont ordonnés dans la propriété persistante `perso_ids` dans la table meta_project du fichier `eventer.db` du projet.
+
+
+== Synopsis ==
+
+
+
+
+
+
+== Action suivant les modes ==
+
+=== TAB sur Item ===
+
+Deux fonctions suivant mode editing/display
+
+MODE EDITING | se déplacer de propriété éditable en propriété éditable
+MODE DISPLAY | se déplacer de lien vers cible en lien vers cible s'il y en a dans le title.
+
+

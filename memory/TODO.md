@@ -4,6 +4,56 @@
 
 ## En cours
 
+### Chantier centralisation Project courant (27/06)
+
+**Principe :** le Project courant est central. `project.listerBrins` /
+`project.listerPersos` = listers uniques (instanciés une fois, tous les
+brins / persos). On transmet `project` (l'objet), jamais `project_id`. Les
+panneaux s'ouvrent/ferment via **`openPanel(item)` / `closePanel()`** portés
+sur `ListerBrin` / `ListerPerso` (cf. `feedback_panel_methods`).
+**Point de nommage acté par l'utilisateur :** `project.listerBrins.openPanel(item)`
+est le bon point d'entrée — PAS de wrapper `openBrinPanel()` sur l'item.
+
+**À faire tout de suite :**
+
+1. **Bugs objectifs restants** (variables mortes après le passage `project_id`→`project`) :
+   - `repo/Lister.js:22` (`countDescendants`) : variable `project` non déclarée
+     (c'est `project_id` ligne 21) ; le fallback `item.id` est perdu.
+   - `repo/Lister.js:30` (`save`) : `${this.project_id}` → propriété supprimée,
+     vaut `undefined` ; remplacer par `this.project.id`.
+   - `ListerBrin.js:80` (`deleteItem`) : query `` `project.id=...` `` malformée
+     (pas de `?`, mauvais nom de param) → `?project_id=${this.project.id}`.
+
+2. **`ListerBrin`** : remplacer `open(eventItem)` par `openPanel(item)` +
+   `closePanel()`. Retirer la plomberie `listerEvent` / `selectedEvent` /
+   `_fetchData` override / `_refreshEventMarks` (lire les brins du Project, plus
+   de `listerEvent.brins`). `contextItem` = l'item depuis lequel on a ouvert.
+
+3. **`ListerPerso.openPanel(contextItem)`** (actuellement stub `???`) — EN ATTENTE,
+   l'utilisateur veut le reprendre lui-même. Rappel logique cible :
+   - `contextItem` est un Event OU un Brin.
+   - direct = `contextItem.perso_ids` ; inherited (Event seulement) = union des
+     `perso_ids` des brins de `contextItem.brin_ids` (via `ListerBrin.pool`).
+   - corriger `contextItem` getter (lit `_contextEvent` inexistant → `_contextItem`).
+   - poser `_directIds` / `_inheritedIds` avant `_syncChecked()`.
+
+4. **`Item` / `dom/Item.js`** — À CLARIFIER AVEC L'UTILISATEUR (« rien compris ») :
+   - comment la touche `b`/`p` (LISTENERS `openBrinPanel`/`openPersoPanel`)
+     déclenche `project.listerBrins.openPanel(this)` sans wrapper nommé
+     `openBrinPanel` — décider du nom de méthode appelé par le dispatcher.
+   - `toggleChecked` (`dom/Item.js:121-122`) : `ctx` undefined → à recâbler
+     (déléguer au `parentLister._afterToggle(this)` + save, marks rafraîchies à
+     la fermeture du panneau, pas en direct).
+
+5. Rafraîchissement des marks à la **fermeture** du panneau via l'item
+   contextuel (`contextItem.refreshPersosMarks()` / `refreshBrinsMarks()`),
+   pas en direct pendant le toggle.
+
+**Plan de la suite (après stabilisation panels) :** reprendre les tests `_tdd/`
+listés plus bas (brins-panel, brin-edition-form, keyboard-delete, brin-nouveau,
+brins-selection, perso-panel…), puis revenir au chantier clipboard + badges
+ci-dessous, puis repenser `App.navigateToItem` (iframes) selon la nouvelle archi.
+
 ### Chantier clipboard + badges (en cours 2026-06-27)
 
 **Contexte :** déviation depuis test 13 de `contextual-help.spec.js` (`⌘+v apparaît si clipboard compatible`).

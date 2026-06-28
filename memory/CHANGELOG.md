@@ -1,5 +1,47 @@
 # CHANGELOG — Eventer3
 
+## 2026-06-27 — Centralisation sur le Project courant
+
+> ⚠️ Avant cette session, beaucoup de travail avait déjà été fait sur cette
+> centralisation (refonte panels, `enterInside`, pools, etc.) mais n'avait pas
+> été tracé et a été en partie oublié. Cette entrée ne couvre que ce qui a été
+> repris/constaté pendant la session du 27/06.
+
+### Principe acté
+- Le **Project courant est au cœur du runtime** une fois choisi.
+- Il possède **un seul `ListerBrin`** (tous les brins, instancié une fois) et
+  **un seul `ListerPerso`** (tous les persos, instancié une fois), exposés par
+  les getters lazy `Project.listerBrins` / `Project.listerPersos`.
+- `Project` (l'objet, pas son id) est transmis au constructeur des listers et
+  des items.
+
+### Fait pendant la session
+- **Suppression** de `ui/BrinPanel.js`, `ui/PersoPanel.js`, `models/dom/DomMethods.js`
+  (wrappers + singletons qui instanciaient un `ListerBrin`/`ListerPerso` à chaque
+  ouverture — contournaient le lister unique du Project).
+- **`App.js`** : retrait de l'import `DomMethods` ; `navigateToItem` mis en
+  commentaire (référençait `keyboardController`/`activeLister`/`enterSelectedItem`
+  d'une ancienne architecture clavier supprimée — à repenser pour les iframes).
+- **Abandon de la propriété `project_id`** sur les objets : on ne garde que
+  `project` (l'objet) ; l'id se dérive via `this.project.id`. Le paramètre d'URL
+  `?project_id=` reste (contrat serveur). Corrigé presque partout par l'utilisateur.
+- **`abstract/Item.js`** : ajout `this.project` dans le constructeur ; suppression
+  de `project_id`.
+- **`abstract/Lister.js`** : `_instantiateItems` transmet `project: this.project`
+  aux items.
+- **`core/Brin.js`** : `static LISTENERS = { ...Item.LISTENERS, ...BrinLi }` ;
+  nouveau fichier `listen/Brin.js` (`BrinLi = { p: openPersoPanel }`).
+- **`core/ListerPerso.js`** : constructeur aligné sur `ListerBrin` (reçoit
+  `project`, `raise(3000)` si absent, `id = project.id + '-persos'`) ; squelette
+  `openPanel(contextItem)` posé (corps à écrire).
+- **`ERRORS.js` / `Texte.js`** : ajustements (codes d'erreur badge/lister).
+
+### Constats / décisions de nommage de l'utilisateur
+- Le bon point d'entrée est **`project.listerBrins.openPanel(item)`** (et
+  `listerPersos.openPanel(item)`), pas un wrapper `openBrinPanel()` sur l'item.
+- Méthodes panel : **`openPanel()` / `closePanel()`** uniquement sur
+  `ListerBrin` / `ListerPerso` (voir règle mémoire `feedback_panel_methods`).
+
 ## 2026-06-26
 
 ### Tests _tdd/ — 60 tests verts

@@ -11,12 +11,12 @@ export default class Lister extends KeyDispatcher {
 
   constructor(data = {}) {
     super()
-    this.id             = data.id            ?? null
-    this.item_ids       = data.item_ids      ?? []
+    this.project        = data.project        || raise(1000)
+    this.id             = data.id             ?? null
+    this.item_ids       = data.item_ids       ?? []
     this.items          = []
-    this.selectedIndex  = data.selectedIndex ?? -1
-    this.project        = data.project  || raise(1000)
-    this.parentLister   = data.parentLister  ?? null
+    this.selectedIndex  = data.selectedIndex  ?? -1
+    this.parentLister   = data.parentLister   ?? null
   }
 
   get minClass() { return this._minClass || (this._minClass = this.constructor.ITEM_CLASS?.name.toLowerCase()) }

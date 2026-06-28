@@ -19,8 +19,8 @@ Il suffit de double-cliquer sur le script `xprepare_travail.command` pour exécu
 
 ### Renseignement de ChatGPT
 
-* Bien dire à l'IA de consulter les fichiers `dev/` en début de développement.
-* Lui dire que les tests se trouvent dans `dev/Tests.md` (ajouter les nouveaux tests là aussi)
+* Bien dire à l'IA de consulter les fichiers `doc/dev/` en début de développement.
+* Lui dire que les tests se trouvent dans `doc/dev/Tests.md` (ajouter les nouveaux tests là aussi)
 * Il ne doit fournir que deux fichiers : `app.zip` et `tests.zip`. Mettre toujours ces deux fichiers dans le dossier `tests/` pour les décompresser.
 * Surtout au début, 
 * Changer souvent de fil de prompt parce que ça devient vite lourd et donc lent.
