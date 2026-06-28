@@ -18,8 +18,8 @@ export default {
   },
 
   async countDescendants(item) {
-    const project = this.project.id ?? item.id
-    const query = project ? `?project_id=${project.id}` : ''
+    const pid = this.project.id ?? item.id
+    const query = project ? `?project_id=${pid}` : ''
     const resp = await fetch(`/api/listers/${this.id}/items/${item.id}/descendants/count${query}`, { cache: 'no-store' })
     if (!resp.ok) return 0
     const data = await resp.json()

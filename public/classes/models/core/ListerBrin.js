@@ -12,35 +12,31 @@ export default class ListerBrin extends Lister {
 
   constructor(data = {}) {
     super(data)
-    this.project     = data.project || raise(2000)
-    this.listerEvent = data.listerEvent ?? null
-    this.id          = this.project.id + '-brins'
+    this.project      = data.project || raise(2000)
+    this.id           = this.project.id + '-brins'
+    this._contextItem = null // Event (depuis lequel on ouvre)
   }
 
-  async openPanel(eventItem) {
-    const le         = eventItem.parentLister
-    this.listerEvent  = le
-    this.parentLister = le
+  get contextItem() { return this._contextItem }
+
+  async openPanel(contextItem) {
+    this._contextItem = contextItem
     if (!this.items.length) await this.load()
-    else this._syncChecked()
-    le.detach()
+    this._syncChecked()
+    contextItem.parentLister.detach()
     this.render()
   }
 
-  get selectedEvent() {
-    const le = this.listerEvent
-    return le?.items[le.selectedIndex] ?? null
-  }
-
-  get contextItem() { return this.selectedEvent }
-
-  async _fetchData() {
-    if (this.listerEvent) return this.listerEvent.brins ?? {}
-    return await super._fetchData()
+  closePanel() {
+    const ctx = this._contextItem
+    this.container.classList.add('hidden')
+    this.container.innerHTML = ''
+    this.detach()
+    ctx.parentLister.render()
+    ctx.refreshBrinsMarks?.()   // ← point 5 (refresh à la fermeture)
   }
 
   _afterCreate(result) {
-    if (this.listerEvent) this.listerEvent.brins[result.id] = result
     ListerBrin.pool[result.id] = result
   }
 
@@ -58,33 +54,28 @@ export default class ListerBrin extends Lister {
     await this.save()
     const brin = new Brin({ ...result, id: result.id, _index: 0, project: this.project })
     this.items = [brin]
-    if (this.listerEvent) this.listerEvent.brins = { [result.id]: result }
   }
 
   _syncChecked() {
-    const brinIds = this.selectedEvent?.brin_ids ?? []
+    const brinIds = this.contextItem?.brin_ids ?? []
     this.items.forEach(b => { b.checked = brinIds.includes(b.id) })
   }
 
   async deleteSelected() {
-    const brin = this.items[this.selectedIndex]
-    const ev   = this.selectedEvent
+    const brin = this.items[this.contextItem]
+    const ctx   = this.contextItem
     await super.deleteSelected()
-    if (!brin || !ev) return
-    ev.brin_ids = (ev.brin_ids ?? []).filter(id => id !== brin.id)
+    if (!brin || !ctx) return
+    ctx.brin_ids = (ctx.brin_ids ?? []).filter(id => id !== brin.id)
     this._refreshEventMarks(ev)
-    await ev.save()
+    await ctx.save()
   }
 
   async deleteItem(item) {
-    const query = `?project.id=${this.project.id}`
+    const query = `?project_id=${this.project.id}`
     const url = `/api/listers/${this.id}/items/${item.id}${query}`
     const resp = await fetch(url, { method: 'DELETE', cache: 'no-store' })
     return resp.ok
-  }
-
-  _afterToggle(_brin, ev) {
-    this._refreshEventMarks(ev)
   }
 
   _refreshEventMarks(ev) {
