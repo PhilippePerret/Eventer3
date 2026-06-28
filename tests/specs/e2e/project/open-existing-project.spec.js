@@ -117,3 +117,54 @@ test('persistance : le projet survit au rechargement', async ({ page }) => {
   await page.reload()
   await expect(pane1(page).locator('.project-item')).toHaveCount(countAfterFirst + 1)
 })
+
+// ─── Lancement / navigation projets ↔ events ─────────────────────────────────
+
+test("entrer dans un projet cache le panneau des projets", async ({ page }) => {
+  installFixtures('with-brins-and-persos')
+  await page.goto('/')
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
+
+  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
+  await expect(pane1(page).locator('#projects-panel')).not.toBeVisible()
+})
+
+test("→ ouvre directement le PREMIER projet à l'ouverture de l'app", async ({ page }) => {
+  installFixtures('with-brins-and-persos')
+  await page.goto('/')
+  await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
+
+  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
+  await expect(pane1(page).locator('.event-item')).toHaveCount(2)
+})
+
+test("→ ← ↓ → : navigation entre projets et leurs évènemenciers", async ({ page }) => {
+  installFixtures('two-projects-events')
+  await page.goto('/')
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
+
+  // entrer dans Projet A
+  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await expect(pane1(page).locator('#projects-panel')).not.toBeVisible()
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
+  await expect(pane1(page).locator('.event-item')).toHaveCount(3) // e1,e2,e3
+
+  // revenir à la liste des projets
+  await pane1(page).locator('.event-item.selected').press('ArrowLeft')
+  await expect(pane1(page).locator('#events-panel')).not.toBeVisible()
+  await expect(pane1(page).locator('#projects-panel')).toBeVisible()
+
+  // choisir Projet B
+  await pane1(page).locator('.project-item.selected').press('ArrowDown')
+  await expect(pane1(page).locator('.project-item').nth(1)).toHaveClass(/selected/)
+
+  // entrer dans Projet B
+  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await expect(pane1(page).locator('#projects-panel')).not.toBeVisible()
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
+  await expect(pane1(page).locator('.event-item')).toHaveCount(2) // e4,e5
+})

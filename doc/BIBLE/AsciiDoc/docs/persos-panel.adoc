@@ -9,11 +9,12 @@ On peut ouvrir le panneau des personnages, pour les choisir :
 
 Il faut comprendre qu'un event possède : 
 
-- tous les personnages de ses brins, sans exception
-- ses propres personnage, définis explicitement
+- par héritage : tous les personnages de tous ses brins
+- ses propres personnage, définis explicitement (dans son `persos_id`)
 
-personnage des brins cochés mais grisés (on ne peut pas les retirer)
-personnage propre à l'event : normal
+Les personnages des brins son **cochés mais grisés** (on ne peut pas les retirer ici avec kbd:[Space])
+
+Les personnages propre à l'event lui-même sont coché et décochables. Il peut également cocher les autres personnages, qui n'appartiennent pas à ses brins.
 
 ==== Cocher/décocher les personnages ====
 

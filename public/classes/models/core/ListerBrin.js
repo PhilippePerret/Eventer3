@@ -45,7 +45,7 @@ export default class ListerBrin extends Lister {
     if (!result?.id) return
     this.item_ids = [result.id]
     await this.save()
-    const brin = new Brin({ ...result, id: result.id, _index: 0, project: this.project })
+    const brin = new Brin({ ...result, id: result.id, badge: result.badge ?? 'IP', _index: 0, project: this.project, parentLister: this })
     this.items = [brin]
   }
 

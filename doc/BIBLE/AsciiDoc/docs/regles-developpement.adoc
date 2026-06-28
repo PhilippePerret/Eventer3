@@ -1,0 +1,44 @@
+== Règles de développement ==
+
+Aujourd'hui qu'on utilise l'IA (Claude-code) pour développer, il est important de respecter des règles de développement strictes et absolues.
+
+=== Fichiers _tdd ===
+
+Emplacement canonique:: Emplacement du fichier lorsqu'il n'est pas "en cours" dans `_tdd`
+
+Il existe :
+
+- une version `specs/e2e/_tdd/` (test unitaires)
+- une version `specs/unit/_tdd/ (test unitaires)
+
+Afin de ne pas changer les imports dès qu'on déplace un module de tests (de son emplacement canonique au dossier _tdd et inversement)
+
+Marque "//Origine: path"
+
+marquer les tests `test.only` si on ne veut pas jouer l'intégralité
+
+
+[[tdd-workflow]]
+=== Fluw de travail TDD ===
+
+SI Création d'un nouveau module
+
+- Le créer provisoirement dans _tdd
+- coder les tests
+
+SINON
+
+- Trouver le test à modifier en fonction du nouveau fonctionnement ou de la nouvelle fonctionnalité
+- le déplacer dans `_tdd`
+- bien vérifier que sa première ligne soit `//Origine: ...` sinon la définir
+- `test.only` ou `test.skip` pour se concentrer si le ou les tests courants
+- dire que c'est prêt.
+
+QUAND tous les tests passent :
+
+  - si c'est un nouveau 
+    - lui choisir un emplacement canonique (MÊME HIÉRARCHIE)
+    - mettre en commentaire en haut du fichier `//Origine: path/to/canonique`
+  - retirer les `test.only` ou `test.skip` éventuels
+  - (re)placer le fichier à sa place canonique sans rien faire d'autre
+  - prévenir qu'on a fini

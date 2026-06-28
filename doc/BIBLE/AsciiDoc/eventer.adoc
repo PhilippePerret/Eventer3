@@ -52,3 +52,5 @@ MODE EDITING | se déplacer de propriété éditable en propriété éditable
 MODE DISPLAY | se déplacer de lien vers cible en lien vers cible s'il y en a dans le title.
 
 
+
+include::docs/persos-panel.adoc[]

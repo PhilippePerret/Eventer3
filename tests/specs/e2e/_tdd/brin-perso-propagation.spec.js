@@ -37,37 +37,32 @@ async function closePersosThenBrins(page) {
   await expect(pane1(page).locator('#brins-panel')).not.toBeVisible()
 }
 
-// ── CAS 1 + 3 : retirer un perso du brin ────────────────────────────────────
-test.only("retirer un perso d'un brin met à jour les events possédant le brin, mais pas l'event qui l'a en direct", async ({ page }) => {
-  await goToBrinPanel(page)
-  // état initial : AA partout sauf e4
-  await expect(marks(page, 0)).toContainText('AA') // e1 (via brin)
-  await expect(marks(page, 1)).toContainText('AA') // e2 (via brin)
-  await expect(marks(page, 2)).toContainText('AA') // e3 (direct)
-  await expect(marks(page, 3)).not.toContainText('AA') // e4
-
-  // décocher c1 (index 0, sélectionné à l'ouverture) sur b1
+// retire c1 de b1 (c1 = index 0, sélectionné à l'ouverture)
+async function removeC1fromB1(page) {
   await openPersosFromB1(page)
   await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/checked/)
   await pane1(page).locator('.brin-item.selected').press(' ')
   await expect(pane1(page).locator('.perso-item').nth(0)).not.toHaveClass(/checked/)
-
   await closePersosThenBrins(page)
+}
 
-  // e1, e2 perdent AA (ils ont le brin) ; e3 GARDE AA (direct) ; e4 toujours rien
-  await expect(marks(page, 0)).not.toContainText('AA')
-  await expect(marks(page, 1)).not.toContainText('AA')
-  await expect(marks(page, 2)).toContainText('AA')
-  await expect(marks(page, 3)).not.toContainText('AA')
+// ── CAS 1 : 2 events possèdent le même brin → modif du brin → les 2 events bougent ──
+test("cas 1 — modifier un brin met à jour les DEUX events qui le possèdent", async ({ page }) => {
+  await goToBrinPanel(page)
+  await expect(marks(page, 0)).toContainText('AA') // e1
+  await expect(marks(page, 1)).toContainText('AA') // e2
+
+  await removeC1fromB1(page)
+
+  await expect(marks(page, 0)).not.toContainText('AA') // e1 mis à jour
+  await expect(marks(page, 1)).not.toContainText('AA') // e2 mis à jour
 })
 
-// ── CAS 2 : ajouter un perso au brin ne touche pas les events sans le brin ───
-test.only("ajouter un perso à un brin n'apparaît que sur les events possédant le brin", async ({ page }) => {
+// ── CAS 2 : ajouter un perso au brin n'apparaît PAS sur un event sans le brin ──
+test("cas 2 — ajouter un perso à un brin n'apparaît pas sur les events sans ce brin", async ({ page }) => {
   await goToBrinPanel(page)
-  await expect(marks(page, 0)).not.toContainText('BB')
-  await expect(marks(page, 1)).not.toContainText('BB')
-  await expect(marks(page, 2)).not.toContainText('BB')
-  await expect(marks(page, 3)).not.toContainText('BB')
+  await expect(marks(page, 0)).not.toContainText('BB') // e1
+  await expect(marks(page, 3)).not.toContainText('BB') // e4 (sans brin)
 
   // cocher c2 (index 1) sur b1
   await openPersosFromB1(page)
@@ -75,12 +70,23 @@ test.only("ajouter un perso à un brin n'apparaît que sur les events possédant
   await expect(pane1(page).locator('.perso-item').nth(1)).toHaveClass(/selected/)
   await pane1(page).locator('.brin-item.selected').press(' ')
   await expect(pane1(page).locator('.perso-item').nth(1)).toHaveClass(/checked/)
-
   await closePersosThenBrins(page)
 
-  // BB apparaît sur e1, e2 (ils ont b1) ; PAS sur e3 ni e4 (pas le brin)
-  await expect(marks(page, 0)).toContainText('BB')
-  await expect(marks(page, 1)).toContainText('BB')
-  await expect(marks(page, 2)).not.toContainText('BB')
-  await expect(marks(page, 3)).not.toContainText('BB')
+  await expect(marks(page, 0)).toContainText('BB')      // e1 (a le brin)
+  await expect(marks(page, 1)).toContainText('BB')      // e2 (a le brin)
+  await expect(marks(page, 3)).not.toContainText('BB')  // e4 (PAS le brin)
+})
+
+// ── CAS 3 : perso sur 3 events (2 via brin, 1 direct) → retiré du brin → 2 perdent, 1 garde ──
+test("cas 3 — retirer un perso du brin : les events via brin perdent la marque, l'event direct la garde", async ({ page }) => {
+  await goToBrinPanel(page)
+  await expect(marks(page, 0)).toContainText('AA') // e1 via brin
+  await expect(marks(page, 1)).toContainText('AA') // e2 via brin
+  await expect(marks(page, 2)).toContainText('AA') // e3 direct
+
+  await removeC1fromB1(page)
+
+  await expect(marks(page, 0)).not.toContainText('AA') // e1 perd
+  await expect(marks(page, 1)).not.toContainText('AA') // e2 perd
+  await expect(marks(page, 2)).toContainText('AA')     // e3 GARDE (direct)
 })

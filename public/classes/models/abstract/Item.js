@@ -58,7 +58,7 @@ export default class Item extends KeyDispatcher {
     }
     await this.onChildListerCreated?.(child)
     child.selectedIndex = 0
-    this.parentLister.detach()
+    this.parentLister.hide()
     child.render()
     child.attach(child.container)
     if (child.items.length === 0) await child.createNew()

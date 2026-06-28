@@ -1,5 +1,24 @@
 # CHANGELOG — Eventer3
 
+## 2026-06-28 — Lancement / navigation projets ↔ évènemenciers (réparé, TDD vert)
+
+Symptôme : impossible d'entrer dans un projet (events-panel jamais affiché / vide). Réparé via 4 tests
+e2e (`project/open-existing-project.spec.js`) : ouverture projet, masquage panneau projets, ouverture
+du 1er projet, navigation `→ ← ↓ →` entre 2 projets.
+
+- **`Project.project = this`** (constructeur) : un Project est son propre contexte projet. Sans ça,
+  `this.project` était `undefined` → pas de `project_id` dans les requêtes → le serveur renvoyait le
+  mauvais lister (l'UUID du projet au lieu des events).
+- **`Lister.hide()`** (`dom/Lister.js`) : coupe le clavier (`detach`) + cache le panneau. `_enterChildLister`
+  appelle `this.parentLister.hide()` au lieu de `detach()` seul (sinon le panneau projets restait visible
+  sous l'évènemencier). `detach()` (KeyDispatcher) ne gère QUE le clavier, pas la visibilité.
+- **`ListerPerso._syncChecked`** : tolère `_directIds`/`_inheritedIds` absents (au `load`, avant `openPanel`),
+  sinon `listerPersos.load()` jetait `undefined.has` → `enterInside` avortait.
+- **`ListerBrin._initDefaultBrin`** : le `new Brin` reçoit `parentLister: this` + `badge` garanti
+  (`result.badge ?? 'IP'`). Sans ça, `Brin.generateUniqueBadge` lisait `parentLister.existingBadges` sur
+  `null` → crash à la création du brin par défaut d'un projet vide. (NB : `createItem` renvoie un brin
+  sans `badge` — à creuser séparément.)
+
 ## 2026-06-28 — Invariant persos directs / brins (TDD)
 
 - **`ListerBrin._afterToggle`** : quand un brin est coché pour un event, les persos portés par ce brin

@@ -60,6 +60,12 @@ export default {
     this.focusSelected()
   },
 
+  // Le lister se retire : clavier coupé + panneau caché (inverse de render)
+  hide() {
+    this.detach()
+    this.container?.classList.add('hidden')
+  },
+
   focusSelected() {
     const item = this.items[this.selectedIndex]
     LOG.m(2, 'Lister.focusSelected', { selectedIndex: this.selectedIndex, itemExists: !!item, elExists: !!item?.el })

@@ -42,9 +42,11 @@ export default class ListerPerso extends Lister {
       _syncChecked(), detach lister appelant, render(). 
   //*/
   _syncChecked() {
+    const directIds    = this._directIds    ?? new Set()
+    const inheritedIds = this._inheritedIds ?? new Set()
     this.items.forEach(p => {
-      const direct    = this._directIds.has(p.id)
-      const inherited = !direct && this._inheritedIds.has(p.id)
+      const direct    = directIds.has(p.id)
+      const inherited = !direct && inheritedIds.has(p.id)
       p.checked   = direct || inherited
       p.inherited = inherited
     })

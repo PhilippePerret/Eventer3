@@ -143,6 +143,8 @@ Test 13 est en `test.only` — en attente de l'implémentation clipboard.
 
 ## Fait
 
+- [x] 2026-06-28 — Lancement/navigation projets↔évènemenciers réparé (4 tests verts `project/open-existing-project.spec.js`) : `Project.project=this`, `Lister.hide()`, `_initDefaultBrin` (parentLister+badge), `ListerPerso._syncChecked` tolérant. Cf. CHANGELOG.
+  - RESTE à creuser : `createItem` renvoie un brin sans `badge` ; tests unitaires `brin-badge` rouges (`parentLister.existingBadges` en contexte unitaire) ; point 5 `brin-perso-propagation` (WIP `e2e/_tdd/`).
 - [x] 2026-06-28 — Généralisation `byId` dans la base `Lister` + `Project.itemsById` (concept utilisateur) ; suppression `this.brins`/`static pool`/legacy `ListerEvent.brins`. Cf. CHANGELOG.
 - [x] 2026-06-28 — Point 1 (bugs `project_id`→`project`) + Point 2 (`ListerBrin` migration `openPanel`/`closePanel`, `contextItem`). Cf. CHANGELOG.
 

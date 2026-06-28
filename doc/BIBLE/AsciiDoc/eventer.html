@@ -484,12 +484,12 @@ Toute classe d&#8217;élément, les projets, les évènements (events), les brin
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Classe d&#8217;un élément</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Classe de la liste</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Unique</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unique (propriétaire)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Project</code> &lt; <code>Item</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerProject</code> &lt; <code>Lister</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui (Application)</p></td>
 </tr>
 </tbody>
 </table>
@@ -534,12 +534,12 @@ Toute classe d&#8217;élément, les projets, les évènements (events), les brin
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Classe d&#8217;un élément</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Classe de la liste</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Unique</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unique (propriétaire)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Brin</code> &lt; <code>Item</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerBrin</code> &lt; <code>Lister</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui (Project)</p></td>
 </tr>
 </tbody>
 </table>
@@ -562,12 +562,12 @@ Toute classe d&#8217;élément, les projets, les évènements (events), les brin
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Classe d&#8217;un élément</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Classe de la liste</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Unique</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unique (propriétaire)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Perso</code> &lt; <code>Item</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerPerso</code> &lt; <code>Lister</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui (Project)</p></td>
 </tr>
 </tbody>
 </table>
@@ -749,12 +749,60 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 MODE DISPLAY | se déplacer de lien vers cible en lien vers cible s&#8217;il y en a dans le title.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_panneau_des_personnages">Panneau des personnages</h3>
+<div class="paragraph">
+<p>On peut ouvrir le panneau des personnages, pour les choisir :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>sur un <a href="#Event">[Event]</a>,</p>
+</li>
+<li>
+<p>sur un <a href="#Brin">[Brin]</a>.</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_ouverture_sur_un_event">Ouverture sur un event</h4>
+<div class="paragraph">
+<p>Il faut comprendre qu&#8217;un event possède :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>par héritage : tous les personnages de tous ses brins</p>
+</li>
+<li>
+<p>ses propres personnage, définis explicitement (dans son <code>persos_id</code>)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Les personnages des brins son <strong>cochés mais grisés</strong> (on ne peut pas les retirer ici avec <kbd>Space</kbd>)</p>
+</div>
+<div class="paragraph">
+<p>Les personnages propre à l&#8217;event lui-même sont coché et décochables. Il peut également cocher les autres personnages, qui n&#8217;appartiennent pas à ses brins.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_cocherdécocher_les_personnages">Cocher/décocher les personnages</h4>
+<div class="paragraph">
+<p>Le
+ouverture sur event &#8658; actualiser en direct les marques en directe
+ouverture sur brin &#8658; actualiser en direct les marques dans les trins (mais pas dans les events)
+fermeture de la fenêtre des brins
+&#8658; si color ou persos d&#8217;un brin au moins modifié &#8658; actualisation de tous les events affichés</p>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-06-28 08:27:21 +0200
+Last updated 2026-06-28 15:15:04 +0200
 </div>
 </div>
 </body>

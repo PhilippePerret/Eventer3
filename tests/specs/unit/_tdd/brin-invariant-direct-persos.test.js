@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
-import ListerBrin from '../../../../../public/classes/models/core/ListerBrin.js'
+import ListerBrin from '../../../../public/classes/models/core/ListerBrin.js'
 
 // Invariant : quand on coche un brin pour un event, les persos portés par ce brin
 // sont retirés des persos DIRECTS de l'event (un perso ne peut être direct + hérité).

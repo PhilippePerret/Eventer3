@@ -5,11 +5,17 @@ import ListerPerso from './ListerPerso.js'
 import ListerEvent from './ListerEvent.js'
 import { PROJECT_STATES, PROJECT_TYPES, PROJECT_COLORS } from '../constants/Project.js'
 import { WORD_FORMS } from '../../../constants/constants.js'
+import LOG from '../../../system/LOG.js'
 
 
 export default class Project extends Item {
   static COLORS    = PROJECT_COLORS
   static get thingName() { return WORD_FORMS.Project }
+
+  constructor(data = {}) {
+    super(data)
+    this.project = this   // un Project est son propre contexte projet
+  }
 
   get listerBrins()  { return this._lbrins  ?? (this._lbrins  = new ListerBrin({ project: this })) }
   get listerPersos() { return this._lpersos ?? (this._lpersos = new ListerPerso({ project: this })) }
