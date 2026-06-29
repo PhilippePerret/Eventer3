@@ -45,6 +45,7 @@ export default class KeyDispatcher {
     const dm = this.constructor.LISTENERS?.[ev.key] ?? this.constructor.LISTENERS?.[ev.key.toLowerCase()]
     if (!dm) return
     const method = this.getMethod(ev, dm)
+    if (!method) return
     this.target[method] || raise(ERRORS[100], ev.key, ev, this)
     ev.preventDefault()
     if (this.target[method](ev) !== false) ev.stopPropagation()
