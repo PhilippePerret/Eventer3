@@ -3,7 +3,7 @@ export const ListerLi = {
   , ArrowDown:  { nokey: 'selectNext'       }
   , ArrowLeft:  { nokey: 'leaveToParent'    } // seulement pour Event !!!
   , n:          { nokey: 'createNew', alt: 'createNewBefore' }
-  , '˜':        { nokey: 'createNewBefore'  }
+  , '˜':        { alt: 'createNewBefore'  }
   , Delete:     { nokey: 'deleteSelected'   }
   , Enter:      { meta: 'closePanel'        }
 }

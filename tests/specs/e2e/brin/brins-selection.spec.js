@@ -1,5 +1,5 @@
 // Origine : tests/specs/e2e/brin/brins-selection.spec.js
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press } from '../__setup__.js'
 import { setupTestBrinsFixture } from '../../../helpers/fixture-setup.js'
 
 test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }) => {
@@ -7,17 +7,16 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
   await page.goto('/')
 
   // Naviguer au premier project
-  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('.event-item')).toHaveCount(3)
 
   // Ouvrir brins pour e1 (doit avoir A et B cochés)
-  await pane1(page).locator('.event-item.selected').press('b')
+  await press(page, 'b')
   await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 
   let brinsItems = pane1(page).locator('.brin-item')
   let checkedCount = 0
   let uncheckedCount = 0
-
 
   for (let i = 0; i < await brinsItems.count(); i++) {
     const item = brinsItems.nth(i)
@@ -35,31 +34,30 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
   expect(uncheckedCount).toBe(2)
 
   // Fermer
-  await pane1(page).locator('.brin-item.selected').press('Meta+Enter')
+  await press(page, 'Meta+Enter')
 
   // Ouvrir brins pour e3 (aucun coché)
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
-    await pane1(page).locator('.event-item.selected').press('b')
-  
+  await press(page, 'ArrowDown')
+  await press(page, 'b')
+
   brinsItems = pane1(page).locator('.brin-item')
   checkedCount = 0
 
   for (let i = 0; i < await brinsItems.count(); i++) {
     const item = brinsItems.nth(i)
     const hasChecked = await item.evaluate(el => el.classList.contains('checked'))
-    const title = await item.locator('.brin-title').textContent()
     expect(hasChecked).toBe(false)
     if (hasChecked) checkedCount++
   }
   expect(checkedCount).toBe(0)
 
   // Fermer
-  await pane1(page).locator('.brin-item.selected').press('Meta+Enter')
+  await press(page, 'Meta+Enter')
 
   // Ouvrir brins pour e2 (doit avoir B et C cochés)
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
-    await pane1(page).locator('.event-item.selected').press('b')
-  
+  await press(page, 'ArrowDown')
+  await press(page, 'b')
+
   brinsItems = pane1(page).locator('.brin-item')
   checkedCount = 0
   uncheckedCount = 0
@@ -79,21 +77,23 @@ test('brins cochés doivent correspondre aux brins de l\'event', async ({ page }
   expect(checkedCount).toBe(2)
   expect(uncheckedCount).toBe(2)
 
-  // Cocher D
-  const brinDItem = pane1(page).locator('.brin-item').filter({ hasText: /Brin D/ })
-  await brinDItem.click()
-  
+  // Cocher D (index 3 : ArrowDown×3 depuis A sélectionné)
+  await press(page, 'ArrowDown')
+  await press(page, 'ArrowDown')
+  await press(page, 'ArrowDown')
+  await press(page, ' ')
+
   // Fermer
-  await pane1(page).locator('.brin-item.selected').press('Meta+Enter')
+  await press(page, 'Meta+Enter')
 
   // Naviguer back à e1 et vérifier que A et B sont encore cochés
-  await pane1(page).locator('.event-item.selected').press('ArrowLeft')
-    await pane1(page).locator('.project-item.selected').press('ArrowUp')
-    await pane1(page).locator('.project-item.selected').press('ArrowUp')
-    await pane1(page).locator('.project-item.selected').press('ArrowRight')
-    await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
-    await pane1(page).locator('.event-item.selected').press('b')
-  
+  await press(page, 'ArrowLeft')
+  await press(page, 'ArrowUp')
+  await press(page, 'ArrowUp')
+  await press(page, 'ArrowRight')
+  await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
+  await press(page, 'b')
+
   brinsItems = pane1(page).locator('.brin-item')
   checkedCount = 0
 

@@ -1,6 +1,6 @@
 // Origine : tests/specs/e2e/brin/brin-init.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures'
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press } from '../__setup__.js'
 
 // fixture many-events : project-a (hl:true, events e1/e2/e3, pas de brins lister)
 
@@ -11,13 +11,13 @@ test.beforeEach(() => {
 async function goToListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
 }
 
 test("un projet sans brins reçoit automatiquement b1 'Intrigue principale' à l'ouverture du panneau", async ({ page }) => {
   await goToListerEvent(page)
-  await pane1(page).locator('.event-item.selected').press('b')
+  await press(page, 'b')
   await expect(pane1(page).locator('#brins-panel')).toBeVisible()
   await expect(pane1(page).locator('.brin-item')).toHaveCount(1)
   await expect(pane1(page).locator('.brin-item').nth(0).locator('.brin-title')).toHaveText('Intrigue principale')
@@ -25,7 +25,7 @@ test("un projet sans brins reçoit automatiquement b1 'Intrigue principale' à l
 
 test("b1 'Intrigue principale' est persisté dans la base de données", async ({ page }) => {
   await goToListerEvent(page)
-  await pane1(page).locator('.event-item.selected').press('b')
+  await press(page, 'b')
   await expect(pane1(page).locator('#brins-panel')).toBeVisible()
   await page.waitForLoadState('networkidle')
 

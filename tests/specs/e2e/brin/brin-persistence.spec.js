@@ -1,6 +1,6 @@
 // Origine : tests/specs/e2e/brin/brin-persistence.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures.js'
-import { test, expect, pane1, getErr } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('with-brins')
@@ -11,38 +11,33 @@ test.beforeEach(() => {
 async function openBrinPanel(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
-  await pane1(page).locator('.event-item.selected').press('b')
+  await press(page, 'b')
   await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 }
 
 test("brin créé persiste après rechargement de la page", async ({ page }) => {
   await openBrinPanel(page)
 
-  await pane1(page).locator('.brin-item.selected').press('n')
+  await press(page, 'n')
   await pane1(page).locator('.brin-item.selected [data-field="title"]').fill('Brin persistant')
-  await pane1(page).locator('.brin-item.selected').press('Enter')
+  await press(page, 'Enter')
 
-  // Vérification immédiate
   await expect(pane1(page).locator('.brin-item').nth(1)).toContainText('Brin persistant')
 
-  // Rechargement de la page
   await page.reload()
 
-  // Navigation vers le panel brins
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
-  await pane1(page).locator('.event-item.selected').press('b')
+  await press(page, 'b')
   await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 
-  // Le brin créé doit être visible
   const brins = pane1(page).locator('.brin-item')
   const brinPersistant = brins.filter({ hasText: 'Brin persistant' })
   await expect(brinPersistant).toBeVisible()
 
-  // Le badge du nouveau brin doit être non vide (stocké en DB)
   const badge = brinPersistant.locator('.brin-badge')
   await expect(badge).not.toHaveText('')
 })
@@ -50,23 +45,20 @@ test("brin créé persiste après rechargement de la page", async ({ page }) => 
 test("brin créé a bien un badge affiché après rechargement", async ({ page }) => {
   await openBrinPanel(page)
 
-  await pane1(page).locator('.brin-item.selected').press('n')
+  await press(page, 'n')
   await pane1(page).locator('.brin-item.selected [data-field="title"]').fill('Nouveau Brin')
-  await pane1(page).locator('.brin-item.selected').press('Enter')
+  await press(page, 'Enter')
 
-  // Attendre que le DOM reflète la création et que le save réseau soit terminé
   await expect(pane1(page).locator('.brin-item').nth(1)).toContainText('Nouveau Brin')
   await page.waitForLoadState('networkidle')
 
-  // Recharger
   await page.reload()
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
-  await pane1(page).locator('.event-item.selected').press('b')
+  await press(page, 'b')
   await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 
-  // Le second brin (inséré après le premier) doit avoir un badge non vide
   const newBrin = pane1(page).locator('.brin-item').nth(1)
   await expect(newBrin).toContainText('Nouveau Brin')
   await expect(newBrin.locator('.brin-badge')).not.toHaveText('')
@@ -76,27 +68,21 @@ test("brin créé a bien un badge affiché après rechargement", async ({ page }
 
 test("modifier le badge d'un brin vers une valeur déjà prise → notification immédiate + badge non modifié", async ({ page }) => {
   await openBrinPanel(page)
-  // b1 badge=MON, b2 badge=AUT
-  await pane1(page).locator('.brin-item.selected').press('Enter') // édite b1
-  await pane1(page).locator('.brin-item.selected').press('Tab')   // title → badge
-  // Taper AUT (déjà pris par b2) → notification immédiate, sans Enter
+  await press(page, 'Enter')
+  await press(page, 'Tab')
   await pane1(page).locator('.brin-item.selected [data-field="badge"]').fill('AUT')
   await expect(pane1(page).locator('.notification')).toBeVisible()
   await expect(pane1(page).locator('.notification')).toContainText(getErr(2010, 'AUT'))
-  // Valider → badge doit être resté MON
-  await pane1(page).locator('.brin-item.selected').press('Enter')
+  await press(page, 'Enter')
   await expect(pane1(page).locator('.brin-item').nth(0).locator('.brin-badge')).toHaveText('MON')
 })
 
 test("remettre son propre badge après changement temporaire → pas de notification", async ({ page }) => {
   await openBrinPanel(page)
-  // Sélectionner b2 (badge=AUT)
-  await pane1(page).locator('.brin-item.selected').press('ArrowDown')
-  await pane1(page).locator('.brin-item.selected').press('Enter') // édite b2
-  await pane1(page).locator('.brin-item.selected').press('Tab')   // title → badge
-  // Changer vers PRE (pas encore Enter), puis remettre AUT
+  await press(page, 'ArrowDown')
+  await press(page, 'Enter')
+  await press(page, 'Tab')
   await pane1(page).locator('.brin-item.selected [data-field="badge"]').fill('PRE')
   await pane1(page).locator('.brin-item.selected [data-field="badge"]').fill('AUT')
-  // Pas de notification
   await expect(pane1(page).locator('.notification')).not.toBeVisible()
 })
