@@ -49,10 +49,34 @@ Appelées par le dispatcher via LISTENERS (`b`/`p` nokey).
    - [x] Méthodes relais `openBrinPanel`/`openPersoPanel` sur `Item` (typo `listerPerso`→`listerPersos`
      corrigée, `openBrinPanel` ajouté).
 
-5. Rafraîchissement des marks à la **fermeture** du panneau via l'item
-   contextuel (`contextItem.refreshPersosMarks()`) — **PERSOS UNIQUEMENT**.
-   Les **brins** se rafraîchissent en **direct** au toggle (`_afterToggle` →
-   `_refreshEventMarks`), PAS à la fermeture.
+5. **[EN COURS — RELANCE DEMAIN ICI] Refresh différé des marques persos** à la
+   **fermeture du panneau brins** — **PERSOS UNIQUEMENT** (cf.
+   [feedback/project_persos_marks_refresh.md]). Les **brins** se rafraîchissent
+   en **direct** au toggle (`_afterToggle` → `_refreshEventMarks`).
+   - [x] Tests cas 1/2/3 écrits : `tests/specs/e2e/_tdd/brin-perso-propagation.spec.js`.
+   - [x] Tests migrés vers l'approche **focus honnête** : `press(page,key)` (= focus réel)
+     au lieu de `locator.press` ; helpers `press`/`hasFocus`/`focusInfo` dans `__setup__.js`.
+   - [x] Test SONDE (`test.only`) vert : prouve que l'app focus l'item sélectionné du
+     panneau actif à chaque transition (project→event→brin→perso). Focus jamais faké.
+   - [ ] **BLOQUEUR 1** : `ListerPerso.closePanel()` MANQUE (seul `ListerBrin` en a un).
+     Sonder ce que `p` fait sur panneau persos ouvert (ferme/rouvre/rien ?) puis l'implémenter.
+     Sans fermeture propre, le différé n'a pas de déclencheur.
+   - [ ] **BLOQUEUR 2** : coder le refresh différé lui-même — liste des brins modifiés
+     (`perso_ids`/`color`) sur `ListerBrin`, vidée après ; à la fermeture du panneau brins,
+     rafraîchir les marques persos des events possédant ces brins (events = `contextItem.parentLister.items`).
+     Notification si beaucoup d'events. (couleur : remise à plus tard sur décision user.)
+   - Retirer le `test.only` de la SONDE quand le chantier avance.
+   - Nettoyer le bloc commentaire mort `/* ??? */` (lignes 41-43 `ListerPerso.js`).
+
+6. **[NOUVEAU — au fil des passages au vert] Migrer `locator.press` → `press(page,key)`**
+   dans les tests e2e, **fichier par fichier** à mesure qu'on les fait passer.
+   - Raison : app **zéro-souris** → aucun élément ne prend le focus autrement que par une
+     touche qu'on gère → `page.keyboard` (focus réel) est toujours valide ET honnête.
+     `locator.press` force le focus → masque les bugs de focus → faux positif.
+   - ~85 fichiers e2e concernés. NE PAS faire en sweep global — un fichier à la fois.
+   - `perso-panel.spec.js` (contient les commentaires « POURRI » = le refrain) : à corriger
+     **directement** (chantier courant), prévu **demain**.
+   - Cf. [feedback/tests-focus-reel-page-keyboard.md].
 
 **Plan de la suite (après stabilisation panels) :** reprendre les tests `_tdd/`
 listés plus bas (brins-panel, brin-edition-form, keyboard-delete, brin-nouveau,
@@ -143,6 +167,11 @@ Test 13 est en `test.only` — en attente de l'implémentation clipboard.
 
 ## Fait
 
+- [x] 2026-06-28 — Tests e2e : approche **focus honnête**. Helpers `press`/`hasFocus`/`focusInfo`
+  dans `__setup__.js` ; `brin-perso-propagation.spec.js` migré ; test SONDE vert (chaîne focus
+  project→event→brin→perso vérifiée). `page.keyboard` > `locator.press` (anti faux-positif). Cf. CHANGELOG.
+- [x] 2026-06-28 — Purge définitive de 2 fichiers `/export` de l'historique git (amend + `git filter-repo`,
+  force-push). Tous SHA réécrits.
 - [x] 2026-06-28 — Lancement/navigation projets↔évènemenciers réparé (4 tests verts `project/open-existing-project.spec.js`) : `Project.project=this`, `Lister.hide()`, `_initDefaultBrin` (parentLister+badge), `ListerPerso._syncChecked` tolérant. Cf. CHANGELOG.
   - RESTE à creuser : `createItem` renvoie un brin sans `badge` ; tests unitaires `brin-badge` rouges (`parentLister.existingBadges` en contexte unitaire) ; point 5 `brin-perso-propagation` (WIP `e2e/_tdd/`).
 - [x] 2026-06-28 — Généralisation `byId` dans la base `Lister` + `Project.itemsById` (concept utilisateur) ; suppression `this.brins`/`static pool`/legacy `ListerEvent.brins`. Cf. CHANGELOG.

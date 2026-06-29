@@ -1,5 +1,25 @@
 # CHANGELOG — Eventer3
 
+## 2026-06-28 — Tests e2e : focus réel, anti faux-positif (helpers `__setup__`)
+
+Décision validée : dans une app **zéro-souris**, un test doit envoyer la touche à l'élément
+**réellement focusé**, jamais forcer le focus sur une cible explicite (sinon un bug de focus
+passe inaperçu = faux positif, casse en live).
+
+- **`press(page, key)`** (`__setup__.js`) = `page.keyboard.press` → touche au focus réel.
+  Remplace le motif `locator('.X-item.selected').press(key)` qui **forçait** le focus.
+- **`hasFocus(page, selector)`** : assertion (poll) qui échoue si le focus réel n'est pas sur
+  `selector`. Réutilisable partout pour prouver le focus.
+- **`focusInfo(page)`** : décrit l'élément focusé (découverte/log).
+- **Vérifié** (test SONDE, `brin-perso-propagation.spec.js`, vert) : l'app focus l'item
+  sélectionné du panneau actif à CHAQUE transition — `goto`→`.project-item.selected`,
+  `→`→`.event-item.selected`, `b`→`.brin-item.selected`, `p`→`.perso-item.selected`.
+  Mécanique : `Lister.render()` → `focusSelected()` → `item.el.focus()` ; listeners clavier
+  par item (`KeyDispatcher` sur `el`).
+- **Migration `locator.press` → `press`** : à faire **fichier par fichier** au fil des passages
+  au vert (~85 specs). Pas de sweep global. Cf. TODO point 6.
+- Hors code : 2 fichiers `/export` purgés de tout l'historique git (`git filter-repo`, force-push).
+
 ## 2026-06-28 — Lancement / navigation projets ↔ évènemenciers (réparé, TDD vert)
 
 Symptôme : impossible d'entrer dans un projet (events-panel jamais affiché / vide). Réparé via 4 tests
