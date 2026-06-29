@@ -39,7 +39,7 @@ Un projet comprend :
 
 
 
-
+include::docs/raccourcis-clavier.adoc[]
 
 
 == Action suivant les modes ==

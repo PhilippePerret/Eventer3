@@ -1,6 +1,6 @@
 // Origine: tests/specs/e2e/perso/perso-panel.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures'
-import { test, expect, pane1, getErr } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('with-persos')
@@ -16,13 +16,13 @@ test.beforeEach(() => {
 async function goToListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
 }
 
 async function openPersoPanel(page) {
   await goToListerEvent(page)
-  await pane1(page).locator('.event-item.selected').press('p')
+  await press(page, 'p')
   await expect(pane1(page).locator('#persos-panel')).toBeVisible()
 }
 
@@ -30,7 +30,7 @@ async function openPersoPanel(page) {
 
 test("p ouvre le panneau des personnages depuis ListerEvent", async ({ page }) => {
   await goToListerEvent(page)
-  await pane1(page).locator('.event-item.selected').press('p')
+  await press(page, 'p')
   await expect(pane1(page).locator('#persos-panel')).toBeVisible()
 })
 
@@ -41,25 +41,21 @@ test("l'ListerEvent reste visible en fond pendant que le panneau est ouvert", as
 
 test("p ferme le panneau des persos quand il est actif", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('p') 
-  console.error("POURRI (on presse p sur le panneau, QUI A LE FOCUS")
+  await press(page, 'p')
   await expect(pane1(page).locator('#persos-panel')).not.toBeVisible()
 })
 
 test("Cmd+Enter ferme le panneau perso", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('Meta+Enter')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Meta+Enter')
   await expect(pane1(page).locator('#persos-panel')).not.toBeVisible()
 })
 
 test("après fermeture, l'ListerEvent redevient actif (↓ change la sélection d'event)", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('Escape')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  console.error("POURRI (ESCAPE NE SERT ***JAMAIS*** À FERMER UN panneau")
+  await press(page, 'Meta+Enter')
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  await press(page, 'ArrowDown')
   await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/selected/)
 })
 
@@ -127,20 +123,16 @@ test("c3 et c4 ne sont pas cochés", async ({ page }) => {
 
 test("Space ne décroche pas un perso hérité (grisé)", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('ArrowDown') // → c2 (inherited)
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'ArrowDown') // → c2 (inherited)
   await expect(pane1(page).locator('.perso-item').nth(1)).toHaveClass(/inherited/)
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.event-item.selected').press(' ')
+  await press(page, ' ')
   await expect(pane1(page).locator('.perso-item').nth(1)).toHaveClass(/checked/) // toujours coché
 })
 
 test("e2 (sans brins ni persos directs) : aucun perso coché", async ({ page }) => {
   await goToListerEvent(page)
-  await pane1(page).locator('.event-item.selected').press('ArrowDown') // e2
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.event-item.selected').press('p')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'ArrowDown') // e2
+  await press(page, 'p')
   await expect(pane1(page).locator('.perso-item').nth(0)).not.toHaveClass(/checked/)
   await expect(pane1(page).locator('.perso-item').nth(1)).not.toHaveClass(/checked/)
   await expect(pane1(page).locator('.perso-item').nth(2)).not.toHaveClass(/checked/)
@@ -151,24 +143,20 @@ test("e2 (sans brins ni persos directs) : aucun perso coché", async ({ page }) 
 
 test("↓ sélectionne le perso suivant", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'ArrowDown')
   await expect(pane1(page).locator('.perso-item').nth(1)).toHaveClass(/selected/)
 })
 
 test("↑ sélectionne le perso précédent", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.event-item.selected').press('ArrowUp')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'ArrowDown')
+  await press(page, 'ArrowUp')
   await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/selected/)
 })
 
 test("↓↑ dans le panneau ne modifient pas la sélection de l'ListerEvent", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'ArrowDown')
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
 })
 
@@ -176,21 +164,17 @@ test("↓↑ dans le panneau ne modifient pas la sélection de l'ListerEvent", a
 
 test("Space coche un perso non-coché (c3)", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.event-item.selected').press('ArrowDown') // → c3
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'ArrowDown')
+  await press(page, 'ArrowDown') // → c3
   await expect(pane1(page).locator('.perso-item').nth(2)).not.toHaveClass(/checked/)
-  await pane1(page).locator('.event-item.selected').press(' ')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, ' ')
   await expect(pane1(page).locator('.perso-item').nth(2)).toHaveClass(/checked/)
 })
 
 test("Space décoche un perso direct coché (c1)", async ({ page }) => {
   await openPersoPanel(page)
   await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/checked/)
-  await pane1(page).locator('.event-item.selected').press(' ')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, ' ')
   await expect(pane1(page).locator('.perso-item').nth(0)).not.toHaveClass(/checked/)
 })
 
@@ -216,12 +200,9 @@ test("la ligne de e2 n'affiche aucun badge perso", async ({ page }) => {
 
 test("cocher c3 depuis le panneau perso de e1 ajoute son avatar sur la ligne de e1", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.event-item.selected').press('ArrowDown') // → c3
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.event-item.selected').press(' ')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'ArrowDown')
+  await press(page, 'ArrowDown') // → c3
+  await press(page, ' ')
   const eventEl = pane1(page).locator('.event-item').nth(0)
   await expect(eventEl.locator('.event-persos-marks')).toContainText('🎭')
 })
@@ -248,12 +229,9 @@ test("la colonne avatar affiche l'avatar si défini, sinon '🫥'", async ({ pag
 
 test("si perso assigné à l'event a un avatar, la ligne event affiche l'avatar pas le badge", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.event-item.selected').press('ArrowDown') // → c3
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.event-item.selected').press(' ') // assigner c3 à e1
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'ArrowDown')
+  await press(page, 'ArrowDown') // → c3
+  await press(page, ' ') // assigner c3 à e1
   const eventEl = pane1(page).locator('.event-item').nth(0)
   await expect(eventEl.locator('.event-persos-marks')).toContainText('🎭')
 })
@@ -262,17 +240,11 @@ test("si perso assigné à l'event a un avatar, la ligne event affiche l'avatar 
 
 test("les avatars déjà utilisés ne sont pas proposés lors du choix pour un autre perso", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('Enter') // éditer c1
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Enter') // éditer c1
   await expect(pane1(page).locator('.perso-item.selected [data-field="title"]')).toBeFocused()
-  await pane1(page).locator('.event-item.selected').press('Tab') // → patronyme
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.event-item.selected').press('Tab') // → badge
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.event-item.selected').press('Tab') // → avatar trigger
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.event-item.selected').press('ArrowDown') // → ouvre popup avatar
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Tab') // → patronyme
+  await press(page, 'Tab') // → avatar trigger
+  await press(page, 'ArrowDown') // → ouvre popup avatar
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
   // 🎭 (c3) et 👑 (c4) ne doivent pas apparaître parmi les options régulières
   const options = pane1(page).locator('.popup-select__option:not(.popup-select__option--custom)')
@@ -284,8 +256,7 @@ test("les avatars déjà utilisés ne sont pas proposés lors du choix pour un a
 
 test("n ouvre l'éditeur pour un nouveau perso (input title focalisé)", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('n')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'n')
   await expect(pane1(page).locator('.perso-item.selected [data-field="title"]')).toBeFocused()
 })
 
@@ -293,38 +264,31 @@ test("n ouvre l'éditeur pour un nouveau perso (input title focalisé)", async (
 
 test("créer un perso avec patronyme → badge calculé depuis le patronyme", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.perso-item.selected').press('n')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'n')
   await pane1(page).locator('.perso-item.selected [data-field="title"]').fill('Jean')
-  await pane1(page).locator('.perso-item.selected').press('Tab') // → patronyme
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Tab') // → patronyme
   await pane1(page).locator('.perso-item.selected [data-field="patronyme"]').fill('Valjean')
   // badge vide : laisser auto-calc
-  await pane1(page).locator('.perso-item.selected').press('Enter')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  // 'Valjean' sans espaces → 'VA'
-  await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-badge')).toHaveText('VA')
+  await press(page, 'Enter')
+  // 'Valjean' → premier essai 'VA' pris par c4 (Valvert) → 'AA'
+  await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-badge')).toHaveText('AA')
 })
 
 test("créer un perso sans patronyme → badge calculé depuis le titre", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.perso-item.selected').press('n')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'n')
   await pane1(page).locator('.perso-item.selected [data-field="title"]').fill('Cosette')
   // pas de patronyme, badge vide
-  await pane1(page).locator('.perso-item.selected').press('Enter')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Enter')
   await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-badge')).toHaveText('CO')
 })
 
 test("badge unique si collision avec un badge existant", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.perso-item.selected').press('n')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'n')
   // 'Cyrus' → 'CY' → collision avec c1 → doit être différent
   await pane1(page).locator('.perso-item.selected [data-field="title"]').fill('Cyrus')
-  await pane1(page).locator('.perso-item.selected').press('Enter')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Enter')
   const badgeEl = pane1(page).locator('.perso-item').nth(1).locator('.perso-badge')
   await expect(badgeEl).not.toHaveText('CY')
   const badge = await badgeEl.textContent()
@@ -333,53 +297,39 @@ test("badge unique si collision avec un badge existant", async ({ page }) => {
 
 test("éditer un perso et vider le badge → recalculé depuis le patronyme", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.perso-item.selected').press('Enter') // édite c1 (title='Cyrano', patronyme='de Bergerac')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.perso-item.selected').press('Tab') // → patronyme
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.perso-item.selected').press('Tab') // → avatar
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.perso-item.selected').press('Tab') // → badge
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Enter') // édite c1 (title='Cyrano', patronyme='de Bergerac')
+  await press(page, 'Tab') // → patronyme
+  await press(page, 'Tab') // → avatar
+  await press(page, 'Tab') // → badge
   await pane1(page).locator('.perso-item.selected [data-field="badge"]').fill('') // vider
-  await pane1(page).locator('.perso-item.selected').press('Enter')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  // patronyme 'de Bergerac' → 'debergerac'.toUpperCase() → 'DE'
-  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-badge')).toHaveText('DE')
+  await press(page, 'Enter')
+  // patronyme 'de Bergerac' → 'DE BERGERAC' → word1='DE' word2='BERGERAC' → D+B='DB' (CY libéré, pris={RO,CH,VA})
+  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-badge')).toHaveText('DB')
 })
 
 test("modifier le badge d'un perso vers une valeur déjà prise → notification immédiate + badge non modifié", async ({ page }) => {
   await openPersoPanel(page)
   // c1 badge=CY, c2 badge=RO
-  await pane1(page).locator('.perso-item.selected').press('Enter') // édite c1
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.perso-item.selected').press('Tab')   // title → patronyme
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.perso-item.selected').press('Tab')   // patronyme → avatar
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.perso-item.selected').press('Tab')   // avatar → badge
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Enter') // édite c1
+  await press(page, 'Tab')   // title → patronyme
+  await press(page, 'Tab')   // patronyme → avatar
+  await press(page, 'Tab')   // avatar → badge
   // Taper RO (déjà pris par c2) → notification immédiate, sans Enter
   await pane1(page).locator('.perso-item.selected [data-field="badge"]').fill('RO')
   await expect(pane1(page).locator('.notification')).toBeVisible()
   await expect(pane1(page).locator('.notification')).toContainText(getErr(3010, 'RO'))
   // Valider → badge doit être resté CY
-  await pane1(page).locator('.perso-item.selected').press('Enter')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Enter')
   await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-badge')).toHaveText('CY')
 })
 
 test("remettre son propre badge après changement temporaire → pas de notification", async ({ page }) => {
   await openPersoPanel(page)
   // c1 badge=CY — on édite c1, change badge, on remet CY
-  await pane1(page).locator('.perso-item.selected').press('Enter')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.perso-item.selected').press('Tab')   // title → patronyme
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.perso-item.selected').press('Tab')   // patronyme → avatar
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.perso-item.selected').press('Tab')   // avatar → badge
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Enter')
+  await press(page, 'Tab')   // title → patronyme
+  await press(page, 'Tab')   // patronyme → avatar
+  await press(page, 'Tab')   // avatar → badge
   await pane1(page).locator('.perso-item.selected [data-field="badge"]').fill('XX')
   await pane1(page).locator('.perso-item.selected [data-field="badge"]').fill('CY')
   await expect(pane1(page).locator('.notification')).not.toBeVisible()
@@ -387,20 +337,17 @@ test("remettre son propre badge après changement temporaire → pas de notifica
 
 test("créer un perso : Enter valide et l'ajoute à la liste", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('n')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'n')
   await pane1(page).locator('.perso-item.selected [data-field="title"]').fill('Nouveau perso')
-  await pane1(page).locator('.event-item.selected').press('Enter')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Enter')
   await expect(pane1(page).locator('.perso-item')).toHaveCount(5)
-  await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-item__title')).toHaveText('Nouveau perso')
+  await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-title')).toHaveText('Nouveau perso')
 })
 
 test("créer un perso : Escape annule, liste inchangée", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('n')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.event-item.selected').press('Escape')
+  await press(page, 'n')
+  await press(page, 'Escape')
   await expect(pane1(page).locator('.perso-item')).toHaveCount(4)
 })
 
@@ -408,73 +355,60 @@ test("créer un perso : Escape annule, liste inchangée", async ({ page }) => {
 
 test("Enter édite le perso sélectionné (input title avec valeur courante)", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('Enter')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Enter')
   const titleInput = pane1(page).locator('.perso-item.selected [data-field="title"]')
   await expect(titleInput).toBeFocused()
   await expect(titleInput).toHaveText('Cyrano')
 })
 
-test("Tab en édition cycle : title → patronyme → badge → avatar → fonction", async ({ page }) => {
+test("Tab en édition cycle : title → patronyme → avatar → badge → type → fonction", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('Enter')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Enter')
   await expect(pane1(page).locator('.perso-item.selected [data-field="title"]')).toBeFocused()
-  await pane1(page).locator('.event-item.selected').press('Tab')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Tab')
   await expect(pane1(page).locator('.perso-item.selected [data-field="patronyme"]')).toBeFocused()
-  await pane1(page).locator('.event-item.selected').press('Tab')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Tab')
+  await expect(pane1(page).locator('.perso-item.selected [data-field="avatar"]')).toBeFocused()
+  await press(page, 'Tab')
   await expect(pane1(page).locator('.perso-item.selected [data-field="badge"]')).toBeFocused()
-  await pane1(page).locator('.event-item.selected').press('Tab')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await expect(pane1(page).locator('.perso-item.selected [data-property="avatar"]')).toBeFocused()
-  await pane1(page).locator('.event-item.selected').press('Tab')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await expect(pane1(page).locator('.perso-item.selected [data-property="fonction"]')).toBeFocused()
+  await press(page, 'Tab')
+  await expect(pane1(page).locator('.perso-item.selected [data-field="type"]')).toBeFocused()
+  await press(page, 'Tab')
+  await expect(pane1(page).locator('.perso-item.selected [data-field="fonction"]')).toBeFocused()
 })
 
 test("édition : modifier le titre puis Enter met à jour l'affichage", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('Enter')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Enter')
   await pane1(page).locator('.perso-item.selected [data-field="title"]').fill('Cyrano de Bergerac')
-  await pane1(page).locator('.event-item.selected').press('Enter')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-item__title')).toHaveText('Cyrano de Bergerac')
+  await press(page, 'Enter')
+  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-title')).toHaveText('Cyrano de Bergerac')
 })
 
 // ─── Persistance ─────────────────────────────────────────────────────────────
 
 test("persistance : perso créé survit au rechargement", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('n')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'n')
   await pane1(page).locator('.perso-item.selected [data-field="title"]').fill('Perso persisté')
-  await pane1(page).locator('.event-item.selected').press('Enter')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Enter')
   await page.waitForLoadState('networkidle')
   await page.reload()
   await goToListerEvent(page)
-  await pane1(page).locator('.event-item.selected').press('p')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'p')
   await expect(pane1(page).locator('.perso-item')).toHaveCount(5)
-  await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-item__title')).toHaveText('Perso persisté')
+  await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-title')).toHaveText('Perso persisté')
 })
 
 test("persistance : cochage direct survit au rechargement", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.event-item.selected').press('ArrowDown') // → c3
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.event-item.selected').press(' ')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'ArrowDown')
+  await press(page, 'ArrowDown') // → c3
+  await press(page, ' ')
   await page.waitForLoadState('networkidle')
   await page.reload()
   await goToListerEvent(page)
-  await pane1(page).locator('.event-item.selected').press('p')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'p')
   await expect(pane1(page).locator('.perso-item').nth(2)).toHaveClass(/checked/)
 })
 
@@ -482,11 +416,9 @@ test("persistance : cochage direct survit au rechargement", async ({ page }) => 
 
 test("après création (Enter), le nouveau perso est sélectionné", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('n')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'n')
   await pane1(page).locator('.perso-item.selected [data-field="title"]').fill('Nouveau')
-  await pane1(page).locator('.event-item.selected').press('Enter')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Enter')
   await expect(pane1(page).locator('.perso-item').nth(1)).toHaveClass(/selected/)
 })
 
@@ -494,11 +426,9 @@ test("après création (Enter), le nouveau perso est sélectionné", async ({ pa
 
 test("après édition (Enter), le perso modifié reste sélectionné", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('Enter') // édite c1
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Enter') // édite c1
   await pane1(page).locator('.perso-item.selected [data-field="title"]').fill('Cyrano modifié')
-  await pane1(page).locator('.event-item.selected').press('Enter')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Enter')
   await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/selected/)
 })
 
@@ -506,26 +436,19 @@ test("après édition (Enter), le perso modifié reste sélectionné", async ({ 
 
 test("réouverture : le premier perso est sélectionné", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('Escape')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Meta+Enter')
   await expect(pane1(page).locator('#persos-panel')).not.toBeVisible()
-  await pane1(page).locator('.event-item.selected').press('p')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'p')
   await expect(pane1(page).locator('#persos-panel')).toBeVisible()
   await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/selected/)
 })
 
 test("réouverture : ↓ change bien la sélection", async ({ page }) => {
   await openPersoPanel(page)
-  await pane1(page).locator('.event-item.selected').press('Escape')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
-  await pane1(page).locator('.event-item.selected').press('p')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'Meta+Enter')
+  await press(page, 'p')
   await expect(pane1(page).locator('#persos-panel')).toBeVisible()
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
-  console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")
+  await press(page, 'ArrowDown')
   await expect(pane1(page).locator('.perso-item').nth(1)).toHaveClass(/selected/)
   await expect(pane1(page).locator('.perso-item').nth(0)).not.toHaveClass(/selected/)
 })
-
-console.error("POURRI (on doit presser la touche sur le panneau, QUI A LE FOCUS, PAS SUR L'EVENT")

@@ -59,16 +59,7 @@ export default class Perso extends Item {
    * Méthode appelé quand on change le badge du personnage
    * S'assure qu'il est unique
    */
-  checkBadgeValue(el, field) {
-    const val = el.textContent?.trim()
-    if (val === field._curvalue) return
-    if (this.parentLister.existingBadges.has(val)) {
-      Notification.show(getErr(3010, val))
-      el.textContent = field._curvalue
-    }
-  }
-
-  static generateUniqueBadge(perso) {
+static generateUniqueBadge(perso) {
     const taken = perso.parentLister.existingBadges
     const pseudo = (perso.title     ?? raise(11, perso.id)).toUpperCase()
     const patron = (perso.patronyme ?? '').toUpperCase()

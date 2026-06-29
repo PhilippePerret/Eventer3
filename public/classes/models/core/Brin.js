@@ -57,17 +57,7 @@ export default class Brin extends Item {
    * Méthode appelé quand on change le badge du personnage
    * S'assure qu'il est unique
    */
-  checkBadgeValue(el){
-    const val = el.textContent?.trim()
-    const badgeField = this.PROPS.find(f => f.name === 'badge')
-    if (val === badgeField._curvalue) return
-    if (this.parentLister.existingBadges.has(val)) {
-      Notification.show(getErr(2010, val))
-      el.textContent = badgeField._curvalue
-    }
-  }
-
-  static generateUniqueBadge(brin) {
+static generateUniqueBadge(brin) {
     const taken = brin.parentLister.existingBadges
     let badge
     const title = brin.title ?? raise(10, brin.id)

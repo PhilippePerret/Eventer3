@@ -1,6 +1,6 @@
 import KeyDispatcher from './KeyDispatcher.js'
 import ItemDom from '../dom/Item.js'
-import { raise } from '../../../system/Error.js'
+import { raise, getErr } from '../../../system/Error.js'
 import ItemRepo from '../repo/Item.js'
 import { ItemLi } from '../listen/Item.js'
 import { stopEvent } from '../../utils/events.js'
@@ -32,7 +32,13 @@ export default class Item extends KeyDispatcher {
   }
 
   onkeydown(ev) {
-    if (this.editing && !this.constructor.LISTENERS[ev.key]) return stopEvent(ev)
+    if (this.editing) {
+      if (document.activeElement?.isContentEditable) {
+        if (ev.key !== 'Tab' && ev.key !== 'Enter' && ev.key !== 'Escape' && ev.key !== 'ArrowLeft') { ev.stopPropagation(); return }
+      } else if (!this.constructor.LISTENERS[ev.key]) {
+        return stopEvent(ev)
+      }
+    }
     super.onkeydown(ev)
   }
 
@@ -83,6 +89,24 @@ export default class Item extends KeyDispatcher {
   onTab() {
     if (!this.editing) return false
     this.focusNextField()
+  }
+
+  checkBadgeValue(el, field) {
+    const badgeField = field ?? this.PROPS.find(f => f.name === 'badge')
+    const val = el.textContent?.trim()
+    if (val === badgeField._curvalue) return
+    if (!val) {
+      const taken = this.parentLister.existingBadges
+      taken.delete(badgeField._curvalue ?? this.badge)
+      const newBadge = this.constructor.generateUniqueBadge(this)
+      this.badge = newBadge
+      el.textContent = newBadge
+      return
+    }
+    if (this.parentLister.existingBadges.has(val)) {
+      Notification.show(getErr(this.minClass === 'perso' ? 3010 : 2010, val))
+      el.textContent = badgeField._curvalue
+    }
   }
 
   openContextualHelp() { ContextualHelp.open(this) }

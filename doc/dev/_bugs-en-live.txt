@@ -1,8 +1,8 @@
-BUG
+BUGS
 BUG 1 Panneau projets mal placé (devrait être centré dans la page) <== mauvais CSS
 BUG 2 ON ne peut pas entrer dans le premier projet (le mien en tout cas)
-BUG 3
-3. Meta+"↑"/"↓" toujours pas implémenté
+BUG 3 Meta+"↑"/"↓" toujours pas implémenté
+BUG 4 Édition impossible
 
 
 BUG

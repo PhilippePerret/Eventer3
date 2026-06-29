@@ -1,6 +1,6 @@
 // Origine : tests/specs/e2e/event/brin-badges-display.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures.js'
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press } from '../__setup__.js'
 
 // Fixture filter-events :
 //   b1 "Amour romantique" badge=AMO
@@ -17,7 +17,7 @@ test.beforeEach(() => {
 async function enterListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
 }
 

@@ -1,0 +1,18 @@
+== Combinaisons clavier ==
+:experimental:
+
+<i>Cette section répertorie l'intégralité des raccourcis-clavier utilisés dans cette application 100 % claiver (ou "zéro-souris")</i>
+
+.Combinaisons générales
+|====
+| Combinaison   | Mode    | Effet                                       | Méthode
+
+| combo:fh[]      | Normal  | Sélectione l'Item précédent                 | Lister.selectPrev
+| combo:fb[]      | Normal  | Sélectionne l'Item suivant                  | Lister.selectNext
+
+| combo:Ctrl[] | | |
+| Création      |         |                                             |
+| combo:n[]     | Normal  | Crée un nouvel Item (Project, Event, etc.)  | Lister.createItem  
+| combo:Alt+n[] | Normal  | Crée un nouvel Item avant                   | Lister.createItemBefore
+
+|====

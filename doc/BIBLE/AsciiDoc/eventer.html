@@ -757,6 +757,69 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 </div>
 </div>
 <div class="sect1">
+<h2 id="_combinaisons_clavier">Combinaisons clavier</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>&lt;i&gt;Cette section répertorie l&#8217;intégralité des raccourcis-clavier utilisés dans cette application 100 % claiver (ou "zéro-souris")&lt;/i&gt;</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Combinaisons générales</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Combinaison</th>
+<th class="tableblock halign-left valign-top">Mode</th>
+<th class="tableblock halign-left valign-top">Effet</th>
+<th class="tableblock halign-left valign-top">Méthode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">↑</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Normal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sélectione l&#8217;Item précédent</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lister.selectPrev</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">↓</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Normal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sélectionne l&#8217;Item suivant</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lister.selectNext</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">⌃</kbd></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Création</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">n</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Normal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Crée un nouvel Item (Project, Event, etc.)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lister.createItem</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">⌥</kbd>+<kbd style="font-size:1.25em;">n</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Normal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Crée un nouvel Item avant</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lister.createItemBefore</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_action_suivant_les_modes">Action suivant les modes</h2>
 <div class="sectionbody">
 <div class="sect2">
@@ -983,16 +1046,47 @@ fermeture de la fenêtre des brins
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>Unresolved directive in eventer.adoc - include::docs/test-application.adoc[]</p>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_test_de_lapplication">Test de l&#8217;application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Tout ce qui concerne les tests de l&#8217;application se place dans le dossier <code>/tests/</code></p>
+</div>
+<div class="paragraph">
+<p>Les tests unitaires se placent dans :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>tests/specs/unit/&lt;dossier&gt;</code> pour les emplacements canoniques,</p>
+</li>
+<li>
+<p><code>test/specs/unit/_tdd</code> pour les tests en cours</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Les tests d&#8217;intégration se placent dans</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>tests/specs/e2e/&lt;dossier&gt;</code> pour les emplacements canoniques,</p>
+</li>
+<li>
+<p><code>test/specs/e2e/_tdd</code> pour les tests en cours</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-06-28 19:37:42 +0200
+Last updated 2026-06-29 14:15:31 +0200
 </div>
 </div>
 </body>
