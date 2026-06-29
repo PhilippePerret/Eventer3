@@ -1,3 +1,4 @@
+// Origine : tests/specs/e2e/event/brin-perso-propagation.spec.js
 // Fixture persos-brin-propagation :
 //   b1 (B1, perso_ids=[c1]) ; persos c1 (AA), c2 (BB)
 //   e1, e2 : brin_ids=[b1]            → marque AA (via brin)
