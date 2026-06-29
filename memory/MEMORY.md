@@ -1,4 +1,7 @@
 - **LIRE EN PREMIER** [**Architecture-cible.md**](../doc/BIBLE/Architecture-cible.md) — chemin RACINE du projet, pas dans memory/
+- **[CRITIQUE: decisions-unilaterales](../../../.claude/projects/-Users-philippeperret-Programmes-Eventer3/memory/feedback_decisions_unilaterales.md)** — INTERDICTION FORMELLE toute décision conception sans concertation
+- **[Ne pas presser vers le code](../../../.claude/projects/-Users-philippeperret-Programmes-Eventer3/memory/feedback_pas_presser_code.md)** — jamais "on code ?" en fin de réponse ; laisser l'utilisateur décider
+- **[CRITIQUE: render/activate/panels](../../../.claude/projects/-Users-philippeperret-Programmes-Eventer3/memory/architecture_render_activate_panels.md)** — render=DOM seul ; activate=focus ; attach une seule fois ; events-panel toujours visible ; closePanel dans Lister base ; onPanelClosed() hook
 - **IMPÉRATIF** : tout fichier `feedback_*.md` va dans `memory/feedback/` — jamais directement dans `memory/`
 - **LIRE EN PREMIER** : [TODO.md](TODO.md) pour connaitre :
   - [le travail en cours](TODO.md#current),

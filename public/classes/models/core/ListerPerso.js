@@ -15,32 +15,17 @@ export default class ListerPerso extends Lister {
     this._contextItem = null // Brin ou Event
   }
 
-  async openPanel(contextItem) {
-    this._contextItem  = contextItem
+  _initPanel(contextItem) {
     this._directIds    = new Set(contextItem.perso_ids ?? [])
     this._inheritedIds = new Set()
-    // Event hérite des persos de ses brins ; un Brin n'a pas d'héritage.
-    // direct ∩ brins = ∅ par invariant → pas de guard.
     if (contextItem.minClass === 'event') {
       const brins = this.project.itemsById['brins']
       for (const bid of (contextItem.brin_ids ?? [])) {
         brins[bid]?.perso_ids?.forEach(pid => this._inheritedIds.add(pid))
       }
     }
-    if (!this.items.length) await this.load()
-    this._syncChecked()
-    contextItem.parentLister.detach()
-    this.render()
   }
 
-  
-  async _afterLoad() {
-    this._syncChecked()
-  }
-
-  /* ???
-      _syncChecked(), detach lister appelant, render(). 
-  //*/
   _syncChecked() {
     const directIds    = this._directIds    ?? new Set()
     const inheritedIds = this._inheritedIds ?? new Set()

@@ -2,6 +2,21 @@
 
 Aujourd'hui qu'on utilise l'IA (Claude-code) pour développer, il est important de respecter des règles de développement strictes et absolues.
 
+Surtout que pour le moment (juin 2026), les IA en sont incapables.
+
+=== Loi de Demeter absolue ===
+
+On applique toujours la loi de Demeter absolue.
+
+**Loi de Demeter simple**
+
+Un objet, une classe, ne sait jamais comment un autre objet, une autre classe, fonctionne dans le détail. Seul l'objet, seule la classe, le sait.
+
+**Loi de Demeter absolue**
+
+Un objet lui-même ne sait pas comment il fait les choses. Par exemple, un Lister ne sait pas que pour cacher son propre panneau il ajoute la classe 'hidden' à  son container.
+
+
 === Fichiers _tdd ===
 
 Emplacement canonique:: Emplacement du fichier lorsqu'il n'est pas "en cours" dans `_tdd`
@@ -42,3 +57,23 @@ QUAND tous les tests passent :
   - retirer les `test.only` ou `test.skip` éventuels
   - (re)placer le fichier à sa place canonique sans rien faire d'autre
   - prévenir qu'on a fini
+
+
+
+  avant même d'implémenter une fonction, se demander : 
+
+  - est-elle propre à la classe
+  - ou est-elle commune à presque toutes les clases
+
+  .Distribution des responsabilité
+  |====
+  | Fonctionnalité propre à une classe
+  | Fonctionnatilé utile  à toutes les classes
+
+  | Exemples
+  |
+
+  | Ouverture du panneau des personnages
+  | Ouverture de n'importe quel panneau
+
+  | (donc traité par Lister)

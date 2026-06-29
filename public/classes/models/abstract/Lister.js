@@ -103,6 +103,28 @@ export default class Lister extends KeyDispatcher {
 
   get contextItem() { return null }
 
+  async openPanel(contextItem) {
+    this._contextItem = contextItem
+    this._initPanel(contextItem)
+    if (!this.items.length) {
+      await this.load()
+      this.render()
+    }
+    this._syncChecked()
+    this.activate()
+  }
+
+  _initPanel(_contextItem) {}
+  _syncChecked() {}
+
+  closePanel() {
+    this.hideContainer()
+    this.contextItem.focus()
+    this.onPanelClosed()
+  }
+
+  onPanelClosed() {}
+
   _canToggle(_item)          { return true }
   _afterToggle(_item, _ctx)  {}
   _afterCreate(result)       { if (result?.id) this.byId[result.id] = result }

@@ -47,21 +47,21 @@ export default class Item extends KeyDispatcher {
 
   /* Partagé avec Project (qui possède son propre enterInside) */
   async _enterChildLister(ChildClass, childId) {
-    const child = new ChildClass({ id: childId, project: this.project, parentLister: this.parentLister })
-    if (childId) await child.load()
-    if (!childId || child._missing) {
-      const result   = await Lister.createLister({ type: `${child.minClass}s`, itemId: this.id, project: this.project })
-      child.id       = result.id
-      child._missing = false
-      this.lister_id = result.id
-      await child.load()
+    const childLister = new ChildClass({ id: childId, project: this.project, parentLister: this.parentLister })
+    if (childId) await childLister.load()
+    if (!childId || childLister._missing) {
+      const result          = await Lister.createLister({ type: `${childLister.minClass}s`, itemId: this.id, project: this.project })
+      childLister.id        = result.id
+      childLister._missing  = false
+      this.lister_id        = result.id
+      await childLister.load()
     }
-    await this.onChildListerCreated?.(child)
-    child.selectedIndex = 0
+    await this.onChildListerCreated?.(childLister)
+    childLister.selectedIndex = 0
     this.parentLister.hide()
-    child.render()
-    child.attach(child.container)
-    if (child.items.length === 0) await child.createNew()
+    childLister.render()
+    childLister.activate()
+    if (childLister.items.length === 0) await childLister.createNew()
   }
 
   onEnter() {
@@ -140,6 +140,8 @@ export default class Item extends KeyDispatcher {
     this.revertValues()
     this._stopEditing()
   }
+
+  focus() { this.el.focus() }
 
   openBrinPanel(){
     this.project.listerBrins.openPanel(this)

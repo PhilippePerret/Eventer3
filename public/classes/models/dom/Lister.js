@@ -12,6 +12,7 @@ export default {
       el.id = id
       el.classList.add('hidden')
       document.querySelector('#main-panels-container').appendChild(el)
+      this.attach(el)
     }
     return el
   },
@@ -45,7 +46,6 @@ export default {
   render() {
     LOG.m(2, 'Lister.render', { items: this.items.length, selectedIndex: this.selectedIndex })
     this.container = this._ensureContainer()
-    this.container.classList.remove('hidden')
     this.container.classList.add(`${this.minClass}-list`)
     const panel = this._ensurePanelStructure(this.container)
     const body  = panel.querySelector('.lister-panel__body')
@@ -55,15 +55,20 @@ export default {
       item.parentLister = this
       body.appendChild(item.build())
     })
-    this.attach(this.container)
     LOG.m(2, 'Lister.render done', { children: body.children.length, firstClass: body.children[0]?.className })
+  },
+
+  activate() {
+    this.container.classList.remove('hidden')
     this.focusSelected()
   },
 
-  // Le lister se retire : clavier coupé + panneau caché (inverse de render)
-  hide() {
-    this.detach()
+  hideContainer() {
     this.container?.classList.add('hidden')
+  },
+
+  hide() {
+    this.hideContainer()
   },
 
   focusSelected() {

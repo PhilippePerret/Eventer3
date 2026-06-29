@@ -16,7 +16,15 @@ sur `ListerBrin` / `ListerPerso` (cf. `feedback_panel_methods`).
 déléguant à `this.project.listerBrins.openPanel(this)` / `listerPersos.openPanel(this)`.
 Appelées par le dispatcher via LISTENERS (`b`/`p` nokey).
 
-**À faire tout de suite :**
+**À faire tout de suite — Refonte render/activate/panels (29/06) :**
+
+- [x] `dom/Lister.js` : `render()` — retiré `attach()`, `focusSelected()`, `classList.remove('hidden')`
+- [x] `dom/Lister.js` : `_ensureContainer()` — `attach()` une seule fois à la création
+- [x] `dom/Lister.js` : ajouté `activate()`, `hideContainer()`, `hide()` simplifié
+- [x] `abstract/Lister.js` : ajouté `closePanel()`, `onPanelClosed()` stub
+- [x] `abstract/Item.js` : ajouté `focus()` ; `_enterChildLister` : `child` → `childLister`, `attach` → `activate()`
+- [x] `core/ListerBrin.js` : retiré `closePanel()` + `detach()` ; `openPanel()` render-once + activate ; `onPanelClosed()` stub /* à implémenter */
+- [x] `core/ListerPerso.js` : retiré `detach()` + bloc mort ; `openPanel()` même pattern
 
 1. **[FAIT 2026-06-28] Bugs objectifs restants** (variables mortes après le passage `project_id`→`project`) :
    - [x] `repo/Lister.js:22` (`countDescendants`) : `project` → `pid` (const ligne 21).
@@ -49,24 +57,11 @@ Appelées par le dispatcher via LISTENERS (`b`/`p` nokey).
    - [x] Méthodes relais `openBrinPanel`/`openPersoPanel` sur `Item` (typo `listerPerso`→`listerPersos`
      corrigée, `openBrinPanel` ajouté).
 
-5. **[EN COURS — RELANCE DEMAIN ICI] Refresh différé des marques persos** à la
-   **fermeture du panneau brins** — **PERSOS UNIQUEMENT** (cf.
-   [feedback/project_persos_marks_refresh.md]). Les **brins** se rafraîchissent
-   en **direct** au toggle (`_afterToggle` → `_refreshEventMarks`).
+5. **[EN COURS] Refresh différé des marques persos** à la **fermeture du panneau brins** — **PERSOS UNIQUEMENT** (cf. [feedback/project_persos_marks_refresh.md]).
    - [x] Tests cas 1/2/3 écrits : `tests/specs/e2e/_tdd/brin-perso-propagation.spec.js`.
-   - [x] Tests migrés vers l'approche **focus honnête** : `press(page,key)` (= focus réel)
-     au lieu de `locator.press` ; helpers `press`/`hasFocus`/`focusInfo` dans `__setup__.js`.
-   - [x] Test SONDE (`test.only`) vert : prouve que l'app focus l'item sélectionné du
-     panneau actif à chaque transition (project→event→brin→perso). Focus jamais faké.
-   - [ ] **BLOQUEUR 1** : `ListerPerso.closePanel()` MANQUE (seul `ListerBrin` en a un).
-     Sonder ce que `p` fait sur panneau persos ouvert (ferme/rouvre/rien ?) puis l'implémenter.
-     Sans fermeture propre, le différé n'a pas de déclencheur.
-   - [ ] **BLOQUEUR 2** : coder le refresh différé lui-même — liste des brins modifiés
-     (`perso_ids`/`color`) sur `ListerBrin`, vidée après ; à la fermeture du panneau brins,
-     rafraîchir les marques persos des events possédant ces brins (events = `contextItem.parentLister.items`).
-     Notification si beaucoup d'events. (couleur : remise à plus tard sur décision user.)
-   - Retirer le `test.only` de la SONDE quand le chantier avance.
-   - Nettoyer le bloc commentaire mort `/* ??? */` (lignes 41-43 `ListerPerso.js`).
+   - [x] `closePanel()` dans `Lister` base ; `ListerBrin.onPanelClosed()` stub en place (29/06).
+   - [ ] Implémenter `ListerBrin.onPanelClosed()` : rafraîchir marques persos des events possédant les brins modifiés depuis l'ouverture du panneau. Notification si beaucoup d'events.
+   - [ ] Retirer `test.only` de la SONDE (`brin-perso-propagation.spec.js`).
 
 6. **[NOUVEAU — au fil des passages au vert] Migrer `locator.press` → `press(page,key)`**
    dans les tests e2e, **fichier par fichier** à mesure qu'on les fait passer.

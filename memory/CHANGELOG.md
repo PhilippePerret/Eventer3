@@ -1,5 +1,15 @@
 # CHANGELOG — Eventer3
 
+## 2026-06-29 — Refonte render/activate/panels + closePanel dans Lister base
+
+Décision validée : `render()` = construction DOM uniquement. `activate()` = show + focus. Keyboard attach une seule fois à la création du container. Loi de Déméter appliquée strictement (pas de chaînes `a.b.c()`).
+
+- **`dom/Lister.js`** : `render()` ne fait plus que construire le DOM (supprimé : `classList.remove('hidden')`, `attach()`, `focusSelected()`). `_ensureContainer()` appelle `attach()` une seule fois à la création du container. Ajouté : `activate()` (retire `hidden` + `focusSelected()`), `hideContainer()` (`classList.add('hidden')`), `hide()` simplifié (délègue à `hideContainer()`).
+- **`abstract/Lister.js`** : `closePanel()` générique (`hideContainer()` + `contextItem.focus()` + `onPanelClosed()`). `onPanelClosed()` stub vide (à surcharger par sous-classe).
+- **`abstract/Item.js`** : `focus()` (`this.el.focus()`). `_enterChildLister` : renommage `child` → `childLister` ; `attach()` → `activate()`.
+- **`core/ListerBrin.js`** : `closePanel()` supprimé (hérité de `Lister`). `openPanel()` : render-once + `activate()` ; supprimé `detach()` sur lister parent. `onPanelClosed()` stub (à implémenter : refresh différé marks persos).
+- **`core/ListerPerso.js`** : même refonte `openPanel()` ; bloc commentaire mort `/* ??? */` supprimé.
+
 ## 2026-06-28 — Tests e2e : focus réel, anti faux-positif (helpers `__setup__`)
 
 Décision validée : dans une app **zéro-souris**, un test doit envoyer la touche à l'élément

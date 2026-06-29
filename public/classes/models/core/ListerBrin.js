@@ -18,25 +18,15 @@ export default class ListerBrin extends Lister {
 
   get contextItem() { return this._contextItem }
 
-  async openPanel(contextItem) {
-    this._contextItem = contextItem
-    if (!this.items.length) await this.load()
-    this._syncChecked()
-    contextItem.parentLister.detach()
-    this.render()
+  _initPanel(contextItem) {
+    this._listerEvent   = contextItem.parentLister
+    this._modifiedBrins = {}
   }
 
-  closePanel() {
-    const ctx = this._contextItem
-    this.container.classList.add('hidden')
-    this.container.innerHTML = ''
-    this.detach()
-    ctx.parentLister.render()
+  onPanelClosed() {
+    this._listerEvent.refreshEventMarks(this._modifiedBrins)
   }
 
-  async _afterLoad() {
-    this._syncChecked()
-  }
   async _initDefault() { await this._initDefaultBrin() }
 
   async _initDefaultBrin() {
