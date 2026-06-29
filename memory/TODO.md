@@ -57,11 +57,10 @@ Appelées par le dispatcher via LISTENERS (`b`/`p` nokey).
    - [x] Méthodes relais `openBrinPanel`/`openPersoPanel` sur `Item` (typo `listerPerso`→`listerPersos`
      corrigée, `openBrinPanel` ajouté).
 
-5. **[EN COURS] Refresh différé des marques persos** à la **fermeture du panneau brins** — **PERSOS UNIQUEMENT** (cf. [feedback/project_persos_marks_refresh.md]).
-   - [x] Tests cas 1/2/3 écrits : `tests/specs/e2e/_tdd/brin-perso-propagation.spec.js`.
-   - [x] `closePanel()` dans `Lister` base ; `ListerBrin.onPanelClosed()` stub en place (29/06).
-   - [x] `ListerBrin.onPanelClosed()` implémenté (29/06) : `_modifiedBrins` tracé dans `_afterToggle` ; `ListerEvent.refreshEventMarks()` itère items/brin_ids → `refreshColor?()` / `refreshPersosMarks()`.
-   - [ ] Retirer `test.only` de la SONDE (`brin-perso-propagation.spec.js`).
+5. **[FAIT 2026-06-29] Refresh différé des marques persos** à la **fermeture du panneau brins** — **PERSOS UNIQUEMENT**.
+   - [x] Tests cas 1/2/3 + sonde focus : tous verts. Fichier déplacé → `tests/specs/e2e/event/brin-perso-propagation.spec.js`.
+   - [x] `ListerBrin.markForCheck(brin)` + `_afterStartEditing` hook + snapshot `initialData` → comparaison à `onPanelClosed()`.
+   - [x] `_afterToggle` : refresh immédiat brin marks + perso marks sur l'event unique (pas de goulot).
 
 6. **[NOUVEAU — au fil des passages au vert] Migrer `locator.press` → `press(page,key)`**
    dans les tests e2e, **fichier par fichier** à mesure qu'on les fait passer.
@@ -69,6 +68,7 @@ Appelées par le dispatcher via LISTENERS (`b`/`p` nokey).
      touche qu'on gère → `page.keyboard` (focus réel) est toujours valide ET honnête.
      `locator.press` force le focus → masque les bugs de focus → faux positif.
    - ~85 fichiers e2e concernés. NE PAS faire en sweep global — un fichier à la fois.
+   - **NE PAS migrer en avance** : on migre PENDANT qu'on fait passer les tests du fichier, pas avant.
    - `perso-panel.spec.js` (contient les commentaires « POURRI » = le refrain) : à corriger
      **directement** (chantier courant), prévu **demain**.
    - Cf. [feedback/tests-focus-reel-page-keyboard.md].

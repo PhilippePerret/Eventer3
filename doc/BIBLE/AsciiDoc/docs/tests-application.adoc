@@ -6,3 +6,8 @@ Les tests unitaires se placent dans :
 
 - `tests/specs/unit/<dossier>` pour les emplacements canoniques,
 - `test/specs/unit/_tdd` pour les tests en cours 
+
+Les tests d'intégration se placent dans 
+
+- `tests/specs/e2e/<dossier>` pour les emplacements canoniques,
+- `test/specs/e2e/_tdd` pour les tests en cours 

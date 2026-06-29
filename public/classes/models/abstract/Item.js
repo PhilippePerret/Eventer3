@@ -69,7 +69,7 @@ export default class Item extends KeyDispatcher {
     if (childLister.items.length === 0) await childLister.createNew()
   }
 
-  onEnter() {
+  onEnter(ev) {
     LOG.m(1, 'Item.onEnter', { id: this.id, editing: this.editing })
     if (this.editing) this.applyEdit()
     else this.startEditing()

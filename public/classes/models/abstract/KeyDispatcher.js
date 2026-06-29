@@ -23,8 +23,7 @@ export default class KeyDispatcher {
       if ((m = dm['alt'])) return m
     } else if (ctrl) {
       if ((m = dm['ctrl'])) return m
-    }
-    if ((m = dm['nokey'])) return m
+    } else if ((m = dm['nokey'])) return m
     return null
   }
 
