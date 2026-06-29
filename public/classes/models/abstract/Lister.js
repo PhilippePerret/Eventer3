@@ -64,7 +64,8 @@ export default class Lister extends KeyDispatcher {
     tempItem.__isTemporary = true
     this.items.splice(insertIdx, 0, tempItem)
     this.selectedIndex = insertIdx
-    this.render()
+    this.build()
+    this.activate()
     this.items[this.selectedIndex]?.startEditing()
   }
 
@@ -74,15 +75,13 @@ export default class Lister extends KeyDispatcher {
   async _reloadAt(insertIdx) {
     await this.load()
     this.selectedIndex = insertIdx
-    this.render()
+    this.build()
+    this.activate()
   }
 
   leaveToParent() {
-    this.container.classList.add('hidden')
-    this.container.innerHTML = ''
-    const parent = this.parentLister
-    this.detach()
-    parent.render()
+    this.hideContainer()
+    this.parentLister.activate()
   }
 
   selectPrev() {
@@ -103,18 +102,14 @@ export default class Lister extends KeyDispatcher {
 
   get contextItem() { return null }
 
-  async openPanel(contextItem) {
+  display(contextItem) {
     this._contextItem = contextItem
-    this._initPanel(contextItem)
-    if (!this.items.length) {
-      await this.load()
-      this.render()
-    }
+    this._applyContext(contextItem)
     this._syncChecked()
     this.activate()
   }
 
-  _initPanel(_contextItem) {}
+  _applyContext(_contextItem) {}
   _syncChecked() {}
 
   closePanel() {

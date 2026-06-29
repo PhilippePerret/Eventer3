@@ -18,7 +18,7 @@ export default class ListerBrin extends Lister {
 
   get contextItem() { return this._contextItem }
 
-  _initPanel(contextItem) {
+  _applyContext(contextItem) {
     this._listerEvent   = contextItem.parentLister
     this._modifiedBrins = {}
   }
@@ -68,6 +68,7 @@ export default class ListerBrin extends Lister {
       const pids = brin.perso_ids ?? []
       if (pids.length) ev.perso_ids = (ev.perso_ids ?? []).filter(id => !pids.includes(id))
     }
+    this._modifiedBrins[brin.id] = { hasChanged: { color: false, persos: true }, brin }
     this._refreshEventMarks(ev)
   }
 

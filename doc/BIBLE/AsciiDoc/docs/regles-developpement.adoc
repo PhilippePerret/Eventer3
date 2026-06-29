@@ -4,6 +4,10 @@ Aujourd'hui qu'on utilise l'IA (Claude-code) pour développer, il est important 
 
 Surtout que pour le moment (juin 2026), les IA en sont incapables.
 
+=== Approche fonctionnelle ===
+
+L'approche doit être au maximum fonctionnelle,
+
 === Loi de Demeter absolue ===
 
 On applique toujours la loi de Demeter absolue.
@@ -14,7 +18,7 @@ Un objet, une classe, ne sait jamais comment un autre objet, une autre classe, f
 
 **Loi de Demeter absolue**
 
-Un objet lui-même ne sait pas comment il fait les choses. Par exemple, un Lister ne sait pas que pour cacher son propre panneau il ajoute la classe 'hidden' à  son container.
+Un objet lui-même ne sait pas comment il fait les choses. Par exemple, un Lister ne sait pas que pour cacher son propre panneau il ajoute la classe 'hidden' à  son container. Il ne connait "publiquement" que `this.hide()`
 
 
 === Fichiers _tdd ===

@@ -30,8 +30,10 @@ export default class Project extends Item {
 
   async enterInside() {
     await this.listerBrins.load()
+    this.listerBrins.build()
     await this.listerPersos.load()
-    await this._enterChildLister(ListerEvent, this.lister_id, this.id)
+    this.listerPersos.build()
+    await this._enterChildLister(ListerEvent, this.lister_id)
   }
 
   async onChildListerCreated(child) {

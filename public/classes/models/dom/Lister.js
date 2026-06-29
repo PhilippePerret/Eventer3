@@ -43,8 +43,8 @@ export default {
     return panel
   },
 
-  render() {
-    LOG.m(2, 'Lister.render', { items: this.items.length, selectedIndex: this.selectedIndex })
+  build() {
+    LOG.m(2, 'Lister.build', { items: this.items.length, selectedIndex: this.selectedIndex })
     this.container = this._ensureContainer()
     this.container.classList.add(`${this.minClass}-list`)
     const panel = this._ensurePanelStructure(this.container)
@@ -55,7 +55,7 @@ export default {
       item.parentLister = this
       body.appendChild(item.build())
     })
-    LOG.m(2, 'Lister.render done', { children: body.children.length, firstClass: body.children[0]?.className })
+    LOG.m(2, 'Lister.build done', { children: body.children.length, firstClass: body.children[0]?.className })
   },
 
   activate() {

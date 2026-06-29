@@ -15,7 +15,7 @@ export default class ListerPerso extends Lister {
     this._contextItem = null // Brin ou Event
   }
 
-  _initPanel(contextItem) {
+  _applyContext(contextItem) {
     this._directIds    = new Set(contextItem.perso_ids ?? [])
     this._inheritedIds = new Set()
     if (contextItem.minClass === 'event') {

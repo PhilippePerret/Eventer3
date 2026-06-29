@@ -60,7 +60,7 @@ Appelées par le dispatcher via LISTENERS (`b`/`p` nokey).
 5. **[EN COURS] Refresh différé des marques persos** à la **fermeture du panneau brins** — **PERSOS UNIQUEMENT** (cf. [feedback/project_persos_marks_refresh.md]).
    - [x] Tests cas 1/2/3 écrits : `tests/specs/e2e/_tdd/brin-perso-propagation.spec.js`.
    - [x] `closePanel()` dans `Lister` base ; `ListerBrin.onPanelClosed()` stub en place (29/06).
-   - [ ] Implémenter `ListerBrin.onPanelClosed()` : rafraîchir marques persos des events possédant les brins modifiés depuis l'ouverture du panneau. Notification si beaucoup d'events.
+   - [x] `ListerBrin.onPanelClosed()` implémenté (29/06) : `_modifiedBrins` tracé dans `_afterToggle` ; `ListerEvent.refreshEventMarks()` itère items/brin_ids → `refreshColor?()` / `refreshPersosMarks()`.
    - [ ] Retirer `test.only` de la SONDE (`brin-perso-propagation.spec.js`).
 
 6. **[NOUVEAU — au fil des passages au vert] Migrer `locator.press` → `press(page,key)`**

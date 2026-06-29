@@ -46,21 +46,26 @@ export default class Item extends KeyDispatcher {
   }
 
   /* Partagé avec Project (qui possède son propre enterInside) */
-  async _enterChildLister(ChildClass, childId) {
+  async _initNewLister(ChildClass, childId) {
     const childLister = new ChildClass({ id: childId, project: this.project, parentLister: this.parentLister })
     if (childId) await childLister.load()
     if (!childId || childLister._missing) {
-      const result          = await Lister.createLister({ type: `${childLister.minClass}s`, itemId: this.id, project: this.project })
-      childLister.id        = result.id
-      childLister._missing  = false
-      this.lister_id        = result.id
+      const result         = await Lister.createLister({ type: `${childLister.minClass}s`, itemId: this.id, project: this.project })
+      childLister.id       = result.id
+      childLister._missing = false
+      this.lister_id       = result.id
       await childLister.load()
     }
+    return childLister
+  }
+
+  async _enterChildLister(ChildClass, childId) {
+    const childLister = await this._initNewLister(ChildClass, childId)
     await this.onChildListerCreated?.(childLister)
     childLister.selectedIndex = 0
     this.parentLister.hide()
-    childLister.render()
-    childLister.activate()
+    childLister.build()
+    childLister.display(this)
     if (childLister.items.length === 0) await childLister.createNew()
   }
 
@@ -129,7 +134,8 @@ export default class Item extends KeyDispatcher {
       const idx = this.parentLister.items.indexOf(this)
       if (idx >= 0) this.parentLister.items.splice(idx, 1)
       this.parentLister.selectedIndex = Math.max(0, idx - 1)
-      this.parentLister.render()
+      this.parentLister.build()
+      this.parentLister.activate()
       return
     }
     if (this.parentLister?.items.length <= 1) {
@@ -144,11 +150,11 @@ export default class Item extends KeyDispatcher {
   focus() { this.el.focus() }
 
   openBrinPanel(){
-    this.project.listerBrins.openPanel(this)
+    this.project.listerBrins.display(this)
   }
 
   openPersoPanel(){
-    this.project.listerPersos.openPanel(this)
+    this.project.listerPersos.display(this)
   }
 
 }

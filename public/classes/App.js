@@ -38,7 +38,7 @@ export default class App {
     const kc = projectLister.keyboardController
     if (!projectId) {
       // projectId null = revenir à la liste projets, sélectionner le projet targetId
-      projectLister.render()
+      projectLister.build()
       const projectItem = projectLister.items.find(item => item.id === targetId)
       if (projectItem) projectLister.selectItemAt(projectLister.items.indexOf(projectItem))
       return

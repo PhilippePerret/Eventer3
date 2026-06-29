@@ -18,7 +18,7 @@ const marks = (page, n) => pane1(page).locator('.event-item').nth(n).locator('.e
 
 // ── TEST SONDE : vérifier que le bon élément est focusé à chaque étape ──
 // (log de la vérité + assertion hasFocus → pas de faux positif possible)
-test.only("SONDE — focus suit le panneau actif à chaque transition", async ({ page }) => {
+test("focus suit le panneau actif à chaque transition", async ({ page }) => {
   await page.goto('/')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
   console.log('[FOCUS] après goto :', await focusInfo(page))

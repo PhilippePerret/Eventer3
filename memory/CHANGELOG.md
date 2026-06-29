@@ -1,5 +1,13 @@
 # CHANGELOG — Eventer3
 
+## 2026-06-29 — Refresh différé marks persos à fermeture panneau brins
+
+- **`ListerBrin._initPanel()`** : initialise `_listerEvent` + `_modifiedBrins = {}` à chaque ouverture.
+- **`ListerBrin._afterToggle()`** : trace chaque brin togglé dans `_modifiedBrins` (`{ hasChanged: { color, persos }, brin }`).
+- **`ListerBrin.onPanelClosed()`** : délègue à `_listerEvent.refreshEventMarks(_modifiedBrins)`.
+- **`ListerEvent.refreshEventMarks(modifiedBrins)`** : itère `items` → `brin_ids` → si brin modifié → `ev.refreshColor?.()` / `ev.refreshPersosMarks()`.
+- **`Lister.openPanel()`** générique : `_initPanel` + load-si-premier + `_syncChecked` + `activate`. Supprime la duplication ListerBrin/ListerPerso.
+
 ## 2026-06-29 — Refonte render/activate/panels + closePanel dans Lister base
 
 Décision validée : `render()` = construction DOM uniquement. `activate()` = show + focus. Keyboard attach une seule fois à la création du container. Loi de Déméter appliquée strictement (pas de chaînes `a.b.c()`).
