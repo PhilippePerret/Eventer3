@@ -1,9 +1,9 @@
 export const ListerLi = {
-    ArrowUp:   { nokey: 'selectPrev'      }
-  , ArrowDown: { nokey: 'selectNext'      }
-  , ArrowLeft: { nokey: 'leaveToParent'   } // seulement pour Event !!!
-  , n:         { nokey: 'createNew', alt: 'createNewBefore' }
-  , '˜':       { nokey: 'createNewBefore' }
-  , Delete:    { nokey: 'deleteSelected'  }
-  , Enter:      { meta: 'closePanel'      }
+    ArrowUp:    { nokey: 'selectPrev'       }
+  , ArrowDown:  { nokey: 'selectNext'       }
+  , ArrowLeft:  { nokey: 'leaveToParent'    } // seulement pour Event !!!
+  , n:          { nokey: 'createNew', alt: 'createNewBefore' }
+  , '˜':        { nokey: 'createNewBefore'  }
+  , Delete:     { nokey: 'deleteSelected'   }
+  , Enter:      { meta: 'closePanel'        }
 }

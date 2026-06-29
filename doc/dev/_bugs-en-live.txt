@@ -1,6 +1,7 @@
 BUG
-1. Panneau projets mal placé (devrait être centré dans la page) <== mauvais CSS
-2. Panneau des projets reste ouvert quand panneau des events s'ouvre
+BUG 1 Panneau projets mal placé (devrait être centré dans la page) <== mauvais CSS
+BUG 2 ON ne peut pas entrer dans le premier projet (le mien en tout cas)
+BUG 3
 3. Meta+"↑"/"↓" toujours pas implémenté
 
 
