@@ -57,4 +57,4 @@ include::docs/persos-panel.adoc[]
 
 include::docs/regles-developpement.adoc[]
 
-include::docs/test-application.adoc[]
+include::docs/tests-application.adoc[]

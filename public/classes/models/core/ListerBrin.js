@@ -8,6 +8,7 @@ export default class ListerBrin extends Lister {
   static ITEM_CLASS = Brin
   static PANEL_ID   = 'brins-panel'
   static CHECK_KEY  = 'brin_ids'
+  static LISTENERS  = { ...Lister.LISTENERS, b: { nokey: 'closePanel' } }
 
   constructor(data = {}) {
     super(data)
@@ -23,8 +24,21 @@ export default class ListerBrin extends Lister {
     this._modifiedBrins = {}
   }
 
+  markForCheck(brin) {
+    if (this._modifiedBrins[brin.id]) return
+    this._modifiedBrins[brin.id] = { brin, initialData: { color: brin.color, perso_ids: [...(brin.perso_ids ?? [])] } }
+  }
+
   onPanelClosed() {
-    this._listerEvent.refreshEventMarks(this._modifiedBrins)
+    const changed = {}
+    Object.values(this._modifiedBrins).forEach(({ brin, initialData }) => {
+      const colorChanged  = brin.color !== initialData.color
+      const persosChanged = [...(brin.perso_ids ?? [])].sort().join(',') !== [...(initialData.perso_ids)].sort().join(',')
+      if (colorChanged || persosChanged) {
+        changed[brin.id] = { hasChanged: { color: colorChanged, persos: persosChanged }, brin }
+      }
+    })
+    this._listerEvent.refreshEventMarks(changed)
   }
 
   async _initDefault() { await this._initDefaultBrin() }
@@ -41,7 +55,7 @@ export default class ListerBrin extends Lister {
 
   _syncChecked() {
     const brinIds = this.contextItem?.brin_ids ?? []
-    this.items.forEach(b => { b.checked = brinIds.includes(b.id) })
+    this.items.forEach(b => { b.checked = brinIds.includes(b.id); b.applyChecked() })
   }
 
   async deleteSelected() {
@@ -61,15 +75,14 @@ export default class ListerBrin extends Lister {
     return resp.ok
   }
 
-  // Brins : rafraîchissement DIRECT au toggle (≠ persos, qui se rafraîchissent à la fermeture)
+  // Brins : rafraîchissement DIRECT au toggle sur l'event concerné uniquement (1 event = pas de goulot)
   _afterToggle(brin, ev) {
-    // Invariant : un perso porté par le brin ne reste pas en perso direct de l'event
     if (brin.checked) {
       const pids = brin.perso_ids ?? []
       if (pids.length) ev.perso_ids = (ev.perso_ids ?? []).filter(id => !pids.includes(id))
     }
-    this._modifiedBrins[brin.id] = { hasChanged: { color: false, persos: true }, brin }
     this._refreshEventMarks(ev)
+    ev.refreshPersosMarks()
   }
 
   _refreshEventMarks(ev) {

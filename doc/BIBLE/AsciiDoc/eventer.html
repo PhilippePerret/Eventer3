@@ -569,6 +569,26 @@ Toute classe d&#8217;élément, les projets, les évènements (events), les brin
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerPerso</code> &lt; <code>Lister</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Oui (Project)</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Appartiennent à</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Par la propritété</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Persistance</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Brin</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>perso_ids</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Event</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>perso_ids</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Event</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Par ses brins</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Non</p></td>
+</tr>
 </tbody>
 </table>
 <div class="paragraph">
@@ -799,10 +819,180 @@ fermeture de la fenêtre des brins
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_règles_de_développement">Règles de développement</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Aujourd&#8217;hui qu&#8217;on utilise l&#8217;IA (Claude-code) pour développer, il est important de respecter des règles de développement strictes et absolues.</p>
+</div>
+<div class="paragraph">
+<p>Surtout que pour le moment (juin 2026), les IA en sont incapables.</p>
+</div>
+<div class="sect2">
+<h3 id="_approche_fonctionnelle">Approche fonctionnelle</h3>
+<div class="paragraph">
+<p>L&#8217;approche doit être au maximum fonctionnelle,</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_loi_de_demeter_absolue">Loi de Demeter absolue</h3>
+<div class="paragraph">
+<p>On applique toujours la loi de Demeter absolue.</p>
+</div>
+<div class="paragraph">
+<p><strong>Loi de Demeter simple</strong></p>
+</div>
+<div class="paragraph">
+<p>Un objet, une classe, ne sait jamais comment un autre objet, une autre classe, fonctionne dans le détail. Seul l&#8217;objet, seule la classe, le sait.</p>
+</div>
+<div class="paragraph">
+<p><strong>Loi de Demeter absolue</strong></p>
+</div>
+<div class="paragraph">
+<p>Un objet lui-même ne sait pas comment il fait les choses. Par exemple, un Lister ne sait pas que pour cacher son propre panneau il ajoute la classe 'hidden' à  son container. Il ne connait "publiquement" que <code>this.hide()</code></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_fichiers_tdd">Fichiers _tdd</h3>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Emplacement canonique</dt>
+<dd>
+<p>Emplacement du fichier lorsqu&#8217;il n&#8217;est pas "en cours" dans <code>_tdd</code></p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>Il existe :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>une version <code>specs/e2e/_tdd/</code> (test unitaires)</p>
+</li>
+<li>
+<p>une version `specs/unit/_tdd/ (test unitaires)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Afin de ne pas changer les imports dès qu&#8217;on déplace un module de tests (de son emplacement canonique au dossier _tdd et inversement)</p>
+</div>
+<div class="paragraph">
+<p>Marque "//Origine: path"</p>
+</div>
+<div class="paragraph">
+<p>marquer les tests <code>test.only</code> si on ne veut pas jouer l&#8217;intégralité</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="tdd-workflow">Fluw de travail TDD</h3>
+<div class="paragraph">
+<p>SI Création d&#8217;un nouveau module</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Le créer provisoirement dans _tdd</p>
+</li>
+<li>
+<p>coder les tests</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>SINON</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Trouver le test à modifier en fonction du nouveau fonctionnement ou de la nouvelle fonctionnalité</p>
+</li>
+<li>
+<p>le déplacer dans <code>_tdd</code></p>
+</li>
+<li>
+<p>bien vérifier que sa première ligne soit <code>//Origine: &#8230;&#8203;</code> sinon la définir</p>
+</li>
+<li>
+<p><code>test.only</code> ou <code>test.skip</code> pour se concentrer si le ou les tests courants</p>
+</li>
+<li>
+<p>dire que c&#8217;est prêt.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>QUAND tous les tests passent :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>si c&#8217;est un nouveau</p>
+</li>
+<li>
+<p>lui choisir un emplacement canonique (MÊME HIÉRARCHIE)</p>
+</li>
+<li>
+<p>mettre en commentaire en haut du fichier <code>//Origine: path/to/canonique</code></p>
+</li>
+<li>
+<p>retirer les <code>test.only</code> ou <code>test.skip</code> éventuels</p>
+</li>
+<li>
+<p>(re)placer le fichier à sa place canonique sans rien faire d&#8217;autre</p>
+</li>
+<li>
+<p>prévenir qu&#8217;on a fini</p>
+<div class="literalblock">
+<div class="content">
+<pre>avant même d'implémenter une fonction, se demander :</pre>
+</div>
+</div>
+</li>
+<li>
+<p>est-elle propre à la classe</p>
+</li>
+<li>
+<p>ou est-elle commune à presque toutes les clases</p>
+<div class="literalblock">
+<div class="content">
+<pre>.Distribution des responsabilité
+|====
+| Fonctionnalité propre à une classe
+| Fonctionnatilé utile  à toutes les classes</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>| Exemples
+|</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>| Ouverture du panneau des personnages
+| Ouverture de n'importe quel panneau</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>| (donc traité par Lister)</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Unresolved directive in eventer.adoc - include::docs/test-application.adoc[]</p>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-06-28 15:15:04 +0200
+Last updated 2026-06-28 19:37:42 +0200
 </div>
 </div>
 </body>

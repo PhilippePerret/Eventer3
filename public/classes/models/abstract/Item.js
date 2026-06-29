@@ -154,6 +154,7 @@ export default class Item extends KeyDispatcher {
   }
 
   openPersoPanel(){
+    this.parentLister?.markForCheck?.(this)
     this.project.listerPersos.display(this)
   }
 

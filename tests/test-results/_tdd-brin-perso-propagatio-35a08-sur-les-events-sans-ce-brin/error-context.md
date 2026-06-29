@@ -12,22 +12,22 @@
 # Error details
 
 ```
-Error: expect(locator).not.toBeVisible() failed
+Error: expect(locator).toContainText(expected) failed
 
-Locator:  locator('#pane-1').contentFrame().locator('#persos-panel')
-Expected: not visible
-Received: visible
+Locator: locator('#pane-1').contentFrame().locator('.event-item').first().locator('.event-persos-marks')
+Expected substring: "BB"
+Received string:    "AA"
 
 Call log:
-  - Expect "not toBeVisible" with timeout 5000ms
-  - waiting for locator('#pane-1').contentFrame().locator('#persos-panel')
-    4 × locator resolved to <div id="persos-panel" class="perso-list">…</div>
-      - unexpected value "visible"
+  - Expect "toContainText" with timeout 5000ms
+  - waiting for locator('#pane-1').contentFrame().locator('.event-item').first().locator('.event-persos-marks')
+    2 × locator resolved to <div class="persos-marks event-persos-marks">…</div>
+      - unexpected value "AA"
 
 ```
 
 ```yaml
-- text: Perso AA Aaa 🫥 AA perso ✓ Perso BB Bbb 🫥 BB perso
+- text: AA
 ```
 
 # Test source
@@ -91,8 +91,7 @@ Call log:
   56  | 
   57  | async function closePersosThenBrins(page) {
   58  |   await press(page, 'p')
-> 59  |   await expect(pane1(page).locator('#persos-panel')).not.toBeVisible()
-      |                                                          ^ Error: expect(locator).not.toBeVisible() failed
+  59  |   await expect(pane1(page).locator('#persos-panel')).not.toBeVisible()
   60  |   await press(page, 'b')
   61  |   await expect(pane1(page).locator('#brins-panel')).not.toBeVisible()
   62  | }
@@ -132,7 +131,8 @@ Call log:
   96  |   await expect(pane1(page).locator('.perso-item').nth(1)).toHaveClass(/checked/)
   97  |   await closePersosThenBrins(page)
   98  | 
-  99  |   await expect(marks(page, 0)).toContainText('BB')      // e1 (a le brin)
+> 99  |   await expect(marks(page, 0)).toContainText('BB')      // e1 (a le brin)
+      |                                ^ Error: expect(locator).toContainText(expected) failed
   100 |   await expect(marks(page, 1)).toContainText('BB')      // e2 (a le brin)
   101 |   await expect(marks(page, 3)).not.toContainText('BB')  // e4 (PAS le brin)
   102 | })

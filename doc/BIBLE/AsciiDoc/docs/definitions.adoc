@@ -46,6 +46,11 @@ Mais la notion de **brin** couvre plus de choses et permet de suivre les évolut
 |====
 | Classe d'un élément | Classe de la liste        | Unique (propriétaire)
 | `Perso` < `Item`    | `ListerPerso` < `Lister`  | Oui (Project)
+
+| Appartiennent à     | Par la propritété         | Persistance
+| `Brin`              | `perso_ids`               | Oui
+| `Event`             | `perso_ids`               | Oui
+| `Event`             | Par ses brins             | Non
 |====
 
 Les personnages en tant qu'élément constitutionnel indispensable d'une histoire, même lorsque c'est une théière ou un pneu.

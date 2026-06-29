@@ -1,0 +1,8 @@
+== Test de l'application ==
+
+Tout ce qui concerne les tests de l'application se place dans le dossier `/tests/`
+
+Les tests unitaires se placent dans :
+
+- `tests/specs/unit/<dossier>` pour les emplacements canoniques,
+- `test/specs/unit/_tdd` pour les tests en cours 

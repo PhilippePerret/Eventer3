@@ -735,18 +735,9 @@ body#shell:has(#pane-2[data-split-active]) .pane-wrapper:has(iframe[data-focused
   color: white;
 }
 
-.brin-row .panel-check {
-  opacity: 0;
-}
-
-.brin-row.checked .panel-check {
-  opacity: 1;
+.brin-item.checked .panel-check::before {
+  content: '✓';
   color: #00a832;
-}
-
-.brin-row.selected.checked .panel-check {
-  opacity: 1;
-  color: white;
 }
 
 .brin-row.selected .panel-color-dot {
@@ -836,24 +827,13 @@ body#shell:has(#pane-2[data-split-active]) .pane-wrapper:has(iframe[data-focused
   color: rgba(255, 255, 255, .78);
 }
 
-.perso-row .panel-check {
-  opacity: 0;
-  font-size: var(--coche);
-}
-
-.perso-row.checked .panel-check {
-  opacity: 1;
+.perso-item.checked .panel-check::before {
+  content: '✓';
   color: #00a832;
 }
 
-.perso-row.selected.checked .panel-check {
-  opacity: 1;
-  color: white;
-}
-
-.perso-row.inherited .panel-check {
+.perso-item.inherited .panel-check::before {
   opacity: .35;
-  color: #00a832;
 }
 
 .panel-mark {

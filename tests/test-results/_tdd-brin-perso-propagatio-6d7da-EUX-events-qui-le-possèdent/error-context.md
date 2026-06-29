@@ -12,23 +12,23 @@
 # Error details
 
 ```
-Error: expect(locator).toHaveClass(expected) failed
+Error: expect(locator).not.toContainText(expected) failed
 
-Locator: locator('#pane-1').contentFrame().locator('.perso-item').first()
-Expected pattern: /checked/
-Received string:  "perso-item selected"
+Locator: locator('#pane-1').contentFrame().locator('.event-item').first().locator('.event-persos-marks')
+Expected substring: not "AA"
+Received string: "AA"
 Timeout: 5000ms
 
 Call log:
-  - Expect "toHaveClass" with timeout 5000ms
-  - waiting for locator('#pane-1').contentFrame().locator('.perso-item').first()
-    14 × locator resolved to <div data-id="c1" tabindex="-1" class="perso-item selected">…</div>
-       - unexpected value "perso-item selected"
+  - Expect "not toContainText" with timeout 5000ms
+  - waiting for locator('#pane-1').contentFrame().locator('.event-item').first().locator('.event-persos-marks')
+    14 × locator resolved to <div class="persos-marks event-persos-marks">…</div>
+       - unexpected value "AA"
 
 ```
 
 ```yaml
-- text: Perso AA Aaa 🫥 AA perso
+- text: AA
 ```
 
 # Test source
@@ -100,8 +100,7 @@ Call log:
   64  | // retire c1 de b1 (c1 = index 0, sélectionné à l'ouverture)
   65  | async function removeC1fromB1(page) {
   66  |   await openPersosFromB1(page)
-> 67  |   await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/checked/)
-      |                                                           ^ Error: expect(locator).toHaveClass(expected) failed
+  67  |   await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/checked/)
   68  |   await press(page, ' ')
   69  |   await expect(pane1(page).locator('.perso-item').nth(0)).not.toHaveClass(/checked/)
   70  |   await closePersosThenBrins(page)
@@ -115,7 +114,8 @@ Call log:
   78  | 
   79  |   await removeC1fromB1(page)
   80  | 
-  81  |   await expect(marks(page, 0)).not.toContainText('AA') // e1 mis à jour
+> 81  |   await expect(marks(page, 0)).not.toContainText('AA') // e1 mis à jour
+      |                                    ^ Error: expect(locator).not.toContainText(expected) failed
   82  |   await expect(marks(page, 1)).not.toContainText('AA') // e2 mis à jour
   83  | })
   84  | 

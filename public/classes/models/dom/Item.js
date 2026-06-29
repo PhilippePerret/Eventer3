@@ -29,7 +29,6 @@ export default {
     gutter.className = `item-check-gutter ${minClass}-check-gutter`
     const checkEl = document.createElement('span')
     checkEl.className = `item-check ${minClass}-check panel-check`
-    checkEl.textContent = this.checked ? '✓' : ''
     gutter.appendChild(checkEl)
     el.appendChild(gutter)
 
@@ -68,6 +67,7 @@ export default {
       this._editingFields.push(editEl)
     }
     this._editingFields[0]?.focus()
+    this._afterStartEditing?.()
   },
 
   revertValues() {
@@ -112,14 +112,16 @@ export default {
     this.color = this.colorFor(index)
   },
 
+  applyChecked() {
+    this.el?.classList.toggle('checked', this.checked)
+  },
+
   toggleChecked() {
     const lister = this.parentLister
     if (lister && !lister._canToggle(this)) return
     const ctx = lister?.contextItem
     this.checked = !this.checked
     this.el?.classList.toggle('checked', this.checked)
-    const checkEl = this.el?.querySelector('.panel-check')
-    if (checkEl) checkEl.textContent = this.checked ? '✓' : ''
     if (!ctx) return
     const key = lister.constructor.CHECK_KEY
     const ids = ctx[key] ?? (ctx[key] = [])

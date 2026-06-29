@@ -7,6 +7,7 @@ export default class ListerPerso extends Lister {
   static ITEM_CLASS = Perso
   static PANEL_ID   = 'persos-panel'
   static CHECK_KEY  = 'perso_ids'
+  static LISTENERS  = { ...Lister.LISTENERS, p: { nokey: 'closePanel' } }
 
   constructor(data = {}) {
     super(data)
@@ -34,6 +35,8 @@ export default class ListerPerso extends Lister {
       const inherited = !direct && inheritedIds.has(p.id)
       p.checked   = direct || inherited
       p.inherited = inherited
+      p.el?.classList.toggle('inherited', inherited)
+      p.applyChecked()
     })
   }
 

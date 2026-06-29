@@ -21,22 +21,18 @@ const marks = (page, n) => pane1(page).locator('.event-item').nth(n).locator('.e
 test("focus suit le panneau actif à chaque transition", async ({ page }) => {
   await page.goto('/')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
-  console.log('[FOCUS] après goto :', await focusInfo(page))
   await hasFocus(page, '.project-item.selected')
 
   await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
-  console.log('[FOCUS] après → (entrée projet) :', await focusInfo(page))
   await hasFocus(page, '.event-item.selected')
 
   await press(page, 'b')
   await expect(pane1(page).locator('#brins-panel')).toBeVisible()
-  console.log('[FOCUS] après b (panneau brins) :', await focusInfo(page))
   await hasFocus(page, '.brin-item.selected')
 
   await press(page, 'p')
   await expect(pane1(page).locator('#persos-panel')).toBeVisible()
-  console.log('[FOCUS] après p (panneau persos) :', await focusInfo(page))
   await hasFocus(page, '.perso-item.selected')
 })
 
