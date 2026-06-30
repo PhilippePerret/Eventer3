@@ -40,7 +40,6 @@ export default class ListerPerso extends Lister {
     })
   }
 
-
   get contextItem() { return this._contextItem }
 
   _canToggle(item) { return !item.inherited }
@@ -48,6 +47,4 @@ export default class ListerPerso extends Lister {
   _afterToggle(_perso, ctx) {
     ctx.refreshPersosMarks()
   }
-
-
 }

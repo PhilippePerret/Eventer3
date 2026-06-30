@@ -17,6 +17,7 @@
 | combo:k[]       | PBrins    | Ajouter le brin dans la liste des cibles      | ???
 | combo:k[]       | PPersp    | Ajouter le personnage dans liste des cibles   | ???
 | combo:cmd+k[]   | Edition   | Ajouter un lien vers une cible dans le texte  | ???
+| combo:space[]   | Display   | Coche/décoche l'`Item` (sauf `Project`)       | ???
 
 4+| **Hiérarchie**
 | combo:fd[]      | Events | Entre dans l'évènemencier de l'event             | Item.enterInside
@@ -32,12 +33,17 @@
 
 4+| Édition
 
-| combo:n[]       | Normal  | Crée un nouvel Item (Project, Event, etc.)        | Lister.createItem  
-| combo:Alt+n[]   | Normal  | Crée un nouvel Item avant                         | Lister.createItemBefore
-| combo:⌦[]       | Normal  | Détruit l'Item (après confirmation si enfants)    | Lister.deleteSelected
-| combo:cmd+x[]   | Normal  | Couper l'Item sélectionné dans le presse-papier   | Lister.cutSelectedItem
-| combo:cmd+c[]   | Normal  | Copier l'Item sélectionné dans le presse-papier   | Lister.copySelectedItem
-| combo:cmd+v[]   | Normal  | Coller l'Item du presse-papier                    | Lister.pasteItem
+| combo:n[]       | Normal  | Crée un nouvel Item (Project, Event, etc.)            | Lister.createItem
+| combo:alt+n[]   | Normal  | Crée un nouvel Item AVANT la sélection                | Lister.createItemBefore
+| combo:tab[]     | Display | Se déplace de lien vers cible en lien vers cible      | ???
+| combo:enter[]   | Display | Met l'`Item` quelconque en édition                    | ???
+| combo:enter[]   | Edition | Finit l'édition de l'`Item` en l'enregistrant         | ???
+| combo:tab[]     | Edition | Se déplace de champ d'édition en champ d'édition      | ???
+| combo:maj+tab[] | Edition | Se déplace de champ en champ d'édition en arrière     | ???
+| combo:⌦[]       | Normal  | Détruit l'Item (après confirmation si enfants)        | Lister.deleteSelected
+| combo:cmd+x[]   | Normal  | Couper l'Item sélectionné dans le presse-papier       | Lister.cutSelectedItem
+| combo:cmd+c[]   | Normal  | Copier l'Item sélectionné dans le presse-papier       | Lister.copySelectedItem
+| combo:cmd+v[]   | Normal  | Coller l'Item du presse-papier                        | Lister.pasteItem
 
 | combo:s[]       | Events  | Ouvrir le panneau des styles pour les définir       | ???
 | combo:maj+s[]   | Events  | Définir les styles pour tous les `Event`(s) cochés  | ???
@@ -51,6 +57,8 @@
 | combo:ctrl+maj+fh[] | Normal  | Déplace le panneau vers le haut               | ???
 | combo:ctrl+maj+fb[] | Normal  | Déplace le panneau vers le bas                | ???
 
+4+| Filtres
+| combo:cmd+:[]       | Normal  | Active le filtrage des `Event`s                 | ???
 4+| Application
 | combo::cmd+o[]      | Display | Ouvre le panneau des options pour les régler    | ???
 |====

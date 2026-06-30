@@ -14,6 +14,8 @@ export default {
   /**
    * Retourne les marks (badges pour le moment) de tous les brins de l'event
    */
+  openStylePanel() { this.project.listerStyle.display(this) },
+
   brinsMarks() {
     const brins = this.project.itemsById['brins']
     const content = (this.brin_ids ?? []).map(id => {

@@ -16,6 +16,8 @@ class Combo < Asciidoctor::Extensions::InlineMacroProcessor
     'fg'    => '←',
     'fh'    => '↑',
     'fd'    => '→',
+    'space' => '␣',
+    'esc'   => '␛'
   }
 
   def process(parent, target, attrs)

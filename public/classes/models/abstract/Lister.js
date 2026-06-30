@@ -94,6 +94,15 @@ export default class Lister extends KeyDispatcher {
     void this.save()
   }
 
+  backgroundNext() { this._switchBackground(1)  }
+  backgroundPrev() { this._switchBackground(-1) }
+  _switchBackground(d) {
+    const l = this._listerEvent
+    if (!l) return
+    d > 0 ? l.selectNext() : l.selectPrev()
+    this.display(l.items[l.selectedIndex])
+  }
+
   _syncIdsOnMove(from, to) {
     const movedId = this.item_ids[from]
     this.item_ids.splice(from, 1)
