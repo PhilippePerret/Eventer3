@@ -10,16 +10,16 @@ test.beforeEach(() => {
 
 test('← sur la liste des projets ne fait rien', async ({ page }) => {
   await page.goto('/')
-  await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
+  await pane1(page).locator('.project-item.selected').waitFor()
   const projectCount = await pane1(page).locator('.project-item').count()
   await press(page, 'ArrowLeft')
   await expect(pane1(page).locator('.project-item')).toHaveCount(projectCount)
-  await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
+  await pane1(page).locator('.project-item.selected').waitFor()
 })
 
 test('ArrowUp sur le premier projet sélectionne le dernier', async ({ page }) => {
   await page.goto('/')
-  await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
+  await pane1(page).locator('.project-item.selected').waitFor()
   await press(page, 'ArrowUp')
   const items = pane1(page).locator('.project-item')
   const last  = items.nth(await items.count() - 1)
@@ -40,7 +40,7 @@ test('ArrowDown sur le dernier projet sélectionne le premier', async ({ page })
 
 test('les events persistent après avoir navigué vers un autre projet et revenu', async ({ page }) => {
   await page.goto('/')
-  await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
+  await pane1(page).locator('.project-item.selected').waitFor()
 
   // Entrer dans Projet A
   await press(page, 'ArrowRight')
@@ -74,7 +74,7 @@ test('les events persistent après avoir navigué vers un autre projet et revenu
 
   // Revenir au Projet A
   await press(page, 'ArrowUp')
-  await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
+  await pane1(page).locator('.project-item.selected').waitFor()
   await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
 

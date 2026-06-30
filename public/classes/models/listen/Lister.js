@@ -5,4 +5,7 @@ export const ListerLi = {
   , '˜':        { alt: 'createNewBefore'  }
   , Delete:     { nokey: 'deleteSelected'   }
   , Enter:      { meta: 'closePanel'        }
+  , c:          { meta: 'copySelectedItem'  }
+  , x:          { meta: 'cutSelectedItem'   }
+  , v:          { meta: 'pasteItem'         }
 }

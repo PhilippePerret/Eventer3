@@ -5,7 +5,9 @@ import { WORD_FORMS } from '../../../constants/constants.js'
 import { EVENT_STATE, EVENT_METEO, EVENT_EFFET, EVENT_COLORS } from '../constants/Event.js'
 
 
+// tag::class-event[]
 export default class Event extends Item {
+// end::class-event[]
 
   static LISTENERS = { ...Item.LISTENERS, ...EventLi }
   static get thingName() { return WORD_FORMS.Event }

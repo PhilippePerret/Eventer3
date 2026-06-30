@@ -12,7 +12,6 @@ export default {
       el.id = id
       el.classList.add('hidden')
       document.querySelector('#main-panels-container').appendChild(el)
-      this.attach(el)
     }
     return el
   },
@@ -46,6 +45,7 @@ export default {
   build() {
     LOG.m(2, 'Lister.build', { items: this.items.length, selectedIndex: this.selectedIndex })
     this.container = this._ensureContainer()
+    this.attach(this.container)
     this.container.classList.add(`${this.minClass}-list`)
     const panel = this._ensurePanelStructure(this.container)
     const body  = panel.querySelector('.lister-panel__body')

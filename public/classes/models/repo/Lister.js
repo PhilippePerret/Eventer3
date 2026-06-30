@@ -13,7 +13,8 @@ export default {
   },
 
   async deleteItem(item) {
-    const resp = await fetch(`/api/listers/${this.id}/items/${item.id}`, { method: 'DELETE', cache: 'no-store' })
+    const qs_pid = this.project === 'none' ? '' : `?project_id=${this.project.id}`
+    const resp   = await fetch(`/api/listers/${this.id}/items/${item.id}${qs_pid}`, { method: 'DELETE', cache: 'no-store' })
     return resp.ok
   },
 
@@ -27,8 +28,8 @@ export default {
   },
 
   async save() {
-    const query = this.project ? `?project_id=${this.project.id}` : ''
-    await fetch(`/api/listers/${this.id}${query}`, {
+    const qs_pid = this.project === 'none' ? '' : `?project_id=${this.project.id}`
+    await fetch(`/api/listers/${this.id}${qs_pid}`, {
       method:  'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ item_ids: this.item_ids }),
@@ -37,8 +38,8 @@ export default {
   },
 
   async createItem(fields) {
-    const query = this.project ? `?project_id=${this.project.id}` : ''
-    const resp  = await fetch(`/api/listers/${this.id}/items${query}`, {
+    const qs_pid = this.project === 'none' ? '' : `?project_id=${this.project.id}`
+    const resp  = await fetch(`/api/listers/${this.id}/items${qs_pid}`, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify(fields),

@@ -9,8 +9,11 @@ import LOG from '../../../system/LOG.js'
 import Notification from '../../ui/Notification.js'
 import { DEFAULT_COLOR } from '../constants/common.js'
 import ContextualHelp from '../../ui/ContextualHelp.js'
+import { Clipboard } from './Clipboard.js'
 
+// tag::class-item[]
 export default class Item extends KeyDispatcher {
+// end::class-item[]
 
   constructor(data = {}) {
     super()
@@ -107,6 +110,14 @@ export default class Item extends KeyDispatcher {
       Notification.show(getErr(this.minClass === 'perso' ? 3010 : 2010, val))
       el.textContent = badgeField._curvalue
     }
+  }
+
+  toClipboardData(isCopy = false) {
+    const data = Object.fromEntries(this.PROPS.map(f => [f.name, this[f.name]]))
+    data.id         = this.id
+    data.created_at = this.created_at
+    data.updated_at = this.updated_at
+    Clipboard.set(this.minClass, data, isCopy)
   }
 
   openContextualHelp() { ContextualHelp.open(this) }

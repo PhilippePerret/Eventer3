@@ -1,0 +1,6 @@
+1) dans le TODO.md#current, tu ajoutes qu'on est en train de tester la nouvelle fonctionnalité 
+2) tu recherches les fichiers tests lesquesls testent cette fonctionnalité
+3) tu vérifies qu'ils ont bien //Origine défini — sinon tu l'ajoutes
+4) tu les moves dans e2e/_tdd (MOVE, PAS COPY)
+5) tu t'assures que les sélecteurs soient bons
+6) tu corriges tous les 'press'

@@ -2,6 +2,10 @@
 
 <a name="current"></a>
 
+## À faire EN PREMIER
+
+**Remettre en route `⌘+↑` / `⌘+↓` déplacement items — tests dans `e2e/_tdd/keyboard-reorder-items.spec.js`**
+
 ## En cours
 
 ### Chantier centralisation Project courant (27/06)

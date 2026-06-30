@@ -6,6 +6,7 @@ import ListerRepo from '../repo/Lister.js'
 import { ListerLi } from '../listen/Lister.js'
 import Notification from '../../ui/Notification.js'
 import ConfirmDialog from '../../ui/ConfirmDialog.js'
+import { Clipboard } from './Clipboard.js'
 
 export default class Lister extends KeyDispatcher {
 
@@ -71,6 +72,62 @@ export default class Lister extends KeyDispatcher {
 
   async createNew()       { await this._createAt(this.selectedIndex + 1) }
   async createNewBefore() { await this._createAt(this.selectedIndex)     }
+
+  copySelectedItem() {
+    this.items[this.selectedIndex]?.toClipboardData(true)
+  }
+
+  async cutSelectedItem() {
+    if (this.items.length <= 1) {
+      const thing = this.constructor.ITEM_CLASS.thingName.thing
+      Notification.show(`Impossible de couper le dernier ${thing}.`)
+      return
+    }
+    const idx  = this.selectedIndex
+    const item = this.items[idx]
+    item.toClipboardData(false)
+    const ok = await this.deleteItem(item)
+    if (!ok) return
+    const newIdx = Math.min(idx, this.items.length - 2)
+    this.items.splice(idx, 1)
+    this.item_ids.splice(idx, 1)
+    delete this.byId[item.id]
+    this.selectedIndex = newIdx
+    this.removeEl(item)
+    this.applySelection(null, this.items[newIdx])
+  }
+
+  async checkDataConflicts(data) {
+    const resolved = { ...data }
+    delete resolved.id
+    if (resolved.badge && this.existingBadges?.has(resolved.badge)) {
+      const confirmed = await ConfirmDialog.open({
+        title:   resolved.title,
+        message: `Le badge "${resolved.badge}" existe déjà. Continuer en régénérant le badge ?`,
+      })
+      if (!confirmed) return null
+      delete resolved.badge
+    }
+    return resolved
+  }
+
+  async pasteItem() {
+    const clip = Clipboard.get()
+    if (!clip || !Clipboard.isCompatible(this.minClass)) return
+    const insertIdx = this.selectedIndex
+    const payload   = clip.isCopy
+      ? await this.checkDataConflicts(clip.data)
+      : { ...clip.data }
+    if (!payload) return
+    payload.lister_id = this.id
+    const result = await this.createItem(payload)
+    if (!result?.id) return
+    const newOrder = [...this.item_ids]
+    newOrder.splice(insertIdx, 0, result.id)
+    this.item_ids = newOrder
+    await this.save()
+    await this._reloadAt(insertIdx)
+  }
 
   async _reloadAt(insertIdx) {
     await this.load()

@@ -9,7 +9,3 @@ export const ListerEventLi = {
   ...ListerLi,
   ArrowLeft: { nokey: 'leaveToParent' },
 }
-
-export const ListerEventLi = {
-  ArrowLeft: { nokey: 'leaveToParent' },
-}

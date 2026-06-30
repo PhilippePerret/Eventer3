@@ -3,7 +3,14 @@
 On peut ouvrir le panneau des personnages, pour les choisir : 
 
 - sur un <<Event>>,
+  
 - sur un <<Brin>>.
+
+```javascript
+include::{publicdir}/classes/models/core/Event.js[tag="class-event"]
+
+include::{publicdir}/classes/models/abstract/Item.js[tag="class-item"]
+```
 
 ==== Ouverture sur un event ====
 

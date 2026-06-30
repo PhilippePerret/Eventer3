@@ -28,6 +28,8 @@ export default class KeyDispatcher {
   }
 
   attach(el) {
+    el._activeKeyDispatcher?.detach()
+    el._activeKeyDispatcher = this
     this._abort?.abort()
     this._abort = new AbortController()
     el.addEventListener('keydown', ev => this.onkeydown(ev), { signal: this._abort.signal })

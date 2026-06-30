@@ -24,7 +24,7 @@ Projet en anglais. C'est le container de tous les autres éléments <<events>>, 
 
 |====
 | Classe d'un élément | Classe de la liste        | Unique 
-| `Evetn` < `Item`    | `ListerEvent` < `Lister`  | Non 
+| `Event` < `Item`    | `ListerEvent` < `Lister`  | Non 
 |====
 
 Diminutif pour “évènement”. C'est simplement “quelque chose qui se passe dans une histoire”. Ça peut aller d'une simple action (évènement atomique) à une guerre (évènement de grand échelle).

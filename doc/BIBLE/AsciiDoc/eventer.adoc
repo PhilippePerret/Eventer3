@@ -1,9 +1,16 @@
+// -- Actualiser ce documentation --
+// asciidoctor -r ./macros.rb eventer.adoc
+// -- Pour l'ouvrir --
+// open -a Firefox eventer.html
+
 = Eventer X =
-:experimental:
 
 :app: **EventerX**
 :enter: `↩︎`
 :up: ↑
+
+// Pour les includes \include::{publicdir}/to/file[tag="le-tag"]
+:publicdir: ../../../../public
 
 include::docs/definitions.adoc[]
 
