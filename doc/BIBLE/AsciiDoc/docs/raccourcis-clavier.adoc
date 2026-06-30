@@ -51,7 +51,7 @@
 | combo:cmd+ffh[] | Styles  | Déplacer le style vers le haut (non prioritaire)    | ???
 
 4+| Panneaux
-| combo:cmd+enter[]   | Panneau | Ferme le panneau ouvert                       | ???
+| combo:cmd+enter[]   | Panneau | Ferme le panneau ouvert                       | Lister.closePanel
 | combo:ctrl+maj+fg[] | Normal  | Déplace le panneau vers la gauche             | ???
 | combo:ctrl+maj+fd[] | Normal  | Déplace le panneau vers la droite             | ???
 | combo:ctrl+maj+fh[] | Normal  | Déplace le panneau vers le haut               | ???
@@ -59,6 +59,9 @@
 
 4+| Filtres
 | combo:cmd+:[]       | Normal  | Active le filtrage des `Event`s                 | ???
+| combo:tab[]         | Filtre  | Passer de propriété de filtre en propriété      | ???
+| combo:maj+tab[]     | Filtre  | Comme combo:tab[] mais à l'envers               | ???
+
 4+| Application
-| combo::cmd+o[]      | Display | Ouvre le panneau des options pour les régler    | ???
+| combo:cmd+o[]       | Display | Ouvre le panneau des options pour les régler    | ???
 |====

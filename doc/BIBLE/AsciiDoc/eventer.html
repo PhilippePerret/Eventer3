@@ -798,13 +798,13 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">⌘</kbd>+<kbd style="font-size:1.25em;">↑</kbd></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Normal</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Déplacement de l&#8217;Item vers le haut</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Lister.mo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lister.moveUp</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">⌘</kbd>+<kbd style="font-size:1.25em;">↓</kbd></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Normal</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Déplacement de l&#8217;Item vers le bas</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Lister.mo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lister.moveDown</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">k</kbd></p></td>
@@ -834,6 +834,12 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">⌘</kbd>+<kbd style="font-size:1.25em;">k</kbd></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Edition</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Ajouter un lien vers une cible dans le texte</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">␣</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Display</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Coche/décoche l'`Item` (sauf <code>Project</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
@@ -879,13 +885,7 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 <td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">⌘</kbd>+<kbd style="font-size:1.25em;">↩︎</kbd></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Panneau</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Ferme le panneau ouvert</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock">Création</p></td>
+<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock">Édition</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">n</kbd></p></td>
@@ -896,8 +896,38 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">⌥</kbd>+<kbd style="font-size:1.25em;">n</kbd></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Normal</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Crée un nouvel Item avant</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Crée un nouvel Item AVANT la sélection</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Lister.createItemBefore</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">tab</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Display</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Se déplace de lien vers cible en lien vers cible</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Display</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Met l'`Item` quelconque en édition</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Edition</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Finit l&#8217;édition de l'`Item` en l&#8217;enregistrant</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">tab</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Edition</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Se déplace de champ d&#8217;édition en champ d&#8217;édition</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">⇧</kbd>+<kbd style="font-size:1.25em;">tab</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Edition</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Se déplace de champ en champ d&#8217;édition en arrière</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">⌦</kbd></p></td>
@@ -930,6 +960,12 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 <td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">⇧</kbd>+<kbd style="font-size:1.25em;">s</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Events</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Définir les styles pour tous les <code>Event</code>(s) cochés</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">⌘</kbd>+<kbd style="font-size:1.25em;">↓</kbd></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Styles</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Déplacer le style vers le bas (précédence)</p></td>
@@ -942,34 +978,67 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 <td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Panneaux</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock">Panneaux</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">⌘</kbd>+<kbd style="font-size:1.25em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Panneau</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ferme le panneau ouvert</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">⌃</kbd>+<kbd style="font-size:1.25em;">⇧</kbd>+<kbd style="font-size:1.25em;">←</kbd></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Normal</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Déplace le panneau vers la gauche</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">⌃</kbd>+<kbd style="font-size:1.25em;">⇧</kbd>+<kbd style="font-size:1.25em;">→</kbd></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Normal</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Déplace le panneau vers la droite</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">⌃</kbd>+<kbd style="font-size:1.25em;">⇧</kbd>+<kbd style="font-size:1.25em;">↑</kbd></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Normal</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Déplace le panneau vers le haut</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">⌃</kbd>+<kbd style="font-size:1.25em;">⇧</kbd>+<kbd style="font-size:1.25em;">↓</kbd></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Normal</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Déplace le panneau vers le bas</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock">Filtres</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">⌘</kbd>+<kbd style="font-size:1.25em;">:</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Normal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Active le filtrage des `Event`s</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">tab</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Filtre</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Passer de propriété de filtre en propriété</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">⇧</kbd>+<kbd style="font-size:1.25em;">tab</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Filtre</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comme <kbd style="font-size:1.25em;">tab</kbd> mais à l&#8217;envers</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock">Application</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.25em;">⌘</kbd>+<kbd style="font-size:1.25em;">o</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Display</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouvre le panneau des options pour les régler</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 </tbody>
 </table>

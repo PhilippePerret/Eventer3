@@ -17,6 +17,7 @@ export default class Event extends Item {
     super(data)
     this.brin_ids  = data.brin_ids  ?? []
     this.perso_ids = data.perso_ids ?? []
+    this.css       = data.css       ?? []
   }
 
   // INTERDICTION FORMELLE D'AJOUTER UNE PROPRIÉTÉ cssClass OU CONSORT !!! TOUTES LES PROPRIÉTÉS CSS DÉCOULENT NATURELLEMENT DE LA CLASSE MINUSCULE, DU :name ET DU :warper. CES TROIS VALEURS SUFFISENT AMPLEMENT POUR DÉSIGNER PRÉCISÉMENT L'ÉLÉMENT.
@@ -28,6 +29,7 @@ export default class Event extends Item {
       , { name: 'effet'         , type: 'select'  , warper: 'edits', values: EVENT_EFFET, onchange: 'setMeteoPerEffet', onchoose: 'checkCompatibiliteMeteoEffet' }
       , { name: 'brin_ids'      , type: 'no-edit' , warper: 'marks', value: 'brinsMarks' }
       , { name: 'perso_ids'     , type: 'no-edit' , warper: 'marks', value: 'persosMarks' }
+      , { name: 'css'           , type: 'no-edit'                                         }
     ])
   }
 }
