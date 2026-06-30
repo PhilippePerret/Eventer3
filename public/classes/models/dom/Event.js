@@ -16,6 +16,10 @@ export default {
    */
   openStylePanel() { this.project.listerStyle.display(this) },
 
+  _afterBuild() {
+    if (this.css?.length) this.project?.listerStyle?.applyEventCss(this)
+  },
+
   brinsMarks() {
     const brins = this.project.itemsById['brins']
     const content = (this.brin_ids ?? []).map(id => {

@@ -1,24 +1,24 @@
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press } from '../__setup__.js'
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 
 test.beforeEach(() => {
   installFixtures('many-events')
 })
 
-// Helper : sélectionne le premier event du projet actif
+const field = page => pane1(page).locator('.event-item.editing [contenteditable][data-field="title"]')
+
 async function selectFirstEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('.project-item').first()).toHaveClass(/selected/)
-  await pane1(page).locator('.event-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
   await expect(pane1(page).locator('.event-item').first()).toBeVisible()
 }
 
 test('k sur item sélectionné → mémorise la cible + notification', async ({ page }) => {
   await selectFirstEvent(page)
-  const title = await pane1(page).locator('.event-item.selected .event-text').textContent()
-  const id    = await pane1(page).locator('.event-item.selected').getAttribute('data-id')
-  await pane1(page).locator('.event-item.selected').press('k')
+  const title = await pane1(page).locator('.event-item.selected .event-title').textContent()
+  await press(page, 'k')
   await expect(pane1(page).locator('.notification')).toBeVisible()
   const notif = await pane1(page).locator('.notification').textContent()
   expect(notif).toContain(title.trim())
@@ -26,10 +26,10 @@ test('k sur item sélectionné → mémorise la cible + notification', async ({ 
 
 test('k deux fois sur le même item → alerte doublon, pas de doublon dans targets', async ({ page }) => {
   await selectFirstEvent(page)
-  await pane1(page).locator('.event-item.selected').press('k')
+  await press(page, 'k')
   await expect(pane1(page).locator('.notification')).toBeVisible()
   await pane1(page).locator('.notification').waitFor({ state: 'hidden' })
-  await pane1(page).locator('.event-item.selected').press('k')
+  await press(page, 'k')
   await expect(pane1(page).locator('.notification')).toBeVisible()
   const notif = await pane1(page).locator('.notification').textContent()
   expect(notif.toLowerCase()).toMatch(/déjà|doublon/)
@@ -37,18 +37,16 @@ test('k deux fois sur le même item → alerte doublon, pas de doublon dans targ
 
 test('⌘+k en édition → TargetsPanel s\'ouvre avec la cible mémorisée', async ({ page }) => {
   await selectFirstEvent(page)
-  const id    = await pane1(page).locator('.event-item.selected').getAttribute('data-id')
-  const title = await pane1(page).locator('.event-item.selected .event-text').textContent()
-  await pane1(page).locator('.event-item.selected').press('k')
+  const title = await pane1(page).locator('.event-item.selected .event-title').textContent()
+  await press(page, 'k')
   await expect(pane1(page).locator('.notification')).toBeVisible()
   await pane1(page).locator('.notification').waitFor({ state: 'hidden' })
 
-  // Passe sur un autre event + entre en édition
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
-  await pane1(page).locator('.event-item.selected').press('Enter')
-  await expect(pane1(page).locator('.event-item.editing input[name="title"]')).toBeFocused()
+  await press(page, 'ArrowDown')
+  await press(page, 'Enter')
+  await expect(field(page)).toBeFocused()
 
-  await pane1(page).locator('.event-item.selected').press('Meta+k')
+  await press(page, 'Meta+k')
   await expect(pane1(page).locator('.targets-panel')).toBeVisible()
   await expect(pane1(page).locator('.floating-panel__item')).toHaveCount(1)
   await expect(pane1(page).locator('.floating-panel__item').first()).toContainText(title.trim())
@@ -57,68 +55,73 @@ test('⌘+k en édition → TargetsPanel s\'ouvre avec la cible mémorisée', as
 test('Enter dans TargetsPanel → insère [title](id) au curseur', async ({ page }) => {
   await selectFirstEvent(page)
   const id    = await pane1(page).locator('.event-item.selected').getAttribute('data-id')
-  const title = await pane1(page).locator('.event-item.selected .event-text').textContent()
-  await pane1(page).locator('.event-item.selected').press('k')
+  const title = await pane1(page).locator('.event-item.selected .event-title').textContent()
+  await press(page, 'k')
   await pane1(page).locator('.notification').waitFor({ state: 'hidden' })
 
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
-  await pane1(page).locator('.event-item.selected').press('Enter')
-  const field = pane1(page).locator('.event-item.editing input[name="title"]')
-  await expect(field).toBeFocused()
-  await field.fill('avant ')
+  await press(page, 'ArrowDown')
+  await press(page, 'Enter')
+  await expect(field(page)).toBeFocused()
+  await field(page).fill('avant ')
 
-  await pane1(page).locator('.event-item.selected').press('Meta+k')
+  await press(page, 'Meta+k')
   await expect(pane1(page).locator('.targets-panel')).toBeVisible()
-  await pane1(page).locator('.event-item.selected').press('Enter')
+  await press(page, 'Enter')
   await expect(pane1(page).locator('.targets-panel')).not.toBeVisible()
 
-  const val = await field.inputValue()
+  const val = (await field(page).evaluate(el => el.textContent)).replace(/ /g, ' ')
   const t   = title.trim()
   expect(val).toBe(`avant [${t}](${id})`)
 
-  // Le titre entre crochets doit être sélectionné pour modification immédiate
-  const sel = await field.evaluate(el => ({ start: el.selectionStart, end: el.selectionEnd }))
-  const linkStart = val.indexOf('[') + 1   // après le '['
+  const sel = await field(page).evaluate(el => {
+    const s = window.getSelection()
+    if (!s?.rangeCount) return { start: 0, end: 0 }
+    const r = s.getRangeAt(0)
+    const pre = r.cloneRange()
+    pre.selectNodeContents(el)
+    pre.setEnd(r.startContainer, r.startOffset)
+    const start = pre.toString().length
+    return { start, end: start + r.toString().length }
+  })
+  const linkStart = val.indexOf('[') + 1
   expect(sel.start).toBe(linkStart)
   expect(sel.end).toBe(linkStart + t.length)
 })
 
 test('⌘+Enter dans TargetsPanel → ferme sans insérer', async ({ page }) => {
   await selectFirstEvent(page)
-  await pane1(page).locator('.event-item.selected').press('k')
+  await press(page, 'k')
   await pane1(page).locator('.notification').waitFor({ state: 'hidden' })
 
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
-  await pane1(page).locator('.event-item.selected').press('Enter')
-  const field = pane1(page).locator('.event-item.editing input[name="title"]')
-  await expect(field).toBeFocused()
-  const before = await field.inputValue()
+  await press(page, 'ArrowDown')
+  await press(page, 'Enter')
+  await expect(field(page)).toBeFocused()
+  const before = await field(page).evaluate(el => el.textContent)
 
-  await pane1(page).locator('.event-item.selected').press('Meta+k')
+  await press(page, 'Meta+k')
   await expect(pane1(page).locator('.targets-panel')).toBeVisible()
-  await pane1(page).locator('.event-item.selected').press('Meta+Enter')
+  await press(page, 'Meta+Enter')
   await expect(pane1(page).locator('.targets-panel')).not.toBeVisible()
 
-  const after = await field.inputValue()
+  const after = await field(page).evaluate(el => el.textContent)
   expect(after).toBe(before)
 })
 
 test('targets persistées : rechargement → cibles toujours présentes', async ({ page }) => {
   await selectFirstEvent(page)
-  const id    = await pane1(page).locator('.event-item.selected').getAttribute('data-id')
-  const title = await pane1(page).locator('.event-item.selected .event-text').textContent()
-  await pane1(page).locator('.event-item.selected').press('k')
+  const title = await pane1(page).locator('.event-item.selected .event-title').textContent()
+  await press(page, 'k')
   await pane1(page).locator('.notification').waitFor({ state: 'hidden' })
 
   await page.reload()
   await expect(pane1(page).locator('.project-item').first()).toHaveClass(/selected/)
-  await pane1(page).locator('.event-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('.event-item').first()).toBeVisible()
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
-  await pane1(page).locator('.event-item.selected').press('Enter')
-  await expect(pane1(page).locator('.event-item.editing input[name="title"]')).toBeFocused()
+  await press(page, 'ArrowDown')
+  await press(page, 'Enter')
+  await expect(field(page)).toBeFocused()
 
-  await pane1(page).locator('.event-item.selected').press('Meta+k')
+  await press(page, 'Meta+k')
   await expect(pane1(page).locator('.targets-panel')).toBeVisible()
   await expect(pane1(page).locator('.floating-panel__item').first()).toContainText(title.trim())
 })

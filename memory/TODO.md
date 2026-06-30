@@ -4,12 +4,11 @@
 
 ## À faire EN PREMIER
 
-**Gestion des styles — panneau style, déplacement `⌘+↑`/`⌘+↓`, maj event(s) courant(s)**
-- Migrer panneau style depuis ancienne architecture
-- Touche `s` sur events-panel → ouvre style panel pour l'event sélectionné
-- Touche `S` (Maj+s) → ouvre style panel pour tous les events cochés (titre "Styles des events cochés" avec "cochés" en rouge)
-- `⌘+↑`/`⌘+↓` déplace le style et actualise l'event courant (ou les events cochés)
-- Tests dans `e2e/_tdd/style-reorder.spec.js` (4 tests)
+**Clipboard**
+1. `Item.toClipboardData()` dans `abstract/Item.js` : `PROPS.filter(f => !f.unique).map(f => [f.name, this[f.name]])`
+2. `Lister.copySelectedItem()` dans `abstract/Lister.js` + import `Clipboard`
+3. `c: { meta: 'copySelectedItem' }` dans `listen/Lister.js`
+4. `ContextualHelp._buildShortcuts()` : vérifier `Clipboard.isCompatible(this._item.minClass)` → ajouter `⌘+v` si oui
 
 ## En cours
 
@@ -34,22 +33,23 @@ sur `ListerBrin` / `ListerPerso` (cf. `feedback_panel_methods`).
 
 **À faire ensuite dans l'ordre :**
 
-#### Clipboard (suite)
-1. `Item.toClipboardData()` dans `abstract/Item.js` : `PROPS.filter(f => !f.unique).map(f => [f.name, this[f.name]])`
-2. `Lister.copySelectedItem()` dans `abstract/Lister.js` + import `Clipboard`
-3. `c: { meta: 'copySelectedItem' }` dans `listen/Lister.js`
-4. `ContextualHelp._buildShortcuts()` : vérifier `Clipboard.isCompatible(this._item.minClass)` → ajouter `⌘+v` si oui
-
-
 > **[LIRE TOUJOURS AVANT TOUT TRAVAIL SUR LES TESTS]**
 > - Déplacer les tests dans `e2e/_tdd/` avant de travailler dessus
-> - S’inspirer de `public-old` pour le fonctionnement anciennement implémenté (ne pas hésiter à reprendre du code, si valide, surtout s’il ne concerne pas la gestion des keyboard events, radicalement différente dans la nouvelle architecture).
+> - S'inspirer de `public-old` pour le fonctionnement anciennement implémenté (ne pas hésiter à reprendre du code, si valide, surtout s'il ne concerne pas la gestion des keyboard events, radicalement différente dans la nouvelle architecture).
 > - Les tests existants, malgré les nombreuses migrations déjà effecutées, ne respectent peut-être pas nouvelle architecture — les corriger au besoin.
 > - **IMPÉRATIF** : si on rencontre le même échec **après trois essais de correction**, ON MET DES LOG(s) pour voir où ça coince.
 
 <a name="todo-after"></a>
 
 ## À faire après
+
+### Maj+s → styles sur events cochés
+
+Touche `S` (Maj+s) sur events-panel → ouvre panneau styles pour **tous les events cochés** :
+- Titre du panneau : "Styles des events cochés" (avec "cochés" en rouge)
+- `applyToEvents` dans `ListerStyle` doit appliquer à chaque event coché (TODO déjà marqué dans le code)
+- `⌘+↑`/`⌘+↓` déplace le style ET actualise TOUS les events cochés
+- Prévoir nouveaux tests dans `e2e/_tdd/style-maj-panel.spec.js`
 
 ### Fichiers `e2e/project/` à reprendre (non verts)
 - `new-project-existing-db.spec.js`
@@ -62,4 +62,3 @@ sur `ListerBrin` / `ListerPerso` (cf. `feedback_panel_methods`).
 ## Réflexions
 
 - [ ] **RÉFLEXION — Majuscule = minuscule dans BaseListener** (`public/classes/models/abstract/BaseListener.js`) : actuellement les touches majuscules doivent être dupliquées explicitement dans chaque LISTENERS (ex: `n` ET `N` dans ListerListener). Réfléchir à un système "majuscule fallback sur minuscule SAUF si la majuscule est explicitement définie dans LISTENERS". Exemple actuel : `ListerListener.js` ligne 13 `N: { nokey: 'createNew' }`.
-

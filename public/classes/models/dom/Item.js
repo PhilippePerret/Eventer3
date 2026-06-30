@@ -19,6 +19,7 @@ export default {
     this._buildContent(el)
     this.el = el
     this.attach(el)
+    this._afterBuild?.()
     return el
   },
 
@@ -145,6 +146,15 @@ export default {
 
   // Ids des persos à afficher. Défaut = persos directs (Brin). Event override (ajoute les hérités).
   _persoIdsForMarks() { return this.perso_ids ?? [] },
+
+  memoAsTarget() {
+    this.project.targetsManager.add(this)
+  },
+
+  openTargetsPanel() {
+    const field = this._editingFields?.[this._editingFieldIdx ?? 0]
+    this.project.targetsManager.openPanel(field)
+  },
 
   refreshPersosMarks() {
     const el = this.el?.querySelector(`.${this.minClass}-persos-marks`)

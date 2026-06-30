@@ -11,6 +11,8 @@ import { DEFAULT_COLOR } from '../constants/common.js'
 import ContextualHelp from '../../ui/ContextualHelp.js'
 import { Clipboard } from './Clipboard.js'
 
+const EDITION_HANDLED_KEYS = { Tab: true, Enter: true, Escape: true, ArrowLeft: true }
+
 // tag::class-item[]
 export default class Item extends KeyDispatcher {
 // end::class-item[]
@@ -37,7 +39,7 @@ export default class Item extends KeyDispatcher {
   onkeydown(ev) {
     if (this.editing) {
       if (document.activeElement?.isContentEditable) {
-        if (ev.key !== 'Tab' && ev.key !== 'Enter' && ev.key !== 'Escape' && ev.key !== 'ArrowLeft') { ev.stopPropagation(); return }
+        if (!EDITION_HANDLED_KEYS[ev.key] && !ev.metaKey) { ev.stopPropagation(); return }
       } else if (!this.constructor.LISTENERS[ev.key]) {
         return stopEvent(ev)
       }

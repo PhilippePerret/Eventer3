@@ -4,5 +4,6 @@ export const ItemLi = {
   , Tab:        { nokey: 'onTab'                }
   , ArrowRight: { nokey: 'enterInside'          }
   , '?':        { meta:  'openContextualHelp'   }
-  , ' ':        { nokey: 'toggleChecked'          }
+  , ' ':        { nokey: 'toggleChecked'           }
+  , k:          { nokey: 'memoAsTarget', meta: 'openTargetsPanel' }
 }

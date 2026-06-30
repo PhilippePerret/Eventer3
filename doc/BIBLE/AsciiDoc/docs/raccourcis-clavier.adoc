@@ -5,18 +5,18 @@
 .Combinaisons générales
 [cols="2,1,4,1"]
 |====
-| Combinaison   | Mode    | Effet                                       | Méthode
+| **Combinaison**  | **Mode**  | **Effet**                                    | **Méthode**
 
 4+| **Sélection & déplacements**
 | combo:fh[]      | Normal    | Sélectione l'Item précédent                   | Lister.selectPrev
 | combo:fb[]      | Normal    | Sélectionne l'Item suivant                    | Lister.selectNext
 | combo:cmd+fh[]  | Normal    | Déplacement de l'Item vers le haut            | Lister.moveUp
 | combo:cmd+fb[]  | Normal    | Déplacement de l'Item vers le bas             | Lister.moveDown
-| combo:k[]       | Projects  | Ajouter le projet dans la liste des cibles    | ???
-| combo:k[]       | Events    | Ajouter l'Event dans la liste des cibles      | ???
-| combo:k[]       | PBrins    | Ajouter le brin dans la liste des cibles      | ???
-| combo:k[]       | PPersp    | Ajouter le personnage dans liste des cibles   | ???
-| combo:cmd+k[]   | Edition   | Ajouter un lien vers une cible dans le texte  | ???
+| combo:k[]       | Projects  | Ajouter le projet dans la liste des cibles    | TargetsManager.add
+| combo:k[]       | Events    | Ajouter l'Event dans la liste des cibles      | TargetsManager.add
+| combo:k[]       | PBrins    | Ajouter le brin dans la liste des cibles      | TargetsManager.add
+| combo:k[]       | PPersp    | Ajouter le personnage dans liste des cibles   | TargetsManager.add
+| combo:cmd+k[]   | Edition   | Ajouter un lien vers une cible dans le texte  | TargetsPanel.open // peut être changé
 | combo:space[]   | Display   | Coche/décoche l'`Item` (sauf `Project`)       | ???
 
 4+| **Hiérarchie**

@@ -8,7 +8,8 @@ export default class ListerStyle extends Lister {
   static PANEL_ID   = 'style-panel'
   static CHECK_KEY  = 'css'
 
-  get minClass() { return 'style' }
+  get minClass()    { return 'style'            }
+  get contextItem() { return this._contextItem }
 
   constructor(data = {}) {
     super(data)
@@ -23,13 +24,17 @@ export default class ListerStyle extends Lister {
     this.item_ids = this._allStyles.map(s => s.id)
   }
 
+  _applyContext() {
+    this._listerEvent = this.contextItem.parentLister
+  }
+
   _syncChecked() {
     const checkedNames = this.contextItem.css ?? []
     this.items.forEach(s => {
       s.checked = checkedNames.includes(s.name)
       s.el?.classList.toggle('checked', s.checked)
     })
-    this.selectedIndex = 0
+    this.selectAt(0)
   }
 
   _afterToggle(_style, ev) {
@@ -42,6 +47,10 @@ export default class ListerStyle extends Lister {
     ev.css = this.items.filter(s => s.checked).map(s => s.id)
     ListerStyle.applyToEvents(ev, this.items)
     ev.scheduleSave()
+  }
+
+  applyEventCss(ev) {
+    ListerStyle.applyToEvents(ev, this.items)
   }
 
   static applyToEvents(event, styles) {
@@ -58,8 +67,8 @@ export default class ListerStyle extends Lister {
     const css = event.css ?? []
     if (!css.length) { el.textContent = ''; return }
     el.textContent = css
-      .map(n => { const s = styles.find(x => x.name === n); return s ? `.event-item[data-id="${event.id}"] .event-text { ${s.css} }` : '' })
+      .map(n => { const s = styles.find(x => x.name === n); return s ? `.event-item[data-id="${event.id}"] .event-title { ${s.css} }` : '' })
       .filter(Boolean).join('\n')
-      + `\n.event-item[data-id="${event.id}"].selected:not(.editing) .event-text { color: white !important; }`
+      + `\n.event-item[data-id="${event.id}"].selected:not(.editing) .event-title { color: white !important; }`
   }
 }

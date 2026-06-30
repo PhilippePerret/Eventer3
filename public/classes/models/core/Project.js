@@ -4,6 +4,7 @@ import ListerBrin  from './ListerBrin.js'
 import ListerPerso from './ListerPerso.js'
 import ListerEvent from './ListerEvent.js'
 import ListerStyle from './ListerStyle.js'
+import TargetsManager from '../../ui/TargetsManager.js'
 import { PROJECT_STATES, PROJECT_TYPES, PROJECT_COLORS } from '../constants/Project.js'
 import { WORD_FORMS } from '../../../constants/constants.js'
 import LOG from '../../../system/LOG.js'
@@ -18,9 +19,10 @@ export default class Project extends Item {
     this.project = this   // un Project est son propre contexte projet
   }
 
-  get listerBrins()  { return this._lbrins  ?? (this._lbrins  = new ListerBrin({ project: this }))  }
-  get listerPersos() { return this._lpersos ?? (this._lpersos = new ListerPerso({ project: this })) }
-  get listerStyle()  { return this._lstyle  ?? (this._lstyle  = new ListerStyle({ project: this })) }
+  get listerBrins()    { return this._lbrins  ?? (this._lbrins  = new ListerBrin({ project: this }))       }
+  get listerPersos()   { return this._lpersos ?? (this._lpersos = new ListerPerso({ project: this }))     }
+  get listerStyle()    { return this._lstyle  ?? (this._lstyle  = new ListerStyle({ project: this }))     }
+  get targetsManager() { return this._tmgr   ?? (this._tmgr   = new TargetsManager(this))                }
 
   // Seul point à tenir à jour si on ajoute une classe d'item : type → table { id → item }
   get itemsById() {
@@ -38,6 +40,7 @@ export default class Project extends Item {
     await this.listerStyle.load()
     this.listerStyle.build()
     await this._enterChildLister(ListerEvent, this.lister_id)
+    await this.targetsManager.load()
   }
 
   async onChildListerCreated(child) {
