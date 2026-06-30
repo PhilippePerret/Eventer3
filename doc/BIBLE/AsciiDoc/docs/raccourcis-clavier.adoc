@@ -1,6 +1,6 @@
 == Combinaisons clavier ==
 
-<i>Cette section répertorie l'intégralité des raccourcis-clavier utilisés dans cette application 100 % claiver (ou "zéro-souris")</i>
+_Cette section répertorie l'intégralité des raccourcis-clavier utilisés dans cette application 100 % claiver (ou "zéro-souris")_
 
 .Combinaisons générales
 [cols="2,1,4,1"]

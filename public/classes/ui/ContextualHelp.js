@@ -1,5 +1,6 @@
 import KeyboardablePanel from './KeyboardablePanel.js'
 import { HELP_PER_CONTEXT } from '../../constants/contextual_help.js'
+import { Clipboard } from '../models/abstract/Clipboard.js'
 
 export default class ContextualHelp extends KeyboardablePanel {
 
@@ -27,7 +28,6 @@ export default class ContextualHelp extends KeyboardablePanel {
     this._item       = item
     this.itemMode = item.editing ? 'editing' : 'list'
     this._contextKey = `${item.minClass}-${this.itemMode}`
-    console.log("Contexte d'aide demandé : %s", this._contextKey)
     this._shortcuts  = []
     this._renderItems = []
     this._buildShortcuts()
@@ -130,6 +130,11 @@ export default class ContextualHelp extends KeyboardablePanel {
       expand(other.shortcuts)
     }
     expand(ctx.shortcuts)
+    if (Clipboard.isCompatible(this._item.minClass)) {
+      const entry = { sc: '⌘+v', ef: 'Coller' }
+      this._shortcuts.push(entry)
+      this._renderItems.push(entry)
+    }
   }
 
 }

@@ -2,14 +2,6 @@
 
 <a name="current"></a>
 
-## À faire EN PREMIER
-
-**Clipboard**
-1. `Item.toClipboardData()` dans `abstract/Item.js` : `PROPS.filter(f => !f.unique).map(f => [f.name, this[f.name]])`
-2. `Lister.copySelectedItem()` dans `abstract/Lister.js` + import `Clipboard`
-3. `c: { meta: 'copySelectedItem' }` dans `listen/Lister.js`
-4. `ContextualHelp._buildShortcuts()` : vérifier `Clipboard.isCompatible(this._item.minClass)` → ajouter `⌘+v` si oui
-
 ## En cours
 
 ### Chantier centralisation Project courant (27/06)

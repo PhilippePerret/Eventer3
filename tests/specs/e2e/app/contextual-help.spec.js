@@ -1,5 +1,5 @@
 // Origine: tests/specs/e2e/app/contextual-help.spec.js
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press } from '../__setup__.js'
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 
 test.beforeEach(() => {
@@ -139,11 +139,11 @@ test('project-list : ␣ absent (except depuis with-selected)', async ({ page })
 
 // ── Clipboard paste ───────────────────────────────────────────────
 
-test.only('⌘+v apparaît dans l\'aide si clipboard compatible (après ⌘+c)', async ({ page }) => {
+test('⌘+v apparaît dans l\'aide si clipboard compatible (après ⌘+c)', async ({ page }) => {
   await page.goto('/')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press('Meta+c')
-  await pane1(page).locator('.project-item.selected').press(OPEN_KEY)
+  await press(page, 'Meta+c')
+  await press(page, OPEN_KEY)
   const keys = await pane1(page).locator('.contextual-help__key').allTextContents()
   expect(keys.some(k => k.includes('v'))).toBeTruthy()
 })
@@ -151,25 +151,25 @@ test.only('⌘+v apparaît dans l\'aide si clipboard compatible (après ⌘+c)',
 test('⌘+v absent de l\'aide si clipboard vide', async ({ page }) => {
   await page.goto('/')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press(OPEN_KEY)
+  await press(page, OPEN_KEY)
   const keys = await pane1(page).locator('.contextual-help__key').allTextContents()
-  expect(keys.some(k => k === '⌘ + v')).toBeFalsy()
+  expect(keys.some(k => k.includes('v'))).toBeFalsy()
 })
 
 test('⌘+v absent si clipboard incompatible (brin copié, panneau persos)', async ({ page }) => {
   installFixtures('with-brins-and-persos')
   await page.goto('/')
   await expect(pane1(page).locator('.project-item').first()).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
-  await pane1(page).locator('.event-item.selected').press('b')
+  await press(page, 'b')
   await expect(pane1(page).locator('#brins-panel')).toBeVisible()
-  await pane1(page).locator('.brin-item.selected').press('Meta+c')
-  await pane1(page).locator('.brin-item.selected').press('p')
+  await press(page, 'Meta+c')
+  await press(page, 'p')
   await expect(pane1(page).locator('#persos-panel')).toBeVisible()
-  await pane1(page).locator('.perso-item.selected').press(OPEN_KEY)
+  await press(page, OPEN_KEY)
   const keys = await pane1(page).locator('.contextual-help__key').allTextContents()
-  expect(keys.some(k => k === '⌘ + v')).toBeFalsy()
+  expect(keys.some(k => k.includes('v'))).toBeFalsy()
 })
 
 // ── Templates wf ───────────────────────────────────────────────────
