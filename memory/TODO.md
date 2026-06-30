@@ -4,7 +4,12 @@
 
 ## À faire EN PREMIER
 
-**Remettre en route `⌘+↑` / `⌘+↓` déplacement items — tests dans `e2e/_tdd/keyboard-reorder-items.spec.js`**
+**Gestion des styles — panneau style, déplacement `⌘+↑`/`⌘+↓`, maj event(s) courant(s)**
+- Migrer panneau style depuis ancienne architecture
+- Touche `s` sur events-panel → ouvre style panel pour l'event sélectionné
+- Touche `S` (Maj+s) → ouvre style panel pour tous les events cochés (titre "Styles des events cochés" avec "cochés" en rouge)
+- `⌘+↑`/`⌘+↓` déplace le style et actualise l'event courant (ou les events cochés)
+- Tests dans `e2e/_tdd/style-reorder.spec.js` (4 tests)
 
 ## En cours
 
@@ -52,7 +57,6 @@ sur `ListerBrin` / `ListerPerso` (cf. `feedback_panel_methods`).
 - `new-project-under-selection.spec.js`
 - `open-existing-project.spec.js`
 
-- [ ] `⌘↓` / `⌘↑` pour déplacer les projets ou les events
 - [ ] `Enter` pour éditer les évènements (event)
 
 ## Réflexions

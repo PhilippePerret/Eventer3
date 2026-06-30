@@ -1,5 +1,12 @@
 # CHANGELOG — Eventer3
 
+## 2026-06-30 — ⌘+↑/↓ déplacement items (project, event, brin, perso)
+
+- **`abstract/Lister.js`** : `moveDown()`, `moveUp()`, `_moveItem(direction)`, `_syncIdsOnMove(from, to)`. Gestion items filtrés (skip). DOM manipulé directement (splice + `after`/`before`). `void this.save()` pour persistence.
+- **`listen/Lister.js`** : `ArrowUp/ArrowDown` enrichis avec `meta: 'moveUp'`/`meta: 'moveDown'`.
+- Tests : `project-reorder.spec.js`, `event-reorder.spec.js`, `brin-reorder.spec.js`, `perso-reorder.spec.js` déplacés dans leurs répertoires respectifs (17 tests verts).
+- Styles : `style-reorder.spec.js` reste dans `_tdd/` (panneau style pas encore migré).
+
 ## 2026-06-29 — Refresh différé marks persos à fermeture panneau brins
 
 - **`ListerBrin._initPanel()`** : initialise `_listerEvent` + `_modifiedBrins = {}` à chaque ouverture.

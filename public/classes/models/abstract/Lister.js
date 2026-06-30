@@ -73,6 +73,33 @@ export default class Lister extends KeyDispatcher {
   async createNew()       { await this._createAt(this.selectedIndex + 1) }
   async createNewBefore() { await this._createAt(this.selectedIndex)     }
 
+  moveDown() { this._moveItem(1)  }
+  moveUp()   { this._moveItem(-1) }
+
+  _moveItem(direction) {
+    const from = this.selectedIndex
+    if (from < 0) return
+    let to = from + direction
+    while (to >= 0 && to < this.items.length && this.items[to].filtered) to += direction
+    if (to < 0 || to >= this.items.length) return
+    const movedItem = this.items[from]
+    const targetEl  = this.items[to].el
+    this.items.splice(from, 1)
+    this.items.splice(to, 0, movedItem)
+    if (direction > 0) targetEl.after(movedItem.el)
+    else               targetEl.before(movedItem.el)
+    this.selectedIndex = to
+    this._syncIdsOnMove(from, to)
+    movedItem.focus()
+    void this.save()
+  }
+
+  _syncIdsOnMove(from, to) {
+    const movedId = this.item_ids[from]
+    this.item_ids.splice(from, 1)
+    this.item_ids.splice(to, 0, movedId)
+  }
+
   copySelectedItem() {
     this.items[this.selectedIndex]?.toClipboardData(true)
   }

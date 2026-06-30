@@ -10,8 +10,8 @@
 4+| **Sélection & déplacements**
 | combo:fh[]      | Normal    | Sélectione l'Item précédent                   | Lister.selectPrev
 | combo:fb[]      | Normal    | Sélectionne l'Item suivant                    | Lister.selectNext
-| combo:cmd+fh[]  | Normal    | Déplacement de l'Item vers le haut            | Lister.mo
-| combo:cmd+fb[]  | Normal    | Déplacement de l'Item vers le bas             | Lister.mo
+| combo:cmd+fh[]  | Normal    | Déplacement de l'Item vers le haut            | Lister.moveUp
+| combo:cmd+fb[]  | Normal    | Déplacement de l'Item vers le bas             | Lister.moveDown
 | combo:k[]       | Projects  | Ajouter le projet dans la liste des cibles    | ???
 | combo:k[]       | Events    | Ajouter l'Event dans la liste des cibles      | ???
 | combo:k[]       | PBrins    | Ajouter le brin dans la liste des cibles      | ???
@@ -39,9 +39,10 @@
 | combo:cmd+c[]   | Normal  | Copier l'Item sélectionné dans le presse-papier   | Lister.copySelectedItem
 | combo:cmd+v[]   | Normal  | Coller l'Item du presse-papier                    | Lister.pasteItem
 
-| combo:s[]       | Events  | Ouvrir le panneau des styles pour les définir     | ???
-| combo:cmd+fb[]  | Styles  | Déplacer le style vers le bas (précédence)        | ???
-| combo:cmd+ffh[] | Styles  | Déplacer le style vers le haut (non prioritaire)  | ???
+| combo:s[]       | Events  | Ouvrir le panneau des styles pour les définir       | ???
+| combo:maj+s[]   | Events  | Définir les styles pour tous les `Event`(s) cochés  | ???
+| combo:cmd+fb[]  | Styles  | Déplacer le style vers le bas (précédence)          | ???
+| combo:cmd+ffh[] | Styles  | Déplacer le style vers le haut (non prioritaire)    | ???
 
 4+| Panneaux
 | combo:cmd+enter[]   | Panneau | Ferme le panneau ouvert                       | ???
