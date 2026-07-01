@@ -17,6 +17,7 @@
 ## En cours
 
 - Tests en live et corriger les bugs au fur et à mesure
+- Faire passer TOUS les tests
 
 
 <a name="todo-after"></a>
