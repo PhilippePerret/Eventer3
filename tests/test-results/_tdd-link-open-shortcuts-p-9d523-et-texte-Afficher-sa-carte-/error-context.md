@@ -12,16 +12,15 @@
 # Error details
 
 ```
-Error: expect(locator).toHaveClass(expected) failed
+Error: expect(locator).toBeVisible() failed
 
-Locator: locator('#pane-1').contentFrame().locator('.event-item').first()
-Expected pattern: /selected/
-Timeout: 5000ms
+Locator: locator('#pane-1').contentFrame().locator('#events-panel')
+Expected: visible
 Error: element(s) not found
 
 Call log:
-  - Expect "toHaveClass" with timeout 5000ms
-  - waiting for locator('#pane-1').contentFrame().locator('.event-item').first()
+  - Expect "toBeVisible" with timeout 5000ms
+  - waiting for locator('#pane-1').contentFrame().locator('#events-panel')
 
 ```
 
@@ -45,9 +44,9 @@ Call log:
   9   |   await page.goto('/')
   10  |   await expect(pane1(page).locator('.project-item').first()).toHaveClass(/selected/)
   11  |   await press(page, 'ArrowRight')
-  12  |   await page.waitForLoadState('networkidle')
-> 13  |   await expect(pane1(page).locator('.event-item').first()).toHaveClass(/selected/)
-      |                                                            ^ Error: expect(locator).toHaveClass(expected) failed
+> 12  |   await expect(pane1(page).locator('#events-panel')).toBeVisible()
+      |                                                      ^ Error: expect(locator).toBeVisible() failed
+  13  |   await expect(pane1(page).locator('.event-item').first()).toHaveClass(/selected/)
   14  | }
   15  | 
   16  | async function enterSubLister(page) {
@@ -147,5 +146,4 @@ Call log:
   110 |   await press(page, 'g')
   111 |   await expect(pane1(page).locator('.notification')).toBeVisible()
   112 |   await expect(pane1(page).locator('.notification')).toContainText('Aucune cible')
-  113 | })
 ```

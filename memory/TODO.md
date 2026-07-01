@@ -24,6 +24,22 @@
 - Supprimer du fichier les tests traités au fur et à mesure
 - Migrer `locator.press` → `press(page,key)` AU FUR ET À MESURE (jamais en global)
 
+---
+
+### Point d'arrêt 2026-07-01
+
+Tests 60-74 (`event-fields.spec.js`) : **toujours dans `_tdd/`**, 14/16 passent.
+2 échecs restants : TAB depuis `effet` ne focus pas `lieu` et persistance `lieu`.
+Piste : remplacer `tabindex='0'` par `tabindex='-1'` sur les trigger spans dans `DOM.buildEditSelectField`.
+
+Tests liens (`links-tab-open.spec.js`, `link-open-shortcuts.spec.js`) : **dans `_tdd/`**, 0 passent.
+- Fixtures `with-links` et `with-broken-links` migrées (lister `type='event'` → `'events'`).
+- `#events-panel` toujours invisible après ArrowRight → **cause non identifiée**.
+  Piste : vérifier depuis quel `cwd` Playwright lance les tests (impact sur `path.resolve('fixtures', name)` dans `installFixtures`).
+- `listen/Event.js` : Tab/o/g/a/c déjà ajoutés à `ListerEventLi`.
+- `DOM.js` : import `Texte` déjà ajouté.
+- Reste : implémenter `cycleLink`/`cycleLinkBack`/`openActiveLink`/`goLink`/`splitLink`/`cardLink` dans `ListerEvent`, créer `LinkOpenPopup.js`, rendre titre en markdown dans `buildTextField`.
+
 
 <a name="todo-after"></a>
 

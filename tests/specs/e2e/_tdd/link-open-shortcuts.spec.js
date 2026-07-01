@@ -9,7 +9,7 @@ async function gotoEventList(page) {
   await page.goto('/')
   await expect(pane1(page).locator('.project-item').first()).toHaveClass(/selected/)
   await press(page, 'ArrowRight')
-  await page.waitForLoadState('networkidle')
+  await expect(pane1(page).locator('#events-panel')).toBeVisible()
   await expect(pane1(page).locator('.event-item').first()).toHaveClass(/selected/)
 }
 

@@ -1,5 +1,6 @@
 import PopupSelect from '../ui/PopupSelect.js'
 import { stopEvent } from './events.js'
+import Texte from '../../system/Texte.js'
 
 export default class DOM {
 
