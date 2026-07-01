@@ -49,7 +49,7 @@ export default class KeyboardablePanel {
     el.setAttribute('tabindex', '-1')
 
     const titleEl = document.createElement('div')
-    titleEl.className   = 'ftpanel__title'
+    titleEl.className   = ('ftpanel__title' + (this._panelClass ? ' ' + this._panelClass + '__title' : ''))
     titleEl.textContent = this._title
     el.appendChild(titleEl)
 

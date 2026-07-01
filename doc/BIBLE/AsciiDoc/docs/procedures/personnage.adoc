@@ -1,0 +1,16 @@
+=== Personnage ===
+
+[#procedure-creation-personnage]
+==== Création d'un personnage ====
+
+[cols="1,4"]
+|====
+| **Action**      | **Attendu**
+|                 | On doit se trouver sur un évènemencier
+| combo:p[]       
+| Le panneau des personnages s'ouvre. +
+Un premier personnage est toujours créé s'il n'y en a pas encore
+
+| combo:n[]       | Un nouveau personnage se met en édition
+|====
+

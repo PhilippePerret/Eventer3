@@ -1,4 +1,4 @@
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 
 test.beforeEach(() => {
@@ -11,7 +11,7 @@ async function gotoApp(page) {
 }
 
 async function openSplit(page) {
-  await page.keyboard.press('Alt+2')
+  await press(page, 'Alt+2')
   await pane1(page).locator('.popup-select__option', { hasText: 'Vertical' }).click()
   await expect(page.frameLocator('#pane-2').locator('.project-item').first()).toBeVisible()
 }
@@ -38,7 +38,7 @@ test('Cmd+2 → pane-2 reçoit data-focused (auto-focus au chargement)', async (
 test('Shift+Tab depuis pane-2 → pane-1 reçoit data-focused', async ({ page }) => {
   await gotoApp(page)
   await openSplit(page)
-  await page.keyboard.press('Shift+Tab')
+  await press(page, 'Shift+Tab')
   await expect(page.locator('#pane-1')).toHaveAttribute('data-focused', '')
   await expect(page.locator('#pane-2')).not.toHaveAttribute('data-focused', '')
 })
@@ -46,7 +46,7 @@ test('Shift+Tab depuis pane-2 → pane-1 reçoit data-focused', async ({ page })
 test('Cmd+1 depuis pane-2 → pane-1 reçoit data-focused', async ({ page }) => {
   await gotoApp(page)
   await openSplit(page)
-  await page.keyboard.press('Alt+1')
+  await press(page, 'Alt+1')
   await expect(page.locator('#pane-1')).toHaveAttribute('data-focused', '')
   await expect(page.locator('#pane-2')).not.toHaveAttribute('data-focused', '')
 })
@@ -54,7 +54,7 @@ test('Cmd+1 depuis pane-2 → pane-1 reçoit data-focused', async ({ page }) => 
 test('Cmd+0 ferme split → pane-1 reçoit data-focused', async ({ page }) => {
   await gotoApp(page)
   await openSplit(page)
-  await page.keyboard.press('Alt+0')
+  await press(page, 'Alt+0')
   await expect(page.locator('#pane-1')).toHaveAttribute('data-focused', '')
   await expect(page.locator('#pane-2')).not.toHaveAttribute('data-focused', '')
 })

@@ -1,0 +1,6 @@
+= EventerX — Manuel utilisateur =
+:toc:
+
+== Procédures ==
+
+include::docs/procedures.adoc[]

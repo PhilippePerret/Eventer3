@@ -1,5 +1,5 @@
 import { installFixtures } from '../../../helpers/install-fixtures'
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('many-events')
@@ -8,13 +8,14 @@ test.beforeEach(() => {
 async function openStatePopup(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
+  await press(page, 'ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
-  await pane1(page).locator('.event-item.selected').press('Enter')
+  await press(page, 'Enter')
   await expect(pane1(page).locator('.event-item.selected input[name="title"]')).toBeFocused()
-  await pane1(page).locator('.event-item.selected').press('Tab')
+  await press(page, 'Tab')
   await expect(pane1(page).locator('.event-item.selected [data-field-name="state"]')).toBeFocused()
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  await press(page, 'ArrowDown')
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
 }
 

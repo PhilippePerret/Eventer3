@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import os from 'node:os'
 import { installFixtures } from '../../../helpers/install-fixtures.js'
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('many-projects')
@@ -24,10 +24,10 @@ async function setupFolderWithDb(page) {
 
 async function openPickerAndSelectFolder(page) {
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press('n')
+  await press(page, 'n')
   await expect(pane1(page).locator('.file-picker')).toBeVisible()
   await expect(pane1(page).locator('.file-picker__entry-name', { hasText: 'projet-existant' })).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press('Enter')
+  await press(page, 'Enter')
 }
 
 // ── Dialog ────────────────────────────────────────────────────────────────────
@@ -52,9 +52,9 @@ test('dialog eventer.db → Tab+Tab+Enter (Annuler) → aucun projet créé', as
   const countBefore = await pane1(page).locator('.project-item').count()
   await openPickerAndSelectFolder(page)
   await expect(pane1(page).locator('.ftpanel.kpanel')).toBeVisible()
-  await pane1(page).locator('.ftpanel.kpanel').press('Tab')   // 0 Importer → 1 Détruire
-  await pane1(page).locator('.ftpanel.kpanel').press('Tab')   // 1 Détruire → 2 Annuler
-  await pane1(page).locator('.ftpanel.kpanel').press('Enter')
+  await press(page, 'Tab')   // 0 Importer → 1 Détruire
+  await press(page, 'Tab')   // 1 Détruire → 2 Annuler
+  await press(page, 'Enter')
   await expect(pane1(page).locator('.ftpanel.kpanel')).not.toBeVisible()
   await expect(pane1(page).locator('.project-item')).toHaveCount(countBefore)
 })
@@ -65,7 +65,7 @@ test('dialog eventer.db → Enter (Oui) importe le projet existant', async ({ pa
   const countBefore = await pane1(page).locator('.project-item').count()
   await openPickerAndSelectFolder(page)
   await expect(pane1(page).locator('.ftpanel.kpanel')).toBeVisible()
-  await pane1(page).locator('.ftpanel.kpanel').press('Enter')
+  await press(page, 'Enter')
   await page.waitForLoadState('networkidle')
   await expect(pane1(page).locator('.project-item')).toHaveCount(countBefore + 1)
 })
@@ -76,8 +76,8 @@ test('dialog eventer.db → Tab+Enter (Détruire) crée un nouveau projet vide',
   const countBefore = await pane1(page).locator('.project-item').count()
   await openPickerAndSelectFolder(page)
   await expect(pane1(page).locator('.ftpanel.kpanel')).toBeVisible()
-  await pane1(page).locator('.ftpanel.kpanel').press('Tab')   // 0 Importer → 1 Détruire
-  await pane1(page).locator('.ftpanel.kpanel').press('Enter')
+  await press(page, 'Tab')   // 0 Importer → 1 Détruire
+  await press(page, 'Enter')
   await page.waitForLoadState('networkidle')
   await expect(pane1(page).locator('.project-item')).toHaveCount(countBefore + 1)
 })

@@ -1,6 +1,7 @@
 import LOG from '../../../system/LOG.js'
 import { raise } from '../../../system/Error.js'
 import { ERRORS } from '../../../system/Locales.js'
+import StatusBar from '../../ui/StatusBar.js'
 
 export default {
 
@@ -26,7 +27,7 @@ export default {
     const header = document.createElement('div')
     header.className = 'lister-panel__header'
     const title = document.createElement('div')
-    title.className = 'panel__title'
+    title.className = 'panel-title'
     header.appendChild(title)
     panel.appendChild(header)
 
@@ -60,6 +61,9 @@ export default {
 
   activate() {
     this.container.classList.remove('hidden')
+    if (this.depth != null) this.container.setAttribute('data-depth', String(this.depth))
+    StatusBar.update(this.constructor.ITEM_CLASS?.name)
+    this.attach(this.container)
     this.focusSelected()
   },
 

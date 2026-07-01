@@ -1,5 +1,67 @@
 # CHANGELOG — Eventer3
 
+## 2026-07-01 — Tests 57-59 : edit-event-title
+
+- **Tests** : 2x ArrowRight → 1x (race condition même bug que delete-cascade) ; `input[name="title"]` → `[data-field="title"]` (contenteditable div) ; `toHaveValue` → `toHaveText` ; ajout `waitForLoadState('networkidle')` + attente `#projects-panel` avant ArrowRight après reload.
+
+## 2026-07-01 — Tests 47-56 : edit-event-state
+
+- **`PopupSelect.handleKeyDown`** : quand popup fermé, Escape/Enter/Tab/Space n'étaient pas propagés (stopEvent appelé via `attachAnchor` persistant sur le trigger). Fix : `if (!this.popupElement && event.key !== 'ArrowDown') return` — seul ArrowDown ouvre le popup, les autres touches propagent librement.
+- **`common.js` DEV_STATES** : typo `'dévelopmnt'` → `'développement'`.
+- **Tests** : sélecteur `[data-field-name="state"]` inexistant → `[data-field="state"]` (attribut posé par `buildEditSelectField`).
+
+## 2026-07-01 — Tests 43-46 : depth-calculation
+
+- **`Lister.constructor`** : `this.depth = data.depth ?? null` — depth non stocké, `activate()` ne pouvait jamais écrire `data-depth`.
+- **`dom/Lister.activate()`** : ajout `this.attach(this.container)` — re-attache listener du lister réactivé (sinon le lister enfant gardait le listener sur `#events-panel` après ArrowLeft).
+- **`abstract/Lister.leaveToParent()`** : ajout `this.parentLister.build()` avant `activate()` — `build()` du lister enfant vidait `body.innerHTML`, détruisant les els DOM du parent.
+- **Tests** : suppression checks `data-depth='0'` avant navigation (élément inexistant) ; ajout attente `#projects-panel` visible (race condition).
+
+## 2026-07-01 — Tests 39-42 : delete-cascade
+
+- **Race condition** (`page.goto('/')`) : `App.start()` async → `ListerProject.init()` non terminé avant iframe `load` event → ArrowRight perdu. Fix : attendre `#projects-panel` visible avant ArrowRight dans chaque test.
+- **Titre dialog** (`Lister.js`) : `title: item.title` → `title: 'Destruction de ' + item.title`.
+- **`.confirm-dialog__title`** (`KeyboardablePanel.js`) : titre recevait seulement `ftpanel__title`, ajout `panelClass + '__title'`.
+- **Test "Escape"** fautif → renommé "Annuler (Tab+Enter)" ; utilise Tab+Enter pour annuler (Escape ne ferme jamais un panneau).
+- **`afterEach`** : `waitForLoadState('networkidle')` pour laisser les requêtes DELETE se terminer avant réinstallation fixture.
+
+## 2026-07-01 — Tests 31-38 : bootstrap + brins + consolidate-level
+
+- **Test 31** (`bootstrap/first-item-selected.spec.js`) : fixture `many-projects` contient 4 projets. `toHaveCount(3)` → `toHaveCount(4)` + ajout nth(3). Vert.
+- **Test 32** (`brin/brins-selection.spec.js`) : vert (bug était dans l'ancienne architecture keyboard).
+- **Tests 33-38** (`event/consolidate-level.spec.js`) : `test.skip` — panneau outils (`Meta+t`, `.tools-panel`, consolidation) non implémenté. À traiter ultérieurement.
+
+## 2026-07-01 — Style panel : sélection/édition CSS
+
+- Tests 21-25 (`style-panel-selected-editing.spec.js`) : `.event-text` → `.event-title` (sélecteur obsolète). Tous verts.
+
+## 2026-07-01 — Style panel : nouvelles fonctionnalités
+
+- **`dom/Lister.js`** : `panel__title` → `panel-title` (classe correcte attendue par les tests).
+- **`core/Style.js`** : `onEnter()` → `toggleChecked()` (plus de startEditing sur les styles).
+- **`core/ListerStyle.js`** : `onkeydown()` override pour raccourcis `a`-`z` (toggle style par lettre). `_panelTitle()` → résolution badges/tokens via `Texte.replaceTokens()`. `_afterToggle()` → `applyToEvents()` live preview. `_syncChecked()` → sync depuis `contextItem.css`.
+- **`abstract/Lister.js`** : `display()` appelle `_updatePanelTitle()`. `_panelTitle()` hook (défaut null = pas de titre). Chaque lister peut surcharger.
+- Tests 17 et 18 (`style-panel-new-features.spec.js`) supprimés — testaient un comportement "preview+revert" inexistant dans la nouvelle architecture (styles auto-save comme tout le reste).
+- Tests 14-20 (`style-panel-new-features.spec.js`) : tous verts (7 tests, 2 supprimés).
+
+## 2026-07-01 — Mode LEVEL : sélection préservée + retour vers bon lister
+
+- **`ListerEvent._renderLevelMode()`** : capture `selectedItemId` avant rebuild → `findIndex` pour retrouver l'item dans la liste plate → `startIdx` correct. Strip 'selected' après chaque `item.build()` (évite la fausse sélection due à `parentLister.selectedIndex=0` des listers enfants).
+- Tests `display-mode-selection.spec.js` (3 tests) : tous verts.
+
+## 2026-07-01 — Mode LEVEL + barre d'état
+
+- **`public/classes/ui/StatusBar.js`** : nouveau singleton. `update(itemClassName)` → "DISP MODE PROJECTS/NESTING/LEVEL". `setDisplayMode()`, `toggleDisplayMode()`, `resetToNesting()`, `setFilterState()`.
+- **`dom/Lister.js`** `activate()` : ajoute `data-depth` sur container + appelle `StatusBar.update(ITEM_CLASS.name)`.
+- **`repo/Lister.js`** `_fetchData()` : stocke `man_depth` et `nature` depuis la réponse API.
+- **`ListerEvent.js`** : `depth`, `man_depth`, `nature` dans constructeur. `display()` reset StatusBar → NESTING. `toggleDisplayMode()` bascule NESTING↔LEVEL. `_renderLevelMode()` collecte récursivement les items à `targetDepth` (ou `man_depth`) → body flat (réels + virtuels). `selectNext/Prev` stop-at-bounds en mode LEVEL. `_exitLevelMode()` retourne au bon lister (via `_levelEntries`). `_isManLister()` selon `nature='man'` ou `depth===man_depth`.
+- Tests `display-mode-level.spec.js` (14 tests) et `status-bar-display-mode.spec.js` (5 tests) : tous verts.
+
+## 2026-07-01 — Aide contextuelle : tests corrigés
+
+- **`contextual-help.spec.js`** : ajout `await expect(#projects-panel).toBeVisible()` avant `press(Meta+?)` (race condition init async).
+- **`shortcuts-panel.spec.js`** : même correction timing + `Escape` → `Meta+Enter` pour fermer (Escape ne ferme jamais un panneau).
+
 ## 2026-06-30 — ⌘+↑/↓ déplacement items (project, event, brin, perso)
 
 - **`abstract/Lister.js`** : `moveDown()`, `moveUp()`, `_moveItem(direction)`, `_syncIdsOnMove(from, to)`. Gestion items filtrés (skip). DOM manipulé directement (splice + `after`/`before`). `void this.save()` pour persistence.

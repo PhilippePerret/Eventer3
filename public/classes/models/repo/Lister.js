@@ -7,7 +7,9 @@ export default {
     const def   = await fetch(`/api/listers/${id}${query}`, { cache: 'no-store' }).then(r => r.json())
     if (!def) return null
     this._missing = def.missing === true
-    if (def.id != null) this.id = def.id
+    if (def.id        != null) this.id        = def.id
+    if (def.man_depth != null) this.man_depth = def.man_depth
+    if (def.nature    != null) this.nature    = def.nature
     this.item_ids = def.item_ids ?? []
     return await fetch(`/api/listers/${id}/items${query}`, { cache: 'no-store' }).then(r => r.json())
   },

@@ -17,7 +17,13 @@
 ## En cours
 
 - Tests en live et corriger les bugs au fur et à mesure
-- Faire passer TOUS les tests
+
+**Tâche principale (multi-jours) : faire passer tous les tests**
+
+- Résultats complets dans `memory/tests-a-faire-passer.txt` (fichier ~10000 lignes)
+- Lire 100 lignes à la fois max
+- Supprimer du fichier les tests traités au fur et à mesure
+- Migrer `locator.press` → `press(page,key)` AU FUR ET À MESURE (jamais en global)
 
 
 <a name="todo-after"></a>

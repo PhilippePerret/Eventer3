@@ -1,5 +1,5 @@
 import { installFixtures } from '../../../helpers/install-fixtures'
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
 // Fixture level-mode-mixed :
 //   Liste#2 (depth=1) : [e1 "Acte I", e2 "Acte II", e3 "Acte III"]
@@ -14,11 +14,12 @@ test.beforeEach(() => {
 
 async function enterLevelMode(page) {
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
+  await press(page, 'ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
-  await pane1(page).locator('.event-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toHaveAttribute('data-depth', '2')
-  await pane1(page).locator('.event-item.selected').press('Meta+m')
+  await press(page, 'Meta+m')
   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
   await expect(pane1(page).locator('.event-item')).toHaveCount(3)
 }
@@ -30,10 +31,10 @@ test("LEVEL mode : item réel après un virtuel est sélectionnable et éditable
 
   await expect(pane1(page).locator('.event-item[data-id="e11"]')).toHaveClass(/selected/)
 
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  await press(page, 'ArrowDown')
   await expect(pane1(page).locator('.event-item[data-id="e31"]')).toHaveClass(/selected/)
 
-  await pane1(page).locator('.event-item.selected').press('Enter')
+  await press(page, 'Enter')
   const input = pane1(page).locator('.event-item[data-id="e31"] input[name="title"]')
   await expect(input).toBeVisible()
   await expect(input).toBeFocused()

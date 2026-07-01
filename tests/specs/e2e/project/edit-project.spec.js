@@ -1,6 +1,6 @@
 // Refactorisé — nouvelle architecture (2026-06-20)
 import { installFixtures } from '../../../helpers/install-fixtures'
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('many-events')
@@ -11,7 +11,7 @@ test.beforeEach(() => {
 async function startEditingFirstProject(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press('Enter')
+  await press(page, 'Enter')
   const titleInput = pane1(page).locator('.project-item.selected [contenteditable][data-field="title"]')
   await expect(titleInput).toBeFocused()
   return titleInput
@@ -20,8 +20,8 @@ async function startEditingFirstProject(page) {
 async function startEditingSecondProject(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press('ArrowDown')
-  await pane1(page).locator('.project-item.selected').press('Enter')
+  await press(page, 'ArrowDown')
+  await press(page, 'Enter')
   const titleInput = pane1(page).locator('.project-item.selected [contenteditable][data-field="title"]')
   await expect(titleInput).toBeFocused()
   return titleInput
@@ -38,7 +38,7 @@ test("un projet créé via FilePicker apparaît sélectionné dans la liste", as
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
 
   const { folderName } = await setupProjectFolder(page)
-  await pane1(page).locator('.project-item.selected').press('n')
+  await press(page, 'n')
   await createAndSelectFolderInPicker(page, expect, folderName)
   await page.waitForLoadState('networkidle')
 
@@ -55,7 +55,7 @@ test("la hauteur du project-item reste identique en édition", async ({ page }) 
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
   const item = pane1(page).locator('.project-item.selected')
   const heightBefore = (await item.boundingBox()).height
-  await item.press('Enter')
+  await press(page, 'Enter')
   await expect(item.locator('[contenteditable][data-field="title"]')).toBeFocused()
   const heightAfter = (await item.boundingBox()).height
   expect(heightAfter).toBe(heightBefore)
@@ -73,18 +73,18 @@ test("édition : les champs PROPS sont éditables (title, state, type)", async (
 
 test("Tab cycle entre les champs PROPS éditables", async ({ page }) => {
   const titleInput = await startEditingFirstProject(page)
-  await titleInput.press('Tab')
+  await press(page, 'Tab')
   await expect(pane1(page).locator('.project-item.selected [data-field="state"]')).toBeFocused()
-  await pane1(page).locator('.project-item.selected [data-field="state"]').press('Tab')
+  await press(page, 'Tab')
   await expect(pane1(page).locator('.project-item.selected [data-field="type"]')).toBeFocused()
-  await pane1(page).locator('.project-item.selected [data-field="type"]').press('Tab')
+  await press(page, 'Tab')
   await expect(titleInput).toBeFocused()
 })
 
 test("Enter valide le nouveau titre", async ({ page }) => {
   const titleInput = await startEditingFirstProject(page)
   await titleInput.fill('Nouveau titre')
-  await titleInput.press('Enter')
+  await press(page, 'Enter')
 
   const firstProject = pane1(page).locator('.project-item').nth(0)
   await expect(firstProject.locator('.project-item__title')).toHaveText('Nouveau titre')
@@ -93,7 +93,7 @@ test("Enter valide le nouveau titre", async ({ page }) => {
 test("Escape restaure le titre original (premier projet)", async ({ page }) => {
   const titleInput = await startEditingFirstProject(page)
   await titleInput.fill('Titre temporaire')
-  await titleInput.press('Escape')
+  await press(page, 'Escape')
 
   const firstProject = pane1(page).locator('.project-item').nth(0)
   await expect(firstProject.locator('.project-item__title')).toHaveText('Projet A')
@@ -102,7 +102,7 @@ test("Escape restaure le titre original (premier projet)", async ({ page }) => {
 test("Escape restaure le titre original (second projet)", async ({ page }) => {
   const titleInput = await startEditingSecondProject(page)
   await titleInput.fill('Titre temp')
-  await titleInput.press('Escape')
+  await press(page, 'Escape')
 
   const secondProject = pane1(page).locator('.project-item').nth(1)
   await expect(secondProject.locator('.project-item__title')).toHaveText('Projet B')
@@ -113,7 +113,7 @@ test("Escape restaure le titre original (second projet)", async ({ page }) => {
 test("persistance : le titre modifié survit au rechargement (premier projet)", async ({ page }) => {
   const titleInput = await startEditingFirstProject(page)
   await titleInput.fill('Titre persistant A')
-  await titleInput.press('Enter')
+  await press(page, 'Enter')
   await page.waitForLoadState('networkidle')
 
   await page.reload()
@@ -123,7 +123,7 @@ test("persistance : le titre modifié survit au rechargement (premier projet)", 
 test("persistance : le titre modifié survit au rechargement (second projet)", async ({ page }) => {
   const titleInput = await startEditingSecondProject(page)
   await titleInput.fill('Titre persistant B')
-  await titleInput.press('Enter')
+  await press(page, 'Enter')
   await page.waitForLoadState('networkidle')
 
   await page.reload()

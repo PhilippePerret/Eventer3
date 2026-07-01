@@ -1,5 +1,5 @@
 import { installFixtures } from '../../../helpers/install-fixtures.js'
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('depth-move')
@@ -8,22 +8,22 @@ test.beforeEach(() => {
 // Ouvre le ConfirmDialog man_depth (2 boutons : Non / Oui)
 async function openManDepthConfirm(page) {
   await page.goto('/')
-  await pane1(page).locator('.event-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
-  await pane1(page).locator('.event-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toHaveAttribute('data-depth', '2')
-  await pane1(page).locator('.event-item.selected').press('t')
-  await pane1(page).locator('.event-item.selected').press('Enter')
-  await pane1(page).locator('.event-item.selected').press('ArrowUp')   // film/BD
-  await pane1(page).locator('.event-item.selected').press('ArrowUp')   // roman
-  await pane1(page).locator('.event-item.selected').press('Enter')
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
-  await pane1(page).locator('.event-item.selected').press('Enter')
-  await pane1(page).locator('.event-item.selected').press('ArrowUp')   // manuscrit
-  await pane1(page).locator('.event-item.selected').press('Enter')
-  await pane1(page).locator('.event-item.selected').press('Tab')       // footer → Annuler
-  await pane1(page).locator('.event-item.selected').press('Tab')       // footer → Appliquer
-  await pane1(page).locator('.event-item.selected').press('Enter')     // appliquer
+  await press(page, 't')
+  await press(page, 'Enter')
+  await press(page, 'ArrowUp')   // film/BD
+  await press(page, 'ArrowUp')   // roman
+  await press(page, 'Enter')
+  await press(page, 'ArrowDown')
+  await press(page, 'Enter')
+  await press(page, 'ArrowUp')   // manuscrit
+  await press(page, 'Enter')
+  await press(page, 'Tab')       // footer → Annuler
+  await press(page, 'Tab')       // footer → Appliquer
+  await press(page, 'Enter')     // appliquer
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
 }
 
@@ -44,18 +44,18 @@ test("Tab bascule le focus de Oui vers Non", async ({ page }) => {
   await openManDepthConfirm(page)
   // Par défaut : Oui focused
   await expect(pane1(page).locator('.panel-btn--focused')).toContainText('Oui')
-  await pane1(page).locator('.event-item.selected').press('Tab')
+  await press(page, 'Tab')
   // Après Tab : Non focused
   await expect(pane1(page).locator('.panel-btn--focused')).toContainText('Non')
 })
 
 test("Tab cycle complet : Non → Oui → Non", async ({ page }) => {
   await openManDepthConfirm(page)
-  await pane1(page).locator('.event-item.selected').press('Tab')  // Non
+  await press(page, 'Tab')  // Non
   await expect(pane1(page).locator('.panel-btn--focused')).toContainText('Non')
-  await pane1(page).locator('.event-item.selected').press('Tab')  // Oui
+  await press(page, 'Tab')  // Oui
   await expect(pane1(page).locator('.panel-btn--focused')).toContainText('Oui')
-  await pane1(page).locator('.event-item.selected').press('Tab')  // Non
+  await press(page, 'Tab')  // Non
   await expect(pane1(page).locator('.panel-btn--focused')).toContainText('Non')
 })
 
@@ -64,24 +64,24 @@ test("Tab cycle complet : Non → Oui → Non", async ({ page }) => {
 test("Enter avec Oui focused → man_depth sauvegardé, sibling devient roman-man", async ({ page }) => {
   await openManDepthConfirm(page)
   // Oui focused par défaut → Enter
-  await pane1(page).locator('.event-item.selected').press('Enter')
+  await press(page, 'Enter')
   await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
   // Vérifier que man_depth a été sauvegardé : sibling lister est roman-man
-  await pane1(page).locator('.event-item.selected').press('ArrowLeft')
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
-  await pane1(page).locator('.event-item.selected').press('ArrowRight')
+  await press(page, 'ArrowLeft')
+  await press(page, 'ArrowDown')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toHaveClass(/roman-man/)
 })
 
 test("Tab→Non puis Enter → man_depth non sauvegardé", async ({ page }) => {
   await openManDepthConfirm(page)
-  await pane1(page).locator('.event-item.selected').press('Tab')  // bascule sur Non
-  await pane1(page).locator('.event-item.selected').press('Enter')
+  await press(page, 'Tab')  // bascule sur Non
+  await press(page, 'Enter')
   await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
   // man_depth non sauvegardé : sibling ne devient pas roman-man
-  await pane1(page).locator('.event-item.selected').press('ArrowLeft')
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
-  await pane1(page).locator('.event-item.selected').press('ArrowRight')
+  await press(page, 'ArrowLeft')
+  await press(page, 'ArrowDown')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).not.toHaveClass(/roman-man/)
 })
 
@@ -90,11 +90,11 @@ test("Tab→Non puis Enter → man_depth non sauvegardé", async ({ page }) => {
 test("Escape annule même si Oui est focused", async ({ page }) => {
   await openManDepthConfirm(page)
   // Oui est focused par défaut
-  await pane1(page).locator('.event-item.selected').press('Escape')
+  await press(page, 'Escape')
   await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
-  await pane1(page).locator('.event-item.selected').press('ArrowLeft')
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
-  await pane1(page).locator('.event-item.selected').press('ArrowRight')
+  await press(page, 'ArrowLeft')
+  await press(page, 'ArrowDown')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).not.toHaveClass(/roman-man/)
 })
 

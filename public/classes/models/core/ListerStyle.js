@@ -1,6 +1,7 @@
 import Lister from '../abstract/Lister.js'
 import Style from './Style.js'
 import { ListerStyleLi } from '../listen/Style.js'
+import Texte from '../../../system/Texte.js'
 
 export default class ListerStyle extends Lister {
   static ITEM_CLASS = Style
@@ -28,6 +29,12 @@ export default class ListerStyle extends Lister {
     this._listerEvent = this.contextItem.parentLister
   }
 
+  _panelTitle() {
+    const persos   = Object.values(this.contextItem?.project?.itemsById?.persos ?? {})
+    const rendered = Texte.replaceTokens(this.contextItem?.title ?? '', { persos })
+    return `Styles · ${rendered}`
+  }
+
   _syncChecked() {
     const checkedNames = this.contextItem.css ?? []
     this.items.forEach(s => {
@@ -53,14 +60,17 @@ export default class ListerStyle extends Lister {
     ListerStyle.applyToEvents(ev, this.items)
   }
 
-  static applyToEvents(event, styles) {
-    /* 
-    
-    TODO : DOIT TENIR COMPTE DE : 
-    PANNEAU OUVERT AVEC s + MAJ => APPLIQUER À TOUS LES EVENTS COCHÉS
-    PANNEAU OUVERT AVEC s => APPLIQUER SEULEMENT À EVENT SÉLECTIONNÉ
+  onkeydown(ev) {
+    if (!ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey && /^[a-z]$/i.test(ev.key)) {
+      const idx  = ev.key.toLowerCase().charCodeAt(0) - 97
+      const item = this.items[idx]
+      if (item) { ev.preventDefault(); ev.stopPropagation(); item.toggleChecked() }
+      return
+    }
+    super.onkeydown(ev)
+  }
 
-     */
+  static applyToEvents(event, styles) {
     const id = `ev-style-${event.id}`
     let el   = document.getElementById(id)
     if (!el) { el = document.createElement('style'); el.id = id; document.head.appendChild(el) }

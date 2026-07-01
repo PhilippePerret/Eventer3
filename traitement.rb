@@ -44,10 +44,13 @@ FILES.each_with_index do |path, i|
   if bad_press?(code)
     w " -- doit être fixé"
     code.gsub!(REG_BAD_PRESS, 'await press(page, \2)')
-    if code.bad_press?(code)
+    if bad_press?(code)
       PROBLEMES << "#{path} n'a pas pu être fixé"
+      w " -- ERROR", true
     else
+      IO.write(File.join(DOSSIER, path), code)
       w " -- fixé", true
+      # break # pour arrêter au premier
     end
     # puts "\n\nNouveau code"
     # puts code

@@ -1,4 +1,4 @@
-import { test, expect } from '../__setup__.js'
+import { test, expect, press, getErr } from '../__setup__.js'
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 
 test('shell / : pane-1 charge app-frame et affiche la liste des projets', async ({ page }) => {
@@ -12,7 +12,7 @@ test('shell / : ArrowDown sans click préalable sélectionne le 2e projet', asyn
   await page.goto('/')
   const pane1 = page.frameLocator('#pane-1')
   await expect(pane1.locator('.project-item').first()).toHaveClass(/selected/)
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  await press(page, 'ArrowDown')
   await expect(pane1.locator('.project-item').nth(1)).toHaveClass(/selected/)
 })
 
@@ -21,6 +21,6 @@ test('shell / : ArrowDown APRÈS click dans pane-1 sélectionne le 2e projet', a
   await page.goto('/')
   const pane1 = page.frameLocator('#pane-1')
   await pane1.locator('body').click()
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  await press(page, 'ArrowDown')
   await expect(pane1.locator('.project-item').nth(1)).toHaveClass(/selected/)
 })

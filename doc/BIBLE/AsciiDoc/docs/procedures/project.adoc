@@ -1,0 +1,129 @@
+=== Projet ===
+
+==== Liste des projets ====
+
+[cols="1,2"]
+|====
+| **Action** | **Attendu**
+| Lancer l'application 
+| L'application se lance, affichant la liste des projets.
+|====
+
+==== Sélectionner les projets ====
+
+[cols="1,4"]
+|====
+| **Action**  | **Attendu**
+| combo:fb[]   .2+| Permet de sélectionner les projets (surlignés)
+| combo:fh[] 
+|====
+
+==== Création d'un nouveau projet
+
+[cols="1,4"]
+|====
+| **Action** | **Attendu**
+| lancer EventerX | La liste des projets s'affiche.
+| combo:fb[]  | Le deuxième projet est sélectionné.
+| combo:n[] | Le fenêtre des choix de fichier/dossier s'ouvre
+| combo:n[] | Un champ de saisie s'ouvre
+2+| Taper "Mon nouveau projet Eventer"
+| combo:enter[]   
+| Le nouveau projet est créé dans la liste, sous le 2^e^ projet.
+|           
+| + Un nouveau dossier a été créé dans le finder avec eventer.db
+|====
+
+==== Déplacer le projet ====
+
+[cols="1,4"]
+|====
+| **Action**  | **Attendu**
+| combo:cmd+fh[]  x | Le projet remonte dans la liste.
+| Recharger l'app | Le projet est toujours à sa nouvelle place.
+|====
+
+==== Suppression d'un projet ====
+
+[cols="1,4"]
+|====
+| **Action**  | **Attendu**
+| combo:fb[]/combo:fh[] | Sélectionner le nouveau projet si nécessaire.
+| combo:delete[]  | Le projet a été supprimé sans confirmation
+|                 
+| Mais son dossier et son `eventer.db` existent toujours dans le finder.
+|====
+
+==== Importer un projet ====
+
+[cols="1,4"]
+|====
+| **Action**  | **Attendu**
+| Lancer l'app  |
+| combo:n[]     | La fenêtre de choix des fichiers/dossiers s'ouvre
+| combo:fb[]    | Choisir le dossier du projet créé ci-dessus.
+| combo:enter[]  
+| Une fenêtre de confirmation demande ce qu'il faut faire entre +
+a) importer le projet (garder l'`eventer.db`) +
+b) le réinitialiser (détruire la base) +
+c) annuler
+| combo:enter[]  
+| Le projet est importé dans l'app, on le voit dans la liste des projets.
+|====
+
+==== Créer le premier évènemencier ====
+
+Teste : 
+. la création d'un premier évènement (`event`),
+. la création d'un second event en dessous,
+. la création d'un troisième event au-dessus,
+
+[cols="1,4"]
+|====
+| **Action**  | **Attendu**
+|    | Le nouveau projet doit être sélectionné.
+| combo:fd[] 
+| En “entre” dans le nouveau projet + 
+Un premier évènement (event) est en édition. +
+Son fond est vert (= édition)
+2+| Taper "Acte I"
+| combo:enter[] | L'évènement sort de l'édition (fond bleu), son texte est enregistré
+| combo:n[]     | Un nouvel event est créé sous le premier
+2+| Taper "Acte III" (ATTENTION : "III", pas "II")
+| combo:enter[]  | L'event sort d'édition et il est sélectionné.
+| combo:alt+n[]  | Un nouvel event se met en édition AU-DESSUS de l'event précédent.
+2+| Taper "Acte II"
+| combo:enter[]  |  L'event sort d'édition et il est sélectionné.
+2+| **On se retrouve avec trois actes qui constituent l'histoire.
+| combo:fg[]      | On revient dans la liste des projets, le nouveau est sélectionné.
+| combo:fd[]      | On revient sur la liste des actes du projet
+| Recharger l'app | 
+| | Sélectionner le nouveau projet à l'aide des flèches
+| combo:fd[]      | La liste des actes du projet a bien été enregistrée.
+|====
+
+==== Importer un projet en l'écrasant ====
+
+[cols="1,4"]
+|====
+| **Action**  | **Attendu**
+| Lancer l'app   | 
+| combo:n[]     | La fenêtre du choix des fichiers/dossiers s'ouvre
+| combo:fb[]x   | Choisir le nouveau projet
+| combo:enter[] | Une fenêtre de confirmation s'ouvre
+| combo:tab[]   | Le deuxième bouton est sélectionné
+| combo:enter[] | Le projet est ouvert + Mais son `eventer.db` a été détruit
+| combo:fd[]    | Le projet ne possède plus ses actes.
+|====
+
+==== Modifier le titre du projet ====
+
+[cols="1,4"]
+|====
+| **Action**  | **Attendu**
+| | Sélectionne le nouveau projet dans la liste.
+| combo:enter[]   | Le projet entre en édition (font vert)
+2+| Modifier le titre à volonté
+| combo:enter[]   | Sortir le projet de l'édition (font bleu)
+| Recharger       | Le nouveau nom du projet a été enregistré.
+|====

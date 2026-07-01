@@ -19,6 +19,7 @@ export default class Lister extends KeyDispatcher {
     this.byId           = {}   // table { id → item }, tenue à jour par la base
     this.selectedIndex  = data.selectedIndex  ?? -1
     this.parentLister   = data.parentLister   ?? null
+    this.depth          = data.depth          ?? null
   }
 
   get minClass() { return this._minClass || (this._minClass = this.constructor.ITEM_CLASS?.name.toLowerCase()) }
@@ -42,7 +43,7 @@ export default class Lister extends KeyDispatcher {
     if (cascadeCount > 0) {
       const label     = cascadeCount === 1 ? 'évènement imbriqué' : 'évènements imbriqués'
       const confirmed = await ConfirmDialog.open({
-        title:         item.title,
+        title:         'Destruction de ' + item.title,
         message:       `Cette destruction entraînera la destruction en cascade de ${cascadeCount} ${label}. Tapez ${cascadeCount} pour confirmer.`,
         expectedValue: cascadeCount,
       })
@@ -174,6 +175,7 @@ export default class Lister extends KeyDispatcher {
 
   leaveToParent() {
     this.hideContainer()
+    this.parentLister.build()
     this.parentLister.activate()
   }
 
@@ -198,12 +200,21 @@ export default class Lister extends KeyDispatcher {
   display(contextItem) {
     this._contextItem = contextItem
     this._applyContext(contextItem)
+    this._updatePanelTitle()
     this._syncChecked()
     this.activate()
   }
 
   _applyContext(_contextItem) {}
   _syncChecked() {}
+
+  _panelTitle()       { return null }
+  _updatePanelTitle() {
+    const t      = this._panelTitle()
+    if (t == null) return
+    const titleEl = this.container?.querySelector('.panel-title')
+    if (titleEl) titleEl.textContent = t
+  }
 
   closePanel() {
     this.hideContainer()

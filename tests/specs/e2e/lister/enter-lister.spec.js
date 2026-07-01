@@ -1,5 +1,5 @@
 import { installFixtures } from '../../../helpers/install-fixtures'
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
 test.describe('→ entre dans le Lister', () => {
 
@@ -14,7 +14,7 @@ test.describe('→ entre dans le Lister', () => {
 
     await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
-    await pane1(page).locator('.event-item.selected').press('ArrowRight')
+    await press(page, 'ArrowRight')
 
     await expect(pane1(page).locator('#events-panel')).not.toHaveClass(/project-list/)
     await expect(pane1(page).locator('#events-panel')).toBeVisible()
@@ -35,7 +35,7 @@ test.describe('→ charge les events du projet', () => {
 
     await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
-    await pane1(page).locator('.event-item.selected').press('ArrowRight')
+    await press(page, 'ArrowRight')
 
     await expect(pane1(page).locator('#events-panel')).toBeVisible()
 

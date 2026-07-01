@@ -1,6 +1,7 @@
 import Lister from '../abstract/Lister.js'
 import { ListerEventLi } from '../listen/Event.js'
 import Event from './Event.js'
+import StatusBar from '../../ui/StatusBar.js'
 
 export default class ListerEvent extends Lister {
   static ITEM_CLASS  = Event
@@ -11,7 +12,151 @@ export default class ListerEvent extends Lister {
 
   constructor(data = {}) {
     super(data)
-    this.project = data.project ?? null
+    this.project       = data.project   ?? null
+    this.depth         = data.depth     ?? 1
+    this.man_depth     = data.man_depth ?? null
+    this.nature        = data.nature    ?? null
+    this._levelEntries = []
+  }
+
+  display(contextItem) {
+    StatusBar.resetToNesting()
+    super.display(contextItem)
+  }
+
+  selectNext() {
+    if (StatusBar.displayMode === 'LEVEL') {
+      const idx = this.selectedIndex + 1
+      if (idx >= this.items.length) return
+      this.selectAt(idx)
+    } else {
+      super.selectNext()
+    }
+  }
+
+  selectPrev() {
+    if (StatusBar.displayMode === 'LEVEL') {
+      const idx = this.selectedIndex - 1
+      if (idx < 0) return
+      this.selectAt(idx)
+    } else {
+      super.selectPrev()
+    }
+  }
+
+  async toggleDisplayMode() {
+    if (StatusBar.displayMode !== 'LEVEL') {
+      StatusBar.setDisplayMode('LEVEL')
+      await this._renderLevelMode()
+    } else {
+      this._exitLevelMode()
+    }
+  }
+
+  leaveToParent() {
+    if (StatusBar.displayMode === 'LEVEL') {
+      this._exitLevelMode()
+      return
+    }
+    super.leaveToParent()
+  }
+
+  _isManLister() {
+    if (this.nature === 'man') return true
+    return this.man_depth != null && this.depth === this.man_depth
+  }
+
+  _exitLevelMode() {
+    StatusBar.resetToNesting()
+    const entry = this._levelEntries[this.selectedIndex]
+    if (!entry) {
+      const root = this._getRootEventLister()
+      root.build()
+      root.activate()
+      return
+    }
+    const { item, parentLister } = entry
+    parentLister.selectedIndex = parentLister.items.findIndex(i => i.id === item.id)
+    parentLister.build()
+    parentLister.activate()
+  }
+
+  _getRootEventLister() {
+    let lister = this
+    while (lister.parentLister instanceof ListerEvent) {
+      lister = lister.parentLister
+    }
+    return lister
+  }
+
+  async _collectItemsAtDepth(lister, targetDepth, currentDepth, isManMode) {
+    const cd = currentDepth ?? lister.depth
+    if (cd === targetDepth) {
+      return lister.items.map(item => ({ item, parentLister: lister, isVirtual: false }))
+    }
+    const results = []
+    for (const item of lister.items) {
+      if (item.lister_id != null) {
+        const childLister = new ListerEvent({
+          id:           item.lister_id,
+          project:      lister.project ?? this.project,
+          parentLister: lister,
+          depth:        cd + 1,
+        })
+        await childLister.load()
+        const sub = await this._collectItemsAtDepth(childLister, targetDepth, cd + 1, isManMode)
+        results.push(...sub)
+      } else {
+        results.push({ item, parentLister: lister, isVirtual: !isManMode, gap: targetDepth - cd })
+      }
+    }
+    return results
+  }
+
+  async _renderLevelMode() {
+    const token = {}
+    this._levelRenderToken = token
+
+    const selectedItemId = this.items[this.selectedIndex]?.id
+
+    const isManMode   = this._isManLister()
+    const targetDepth = isManMode ? (this.man_depth ?? this.depth) : this.depth
+    const root        = this._getRootEventLister()
+    const collected   = await this._collectItemsAtDepth(root, targetDepth, null, isManMode)
+    if (this._levelRenderToken !== token) return
+
+    const panel = this._ensurePanelStructure(this.container)
+    const body  = panel.querySelector('.lister-panel__body')
+    body.innerHTML = ''
+
+    const realItems = []
+    const entries   = []
+
+    for (const { item, parentLister, isVirtual, gap } of collected) {
+      if (isVirtual) {
+        const el = document.createElement('div')
+        el.className   = 'event-item virtual'
+        el.dataset.id  = item.id
+        el.textContent = `+${gap} ${item.title}`
+        body.appendChild(el)
+      } else {
+        item.parentLister = parentLister
+        const el = item.build()
+        el.classList.remove('selected')
+        body.appendChild(el)
+        realItems.push(item)
+        entries.push({ item, parentLister })
+      }
+    }
+
+    this.items         = realItems
+    this._levelEntries = entries
+
+    const selIdx   = selectedItemId != null ? realItems.findIndex(i => i.id === selectedItemId) : -1
+    const startIdx = selIdx >= 0 ? selIdx : 0
+    this.selectedIndex = startIdx
+    this.attach(this.container)
+    if (realItems.length > 0) this.applySelection(null, realItems[startIdx])
   }
 
   refreshEventMarks(modifiedBrins) {

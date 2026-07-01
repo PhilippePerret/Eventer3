@@ -10,7 +10,7 @@ export const DEFAULT_COLOR = {
 export const DEV_STATES = [ // event et projet
   { value: 0, label: '—' },
   { value: 1, label: 'ébauche' },
-  { value: 2, label: 'dévelopmnt' },
+  { value: 2, label: 'développement' },
   { value: 3, label: 'premier jet' },
   { value: 4, label: 'réécriture' },
   { value: 5, label: 'achèvement' },

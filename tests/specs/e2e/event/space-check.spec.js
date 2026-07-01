@@ -1,5 +1,5 @@
 import { installFixtures } from '../../../helpers/install-fixtures'
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('many-events')
@@ -8,7 +8,8 @@ test.beforeEach(() => {
 async function enterListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
+  await press(page, 'ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
 }
 
@@ -19,7 +20,7 @@ test('Space coche visuellement l\'event sélectionné', async ({ page }) => {
   await expect(firstEvent).toHaveClass(/selected/)
   await expect(firstEvent.locator('.event-check')).not.toContainText('✓')
 
-  await pane1(page).locator('.event-item.selected').press(' ')
+  await press(page, ' ')
 
   await expect(firstEvent.locator('.event-check')).toContainText('✓')
 })
@@ -28,10 +29,10 @@ test('Space décoche un event déjà coché', async ({ page }) => {
   await enterListerEvent(page)
 
   const firstEvent = pane1(page).locator('.event-item').nth(0)
-  await pane1(page).locator('.event-item.selected').press(' ')
+  await press(page, ' ')
   await expect(firstEvent.locator('.event-check')).toContainText('✓')
 
-  await pane1(page).locator('.event-item.selected').press(' ')
+  await press(page, ' ')
   await expect(firstEvent.locator('.event-check')).not.toContainText('✓')
 })
 
@@ -39,7 +40,7 @@ test('Space persiste la coche après rechargement', async ({ page }) => {
   await enterListerEvent(page)
 
   const patchDone = page.waitForResponse(r => r.url().includes('/api/items/') && r.request().method() === 'PATCH')
-  await pane1(page).locator('.event-item.selected').press(' ')
+  await press(page, ' ')
   const patchResp = await patchDone
   await page.waitForLoadState('networkidle')
 
@@ -52,7 +53,8 @@ test('Space persiste la coche après rechargement', async ({ page }) => {
 
   await page.reload()
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
+  await press(page, 'ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
 
   const firstEvent = pane1(page).locator('.event-item').nth(0)

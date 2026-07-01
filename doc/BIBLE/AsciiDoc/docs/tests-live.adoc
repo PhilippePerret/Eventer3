@@ -1,0 +1,15 @@
+== Tests en live ==
+:toc:
+
+_Ce fichier décrit tous les tests en live qui peuvent être effectués pour compléter les tests d'intégration_
+
+////
+-- Modèle de table à copier --
+[cols="1,4"]
+|====
+| **Action**  | **Attendu**
+| combo:x[]   | 
+|====
+////
+
+include::procedures.adoc[]

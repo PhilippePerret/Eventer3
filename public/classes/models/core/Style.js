@@ -13,6 +13,8 @@ export default class Style extends Item {
     this.css  = data.css  ?? ''
   }
 
+  onEnter() { this.toggleChecked() }
+
 }
 
 Object.assign(Style.prototype, StyleDom)

@@ -1,5 +1,5 @@
 import { installFixtures } from '../../../helpers/install-fixtures'
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
 test.describe('← depuis un ListerEvent vers la liste des projets', () => {
 
@@ -13,10 +13,10 @@ test.describe('← depuis un ListerEvent vers la liste des projets', () => {
     await expect(pane1(page).locator('#projects-panel')).toBeVisible()
     await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
-    await pane1(page).locator('.event-item.selected').press('ArrowRight')
+    await press(page, 'ArrowRight')
     await expect(pane1(page).locator('#events-panel')).toBeVisible()
 
-    await pane1(page).locator('.event-item.selected').press('ArrowLeft')
+    await press(page, 'ArrowLeft')
 
     await expect(pane1(page).locator('#projects-panel')).toBeVisible()
 
@@ -39,18 +39,18 @@ test.describe('← depuis un sous-ListerEvent vers le ListerEvent parent', () =>
     await expect(pane1(page).locator('#projects-panel')).toBeVisible()
     await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
-    await pane1(page).locator('.event-item.selected').press('ArrowRight')
+    await press(page, 'ArrowRight')
     await expect(pane1(page).locator('#events-panel')).toBeVisible()
 
     await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
     await expect(pane1(page).locator('.event-item').nth(0)).toContainText('Évènement un')
 
-    await pane1(page).locator('.event-item.selected').press('ArrowRight')
+    await press(page, 'ArrowRight')
     await expect(pane1(page).locator('#events-panel')).toBeVisible()
     await expect(pane1(page).locator('.event-item')).toHaveCount(2)
     await expect(pane1(page).locator('.event-item').nth(0)).toContainText('Évènement e4')
 
-    await pane1(page).locator('.event-item.selected').press('ArrowLeft')
+    await press(page, 'ArrowLeft')
 
     await expect(pane1(page).locator('#events-panel')).toBeVisible()
     await expect(pane1(page).locator('.event-item')).toHaveCount(3)

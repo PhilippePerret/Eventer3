@@ -2,7 +2,7 @@ import Item from '../abstract/Item.js'
 import EventDom from '../dom/Event.js'
 import { EventLi } from '../listen/Event.js'
 import { WORD_FORMS } from '../../../constants/constants.js'
-import { EVENT_STATE, EVENT_METEO, EVENT_EFFET, EVENT_COLORS } from '../constants/Event.js'
+import { EVENT_STATE, EVENT_METEO, EVENT_EFFET, EVENT_LIEU, EVENT_COLORS } from '../constants/Event.js'
 
 
 // tag::class-event[]
@@ -15,6 +15,9 @@ export default class Event extends Item {
 
   constructor(data = {}) {
     super(data)
+    this.meteo     = data.meteo     ?? null
+    this.effet     = data.effet     ?? null
+    this.lieu      = data.lieu      ?? null
     this.brin_ids  = data.brin_ids  ?? []
     this.perso_ids = data.perso_ids ?? []
     this.css       = data.css       ?? []
@@ -27,6 +30,7 @@ export default class Event extends Item {
       , { name: 'state'         , type: 'select'  , warper: 'edits', values: EVENT_STATE }
       , { name: 'meteo'         , type: 'select'  , warper: 'edits', values: EVENT_METEO, onchange: 'setEffetPerMeteo', onchoose: 'checkCompatibiliteMeteoEffet' }
       , { name: 'effet'         , type: 'select'  , warper: 'edits', values: EVENT_EFFET, onchange: 'setMeteoPerEffet', onchoose: 'checkCompatibiliteMeteoEffet' }
+      , { name: 'lieu'          , type: 'select'  , warper: 'edits', values: EVENT_LIEU }
       , { name: 'brin_ids'      , type: 'no-edit' , warper: 'marks', value: 'brinsMarks' }
       , { name: 'perso_ids'     , type: 'no-edit' , warper: 'marks', value: 'persosMarks' }
       , { name: 'css'           , type: 'no-edit'                                         }

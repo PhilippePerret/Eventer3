@@ -1,6 +1,6 @@
 // Origine : tests/specs/e2e/event/new-event-virtual-lister.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures'
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('many-events')
@@ -14,10 +14,10 @@ test("→ sur un projet sans lister : crée l'éditeur, Enter confirme, n crée 
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  await press(page, 'ArrowDown')
   await expect(pane1(page).locator('.project-item').nth(1)).toHaveClass(/selected/)
 
-  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
 
   const firstInput = pane1(page).locator('.event-item [data-field="title"]')
@@ -25,7 +25,7 @@ test("→ sur un projet sans lister : crée l'éditeur, Enter confirme, n crée 
   await expect(firstInput).toBeFocused()
 
   await firstInput.fill('Mon premier event')
-  await pane1(page).locator('.event-item.selected').press('Enter')
+  await press(page, 'Enter')
   await page.waitForLoadState('networkidle')
 
   await expect(pane1(page).locator('.event-item')).toHaveCount(1)
@@ -41,13 +41,13 @@ test("→ sur un projet sans lister : crée l'éditeur, Enter confirme, n crée 
   expect(items[lister.item_ids[0]].title).toBe('Mon premier event')
 
 
-  await pane1(page).locator('.event-item.selected').press('n')
+  await press(page, 'n')
   const secondInput = pane1(page).locator('.event-item [data-field="title"]')
   await expect(secondInput).toBeVisible()
   await expect(secondInput).toBeFocused()
 
   await secondInput.fill('Mon second event')
-  await pane1(page).locator('.event-item.selected').press('Enter')
+  await press(page, 'Enter')
 
   await expect(pane1(page).locator('.event-item')).toHaveCount(2)
   await expect(pane1(page).locator('.event-item').nth(0)).toContainText('Mon premier event')

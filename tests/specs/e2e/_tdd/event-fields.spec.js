@@ -1,5 +1,5 @@
 import { installFixtures } from '../../../helpers/install-fixtures.js'
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
 // Fixture with-event-states :
 //   e1="Scène du bal"    meteo='ps'(☀️)  effet='ma'(Matin) lieu=null
@@ -7,18 +7,18 @@ import { test, expect, pane1 } from '../__setup__.js'
 //   e3="La trahison"     meteo='ps'(☀️)  effet='jr'(Jour)  lieu=null
 
 async function goToListerEvent(page) {
-  installFixtures('with-event-states')
+  await installFixtures('with-event-states')
   await page.goto('/')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
 }
 
 async function enterEditionOnFirst(page) {
   await expect(pane1(page).locator('.event-item').first()).toHaveClass(/selected/)
-  await pane1(page).locator('.event-item.selected').press('Enter')
+  await press(page, 'Enter')
   await expect(pane1(page).locator('.event-item.editing')).toBeVisible()
-  await expect(pane1(page).locator('.event-item.editing input[name="title"]')).toBeFocused()
+  await expect(pane1(page).locator('.event-item.editing [data-field="title"]')).toBeFocused()
 }
 
 // ─── Affichage ────────────────────────────────────────────────────────────────
@@ -43,42 +43,42 @@ test("event row : badge lieu vide si non défini", async ({ page }) => {
 test("édition : TAB depuis titre focus trigger état", async ({ page }) => {
   await goToListerEvent(page)
   await enterEditionOnFirst(page)
-  await pane1(page).locator('.event-item.selected').press('Tab')
-  await expect(pane1(page).locator('.event-item.editing button[data-field-name="state"]')).toBeFocused()
+  await press(page, 'Tab')
+  await expect(pane1(page).locator('.event-item.editing [data-field="state"]')).toBeFocused()
 })
 
 test("édition : TAB depuis état focus trigger météo", async ({ page }) => {
   await goToListerEvent(page)
   await enterEditionOnFirst(page)
-  await pane1(page).locator('.event-item.selected').press('Tab') // → state
-  await pane1(page).locator('.event-item.selected').press('Tab') // → meteo
-  await expect(pane1(page).locator('.event-item.editing button[data-field-name="meteo"]')).toBeFocused()
+  await press(page, 'Tab') // → state
+  await press(page, 'Tab') // → meteo
+  await expect(pane1(page).locator('.event-item.editing [data-field="meteo"]')).toBeFocused()
 })
 
 test("édition : TAB depuis météo focus trigger effet", async ({ page }) => {
   await goToListerEvent(page)
   await enterEditionOnFirst(page)
-  await pane1(page).locator('.event-item.selected').press('Tab') // → state
-  await pane1(page).locator('.event-item.selected').press('Tab') // → meteo
-  await pane1(page).locator('.event-item.selected').press('Tab') // → effet
-  await expect(pane1(page).locator('.event-item.editing button[data-field-name="effet"]')).toBeFocused()
+  await press(page, 'Tab') // → state
+  await press(page, 'Tab') // → meteo
+  await press(page, 'Tab') // → effet
+  await expect(pane1(page).locator('.event-item.editing [data-field="effet"]')).toBeFocused()
 })
 
 test("édition : TAB depuis effet focus trigger lieu", async ({ page }) => {
   await goToListerEvent(page)
   await enterEditionOnFirst(page)
-  await pane1(page).locator('.event-item.selected').press('Tab') // → state
-  await pane1(page).locator('.event-item.selected').press('Tab') // → meteo
-  await pane1(page).locator('.event-item.selected').press('Tab') // → effet
-  await pane1(page).locator('.event-item.selected').press('Tab') // → lieu
-  await expect(pane1(page).locator('.event-item.editing button[data-field-name="lieu"]')).toBeFocused()
+  await press(page, 'Tab') // → state
+  await press(page, 'Tab') // → meteo
+  await press(page, 'Tab') // → effet
+  await press(page, 'Tab') // → lieu
+  await expect(pane1(page).locator('.event-item.editing [data-field="lieu"]')).toBeFocused()
 })
 
 test("édition : TAB depuis lieu revient au titre", async ({ page }) => {
   await goToListerEvent(page)
   await enterEditionOnFirst(page)
-  for (let i = 0; i < 5; i++) await pane1(page).locator('.event-item.selected').press('Tab') // titre→state→meteo→effet→lieu→titre
-  await expect(pane1(page).locator('.event-item.editing input[name="title"]')).toBeFocused()
+  for (let i = 0; i < 5; i++) await press(page, 'Tab') // titre→state→meteo→effet→lieu→titre
+  await expect(pane1(page).locator('.event-item.editing [data-field="title"]')).toBeFocused()
 })
 
 // ─── Ouverture popup ─────────────────────────────────────────────────────────
@@ -86,30 +86,30 @@ test("édition : TAB depuis lieu revient au titre", async ({ page }) => {
 test("édition : ArrowDown sur trigger météo ouvre popup", async ({ page }) => {
   await goToListerEvent(page)
   await enterEditionOnFirst(page)
-  await pane1(page).locator('.event-item.selected').press('Tab') // → state
-  await pane1(page).locator('.event-item.selected').press('Tab') // → meteo
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  await press(page, 'Tab') // → state
+  await press(page, 'Tab') // → meteo
+  await press(page, 'ArrowDown')
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
 })
 
 test("édition : ArrowDown sur trigger effet ouvre popup", async ({ page }) => {
   await goToListerEvent(page)
   await enterEditionOnFirst(page)
-  await pane1(page).locator('.event-item.selected').press('Tab') // → state
-  await pane1(page).locator('.event-item.selected').press('Tab') // → meteo
-  await pane1(page).locator('.event-item.selected').press('Tab') // → effet
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  await press(page, 'Tab') // → state
+  await press(page, 'Tab') // → meteo
+  await press(page, 'Tab') // → effet
+  await press(page, 'ArrowDown')
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
 })
 
 test("édition : ArrowDown sur trigger lieu ouvre popup", async ({ page }) => {
   await goToListerEvent(page)
   await enterEditionOnFirst(page)
-  await pane1(page).locator('.event-item.selected').press('Tab') // → state
-  await pane1(page).locator('.event-item.selected').press('Tab') // → meteo
-  await pane1(page).locator('.event-item.selected').press('Tab') // → effet
-  await pane1(page).locator('.event-item.selected').press('Tab') // → lieu
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  await press(page, 'Tab') // → state
+  await press(page, 'Tab') // → meteo
+  await press(page, 'Tab') // → effet
+  await press(page, 'Tab') // → lieu
+  await press(page, 'ArrowDown')
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
 })
 
@@ -118,17 +118,18 @@ test("édition : ArrowDown sur trigger lieu ouvre popup", async ({ page }) => {
 test("météo : sélection 'pl' persiste après sauvegarde", async ({ page }) => {
   await goToListerEvent(page)
   await enterEditionOnFirst(page)
-  await pane1(page).locator('.event-item.selected').press('Tab') // → state
-  await pane1(page).locator('.event-item.selected').press('Tab') // → meteo
-  await pane1(page).locator('.event-item.selected').press('ArrowDown') // ouvre popup
+  await press(page, 'Tab') // → state
+  await press(page, 'Tab') // → meteo
+  await press(page, 'ArrowDown') // ouvre popup
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
   await pane1(page).locator('.popup-select__option[data-value="pl"]').click()
-  await pane1(page).locator('.event-item.selected').press('Enter') // confirme edition
+  await press(page, 'Enter') // confirme edition
   await expect(pane1(page).locator('.event-item').first().locator('.event-meteo')).toHaveText('🌨️')
   // Reload et vérifier persistance
+  await page.waitForLoadState('networkidle')
   await page.reload()
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
   await expect(pane1(page).locator('.event-item').first().locator('.event-meteo')).toHaveText('🌨️')
 })
@@ -136,19 +137,20 @@ test("météo : sélection 'pl' persiste après sauvegarde", async ({ page }) =>
 test("lieu : sélection 'ext' persiste après sauvegarde", async ({ page }) => {
   await goToListerEvent(page)
   await enterEditionOnFirst(page)
-  await pane1(page).locator('.event-item.selected').press('Tab') // → state
-  await pane1(page).locator('.event-item.selected').press('Tab') // → meteo
-  await pane1(page).locator('.event-item.selected').press('Tab') // → effet
-  await pane1(page).locator('.event-item.selected').press('Tab') // → lieu
-  await pane1(page).locator('.event-item.selected').press('ArrowDown') // ouvre popup
+  await press(page, 'Tab') // → state
+  await press(page, 'Tab') // → meteo
+  await press(page, 'Tab') // → effet
+  await press(page, 'Tab') // → lieu
+  await press(page, 'ArrowDown') // ouvre popup
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
   await pane1(page).locator('.popup-select__option[data-value="ext"]').click()
-  await pane1(page).locator('.event-item.selected').press('Enter') // confirme edition
+  await press(page, 'Enter') // confirme edition
   await expect(pane1(page).locator('.event-item').first().locator('.event-lieu')).toHaveText('Extérieur')
   // Reload et vérifier persistance
+  await page.waitForLoadState('networkidle')
   await page.reload()
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
   await expect(pane1(page).locator('.event-item').first().locator('.event-lieu')).toHaveText('Extérieur')
 })
@@ -159,45 +161,45 @@ test("lieu : sélection 'ext' persiste après sauvegarde", async ({ page }) => {
 test("incompatibilité : meteo=ps → effet popup grise au/cr/nu", async ({ page }) => {
   await goToListerEvent(page)
   await enterEditionOnFirst(page) // e1 : meteo='ps'
-  await pane1(page).locator('.event-item.selected').press('Tab') // → state
-  await pane1(page).locator('.event-item.selected').press('Tab') // → meteo
-  await pane1(page).locator('.event-item.selected').press('Tab') // → effet
-  await pane1(page).locator('.event-item.selected').press('ArrowDown') // ouvre popup effet
+  await press(page, 'Tab') // → state
+  await press(page, 'Tab') // → meteo
+  await press(page, 'Tab') // → effet
+  await press(page, 'ArrowDown') // ouvre popup effet
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
   await expect(pane1(page).locator('.popup-select__option[data-value="au"]')).toHaveClass(/disabled/)
   await expect(pane1(page).locator('.popup-select__option[data-value="cr"]')).toHaveClass(/disabled/)
   await expect(pane1(page).locator('.popup-select__option[data-value="nu"]')).toHaveClass(/disabled/)
   await expect(pane1(page).locator('.popup-select__option[data-value="ma"]')).not.toHaveClass(/disabled/)
-  await pane1(page).locator('.event-item.selected').press('Escape')
+  await press(page, 'Escape')
 })
 
 // e2 a effet='nu' → météos incompatibles : ps, vo, di
 test("incompatibilité : effet=nu → météo popup grise ps/vo/di", async ({ page }) => {
   await goToListerEvent(page)
   // sélectionner e2
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  await press(page, 'ArrowDown')
   await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/selected/)
-  await pane1(page).locator('.event-item.selected').press('Enter') // ouvre édition sur e2
+  await press(page, 'Enter') // ouvre édition sur e2
   await expect(pane1(page).locator('.event-item.editing')).toBeVisible()
-  await expect(pane1(page).locator('.event-item.editing input[name="title"]')).toBeFocused()
-  await pane1(page).locator('.event-item.selected').press('Tab') // → state
-  await pane1(page).locator('.event-item.selected').press('Tab') // → meteo
-  await pane1(page).locator('.event-item.selected').press('ArrowDown') // ouvre popup meteo
+  await expect(pane1(page).locator('.event-item.editing [data-field="title"]')).toBeFocused()
+  await press(page, 'Tab') // → state
+  await press(page, 'Tab') // → meteo
+  await press(page, 'ArrowDown') // ouvre popup meteo
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
   await expect(pane1(page).locator('.popup-select__option[data-value="ps"]')).toHaveClass(/disabled/)
   await expect(pane1(page).locator('.popup-select__option[data-value="vo"]')).toHaveClass(/disabled/)
   await expect(pane1(page).locator('.popup-select__option[data-value="di"]')).toHaveClass(/disabled/)
   await expect(pane1(page).locator('.popup-select__option[data-value="pl"]')).not.toHaveClass(/disabled/)
-  await pane1(page).locator('.event-item.selected').press('Escape')
+  await press(page, 'Escape')
 })
 
 test("incompatibilité : option grisée non sélectionnable (Space ignoré)", async ({ page }) => {
   await goToListerEvent(page)
   await enterEditionOnFirst(page) // e1 : meteo='ps', effet='ma'
-  await pane1(page).locator('.event-item.selected').press('Tab') // → state
-  await pane1(page).locator('.event-item.selected').press('Tab') // → meteo
-  await pane1(page).locator('.event-item.selected').press('Tab') // → effet
-  await pane1(page).locator('.event-item.selected').press('ArrowDown') // ouvre popup effet
+  await press(page, 'Tab') // → state
+  await press(page, 'Tab') // → meteo
+  await press(page, 'Tab') // → effet
+  await press(page, 'ArrowDown') // ouvre popup effet
   // Navigate to 'nu' (nuit) which is disabled
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
   // trouver index de 'nu' dans la liste et naviguer
@@ -206,8 +208,8 @@ test("incompatibilité : option grisée non sélectionnable (Space ignoré)", as
   await nuOption.click() // clic sur option désactivée
   // le popup doit rester ouvert
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
-  await pane1(page).locator('.event-item.selected').press('Escape')
+  await press(page, 'Escape')
   // l'effet n'a pas changé
-  await pane1(page).locator('.event-item.selected').press('Escape') // annule édition
+  await press(page, 'Escape') // annule édition
   await expect(pane1(page).locator('.event-item').first().locator('.event-effet')).toHaveText('Matin')
 })

@@ -1,6 +1,6 @@
 import { installFixtures } from '../../../helpers/install-fixtures'
 import { setupProjectFolder, createAndSelectFolderInPicker } from '../../../helpers/create-project-helper.js'
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('many-projects')
@@ -11,7 +11,7 @@ async function createProject(page, expect) {
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
 
   const { folderName } = await setupProjectFolder(page)
-  await pane1(page).locator('.project-item.selected').press('n')
+  await press(page, 'n')
   await createAndSelectFolderInPicker(page, expect, folderName)
   await page.waitForLoadState('networkidle')
 

@@ -234,6 +234,7 @@ export default class PopupSelect {
 
   handleKeyDown(event, _controller) {
     if (!PopupSelect.HANDLEKEYS[event.key]) return
+    if (!this.popupElement && event.key !== 'ArrowDown') return
     if (!PopupSelect.NOT_STOPPED_KEYS[event.key]) stopEvent(event)
 
     switch (event.key) {

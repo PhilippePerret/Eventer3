@@ -1,5 +1,5 @@
 import { installFixtures } from '../../../helpers/install-fixtures'
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('with-persos')
@@ -15,19 +15,20 @@ test.beforeEach(() => {
 async function goToListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
-  await pane1(page).locator('.project-item.selected').press('ArrowRight').press('ArrowRight')
+  await press(page, 'ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
 }
 
 async function openBrinPanel(page) {
   await goToListerEvent(page)
-  await pane1(page).locator('.event-item.selected').press('b')
+  await press(page, 'b')
   await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 }
 
 async function openPersoPanelFromBrin(page) {
   await openBrinPanel(page)
-  await pane1(page).locator('.event-item.selected').press('p')
+  await press(page, 'p')
   await expect(pane1(page).locator('#persos-panel')).toBeVisible()
 }
 
@@ -35,7 +36,7 @@ async function openPersoPanelFromBrin(page) {
 
 test("p ouvre le panneau des personnages depuis ListerBrin", async ({ page }) => {
   await openBrinPanel(page)
-  await pane1(page).locator('.event-item.selected').press('p')
+  await press(page, 'p')
   await expect(pane1(page).locator('#persos-panel')).toBeVisible()
 })
 
@@ -46,10 +47,10 @@ test("le panneau brins reste visible en fond pendant le panneau perso", async ({
 
 test("Escape ferme le panneau perso et remet le focus sur ListerBrin", async ({ page }) => {
   await openPersoPanelFromBrin(page)
-  await pane1(page).locator('.event-item.selected').press('Escape')
+  await press(page, 'Escape')
   await expect(pane1(page).locator('#persos-panel')).not.toBeVisible()
   // ListerBrin reprend la main : ↓ change la sélection du brin
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  await press(page, 'ArrowDown')
   // pas d'erreur = ListerBrin actif
 })
 
@@ -78,15 +79,15 @@ test("les persos du brin ne sont pas grisés (tous décochables depuis brin)", a
 test("Space coche un perso non-coché sur le brin (c1)", async ({ page }) => {
   await openPersoPanelFromBrin(page)
   await expect(pane1(page).locator('.perso-item').nth(0)).not.toHaveClass(/checked/)
-  await pane1(page).locator('.event-item.selected').press(' ')
+  await press(page, ' ')
   await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/checked/)
 })
 
 test("Space décoche un perso coché sur le brin (c2)", async ({ page }) => {
   await openPersoPanelFromBrin(page)
-  await pane1(page).locator('.event-item.selected').press('ArrowDown') // → c2
+  await press(page, 'ArrowDown') // → c2
   await expect(pane1(page).locator('.perso-item').nth(1)).toHaveClass(/checked/)
-  await pane1(page).locator('.event-item.selected').press(' ')
+  await press(page, ' ')
   await expect(pane1(page).locator('.perso-item').nth(1)).not.toHaveClass(/checked/)
 })
 
@@ -100,9 +101,9 @@ test("la ligne de b1 affiche le badge de c2 (son perso)", async ({ page }) => {
 
 test("cocher c3 depuis le panneau perso de b1 ajoute son avatar sur la ligne du brin", async ({ page }) => {
   await openPersoPanelFromBrin(page)
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
-  await pane1(page).locator('.event-item.selected').press('ArrowDown') // → c3
-  await pane1(page).locator('.event-item.selected').press(' ')
+  await press(page, 'ArrowDown')
+  await press(page, 'ArrowDown') // → c3
+  await press(page, ' ')
   const brinEl = pane1(page).locator('.brin-item').nth(0)
   // c3 a avatar 🎭 → affiché à la place du badge
   await expect(brinEl.locator('.brin-persos-marks')).toContainText('🎭')
@@ -122,7 +123,7 @@ test("retirer un brin d'un event met à jour les marques perso sur la ligne de l
   await openBrinPanel(page)
   // b1 est coché sur e1 (c2=RO via b1 s'affiche sur e1)
   // décocher b1
-  await pane1(page).locator('.event-item.selected').press(' ')
+  await press(page, ' ')
   const eventEl = pane1(page).locator('.event-item').nth(0)
   // c2 (RO) ne devrait plus apparaître (vient de b1)
   await expect(eventEl.locator('.event-persos-marks')).not.toContainText('RO')
@@ -132,10 +133,10 @@ test("retirer un brin d'un event met à jour les marques perso sur la ligne de l
 
 test("persistance : cochage sur brin survit au rechargement", async ({ page }) => {
   await openPersoPanelFromBrin(page)
-  await pane1(page).locator('.event-item.selected').press(' ') // cocher c1 sur b1
+  await press(page, ' ') // cocher c1 sur b1
   await page.waitForLoadState('networkidle')
   await page.reload()
   await openBrinPanel(page)
-  await pane1(page).locator('.event-item.selected').press('p')
+  await press(page, 'p')
   await expect(pane1(page).locator('.perso-item').nth(0)).toHaveClass(/checked/)
 })

@@ -4,7 +4,7 @@
 // open -a Firefox eventer.html
 
 = Eventer X =
-
+:toc: right
 :app: **EventerX**
 :enter: `↩︎`
 :up: ↑
@@ -43,7 +43,6 @@ Un projet comprend :
 
 
 == Synopsis ==
-
 
 
 include::docs/raccourcis-clavier.adoc[]

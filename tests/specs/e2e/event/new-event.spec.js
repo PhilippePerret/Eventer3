@@ -1,6 +1,6 @@
 // Origine : tests/specs/e2e/event/new-event.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures'
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('many-events')
@@ -14,20 +14,20 @@ test("dans un ListerEvent, la touche « n » crée un nouvel Event après celui 
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
-  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
 
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
   const firstEventTitle = await pane1(page).locator('.event-item').nth(0).textContent()
 
-  await pane1(page).locator('.event-item.selected').press('n')
+  await press(page, 'n')
 
   const input = pane1(page).locator('.event-item [data-field="title"]')
   await expect(input).toBeVisible()
   await expect(input).toBeFocused()
 
   await input.fill('Nouvel évènement test')
-  await input.press('Enter')
+  await press(page, 'Enter')
 
   const items = pane1(page).locator('.event-item')
   await expect(items).toHaveCount(4)

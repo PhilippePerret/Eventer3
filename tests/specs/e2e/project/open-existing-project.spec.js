@@ -1,5 +1,5 @@
 // Refactorisé — nouvelle architecture (2026-06-25)
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { setupProjectFolder, createAndSelectFolderInPicker } from '../../../helpers/create-project-helper.js'
 
@@ -11,7 +11,7 @@ async function createProjectAndGetFolderInfo(page, expect) {
   await page.goto('/')
   const { folderName, workDir } = await setupProjectFolder(page)
   await expect(pane1(page).locator('#projects-panel')).toHaveClass(/project-list/)
-  await pane1(page).locator('.project-item.selected').press('n')
+  await press(page, 'n')
   await createAndSelectFolderInPicker(page, expect, folderName)
   await page.waitForLoadState('networkidle')
   return { folderName, workDir }
@@ -23,9 +23,9 @@ async function tryPickExistingFolder(page, expect, workDir) {
     data: JSON.stringify({ value: workDir })
   })
   await expect(pane1(page).locator('#projects-panel')).toHaveClass(/project-list/)
-  await pane1(page).locator('.project-item.selected').press('n')
+  await press(page, 'n')
   await expect(pane1(page).locator('.file-picker')).toBeVisible()
-  await pane1(page).locator('.file-picker').press('Enter')
+  await press(page, 'Enter')
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -49,7 +49,7 @@ test('confirmer l\'ouverture : le projet apparaît dans la liste', async ({ page
   await tryPickExistingFolder(page, expect, workDir)
   await expect(pane1(page).locator('.ftpanel.kpanel')).toBeVisible()
 
-  await pane1(page).locator('.ftpanel.kpanel').press('Enter')
+  await press(page, 'Enter')
   await page.waitForLoadState('networkidle')
 
   await expect(pane1(page).locator('.project-item')).toHaveCount(countAfterFirst + 1)
@@ -61,10 +61,10 @@ test('→ sur un projet ouvre la liste de ses events', async ({ page }) => {
   await page.goto('/')
   await tryPickExistingFolder(page, expect, workDir)
   await expect(pane1(page).locator('.ftpanel.kpanel')).toBeVisible()
-  await pane1(page).locator('.ftpanel.kpanel').press('Enter')
+  await press(page, 'Enter')
   await page.waitForLoadState('networkidle')
 
-  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toHaveClass(/event-list/)
 
   await expect(pane1(page).locator('.event-item')).toHaveCount(1)
@@ -80,8 +80,8 @@ test('annuler : aucun projet créé', async ({ page }) => {
   await tryPickExistingFolder(page, expect, workDir)
   await expect(pane1(page).locator('.ftpanel.kpanel')).toBeVisible()
 
-  await pane1(page).locator('.ftpanel.kpanel').press('Tab')
-  await pane1(page).locator('.ftpanel.kpanel').press('Enter')
+  await press(page, 'Tab')
+  await press(page, 'Enter')
   await expect(pane1(page).locator('.ftpanel.kpanel')).not.toBeVisible()
 
   await expect(pane1(page).locator('.project-item')).toHaveCount(countAfterFirst)
@@ -94,7 +94,7 @@ test('ouverture d\'un projet existant : ses events affichent les marques de brin
   await page.goto('/')
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
-  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toHaveClass(/event-list/)
   await expect(pane1(page).locator('.event-item')).toHaveCount(2)
 
@@ -111,7 +111,7 @@ test('persistance : le projet survit au rechargement', async ({ page }) => {
   await page.goto('/')
   await tryPickExistingFolder(page, expect, workDir)
   await expect(pane1(page).locator('.ftpanel.kpanel')).toBeVisible()
-  await pane1(page).locator('.ftpanel.kpanel').press('Enter')
+  await press(page, 'Enter')
   await page.waitForLoadState('networkidle')
 
   await page.reload()
@@ -125,7 +125,7 @@ test("entrer dans un projet cache le panneau des projets", async ({ page }) => {
   await page.goto('/')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
 
-  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
 
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
   await expect(pane1(page).locator('#projects-panel')).not.toBeVisible()
@@ -136,7 +136,7 @@ test("→ ouvre directement le PREMIER projet à l'ouverture de l'app", async ({
   await page.goto('/')
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
-  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
 
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
   await expect(pane1(page).locator('.event-item')).toHaveCount(2)
@@ -148,22 +148,22 @@ test("→ ← ↓ → : navigation entre projets et leurs évènemenciers", asyn
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
 
   // entrer dans Projet A
-  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#projects-panel')).not.toBeVisible()
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
   await expect(pane1(page).locator('.event-item')).toHaveCount(3) // e1,e2,e3
 
   // revenir à la liste des projets
-  await pane1(page).locator('.event-item.selected').press('ArrowLeft')
+  await press(page, 'ArrowLeft')
   await expect(pane1(page).locator('#events-panel')).not.toBeVisible()
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
 
   // choisir Projet B
-  await pane1(page).locator('.project-item.selected').press('ArrowDown')
+  await press(page, 'ArrowDown')
   await expect(pane1(page).locator('.project-item').nth(1)).toHaveClass(/selected/)
 
   // entrer dans Projet B
-  await pane1(page).locator('.project-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#projects-panel')).not.toBeVisible()
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
   await expect(pane1(page).locator('.event-item')).toHaveCount(2) // e4,e5

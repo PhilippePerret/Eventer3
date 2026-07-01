@@ -1,5 +1,5 @@
 import { installFixtures } from '../../../helpers/install-fixtures.js'
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('filter-events')
@@ -15,7 +15,7 @@ async function enterListerEvent(page) {
   await page.goto('/')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
-  await pane1(page).locator('.event-item.selected').press('ArrowRight')
+  await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
 }
@@ -26,7 +26,7 @@ test('Cmd+: affiche filter-bar avec hint des sous-commandes', async ({ page }) =
   await enterListerEvent(page)
   await expect(pane1(page).locator('#filter-bar')).not.toBeVisible()
 
-  await pane1(page).locator('.event-item.selected').press('Meta+:')
+  await press(page, 'Meta+:')
 
   await expect(pane1(page).locator('#filter-bar')).toBeVisible()
   await expect(pane1(page).locator('#filter-bar')).toContainText('t')
@@ -36,10 +36,10 @@ test('Cmd+: affiche filter-bar avec hint des sous-commandes', async ({ page }) =
 
 test('Escape depuis filter-sequence ferme le hint', async ({ page }) => {
   await enterListerEvent(page)
-  await pane1(page).locator('.event-item.selected').press('Meta+:')
+  await press(page, 'Meta+:')
   await expect(pane1(page).locator('#filter-bar')).toBeVisible()
 
-  await pane1(page).locator('.event-item.selected').press('Escape')
+  await press(page, 'Escape')
 
   await expect(pane1(page).locator('#filter-bar')).not.toBeVisible()
 })
@@ -50,8 +50,8 @@ test('Cmd+: puis t affiche un input de filtre texte', async ({ page }) => {
   await enterListerEvent(page)
   await expect(pane1(page).locator('#filter-input')).not.toBeVisible()
 
-  await pane1(page).locator('.event-item.selected').press('Meta+:')
-  await pane1(page).locator('.event-item.selected').press('t')
+  await press(page, 'Meta+:')
+  await press(page, 't')
 
   await expect(pane1(page).locator('#filter-input')).toBeVisible()
   await expect(pane1(page).locator('#filter-input')).toBeFocused()
@@ -62,8 +62,8 @@ test('Cmd+: puis t affiche un input de filtre texte', async ({ page }) => {
 test('filtrage live : "bal" filtre dès la frappe sans Enter', async ({ page }) => {
   await enterListerEvent(page)
 
-  await pane1(page).locator('.event-item.selected').press('Meta+:')
-  await pane1(page).locator('.event-item.selected').press('t')
+  await press(page, 'Meta+:')
+  await press(page, 't')
   await pane1(page).locator('#filter-input').fill('bal')
   // Pas de Enter — filtre live
 
@@ -77,8 +77,8 @@ test('filtrage live : "bal" filtre dès la frappe sans Enter', async ({ page }) 
 test('filtrage live : insensible à la casse', async ({ page }) => {
   await enterListerEvent(page)
 
-  await pane1(page).locator('.event-item.selected').press('Meta+:')
-  await pane1(page).locator('.event-item.selected').press('t')
+  await press(page, 'Meta+:')
+  await press(page, 't')
   await pane1(page).locator('#filter-input').fill('BAL')
 
   await expect(pane1(page).locator('.event-item').nth(0)).not.toHaveClass(/hidden/)
@@ -91,10 +91,10 @@ test('filtrage live : insensible à la casse', async ({ page }) => {
 test("Enter ferme l'input sans annuler le filtre", async ({ page }) => {
   await enterListerEvent(page)
 
-  await pane1(page).locator('.event-item.selected').press('Meta+:')
-  await pane1(page).locator('.event-item.selected').press('t')
+  await press(page, 'Meta+:')
+  await press(page, 't')
   await pane1(page).locator('#filter-input').fill('bal')
-  await pane1(page).locator('.event-item.selected').press('Enter')
+  await press(page, 'Enter')
 
   await expect(pane1(page).locator('#filter-input')).not.toBeVisible()
   await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/hidden/)
@@ -106,13 +106,13 @@ test("Enter ferme l'input sans annuler le filtre", async ({ page }) => {
 test('navigation ↓ saute les items cachés par le filtre', async ({ page }) => {
   await enterListerEvent(page)
 
-  await pane1(page).locator('.event-item.selected').press('Meta+:')
-  await pane1(page).locator('.event-item.selected').press('t')
+  await press(page, 'Meta+:')
+  await press(page, 't')
   await pane1(page).locator('#filter-input').fill('bal')
-  await pane1(page).locator('.event-item.selected').press('Enter')
+  await press(page, 'Enter')
 
   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
-  await pane1(page).locator('.event-item.selected').press('ArrowDown')
+  await press(page, 'ArrowDown')
 
   await expect(pane1(page).locator('.event-item').nth(3)).toHaveClass(/selected/)
   await expect(pane1(page).locator('.event-item').nth(1)).not.toHaveClass(/selected/)
@@ -123,10 +123,10 @@ test('navigation ↓ saute les items cachés par le filtre', async ({ page }) =>
 test('FilterBar affiche le terme de filtre texte actif', async ({ page }) => {
   await enterListerEvent(page)
 
-  await pane1(page).locator('.event-item.selected').press('Meta+:')
-  await pane1(page).locator('.event-item.selected').press('t')
+  await press(page, 'Meta+:')
+  await press(page, 't')
   await pane1(page).locator('#filter-input').fill('bal')
-  await pane1(page).locator('.event-item.selected').press('Enter')
+  await press(page, 'Enter')
 
   await expect(pane1(page).locator('#filter-bar')).toBeVisible()
   await expect(pane1(page).locator('#filter-bar')).toContainText('bal')
@@ -137,15 +137,15 @@ test('FilterBar affiche le terme de filtre texte actif', async ({ page }) => {
 test('Cmd+: puis : efface le filtre texte', async ({ page }) => {
   await enterListerEvent(page)
 
-  await pane1(page).locator('.event-item.selected').press('Meta+:')
-  await pane1(page).locator('.event-item.selected').press('t')
+  await press(page, 'Meta+:')
+  await press(page, 't')
   await pane1(page).locator('#filter-input').fill('bal')
-  await pane1(page).locator('.event-item.selected').press('Enter')
+  await press(page, 'Enter')
 
   await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/hidden/)
 
-  await pane1(page).locator('.event-item.selected').press('Meta+:')
-  await pane1(page).locator('.event-item.selected').press(':')
+  await press(page, 'Meta+:')
+  await press(page, ':')
 
   const items = pane1(page).locator('.event-item')
   await expect(items.nth(0)).not.toHaveClass(/hidden/)
@@ -159,10 +159,10 @@ test('Cmd+: puis : efface le filtre texte', async ({ page }) => {
 test("Escape dans l'input annule le filtre texte", async ({ page }) => {
   await enterListerEvent(page)
 
-  await pane1(page).locator('.event-item.selected').press('Meta+:')
-  await pane1(page).locator('.event-item.selected').press('t')
+  await press(page, 'Meta+:')
+  await press(page, 't')
   await pane1(page).locator('#filter-input').fill('bal')
-  await pane1(page).locator('.event-item.selected').press('Escape')
+  await press(page, 'Escape')
 
   await expect(pane1(page).locator('#filter-input')).not.toBeVisible()
 
@@ -178,8 +178,8 @@ test("Escape dans l'input annule le filtre texte", async ({ page }) => {
 test('Cmd+: puis b ouvre le sélecteur de brins pour filtre', async ({ page }) => {
   await enterListerEvent(page)
 
-  await pane1(page).locator('.event-item.selected').press('Meta+:')
-  await pane1(page).locator('.event-item.selected').press('b')
+  await press(page, 'Meta+:')
+  await press(page, 'b')
 
   await expect(pane1(page).locator('#filter-selector-panel')).toBeVisible()
 })
@@ -187,8 +187,8 @@ test('Cmd+: puis b ouvre le sélecteur de brins pour filtre', async ({ page }) =
 test('Cmd+: puis p ouvre le sélecteur de persos pour filtre', async ({ page }) => {
   await enterListerEvent(page)
 
-  await pane1(page).locator('.event-item.selected').press('Meta+:')
-  await pane1(page).locator('.event-item.selected').press('p')
+  await press(page, 'Meta+:')
+  await press(page, 'p')
 
   await expect(pane1(page).locator('#filter-selector-panel')).toBeVisible()
 })

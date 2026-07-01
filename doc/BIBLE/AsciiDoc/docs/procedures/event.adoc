@@ -1,0 +1,124 @@
+=== Event ===
+
+_(Event = évènement)_
+
+==== Modifier un évènement ====
+
+[cols="1,4"]
+|====
+| **Action**      | **Attendu**
+|                 | On doit se trouver dans l'évènemencier d'un projet.
+| combo:enter[]   | L'event passe en édition (fond vert)
+| combo:a-z[]     | On modifie son texte (appelé aussi “titre”)
+| combo:tab[]     | Propriété suivante sélectionnée (statut)
+| combo:fb[]      | Le menu des status s'ouvre
+| combo:fb[]/combo:fh[] | sélectionne une valeur
+| combo:enter[]   | Choisit cette valeur
+| combo:tab[]     | Propriété suivante sélectionnée (météo)
+| idem            | Une valeur est choisie (ou pas)
+| combo:tab[]     | Propriété suivante sélectionnée (effet)
+| idem            | Une valeur est choisie (ou pas)
+| combo:maj+tab[] | Propriété précédente sélectionnée (météo)
+| combo:tab[]x2   | Propriété suivante sélectionnée (lieu)
+| idem            | Une valeur est choisie (ou pas)
+| combo:enter[]   | Fin de l'édition de l'event (automatiquement enregistré)
+|====
+
+==== Déplacer un event ====
+
+==== Copier un event ====
+
+==== Couper un event ====
+
+==== Coller un event ==== 
+
+==== Choisir les brins de l'event ====
+
+==== Choisir les personnages de l'event ====
+
+[cols="1,4"]
+|====
+| **Action**      | **Attendu**
+|                 | Choisir un projet qui xref:procedure-creation-personnage[contient des personnages]
+|====
+
+==== Choisir les personnages de tous les events cochés ====
+
+[cols="1,4"]
+|====
+| **Action**        | **Attendu**
+|                   | Un évènemencier doit être affiché, avec plusieurs events.
+| combo:fb+space[]  | Plusieurs events sont cochés
+| combo:maj+p[]     | Ouvre le panneau des personnages en mode “pour tous les cochés”
+|====
+
+
+
+==== Choisir les brins de l'event ====
+
+////
+à placer : 
+- les badges s'ajoutent à l'event courant (à tous les events cochés si maj pour ouvrir — dans une d)
+ - en fonction des options, la couleur du brin s'applique à l'affichage de l'event (trois choix : pas de couleur héritée, couleur du premier brin, météo)
+////
+
+==== Choisir les brins des tous events cochés ====
+
+==== Mémoriser un event comme cible ====
+
+==== Coller un lien vers un event ====
+
+==== Coller un lien vers un projet ====
+
+==== Coller un lien vers un brin ====
+
+==== Coller un lien vers un personnages ====
+
+==== Définir le style d'un event ====
+
+////
+Deux choses à traiter
+- le style
+- le format manuscrit/évènemencier du Lister
+////
+
+
+==== Définir l'aspect d'un event ====
+
+////
+à faire :
+- réglage de sa couleur
+- réglage de son style
+////
+
+[cols="1,4"]
+|====
+| **Action**      | **Attendu**
+|                 
+| Sélectionner un event qui possède a) au moins deux brins, b) une météo et un effet (jour, nuit, etc.) défini.
+
+| combo:o[]       | La panneau des options est ouvert
+| combo:fb[] x    | L'option “Couleur de l'évènement” est sélectionné
+| combo:tab[]     | Le menu de l'option est actif
+| combo:fb[] x    | Choisir “Couleur propre de l'event”
+| combo:o[]       
+| Le panneau des options se ferme +
+  La couleur propre à l'event est appliquée
+| combo:o[]       | La panneau des options est ouvert
+| combo:fb[] x    | L'option “Couleur de l'évènement” est sélectionné
+| combo:tab[]     | Le menu de l'option est actif
+| combo:fb[] x    | Choisir “Couleur du premier brin”
+| combo:o[]       
+| Le panneau des options se ferme +
+  La couleur du premier brin est appliquée
+| combo:o[]       | La panneau des options est ouvert
+| combo:fb[] x    | L'option “Couleur de l'évènement” est sélectionné
+| combo:tab[]     | Le menu de l'option est actif
+| combo:fb[] x    | Choisir “Couleur de la météo”
+| combo:o[]       
+| Le panneau des options se ferme +
+  La couleur de la météo est appliquée
+
+|                 | La couleur de la météo de l'event est appliquée
+|====
+

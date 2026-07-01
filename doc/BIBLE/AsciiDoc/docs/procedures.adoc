@@ -1,0 +1,7 @@
+== Toutes les procédures ==
+
+_Ce document décrit les procédures pour accomplir les différentes opérations dans EventerC_
+
+include::procedures/project.adoc[]
+include::procedures/event.adoc[]
+include::procedures/personnage.adoc[]

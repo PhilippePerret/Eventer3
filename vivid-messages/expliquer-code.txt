@@ -1,0 +1,6 @@
+Tu penses vraiment que je vais te laisser mettre ton code pourri dans mon app sans que tu expliques ce que tu fais ? Sérieux ? Donc :
+1) Tu expliques ce que tu veux faire
+2) tu expliques POURQUOI tu dois le faire
+3) Tu expliques pourquoi l'emplacement que tu as choisi est le meilleur (fichier, emplacement
+dans le fichier)
+4) Tu expliques pourquoi le responsable que tu as choisi est le meilleur

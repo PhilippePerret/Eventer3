@@ -7,22 +7,23 @@ class Combo < Asciidoctor::Extensions::InlineMacroProcessor
   named :combo
 
   STRKEYS_TO_KEY = {
-    'alt'   => '⌥',
-    'cmd'   => '⌘',
-    'ctrl'  => '⌃', 
-    'maj'   => '⇧',
-    'enter' => '↩︎',
-    'fb'    => '↓',
-    'fg'    => '←',
-    'fh'    => '↑',
-    'fd'    => '→',
-    'space' => '␣',
-    'esc'   => '␛'
+    'alt'     => '⌥',
+    'cmd'     => '⌘',
+    'ctrl'    => '⌃', 
+    'maj'     => '⇧',
+    'enter'   => '↩︎',
+    'fb'      => '↓',
+    'fg'      => '←',
+    'fh'      => '↑',
+    'fd'      => '→',
+    'space'   => '␣',
+    'esc'     => '␛',
+    'delete'  => '⌦'
   }
 
   def process(parent, target, attrs)
     target.split('+')
-      .map {|k| %(<kbd style="font-size:1.25em;">#{STRKEYS_TO_KEY[k.downcase] || k}</kbd>) }
+      .map {|k| %(<kbd style="font-size:1.1em;">#{STRKEYS_TO_KEY[k.downcase] || k}</kbd>) }
       .join('+')
   end
 end

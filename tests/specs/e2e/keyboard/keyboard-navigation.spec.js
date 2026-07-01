@@ -1,7 +1,7 @@
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 installFixtures('many-projects')
 
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
 test(
   'les flèches haut/bas permettent de naviguer dans un Lister',
@@ -14,7 +14,7 @@ test(
     await expect(items.nth(0))
       .toHaveClass(/selected/)
 
-    await pane1(page).locator('.event-item.selected').press('ArrowDown')
+    await press(page, 'ArrowDown')
 
     await expect(items.nth(0))
       .not.toHaveClass(/selected/)
@@ -22,7 +22,7 @@ test(
     await expect(items.nth(1))
       .toHaveClass(/selected/)
 
-    await pane1(page).locator('.event-item.selected').press('ArrowDown')
+    await press(page, 'ArrowDown')
 
     await expect(items.nth(1))
       .not.toHaveClass(/selected/)
@@ -30,7 +30,7 @@ test(
     await expect(items.nth(2))
       .toHaveClass(/selected/)
 
-    await pane1(page).locator('.event-item.selected').press('ArrowUp')
+    await press(page, 'ArrowUp')
 
     await expect(items.nth(2))
       .not.toHaveClass(/selected/)

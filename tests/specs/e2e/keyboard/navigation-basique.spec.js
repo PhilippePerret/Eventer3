@@ -1,5 +1,5 @@
 import { installFixtures } from '../../../helpers/install-fixtures'
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
 /**
  * Fixture 'navigation' :
@@ -20,11 +20,11 @@ test.describe('Navigation basique', () => {
     await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
 
     // Naviguer sur Projet B (deuxième)
-    await pane1(page).locator('.event-item.selected').press('ArrowDown')
+    await press(page, 'ArrowDown')
     await expect(pane1(page).locator('.project-item').nth(1)).toHaveClass(/selected/)
 
     // Entrer dans Projet B
-    await pane1(page).locator('.project-item.selected').press('ArrowRight')
+    await press(page, 'ArrowRight')
     await expect(pane1(page).locator('#events-panel')).toBeVisible()
 
     // Tous les events de niveau 1 affichés, le premier sélectionné
@@ -32,19 +32,19 @@ test.describe('Navigation basique', () => {
     await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
 
     // Naviguer vers e2 (qui a des enfants)
-    await pane1(page).locator('.event-item.selected').press('ArrowDown')
+    await press(page, 'ArrowDown')
     await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/selected/)
 
     // e2 doit afficher un indicateur d'enfants
     await expect(pane1(page).locator('.event-item.selected .child-indicator')).toBeVisible()
 
     // Entrer dans le sous-lister de e2
-    await pane1(page).locator('.event-item.selected').press('ArrowRight')
+    await press(page, 'ArrowRight')
     await expect(pane1(page).locator('#events-panel')).toBeVisible()
     await expect(pane1(page).locator('.event-item')).toHaveCount(2)
 
     // Revenir au lister parent (niveau 1)
-    await pane1(page).locator('.event-item.selected').press('ArrowLeft')
+    await press(page, 'ArrowLeft')
     await expect(pane1(page).locator('#events-panel')).toBeVisible()
     await expect(pane1(page).locator('.event-item')).toHaveCount(3)
 
@@ -52,7 +52,7 @@ test.describe('Navigation basique', () => {
     await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/selected/)
 
     // Revenir à la liste des projets
-    await pane1(page).locator('.event-item.selected').press('ArrowLeft')
+    await press(page, 'ArrowLeft')
     await expect(pane1(page).locator('#projects-panel')).toBeVisible()
 
     // Projet B doit être sélectionné (le deuxième, celui d'où on est parti)

@@ -16,7 +16,7 @@ export default class DOM {
     const val = item[field.name]
     const values = this._normalizeValues(field.values)
     const found = values.find(v => v.value === val)
-    el.textContent = found ? (found.label ?? found.name ?? val) : (val ?? '---')
+    el.textContent = found ? (found.label ?? found.name ?? val) : (val ?? '')
     this._applyValuesWidth(el, field)
     return el
   }
@@ -49,12 +49,14 @@ export default class DOM {
     el.setAttribute('tabindex', '0')
     const values = this._normalizeValues(field.values)
     const found = values.find(v => v.value === item[field.name])
-    el.textContent = found ? (found.label ?? found.name ?? item[field.name]) : (item[field.name] ?? '---')
+    el.textContent = found ? (found.label ?? found.name ?? item[field.name]) : (item[field.name] ?? '')
 
+    const disabledValues = field.onchoose ? (item[field.onchoose]?.(field.name) ?? []) : []
     const popup = new PopupSelect({
       options: values,
       currentValue: item[field.name],
       multi: field.multiple ?? false,
+      disabledValues,
       onSelect: val => {
         item[field.name] = val
         const f = values.find(v => v.value === val)

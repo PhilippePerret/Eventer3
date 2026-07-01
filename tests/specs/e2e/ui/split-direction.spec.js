@@ -1,4 +1,4 @@
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 
 test.beforeEach(() => installFixtures('with-links'))
@@ -9,7 +9,7 @@ async function gotoApp(page) {
 }
 
 async function openSplit(page) {
-  await page.keyboard.press('Alt+2')
+  await press(page, 'Alt+2')
   await pane1(page).locator('.popup-select__option', { hasText: 'Vertical' }).click()
   await expect(page.frameLocator('#pane-2').locator('.project-item').first()).toBeVisible()
 }
@@ -18,19 +18,19 @@ async function openSplit(page) {
 
 test('Alt+2 affiche un popup vertical/horizontal', async ({ page }) => {
   await gotoApp(page)
-  await page.keyboard.press('Alt+2')
+  await press(page, 'Alt+2')
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
 })
 
 test('Alt+2 pavé numérique affiche aussi le popup', async ({ page }) => {
   await gotoApp(page)
-  await page.keyboard.press('Alt+Numpad2')
+  await press(page, 'Alt+Numpad2')
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
 })
 
 test('popup contient les options Vertical et Horizontal', async ({ page }) => {
   await gotoApp(page)
-  await page.keyboard.press('Alt+2')
+  await press(page, 'Alt+2')
   const popup = pane1(page).locator('.popup-select')
   await expect(popup.locator('.popup-select__option', { hasText: 'Vertical' })).toBeVisible()
   await expect(popup.locator('.popup-select__option', { hasText: 'Horizontal' })).toBeVisible()
@@ -40,14 +40,14 @@ test('popup contient les options Vertical et Horizontal', async ({ page }) => {
 
 test('choisir Vertical → pane-2 visible', async ({ page }) => {
   await gotoApp(page)
-  await page.keyboard.press('Alt+2')
+  await press(page, 'Alt+2')
   await pane1(page).locator('.popup-select__option', { hasText: 'Vertical' }).click()
   await expect(page.locator('#pane-2')).toBeVisible()
 })
 
 test('split Vertical → body#shell flex-direction = row', async ({ page }) => {
   await gotoApp(page)
-  await page.keyboard.press('Alt+2')
+  await press(page, 'Alt+2')
   await pane1(page).locator('.popup-select__option', { hasText: 'Vertical' }).click()
   const dir = await page.evaluate(() => document.body.style.flexDirection || getComputedStyle(document.body).flexDirection)
   expect(dir).toBe('row')
@@ -57,14 +57,14 @@ test('split Vertical → body#shell flex-direction = row', async ({ page }) => {
 
 test('choisir Horizontal → pane-2 visible', async ({ page }) => {
   await gotoApp(page)
-  await page.keyboard.press('Alt+2')
+  await press(page, 'Alt+2')
   await pane1(page).locator('.popup-select__option', { hasText: 'Horizontal' }).click()
   await expect(page.locator('#pane-2')).toBeVisible()
 })
 
 test('split Horizontal → body#shell flex-direction = column', async ({ page }) => {
   await gotoApp(page)
-  await page.keyboard.press('Alt+2')
+  await press(page, 'Alt+2')
   await pane1(page).locator('.popup-select__option', { hasText: 'Horizontal' }).click()
   await expect(page.locator('#pane-2')).toBeVisible()
   await page.waitForFunction(() => document.body.style.flexDirection === 'column')
@@ -77,8 +77,8 @@ test('split Horizontal → body#shell flex-direction = column', async ({ page })
 test('Alt+2 split actif → focus sur pane-2', async ({ page }) => {
   await gotoApp(page)
   await openSplit(page)
-  await page.keyboard.press('Alt+1')
+  await press(page, 'Alt+1')
   await expect(page.locator('#pane-1')).toHaveAttribute('data-focused', '')
-  await page.keyboard.press('Alt+2')
+  await press(page, 'Alt+2')
   await expect(page.locator('#pane-2')).toHaveAttribute('data-focused', '')
 })

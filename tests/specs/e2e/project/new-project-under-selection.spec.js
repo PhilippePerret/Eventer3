@@ -1,7 +1,7 @@
 // Origine : tests/specs/e2e/project/new-project-under-selection.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures'
 import { setupProjectFolder, createAndSelectFolderInPicker } from '../../../helpers/create-project-helper.js'
-import { test, expect, pane1 } from '../__setup__.js'
+import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
 test.beforeEach(() => {
   installFixtures('many-projects')
@@ -14,12 +14,12 @@ test('la touche n crée un nouveau projet vide en dessous de la sélection', asy
 
   await expect(items).toHaveCount(3)
 
-  await pane1(page).locator('.project-item.selected').press('ArrowDown')
+  await press(page, 'ArrowDown')
   await expect(items.nth(1)).toHaveClass(/selected/)
 
   const { folderName } = await setupProjectFolder(page)
 
-  await pane1(page).locator('.project-item.selected').press('n')
+  await press(page, 'n')
   await createAndSelectFolderInPicker(page, expect, folderName)
   await page.waitForLoadState('networkidle')
 

@@ -9,4 +9,5 @@ export const EventLi = {
 export const ListerEventLi = {
   ...ListerLi,
   ArrowLeft: { nokey: 'leaveToParent' },
+  m:         { meta:  'toggleDisplayMode' },
 }
