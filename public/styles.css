@@ -1965,12 +1965,12 @@ body:has(#filter-input:not(.hidden)) #main-panel {
 
 /* ─── Mode manuscrit / scénario ─────────────────────────────────────────────── */
 
-#main-panel.roman-man .event-title,
-#main-panel.film-man .event-title {
+#events-panel.roman-man .event-title,
+#events-panel.film-man .event-title {
   white-space: normal;
 }
 
-#main-panel.roman-man .event-title {
+#events-panel.roman-man .event-title {
   font-family: 'EB Garamond', Garamond, Georgia, serif;
   max-width: 680px;
   line-height: 1.7;

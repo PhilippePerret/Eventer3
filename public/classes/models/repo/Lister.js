@@ -7,9 +7,11 @@ export default {
     const def   = await fetch(`/api/listers/${id}${query}`, { cache: 'no-store' }).then(r => r.json())
     if (!def) return null
     this._missing = def.missing === true
-    if (def.id        != null) this.id        = def.id
-    if (def.man_depth != null) this.man_depth = def.man_depth
-    if (def.nature    != null) this.nature    = def.nature
+    if (def.id             != null) this.id             = def.id
+    if (def.man_depth      != null) this.man_depth      = def.man_depth
+    if (def.nature         != null) this.nature         = def.nature
+    if (def.project_nature != null) this.project_nature = def.project_nature
+
     this.item_ids = def.item_ids ?? []
     return await fetch(`/api/listers/${id}/items${query}`, { cache: 'no-store' }).then(r => r.json())
   },
@@ -35,6 +37,28 @@ export default {
       method:  'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ item_ids: this.item_ids }),
+      cache:   'no-store',
+    })
+  },
+
+  async saveNature() {
+    const pid = this.project?.id
+    if (!pid) return
+    await fetch(`/api/listers/${this.id}?project_id=${pid}`, {
+      method:  'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ nature: this.nature }),
+      cache:   'no-store',
+    })
+  },
+
+  async saveProjectMeta(fields) {
+    const pid = this.project?.id
+    if (!pid) return
+    await fetch(`/api/projects/${pid}`, {
+      method:  'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(fields),
       cache:   'no-store',
     })
   },

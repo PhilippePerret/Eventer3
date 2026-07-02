@@ -3,6 +3,7 @@ import { ListerEventLi } from '../listen/Event.js'
 import Event from './Event.js'
 import StatusBar from '../../ui/StatusBar.js'
 import NaturePanel from '../../ui/NaturePanel.js'
+import LOG from '../../../system/LOG.js'
 
 export default class ListerEvent extends Lister {
   static ITEM_CLASS  = Event
@@ -23,6 +24,7 @@ export default class ListerEvent extends Lister {
   display(contextItem) {
     StatusBar.resetToNesting()
     super.display(contextItem)
+    this._updateMainPanelClass()
   }
 
   selectNext() {
@@ -55,6 +57,14 @@ export default class ListerEvent extends Lister {
   }
 
   openNaturePanel() { new NaturePanel({ target: this }).open() }
+
+  _updateMainPanelClass() {
+    if (!this.container) return
+    this.container.classList.remove('roman-man', 'film-man')
+    const projectNature = this.project?.nature ?? this.project_nature ?? null
+    if (this.nature === 'man' && projectNature)
+      this.container.classList.add(`${projectNature}-man`)
+  }
 
   leaveToParent() {
     if (StatusBar.displayMode === 'LEVEL') {

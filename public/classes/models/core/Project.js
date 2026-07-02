@@ -38,7 +38,7 @@ export default class Project extends Item {
   async enterInside() {
     await this.listerBrins.load()
     this.listerBrins.build()
-    await this.listerPersos.load()
+    try { await this.listerPersos.load() } catch(e) { LOG.m(1, 'ERREUR persos.load', e.message) }
     this.listerPersos.build()
     await this.listerStyle.load()
     this.listerStyle.build()

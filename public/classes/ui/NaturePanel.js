@@ -8,8 +8,14 @@ const PROJECT_NATURE_OPTIONS = [...PROJECT_TYPES, { value: null, label: '—' }]
 export default class NaturePanel extends KeyboardablePanel {
 
   constructor({ target }) {
-    super({ panelClass: 'nature-panel' })
-    this._isProject     = target.constructor.name === 'Project'
+    const isProject = target.constructor.name === 'Project'
+    const title     = isProject ? '' : (() => {
+      const raw   = target.parentItem?.title ?? 'l\'évènemencier'
+      const label = raw.length > 24 ? raw.slice(0, 24) + '…' : raw
+      return `Type de « ${label} » (niv. ${target.depth})`
+    })()
+    super({ title, panelClass: 'nature-panel' })
+    this._isProject     = isProject
     this._target        = target
     this._lister        = this._isProject ? null : target
     this._projectNature = this._isProject ? (target.nature ?? null) : (target.project_nature ?? null)
@@ -33,12 +39,6 @@ export default class NaturePanel extends KeyboardablePanel {
   _getItemCount() { return 2 }
 
   _renderContent(body) {
-    const lister  = this._lister
-    const raw     = lister.parentItem?.title ?? 'l\'évènemencier'
-    const label   = raw.length > 24 ? raw.slice(0, 24) + '…' : raw
-    const titleEl = this._el?.querySelector('.ftpanel__title')
-    if (titleEl) titleEl.textContent = `Type de « ${label} » (niv. ${lister.depth})`
-
     this._rows = [
       this._createRow('Nature projet',       this._projectNatureLabel()),
       this._createRow('Nature évènemencier', this._listerNatureLabel()),
@@ -133,28 +133,31 @@ export default class NaturePanel extends KeyboardablePanel {
   async _apply() {
     const lister = this._lister
     lister.nature         = this._listerNature
+    lister.project_nature = this._projectNature
     lister.project.nature = this._projectNature
-    await lister.save()
-    await lister.project.save()
-    lister._updateMainPanelClass?.()
-    lister._propagateProjectMetaToAncestors?.()
 
     const alreadyDefault = lister.man_depth != null && lister.depth === lister.man_depth
     const needsConfirm   = this._listerNature === 'man' && !alreadyDefault
+
+    lister._updateMainPanelClass?.()
+    lister._propagateProjectMetaToAncestors?.()
     this.close()
+    lister.activate()
+
+    void Promise.all([lister.save(), lister.saveNature(), lister.saveProjectMeta({ nature: this._projectNature }), lister.project.save()])
 
     if (needsConfirm) {
       const man       = PROJECT_TYPES.find(t => t.value === this._projectNature)?.man ?? 'manuscrit'
       const confirmed = await ConfirmDialog.open({
         message: `Est-ce le niveau par défaut des évènemenciers ${man}s ?`,
         buttons: [
-          { label: 'Non', key: 'Escape', value: false },
-          { label: 'Oui', key: 'Enter',  value: true  },
+          { label: 'Non', type: 'cancel',  value: false },
+          { label: 'Oui', type: 'primary', value: true  },
         ],
       })
       if (confirmed) {
         lister.man_depth = lister.depth
-        await lister.save()
+        void Promise.all([lister.save(), lister.saveProjectMeta({ man_depth: lister.man_depth })])
         lister._propagateProjectMetaToAncestors?.()
       }
     }

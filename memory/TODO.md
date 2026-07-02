@@ -86,6 +86,15 @@ PULL Double fenêtre
 - specs/e2e/ui/split-arrow-nav.spec.js
 
 
+**`_tdd/lister-nature.spec.js`** : en cours (session 2026-07-02).
+- Tests 1–22 passent SAUF test 16 (mis en `test.skip`).
+- Test 16 échoue : race condition — quand `_apply()` est lancé (Appliquer) et que l'utilisateur navigue vers un lister frère et ouvre un nouveau NaturePanel, l'ancien `_apply()` peut encore tourner et ouvrir son ConfirmDialog en même temps. Fix partiel appliqué (`void Promise.all` pour les saves, `close()+activate()` avant saves), mais le problème persiste — à investiguer.
+- `_apply()` dans `NaturePanel.js` : saves en fire-and-forget (`void Promise.all`).
+- Bug persos.load (`existingBadges` null) : contourné avec try/catch dans `Project.enterInside()` — à vraiment corriger.
+- **SURVEILLER** : pollution de données entre tests — `saveProjectMeta` écrit dans la DB de test et peut affecter `project-create.spec.js` (4 items créés au lieu de 3).
+- `_tdd/project-create.spec.js` : problème connu (4 items au lieu de 3), pas encore traité.
+- `_tdd/project-edit.spec.js` et `_tdd/project-navigation.spec.js` : statut inconnu (pas encore lancés en session récente).
+
 Tests 60-74 (`event-fields.spec.js`) : **toujours dans `_tdd/`**, 14/16 passent.
 2 échecs restants : TAB depuis `effet` ne focus pas `lieu` et persistance `lieu`.
 Piste : remplacer `tabindex='0'` par `tabindex='-1'` sur les trigger spans dans `DOM.buildEditSelectField`.

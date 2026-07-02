@@ -1,4 +1,5 @@
 import { stopEvent } from '../utils/events.js'
+import LOG from '../../system/LOG.js'
 
 export default class KeyboardablePanel {
 
@@ -61,7 +62,9 @@ export default class KeyboardablePanel {
     this._renderFooter(el)
 
     this._el = el
+    LOG.m(1, 'KeyboardablePanel._render appending', this._panelClass, 'to body, body exists=', !!document.body)
     document.body.appendChild(el)
+    LOG.m(1, 'KeyboardablePanel._render done, el in DOM=', document.body.contains(el))
     this._updateItemSelection()
   }
 
