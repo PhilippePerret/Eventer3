@@ -1,4 +1,6 @@
 import Item from '../abstract/Item.js'
+import { ProjectLi } from '../listen/Project.js'
+import NaturePanel from '../../ui/NaturePanel.js'
 import Lister from '../abstract/Lister.js'
 import ListerBrin  from './ListerBrin.js'
 import ListerPerso from './ListerPerso.js'
@@ -12,6 +14,7 @@ import LOG from '../../../system/LOG.js'
 
 export default class Project extends Item {
   static COLORS    = PROJECT_COLORS
+  static LISTENERS = ProjectLi
   static get thingName() { return WORD_FORMS.Project }
 
   constructor(data = {}) {
@@ -54,9 +57,13 @@ export default class Project extends Item {
       , {name: 'type',  type: 'select', warper: 'edits', values: PROJECT_TYPES}
     ])}
 
+  openNaturePanel() { new NaturePanel({ target: this }).open() }
+
   static async onCreated(project) {
-    const evtLister = await Lister.createLister({ type: 'events', itemId: id, project: project })
+    const evtLister = await Lister.createLister({ type: 'events', itemId: project.id, project: project })
     if (evtLister?.id) await new Lister({ id: evtLister.id, project: project }).createItem({ title: 'Acte I' })
+    await new ListerBrin({ project }).load()
+    await new ListerPerso({ project }).load()
   }
 
 }

@@ -1,20 +1,8 @@
-# Manuel Eventer
+# Styles
 
 NOTE POUR CLAUDE : TU N’AS PAS À LIRE CE FICHIER
 
-[TOC]
 
----
-
-
----
-
-
-
-
----
-
-## Aspect
 
 ### Aspect des items
 

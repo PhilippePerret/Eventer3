@@ -28,6 +28,14 @@ export default class ListerPerso extends Lister {
     }
   }
 
+  async _initDefault() {
+    const result = await this.createItem({ title: 'Votre protagoniste' })
+    if (!result?.id) return
+    this.item_ids = [result.id]
+    await this.save()
+    this.items = [new Perso({ ...result, id: result.id, _index: 0, project: this.project, parentLister: this })]
+  }
+
   _syncChecked() {
     const directIds    = this._directIds    ?? new Set()
     const inheritedIds = this._inheritedIds ?? new Set()

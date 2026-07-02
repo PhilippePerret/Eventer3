@@ -1,3 +1,5 @@
+// Origine : tests/specs/e2e/lister/lister-nature.spec.js
+//         + tests/specs/e2e/ui/popup-select-current-value.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect, pane1, press, getErr } from '../__setup__.js'
 import { MANUSCRIT_WIDTH } from '../../../../public/constants/constants.js'
@@ -19,10 +21,10 @@ async function goToListerEvent(page) {
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
 }
 
-// Tab Tab Enter = activer le bouton "Appliquer" (dernier bouton footer)
+// Tab Tab Enter = activer le bouton "Appliquer" (footerBtns[1], DOM index 0 car rendu inverse)
 async function applyNaturePanel(page) {
-  await press(page, 'Tab')   // footer focus → Annuler
-  await press(page, 'Tab')   // footer focus → Appliquer
+  await press(page, 'Tab')   // footerFocusIdx=0 → Annuler
+  await press(page, 'Tab')   // footerFocusIdx=1 → Appliquer
   await press(page, 'Enter') // appliquer
 }
 
@@ -48,7 +50,7 @@ async function setRomanMan(page) {
 
 // ─── Structure du panneau ─────────────────────────────────────────────────────
 
-test("'t' dans project list → popup projet nature (pas nature-panel)", async ({ page }) => {
+test.only("'t' dans project list → popup projet nature (pas nature-panel)", async ({ page }) => {
   await goToProjectList(page)
   await press(page, 't')
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
@@ -65,7 +67,7 @@ test("'t' dans event lister → panneau .nature-panel s'ouvre", async ({ page })
 test("panneau nature → titre mentionne le niveau courant", async ({ page }) => {
   await goToListerEvent(page)
   await press(page, 't')
-  await expect(pane1(page).locator('.nature-panel .floating-panel__title')).toContainText('niv. 1')
+  await expect(pane1(page).locator('.nature-panel .ftpanel__title')).toContainText('niv. 1')
 })
 
 test("panneau nature → contient 'Nature projet' et 'Nature évènemencier'", async ({ page }) => {
@@ -79,12 +81,12 @@ test("panneau nature → contient 'Nature projet' et 'Nature évènemencier'", a
 test("panneau nature → footer a boutons 'Annuler' et 'Appliquer' alternables par Tab", async ({ page }) => {
   await goToListerEvent(page)
   await press(page, 't')
-  const footer = pane1(page).locator('.nature-panel .floating-panel__footer')
+  const footer = pane1(page).locator('.nature-panel .ftpanel__footer')
   await expect(footer).toBeVisible()
-  const btns = footer.locator('.panel-btn')
+  const btns = footer.locator('.ftpanel-btn')
   await expect(btns).toHaveCount(2)
-  await expect(btns.first()).toContainText('Annuler')
-  await expect(btns.last()).toContainText('Appliquer')
+  await expect(btns.first()).toContainText('Appliquer')
+  await expect(btns.last()).toContainText('Annuler')
 })
 
 // ─── Navigation et menus ──────────────────────────────────────────────────────
@@ -125,13 +127,14 @@ test("projet 'film' → popup évènemencier propose 'scénario'", async ({ page
   await expect(pane1(page).locator('.popup-select')).toContainText('scénario')
 })
 
-// ─── Escape / Annuler ─────────────────────────────────────────────────────────
+// ─── Annuler ──────────────────────────────────────────────────────────────────
 
-test("Escape ferme le panneau sans appliquer", async ({ page }) => {
+test("Annuler ferme le panneau sans appliquer", async ({ page }) => {
   await goToListerEvent(page)
   await press(page, 't')
   await expect(pane1(page).locator('.nature-panel')).toBeVisible()
-  await press(page, 'Escape')
+  await press(page, 'Tab')   // → Annuler (index 0, DOM en reverse = dernier)
+  await press(page, 'Enter') // fermer
   await expect(pane1(page).locator('.nature-panel')).not.toBeVisible()
   await expect(pane1(page).locator('#events-panel')).not.toHaveClass(/roman/)
 })
@@ -175,7 +178,6 @@ test("nature man et depth ≠ man_depth → ConfirmDialog s'ouvre avec 'niveau p
   await press(page, 'ArrowUp')   // manuscrit
   await press(page, 'Enter')
   await applyNaturePanel(page)
-  // nature-panel fermé, confirm-dialog ouvert
   await expect(pane1(page).locator('.nature-panel')).not.toBeVisible()
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
   await expect(pane1(page).locator('.confirm-dialog')).toContainText('niveau par défaut')
@@ -201,7 +203,6 @@ test("confirmer 'n' → man_depth non sauvegardé, panneau ferme", async ({ page
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
   await press(page, 'Escape') // refuser man_depth
   await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
-  // sibling lister à même depth NE doit PAS être roman-man automatiquement
   await press(page, 'ArrowLeft')
   await press(page, 'ArrowDown')
   await press(page, 'ArrowRight')
@@ -241,7 +242,6 @@ test("depth = man_depth → appliquer ferme sans confirmation", async ({ page })
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
   await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toHaveAttribute('data-depth', '2')
-  // définir man_depth = 2 d'abord
   await press(page, 't')
   await press(page, 'Enter')
   await press(page, 'ArrowUp')    // film/BD
@@ -255,9 +255,8 @@ test("depth = man_depth → appliquer ferme sans confirmation", async ({ page })
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
   await press(page, 'Enter') // man_depth = 2 (oui)
   await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
-  // rouvrir 't' : depth 2 = man_depth → pas de confirmation
   await press(page, 't')
-  await applyNaturePanel(page) // appliquer sans rien changer
+  await applyNaturePanel(page)
   await expect(pane1(page).locator('.nature-panel')).not.toBeVisible()
 })
 
@@ -270,7 +269,6 @@ test("nature null à man_depth → panneau affiche 'manuscrit', popup focused su
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
   await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toHaveAttribute('data-depth', '2')
-  // Définir roman + man_depth=2 sur ce lister
   await press(page, 't')
   await press(page, 'Enter')
   await press(page, 'ArrowUp')   // film/BD
@@ -284,16 +282,13 @@ test("nature null à man_depth → panneau affiche 'manuscrit', popup focused su
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
   await press(page, 'Enter')     // oui → man_depth=2
   await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
-  // Naviguer vers un sibling (nature=null, depth=2=man_depth)
   await press(page, 'ArrowLeft')
   await press(page, 'ArrowDown')
   await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toHaveClass(/roman-man/)
-  // Ouvrir panneau → ligne évènemencier affiche 'manuscrit' (effectif, même si null en DB)
   await press(page, 't')
   await expect(pane1(page).locator('.nature-panel')).toBeVisible()
   await expect(pane1(page).locator('.nature-panel__fields')).toContainText('manuscrit')
-  // Ouvrir popup évènemencier → 'défaut' doit être focused (valeur stockée = null)
   await press(page, 'ArrowDown')
   await press(page, 'Enter')
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
@@ -337,12 +332,50 @@ test("Tab×3 ramène à aucun footer sélectionné → Enter ouvre le popup", as
   await goToListerEvent(page)
   await press(page, 't')
   await expect(pane1(page).locator('.nature-panel')).toBeVisible()
-  // Cycler à travers tous les boutons footer
   await press(page, 'Tab')   // → Annuler
   await press(page, 'Tab')   // → Appliquer
   await press(page, 'Tab')   // → aucun (retour à -1)
-  // Enter doit ouvrir le popup du champ sélectionné, pas activer un bouton footer
   await press(page, 'Enter')
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
   await expect(pane1(page).locator('.nature-panel')).toBeVisible()
+})
+
+// ─── PopupSelect : currentValue ───────────────────────────────────────────────
+
+test("popup nature projet : option '—' focused quand currentValue est null", async ({ page }) => {
+  await goToListerEvent(page)
+  await press(page, 't')
+  await expect(pane1(page).locator('.nature-panel')).toBeVisible()
+  await press(page, 'Enter')
+  await expect(pane1(page).locator('.popup-select')).toBeVisible()
+  const focused = pane1(page).locator('.popup-select__option.focused')
+  await expect(focused).toContainText('—')
+})
+
+test("popup nature évènemencier : option 'défaut' focused quand currentValue est null", async ({ page }) => {
+  await goToListerEvent(page)
+  await press(page, 't')
+  await expect(pane1(page).locator('.nature-panel')).toBeVisible()
+  await press(page, 'Enter')
+  await press(page, 'ArrowUp')   // film/BD
+  await press(page, 'ArrowUp')   // roman
+  await press(page, 'Enter')
+  await press(page, 'ArrowDown')
+  await press(page, 'Enter')
+  await expect(pane1(page).locator('.popup-select')).toBeVisible()
+  const focused = pane1(page).locator('.popup-select__option.focused')
+  await expect(focused).toContainText('défaut')
+})
+
+test("popup nature projet : option 'roman' focused après avoir choisi roman", async ({ page }) => {
+  await goToListerEvent(page)
+  await press(page, 't')
+  await press(page, 'Enter')
+  await press(page, 'ArrowUp')   // film/BD
+  await press(page, 'ArrowUp')   // roman
+  await press(page, 'Enter')     // select roman
+  await press(page, 'Enter')     // rouvrir
+  await expect(pane1(page).locator('.popup-select')).toBeVisible()
+  const focused = pane1(page).locator('.popup-select__option.focused')
+  await expect(focused).toContainText('roman')
 })

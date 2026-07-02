@@ -18,8 +18,9 @@ export const PROJECT_STATES = [
 ]
 
 export const PROJECT_TYPES = [
-      {label: 'roman'    , value: 'roman'     }
-   ,  {label: 'film'     , value: 'film'      }
-   ,  {label: 'BD'       , value: 'bd'        }
-   ,  {label: 'Theatre'  , value: 'theatre'   }
+      {label: 'roman'       , value: 'roman'    , man: 'manuscrit'  }
+   ,  {label: 'film'        , value: 'film'     , man: 'scénario'   }
+   ,  {label: 'BD'          , value: 'bd'       , man: 'scénario'   }
+   ,  {label: 'Théâtre'     , value: 'theatre'  , man: 'texte'      }
+   ,  {label: 'Pièce radio' , value: 'radio'    , man: 'script'     }
 ]

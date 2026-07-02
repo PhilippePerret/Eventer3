@@ -1,13 +1,24 @@
 == Filtrage ==
 
-{appname} possède un système de filtrage puissant qui permet de filter très précisément les events pour les retrouver ou les grouper plus facilement.
+{appname} possède un système de filtrage puissant qui permet de filter très précisément les events pour les retrouver ou les grouper plus facilement. La touche magique du filtrage est combo:cmd+:[]. Elle permet d'entrer en mode filtre. La touche combo:tab[] permet ensuite de se déplacer de champ filtrable en champ filtrable.
 
-////
-Faire l'exemple (fonctionnalité à implémenter) pour cocher plusieurs events qui partagent une même chose, par exemple un même état :
-- on les filtre
-- on les coche tous ("cocher" tous les visibles" à implémenter)
-- on applique quelque chose (en éditant le premier par exemple et quand on fait "enter", le changement s'applique à tous les events cochés (à implémenter))
-////
+
+==== Filtrer par le texte ====
+
+C'est le premier filtrage qui est actité par la combinaison combo:cmd+:[].
+
+[cols="1,4"]
+|====
+| **Action**      | **Attendu**
+| combo:cmd+:[]   | Le listing courant passent en mode filtre +
+Le curseur se place dans le champ au-dessus des textes.
+|combo:a-z[]      | Les items apparaissent et disparaissent s'ils correspondent ou non au texte tapé.
+|combo:cmd+:[]    | Sort de l'édition en gardant la liste filtrée. +
+Pour sortir du filtrage en revenant à la liste initiale, taper combo:esc[].
+|====
+
+
+
 
 ==== Cocher tous les filtrés ====
 

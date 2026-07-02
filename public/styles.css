@@ -236,6 +236,8 @@ body {
 
 .item-edits span {
   min-width: 20px;
+  min-height: 1.2em;
+  display: inline-block;
 }
 
 .event-title {

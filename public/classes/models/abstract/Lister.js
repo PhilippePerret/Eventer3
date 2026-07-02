@@ -213,10 +213,8 @@ export default class Lister extends KeyDispatcher {
   _panelTitle()       { return this._contextItem?.title ?? null }
   _updatePanelTitle() {
     const t      = this._panelTitle()
-    LOG.m(4, '_updatePanelTitle', { class: this.constructor.name, t, ctxTitle: this._contextItem?.title })
     if (t == null) return
     const titleEl = this.container?.querySelector('.panel-title')
-    LOG.m(4, '_updatePanelTitle titleEl', { titleEl: !!titleEl })
     if (titleEl) titleEl.textContent = t
   }
 

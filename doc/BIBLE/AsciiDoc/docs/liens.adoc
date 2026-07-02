@@ -1,0 +1,11 @@
+== Les Liens inter-item ==
+
+La liaison entre les éléments d'une histoire permettent de gagner beaucoup de temps et de confort.
+
+- récolter les liens
+- organiser les liens
+- appliquer les liens
+- épingler les liens
+- rejoindre une cible
+- afficher la carte d'une cible
+- afficher la cible dans une autre fenêtre

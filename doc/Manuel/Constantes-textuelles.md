@@ -2,21 +2,6 @@
 
 ## Le Texte/les textes
 
-### Aspect
-
-On peut déterminer l’aspect général du texte des évènemenciers en modifiant le style par défaut des *event*. Pour le moment, ça se fait en éditant le fichier `data/themes/default.css`. Vous pouvez modifier la police et la taille des *events.*
-
-On peut également, dans ce dossier `data/themes`, définir tous les styles que l’on veut, qui seront applicable ensuite sur les *events*. Noter ici que l’application s’écarte à ce niveau des traitements de texte conventionnels où l’on ne peut appliquer qu’un seul style à un paragraphe. Ici, on peut en appliquer autant qu’on veut, en sachant que le dernier a toujours raison concernant les caracéritiques communes : si deux styles définissent la taille de la police, c’est toujours la taille du dernier style appliqué qui l’emportera. C’est la raison pour laquelle on peut définir l’order des styles.
-
-#### Appliquer un style à un event
-
-- Ouvrir la fenêtre des styles en tapant `s` alors que l’*event* est sélectionné,
-- choisir les styles voulus en les cochant/décochant (avec `␣` ou `↩︎`),
-- déplacer si nécessaire les styles avec `⌘↓` et `⌘↑`
-- confirmer en fermant la fenêtre avec `⌘ + ↩︎`
-
----
-
 ### La constantes
 
 Vous pouvez utiliser des constantes dans le texte qui permettront de remplacer automatiquement un texte par un autre. Par exemple, typiquement, si vous ne connaissez pas encore le nom de la ville où se déroule l’histoire, plutôt que d’avoir à la remplacer partout une fois que vous l’avez trouvée, utiliser le texte « VILLE » dans les textes, dans les constantes, dites que « VILLE » doit être remplacé provisoirement par « Amiens ». Il sera écrit « Amiens » chaque fois, mais une fois que vous aurai opté pour la ville, il vous suffira de remplacer la valeur de la constante « VILLE » pour la changer dans tous les textes.

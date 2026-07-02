@@ -8,7 +8,7 @@ import LOG from '../../../system/LOG.js'
 export default class ListerProject extends Lister {
   static ITEM_CLASS  = Project
   static CHILD_CLASS = ListerEvent
-  static PANEL_ID     = 'projects-panel'
+  static PANEL_ID    = 'projects-panel'
 
   static async init() {
     LOG.m(1, 'Init projects')
@@ -74,7 +74,7 @@ export default class ListerProject extends Lister {
       body:    JSON.stringify({ db_path: dbPath }),
     })
 
-    await this.constructor.ITEM_CLASS.onCreated?.(newId) // ICI IL FAUDRAIT LE PROJET (INSTANCE)
+    await this.constructor.ITEM_CLASS.onCreated?.({ id: newId })
 
     await this._appendToOrder(prevIds, newId, insertIdx)
   }

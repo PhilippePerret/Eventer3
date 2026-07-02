@@ -2,6 +2,7 @@ import Lister from '../abstract/Lister.js'
 import { ListerEventLi } from '../listen/Event.js'
 import Event from './Event.js'
 import StatusBar from '../../ui/StatusBar.js'
+import NaturePanel from '../../ui/NaturePanel.js'
 
 export default class ListerEvent extends Lister {
   static ITEM_CLASS  = Event
@@ -52,6 +53,8 @@ export default class ListerEvent extends Lister {
       this._exitLevelMode()
     }
   }
+
+  openNaturePanel() { new NaturePanel({ target: this }).open() }
 
   leaveToParent() {
     if (StatusBar.displayMode === 'LEVEL') {

@@ -1,12 +1,11 @@
-// Refactorisé — nouvelle architecture (2026-06-20)
-import { installFixtures } from '../../../helpers/install-fixtures'
+// Origine : tests/specs/e2e/project/edit-project.spec.js
+import { installFixtures } from '../../../helpers/install-fixtures.js'
+import { setupProjectFolder, createAndSelectFolderInPicker } from '../../../helpers/create-project-helper.js'
 import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
-test.beforeEach(() => {
-  installFixtures('many-events')
-})
-
 // many-events : project-a (index 0), project-b (index 1)
+
+test.beforeEach(() => installFixtures('many-events'))
 
 async function startEditingFirstProject(page) {
   await page.goto('/')
@@ -27,11 +26,9 @@ async function startEditingSecondProject(page) {
   return titleInput
 }
 
-// --- Lisibilité en édition ---
+// ─── Apparence ────────────────────────────────────────────────────────────────
 
 test("un projet créé via FilePicker apparaît sélectionné dans la liste", async ({ page }) => {
-  // Ce test remplace le test de lisibilité de l'input id, supprimé avec le passage au FilePicker.
-  // La création via FilePicker n'expose plus d'input id en ligne.
   const { setupProjectFolder, createAndSelectFolderInPicker } = await import('../../../helpers/create-project-helper.js')
 
   await page.goto('/')
@@ -48,8 +45,6 @@ test("un projet créé via FilePicker apparaît sélectionné dans la liste", as
   await expect(items.nth(1)).toHaveClass(/selected/)
 })
 
-// --- Hauteur visuelle ---
-
 test("la hauteur du project-item reste identique en édition", async ({ page }) => {
   await page.goto('/')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
@@ -61,7 +56,7 @@ test("la hauteur du project-item reste identique en édition", async ({ page }) 
   expect(heightAfter).toBe(heightBefore)
 })
 
-// --- Champs éditables ---
+// ─── Champs éditables ─────────────────────────────────────────────────────────
 
 test("édition : les champs PROPS sont éditables (title, state, type)", async ({ page }) => {
   const titleInput = await startEditingFirstProject(page)
@@ -87,7 +82,7 @@ test("Enter valide le nouveau titre", async ({ page }) => {
   await press(page, 'Enter')
 
   const firstProject = pane1(page).locator('.project-item').nth(0)
-  await expect(firstProject.locator('.project-item__title')).toHaveText('Nouveau titre')
+  await expect(firstProject.locator('.project-title')).toHaveText('Nouveau titre')
 })
 
 test("Escape restaure le titre original (premier projet)", async ({ page }) => {
@@ -96,7 +91,7 @@ test("Escape restaure le titre original (premier projet)", async ({ page }) => {
   await press(page, 'Escape')
 
   const firstProject = pane1(page).locator('.project-item').nth(0)
-  await expect(firstProject.locator('.project-item__title')).toHaveText('Projet A')
+  await expect(firstProject.locator('.project-title')).toHaveText('Projet A')
 })
 
 test("Escape restaure le titre original (second projet)", async ({ page }) => {
@@ -105,10 +100,10 @@ test("Escape restaure le titre original (second projet)", async ({ page }) => {
   await press(page, 'Escape')
 
   const secondProject = pane1(page).locator('.project-item').nth(1)
-  await expect(secondProject.locator('.project-item__title')).toHaveText('Projet B')
+  await expect(secondProject.locator('.project-title')).toHaveText('Projet B')
 })
 
-// --- Persistance ---
+// ─── Persistance ──────────────────────────────────────────────────────────────
 
 test("persistance : le titre modifié survit au rechargement (premier projet)", async ({ page }) => {
   const titleInput = await startEditingFirstProject(page)
@@ -117,7 +112,7 @@ test("persistance : le titre modifié survit au rechargement (premier projet)", 
   await page.waitForLoadState('networkidle')
 
   await page.reload()
-  await expect(pane1(page).locator('.project-item').nth(0).locator('.project-item__title')).toHaveText('Titre persistant A')
+  await expect(pane1(page).locator('.project-item').nth(0).locator('.project-title')).toHaveText('Titre persistant A')
 })
 
 test("persistance : le titre modifié survit au rechargement (second projet)", async ({ page }) => {
@@ -127,5 +122,5 @@ test("persistance : le titre modifié survit au rechargement (second projet)", a
   await page.waitForLoadState('networkidle')
 
   await page.reload()
-  await expect(pane1(page).locator('.project-item').nth(1).locator('.project-item__title')).toHaveText('Titre persistant B')
+  await expect(pane1(page).locator('.project-item').nth(1).locator('.project-title')).toHaveText('Titre persistant B')
 })
