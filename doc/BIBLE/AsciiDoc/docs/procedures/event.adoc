@@ -9,9 +9,10 @@ _(Event = évènement)_
 | **Action**      | **Attendu**
 | combo:maj+?[]   
 | Le panneau de l'aide contextuelle s'ouvre +
-Vous pouvez lire le raccourci.
-| combo:tab[] x 2  | Le bouton “Fermé” est actif.
-| comb:enter[]  | L’aide contextuelle est fermé.
+Vous pouvez prendre connaissance du raccourci à utiliser. +
+(ainsi que découvrir les autres raccoucis que vous ne connaissez peut-être pas)
+| combo:tab[] x 2  | Le bouton combo:Fermé[] est actif
+| combo:enter[]  | L’aide contextuelle est fermé
 |====
 
 ==== Jouer un raccourci depuis l'aide contextuelle ====
@@ -22,7 +23,9 @@ Vous pouvez lire le raccourci.
 | combo:maj+?[]   
 | Le panneau de l'aide contextuelle s'ouvre +
 | combo:fb[]/combo:fh[] x   | Sélectionne le raccourci voulu
-| combo:tab[] comb:enter[]  | Le raccourci est joué.
+| combo:tab[] | Le bouton combo:Jouer[] est actif +
+(Noter qu'en fait il n’est pas nécessaire d'être sur le bouton combo:Jouer[] pour activer la raccourci, il suffit de presser comb:enter[] pour jouer le raccourci sélectionné)
+| combo:enter[]  | Le raccourci est joué
 
 |====
 
@@ -48,6 +51,11 @@ Vous pouvez lire le raccourci.
 | idem            | Une valeur est choisie (ou pas)
 | combo:enter[]   | Fin de l'édition de l'event (automatiquement enregistré)
 |====
+
+==== Modifier tous les évènements cochés ====
+
+include::sousprocs/edition-with-maj.adoc[]
+
 
 ==== Déplacer un event ====
 

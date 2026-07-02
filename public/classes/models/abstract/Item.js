@@ -73,7 +73,7 @@ export default class Item extends KeyDispatcher {
   async _enterChildLister(ChildClass, childId) {
     const childLister = await this._initNewLister(ChildClass, childId)
     await this.onChildListerCreated?.(childLister)
-    childLister.selectedIndex = 0
+    if (childLister.items.length > 0) childLister.selectedIndex = 0
     this.parentLister.hide()
     childLister.build()
     childLister.display(this)
@@ -168,6 +168,14 @@ export default class Item extends KeyDispatcher {
   cancelEdit() {
     LOG.m(2, 'Item.cancelEdit', { parentLister: !!this.parentLister, itemsLength: this.parentLister?.items.length, title: JSON.stringify(this.title) })
     if (this.__isTemporary) {
+      if (this.parentLister.items.length <= 1) {
+        if ((this.parentLister.depth ?? 1) <= 1) {
+          this._warnIfEmptyTitle()
+          return
+        }
+        this.parentLister.leaveToParent()
+        return
+      }
       const idx = this.parentLister.items.indexOf(this)
       if (idx >= 0) this.parentLister.items.splice(idx, 1)
       this.parentLister.selectedIndex = Math.max(0, idx - 1)

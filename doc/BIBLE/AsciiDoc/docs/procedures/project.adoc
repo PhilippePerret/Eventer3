@@ -125,5 +125,15 @@ Son fond est vert (= édition)
 | combo:enter[]   | Le projet entre en édition (font vert)
 2+| Modifier le titre à volonté
 | combo:enter[]   | Sortir le projet de l'édition (font bleu)
-| Recharger       | Le nouveau nom du projet a été enregistré.
+| Recharger       | Le nouveau nom du projet a été enregistré. +
+_Noter que ça ne modifie pas le nom du dossier dans le Finder_
 |====
+
+==== Modifier le projet ====
+
+
+
+==== Modifier tous les projets cochés ====
+
+include::sousprocs/edition-with-maj.adoc[]
+

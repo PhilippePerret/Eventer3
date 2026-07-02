@@ -5,7 +5,7 @@ export const ListerLi = {
   , '˜':        { alt: 'createNewBefore'                            }
   , Delete:     { nokey: 'deleteSelected' , maj: 'deleteCheckeds'   }
   , Enter:      { meta: 'closePanel'                                }
-  , c:          { meta: 'copySelectedItem', maj: 'copyCheckedItems' }
-  , x:          { meta: 'cutSelectedItem' , maj: 'cutCheckedItems'  }
+  , c:          { nokey: 'outOfTargetLink', meta: 'copySelectedItem', 'meta+maj': 'copyCheckedItems' }
+  , x:          { meta: 'cutSelectedItem' , 'meta+maj': 'cutCheckedItems'  }
   , v:          { meta: 'pasteItem'                                 }
 }

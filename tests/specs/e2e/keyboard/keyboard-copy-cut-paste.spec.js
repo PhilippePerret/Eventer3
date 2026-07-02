@@ -1,3 +1,4 @@
+// Origine : tests/specs/e2e/keyboard/keyboard-copy-cut-paste.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect, pane1, press } from '../__setup__.js'
 

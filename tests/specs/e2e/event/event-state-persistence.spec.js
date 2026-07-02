@@ -15,9 +15,9 @@ async function goToListerEvent(page) {
 
 async function setEventState(page, stateName) {
   await press(page, 'Enter')
-  await expect(pane1(page).locator('.event-item.selected input[name="title"]')).toBeFocused()
+  await expect(pane1(page).locator('.event-item.selected [contenteditable][data-field="title"]')).toBeFocused()
   await press(page, 'Tab')
-  await expect(pane1(page).locator('.event-item.selected [data-field-name="state"]')).toBeFocused()
+  await expect(pane1(page).locator('.event-item.selected [data-field="state"]')).toBeFocused()
   await press(page, 'ArrowDown')
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
   // Filtrer pour trouver l'option rapidement

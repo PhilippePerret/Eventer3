@@ -4,4 +4,5 @@ _Ce document décrit les procédures pour accomplir les différentes opérations
 
 include::procedures/project.adoc[]
 include::procedures/event.adoc[]
+include::procedures/brin.adoc[]
 include::procedures/personnage.adoc[]

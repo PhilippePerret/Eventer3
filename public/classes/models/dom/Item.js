@@ -123,7 +123,7 @@ export default {
     const ctx = lister?.contextItem
     this.checked = !this.checked
     this.el?.classList.toggle('checked', this.checked)
-    if (!ctx) return
+    if (!ctx) { this.scheduleSave(); return }
     const key = lister.constructor.CHECK_KEY
     const ids = ctx[key] ?? (ctx[key] = [])
     if (this.checked) { if (!ids.includes(this.id)) ids.push(this.id) }

@@ -23,9 +23,9 @@ test("un event avec état affiche sa pastille", async ({ page }) => {
   await goToListerEvent(page)
   // On met le premier event en état "ébauche" via Tab+Enter en édition
   await press(page, 'Enter')
-  await expect(pane1(page).locator('.event-item.selected input[name="title"]')).toBeFocused()
+  await expect(pane1(page).locator('.event-item.selected [contenteditable][data-field="title"]')).toBeFocused()
   await press(page, 'Tab')
-  const trigger = pane1(page).locator('.event-item.selected [data-field-name="state"]')
+  const trigger = pane1(page).locator('.event-item.selected [data-field="state"]')
   await expect(trigger).toBeFocused()
   await press(page, 'ArrowDown')
   // L'option "ébauche" est la 2e (index 1), ↓ pour la sélectionner

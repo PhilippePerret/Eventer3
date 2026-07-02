@@ -18,11 +18,11 @@ test('Space coche visuellement l\'event sélectionné', async ({ page }) => {
 
   const firstEvent = pane1(page).locator('.event-item').nth(0)
   await expect(firstEvent).toHaveClass(/selected/)
-  await expect(firstEvent.locator('.event-check')).not.toContainText('✓')
+  await expect(firstEvent).not.toHaveClass(/checked/)
 
   await press(page, ' ')
 
-  await expect(firstEvent.locator('.event-check')).toContainText('✓')
+  await expect(firstEvent).toHaveClass(/checked/)
 })
 
 test('Space décoche un event déjà coché', async ({ page }) => {
@@ -30,10 +30,10 @@ test('Space décoche un event déjà coché', async ({ page }) => {
 
   const firstEvent = pane1(page).locator('.event-item').nth(0)
   await press(page, ' ')
-  await expect(firstEvent.locator('.event-check')).toContainText('✓')
+  await expect(firstEvent).toHaveClass(/checked/)
 
   await press(page, ' ')
-  await expect(firstEvent.locator('.event-check')).not.toContainText('✓')
+  await expect(firstEvent).not.toHaveClass(/checked/)
 })
 
 test('Space persiste la coche après rechargement', async ({ page }) => {
@@ -58,5 +58,5 @@ test('Space persiste la coche après rechargement', async ({ page }) => {
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
 
   const firstEvent = pane1(page).locator('.event-item').nth(0)
-  await expect(firstEvent.locator('.event-check')).toContainText('✓')
+  await expect(firstEvent).toHaveClass(/checked/)
 })

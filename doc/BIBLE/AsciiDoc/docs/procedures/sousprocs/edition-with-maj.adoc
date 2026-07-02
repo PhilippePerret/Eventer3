@@ -1,0 +1,16 @@
+_Note : Cette opération fonctionne même si l'event courant n'est pas coché, lui._
+
+[cols="1,4"]
+|====
+| **Action**      | **Attendu**
+| combo:maj+enter[] | Entre en édition dans l'item +
+Noter que les éléments cochés se mettent aussi en pseudo-édition. + 
+Pour sortir, combo:esc[] comme d'habitude.
+| combo:tab[] xx        | La propriété à modifier dans l'item et tous les cochés est sélecionnée
+| combo:fb[]/combo:fh[] | La nouvelle valeur est sélectionnée
+| combo:enter[]         | La nouvelle valeur est choisie +
+_Note : Elle est appliquée immédiatement à l'item sélectionné, mais pas aux cochés (elle le sera après confirmation, à la fin)._
+2+| _Vous pouvez modifier d'autres propritétés_
+| combo:enter[]         | Une boite de dialogue s'affiche pour confirmer l'application à tous les cochés
+| combo:enter[]         | Tous les changement sont appliqués à tous les cochés et le sélectionné.
+|====

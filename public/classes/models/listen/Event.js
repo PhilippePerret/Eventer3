@@ -14,5 +14,4 @@ export const ListerEventLi = {
   o:         { nokey: 'openActiveLink' },
   g:         { nokey: 'goLink' },
   a:         { nokey: 'splitLink' },
-  c:         { nokey: 'cardLink' },
 }

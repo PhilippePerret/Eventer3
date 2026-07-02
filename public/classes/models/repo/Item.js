@@ -6,7 +6,7 @@ export default {
   },
 
   async save() {
-    const payload = {}
+    const payload = { checked: this.checked }
     for (const field of (this.PROPS ?? [])) payload[field.name] = this[field.name]
     const pid   = (this.project ?? this.parentLister?.project).id
     const query = pid ? `?project_id=${pid}` : ''

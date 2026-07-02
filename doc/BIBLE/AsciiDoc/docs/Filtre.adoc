@@ -1,0 +1,19 @@
+== Filtrage ==
+
+{appname} possède un système de filtrage puissant qui permet de filter très précisément les events pour les retrouver ou les grouper plus facilement.
+
+////
+Faire l'exemple (fonctionnalité à implémenter) pour cocher plusieurs events qui partagent une même chose, par exemple un même état :
+- on les filtre
+- on les coche tous ("cocher" tous les visibles" à implémenter)
+- on applique quelque chose (en éditant le premier par exemple et quand on fait "enter", le changement s'applique à tous les events cochés (à implémenter))
+////
+
+==== Cocher tous les filtrés ====
+
+[cols="1,4"]
+|====
+| **Action**          | **Attendu**
+| combo:maj+space[]   | Coche tous les éléments affichés
+|====
+

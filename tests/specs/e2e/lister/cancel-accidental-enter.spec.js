@@ -1,3 +1,4 @@
+// Origine : tests/specs/e2e/lister/cancel-accidental-enter.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures'
 import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
@@ -17,7 +18,7 @@ test.describe('← annule la création d\'un event dans un lister non-virtuel', 
 
     const eventCount = await pane1(page).locator('.event-item').count()
     await press(page, 'n')
-    await expect(pane1(page).locator('.event-item input[name="title"]')).toBeVisible()
+    await expect(pane1(page).locator('.event-item [contenteditable][data-field="title"]')).toBeVisible()
 
     await press(page, 'ArrowLeft')
 
@@ -46,7 +47,7 @@ test.describe('Annulation entrée accidentelle dans un lister vide', () => {
     await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
 
     await press(page, 'ArrowRight')
-    await expect(pane1(page).locator('#events-panel input.event-text')).toBeVisible()
+    await expect(pane1(page).locator('#events-panel [contenteditable][data-field="title"]')).toBeVisible()
 
     await press(page, 'Escape')
 
@@ -72,7 +73,7 @@ test.describe('Annulation entrée accidentelle dans un lister vide', () => {
     await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
 
     await press(page, 'ArrowRight')
-    await expect(pane1(page).locator('#events-panel input.event-text')).toBeVisible()
+    await expect(pane1(page).locator('#events-panel [contenteditable][data-field="title"]')).toBeVisible()
 
     await press(page, 'ArrowLeft')
 

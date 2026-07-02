@@ -285,11 +285,9 @@ body {
   white-space: nowrap;
 }
 
-.event-meteo:empty,
-.event-effet:empty,
-.event-lieu:empty {
-  display: none;
-}
+.event-meteo { width: 3ch; }
+.event-effet { width: 10ch; }
+.event-lieu  { width: 10ch; }
 
 .popup-select__option.disabled {
   opacity: 0.4;

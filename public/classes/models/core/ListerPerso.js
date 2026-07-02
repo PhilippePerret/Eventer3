@@ -17,6 +17,7 @@ export default class ListerPerso extends Lister {
   }
 
   _applyContext(contextItem) {
+    this._listerEvent  = contextItem.parentLister
     this._directIds    = new Set(contextItem.perso_ids ?? [])
     this._inheritedIds = new Set()
     if (contextItem.minClass === 'event') {

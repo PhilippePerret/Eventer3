@@ -1,0 +1,6 @@
+=== Les Brins ===
+
+==== Modifier tous les brins cochés ====
+
+include::sousprocs/edition-with-maj.adoc[]
+

@@ -14,3 +14,7 @@ Un premier personnage est toujours créé s'il n'y en a pas encore
 | combo:n[]       | Un nouveau personnage se met en édition
 |====
 
+==== Modifier tous les personnages cochés ====
+
+include::sousprocs/edition-with-maj.adoc[]
+

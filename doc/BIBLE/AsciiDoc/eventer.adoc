@@ -60,7 +60,5 @@ MODE DISPLAY | se déplacer de lien vers cible en lien vers cible s'il y en a da
 
 
 include::docs/persos-panel.adoc[]
-
 include::docs/regles-developpement.adoc[]
-
 include::docs/tests-application.adoc[]

@@ -1,6 +1,6 @@
 import KeyDispatcher from './KeyDispatcher.js'
 import LOG from '../../../system/LOG.js'
-import { raise } from '../../../system/Error.js'
+import { raise, getErr } from '../../../system/Error.js'
 import ListerDom from '../dom/Lister.js'
 import ListerRepo from '../repo/Lister.js'
 import { ListerLi } from '../listen/Lister.js'
@@ -195,6 +195,8 @@ export default class Lister extends KeyDispatcher {
     this.selectAt(idx)
   }
 
+  outOfTargetLink() { Notification.show(getErr(5200)) }
+
   get contextItem() { return null }
 
   display(contextItem) {
@@ -247,7 +249,8 @@ export default class Lister extends KeyDispatcher {
       .filter(Boolean)
   }
 
-  static async createLister(fields) {
+  static async createLister({ project, ...fields }) {
+    if (project?.id) fields.project_id = project.id
     const resp = await fetch('/api/listers', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
