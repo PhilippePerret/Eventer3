@@ -19,8 +19,6 @@ export default class ListerEvent extends Lister {
     this._levelEntries = []
   }
 
-  _panelTitle() { return this._contextItem?.title ?? null }
-
   display(contextItem) {
     StatusBar.resetToNesting()
     super.display(contextItem)

@@ -61,11 +61,14 @@ export default class ListerBrin extends Lister {
   async deleteSelected() {
     const brin = this.items[this.selectedIndex]
     const ctx  = this.contextItem
+    LOG.m(4, 'ListerBrin.deleteSelected', { brin: brin?.id, ctx: ctx?.id, brin_ids: ctx?.brin_ids })
     await super.deleteSelected()
-    if (!brin || !ctx) return
+    if (!brin || !ctx) { LOG.m(4, 'ListerBrin.deleteSelected ABORT', { brin: !!brin, ctx: !!ctx }); return }
     ctx.brin_ids = (ctx.brin_ids ?? []).filter(id => id !== brin.id)
     this._refreshEventMarks(ctx)
+    LOG.m(4, 'ListerBrin.deleteSelected BEFORE save', { brin_ids: ctx.brin_ids })
     await ctx.save()
+    LOG.m(4, 'ListerBrin.deleteSelected AFTER save')
   }
 
   async deleteItem(item) {

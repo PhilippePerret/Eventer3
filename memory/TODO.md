@@ -32,14 +32,6 @@
 
 **IMPORTANT** : Ne pas oublier d'ajouter "//Origine: ..." en haut des fichiers de test qui n'ont pas cette marque
 
-PULL Brin
-- specs/e2e/brin/brins-selection.spec.js
-- specs/e2e/keyboard/keyboard-alt-arrows-panels.spec.js
-- specs/e2e/keyboard/keyboard-delete.spec.js
-PULL Perso
-- specs/e2e/perso/perso-from-brin.spec.js
-PULL Search
-- specs/e2e/filter/panel-search.spec.js
 PULL Project
 (rassembler au maximum, dans un même fichier, les tests apparentés)
 - specs/e2e/event/new-event-virtual-lister.spec.js
@@ -53,6 +45,10 @@ PULL Project
 - specs/e2e/project/regression-project-id.spec.js
 - specs/e2e/project/seed-projet-complet.spec.js
 - specs/e2e/ui/popup-select-current-value.spec.js
+PULL Perso
+- specs/e2e/perso/perso-from-brin.spec.js
+PULL Search
+- specs/e2e/filter/panel-search.spec.js
 PULL Styles
 - specs/e2e/apparence/style-panel.spec.js
 - specs/e2e/panels/panel-move.spec.js
@@ -111,4 +107,18 @@ Tests liens (`links-tab-open.spec.js`, `link-open-shortcuts.spec.js`) : **dans `
 ## Fonctionnalités à implémenter
 
 - bouton/raccourci pour "cocher tous les visibles" (surtout utile quand on filtre la liste des events) — raccourci : Maj+Space (toggle)
+
 - édition de tous les cochés en même temps (pour tout Item, projet, brin, event, etc.) : Maj + Enter pour entrer en édition dans l'item sélectionné (=> indication dans barre d'état que les changements seront appliqués à tous les items cochés + marque sur tous les cochés, classe .pseudo-editing, moins verte que l'item édité). Comme pour le fonctionnement normal, les propriétés sont persistées tout de suite, MAIS SEULEMENT pour le sélectionné. Et elles sont mémorisées pour les autres. En sortant -> demande de confirmation et si oui, tous les changements (ET SEULEMENT LES CHANGEMENTS) sont appliqués aux items cochés en plus du sélectionné (ATTENTION : le sélectionné peut ne pas être coché )
+
+- PANNEAU DES OPTIONS 
+  C'est un panneau KeyboardPanel qui permet de régler les options a) de l'application b) du projet (et plus tard si nécessaire c) de l'évènemencier)
+  Titre : "Options de <propriétaire>"
+  Body  : les items des options pour réglage
+  Footer : bouton "Fermer" seulement
+  - Les options sont enregistrées à chaque changement (mais débounce)
+  - Chaque item est :
+    - une phrase ("Aspect des évènements")
+    - soit un menu de valeurs, soit une case à cocher
+  - on se déplace d'item en item avec "↑"/"↓"
+  - "↩︎" permet d'entrer "en édition" — le select ou la cb se met aussitôt en édition
+

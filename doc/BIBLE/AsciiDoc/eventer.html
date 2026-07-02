@@ -469,22 +469,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_tab_sur_item">TAB sur Item</a></li>
 <li><a href="#_panneau_des_personnages">Panneau des personnages</a></li>
-</ul>
-</li>
-<li><a href="#_règles_de_développement">Règles de développement</a>
-<ul class="sectlevel2">
 <li><a href="#_approche_fonctionnelle">Approche fonctionnelle</a></li>
 <li><a href="#_loi_de_demeter_absolue">Loi de Demeter absolue</a></li>
 <li><a href="#_fichiers_tdd">Fichiers _tdd</a></li>
 <li><a href="#tdd-workflow">Fluw de travail TDD</a></li>
 </ul>
 </li>
-<li><a href="#_test_de_lapplication">Test de l&#8217;application</a></li>
 <li><a href="#_tests_en_live">Tests en live</a></li>
 <li><a href="#_toutes_les_procédures">Toutes les procédures</a>
 <ul class="sectlevel2">
 <li><a href="#_projet">Projet</a></li>
 <li><a href="#_event">Event</a></li>
+<li><a href="#_les_brins">Les Brins</a></li>
 <li><a href="#_personnage">Personnage</a></li>
 </ul>
 </li>
@@ -1161,20 +1157,16 @@ export default class Item extends KeyDispatcher {</code></pre>
 ouverture sur event &#8658; actualiser en direct les marques en directe
 ouverture sur brin &#8658; actualiser en direct les marques dans les trins (mais pas dans les events)
 fermeture de la fenêtre des brins
-&#8658; si color ou persos d&#8217;un brin au moins modifié &#8658; actualisation de tous les events affichés</p>
+&#8658; si color ou persos d&#8217;un brin au moins modifié &#8658; actualisation de tous les events affichés
+== Règles de développement ==</p>
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_règles_de_développement">Règles de développement</h2>
-<div class="sectionbody">
 <div class="paragraph">
 <p>Aujourd&#8217;hui qu&#8217;on utilise l&#8217;IA (Claude-code) pour développer, il est important de respecter des règles de développement strictes et absolues.</p>
 </div>
 <div class="paragraph">
 <p>Surtout que pour le moment (juin 2026), les IA en sont incapables.</p>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_approche_fonctionnelle">Approche fonctionnelle</h3>
@@ -1325,18 +1317,13 @@ fermeture de la fenêtre des brins
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>| (donc traité par Lister)</pre>
+<pre>  | (donc traité par Lister)
+== Test de l'application ==</pre>
 </div>
 </div>
 </li>
 </ul>
 </div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_test_de_lapplication">Test de l&#8217;application</h2>
-<div class="sectionbody">
 <div class="paragraph">
 <p>Tout ce qui concerne les tests de l&#8217;application se place dans le dossier <code>/tests/</code></p>
 </div>
@@ -1365,6 +1352,7 @@ fermeture de la fenêtre des brins
 <p><code>test/specs/e2e/_tdd</code> pour les tests en cours</p>
 </li>
 </ul>
+</div>
 </div>
 </div>
 </div>
@@ -1710,7 +1698,60 @@ Son fond est vert (= édition)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Recharger</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Le nouveau nom du projet a été enregistré.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le nouveau nom du projet a été enregistré.<br>
+<em>Noter que ça ne modifie pas le nom du dossier dans le Finder</em></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_modifier_le_projet">Modifier le projet</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_modifier_tous_les_projets_cochés">Modifier tous les projets cochés</h4>
+<div class="paragraph">
+<p><em>Note : Cette opération fonctionne même si l&#8217;event courant n&#8217;est pas coché, lui.</em></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Action</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Attendu</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">⇧</kbd>+<kbd style="font-size:1.1em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Entre en édition dans l&#8217;item<br>
+Noter que les éléments cochés se mettent aussi en pseudo-édition.<br>
+Pour sortir, <kbd style="font-size:1.1em;">␛</kbd> comme d&#8217;habitude.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">tab</kbd> xx</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La propriété à modifier dans l&#8217;item et tous les cochés est sélecionnée</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↓</kbd>/<kbd style="font-size:1.1em;">↑</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La nouvelle valeur est sélectionnée</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La nouvelle valeur est choisie<br>
+<em>Note : Elle est appliquée immédiatement à l&#8217;item sélectionné, mais pas aux cochés (elle le sera après confirmation, à la fin).</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock"><em>Vous pouvez modifier d&#8217;autres propritétés</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Une boite de dialogue s&#8217;affiche pour confirmer l&#8217;application à tous les cochés</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tous les changement sont appliqués à tous les cochés et le sélectionné.</p></td>
 </tr>
 </tbody>
 </table>
@@ -1741,11 +1782,11 @@ Vous pouvez prendre connaissance du raccourci à utiliser.<br>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">tab</kbd> x 2</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Le bouton <kbd style="font-size:1.1em;">Fermé</kbd> est actif.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le bouton <kbd style="font-size:1.1em;">Fermé</kbd> est actif</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↩︎</kbd></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">L’aide contextuelle est fermé.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">L’aide contextuelle est fermé</p></td>
 </tr>
 </tbody>
 </table>
@@ -1771,8 +1812,13 @@ Vous pouvez prendre connaissance du raccourci à utiliser.<br>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Sélectionne le raccourci voulu</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">tab</kbd> comb:enter[]</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Le raccourci est joué.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">tab</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le bouton <kbd style="font-size:1.1em;">Jouer</kbd> est actif<br>
+(Noter qu&#8217;en fait il n’est pas nécessaire d&#8217;être sur le bouton <kbd style="font-size:1.1em;">Jouer</kbd> pour activer la raccourci, il suffit de presser comb:enter[] pour jouer le raccourci sélectionné)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le raccourci est joué</p></td>
 </tr>
 </tbody>
 </table>
@@ -1848,6 +1894,54 @@ Vous pouvez prendre connaissance du raccourci à utiliser.<br>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↩︎</kbd></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Fin de l&#8217;édition de l&#8217;event (automatiquement enregistré)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_modifier_tous_les_évènements_cochés">Modifier tous les évènements cochés</h4>
+<div class="paragraph">
+<p><em>Note : Cette opération fonctionne même si l&#8217;event courant n&#8217;est pas coché, lui.</em></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Action</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Attendu</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">⇧</kbd>+<kbd style="font-size:1.1em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Entre en édition dans l&#8217;item<br>
+Noter que les éléments cochés se mettent aussi en pseudo-édition.<br>
+Pour sortir, <kbd style="font-size:1.1em;">␛</kbd> comme d&#8217;habitude.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">tab</kbd> xx</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La propriété à modifier dans l&#8217;item et tous les cochés est sélecionnée</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↓</kbd>/<kbd style="font-size:1.1em;">↑</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La nouvelle valeur est sélectionnée</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La nouvelle valeur est choisie<br>
+<em>Note : Elle est appliquée immédiatement à l&#8217;item sélectionné, mais pas aux cochés (elle le sera après confirmation, à la fin).</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock"><em>Vous pouvez modifier d&#8217;autres propritétés</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Une boite de dialogue s&#8217;affiche pour confirmer l&#8217;application à tous les cochés</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tous les changement sont appliqués à tous les cochés et le sélectionné.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2038,6 +2132,57 @@ Vous pouvez prendre connaissance du raccourci à utiliser.<br>
 </div>
 </div>
 <div class="sect2">
+<h3 id="_les_brins">Les Brins</h3>
+<div class="sect3">
+<h4 id="_modifier_tous_les_brins_cochés">Modifier tous les brins cochés</h4>
+<div class="paragraph">
+<p><em>Note : Cette opération fonctionne même si l&#8217;event courant n&#8217;est pas coché, lui.</em></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Action</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Attendu</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">⇧</kbd>+<kbd style="font-size:1.1em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Entre en édition dans l&#8217;item<br>
+Noter que les éléments cochés se mettent aussi en pseudo-édition.<br>
+Pour sortir, <kbd style="font-size:1.1em;">␛</kbd> comme d&#8217;habitude.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">tab</kbd> xx</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La propriété à modifier dans l&#8217;item et tous les cochés est sélecionnée</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↓</kbd>/<kbd style="font-size:1.1em;">↑</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La nouvelle valeur est sélectionnée</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La nouvelle valeur est choisie<br>
+<em>Note : Elle est appliquée immédiatement à l&#8217;item sélectionné, mais pas aux cochés (elle le sera après confirmation, à la fin).</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock"><em>Vous pouvez modifier d&#8217;autres propritétés</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Une boite de dialogue s&#8217;affiche pour confirmer l&#8217;application à tous les cochés</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tous les changement sont appliqués à tous les cochés et le sélectionné.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_personnage">Personnage</h3>
 <div class="sect3">
 <h4 id="procedure-creation-personnage">Création d&#8217;un personnage</h4>
@@ -2067,13 +2212,61 @@ Un premier personnage est toujours créé s&#8217;il n&#8217;y en a pas encore</
 </tbody>
 </table>
 </div>
+<div class="sect3">
+<h4 id="_modifier_tous_les_personnages_cochés">Modifier tous les personnages cochés</h4>
+<div class="paragraph">
+<p><em>Note : Cette opération fonctionne même si l&#8217;event courant n&#8217;est pas coché, lui.</em></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Action</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Attendu</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">⇧</kbd>+<kbd style="font-size:1.1em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Entre en édition dans l&#8217;item<br>
+Noter que les éléments cochés se mettent aussi en pseudo-édition.<br>
+Pour sortir, <kbd style="font-size:1.1em;">␛</kbd> comme d&#8217;habitude.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">tab</kbd> xx</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La propriété à modifier dans l&#8217;item et tous les cochés est sélecionnée</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↓</kbd>/<kbd style="font-size:1.1em;">↑</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La nouvelle valeur est sélectionnée</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La nouvelle valeur est choisie<br>
+<em>Note : Elle est appliquée immédiatement à l&#8217;item sélectionné, mais pas aux cochés (elle le sera après confirmation, à la fin).</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="2"><p class="tableblock"><em>Vous pouvez modifier d&#8217;autres propritétés</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Une boite de dialogue s&#8217;affiche pour confirmer l&#8217;application à tous les cochés</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tous les changement sont appliqués à tous les cochés et le sélectionné.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-07-01 10:29:56 +0200
+Last updated 2026-07-02 11:10:18 +0200
 </div>
 </div>
 </body>

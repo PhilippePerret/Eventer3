@@ -187,6 +187,7 @@ test.describe('Delete dans le panneau des brins', () => {
     await openBrinPanel(page)
     await press(page, 'ArrowDown')
     await press(page, 'Delete')
+    await expect(pane1(page).locator('.brin-item')).toHaveCount(1)
     // Rechargement
     await page.reload()
     await goToListerEvent(page)

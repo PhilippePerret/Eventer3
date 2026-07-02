@@ -5,7 +5,7 @@ import LOG from '../system/LOG.js'
 export default class App {
 
   async start() {
-    // LOG.on(4) // POUR METTRE EN ROUTE LES TESTS (NE PAS DUPLIQUER CETTE LIGNE !!!!)
+    LOG.on(4) // POUR METTRE EN ROUTE LES TESTS (NE PAS DUPLIQUER CETTE LIGNE !!!!)
 
     LOG.m(1, 'Start application')
 
