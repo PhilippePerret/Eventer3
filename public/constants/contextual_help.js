@@ -3,7 +3,7 @@ import { WORD_FORMS } from './constants.js'
 export const HELP_PER_CONTEXT = {
 
   /*-générique : fenêtre divisée -*/
-  'double-panneu': {
+  'double-panneau': {
     title: "Double panneau",
     shortcuts: [
       {sc: '⇧ + ⇥', ef: 'Changer la fenêtre active'}

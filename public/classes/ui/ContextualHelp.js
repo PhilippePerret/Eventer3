@@ -32,13 +32,13 @@ export default class ContextualHelp extends KeyboardablePanel {
     this._renderItems = []
     this._buildShortcuts()
     const ctx = HELP_PER_CONTEXT[this._contextKey]
-    this._title = ContextualHelp._resolveTemplate(ctx?.title ?? '— Contexte non défini', ctx)
+    this._title = ContextualHelp._resolveTemplate(ctx?.title ?? 'Aide contextuelle', ctx)
   }
 
   _getFooterButtons() {
     return [
-      { label: '↩︎ Jouer', type: 'play',  action: () => this._playSelected() },
-      { label: 'Fermer',   type: 'close', action: () => this.close()         }
+      { label: 'Jouer',  type: 'play',  action: () => this._playSelected() },
+      { label: 'Fermer', type: 'close', action: () => this.close()         }
     ]
   }
 
@@ -49,30 +49,39 @@ export default class ContextualHelp extends KeyboardablePanel {
     const ctx     = HELP_PER_CONTEXT[this._contextKey]
     const resolve = (text) => ContextualHelp._resolveTemplate(text, ctx)
     let currentGroup = null
+    const ensureGroup = () => {
+      if (currentGroup) return
+      currentGroup = document.createElement('div')
+      currentGroup.className = 'contextual-help__group'
+      zone.appendChild(currentGroup)
+    }
 
     for (const item of this._renderItems) {
       if (item.__group_end) { currentGroup = null; continue }
       if (item.__section) {
         currentGroup = document.createElement('div')
         currentGroup.className = 'contextual-help__group'
-        const legend = document.createElement('div')
-        legend.className   = 'contextual-help__group-title'
-        legend.textContent = resolve(item.title)
-        currentGroup.appendChild(legend)
+        if (item.title) {
+          const legend = document.createElement('div')
+          legend.className   = 'contextual-help__group-title'
+          legend.textContent = resolve(item.title)
+          currentGroup.appendChild(legend)
+        }
         zone.appendChild(currentGroup)
         continue
       }
+      ensureGroup()
       const row = document.createElement('div')
       row.className = 'contextual-help__row ftpanel__item'
-      const kbd = document.createElement('kbd')
-      kbd.className   = 'contextual-help__key'
-      kbd.textContent = item.sc
       const ef = document.createElement('span')
       ef.className   = 'contextual-help__effect'
       ef.textContent = resolve(item.ef)
-      row.appendChild(kbd)
+      const kbd = document.createElement('kbd')
+      kbd.className   = 'contextual-help__key'
+      kbd.textContent = item.sc
       row.appendChild(ef)
-      ;(currentGroup ?? zone).appendChild(row)
+      row.appendChild(kbd)
+      currentGroup.appendChild(row)
     }
   }
 

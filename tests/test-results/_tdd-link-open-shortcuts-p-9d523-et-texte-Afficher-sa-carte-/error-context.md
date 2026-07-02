@@ -16,6 +16,7 @@ Error: expect(locator).toBeVisible() failed
 
 Locator: locator('#pane-1').contentFrame().locator('#events-panel')
 Expected: visible
+Timeout: 5000ms
 Error: element(s) not found
 
 Call log:

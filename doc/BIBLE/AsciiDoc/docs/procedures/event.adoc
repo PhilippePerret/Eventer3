@@ -2,6 +2,31 @@
 
 _(Event = évènement)_
 
+==== Obtenir de l'aide sur la liste ====
+
+[cols="1,4"]
+|====
+| **Action**      | **Attendu**
+| combo:maj+?[]   
+| Le panneau de l'aide contextuelle s'ouvre +
+Vous pouvez lire le raccourci.
+| combo:tab[] x 2  | Le bouton “Fermé” est actif.
+| comb:enter[]  | L’aide contextuelle est fermé.
+|====
+
+==== Jouer un raccourci depuis l'aide contextuelle ====
+
+[cols="1,4"]
+|====
+| **Action**      | **Attendu**
+| combo:maj+?[]   
+| Le panneau de l'aide contextuelle s'ouvre +
+| combo:fb[]/combo:fh[] x   | Sélectionne le raccourci voulu
+| combo:tab[] comb:enter[]  | Le raccourci est joué.
+
+|====
+
+
 ==== Modifier un évènement ====
 
 [cols="1,4"]
