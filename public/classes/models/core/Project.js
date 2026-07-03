@@ -1,6 +1,5 @@
 import Item from '../abstract/Item.js'
 import { ProjectLi } from '../listen/Project.js'
-import NaturePanel from '../../ui/NaturePanel.js'
 import Lister from '../abstract/Lister.js'
 import ListerBrin  from './ListerBrin.js'
 import ListerPerso from './ListerPerso.js'
@@ -56,8 +55,6 @@ export default class Project extends Item {
       , {name: 'state', type: 'select', warper: 'edits', values: PROJECT_STATES }
       , {name: 'type',  type: 'select', warper: 'edits', values: PROJECT_TYPES}
     ])}
-
-  openNaturePanel() { new NaturePanel({ target: this }).open() }
 
   static async onCreated(project) {
     const evtLister = await Lister.createLister({ type: 'events', itemId: project.id, project: project })

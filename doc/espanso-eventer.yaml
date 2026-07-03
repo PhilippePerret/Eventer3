@@ -1,0 +1,5 @@
+matches:
+  - trigger: "appname"
+    replace: "EventerX"
+  - trigger: ":prota"
+    replace: "La grande héroïne de l'histoire"

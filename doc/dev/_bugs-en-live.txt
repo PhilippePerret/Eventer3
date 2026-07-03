@@ -1,3 +1,7 @@
+Supprimer le raccourci "t" sur Project pour choisir la nature
+=> Supprimer tous les tests (ils sont dans _tdd) qui testent ça
+=> Déplacer les fonctions dans core/ListerEvent car ce sera seulement cette classe maintenant qui devra réagir à "t"
+
 BUGS
 
 BUG 1 Panneau projets mal placé (devrait être centré dans la page) <== mauvais CSS

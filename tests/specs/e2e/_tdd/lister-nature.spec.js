@@ -53,13 +53,6 @@ async function setRomanMan(page) {
 
 // ─── Structure du panneau ─────────────────────────────────────────────────────
 
-test("'t' dans project list → popup projet nature (pas nature-panel)", async ({ page }) => {
-  await goToProjectList(page)
-  await press(page, 't')
-  await expect(pane1(page).locator('.popup-select')).toBeVisible()
-  await expect(pane1(page).locator('.nature-panel')).not.toBeVisible()
-})
-
 test("'t' dans event lister → panneau .nature-panel s'ouvre", async ({ page }) => {
   await goToListerEvent(page)
   await press(page, 't')
