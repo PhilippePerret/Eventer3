@@ -7,6 +7,7 @@ import { ListerLi } from '../listen/Lister.js'
 import Notification from '../../ui/Notification.js'
 import ConfirmDialog from '../../ui/ConfirmDialog.js'
 import { Clipboard } from './Clipboard.js'
+import { movePanel, movablePanelInner } from '../../utils/panelMove.js'
 
 export default class Lister extends KeyDispatcher {
 
@@ -25,6 +26,11 @@ export default class Lister extends KeyDispatcher {
   get minClass() { return this._minClass || (this._minClass = this.constructor.ITEM_CLASS?.name.toLowerCase()) }
 
   static LISTENERS = { ...ListerLi }
+
+  movePanelDown()  { movePanel(movablePanelInner(this.container), 'ArrowDown')  }
+  movePanelUp()    { movePanel(movablePanelInner(this.container), 'ArrowUp')    }
+  movePanelLeft()  { movePanel(movablePanelInner(this.container), 'ArrowLeft')  }
+  movePanelRight() { movePanel(movablePanelInner(this.container), 'ArrowRight') }
 
   selectAt(idx) {
     const current = this.items[this.selectedIndex]

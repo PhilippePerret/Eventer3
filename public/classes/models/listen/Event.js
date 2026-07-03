@@ -8,11 +8,11 @@ export const EventLi = {
 
 export const ListerEventLi = {
   ...ListerLi,
-  ArrowLeft: { nokey: 'leaveToParent' },
+  ArrowLeft: { nokey: 'leaveToParent', 'ctrl+maj': 'movePanelLeft' },
   m:         { meta:  'toggleDisplayMode' },
   Tab:       { nokey: 'cycleLink', maj: 'cycleLinkBack' },
   o:         { nokey: 'openActiveLink' },
   g:         { nokey: 'goLink' },
   a:         { nokey: 'splitLink' },
-  t:         { nokey: 'openNaturePanel' },
+  t:         { nokey: 'openNaturePanel', meta: 'openToolsPanel' },
 }

@@ -1,6 +1,8 @@
 export const ListerLi = {
-    ArrowUp:    { nokey: 'selectPrev'     , alt: 'backgroundPrev' , meta: 'moveUp'    }
-  , ArrowDown:  { nokey: 'selectNext'     , alt: 'backgroundNext' , meta: 'moveDown'  }
+    ArrowUp:    { nokey: 'selectPrev'     , alt: 'backgroundPrev' , meta: 'moveUp'   , 'ctrl+maj': 'movePanelUp'    }
+  , ArrowDown:  { nokey: 'selectNext'     , alt: 'backgroundNext' , meta: 'moveDown' , 'ctrl+maj': 'movePanelDown'  }
+  , ArrowLeft:  { 'ctrl+maj': 'movePanelLeft'  }
+  , ArrowRight: { 'ctrl+maj': 'movePanelRight' }
   , n:          { nokey: 'createNew'      , alt: 'createNewBefore'  }
   , '˜':        { alt: 'createNewBefore'                            }
   , Delete:     { nokey: 'deleteSelected' , maj: 'deleteCheckeds'   }

@@ -7,29 +7,37 @@ _Cette section répertorie l'intégralité des raccourcis-clavier utilisés dans
 |====
 | **Combinaison**  | **Mode**  | **Effet**                                    | **Méthode**
 
-4+| **Sélection & déplacements**
-| combo:fh[]      | Normal    | Sélectione l'Item précédent                   | Lister.selectPrev
-| combo:fb[]      | Normal    | Sélectionne l'Item suivant                    | Lister.selectNext
-| combo:cmd+fh[]  | Normal    | Déplacement de l'Item vers le haut            | Lister.moveUp
-| combo:cmd+fb[]  | Normal    | Déplacement de l'Item vers le bas             | Lister.moveDown
+4+| **Navigation**
+| combo:fh[]      | Normal    | Sélectione l'Item précédent                       | Lister.selectPrev
+| combo:fb[]      | Normal    | Sélectionne l'Item suivant                        | Lister.selectNext
+| combo:cmd+fh[]  | Normal    | Déplacement de l'Item vers le haut                | Lister.moveUp
+| combo:cmd+fb[]  | Normal    | Déplacement de l'Item vers le bas                 | Lister.moveDown
+| combo:space[]   | Display   | Coche/décoche l'`Item` (sauf `Project`)           | ???
+| combo:fd[]      | Events    | Entre dans l'évènemencier de l'event              | Item.enterInside
+| combo:fd[]      | Projets   | Entre dans le projet (évènemencier de niveau 1)   | Project.enterInside
+| combo:fg[]      | Eventer   | Revenir à l'évènemencier parent ou la liste des projets | Lister.leaveToParent
+| combo:alt+fb[]  | Panel     | Sélectionne l'élément suivant sous le panneau     | ???
+| combo:alt+fh[]  | Panel     | Sélectionne l'élément précédent sous le panneau   | ???
+
+4+| **Cibles/références**
+
 | combo:k[]       | Projects  | Ajouter le projet dans la liste des cibles    | TargetsManager.add
 | combo:k[]       | Events    | Ajouter l'Event dans la liste des cibles      | TargetsManager.add
 | combo:k[]       | PBrins    | Ajouter le brin dans la liste des cibles      | TargetsManager.add
 | combo:k[]       | PPersp    | Ajouter le personnage dans liste des cibles   | TargetsManager.add
 | combo:cmd+k[]   | Edition   | Ajouter un lien vers une cible dans le texte  | TargetsPanel.open // peut être changé
-| combo:space[]   | Display   | Coche/décoche l'`Item` (sauf `Project`)       | ???
-
-4+| **Hiérarchie**
-| combo:fd[]      | Events | Entre dans l'évènemencier de l'event             | Item.enterInside
-| combo:fd[]      | Projets | Entre dans le projet (évènemencier de niveau 1) | Project.enterInside
-| combo:fg[]      | Eventer  | Revenir à l'évènemencier parent ou la liste des projets | Lister.leaveToParent
+| combo:tab[] *x  | Display   | Sélection un lien insérer dans un texte       | ???
+| combo:c[]       | Lien cible  | Ouvre la carte de la cible du lien          | ???
+| combo:g[]       | Lien cible  | Rejoint la cible du lien (l'affiche)        | ???
+| combo:a[]       | Lien cible  | Affiche la cible du lien dans autre fenêtre | ???
+| combo:o[]       | Lien cible  
+| Ouvre la boite pour choisir comment afficher la cible                       | ???
 
 4+| Regroupements
+
 | combo:p[]       | Events | Ouvre le panneau des personnages pour les définir et les choisir pour l'`Event` sélectionné  | ???
 | combo:p[]       | Brins   | Ouvre le panneau des personnages pour les définir et les choisir pour le brin | ???
 | combo:b[]       | Events |` Ouvre le panneau des brins pour les définir et les choisir  | ???
-
-
 
 4+| Édition
 
@@ -41,10 +49,11 @@ _Cette section répertorie l'intégralité des raccourcis-clavier utilisés dans
 | combo:tab[]     | Edition | Se déplace de champ d'édition en champ d'édition      | ???
 | combo:maj+tab[] | Edition | Se déplace de champ en champ d'édition en arrière     | ???
 | combo:⌦[]       | Normal  | Détruit l'Item (après confirmation si enfants)        | Lister.deleteSelected
+| combo:maj+⌦[]   | Normal  | Détruit tous les Item cochés (confirmat° si enfants)  | Lister.deleteSelected
 | combo:cmd+x[]   | Normal  | Couper l'Item sélectionné dans le presse-papier       | Lister.cutSelectedItem
 | combo:cmd+c[]   | Normal  | Copier l'Item sélectionné dans le presse-papier       | Lister.copySelectedItem
 | combo:cmd+v[]   | Normal  | Coller l'Item du presse-papier                        | Lister.pasteItem
-
+| combo:cmd+k[]   | Items   | Le panneau des cibles est ouvert, pour en choisir   | ???
 | combo:s[]       | Events  | Ouvrir le panneau des styles pour les définir       | ???
 | combo:maj+s[]   | Events  | Définir les styles pour tous les `Event`(s) cochés  | ???
 | combo:cmd+fb[]  | Styles  | Déplacer le style vers le bas (précédence)          | ???
@@ -58,11 +67,13 @@ _Cette section répertorie l'intégralité des raccourcis-clavier utilisés dans
 | combo:ctrl+maj+fb[] | Normal  | Déplace le panneau vers le bas                | ???
 
 4+| Filtres
-| combo:cmd+:[]       | Normal  | Active le filtrage des `Event`s                 | ???
-| combo:tab[]         | Filtre  | Passer de propriété de filtre en propriété      | ???
-| combo:maj+tab[]     | Filtre  | Comme combo:tab[] mais à l'envers               | ???
+| combo:cmd+:[]       | Normal  | Active le filtrage des `Event`s                       | ???
+| combo:tab[]         | Filtre  | Passer de propriété de filtre en propriété de filtre  | ???
+| combo:maj+tab[]     | Filtre  | Comme combo:tab[] mais à l'envers                     | ???
 
 4+| Application
-| combo:q[]           | Display | Ouvre le panneau pour définir les constantes    | ???
-| combo:cmd+o[]       | Display | Ouvre le panneau des options pour les régler    | ???
+| combo:cmd+m[]       | Display | Ouvre le panneau des modes d'affichage          | ???
+| combo:cmd+t[]       | Display | Le panneau des outils est ouvert                | ???
+| combo:q[]           | Display | Le panneau des constantes est ouvert            | ???
+| combo:cmd+o[]       | Display | Le panneau des options est ouvert               | ???
 |====

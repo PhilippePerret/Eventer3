@@ -1289,40 +1289,6 @@ TOUT PANNEAU FLOTTANT A LA STRUCTURE :
 .targets-panel  { z-index: 300; width: 380px; }
 .link-open-popup { z-index: 400; width: 340px; }
 
-#shortcuts-panel {
-  position: fixed;
-  inset: 0;
-  z-index: 300;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0,0,0,0.5);
-}
-
-.shortcuts-panel__inner {
-  background: var(--bg);
-  color: var(--text);
-  border-radius: 8px;
-  padding: 24px 32px;
-  min-width: 320px;
-  max-width: 520px;
-}
-
-.shortcuts-panel__title {
-  margin: 0 0 12px;
-  font-size: 1.1em;
-}
-
-.shortcuts-panel__table { width: 100%; border-collapse: collapse; }
-.sc-key   { font-weight: bold; padding: 3px 12px 3px 0; white-space: nowrap; }
-.sc-effect { padding: 3px 0; }
-
-.shortcuts-panel__nav,
-.shortcuts-panel__close {
-  margin: 8px 0 0;
-  font-size: 0.85em;
-  opacity: 0.6;
-}
 
 /* ─── Footer shortcuts ────────────────────────────────────────── */
 

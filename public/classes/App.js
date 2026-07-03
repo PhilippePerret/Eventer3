@@ -1,4 +1,5 @@
 import ListerProject from './models/core/ListerProject.js'
+import ToolsPanel from './ui/ToolsPanel.js'
 import LOG from '../system/LOG.js'
 
 
@@ -10,6 +11,21 @@ export default class App {
     LOG.m(1, 'Start application')
 
     const projectLister = await ListerProject.init()
+
+    document.addEventListener('keydown', (ev) => {
+      if (ev.metaKey && !ev.ctrlKey && !ev.altKey && ev.key === 't') {
+        let el = document.activeElement
+        while (el) {
+          if (el._activeKeyDispatcher?.getTools) {
+            ev.preventDefault()
+            ev.stopPropagation()
+            new ToolsPanel().open(el._activeKeyDispatcher.getTools())
+            return
+          }
+          el = el.parentElement
+        }
+      }
+    }, { capture: true })
 
     window.addEventListener('message', async (event) => {
       if (event.data?.type !== 'app-action') return

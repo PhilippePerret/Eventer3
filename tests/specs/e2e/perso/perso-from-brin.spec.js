@@ -1,3 +1,4 @@
+// Origine : tests/specs/e2e/perso/perso-from-brin.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures'
 import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
@@ -45,9 +46,9 @@ test("le panneau brins reste visible en fond pendant le panneau perso", async ({
   await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 })
 
-test("Escape ferme le panneau perso et remet le focus sur ListerBrin", async ({ page }) => {
+test("'p' ferme le panneau perso et remet le focus sur ListerBrin", async ({ page }) => {
   await openPersoPanelFromBrin(page)
-  await press(page, 'Escape')
+  await press(page, 'p')
   await expect(pane1(page).locator('#persos-panel')).not.toBeVisible()
   // ListerBrin reprend la main : ↓ change la sélection du brin
   await press(page, 'ArrowDown')
@@ -96,7 +97,7 @@ test("Space décoche un perso coché sur le brin (c2)", async ({ page }) => {
 test("la ligne de b1 affiche le badge de c2 (son perso)", async ({ page }) => {
   await openBrinPanel(page)
   const brinEl = pane1(page).locator('.brin-item').nth(0)
-  await expect(brinEl.locator('.brin-persos-marks .perso-mark')).toContainText('RO')
+  await expect(brinEl.locator('.brin-persos-marks .panel-mark')).toContainText('RO')
 })
 
 test("cocher c3 depuis le panneau perso de b1 ajoute son avatar sur la ligne du brin", async ({ page }) => {

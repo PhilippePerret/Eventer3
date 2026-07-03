@@ -58,6 +58,13 @@ export default class ListerEvent extends Lister {
 
   openNaturePanel() { new NaturePanel({ target: this }).open() }
 
+  getTools() {
+    return [
+      { key: 'e', label: 'Exporter…',  action: () => {} },
+      { key: 'i', label: 'Importer…',  action: () => {} },
+    ]
+  }
+
   _updateMainPanelClass() {
     if (!this.container) return
     this.container.classList.remove('roman-man', 'film-man')

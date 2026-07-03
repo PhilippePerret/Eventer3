@@ -4,3 +4,8 @@
 
 include::sousprocs/edition-with-maj.adoc[]
 
+==== Détruire un brin ====
+
+==== Détruire tous les brins cochés ====
+
+include::sousprocs/destoy-all-checkeds.adoc[]

@@ -440,6 +440,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
+<li><a href="#_philosophie">Philosophie</a></li>
+<li><a href="#_spécifications">Spécifications</a></li>
 <li><a href="#_définitions">Définitions</a>
 <ul class="sectlevel2">
 <li><a href="#_classes_abstraites">Classes abstraites</a></li>
@@ -482,12 +484,73 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_event">Event</a></li>
 <li><a href="#_les_brins">Les Brins</a></li>
 <li><a href="#_personnage">Personnage</a></li>
+<li><a href="#_lapplication">L&#8217;application</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 <div id="content">
+<div class="sect1">
+<h2 id="_philosophie">Philosophie</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>outil local (pour le moment)</p>
+</li>
+<li>
+<p>entièrement pilotable au clavier, zéro souris</p>
+</li>
+<li>
+<p>interface silencieuse</p>
+</li>
+<li>
+<p>priorité absolue à la fluidité</p>
+</li>
+<li>
+<p>zéro sensation « base de données »</p>
+</li>
+<li>
+<p>développement en TDD</p>
+</li>
+<li>
+<p>aucune complexité inutile (&#8658; cf. « tout basé sur <code>Lister</code>  et <code>Item</code>)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_spécifications">Spécifications</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Application ruby Sinatra (cf. app.rb)</p>
+</li>
+<li>
+<p>l’enregistrement est automatique, transparent</p>
+</li>
+<li>
+<p>tout clavier, rien à la souris</p>
+</li>
+<li>
+<p>~~sauvegarde en JSON~~. SQLite maintenant.</p>
+</li>
+<li>
+<p>une base par projet (un fichier <code>eventer.db</code>)</p>
+</li>
+<li>
+<p>un main-db pour maintenir les références aux projets</p>
+</li>
+<li>
+<p>produire du code verbeux (comme le mode verbose, <code>--verbose</code>, des commandes unix) pour pouvoir suivre le message. Mais désactivable facilement. Cf. <code>LOG</code> en backend (ruby) et en frontend (JavaScript).</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="_définitions">Définitions</h2>
 <div class="sectionbody">
@@ -1084,6 +1147,12 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 <td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock">Application</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">q</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Display</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouvre le panneau pour définir les constantes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">⌘</kbd>+<kbd style="font-size:1.1em;">o</kbd></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Display</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Ouvre le panneau des options pour les régler</p></td>
@@ -1120,13 +1189,6 @@ MODE DISPLAY | se déplacer de lien vers cible en lien vers cible s&#8217;il y e
 <p>sur un <a href="#Brin">[Brin]</a>.</p>
 </li>
 </ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-javascript" data-lang="javascript">export default class Event extends Item {
-
-export default class Item extends KeyDispatcher {</code></pre>
-</div>
 </div>
 <div class="sect3">
 <h4 id="_ouverture_sur_un_event">Ouverture sur un event</h4>
@@ -1711,7 +1773,7 @@ Son fond est vert (= édition)</p></td>
 <div class="sect3">
 <h4 id="_modifier_tous_les_projets_cochés">Modifier tous les projets cochés</h4>
 <div class="paragraph">
-<p><em>Note : Cette opération fonctionne même si l&#8217;event courant n&#8217;est pas coché, lui.</em></p>
+<p><em>Note : Cette opération fonctionne même si item courant n&#8217;est pas coché, lui.</em></p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1901,7 +1963,7 @@ Vous pouvez prendre connaissance du raccourci à utiliser.<br>
 <div class="sect3">
 <h4 id="_modifier_tous_les_évènements_cochés">Modifier tous les évènements cochés</h4>
 <div class="paragraph">
-<p><em>Note : Cette opération fonctionne même si l&#8217;event courant n&#8217;est pas coché, lui.</em></p>
+<p><em>Note : Cette opération fonctionne même si item courant n&#8217;est pas coché, lui.</em></p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -2042,7 +2104,38 @@ Pour sortir, <kbd style="font-size:1.1em;">␛</kbd> comme d&#8217;habitude.</p>
 </div>
 <div class="sect3">
 <h4 id="_définir_le_style_dun_event">Définir le style d&#8217;un event</h4>
-
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Action</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Attendu</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">On se trouve sur l&#8217;évènemencier de l&#8217;event</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↑</kbd>/<kbd style="font-size:1.1em;">↓</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">L&#8217;event à styliser est sélectionné</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">s</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La fenêtre des styles est ouverte</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">…</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">s</kbd> | <kbd style="font-size:1.1em;">⌘</kbd>+<kbd style="font-size:1.1em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">la fenêtre des styles est fermée</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect3">
 <h4 id="_définir_laspect_dun_event">Définir l&#8217;aspect d&#8217;un event</h4>
@@ -2130,13 +2223,21 @@ Pour sortir, <kbd style="font-size:1.1em;">␛</kbd> comme d&#8217;habitude.</p>
 </tbody>
 </table>
 </div>
+<div class="sect3">
+<h4 id="_détruire_un_event">Détruire un event</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_détruire_tous_les_events_cochés">Détruire tous les events cochés</h4>
+
+</div>
 </div>
 <div class="sect2">
 <h3 id="_les_brins">Les Brins</h3>
 <div class="sect3">
 <h4 id="_modifier_tous_les_brins_cochés">Modifier tous les brins cochés</h4>
 <div class="paragraph">
-<p><em>Note : Cette opération fonctionne même si l&#8217;event courant n&#8217;est pas coché, lui.</em></p>
+<p><em>Note : Cette opération fonctionne même si item courant n&#8217;est pas coché, lui.</em></p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -2180,6 +2281,14 @@ Pour sortir, <kbd style="font-size:1.1em;">␛</kbd> comme d&#8217;habitude.</p>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="sect3">
+<h4 id="_détruire_un_brin">Détruire un brin</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_détruire_tous_les_brins_cochés">Détruire tous les brins cochés</h4>
+
 </div>
 </div>
 <div class="sect2">
@@ -2215,7 +2324,7 @@ Un premier personnage est toujours créé s&#8217;il n&#8217;y en a pas encore</
 <div class="sect3">
 <h4 id="_modifier_tous_les_personnages_cochés">Modifier tous les personnages cochés</h4>
 <div class="paragraph">
-<p><em>Note : Cette opération fonctionne même si l&#8217;event courant n&#8217;est pas coché, lui.</em></p>
+<p><em>Note : Cette opération fonctionne même si item courant n&#8217;est pas coché, lui.</em></p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -2260,13 +2369,36 @@ Pour sortir, <kbd style="font-size:1.1em;">␛</kbd> comme d&#8217;habitude.</p>
 </tbody>
 </table>
 </div>
+<div class="sect3">
+<h4 id="_détruire_un_personnage">Détruire un personnage</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_détruire_tous_les_personnages_cochés">Détruire tous les personnages cochés</h4>
+
+</div>
+</div>
+<div class="sect2">
+<h3 id="_lapplication">L&#8217;application</h3>
+<div class="sect3">
+<h4 id="_définir_une_constante">Définir une constante</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_redéfinir_une_constante">Redéfinir une constante</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_supprimer_une_constante">Supprimer une constante</h4>
+
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-07-02 11:10:18 +0200
+Last updated 2026-07-03 10:35:05 +0200
 </div>
 </div>
 </body>

@@ -67,12 +67,37 @@ include::sousprocs/edition-with-maj.adoc[]
 
 ==== Choisir les brins de l'event ====
 
+==== Choisir les brins de tous les events cochés ====
+
+[cols="1,4"]
+|====
+| **Action**      | **Attendu**
+|                 | Un évènemencier est ouvert +
+Le projet possède plusieurs brins +
+Plusieurs évènements sont cochés
+| combo:maj+b[]   | La fenêtre des brins est ouverte +
+_(tous les brins se sont mis en pseudo édition)_
+| combo:fh/fb[]   | Sélectionne le brin voulu
+| combo:space[]   | Coche ou décoche le brin selon son état précédent +
+Le badge du brin s'ajoute ou se retire de l'event sélectionné (mais pas des autres)
+| combo:cmd+enter | La fenêtre des brins est refermée +
+Les brins se sont ajoutés et retirés à tous les events cochés.
+|====
+
+
+
 ==== Choisir les personnages de l'event ====
 
 [cols="1,4"]
 |====
 | **Action**      | **Attendu**
 |                 | Choisir un projet qui xref:procedure-creation-personnage[contient des personnages]
+| combo:p[]       | La fenêtre des personnages est ouverte
+| combo:fh/fb[]   | Le personnage voulu est sélectionné
+| combo:space[]   | Le personnage est coché +
+Et son avatar ou son badge s'affiche sur la ligne de l'event.
+| … |
+| combo:p[] \| combo:cmd+enter[] | La fenêtre des personnages est fermée
 |====
 
 ==== Choisir les personnages de tous les events cochés ====
@@ -115,6 +140,18 @@ Deux choses à traiter
 - le format manuscrit/évènemencier du Lister
 ////
 
+[cols="1,4"]
+|====
+| **Action**      | **Attendu**
+|                       | On se trouve sur l'évènemencier de l'event
+| combo:fh/fb[] | L'event à styliser est sélectionné
+| combo:s[]             | La fenêtre des styles est ouverte
+| … |
+| combo:s[] \| combo:cmd+enter[] | la fenêtre des styles est fermée
+|====
+
+
+
 
 ==== Définir l'aspect d'un event ====
 
@@ -155,3 +192,9 @@ Deux choses à traiter
 |                 | La couleur de la météo de l'event est appliquée
 |====
 
+
+==== Détruire un event ====
+
+==== Détruire tous les events cochés ====
+
+include::sousprocs/destoy-all-checkeds.adoc[]

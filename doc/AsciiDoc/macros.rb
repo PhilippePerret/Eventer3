@@ -22,9 +22,17 @@ class Combo < Asciidoctor::Extensions::InlineMacroProcessor
   }
 
   def process(parent, target, attrs)
-    target.split('+')
-      .map {|k| %(<kbd style="font-size:1.1em;">#{STRKEYS_TO_KEY[k.downcase] || k}</kbd>) }
-      .join('+')
+    if target.match?(/\+/)
+      target.split('+')
+        .map {|k| %(<kbd style="font-size:1.1em;">#{STRKEYS_TO_KEY[k.downcase] || k}</kbd>) }
+        .join('+')
+    elsif target.match?(/\//)
+      target.split('/')
+        .map {|k| %(<kbd style="font-size:1.1em;">#{STRKEYS_TO_KEY[k.downcase] || k}</kbd>) }
+        .join('/')
+    else
+      %(<kbd style="font-size:1.1em;">#{STRKEYS_TO_KEY[target.downcase] || target}</kbd>)
+    end
   end
 end
 

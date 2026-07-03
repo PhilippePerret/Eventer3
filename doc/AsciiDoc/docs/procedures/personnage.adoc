@@ -18,3 +18,8 @@ Un premier personnage est toujours créé s'il n'y en a pas encore
 
 include::sousprocs/edition-with-maj.adoc[]
 
+==== Détruire un personnage ====
+
+==== Détruire tous les personnages cochés ====
+
+include::sousprocs/destoy-all-checkeds.adoc[]

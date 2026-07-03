@@ -64,8 +64,7 @@ export default class ListerStyle extends Lister {
     if (!ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey && /^[a-z]$/i.test(ev.key)) {
       const idx  = ev.key.toLowerCase().charCodeAt(0) - 97
       const item = this.items[idx]
-      if (item) { ev.preventDefault(); ev.stopPropagation(); item.toggleChecked() }
-      return
+      if (item) { ev.preventDefault(); ev.stopPropagation(); item.toggleChecked(); return }
     }
     super.onkeydown(ev)
   }

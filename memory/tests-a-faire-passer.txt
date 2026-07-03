@@ -627,61 +627,7 @@
 
     Error Context: test-results/_tdd-links-tab-open-Escape-ferme-le-popup-lien-reste-actif/error-context.md
 
-  24) specs/e2e/apparence/style-panel.spec.js:39:1 › s ferme le panneau quand il est actif 
-
-    Error: expect(locator).not.toBeVisible() failed
-
-    Locator:  locator('#pane-1').contentFrame().locator('#style-panel')
-    Expected: not visible
-    Received: visible
-    Timeout:  5000ms
-
-    Call log:
-      - Expect "not toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('#style-panel')
-        14 × locator resolved to <div id="style-panel" class="style-list">…</div>
-           - unexpected value "visible"
-
-
-      40 |   await openStylePanel(page)
-      41 |   await press(page, 's')
-    > 42 |   await expect(pane1(page).locator('#style-panel')).not.toBeVisible()
-         |                                                         ^
-      43 | })
-      44 |
-      45 | test("Cmd+Enter ferme le panneau des styles", async ({ page }) => {
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/apparence/style-panel.spec.js:42:57
-
-    Error Context: test-results/apparence-style-panel-s-ferme-le-panneau-quand-il-est-actif/error-context.md
-
-  25) specs/e2e/apparence/style-panel.spec.js:51:1 › après fermeture, l'ListerEvent redevient actif (↓ change la sélection) 
-
-    Error: expect(locator).toHaveClass(expected) failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.event-item').nth(1)
-    Expected pattern: /selected/
-    Received string:  "event-item"
-    Timeout: 5000ms
-
-    Call log:
-      - Expect "toHaveClass" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.event-item').nth(1)
-        14 × locator resolved to <div data-id="e2" tabindex="-1" class="event-item">…</div>
-           - unexpected value "event-item"
-
-
-      54 |   await expect(pane1(page).locator('.event-item').nth(0)).toHaveClass(/selected/)
-      55 |   await press(page, 'ArrowDown')
-    > 56 |   await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/selected/)
-         |                                                           ^
-      57 | })
-      58 |
-      59 | // ─── Affichage ──────────────────────────────────────────────────────────────
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/apparence/style-panel.spec.js:56:59
-
-    Error Context: test-results/apparence-style-panel-aprè-f23a8-ctif-↓-change-la-sélection-/error-context.md
-
-  35) specs/e2e/event/link-go-navigate.spec.js:32:1 › go vers item racine (e3=Acte III) depuis sous-lister 
+  24) specs/e2e/event/link-go-navigate.spec.js:32:1 › go vers item racine (e3=Acte III) depuis sous-lister 
 
     Error: expect(locator).toHaveClass(expected) failed
 
@@ -707,7 +653,7 @@
 
     Error Context: test-results/event-link-go-navigate-go--d4795-Acte-III-depuis-sous-lister/error-context.md
 
-  36) specs/e2e/event/link-go-navigate.spec.js:44:1 › go vers item depth=1 (e6=Séq 3 Acte I) depuis sous-lister différent 
+  25) specs/e2e/event/link-go-navigate.spec.js:44:1 › go vers item depth=1 (e6=Séq 3 Acte I) depuis sous-lister différent 
 
     Error: expect(locator).toHaveClass(expected) failed
 
@@ -733,7 +679,7 @@
 
     Error Context: test-results/event-link-go-navigate-go--9732f-epuis-sous-lister-différent/error-context.md
 
-  37) specs/e2e/event/link-go-navigate.spec.js:60:1 › go vers item depth=2 (e49=Scène 1 Séq 4 Acte III) depuis sous-lister différent 
+  26) specs/e2e/event/link-go-navigate.spec.js:60:1 › go vers item depth=2 (e49=Scène 1 Séq 4 Acte III) depuis sous-lister différent 
 
     Error: expect(locator).toHaveClass(expected) failed
 
@@ -759,32 +705,7 @@
 
     Error Context: test-results/event-link-go-navigate-go--ae186-epuis-sous-lister-différent/error-context.md
 
-  43) specs/e2e/event/new-event-virtual-lister.spec.js:9:1 › → sur un projet sans lister : crée l'éditeur, Enter confirme, n crée un second event 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('#events-panel')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('#events-panel')
-
-
-      19 |
-      20 |   await press(page, 'ArrowRight')
-    > 21 |   await expect(pane1(page).locator('#events-panel')).toBeVisible()
-         |                                                      ^
-      22 |
-      23 |   const firstInput = pane1(page).locator('.event-item [data-field="title"]')
-      24 |   await expect(firstInput).toBeVisible()
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/event/new-event-virtual-lister.spec.js:21:54
-
-    Error Context: test-results/event-new-event-virtual-li-4e6ca-irme-n-crée-un-second-event/error-context.md
-
-  47) specs/e2e/eventer/level-mode-edit.spec.js:27:1 › LEVEL mode : item réel après un virtuel est sélectionnable et éditable 
+  27) specs/e2e/eventer/level-mode-edit.spec.js:27:1 › LEVEL mode : item réel après un virtuel est sélectionnable et éditable 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -809,36 +730,7 @@
 
     Error Context: test-results/eventer-level-mode-edit-LE-9550d--sélectionnable-et-éditable/error-context.md
 
-  48) specs/e2e/filesystem/filepicker.spec.js:75:1 › sélectionner un dossier crée le projet directement (sans éditeur) 
-
-    Error: expect(locator).toHaveCount(expected) failed
-
-    Locator:  locator('#pane-1').contentFrame().locator('.project-item')
-    Expected: 5
-    Received: 4
-    Timeout:  5000ms
-
-    Call log:
-      - Expect "toHaveCount" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.project-item')
-        14 × locator resolved to 4 elements
-           - unexpected value "4"
-
-
-      80 |   await expect(fp(page)).not.toBeVisible()
-      81 |   await page.waitForLoadState('networkidle')
-    > 82 |   await expect(pane1(page).locator('.project-item')).toHaveCount(countBefore + 1)
-         |                                                      ^
-      83 |   await expect(pane1(page).locator('.project-item.selected input[name="title"]')).not.toBeVisible()
-      84 | })
-      85 |
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filesystem/filepicker.spec.js:82:54
-
-    Error Context: test-results/filesystem-filepicker-séle-9db29-t-directement-sans-éditeur-/error-context.md
-
-    Error Context: test-results/filesystem-filepicker-séle-9db29-t-directement-sans-éditeur-/error-context.md
-
-  49) specs/e2e/filter/filter-bar.spec.js:37:1 › ListerEvent : ':' révèle la barre et focus le titre 
+  29) specs/e2e/filter/filter-bar.spec.js:37:1 › ListerEvent : ':' révèle la barre et focus le titre 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -863,7 +755,7 @@
 
     Error Context: test-results/filter-filter-bar-ListerEv-3ba4d--la-barre-et-focus-le-titre/error-context.md
 
-  50) specs/e2e/filter/filter-bar.spec.js:49:1 › ListerEvent : widget titre présent dans la barre 
+  30) specs/e2e/filter/filter-bar.spec.js:49:1 › ListerEvent : widget titre présent dans la barre 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -889,7 +781,7 @@
 
     Error Context: test-results/filter-filter-bar-ListerEv-87b5e-titre-présent-dans-la-barre/error-context.md
 
-  51) specs/e2e/filter/filter-bar.spec.js:54:1 › ListerEvent : widget état présent dans la barre 
+  31) specs/e2e/filter/filter-bar.spec.js:54:1 › ListerEvent : widget état présent dans la barre 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -915,7 +807,7 @@
 
     Error Context: test-results/filter-filter-bar-ListerEv-4b6b6--état-présent-dans-la-barre/error-context.md
 
-  52) specs/e2e/filter/filter-bar.spec.js:59:1 › ListerEvent : widget météo présent dans la barre 
+  32) specs/e2e/filter/filter-bar.spec.js:59:1 › ListerEvent : widget météo présent dans la barre 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -941,7 +833,7 @@
 
     Error Context: test-results/filter-filter-bar-ListerEv-7b78c-météo-présent-dans-la-barre/error-context.md
 
-  53) specs/e2e/filter/filter-bar.spec.js:64:1 › ListerEvent : widget effet présent dans la barre 
+  33) specs/e2e/filter/filter-bar.spec.js:64:1 › ListerEvent : widget effet présent dans la barre 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -967,7 +859,7 @@
 
     Error Context: test-results/filter-filter-bar-ListerEv-09a29-effet-présent-dans-la-barre/error-context.md
 
-  54) specs/e2e/filter/filter-bar.spec.js:71:1 › TAB depuis titre : focus widget état ───
+  34) specs/e2e/filter/filter-bar.spec.js:71:1 › TAB depuis titre : focus widget état ───
 
     Error: expect(locator).toBeVisible() failed
 
@@ -993,7 +885,7 @@
 
     Error Context: test-results/filter-filter-bar-TAB-depuis-titre-focus-widget-état/error-context.md
 
-  55) specs/e2e/filter/filter-bar.spec.js:77:1 › TAB depuis état : focus widget météo ───
+  35) specs/e2e/filter/filter-bar.spec.js:77:1 › TAB depuis état : focus widget météo ───
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1019,7 +911,7 @@
 
     Error Context: test-results/filter-filter-bar-TAB-depuis-état-focus-widget-météo/error-context.md
 
-  56) specs/e2e/filter/filter-bar.spec.js:84:1 › TAB depuis météo : focus widget effet ──
+  36) specs/e2e/filter/filter-bar.spec.js:84:1 › TAB depuis météo : focus widget effet ──
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1045,7 +937,7 @@
 
     Error Context: test-results/filter-filter-bar-TAB-depuis-météo-focus-widget-effet/error-context.md
 
-  57) specs/e2e/filter/filter-bar.spec.js:91:1 › TAB depuis dernier widget : revient au champ titre 
+  37) specs/e2e/filter/filter-bar.spec.js:91:1 › TAB depuis dernier widget : revient au champ titre 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1071,7 +963,7 @@
 
     Error Context: test-results/filter-filter-bar-TAB-depu-43d96-dget-revient-au-champ-titre/error-context.md
 
-  58) specs/e2e/filter/filter-bar.spec.js:98:1 › widget état focusé : ArrowDown ouvre le popup 
+  38) specs/e2e/filter/filter-bar.spec.js:98:1 › widget état focusé : ArrowDown ouvre le popup 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1097,7 +989,7 @@
 
     Error Context: test-results/filter-filter-bar-widget-é-11e76-sé-ArrowDown-ouvre-le-popup/error-context.md
 
-  59) specs/e2e/filter/filter-bar.spec.js:105:1 › widget état focusé : ArrowDown n'affecte pas la sélection d'items 
+  39) specs/e2e/filter/filter-bar.spec.js:105:1 › widget état focusé : ArrowDown n'affecte pas la sélection d'items 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1123,7 +1015,7 @@
 
     Error Context: test-results/filter-filter-bar-widget-é-4d1b0-te-pas-la-sélection-d-items/error-context.md
 
-  60) specs/e2e/filter/filter-bar.spec.js:114:1 › TAB depuis popup ouvert : ferme popup et focus widget suivant 
+  40) specs/e2e/filter/filter-bar.spec.js:114:1 › TAB depuis popup ouvert : ferme popup et focus widget suivant 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1149,7 +1041,7 @@
 
     Error Context: test-results/filter-filter-bar-TAB-depu-79dc5-pup-et-focus-widget-suivant/error-context.md
 
-  61) specs/e2e/filter/filter-bar.spec.js:124:1 › état : cliquer le bouton ouvre le popup 
+  41) specs/e2e/filter/filter-bar.spec.js:124:1 › état : cliquer le bouton ouvre le popup 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1175,7 +1067,7 @@
 
     Error Context: test-results/filter-filter-bar-état-cliquer-le-bouton-ouvre-le-popup/error-context.md
 
-  62) specs/e2e/filter/filter-bar.spec.js:130:1 › état : sélectionner 'ébauche' → filtre immédiat, 2 events visibles 
+  42) specs/e2e/filter/filter-bar.spec.js:130:1 › état : sélectionner 'ébauche' → filtre immédiat, 2 events visibles 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1201,7 +1093,7 @@
 
     Error Context: test-results/filter-filter-bar-état-sél-87031--immédiat-2-events-visibles/error-context.md
 
-  63) specs/e2e/filter/filter-bar.spec.js:139:1 › état : multi-sélection ébauche + développement → 3 events 
+  43) specs/e2e/filter/filter-bar.spec.js:139:1 › état : multi-sélection ébauche + développement → 3 events 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1227,7 +1119,7 @@
 
     Error Context: test-results/filter-filter-bar-état-mul-bb4a7-he-développement-→-3-events/error-context.md
 
-  64) specs/e2e/filter/filter-bar.spec.js:149:1 › état : désélectionner réaffiche tout ──
+  44) specs/e2e/filter/filter-bar.spec.js:149:1 › état : désélectionner réaffiche tout ──
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1253,7 +1145,7 @@
 
     Error Context: test-results/filter-filter-bar-état-désélectionner-réaffiche-tout/error-context.md
 
-  65) specs/e2e/filter/filter-bar.spec.js:159:1 › état + titre : filtre cumulatif ───────
+  45) specs/e2e/filter/filter-bar.spec.js:159:1 › état + titre : filtre cumulatif ───────
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1279,7 +1171,7 @@
 
     Error Context: test-results/filter-filter-bar-état-titre-filtre-cumulatif/error-context.md
 
-  66) specs/e2e/filter/filter-bar.spec.js:171:1 › météo : cliquer le bouton ouvre le popup 
+  46) specs/e2e/filter/filter-bar.spec.js:171:1 › météo : cliquer le bouton ouvre le popup 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1305,7 +1197,7 @@
 
     Error Context: test-results/filter-filter-bar-météo-cliquer-le-bouton-ouvre-le-popup/error-context.md
 
-  67) specs/e2e/filter/filter-bar.spec.js:177:1 › météo : sélectionner 'ps' → filtre immédiat, 2 events visibles (e1 + e3) 
+  47) specs/e2e/filter/filter-bar.spec.js:177:1 › météo : sélectionner 'ps' → filtre immédiat, 2 events visibles (e1 + e3) 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1331,7 +1223,7 @@
 
     Error Context: test-results/filter-filter-bar-météo-sé-7d55d-at-2-events-visibles-e1-e3-/error-context.md
 
-  68) specs/e2e/filter/filter-bar.spec.js:186:1 › météo : sélectionner 'pl' → filtre immédiat, 1 event visible (e2) 
+  48) specs/e2e/filter/filter-bar.spec.js:186:1 › météo : sélectionner 'pl' → filtre immédiat, 1 event visible (e2) 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1357,7 +1249,7 @@
 
     Error Context: test-results/filter-filter-bar-météo-sé-5d60b-mmédiat-1-event-visible-e2-/error-context.md
 
-  69) specs/e2e/filter/filter-bar.spec.js:196:1 › effet : cliquer le bouton ouvre le popup 
+  49) specs/e2e/filter/filter-bar.spec.js:196:1 › effet : cliquer le bouton ouvre le popup 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1383,7 +1275,7 @@
 
     Error Context: test-results/filter-filter-bar-effet-cliquer-le-bouton-ouvre-le-popup/error-context.md
 
-  70) specs/e2e/filter/filter-bar.spec.js:202:1 › effet : sélectionner 'nu' → filtre immédiat, 1 event visible (e2) 
+  50) specs/e2e/filter/filter-bar.spec.js:202:1 › effet : sélectionner 'nu' → filtre immédiat, 1 event visible (e2) 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1409,7 +1301,7 @@
 
     Error Context: test-results/filter-filter-bar-effet-sé-71aaa-mmédiat-1-event-visible-e2-/error-context.md
 
-  71) specs/e2e/filter/filter-bar.spec.js:210:1 › effet : sélectionner 'jr' → filtre immédiat, 1 event visible (e3) 
+  51) specs/e2e/filter/filter-bar.spec.js:210:1 › effet : sélectionner 'jr' → filtre immédiat, 1 event visible (e3) 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1435,7 +1327,7 @@
 
     Error Context: test-results/filter-filter-bar-effet-sé-95f16-mmédiat-1-event-visible-e3-/error-context.md
 
-  72) specs/e2e/filter/filter-bar.spec.js:218:1 › météo + effet : filtre cumulatif (ps + jr → e3 seul) 
+  52) specs/e2e/filter/filter-bar.spec.js:218:1 › météo + effet : filtre cumulatif (ps + jr → e3 seul) 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1461,7 +1353,7 @@
 
     Error Context: test-results/filter-filter-bar-météo-ef-d14d9--cumulatif-ps-jr-→-e3-seul-/error-context.md
 
-  73) specs/e2e/filter/filter-brin.spec.js:22:1 › Cmd+: puis b ouvre le sélecteur de brins 
+  53) specs/e2e/filter/filter-brin.spec.js:22:1 › Cmd+: puis b ouvre le sélecteur de brins 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1488,7 +1380,7 @@
 
     Error Context: test-results/filter-filter-brin-Cmd-puis-b-ouvre-le-sélecteur-de-brins/error-context.md
 
-  74) specs/e2e/filter/filter-brin.spec.js:29:1 › le sélecteur affiche les brins du projet 
+  54) specs/e2e/filter/filter-brin.spec.js:29:1 › le sélecteur affiche les brins du projet 
 
     Error: expect(locator).toHaveCount(expected) failed
 
@@ -1515,7 +1407,7 @@
 
     Error Context: test-results/filter-filter-brin-le-sélecteur-affiche-les-brins-du-projet/error-context.md
 
-  75) specs/e2e/filter/filter-brin.spec.js:38:1 › sélectionner b1 masque les events sans b1 
+  55) specs/e2e/filter/filter-brin.spec.js:38:1 › sélectionner b1 masque les events sans b1 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1542,7 +1434,7 @@
 
     Error Context: test-results/filter-filter-brin-sélectionner-b1-masque-les-events-sans-b1/error-context.md
 
-  76) specs/e2e/filter/filter-brin.spec.js:53:1 › Escape dans le sélecteur n'applique pas le filtre 
+  56) specs/e2e/filter/filter-brin.spec.js:53:1 › Escape dans le sélecteur n'applique pas le filtre 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1569,7 +1461,7 @@
 
     Error Context: test-results/filter-filter-brin-Escape--4c78e-ur-n-applique-pas-le-filtre/error-context.md
 
-  77) specs/e2e/filter/filter-brin.spec.js:68:1 › Cmd+:: efface le filtre brin et réaffiche tous les events 
+  57) specs/e2e/filter/filter-brin.spec.js:68:1 › Cmd+:: efface le filtre brin et réaffiche tous les events 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1596,7 +1488,7 @@
 
     Error Context: test-results/filter-filter-brin-Cmd-eff-68bf8-t-réaffiche-tous-les-events/error-context.md
 
-  78) specs/e2e/filter/filter-text.spec.js:25:1 › Cmd+: affiche filter-bar avec hint des sous-commandes 
+  58) specs/e2e/filter/filter-text.spec.js:25:1 › Cmd+: affiche filter-bar avec hint des sous-commandes 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1623,7 +1515,7 @@
 
     Error Context: test-results/filter-filter-text-Cmd-aff-6ebf6-vec-hint-des-sous-commandes/error-context.md
 
-  79) specs/e2e/filter/filter-text.spec.js:37:1 › Escape depuis filter-sequence ferme le hint 
+  59) specs/e2e/filter/filter-text.spec.js:37:1 › Escape depuis filter-sequence ferme le hint 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1650,7 +1542,7 @@
 
     Error Context: test-results/filter-filter-text-Escape--7d146-lter-sequence-ferme-le-hint/error-context.md
 
-  80) specs/e2e/filter/filter-text.spec.js:49:1 › Cmd+: puis t affiche un input de filtre texte 
+  60) specs/e2e/filter/filter-text.spec.js:49:1 › Cmd+: puis t affiche un input de filtre texte 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1677,7 +1569,7 @@
 
     Error Context: test-results/filter-filter-text-Cmd-pui-b8ba8-he-un-input-de-filtre-texte/error-context.md
 
-  81) specs/e2e/filter/filter-text.spec.js:62:1 › filtrage live : "bal" filtre dès la frappe sans Enter 
+  61) specs/e2e/filter/filter-text.spec.js:62:1 › filtrage live : "bal" filtre dès la frappe sans Enter 
 
     Test timeout of 15000ms exceeded.
 
@@ -1712,7 +1604,7 @@
 
     Error Context: test-results/filter-filter-text-filtrag-5d1be-re-dès-la-frappe-sans-Enter/error-context.md
 
-  82) specs/e2e/filter/filter-text.spec.js:77:1 › filtrage live : insensible à la casse ─
+  62) specs/e2e/filter/filter-text.spec.js:77:1 › filtrage live : insensible à la casse ─
 
     Test timeout of 15000ms exceeded.
 
@@ -1747,7 +1639,7 @@
 
     Error Context: test-results/filter-filter-text-filtrage-live-insensible-à-la-casse/error-context.md
 
-  83) specs/e2e/filter/filter-text.spec.js:91:1 › Enter ferme l'input sans annuler le filtre 
+  63) specs/e2e/filter/filter-text.spec.js:91:1 › Enter ferme l'input sans annuler le filtre 
 
     Test timeout of 15000ms exceeded.
 
@@ -1782,7 +1674,7 @@
 
     Error Context: test-results/filter-filter-text-Enter-f-95853-nput-sans-annuler-le-filtre/error-context.md
 
-  84) specs/e2e/filter/filter-text.spec.js:106:1 › navigation ↓ saute les items cachés par le filtre 
+  64) specs/e2e/filter/filter-text.spec.js:106:1 › navigation ↓ saute les items cachés par le filtre 
 
     Test timeout of 15000ms exceeded.
 
@@ -1817,7 +1709,7 @@
 
     Error Context: test-results/filter-filter-text-navigat-df3ea--items-cachés-par-le-filtre/error-context.md
 
-  85) specs/e2e/filter/filter-text.spec.js:123:1 › FilterBar affiche le terme de filtre texte actif 
+  65) specs/e2e/filter/filter-text.spec.js:123:1 › FilterBar affiche le terme de filtre texte actif 
 
     Test timeout of 15000ms exceeded.
 
@@ -1852,7 +1744,7 @@
 
     Error Context: test-results/filter-filter-text-FilterB-3e0ef-terme-de-filtre-texte-actif/error-context.md
 
-  86) specs/e2e/filter/filter-text.spec.js:137:1 › Cmd+: puis : efface le filtre texte ──
+  66) specs/e2e/filter/filter-text.spec.js:137:1 › Cmd+: puis : efface le filtre texte ──
 
     Test timeout of 15000ms exceeded.
 
@@ -1887,7 +1779,7 @@
 
     Error Context: test-results/filter-filter-text-Cmd-puis-efface-le-filtre-texte/error-context.md
 
-  87) specs/e2e/filter/filter-text.spec.js:159:1 › Escape dans l'input annule le filtre texte 
+  67) specs/e2e/filter/filter-text.spec.js:159:1 › Escape dans l'input annule le filtre texte 
 
     Test timeout of 15000ms exceeded.
 
@@ -1922,7 +1814,7 @@
 
     Error Context: test-results/filter-filter-text-Escape--6d2ed-nput-annule-le-filtre-texte/error-context.md
 
-  88) specs/e2e/filter/filter-text.spec.js:178:1 › Cmd+: puis b ouvre le sélecteur de brins pour filtre 
+  68) specs/e2e/filter/filter-text.spec.js:178:1 › Cmd+: puis b ouvre le sélecteur de brins pour filtre 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1949,7 +1841,7 @@
 
     Error Context: test-results/filter-filter-text-Cmd-pui-00420-ecteur-de-brins-pour-filtre/error-context.md
 
-  89) specs/e2e/filter/filter-text.spec.js:187:1 › Cmd+: puis p ouvre le sélecteur de persos pour filtre 
+  69) specs/e2e/filter/filter-text.spec.js:187:1 › Cmd+: puis p ouvre le sélecteur de persos pour filtre 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1976,7 +1868,7 @@
 
     Error Context: test-results/filter-filter-text-Cmd-pui-dc7bb-cteur-de-persos-pour-filtre/error-context.md
 
-  90) specs/e2e/filter/filter-ux.spec.js:16:3 › badge FILTRE dans la barre d'état — couleur selon état › badge FILTRE vert dès Cmd+: (mode filtre activé) 
+  70) specs/e2e/filter/filter-ux.spec.js:16:3 › badge FILTRE dans la barre d'état — couleur selon état › badge FILTRE vert dès Cmd+: (mode filtre activé) 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -2001,7 +1893,7 @@
 
     Error Context: test-results/filter-filter-ux-badge-FIL-1804b-dès-Cmd-mode-filtre-activé-/error-context.md
 
-  91) specs/e2e/filter/filter-ux.spec.js:22:3 › badge FILTRE dans la barre d'état — couleur selon état › badge FILTRE reste vert si aucun item masqué 
+  71) specs/e2e/filter/filter-ux.spec.js:22:3 › badge FILTRE dans la barre d'état — couleur selon état › badge FILTRE reste vert si aucun item masqué 
 
     Test timeout of 15000ms exceeded.
 
@@ -2036,7 +1928,7 @@
 
     Error Context: test-results/filter-filter-ux-badge-FIL-9d8ae-e-vert-si-aucun-item-masqué/error-context.md
 
-  92) specs/e2e/filter/filter-ux.spec.js:33:3 › badge FILTRE dans la barre d'état — couleur selon état › badge FILTRE rouge quand items masqués 
+  72) specs/e2e/filter/filter-ux.spec.js:33:3 › badge FILTRE dans la barre d'état — couleur selon état › badge FILTRE rouge quand items masqués 
 
     Test timeout of 15000ms exceeded.
 
@@ -2071,7 +1963,7 @@
 
     Error Context: test-results/filter-filter-ux-badge-FIL-52389-E-rouge-quand-items-masqués/error-context.md
 
-  93) specs/e2e/filter/filter-ux.spec.js:42:3 › badge FILTRE dans la barre d'état — couleur selon état › badge FILTRE rouge après Enter quand items masqués 
+  73) specs/e2e/filter/filter-ux.spec.js:42:3 › badge FILTRE dans la barre d'état — couleur selon état › badge FILTRE rouge après Enter quand items masqués 
 
     Test timeout of 15000ms exceeded.
 
@@ -2106,7 +1998,7 @@
 
     Error Context: test-results/filter-filter-ux-badge-FIL-d55c0-s-Enter-quand-items-masqués/error-context.md
 
-  94) specs/e2e/filter/filter-ux.spec.js:51:3 › badge FILTRE dans la barre d'état — couleur selon état › badge FILTRE absent après Escape dans l'input 
+  74) specs/e2e/filter/filter-ux.spec.js:51:3 › badge FILTRE dans la barre d'état — couleur selon état › badge FILTRE absent après Escape dans l'input 
 
     Test timeout of 15000ms exceeded.
 
@@ -2141,7 +2033,7 @@
 
     Error Context: test-results/filter-filter-ux-badge-FIL-96900-t-après-Escape-dans-l-input/error-context.md
 
-  95) specs/e2e/filter/filter-ux.spec.js:74:3 › panneau sélecteur de brins — présentation › titre du sélecteur sans raccourcis clavier 
+  75) specs/e2e/filter/filter-ux.spec.js:74:3 › panneau sélecteur de brins — présentation › titre du sélecteur sans raccourcis clavier 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -2168,7 +2060,7 @@
 
     Error Context: test-results/filter-filter-ux-panneau-s-5210a-eur-sans-raccourcis-clavier/error-context.md
 
-  96) specs/e2e/filter/filter-ux.spec.js:96:3 › input filtre texte ne recouvre pas le contenu › premier item visible sous l'input filtre (pas recouvert) 
+  76) specs/e2e/filter/filter-ux.spec.js:96:3 › input filtre texte ne recouvre pas le contenu › premier item visible sous l'input filtre (pas recouvert) 
 
     TypeError: Cannot read properties of null (reading 'y')
 
@@ -2183,7 +2075,7 @@
 
     Error Context: test-results/filter-filter-ux-input-fil-cc06f-input-filtre-pas-recouvert-/error-context.md
 
-  97) specs/e2e/filter/filter-ux.spec.js:120:3 › position de l'input selon le lister actif › input filter-text apparaît dans les limites du lister actif (events) 
+  77) specs/e2e/filter/filter-ux.spec.js:120:3 › position de l'input selon le lister actif › input filter-text apparaît dans les limites du lister actif (events) 
 
     TypeError: Cannot read properties of null (reading 'y')
 
@@ -2198,7 +2090,7 @@
 
     Error Context: test-results/filter-filter-ux-position--00cb9-tes-du-lister-actif-events-/error-context.md
 
-  98) specs/e2e/filter/filter-ux.spec.js:146:3 › filtre brins sans brins disponibles › Cmd+: puis b sans brins affiche notification 
+  78) specs/e2e/filter/filter-ux.spec.js:146:3 › filtre brins sans brins disponibles › Cmd+: puis b sans brins affiche notification 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -2225,7 +2117,7 @@
 
     Error Context: test-results/filter-filter-ux-filtre-br-d9c07--brins-affiche-notification/error-context.md
 
-  99) specs/e2e/filter/filter-ux.spec.js:178:3 › indicateur FILTRE dans la barre d'état › status bar affiche FILTRE quand un filtre est actif 
+  79) specs/e2e/filter/filter-ux.spec.js:178:3 › indicateur FILTRE dans la barre d'état › status bar affiche FILTRE quand un filtre est actif 
 
     Test timeout of 15000ms exceeded.
 
@@ -2260,7 +2152,7 @@
 
     Error Context: test-results/filter-filter-ux-indicateu-c45c8-E-quand-un-filtre-est-actif/error-context.md
 
-  100) specs/e2e/filter/filter-ux.spec.js:189:3 › indicateur FILTRE dans la barre d'état › status bar n'affiche plus FILTRE après effacement du filtre 
+  80) specs/e2e/filter/filter-ux.spec.js:189:3 › indicateur FILTRE dans la barre d'état › status bar n'affiche plus FILTRE après effacement du filtre 
 
     Test timeout of 15000ms exceeded.
 
@@ -2295,7 +2187,7 @@
 
     Error Context: test-results/filter-filter-ux-indicateu-5b2d7--après-effacement-du-filtre/error-context.md
 
-  101) specs/e2e/filter/filter-ux.spec.js:203:3 › indicateur FILTRE dans la barre d'état › Escape dans l'input efface le filtre et retire FILTRE du status bar 
+  81) specs/e2e/filter/filter-ux.spec.js:203:3 › indicateur FILTRE dans la barre d'état › Escape dans l'input efface le filtre et retire FILTRE du status bar 
 
     Test timeout of 15000ms exceeded.
 
@@ -2330,347 +2222,7 @@
 
     Error Context: test-results/filter-filter-ux-indicateu-71e5f-retire-FILTRE-du-status-bar/error-context.md
 
-  102) specs/e2e/filter/panel-search.spec.js:25:1 › panneau brins : champ .panel-search visible après ':' 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('#brins-panel .filter-bar')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('#brins-panel .filter-bar')
-
-
-      18 |   await expect(pane1(page).locator(panelSelector)).toBeVisible()
-      19 |   await press(page, ':')
-    > 20 |   await expect(pane1(page).locator(`${panelSelector} .filter-bar`)).toBeVisible()
-         |                                                                     ^
-      21 | }
-      22 |
-      23 | // ─── ListerBrin ───────────────────────────────────────────────────────────────
-        at revealFilter (/Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:20:69)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:29:3
-
-    Error Context: test-results/filter-panel-search-pannea-d06df-panel-search-visible-après-/error-context.md
-
-  103) specs/e2e/filter/panel-search.spec.js:33:1 › panneau brins : taper 'mon' cache 'Autre brin' 
-
-    Error: expect(locator).toHaveCount(expected) failed
-
-    Locator:  locator('#pane-1').contentFrame().locator('.brin-row')
-    Expected: 2
-    Received: 0
-    Timeout:  5000ms
-
-    Call log:
-      - Expect "toHaveCount" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.brin-row')
-        14 × locator resolved to 0 elements
-           - unexpected value "0"
-
-
-      34 |   await goToListerEvent(page, 'with-brins-and-persos')
-      35 |   await press(page, 'b')
-    > 36 |   await expect(pane1(page).locator('.brin-row')).toHaveCount(2)
-         |                                                  ^
-      37 |   await revealFilter(page, '#brins-panel')
-      38 |   await pane1(page).locator('#brins-panel .panel-search').fill('mon')
-      39 |   await expect(pane1(page).locator('.brin-row:not(.hidden)')).toHaveCount(1)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:36:50
-
-    Error Context: test-results/filter-panel-search-pannea-39e73-taper-mon-cache-Autre-brin-/error-context.md
-
-  104) specs/e2e/filter/panel-search.spec.js:43:1 › panneau brins : vider le champ réaffiche tout 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('#brins-panel .filter-bar')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('#brins-panel .filter-bar')
-
-
-      18 |   await expect(pane1(page).locator(panelSelector)).toBeVisible()
-      19 |   await press(page, ':')
-    > 20 |   await expect(pane1(page).locator(`${panelSelector} .filter-bar`)).toBeVisible()
-         |                                                                     ^
-      21 | }
-      22 |
-      23 | // ─── ListerBrin ───────────────────────────────────────────────────────────────
-        at revealFilter (/Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:20:69)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:46:3
-
-    Error Context: test-results/filter-panel-search-pannea-5e29f-der-le-champ-réaffiche-tout/error-context.md
-
-  105) specs/e2e/filter/panel-search.spec.js:53:1 › panneau brins : filtre remis à zéro à la fermeture/réouverture 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('#brins-panel .filter-bar')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('#brins-panel .filter-bar')
-
-
-      18 |   await expect(pane1(page).locator(panelSelector)).toBeVisible()
-      19 |   await press(page, ':')
-    > 20 |   await expect(pane1(page).locator(`${panelSelector} .filter-bar`)).toBeVisible()
-         |                                                                     ^
-      21 | }
-      22 |
-      23 | // ─── ListerBrin ───────────────────────────────────────────────────────────────
-        at revealFilter (/Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:20:69)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:56:3
-
-    Error Context: test-results/filter-panel-search-pannea-fd700--à-la-fermeture-réouverture/error-context.md
-
-  106) specs/e2e/filter/panel-search.spec.js:68:1 › panneau persos : champ .panel-search visible après ':' 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('#persos-panel .filter-bar')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('#persos-panel .filter-bar')
-
-
-      18 |   await expect(pane1(page).locator(panelSelector)).toBeVisible()
-      19 |   await press(page, ':')
-    > 20 |   await expect(pane1(page).locator(`${panelSelector} .filter-bar`)).toBeVisible()
-         |                                                                     ^
-      21 | }
-      22 |
-      23 | // ─── ListerBrin ───────────────────────────────────────────────────────────────
-        at revealFilter (/Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:20:69)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:72:3
-
-    Error Context: test-results/filter-panel-search-pannea-d5635-panel-search-visible-après-/error-context.md
-
-  107) specs/e2e/filter/panel-search.spec.js:76:1 › panneau persos : taper 'cyr' cache 'Roxane' 
-
-    Error: expect(locator).toHaveCount(expected) failed
-
-    Locator:  locator('#pane-1').contentFrame().locator('.perso-row')
-    Expected: 2
-    Received: 0
-    Timeout:  5000ms
-
-    Call log:
-      - Expect "toHaveCount" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.perso-row')
-        14 × locator resolved to 0 elements
-           - unexpected value "0"
-
-
-      77 |   await goToListerEvent(page, 'with-brins-and-persos')
-      78 |   await press(page, 'p')
-    > 79 |   await expect(pane1(page).locator('.perso-row')).toHaveCount(2)
-         |                                                   ^
-      80 |   await revealFilter(page, '#persos-panel')
-      81 |   await pane1(page).locator('#persos-panel .panel-search').fill('cyr')
-      82 |   await expect(pane1(page).locator('.perso-row:not(.hidden)')).toHaveCount(1)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:79:51
-
-    Error Context: test-results/filter-panel-search-panneau-persos-taper-cyr-cache-Roxane-/error-context.md
-
-  108) specs/e2e/filter/panel-search.spec.js:88:1 › panneau styles : champ .panel-search visible après ':' 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('#style-panel .filter-bar')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('#style-panel .filter-bar')
-
-
-      18 |   await expect(pane1(page).locator(panelSelector)).toBeVisible()
-      19 |   await press(page, ':')
-    > 20 |   await expect(pane1(page).locator(`${panelSelector} .filter-bar`)).toBeVisible()
-         |                                                                     ^
-      21 | }
-      22 |
-      23 | // ─── ListerBrin ───────────────────────────────────────────────────────────────
-        at revealFilter (/Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:20:69)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:92:3
-
-    Error Context: test-results/filter-panel-search-pannea-865cf-panel-search-visible-après-/error-context.md
-
-  109) specs/e2e/filter/panel-search.spec.js:96:1 › panneau styles : taper 'titre' cache 'note-rouge' 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('#style-panel .filter-bar')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('#style-panel .filter-bar')
-
-
-      18 |   await expect(pane1(page).locator(panelSelector)).toBeVisible()
-      19 |   await press(page, ':')
-    > 20 |   await expect(pane1(page).locator(`${panelSelector} .filter-bar`)).toBeVisible()
-         |                                                                     ^
-      21 | }
-      22 |
-      23 | // ─── ListerBrin ───────────────────────────────────────────────────────────────
-        at revealFilter (/Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:20:69)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:100:3
-
-    Error Context: test-results/filter-panel-search-pannea-37262-per-titre-cache-note-rouge-/error-context.md
-
-  110) specs/e2e/filter/panel-search.spec.js:108:1 › liste events : champ .panel-search visible après ':' 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('#events-panel .filter-bar')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('#events-panel .filter-bar')
-
-
-      18 |   await expect(pane1(page).locator(panelSelector)).toBeVisible()
-      19 |   await press(page, ':')
-    > 20 |   await expect(pane1(page).locator(`${panelSelector} .filter-bar`)).toBeVisible()
-         |                                                                     ^
-      21 | }
-      22 |
-      23 | // ─── ListerBrin ───────────────────────────────────────────────────────────────
-        at revealFilter (/Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:20:69)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:110:3
-
-    Error Context: test-results/filter-panel-search-liste--3e282-panel-search-visible-après-/error-context.md
-
-  111) specs/e2e/filter/panel-search.spec.js:114:1 › liste projets : champ .panel-search visible après ':' 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('#events-panel')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('#events-panel')
-
-
-      16 |
-      17 | async function revealFilter(page, panelSelector = '#events-panel') {
-    > 18 |   await expect(pane1(page).locator(panelSelector)).toBeVisible()
-         |                                                    ^
-      19 |   await press(page, ':')
-      20 |   await expect(pane1(page).locator(`${panelSelector} .filter-bar`)).toBeVisible()
-      21 | }
-        at revealFilter (/Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:18:52)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:118:9
-
-    Error Context: test-results/filter-panel-search-liste--42ab6-panel-search-visible-après-/error-context.md
-
-  112) specs/e2e/filter/panel-search.spec.js:122:1 › liste events : taper '1' cache 'Événement 2' 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('#events-panel .filter-bar')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('#events-panel .filter-bar')
-
-
-      18 |   await expect(pane1(page).locator(panelSelector)).toBeVisible()
-      19 |   await press(page, ':')
-    > 20 |   await expect(pane1(page).locator(`${panelSelector} .filter-bar`)).toBeVisible()
-         |                                                                     ^
-      21 | }
-      22 |
-      23 | // ─── ListerBrin ───────────────────────────────────────────────────────────────
-        at revealFilter (/Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:20:69)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:124:3
-
-    Error Context: test-results/filter-panel-search-liste-events-taper-1-cache-Événement-2-/error-context.md
-
-  113) specs/e2e/filter/panel-search.spec.js:131:1 › liste events : vider le champ réaffiche tout 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('#events-panel .filter-bar')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('#events-panel .filter-bar')
-
-
-      18 |   await expect(pane1(page).locator(panelSelector)).toBeVisible()
-      19 |   await press(page, ':')
-    > 20 |   await expect(pane1(page).locator(`${panelSelector} .filter-bar`)).toBeVisible()
-         |                                                                     ^
-      21 | }
-      22 |
-      23 | // ─── ListerBrin ───────────────────────────────────────────────────────────────
-        at revealFilter (/Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:20:69)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:133:3
-
-    Error Context: test-results/filter-panel-search-liste--fd354-der-le-champ-réaffiche-tout/error-context.md
-
-  114) specs/e2e/filter/panel-search.spec.js:140:1 › liste events : filtre remis à zéro quand on revient à la liste 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('#events-panel .filter-bar')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('#events-panel .filter-bar')
-
-
-      18 |   await expect(pane1(page).locator(panelSelector)).toBeVisible()
-      19 |   await press(page, ':')
-    > 20 |   await expect(pane1(page).locator(`${panelSelector} .filter-bar`)).toBeVisible()
-         |                                                                     ^
-      21 | }
-      22 |
-      23 | // ─── ListerBrin ───────────────────────────────────────────────────────────────
-        at revealFilter (/Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:20:69)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/filter/panel-search.spec.js:142:3
-
-    Error Context: test-results/filter-panel-search-liste--339d1-quand-on-revient-à-la-liste/error-context.md
-
-  116) specs/e2e/item/new-item-deselects-current.spec.js:7:1 › la touche n désélectionne l'item courant 
+  82) specs/e2e/item/new-item-deselects-current.spec.js:7:1 › la touche n désélectionne l'item courant 
 
     Error: expect(locator).not.toHaveClass(expected) failed
 
@@ -2697,7 +2249,7 @@
 
     Error Context: test-results/item-new-item-deselects-cu-67f74-ésélectionne-l-item-courant/error-context.md
 
-  131) specs/e2e/links/broken-links.spec.js:31:1 › TargetsPanel : cibles inexistantes filtrées à l'ouverture 
+  83) specs/e2e/links/broken-links.spec.js:31:1 › TargetsPanel : cibles inexistantes filtrées à l'ouverture 
 
     Error: expect(locator).toBeFocused() failed
 
@@ -2722,7 +2274,7 @@
 
     Error Context: test-results/links-broken-links-Targets-bebb0-ntes-filtrées-à-l-ouverture/error-context.md
 
-  132) specs/e2e/links/broken-links.spec.js:49:1 › lien cassé : 'o' → notification, pas de popup 
+  84) specs/e2e/links/broken-links.spec.js:49:1 › lien cassé : 'o' → notification, pas de popup 
 
     Error: expect(locator).toHaveClass(expected) failed
 
@@ -2748,7 +2300,7 @@
 
     Error Context: test-results/links-broken-links-lien-cassé-o-→-notification-pas-de-popup/error-context.md
 
-  133) specs/e2e/links/broken-links.spec.js:59:1 › lien cassé : 'g' → notification sans naviguer 
+  85) specs/e2e/links/broken-links.spec.js:59:1 › lien cassé : 'g' → notification sans naviguer 
 
     Error: expect(locator).toHaveClass(expected) failed
 
@@ -2774,7 +2326,7 @@
 
     Error Context: test-results/links-broken-links-lien-cassé-g-→-notification-sans-naviguer/error-context.md
 
-  134) specs/e2e/links/broken-links.spec.js:68:1 › lien cassé : 'a' → notification sans ouvrir split 
+  86) specs/e2e/links/broken-links.spec.js:68:1 › lien cassé : 'a' → notification sans ouvrir split 
 
     Error: expect(locator).toHaveClass(expected) failed
 
@@ -2800,7 +2352,7 @@
 
     Error Context: test-results/links-broken-links-lien-ca-e9b8e-ification-sans-ouvrir-split/error-context.md
 
-  138) specs/e2e/lister/enter-lister.spec.js:8:3 › → entre dans le Lister › la touche → entre dans le Lister de l'item sélectionné 
+  87) specs/e2e/lister/enter-lister.spec.js:8:3 › → entre dans le Lister › la touche → entre dans le Lister de l'item sélectionné 
 
     Error: expect(locator).not.toHaveClass(expected) failed
 
@@ -2825,654 +2377,7 @@
 
     Error Context: test-results/lister-enter-lister-→-entr-3a0f0-ister-de-l-item-sélectionné/error-context.md
 
-  139) specs/e2e/lister/lister-nature.spec.js:51:1 › 't' dans project list → popup projet nature (pas nature-panel) 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.popup-select')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.popup-select')
-
-
-      52 |   await goToProjectList(page)
-      53 |   await press(page, 't')
-    > 54 |   await expect(pane1(page).locator('.popup-select')).toBeVisible()
-         |                                                      ^
-      55 |   await expect(pane1(page).locator('.nature-panel')).not.toBeVisible()
-      56 | })
-      57 |
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:54:54
-
-    Error Context: test-results/lister-lister-nature--t-da-230af-et-nature-pas-nature-panel-/error-context.md
-
-  140) specs/e2e/lister/lister-nature.spec.js:58:1 › 't' dans event lister → panneau .nature-panel s'ouvre 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.nature-panel')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.nature-panel')
-
-
-      59 |   await goToListerEvent(page)
-      60 |   await press(page, 't')
-    > 61 |   await expect(pane1(page).locator('.nature-panel')).toBeVisible()
-         |                                                      ^
-      62 |   await expect(pane1(page).locator('.popup-select')).not.toBeVisible()
-      63 | })
-      64 |
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:61:54
-
-    Error Context: test-results/lister-lister-nature--t-da-18bc5-anneau-nature-panel-s-ouvre/error-context.md
-
-  141) specs/e2e/lister/lister-nature.spec.js:65:1 › panneau nature → titre mentionne le niveau courant 
-
-    Error: expect(locator).toContainText(expected) failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.nature-panel .floating-panel__title')
-    Expected substring: "niv. 1"
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toContainText" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.nature-panel .floating-panel__title')
-
-
-      66 |   await goToListerEvent(page)
-      67 |   await press(page, 't')
-    > 68 |   await expect(pane1(page).locator('.nature-panel .floating-panel__title')).toContainText('niv. 1')
-         |                                                                             ^
-      69 | })
-      70 |
-      71 | test("panneau nature → contient 'Nature projet' et 'Nature évènemencier'", async ({ page }) => {
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:68:77
-
-    Error Context: test-results/lister-lister-nature-panne-66cf5-mentionne-le-niveau-courant/error-context.md
-
-  142) specs/e2e/lister/lister-nature.spec.js:71:1 › panneau nature → contient 'Nature projet' et 'Nature évènemencier' 
-
-    Error: expect(locator).toContainText(expected) failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.nature-panel')
-    Expected substring: "Nature projet"
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toContainText" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.nature-panel')
-
-
-      73 |   await press(page, 't')
-      74 |   const panel = pane1(page).locator('.nature-panel')
-    > 75 |   await expect(panel).toContainText('Nature projet')
-         |                       ^
-      76 |   await expect(panel).toContainText('Nature évènemencier')
-      77 | })
-      78 |
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:75:23
-
-    Error Context: test-results/lister-lister-nature-panne-6109a-jet-et-Nature-évènemencier-/error-context.md
-
-  143) specs/e2e/lister/lister-nature.spec.js:79:1 › panneau nature → footer a boutons 'Annuler' et 'Appliquer' alternables par Tab 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.nature-panel .floating-panel__footer')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.nature-panel .floating-panel__footer')
-
-
-      81 |   await press(page, 't')
-      82 |   const footer = pane1(page).locator('.nature-panel .floating-panel__footer')
-    > 83 |   await expect(footer).toBeVisible()
-         |                        ^
-      84 |   const btns = footer.locator('.panel-btn')
-      85 |   await expect(btns).toHaveCount(2)
-      86 |   await expect(btns.first()).toContainText('Annuler')
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:83:24
-
-    Error Context: test-results/lister-lister-nature-panne-a628c-pliquer-alternables-par-Tab/error-context.md
-
-  144) specs/e2e/lister/lister-nature.spec.js:92:1 › Enter sur champ projet → popup avec 'roman' et 'film' 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.popup-select')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.popup-select')
-
-
-       95 |   await press(page, 'Enter')
-       96 |   const popup = pane1(page).locator('.popup-select')
-    >  97 |   await expect(popup).toBeVisible()
-          |                       ^
-       98 |   await expect(popup).toContainText('roman')
-       99 |   await expect(popup).toContainText('film')
-      100 | })
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:97:23
-
-    Error Context: test-results/lister-lister-nature-Enter-3f289-→-popup-avec-roman-et-film-/error-context.md
-
-  145) specs/e2e/lister/lister-nature.spec.js:102:1 › choix 'roman' → champ évènemencier activé par ArrowDown, Enter ouvre popup 'manuscrit' 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.popup-select')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.popup-select')
-
-
-      110 |   await press(page, 'Enter')
-      111 |   const popup = pane1(page).locator('.popup-select')
-    > 112 |   await expect(popup).toBeVisible()
-          |                       ^
-      113 |   await expect(popup).toContainText('manuscrit')
-      114 |   await expect(popup).toContainText('défaut')
-      115 | })
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:112:23
-
-    Error Context: test-results/lister-lister-nature-choix-66aaf-nter-ouvre-popup-manuscrit-/error-context.md
-
-  146) specs/e2e/lister/lister-nature.spec.js:117:1 › projet 'film' → popup évènemencier propose 'scénario' 
-
-    Error: expect(locator).toContainText(expected) failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.popup-select')
-    Expected substring: "scénario"
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toContainText" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.popup-select')
-
-
-      123 |   await press(page, 'ArrowDown')  // champ évènemencier
-      124 |   await press(page, 'Enter')
-    > 125 |   await expect(pane1(page).locator('.popup-select')).toContainText('scénario')
-          |                                                      ^
-      126 | })
-      127 |
-      128 | // ─── Escape / Annuler ─────────────────────────────────────────────────────────
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:125:54
-
-    Error Context: test-results/lister-lister-nature-proje-fcc15-nemencier-propose-scénario-/error-context.md
-
-  147) specs/e2e/lister/lister-nature.spec.js:130:1 › Escape ferme le panneau sans appliquer 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.nature-panel')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.nature-panel')
-
-
-      131 |   await goToListerEvent(page)
-      132 |   await press(page, 't')
-    > 133 |   await expect(pane1(page).locator('.nature-panel')).toBeVisible()
-          |                                                      ^
-      134 |   await press(page, 'Escape')
-      135 |   await expect(pane1(page).locator('.nature-panel')).not.toBeVisible()
-      136 |   await expect(pane1(page).locator('#events-panel')).not.toHaveClass(/roman/)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:133:54
-
-    Error Context: test-results/lister-lister-nature-Escape-ferme-le-panneau-sans-appliquer/error-context.md
-
-  148) specs/e2e/lister/lister-nature.spec.js:141:1 › roman+manuscrit → #main-panel a la classe 'roman-man' 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.nature-panel')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.nature-panel')
-
-
-      30 | async function setRomanMan(page) {
-      31 |   await press(page, 't')
-    > 32 |   await expect(pane1(page).locator('.nature-panel')).toBeVisible()
-         |                                                      ^
-      33 |   await press(page, 'Enter')                          // ouvre popup projet
-      34 |   await expect(pane1(page).locator('.popup-select')).toBeVisible()
-      35 |   await press(page, 'ArrowUp')                        // film/BD
-        at setRomanMan (/Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:32:54)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:143:3
-
-    Error Context: test-results/lister-lister-nature-roman-5257d-anel-a-la-classe-roman-man-/error-context.md
-
-  149) specs/e2e/lister/lister-nature.spec.js:147:1 › film+scénario → #main-panel a la classe 'film-man' 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.confirm-dialog')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.confirm-dialog')
-
-
-      156 |   await press(page, 'Enter')
-      157 |   await applyNaturePanel(page)
-    > 158 |   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
-          |                                                        ^
-      159 |   await press(page, 'Escape')    // refuser man_depth
-      160 |   await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
-      161 |   await expect(pane1(page).locator('#events-panel')).toHaveClass(/film-man/)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:158:56
-
-    Error Context: test-results/lister-lister-nature-film--7c7de-panel-a-la-classe-film-man-/error-context.md
-
-  150) specs/e2e/lister/lister-nature.spec.js:166:1 › nature man et depth ≠ man_depth → ConfirmDialog s'ouvre avec 'niveau par défaut' 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.confirm-dialog')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.confirm-dialog')
-
-
-      178 |   // nature-panel fermé, confirm-dialog ouvert
-      179 |   await expect(pane1(page).locator('.nature-panel')).not.toBeVisible()
-    > 180 |   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
-          |                                                        ^
-      181 |   await expect(pane1(page).locator('.confirm-dialog')).toContainText('niveau par défaut')
-      182 | })
-      183 |
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:180:56
-
-    Error Context: test-results/lister-lister-nature-natur-f4dc3-vre-avec-niveau-par-défaut-/error-context.md
-
-  151) specs/e2e/lister/lister-nature.spec.js:184:1 › confirmer 'n' → man_depth non sauvegardé, panneau ferme 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.confirm-dialog')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.confirm-dialog')
-
-
-      199 |   await press(page, 'Enter')
-      200 |   await applyNaturePanel(page)
-    > 201 |   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
-          |                                                        ^
-      202 |   await press(page, 'Escape') // refuser man_depth
-      203 |   await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
-      204 |   // sibling lister à même depth NE doit PAS être roman-man automatiquement
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:201:56
-
-    Error Context: test-results/lister-lister-nature-confi-cabd0-on-sauvegardé-panneau-ferme/error-context.md
-
-  152) specs/e2e/lister/lister-nature.spec.js:211:1 › confirmer 'o' → man_depth sauvegardé, sibling lister devient roman-man 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.confirm-dialog')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.confirm-dialog')
-
-
-      226 |   await press(page, 'Enter')
-      227 |   await applyNaturePanel(page)
-    > 228 |   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
-          |                                                        ^
-      229 |   await press(page, 'Enter') // confirmer man_depth (oui)
-      230 |   await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
-      231 |   await press(page, 'ArrowLeft')
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:228:56
-
-    Error Context: test-results/lister-lister-nature-confi-cc8ed-ng-lister-devient-roman-man/error-context.md
-
-  153) specs/e2e/lister/lister-nature.spec.js:237:1 › depth = man_depth → appliquer ferme sans confirmation 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.confirm-dialog')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.confirm-dialog')
-
-
-      253 |   await press(page, 'Enter')
-      254 |   await applyNaturePanel(page)
-    > 255 |   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
-          |                                                        ^
-      256 |   await press(page, 'Enter') // man_depth = 2 (oui)
-      257 |   await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
-      258 |   // rouvrir 't' : depth 2 = man_depth → pas de confirmation
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:255:56
-
-    Error Context: test-results/lister-lister-nature-depth-5e428-uer-ferme-sans-confirmation/error-context.md
-
-  154) specs/e2e/lister/lister-nature.spec.js:266:1 › nature null à man_depth → panneau affiche 'manuscrit', popup focused sur 'défaut' 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.confirm-dialog')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.confirm-dialog')
-
-
-      282 |   await press(page, 'Enter')
-      283 |   await applyNaturePanel(page)
-    > 284 |   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
-          |                                                        ^
-      285 |   await press(page, 'Enter')     // oui → man_depth=2
-      286 |   await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
-      287 |   // Naviguer vers un sibling (nature=null, depth=2=man_depth)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:284:56
-
-    Error Context: test-results/lister-lister-nature-natur-e5e08-t-popup-focused-sur-défaut-/error-context.md
-
-  155) specs/e2e/lister/lister-nature.spec.js:306:1 › roman-man → event-text sans white-space nowrap 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.nature-panel')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.nature-panel')
-
-
-      30 | async function setRomanMan(page) {
-      31 |   await press(page, 't')
-    > 32 |   await expect(pane1(page).locator('.nature-panel')).toBeVisible()
-         |                                                      ^
-      33 |   await press(page, 'Enter')                          // ouvre popup projet
-      34 |   await expect(pane1(page).locator('.popup-select')).toBeVisible()
-      35 |   await press(page, 'ArrowUp')                        // film/BD
-        at setRomanMan (/Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:32:54)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:308:3
-
-    Error Context: test-results/lister-lister-nature-roman-68fc4-ext-sans-white-space-nowrap/error-context.md
-
-  156) specs/e2e/lister/lister-nature.spec.js:315:1 › roman-man → event-text max-width = MANUSCRIT_WIDTH 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.nature-panel')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.nature-panel')
-
-
-      30 | async function setRomanMan(page) {
-      31 |   await press(page, 't')
-    > 32 |   await expect(pane1(page).locator('.nature-panel')).toBeVisible()
-         |                                                      ^
-      33 |   await press(page, 'Enter')                          // ouvre popup projet
-      34 |   await expect(pane1(page).locator('.popup-select')).toBeVisible()
-      35 |   await press(page, 'ArrowUp')                        // film/BD
-        at setRomanMan (/Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:32:54)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:317:3
-
-    Error Context: test-results/lister-lister-nature-roman-a843f-t-max-width-MANUSCRIT-WIDTH/error-context.md
-
-  157) specs/e2e/lister/lister-nature.spec.js:326:1 › roman-man persiste → page.goto('/') puis ArrowRight → #main-panel roman-man 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.nature-panel')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.nature-panel')
-
-
-      30 | async function setRomanMan(page) {
-      31 |   await press(page, 't')
-    > 32 |   await expect(pane1(page).locator('.nature-panel')).toBeVisible()
-         |                                                      ^
-      33 |   await press(page, 'Enter')                          // ouvre popup projet
-      34 |   await expect(pane1(page).locator('.popup-select')).toBeVisible()
-      35 |   await press(page, 'ArrowUp')                        // film/BD
-        at setRomanMan (/Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:32:54)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:328:3
-
-    Error Context: test-results/lister-lister-nature-roman-60f09-ight-→-main-panel-roman-man/error-context.md
-
-  158) specs/e2e/lister/lister-nature.spec.js:336:1 › Tab×3 ramène à aucun footer sélectionné → Enter ouvre le popup 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.nature-panel')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.nature-panel')
-
-
-      337 |   await goToListerEvent(page)
-      338 |   await press(page, 't')
-    > 339 |   await expect(pane1(page).locator('.nature-panel')).toBeVisible()
-          |                                                      ^
-      340 |   // Cycler à travers tous les boutons footer
-      341 |   await press(page, 'Tab')   // → Annuler
-      342 |   await press(page, 'Tab')   // → Appliquer
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/lister/lister-nature.spec.js:339:54
-
-    Error Context: test-results/lister-lister-nature-Tab×3-93cdb-onné-→-Enter-ouvre-le-popup/error-context.md
-
-  159) specs/e2e/panels/panel-move.spec.js:24:1 › Ctrl+Shift+↓ déplace le style panel de 50px vers le bas 
-
-    Test timeout of 15000ms exceeded.
-
-    Error: locator.boundingBox: Test timeout of 15000ms exceeded.
-    Call log:
-      - waiting for locator('#pane-1').contentFrame().locator('.style-panel__inner')
-
-
-      24 | test("Ctrl+Shift+↓ déplace le style panel de 50px vers le bas", async ({ page }) => {
-      25 |   await openStylePanel(page)
-    > 26 |   const before = await pane1(page).locator('.style-panel__inner').boundingBox()
-         |                                                                   ^
-      27 |   await press(page, 'Control+Shift+ArrowDown')
-      28 |   const after = await pane1(page).locator('.style-panel__inner').boundingBox()
-      29 |   expect(Math.round(after.y - before.y)).toBe(50)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/panels/panel-move.spec.js:26:67
-
-    Error Context: test-results/panels-panel-move-Ctrl-Shi-fab18-e-panel-de-50px-vers-le-bas/error-context.md
-
-  160) specs/e2e/panels/panel-move.spec.js:32:1 › Ctrl+Shift+↑ déplace le style panel de 50px vers le haut 
-
-    Test timeout of 15000ms exceeded.
-
-    Error: locator.boundingBox: Test timeout of 15000ms exceeded.
-    Call log:
-      - waiting for locator('#pane-1').contentFrame().locator('.style-panel__inner')
-
-
-      32 | test("Ctrl+Shift+↑ déplace le style panel de 50px vers le haut", async ({ page }) => {
-      33 |   await openStylePanel(page)
-    > 34 |   const before = await pane1(page).locator('.style-panel__inner').boundingBox()
-         |                                                                   ^
-      35 |   await press(page, 'Control+Shift+ArrowUp')
-      36 |   const after = await pane1(page).locator('.style-panel__inner').boundingBox()
-      37 |   expect(Math.round(before.y - after.y)).toBe(50)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/panels/panel-move.spec.js:34:67
-
-    Error Context: test-results/panels-panel-move-Ctrl-Shi-f3020--panel-de-50px-vers-le-haut/error-context.md
-
-  161) specs/e2e/panels/panel-move.spec.js:40:1 › Ctrl+Shift+→ déplace le style panel de 50px vers la droite 
-
-    Test timeout of 15000ms exceeded.
-
-    Error: locator.boundingBox: Test timeout of 15000ms exceeded.
-    Call log:
-      - waiting for locator('#pane-1').contentFrame().locator('.style-panel__inner')
-
-
-      40 | test("Ctrl+Shift+→ déplace le style panel de 50px vers la droite", async ({ page }) => {
-      41 |   await openStylePanel(page)
-    > 42 |   const before = await pane1(page).locator('.style-panel__inner').boundingBox()
-         |                                                                   ^
-      43 |   await press(page, 'Control+Shift+ArrowRight')
-      44 |   const after = await pane1(page).locator('.style-panel__inner').boundingBox()
-      45 |   expect(Math.round(after.x - before.x)).toBe(50)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/panels/panel-move.spec.js:42:67
-
-    Error Context: test-results/panels-panel-move-Ctrl-Shi-77726-anel-de-50px-vers-la-droite/error-context.md
-
-  162) specs/e2e/panels/panel-move.spec.js:48:1 › Ctrl+Shift+← déplace le style panel de 50px vers la gauche 
-
-    Test timeout of 15000ms exceeded.
-
-    Error: locator.boundingBox: Test timeout of 15000ms exceeded.
-    Call log:
-      - waiting for locator('#pane-1').contentFrame().locator('.style-panel__inner')
-
-
-      48 | test("Ctrl+Shift+← déplace le style panel de 50px vers la gauche", async ({ page }) => {
-      49 |   await openStylePanel(page)
-    > 50 |   const before = await pane1(page).locator('.style-panel__inner').boundingBox()
-         |                                                                   ^
-      51 |   await press(page, 'Control+Shift+ArrowLeft')
-      52 |   const after = await pane1(page).locator('.style-panel__inner').boundingBox()
-      53 |   expect(Math.round(before.x - after.x)).toBe(50)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/panels/panel-move.spec.js:50:67
-
-    Error Context: test-results/panels-panel-move-Ctrl-Shi-61538-anel-de-50px-vers-la-gauche/error-context.md
-
-  163) specs/e2e/panels/panel-move.spec.js:56:1 › deux Ctrl+Shift+↓ accumulent : 100px total 
-
-    Test timeout of 15000ms exceeded.
-
-    Error: locator.boundingBox: Test timeout of 15000ms exceeded.
-    Call log:
-      - waiting for locator('#pane-1').contentFrame().locator('.style-panel__inner')
-
-
-      56 | test("deux Ctrl+Shift+↓ accumulent : 100px total", async ({ page }) => {
-      57 |   await openStylePanel(page)
-    > 58 |   const before = await pane1(page).locator('.style-panel__inner').boundingBox()
-         |                                                                   ^
-      59 |   await press(page, 'Control+Shift+ArrowDown')
-      60 |   await press(page, 'Control+Shift+ArrowDown')
-      61 |   const after = await pane1(page).locator('.style-panel__inner').boundingBox()
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/panels/panel-move.spec.js:58:67
-
-    Error Context: test-results/panels-panel-move-deux-Ctrl-Shift-↓-accumulent-100px-total/error-context.md
-
-  164) specs/e2e/panels/panel-move.spec.js:67:1 › Ctrl+Shift+↓ déplace le panneau raccourcis de 50px 
-
-    Error: expect(received).toBe(expected) // Object.is equality
-
-    Expected: 50
-    Received: 0
-
-      77 |   await press(page, 'Control+Shift+ArrowDown')
-      78 |   const after = await pane1(page).locator('.shortcuts-panel__inner').boundingBox()
-    > 79 |   expect(Math.round(after.y - before.y)).toBe(50)
-         |                                          ^
-      80 | })
-      81 |
-      82 | // ─── Tools panel ─────────────────────────────────────────────────────────────
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/panels/panel-move.spec.js:79:42
-
-    Error Context: test-results/panels-panel-move-Ctrl-Shi-42e00--panneau-raccourcis-de-50px/error-context.md
-
-  165) specs/e2e/panels/panel-move.spec.js:84:1 › Ctrl+Shift+↓ déplace le panneau outils de 50px 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.tools-panel')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.tools-panel')
-
-
-      85 |   await goToListerEvent(page)
-      86 |   await press(page, 'Meta+t')
-    > 87 |   await expect(pane1(page).locator('.tools-panel')).toBeVisible()
-         |                                                     ^
-      88 |   const before = await pane1(page).locator('.tools-panel').boundingBox()
-      89 |   await press(page, 'Control+Shift+ArrowDown')
-      90 |   const after = await pane1(page).locator('.tools-panel').boundingBox()
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/panels/panel-move.spec.js:87:53
-
-    Error Context: test-results/panels-panel-move-Ctrl-Shi-dd65d-e-le-panneau-outils-de-50px/error-context.md
-
-  166) specs/e2e/panels/tools-panel.spec.js:29:1 › ⌘+t ouvre le panneau outils en mode LEVEL 
+  88) specs/e2e/panels/tools-panel.spec.js:29:1 › ⌘+t ouvre le panneau outils en mode LEVEL 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -3497,7 +2402,7 @@
 
     Error Context: test-results/panels-tools-panel-⌘-t-ouvre-le-panneau-outils-en-mode-LEVEL/error-context.md
 
-  167) specs/e2e/panels/tools-panel.spec.js:37:1 › ⌘+t hors mode LEVEL : ouvre le panneau sans l'outil Consolider 
+  89) specs/e2e/panels/tools-panel.spec.js:37:1 › ⌘+t hors mode LEVEL : ouvre le panneau sans l'outil Consolider 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -3522,7 +2427,7 @@
 
     Error Context: test-results/panels-tools-panel-⌘-t-hor-b1d02-eau-sans-l-outil-Consolider/error-context.md
 
-  168) specs/e2e/panels/tools-panel.spec.js:50:1 › panneau outils : titre visible ───────
+  90) specs/e2e/panels/tools-panel.spec.js:50:1 › panneau outils : titre visible ───────
 
     Error: expect(locator).toBeVisible() failed
 
@@ -3547,7 +2452,7 @@
 
     Error Context: test-results/panels-tools-panel-panneau-outils-titre-visible/error-context.md
 
-  169) specs/e2e/panels/tools-panel.spec.js:58:1 › panneau outils : footer avec faux-boutons Fermer et Exécuter 
+  91) specs/e2e/panels/tools-panel.spec.js:58:1 › panneau outils : footer avec faux-boutons Fermer et Exécuter 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -3572,7 +2477,7 @@
 
     Error Context: test-results/panels-tools-panel-panneau-5c013--boutons-Fermer-et-Exécuter/error-context.md
 
-  170) specs/e2e/panels/tools-panel.spec.js:69:1 › panneau outils : item Consolider listé avec son raccourci ⌘⇧C 
+  92) specs/e2e/panels/tools-panel.spec.js:69:1 › panneau outils : item Consolider listé avec son raccourci ⌘⇧C 
 
     Error: expect(locator).toContainText(expected) failed
 
@@ -3597,7 +2502,7 @@
 
     Error Context: test-results/panels-tools-panel-panneau-48020-isté-avec-son-raccourci-⌘⇧C/error-context.md
 
-  171) specs/e2e/panels/tools-panel.spec.js:80:1 › TAB : items → Exécuter → Fermer → items 
+  93) specs/e2e/panels/tools-panel.spec.js:80:1 › TAB : items → Exécuter → Fermer → items 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -3622,7 +2527,7 @@
 
     Error Context: test-results/panels-tools-panel-TAB-items-→-Exécuter-→-Fermer-→-items/error-context.md
 
-  172) specs/e2e/panels/tools-panel.spec.js:102:1 › TAB + Enter sur Exécuter : consolide et ferme le panneau 
+  94) specs/e2e/panels/tools-panel.spec.js:102:1 › TAB + Enter sur Exécuter : consolide et ferme le panneau 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -3647,7 +2552,7 @@
 
     Error Context: test-results/panels-tools-panel-TAB-Ent-68339-nsolide-et-ferme-le-panneau/error-context.md
 
-  173) specs/e2e/panels/tools-panel.spec.js:116:1 › TAB + TAB + Enter sur Fermer : ferme sans consolider 
+  95) specs/e2e/panels/tools-panel.spec.js:116:1 › TAB + TAB + Enter sur Fermer : ferme sans consolider 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -3672,7 +2577,7 @@
 
     Error Context: test-results/panels-tools-panel-TAB-TAB-368c6-ermer-ferme-sans-consolider/error-context.md
 
-  174) specs/e2e/panels/tools-panel.spec.js:133:1 › lettre C dans le panneau : consolide et ferme 
+  96) specs/e2e/panels/tools-panel.spec.js:133:1 › lettre C dans le panneau : consolide et ferme 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -3697,7 +2602,7 @@
 
     Error Context: test-results/panels-tools-panel-lettre--7e3bd--panneau-consolide-et-ferme/error-context.md
 
-  175) specs/e2e/panels/tools-panel.spec.js:147:1 › Enter sur item sélectionné : consolide et ferme 
+  97) specs/e2e/panels/tools-panel.spec.js:147:1 › Enter sur item sélectionné : consolide et ferme 
 
     Error: expect(locator).toHaveClass(expected) failed
 
@@ -3722,7 +2627,7 @@
 
     Error Context: test-results/panels-tools-panel-Enter-s-f98de-ectionné-consolide-et-ferme/error-context.md
 
-  176) specs/e2e/panels/tools-panel.spec.js:162:1 › ⌘+⇧+C direct : consolide sans ouvrir le panneau 
+  98) specs/e2e/panels/tools-panel.spec.js:162:1 › ⌘+⇧+C direct : consolide sans ouvrir le panneau 
 
     Error: expect(locator).toHaveCount(expected) failed
 
@@ -3749,59 +2654,7 @@
 
     Error Context: test-results/panels-tools-panel-⌘-⇧-C-d-1cc5f-lide-sans-ouvrir-le-panneau/error-context.md
 
-  177) specs/e2e/perso/perso-from-brin.spec.js:48:1 › Escape ferme le panneau perso et remet le focus sur ListerBrin 
-
-    Error: expect(locator).not.toBeVisible() failed
-
-    Locator:  locator('#pane-1').contentFrame().locator('#persos-panel')
-    Expected: not visible
-    Received: visible
-    Timeout:  5000ms
-
-    Call log:
-      - Expect "not toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('#persos-panel')
-        14 × locator resolved to <div id="persos-panel" class="perso-list">…</div>
-           - unexpected value "visible"
-
-
-      49 |   await openPersoPanelFromBrin(page)
-      50 |   await press(page, 'Escape')
-    > 51 |   await expect(pane1(page).locator('#persos-panel')).not.toBeVisible()
-         |                                                          ^
-      52 |   // ListerBrin reprend la main : ↓ change la sélection du brin
-      53 |   await press(page, 'ArrowDown')
-      54 |   // pas d'erreur = ListerBrin actif
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/perso/perso-from-brin.spec.js:51:58
-
-    Error Context: test-results/perso-perso-from-brin-Esca-677d6-met-le-focus-sur-ListerBrin/error-context.md
-
-  178) specs/e2e/perso/perso-from-brin.spec.js:96:1 › la ligne de b1 affiche le badge de c2 (son perso) 
-
-    Error: expect(locator).toContainText(expected) failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.brin-item').first().locator('.brin-persos-marks .perso-mark')
-    Expected substring: "RO"
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toContainText" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.brin-item').first().locator('.brin-persos-marks .perso-mark')
-
-
-       97 |   await openBrinPanel(page)
-       98 |   const brinEl = pane1(page).locator('.brin-item').nth(0)
-    >  99 |   await expect(brinEl.locator('.brin-persos-marks .perso-mark')).toContainText('RO')
-          |                                                                  ^
-      100 | })
-      101 |
-      102 | test("cocher c3 depuis le panneau perso de b1 ajoute son avatar sur la ligne du brin", async ({ page }) => {
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/perso/perso-from-brin.spec.js:99:66
-
-    Error Context: test-results/perso-perso-from-brin-la-l-907d2-e-le-badge-de-c2-son-perso-/error-context.md
-
-  179) specs/e2e/perso/perso-no-perso.spec.js:23:1 › ouvrir le panneau sans perso existant → 'Votre protagoniste' créé automatiquement 
+  99) specs/e2e/perso/perso-no-perso.spec.js:23:1 › ouvrir le panneau sans perso existant → 'Votre protagoniste' créé automatiquement 
 
     Error: expect(locator).toHaveCount(expected) failed
 
@@ -3828,7 +2681,7 @@
 
     Error Context: test-results/perso-perso-no-perso-ouvri-a4193-oniste-créé-automatiquement/error-context.md
 
-  180) specs/e2e/perso/perso-no-perso.spec.js:29:1 › le perso auto-créé est sélectionné ─
+  100) specs/e2e/perso/perso-no-perso.spec.js:29:1 › le perso auto-créé est sélectionné ─
 
     Error: expect(locator).toHaveClass(expected) failed
 
@@ -3853,7 +2706,7 @@
 
     Error Context: test-results/perso-perso-no-perso-le-perso-auto-créé-est-sélectionné/error-context.md
 
-  181) specs/e2e/perso/perso-no-perso.spec.js:34:1 › 'Votre protagoniste' survit au rechargement 
+  101) specs/e2e/perso/perso-no-perso.spec.js:34:1 › 'Votre protagoniste' survit au rechargement 
 
     Error: expect(locator).toHaveCount(expected) failed
 
@@ -3880,315 +2733,7 @@
 
     Error Context: test-results/perso-perso-no-perso--Votr-6e250-iste-survit-au-rechargement/error-context.md
 
-  182) specs/e2e/project/edit-project.spec.js:32:1 › un projet créé via FilePicker apparaît sélectionné dans la liste 
-
-    Error: expect(locator).toHaveClass(expected) failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.project-item').nth(1)
-    Expected pattern: /selected/
-    Received string:  "project-item"
-    Timeout: 5000ms
-
-    Call log:
-      - Expect "toHaveClass" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.project-item').nth(1)
-        14 × locator resolved to <div tabindex="-1" class="project-item" data-id="00000000-0000-0000-0000-000000000002">…</div>
-           - unexpected value "project-item"
-
-
-      46 |   const countAfter = await items.count()
-      47 |   expect(countAfter).toBeGreaterThan(1)
-    > 48 |   await expect(items.nth(1)).toHaveClass(/selected/)
-         |                              ^
-      49 | })
-      50 |
-      51 | // --- Hauteur visuelle ---
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/edit-project.spec.js:48:30
-
-    Error Context: test-results/project-edit-project-un-pr-50052-t-sélectionné-dans-la-liste/error-context.md
-
-  183) specs/e2e/project/edit-project.spec.js:66:1 › édition : les champs PROPS sont éditables (title, state, type) 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator:  locator('#pane-1').contentFrame().locator('.project-item.selected [data-field="state"]')
-    Expected: visible
-    Received: hidden
-    Timeout:  5000ms
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.project-item.selected [data-field="state"]')
-        14 × locator resolved to <span tabindex="0" data-field="state" class="project-state display-select"></span>
-           - unexpected value "hidden"
-
-
-      67 |   const titleInput = await startEditingFirstProject(page)
-      68 |   await expect(titleInput).toBeVisible()
-    > 69 |   await expect(pane1(page).locator('.project-item.selected [data-field="state"]')).toBeVisible()
-         |                                                                                    ^
-      70 |   await expect(pane1(page).locator('.project-item.selected [data-field="type"]')).toBeVisible()
-      71 |   await expect(pane1(page).locator('.project-item.selected [data-field="id"]')).toHaveCount(0)
-      72 | })
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/edit-project.spec.js:69:84
-
-    Error Context: test-results/project-edit-project-éditi-f591e-éditables-title-state-type-/error-context.md
-
-  184) specs/e2e/project/edit-project.spec.js:84:1 › Enter valide le nouveau titre ──────
-
-    Error: expect(locator).toHaveText(expected) failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.project-item').first().locator('.project-item__title')
-    Expected: "Nouveau titre"
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toHaveText" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.project-item').first().locator('.project-item__title')
-
-
-      88 |
-      89 |   const firstProject = pane1(page).locator('.project-item').nth(0)
-    > 90 |   await expect(firstProject.locator('.project-item__title')).toHaveText('Nouveau titre')
-         |                                                              ^
-      91 | })
-      92 |
-      93 | test("Escape restaure le titre original (premier projet)", async ({ page }) => {
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/edit-project.spec.js:90:62
-
-    Error Context: test-results/project-edit-project-Enter-valide-le-nouveau-titre/error-context.md
-
-  185) specs/e2e/project/edit-project.spec.js:93:1 › Escape restaure le titre original (premier projet) 
-
-    Error: expect(locator).toHaveText(expected) failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.project-item').first().locator('.project-item__title')
-    Expected: "Projet A"
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toHaveText" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.project-item').first().locator('.project-item__title')
-
-
-       97 |
-       98 |   const firstProject = pane1(page).locator('.project-item').nth(0)
-    >  99 |   await expect(firstProject.locator('.project-item__title')).toHaveText('Projet A')
-          |                                                              ^
-      100 | })
-      101 |
-      102 | test("Escape restaure le titre original (second projet)", async ({ page }) => {
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/edit-project.spec.js:99:62
-
-    Error Context: test-results/project-edit-project-Escap-83bd5-re-original-premier-projet-/error-context.md
-
-  186) specs/e2e/project/edit-project.spec.js:102:1 › Escape restaure le titre original (second projet) 
-
-    Error: expect(locator).toHaveText(expected) failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.project-item').nth(1).locator('.project-item__title')
-    Expected: "Projet B"
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toHaveText" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.project-item').nth(1).locator('.project-item__title')
-
-
-      106 |
-      107 |   const secondProject = pane1(page).locator('.project-item').nth(1)
-    > 108 |   await expect(secondProject.locator('.project-item__title')).toHaveText('Projet B')
-          |                                                               ^
-      109 | })
-      110 |
-      111 | // --- Persistance ---
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/edit-project.spec.js:108:63
-
-    Error Context: test-results/project-edit-project-Escap-f423d-tre-original-second-projet-/error-context.md
-
-  187) specs/e2e/project/edit-project.spec.js:113:1 › persistance : le titre modifié survit au rechargement (premier projet) 
-
-    Error: expect(locator).toHaveText(expected) failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.project-item').first().locator('.project-item__title')
-    Expected: "Titre persistant A"
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toHaveText" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.project-item').first().locator('.project-item__title')
-
-
-      118 |
-      119 |   await page.reload()
-    > 120 |   await expect(pane1(page).locator('.project-item').nth(0).locator('.project-item__title')).toHaveText('Titre persistant A')
-          |                                                                                             ^
-      121 | })
-      122 |
-      123 | test("persistance : le titre modifié survit au rechargement (second projet)", async ({ page }) => {
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/edit-project.spec.js:120:93
-
-    Error Context: test-results/project-edit-project-persi-24ece-echargement-premier-projet-/error-context.md
-
-  188) specs/e2e/project/edit-project.spec.js:123:1 › persistance : le titre modifié survit au rechargement (second projet) 
-
-    Error: expect(locator).toHaveText(expected) failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.project-item').nth(1).locator('.project-item__title')
-    Expected: "Titre persistant B"
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toHaveText" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.project-item').nth(1).locator('.project-item__title')
-
-
-      128 |
-      129 |   await page.reload()
-    > 130 |   await expect(pane1(page).locator('.project-item').nth(1).locator('.project-item__title')).toHaveText('Titre persistant B')
-          |                                                                                             ^
-      131 | })
-      132 |
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/edit-project.spec.js:130:93
-
-    Error Context: test-results/project-edit-project-persi-60f24-rechargement-second-projet-/error-context.md
-
-  189) specs/e2e/project/new-project-cancelled.spec.js:8:1 › la touche Escape après n annule complètement la création du projet 
-
-    Error: expect(locator).toHaveCount(expected) failed
-
-    Locator:  locator('#pane-1').contentFrame().locator('.project-item')
-    Expected: 3
-    Received: 4
-    Timeout:  5000ms
-
-    Call log:
-      - Expect "toHaveCount" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.project-item')
-        14 × locator resolved to 4 elements
-           - unexpected value "4"
-
-
-      12 |   const items = pane1(page).locator('.project-item')
-      13 |
-    > 14 |   await expect(items).toHaveCount(3)
-         |                       ^
-      15 |   await expect(items.nth(0)).toHaveClass(/selected/)
-      16 |   await expect(items.nth(1)).not.toHaveClass(/selected/)
-      17 |   await expect(items.nth(2)).not.toHaveClass(/selected/)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/new-project-cancelled.spec.js:14:23
-
-    Error Context: test-results/project-new-project-cancel-686f0-ement-la-création-du-projet/error-context.md
-
-  190) specs/e2e/project/new-project-existing-db.spec.js:73:1 › dialog eventer.db → Tab+Enter (Détruire) crée un nouveau projet vide 
-
-    Error: expect(locator).toHaveCount(expected) failed
-
-    Locator:  locator('#pane-1').contentFrame().locator('.project-item')
-    Expected: 5
-    Received: 4
-    Timeout:  5000ms
-
-    Call log:
-      - Expect "toHaveCount" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.project-item')
-        14 × locator resolved to 4 elements
-           - unexpected value "4"
-
-
-      80 |   await press(page, 'Enter')
-      81 |   await page.waitForLoadState('networkidle')
-    > 82 |   await expect(pane1(page).locator('.project-item')).toHaveCount(countBefore + 1)
-         |                                                      ^
-      83 | })
-      84 |
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/new-project-existing-db.spec.js:82:54
-
-    Error Context: test-results/project-new-project-existi-ce6fe-crée-un-nouveau-projet-vide/error-context.md
-
-  191) specs/e2e/project/new-project-initial-data.spec.js:21:1 › un nouveau projet sauvegardé a un évènemencier avec un event "Acte I" 
-
-    TypeError: Cannot read properties of null (reading 'id')
-
-      25 |   expect(listerResp.ok()).toBeTruthy()
-      26 |   const listerData = await listerResp.json()
-    > 27 |   expect(listerData.id).toBeTruthy()
-         |                     ^
-      28 |
-      29 |   const itemsResp = await page.request.get(`/api/listers/${listerData.id}/items?project_id=${projectId}`)
-      30 |   expect(itemsResp.ok()).toBeTruthy()
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/new-project-initial-data.spec.js:27:21
-
-    Error Context: test-results/project-new-project-initia-5831c-ncier-avec-un-event-Acte-I-/error-context.md
-
-  192) specs/e2e/project/new-project-initial-data.spec.js:36:1 › un nouveau projet sauvegardé a un brin "Intrigue principale" 
-
-    Error: expect(received).toContain(expected) // indexOf
-
-    Expected value: "Intrigue principale"
-    Received array: []
-
-      41 |   const items = await itemsResp.json()
-      42 |   const brinTitles = Object.values(items).map(i => i.title)
-    > 43 |   expect(brinTitles).toContain('Intrigue principale')
-         |                      ^
-      44 | })
-      45 |
-      46 | test('un nouveau projet sauvegardé a un personnage "Votre protagoniste"', async ({ page }) => {
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/new-project-initial-data.spec.js:43:22
-
-    Error Context: test-results/project-new-project-initia-a7232-n-brin-Intrigue-principale-/error-context.md
-
-  193) specs/e2e/project/new-project-initial-data.spec.js:46:1 › un nouveau projet sauvegardé a un personnage "Votre protagoniste" 
-
-    Error: expect(received).toContain(expected) // indexOf
-
-    Expected value: "Votre protagoniste"
-    Received array: []
-
-      51 |   const items = await itemsResp.json()
-      52 |   const persoTitles = Object.values(items).map(i => i.title)
-    > 53 |   expect(persoTitles).toContain('Votre protagoniste')
-         |                       ^
-      54 | })
-      55 |
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/new-project-initial-data.spec.js:53:23
-
-    Error Context: test-results/project-new-project-initia-3ade1-sonnage-Votre-protagoniste-/error-context.md
-
-  194) specs/e2e/project/new-project-under-selection.spec.js:10:1 › la touche n crée un nouveau projet vide en dessous de la sélection 
-
-    Error: expect(locator).toHaveCount(expected) failed
-
-    Locator:  locator('#pane-1').contentFrame().locator('.project-item')
-    Expected: 3
-    Received: 4
-    Timeout:  5000ms
-
-    Call log:
-      - Expect "toHaveCount" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.project-item')
-        14 × locator resolved to 4 elements
-           - unexpected value "4"
-
-
-      13 |   const items = pane1(page).locator('.project-item')
-      14 |
-    > 15 |   await expect(items).toHaveCount(3)
-         |                       ^
-      16 |
-      17 |   await press(page, 'ArrowDown')
-      18 |   await expect(items.nth(1)).toHaveClass(/selected/)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/new-project-under-selection.spec.js:15:23
-
-    Error Context: test-results/project-new-project-under--a6f85--en-dessous-de-la-sélection/error-context.md
-
-  195) specs/e2e/project/new-sans-title-cancel-create.spec.js:8:1 › Escape dans le FilePicker ne crée pas de projet 
+  102) specs/e2e/project/new-sans-title-cancel-create.spec.js:8:1 › Escape dans le FilePicker ne crée pas de projet 
 
     Error: expect(locator).not.toBeVisible() failed
 
@@ -4215,7 +2760,7 @@
 
     Error Context: test-results/project-new-sans-title-can-e3220-icker-ne-crée-pas-de-projet/error-context.md
 
-  196) specs/e2e/project/new-sans-title-cancel-create.spec.js:23:1 › la touche Entrée sans titre : l'éditeur reste visible 
+  103) specs/e2e/project/new-sans-title-cancel-create.spec.js:23:1 › la touche Entrée sans titre : l'éditeur reste visible 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -4240,165 +2785,7 @@
 
     Error Context: test-results/project-new-sans-title-can-c109e-tre-l-éditeur-reste-visible/error-context.md
 
-  197) specs/e2e/project/open-existing-project.spec.js:33:1 › choisir un dossier avec eventer.db affiche une boîte de confirmation 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.ftpanel.kpanel')
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.ftpanel.kpanel')
-
-
-      37 |   await tryPickExistingFolder(page, expect, workDir)
-      38 |
-    > 39 |   await expect(pane1(page).locator('.ftpanel.kpanel')).toBeVisible()
-         |                                                        ^
-      40 |   await expect(pane1(page).locator('.ftpanel.kpanel')).toContainText('projet')
-      41 | })
-      42 |
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/open-existing-project.spec.js:39:56
-
-    Error Context: test-results/project-open-existing-proj-0e85a-e-une-boîte-de-confirmation/error-context.md
-
-  198) specs/e2e/project/open-existing-project.spec.js:43:1 › confirmer l'ouverture : le projet apparaît dans la liste 
-
-    Error: expect(locator).toHaveCount(expected) failed
-
-    Locator:  locator('#pane-1').contentFrame().locator('.project-item')
-    Expected: 5
-    Received: 6
-    Timeout:  5000ms
-
-    Call log:
-      - Expect "toHaveCount" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.project-item')
-        14 × locator resolved to 6 elements
-           - unexpected value "6"
-
-
-      53 |   await page.waitForLoadState('networkidle')
-      54 |
-    > 55 |   await expect(pane1(page).locator('.project-item')).toHaveCount(countAfterFirst + 1)
-         |                                                      ^
-      56 | })
-      57 |
-      58 | test('→ sur un projet ouvre la liste de ses events', async ({ page }) => {
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/open-existing-project.spec.js:55:54
-
-    Error Context: test-results/project-open-existing-proj-2eca9-ojet-apparaît-dans-la-liste/error-context.md
-
-  199) specs/e2e/project/open-existing-project.spec.js:58:1 › → sur un projet ouvre la liste de ses events 
-
-    Error: expect(locator).toHaveClass(expected) failed
-
-    Locator: locator('#pane-1').contentFrame().locator('#events-panel')
-    Expected pattern: /event-list/
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toHaveClass" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('#events-panel')
-
-
-      66 |
-      67 |   await press(page, 'ArrowRight')
-    > 68 |   await expect(pane1(page).locator('#events-panel')).toHaveClass(/event-list/)
-         |                                                      ^
-      69 |
-      70 |   await expect(pane1(page).locator('.event-item')).toHaveCount(1)
-      71 |   await expect(pane1(page).locator('.event-item').nth(0)).toContainText('Acte I')
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/open-existing-project.spec.js:68:54
-
-    Error Context: test-results/project-open-existing-proj-87d68-uvre-la-liste-de-ses-events/error-context.md
-
-  200) specs/e2e/project/open-existing-project.spec.js:74:1 › annuler : aucun projet créé 
-
-    Error: expect(locator).toHaveCount(expected) failed
-
-    Locator:  locator('#pane-1').contentFrame().locator('.project-item')
-    Expected: 4
-    Received: 5
-    Timeout:  5000ms
-
-    Call log:
-      - Expect "toHaveCount" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.project-item')
-        14 × locator resolved to 5 elements
-           - unexpected value "5"
-
-
-      85 |   await expect(pane1(page).locator('.ftpanel.kpanel')).not.toBeVisible()
-      86 |
-    > 87 |   await expect(pane1(page).locator('.project-item')).toHaveCount(countAfterFirst)
-         |                                                      ^
-      88 | })
-      89 |
-      90 | // Fixture with-brins-and-persos : Projet A, e1 (brin b1 'MON', perso c1 'CY'), e2 (sans brin/perso)
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/open-existing-project.spec.js:87:54
-
-    Error Context: test-results/project-open-existing-project-annuler-aucun-projet-créé/error-context.md
-
-  201) specs/e2e/project/open-existing-project.spec.js:106:1 › persistance : le projet survit au rechargement 
-
-    Error: expect(locator).toHaveCount(expected) failed
-
-    Locator:  locator('#pane-1').contentFrame().locator('.project-item')
-    Expected: 5
-    Received: 6
-    Timeout:  5000ms
-
-    Call log:
-      - Expect "toHaveCount" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.project-item')
-        14 × locator resolved to 6 elements
-           - unexpected value "6"
-
-
-      116 |
-      117 |   await page.reload()
-    > 118 |   await expect(pane1(page).locator('.project-item')).toHaveCount(countAfterFirst + 1)
-          |                                                      ^
-      119 | })
-      120 |
-      121 | // ─── Lancement / navigation projets ↔ events ─────────────────────────────────
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/open-existing-project.spec.js:118:54
-
-    Error Context: test-results/project-open-existing-proj-3d790-ojet-survit-au-rechargement/error-context.md
-
-  202) specs/e2e/project/project-listing-content.spec.js:6:1 › la liste affiche uniquement les projets actifs 
-
-    Error: expect(locator).toHaveCount(expected) failed
-
-    Locator:  locator('#pane-1').contentFrame().locator('.project-item')
-    Expected: 3
-    Received: 4
-    Timeout:  5000ms
-
-    Call log:
-      - Expect "toHaveCount" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.project-item')
-        14 × locator resolved to 4 elements
-           - unexpected value "4"
-
-
-       8 |   await page.goto('/')
-       9 |
-    > 10 |   await expect(pane1(page).locator('.project-item')).toHaveCount(3)
-         |                                                      ^
-      11 |
-      12 |   await expect(pane1(page).locator('text=Projet A')).toBeVisible()
-      13 |   await expect(pane1(page).locator('text=Projet B')).toBeVisible()
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/project-listing-content.spec.js:10:54
-
-    Error Context: test-results/project-project-listing-co-bead9-iquement-les-projets-actifs/error-context.md
-
-  203) specs/e2e/project/project-listing.spec.js:5:1 › la liste des projets possède les bonnes classes CSS 
+  104) specs/e2e/project/project-listing.spec.js:5:1 › la liste des projets possède les bonnes classes CSS 
 
     Error: expect(locator).toHaveCount(expected) failed
 
@@ -4425,106 +2812,7 @@
 
     Error Context: test-results/project-project-listing-la-962dc-sède-les-bonnes-classes-CSS/error-context.md
 
-  204) specs/e2e/project/regression-project-id.spec.js:25:1 › créer un event imbriqué → persiste après rechargement 
-
-    Error: expect(locator).toBeFocused() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.event-item input[name="title"]')
-    Expected: focused
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeFocused" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.event-item input[name="title"]')
-
-
-      33 |   await press(page, 'n')
-      34 |   const input = pane1(page).locator('.event-item input[name="title"]')
-    > 35 |   await expect(input).toBeFocused()
-         |                       ^
-      36 |   await input.fill('Sous-event persistant')
-      37 |   await press(page, 'Enter')
-      38 |   await expect(pane1(page).locator('.event-item').first()).toContainText('Sous-event persistant')
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/regression-project-id.spec.js:35:23
-
-    Error Context: test-results/project-regression-project-76e90-persiste-après-rechargement/error-context.md
-
-  205) specs/e2e/project/regression-project-id.spec.js:51:1 › créer un brin → persiste après rechargement 
-
-    Error: expect(locator).toBeFocused() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.brin-item input[name="title"]')
-    Expected: focused
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeFocused" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.brin-item input[name="title"]')
-
-
-      59 |   await press(page, 'n')
-      60 |   const input = pane1(page).locator('.brin-item input[name="title"]')
-    > 61 |   await expect(input).toBeFocused()
-         |                       ^
-      62 |   await input.fill('Brin régression')
-      63 |   await press(page, 'Enter')
-      64 |
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/regression-project-id.spec.js:61:23
-
-    Error Context: test-results/project-regression-project-f3aa4-persiste-après-rechargement/error-context.md
-
-  206) specs/e2e/project/regression-project-id.spec.js:81:1 › créer un perso → persiste après rechargement 
-
-    Error: expect(locator).toBeFocused() failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.perso-item input[name="title"]')
-    Expected: focused
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toBeFocused" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.perso-item input[name="title"]')
-
-
-      89 |   await press(page, 'n')
-      90 |   const input = pane1(page).locator('.perso-item input[name="title"]')
-    > 91 |   await expect(input).toBeFocused()
-         |                       ^
-      92 |   await input.fill('Perso régression')
-      93 |   await press(page, 'Enter')
-      94 |
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/regression-project-id.spec.js:91:23
-
-    Error Context: test-results/project-regression-project-51355-persiste-après-rechargement/error-context.md
-
-  207) specs/e2e/project/seed-projet-complet.spec.js:22:1 › projet seed → "Votre protagoniste" dans le panneau persos 
-
-    Error: expect(locator).toContainText(expected) failed
-
-    Locator: locator('#pane-1').contentFrame().locator('.perso-item__title').first()
-    Expected substring: "Votre protagoniste"
-    Timeout: 5000ms
-    Error: element(s) not found
-
-    Call log:
-      - Expect "toContainText" with timeout 5000ms
-      - waiting for locator('#pane-1').contentFrame().locator('.perso-item__title').first()
-
-
-      25 |   await press(page, 'p')
-      26 |   await expect(pane1(page).locator('#persos-panel')).toBeVisible()
-    > 27 |   await expect(pane1(page).locator('.perso-item__title').first()).toContainText('Votre protagoniste')
-         |                                                                   ^
-      28 | })
-      29 |
-        at /Users/philippeperret/Programmes/Eventer3/tests/specs/e2e/project/seed-projet-complet.spec.js:27:67
-
-    Error Context: test-results/project-seed-projet-comple-836c4-iste-dans-le-panneau-persos/error-context.md
-
-  208) specs/e2e/texte/constants-panel.spec.js:12:3 › ConstantsPanel › q ouvre le panneau depuis ListerProject 
+  105) specs/e2e/texte/constants-panel.spec.js:12:3 › ConstantsPanel › q ouvre le panneau depuis ListerProject 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -4551,7 +2839,7 @@
 
     Error Context: test-results/texte-constants-panel-Cons-1041f-anneau-depuis-ListerProject/error-context.md
 
-  209) specs/e2e/texte/constants-panel.spec.js:18:3 › ConstantsPanel › q ouvre le panneau depuis ListerEvent 
+  106) specs/e2e/texte/constants-panel.spec.js:18:3 › ConstantsPanel › q ouvre le panneau depuis ListerEvent 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -4578,7 +2866,7 @@
 
     Error Context: test-results/texte-constants-panel-Cons-5c00c--panneau-depuis-ListerEvent/error-context.md
 
-  210) specs/e2e/texte/constants-panel.spec.js:26:3 › ConstantsPanel › Escape ferme le panneau 
+  107) specs/e2e/texte/constants-panel.spec.js:26:3 › ConstantsPanel › Escape ferme le panneau 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -4605,7 +2893,7 @@
 
     Error Context: test-results/texte-constants-panel-ConstantsPanel-Escape-ferme-le-panneau/error-context.md
 
-  211) specs/e2e/texte/constants-panel.spec.js:36:3 › ConstantsPanel › le panneau a exactement deux colonnes 
+  108) specs/e2e/texte/constants-panel.spec.js:36:3 › ConstantsPanel › le panneau a exactement deux colonnes 
 
     Error: expect(locator).toHaveCount(expected) failed
 
@@ -4632,7 +2920,7 @@
 
     Error Context: test-results/texte-constants-panel-Cons-b2b2d--a-exactement-deux-colonnes/error-context.md
 
-  212) specs/e2e/texte/constants-panel.spec.js:42:3 › ConstantsPanel › chaque colonne contient des lignes constante/valeur 
+  109) specs/e2e/texte/constants-panel.spec.js:42:3 › ConstantsPanel › chaque colonne contient des lignes constante/valeur 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -4657,7 +2945,7 @@
 
     Error Context: test-results/texte-constants-panel-Cons-95b44-des-lignes-constante-valeur/error-context.md
 
-  213) specs/e2e/texte/constants-panel.spec.js:55:3 › ConstantsPanel › la première ligne est sélectionnée à l'ouverture 
+  110) specs/e2e/texte/constants-panel.spec.js:55:3 › ConstantsPanel › la première ligne est sélectionnée à l'ouverture 
 
     Error: expect(locator).toHaveClass(expected) failed
 
@@ -4682,7 +2970,7 @@
 
     Error Context: test-results/texte-constants-panel-Cons-326db--sélectionnée-à-l-ouverture/error-context.md
 
-  214) specs/e2e/texte/constants-panel.spec.js:61:3 › ConstantsPanel › ↓ sélectionne la ligne suivante 
+  111) specs/e2e/texte/constants-panel.spec.js:61:3 › ConstantsPanel › ↓ sélectionne la ligne suivante 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -4707,7 +2995,7 @@
 
     Error Context: test-results/texte-constants-panel-Cons-a07b8-lectionne-la-ligne-suivante/error-context.md
 
-  215) specs/e2e/texte/constants-panel.spec.js:70:3 › ConstantsPanel › ↑ remonte d'une ligne 
+  112) specs/e2e/texte/constants-panel.spec.js:70:3 › ConstantsPanel › ↑ remonte d'une ligne 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -4732,7 +3020,7 @@
 
     Error Context: test-results/texte-constants-panel-ConstantsPanel-↑-remonte-d-une-ligne/error-context.md
 
-  216) specs/e2e/texte/constants-panel.spec.js:82:3 › ConstantsPanel › Tab met le focus sur le champ constante de la ligne sélectionnée 
+  113) specs/e2e/texte/constants-panel.spec.js:82:3 › ConstantsPanel › Tab met le focus sur le champ constante de la ligne sélectionnée 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -4757,7 +3045,7 @@
 
     Error Context: test-results/texte-constants-panel-Cons-5954e-te-de-la-ligne-sélectionnée/error-context.md
 
-  217) specs/e2e/texte/constants-panel.spec.js:90:3 › ConstantsPanel › Tab depuis le champ constante met le focus sur le champ valeur 
+  114) specs/e2e/texte/constants-panel.spec.js:90:3 › ConstantsPanel › Tab depuis le champ constante met le focus sur le champ valeur 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -4782,7 +3070,7 @@
 
     Error Context: test-results/texte-constants-panel-Cons-4fb54-e-focus-sur-le-champ-valeur/error-context.md
 
-  218) specs/e2e/texte/constants-panel.spec.js:99:3 › ConstantsPanel › Shift+Tab depuis le champ valeur revient sur le champ constante (même ligne) 
+  115) specs/e2e/texte/constants-panel.spec.js:99:3 › ConstantsPanel › Shift+Tab depuis le champ valeur revient sur le champ constante (même ligne) 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -4807,7 +3095,7 @@
 
     Error Context: test-results/texte-constants-panel-Cons-30062-champ-constante-même-ligne-/error-context.md
 
-  219) specs/e2e/texte/constants-panel.spec.js:110:3 › ConstantsPanel › Shift+Tab depuis le champ constante va sur la valeur de la ligne précédente 
+  116) specs/e2e/texte/constants-panel.spec.js:110:3 › ConstantsPanel › Shift+Tab depuis le champ constante va sur la valeur de la ligne précédente 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -4832,7 +3120,7 @@
 
     Error Context: test-results/texte-constants-panel-Cons-18c4d-leur-de-la-ligne-précédente/error-context.md
 
-  220) specs/e2e/texte/constants-panel.spec.js:123:3 › ConstantsPanel › constante + valeur : sauvegardée à la fermeture 
+  117) specs/e2e/texte/constants-panel.spec.js:123:3 › ConstantsPanel › constante + valeur : sauvegardée à la fermeture 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -4857,7 +3145,7 @@
 
     Error Context: test-results/texte-constants-panel-Cons-a82a0--sauvegardée-à-la-fermeture/error-context.md
 
-  221) specs/e2e/texte/constants-panel.spec.js:142:3 › ConstantsPanel › valeur sans constante : ignorée 
+  118) specs/e2e/texte/constants-panel.spec.js:142:3 › ConstantsPanel › valeur sans constante : ignorée 
 
     Test timeout of 15000ms exceeded.
 
@@ -4877,7 +3165,7 @@
 
     Error Context: test-results/texte-constants-panel-Cons-cb852-leur-sans-constante-ignorée/error-context.md
 
-  222) specs/e2e/texte/constants-panel.spec.js:153:3 › ConstantsPanel › constante sans valeur : ignorée 
+  119) specs/e2e/texte/constants-panel.spec.js:153:3 › ConstantsPanel › constante sans valeur : ignorée 
 
     Test timeout of 15000ms exceeded.
 
@@ -4897,7 +3185,7 @@
 
     Error Context: test-results/texte-constants-panel-Cons-75928-nstante-sans-valeur-ignorée/error-context.md
 
-  223) specs/e2e/texte/constants-panel.spec.js:163:3 › ConstantsPanel › lignes vides intercalées : les lignes valides restent sauvegardées 
+  120) specs/e2e/texte/constants-panel.spec.js:163:3 › ConstantsPanel › lignes vides intercalées : les lignes valides restent sauvegardées 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -4922,7 +3210,7 @@
 
     Error Context: test-results/texte-constants-panel-Cons-87d1d-alides-restent-sauvegardées/error-context.md
 
-  224) specs/e2e/texte/markdown-editing.spec.js:28:1 › ⌘+i entoure la sélection avec *...* (italique) 
+  121) specs/e2e/texte/markdown-editing.spec.js:28:1 › ⌘+i entoure la sélection avec *...* (italique) 
 
     Error: expect(locator).toBeFocused() failed
 
@@ -4948,7 +3236,7 @@
 
     Error Context: test-results/texte-markdown-editing-⌘-i-bb3e1-la-sélection-avec-italique-/error-context.md
 
-  225) specs/e2e/texte/markdown-editing.spec.js:37:1 › ⌘+g entoure la sélection avec **...** (gras) 
+  122) specs/e2e/texte/markdown-editing.spec.js:37:1 › ⌘+g entoure la sélection avec **...** (gras) 
 
     Error: expect(locator).toBeFocused() failed
 
@@ -4974,7 +3262,7 @@
 
     Error Context: test-results/texte-markdown-editing-⌘-g-entoure-la-sélection-avec-gras-/error-context.md
 
-  226) specs/e2e/texte/markdown-editing.spec.js:46:1 › ⌘+b entoure la sélection avec ~~...~~ (barré) 
+  123) specs/e2e/texte/markdown-editing.spec.js:46:1 › ⌘+b entoure la sélection avec ~~...~~ (barré) 
 
     Error: expect(locator).toBeFocused() failed
 
@@ -5000,7 +3288,7 @@
 
     Error Context: test-results/texte-markdown-editing-⌘-b-entoure-la-sélection-avec-barré-/error-context.md
 
-  227) specs/e2e/texte/markdown-editing.spec.js:55:1 › ⌘+u entoure la sélection avec __...__ (souligné) 
+  124) specs/e2e/texte/markdown-editing.spec.js:55:1 › ⌘+u entoure la sélection avec __...__ (souligné) 
 
     Error: expect(locator).toBeFocused() failed
 
@@ -5026,7 +3314,7 @@
 
     Error Context: test-results/texte-markdown-editing-⌘-u-7ff57-la-sélection-avec-souligné-/error-context.md
 
-  228) specs/e2e/texte/markdown-editing.spec.js:64:1 › ⌘+i sur [*world*] sélection inclut marques → retire italique 
+  125) specs/e2e/texte/markdown-editing.spec.js:64:1 › ⌘+i sur [*world*] sélection inclut marques → retire italique 
 
     Error: expect(locator).toBeFocused() failed
 
@@ -5052,7 +3340,7 @@
 
     Error Context: test-results/texte-markdown-editing-⌘-i-9568e-t-marques-→-retire-italique/error-context.md
 
-  229) specs/e2e/texte/markdown-editing.spec.js:75:1 › ⌘+i sur *[world]* sélection exclut marques → retire italique 
+  126) specs/e2e/texte/markdown-editing.spec.js:75:1 › ⌘+i sur *[world]* sélection exclut marques → retire italique 
 
     Error: expect(locator).toBeFocused() failed
 
@@ -5078,7 +3366,7 @@
 
     Error Context: test-results/texte-markdown-editing-⌘-i-7a65e-t-marques-→-retire-italique/error-context.md
 
-  230) specs/e2e/texte/token-replace.spec.js:19:3 › Token replacement dans les titres › constante /VILLE/ remplacée dans le titre de l'event 
+  127) specs/e2e/texte/token-replace.spec.js:19:3 › Token replacement dans les titres › constante /VILLE/ remplacée dans le titre de l'event 
 
     Error: expect(locator).toHaveText(expected) failed
 
@@ -5103,7 +3391,7 @@
 
     Error Context: test-results/texte-token-replace-Token--672d9-ée-dans-le-titre-de-l-event/error-context.md
 
-  231) specs/e2e/texte/token-replace.spec.js:25:3 › Token replacement dans les titres › badge PP remplacé par le titre du personnage 
+  128) specs/e2e/texte/token-replace.spec.js:25:3 › Token replacement dans les titres › badge PP remplacé par le titre du personnage 
 
     Error: expect(locator).toHaveText(expected) failed
 
@@ -5128,7 +3416,7 @@
 
     Error Context: test-results/texte-token-replace-Token--48d5a--par-le-titre-du-personnage/error-context.md
 
-  232) specs/e2e/texte/token-replace.spec.js:31:3 › Token replacement dans les titres › badge PPpat remplacé par le patronyme du personnage 
+  129) specs/e2e/texte/token-replace.spec.js:31:3 › Token replacement dans les titres › badge PPpat remplacé par le patronyme du personnage 
 
     Error: expect(locator).toHaveText(expected) failed
 
@@ -5153,7 +3441,7 @@
 
     Error Context: test-results/texte-token-replace-Token--3b0cd--le-patronyme-du-personnage/error-context.md
 
-  233) specs/e2e/texte/token-replace.spec.js:39:3 › Token replacement dans les titres › constante /VILLE/ remplacée dans le titre du brin 
+  130) specs/e2e/texte/token-replace.spec.js:39:3 › Token replacement dans les titres › constante /VILLE/ remplacée dans le titre du brin 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -5178,7 +3466,7 @@
 
     Error Context: test-results/texte-token-replace-Token--b1d90-lacée-dans-le-titre-du-brin/error-context.md
 
-  234) specs/e2e/texte/token-replace.spec.js:50:3 › Token replacement dans les titres › constante /VILLE/ remplacée dans le titre du perso 
+  131) specs/e2e/texte/token-replace.spec.js:50:3 › Token replacement dans les titres › constante /VILLE/ remplacée dans le titre du perso 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -5203,7 +3491,7 @@
 
     Error Context: test-results/texte-token-replace-Token--4fa71-acée-dans-le-titre-du-perso/error-context.md
 
-  235) specs/e2e/texte/token-replace.spec.js:61:3 › Token replacement dans les titres › titre du panneau brins utilise le titre rendu (tokens remplacés) 
+  132) specs/e2e/texte/token-replace.spec.js:61:3 › Token replacement dans les titres › titre du panneau brins utilise le titre rendu (tokens remplacés) 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -5228,7 +3516,7 @@
 
     Error Context: test-results/texte-token-replace-Token--40e7a-tre-rendu-tokens-remplacés-/error-context.md
 
-  236) specs/e2e/texte/token-replace.spec.js:72:3 › Token replacement dans les titres › nouvel event créé après définition constante : remplacement immédiat 
+  133) specs/e2e/texte/token-replace.spec.js:72:3 › Token replacement dans les titres › nouvel event créé après définition constante : remplacement immédiat 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -5253,7 +3541,7 @@
 
     Error Context: test-results/texte-token-replace-Token--6c11d-tante-remplacement-immédiat/error-context.md
 
-  237) specs/e2e/ui/confirm-dialog-tab.spec.js:32:1 › ConfirmDialog : bouton 'Oui' focused par défaut (dernier bouton = action principale) 
+  134) specs/e2e/ui/confirm-dialog-tab.spec.js:32:1 › ConfirmDialog : bouton 'Oui' focused par défaut (dernier bouton = action principale) 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -5279,7 +3567,7 @@
 
     Error Context: test-results/ui-confirm-dialog-tab-Conf-7da54-r-bouton-action-principale-/error-context.md
 
-  238) specs/e2e/ui/confirm-dialog-tab.spec.js:43:1 › Tab bascule le focus de Oui vers Non 
+  135) specs/e2e/ui/confirm-dialog-tab.spec.js:43:1 › Tab bascule le focus de Oui vers Non 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -5305,7 +3593,7 @@
 
     Error Context: test-results/ui-confirm-dialog-tab-Tab-bascule-le-focus-de-Oui-vers-Non/error-context.md
 
-  239) specs/e2e/ui/confirm-dialog-tab.spec.js:52:1 › Tab cycle complet : Non → Oui → Non 
+  136) specs/e2e/ui/confirm-dialog-tab.spec.js:52:1 › Tab cycle complet : Non → Oui → Non 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -5331,7 +3619,7 @@
 
     Error Context: test-results/ui-confirm-dialog-tab-Tab-cycle-complet-Non-→-Oui-→-Non/error-context.md
 
-  240) specs/e2e/ui/confirm-dialog-tab.spec.js:64:1 › Enter avec Oui focused → man_depth sauvegardé, sibling devient roman-man 
+  137) specs/e2e/ui/confirm-dialog-tab.spec.js:64:1 › Enter avec Oui focused → man_depth sauvegardé, sibling devient roman-man 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -5357,7 +3645,7 @@
 
     Error Context: test-results/ui-confirm-dialog-tab-Ente-8d362-é-sibling-devient-roman-man/error-context.md
 
-  241) specs/e2e/ui/confirm-dialog-tab.spec.js:76:1 › Tab→Non puis Enter → man_depth non sauvegardé 
+  138) specs/e2e/ui/confirm-dialog-tab.spec.js:76:1 › Tab→Non puis Enter → man_depth non sauvegardé 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -5383,7 +3671,7 @@
 
     Error Context: test-results/ui-confirm-dialog-tab-Tab→-2d1b9--→-man-depth-non-sauvegardé/error-context.md
 
-  242) specs/e2e/ui/confirm-dialog-tab.spec.js:90:1 › Escape annule même si Oui est focused 
+  139) specs/e2e/ui/confirm-dialog-tab.spec.js:90:1 › Escape annule même si Oui est focused 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -5409,7 +3697,7 @@
 
     Error Context: test-results/ui-confirm-dialog-tab-Escape-annule-même-si-Oui-est-focused/error-context.md
 
-  243) specs/e2e/ui/confirm-dialog-tab.spec.js:103:1 › bouton focused a une couleur verte (background non-transparent) 
+  140) specs/e2e/ui/confirm-dialog-tab.spec.js:103:1 › bouton focused a une couleur verte (background non-transparent) 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -5435,7 +3723,7 @@
 
     Error Context: test-results/ui-confirm-dialog-tab-bout-05a94-background-non-transparent-/error-context.md
 
-  244) specs/e2e/ui/popup-select-current-value.spec.js:18:1 › popup nature projet : option '—' focused quand currentValue est null 
+  141) specs/e2e/ui/popup-select-current-value.spec.js:18:1 › popup nature projet : option '—' focused quand currentValue est null 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -5460,7 +3748,7 @@
 
     Error Context: test-results/ui-popup-select-current-va-1f07b-quand-currentValue-est-null/error-context.md
 
-  245) specs/e2e/ui/popup-select-current-value.spec.js:29:1 › popup nature évènemencier : option 'défaut' focused quand currentValue est null 
+  142) specs/e2e/ui/popup-select-current-value.spec.js:29:1 › popup nature évènemencier : option 'défaut' focused quand currentValue est null 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -5485,7 +3773,7 @@
 
     Error Context: test-results/ui-popup-select-current-va-9ff7c-quand-currentValue-est-null/error-context.md
 
-  246) specs/e2e/ui/popup-select-current-value.spec.js:46:1 › popup nature projet : option 'roman' focused après avoir choisi roman 
+  143) specs/e2e/ui/popup-select-current-value.spec.js:46:1 › popup nature projet : option 'roman' focused après avoir choisi roman 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -5510,7 +3798,7 @@
 
     Error Context: test-results/ui-popup-select-current-va-90a59-ed-après-avoir-choisi-roman/error-context.md
 
-  247) specs/e2e/ui/split-arrow-nav.spec.js:20:1 › Cmd+→ depuis pane-1 → data-focused passe à pane-2 
+  144) specs/e2e/ui/split-arrow-nav.spec.js:20:1 › Cmd+→ depuis pane-1 → data-focused passe à pane-2 
 
     Test timeout of 15000ms exceeded.
 
@@ -5531,7 +3819,7 @@
 
     Error Context: test-results/ui-split-arrow-nav-Cmd-→-d-24d43-data-focused-passe-à-pane-2/error-context.md
 
-  248) specs/e2e/ui/split-arrow-nav.spec.js:31:1 › Cmd+→ depuis pane-2 → data-focused passe à pane-1 (cycle) 
+  145) specs/e2e/ui/split-arrow-nav.spec.js:31:1 › Cmd+→ depuis pane-2 → data-focused passe à pane-1 (cycle) 
 
     Test timeout of 15000ms exceeded.
 
@@ -5552,7 +3840,7 @@
 
     Error Context: test-results/ui-split-arrow-nav-Cmd-→-d-38728-cused-passe-à-pane-1-cycle-/error-context.md
 
-  249) specs/e2e/ui/split-arrow-nav.spec.js:42:1 › Cmd+← depuis pane-2 → data-focused passe à pane-1 
+  146) specs/e2e/ui/split-arrow-nav.spec.js:42:1 › Cmd+← depuis pane-2 → data-focused passe à pane-1 
 
     Test timeout of 15000ms exceeded.
 
@@ -5573,7 +3861,7 @@
 
     Error Context: test-results/ui-split-arrow-nav-Cmd-←-d-d8485-data-focused-passe-à-pane-1/error-context.md
 
-  250) specs/e2e/ui/split-arrow-nav.spec.js:50:1 › Cmd+← depuis pane-1 → data-focused passe à pane-2 
+  147) specs/e2e/ui/split-arrow-nav.spec.js:50:1 › Cmd+← depuis pane-1 → data-focused passe à pane-2 
 
     Test timeout of 15000ms exceeded.
 
@@ -5594,7 +3882,7 @@
 
     Error Context: test-results/ui-split-arrow-nav-Cmd-←-d-26b7c-data-focused-passe-à-pane-2/error-context.md
 
-  251) specs/e2e/ui/split-close-focused.spec.js:34:1 › Alt+0 pane-2 focusé → pane-1 navigue vers l'item sélectionné dans pane-2 
+  148) specs/e2e/ui/split-close-focused.spec.js:34:1 › Alt+0 pane-2 focusé → pane-1 navigue vers l'item sélectionné dans pane-2 
 
     Test timeout of 15000ms exceeded.
 
@@ -5615,7 +3903,7 @@
 
     Error Context: test-results/ui-split-close-focused-Alt-22da3-tem-sélectionné-dans-pane-2/error-context.md
 
-  252) specs/e2e/ui/split-close-focused.spec.js:44:1 › Alt+0 pane-2 focusé → pane-2 fermé 
+  149) specs/e2e/ui/split-close-focused.spec.js:44:1 › Alt+0 pane-2 focusé → pane-2 fermé 
 
     Test timeout of 15000ms exceeded.
 
@@ -5636,7 +3924,7 @@
 
     Error Context: test-results/ui-split-close-focused-Alt-0-pane-2-focusé-→-pane-2-fermé/error-context.md
 
-  253) specs/e2e/ui/split-close-focused.spec.js:52:1 › Alt+0 pane-2 focusé → focus revient sur pane-1 
+  150) specs/e2e/ui/split-close-focused.spec.js:52:1 › Alt+0 pane-2 focusé → focus revient sur pane-1 
 
     Test timeout of 15000ms exceeded.
 
@@ -5657,7 +3945,7 @@
 
     Error Context: test-results/ui-split-close-focused-Alt-d93ec--→-focus-revient-sur-pane-1/error-context.md
 
-  254) specs/e2e/ui/split-close-focused.spec.js:62:1 › Alt+0 pane-1 focusé → pane-1 reste dans son état courant 
+  151) specs/e2e/ui/split-close-focused.spec.js:62:1 › Alt+0 pane-1 focusé → pane-1 reste dans son état courant 
 
     Test timeout of 15000ms exceeded.
 
@@ -5678,7 +3966,7 @@
 
     Error Context: test-results/ui-split-close-focused-Alt-b88f8-reste-dans-son-état-courant/error-context.md
 
-  255) specs/e2e/ui/split-close-focused.spec.js:77:1 › Alt+0 pane-2 niveau projets, pane-1 en ListerEvent → pane-1 revient à la liste projets 
+  152) specs/e2e/ui/split-close-focused.spec.js:77:1 › Alt+0 pane-2 niveau projets, pane-1 en ListerEvent → pane-1 revient à la liste projets 
 
     Test timeout of 15000ms exceeded.
 
@@ -5699,7 +3987,7 @@
 
     Error Context: test-results/ui-split-close-focused-Alt-a892f--revient-à-la-liste-projets/error-context.md
 
-  256) specs/e2e/ui/split-direction.spec.js:19:1 › Alt+2 affiche un popup vertical/horizontal 
+  153) specs/e2e/ui/split-direction.spec.js:19:1 › Alt+2 affiche un popup vertical/horizontal 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -5724,7 +4012,7 @@
 
     Error Context: test-results/ui-split-direction-Alt-2-a-a73d0-n-popup-vertical-horizontal/error-context.md
 
-  257) specs/e2e/ui/split-direction.spec.js:25:1 › Alt+2 pavé numérique affiche aussi le popup 
+  154) specs/e2e/ui/split-direction.spec.js:25:1 › Alt+2 pavé numérique affiche aussi le popup 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -5749,7 +4037,7 @@
 
     Error Context: test-results/ui-split-direction-Alt-2-p-21e2a-ique-affiche-aussi-le-popup/error-context.md
 
-  258) specs/e2e/ui/split-direction.spec.js:31:1 › popup contient les options Vertical et Horizontal 
+  155) specs/e2e/ui/split-direction.spec.js:31:1 › popup contient les options Vertical et Horizontal 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -5774,7 +4062,7 @@
 
     Error Context: test-results/ui-split-direction-popup-c-cf013-ions-Vertical-et-Horizontal/error-context.md
 
-  259) specs/e2e/ui/split-direction.spec.js:41:1 › choisir Vertical → pane-2 visible ────
+  156) specs/e2e/ui/split-direction.spec.js:41:1 › choisir Vertical → pane-2 visible ────
 
     Test timeout of 15000ms exceeded.
 
@@ -5794,7 +4082,7 @@
 
     Error Context: test-results/ui-split-direction-choisir-Vertical-→-pane-2-visible/error-context.md
 
-  260) specs/e2e/ui/split-direction.spec.js:48:1 › split Vertical → body#shell flex-direction = row 
+  157) specs/e2e/ui/split-direction.spec.js:48:1 › split Vertical → body#shell flex-direction = row 
 
     Test timeout of 15000ms exceeded.
 
@@ -5814,7 +4102,7 @@
 
     Error Context: test-results/ui-split-direction-split-V-c8591-dy-shell-flex-direction-row/error-context.md
 
-  261) specs/e2e/ui/split-direction.spec.js:58:1 › choisir Horizontal → pane-2 visible ──
+  158) specs/e2e/ui/split-direction.spec.js:58:1 › choisir Horizontal → pane-2 visible ──
 
     Test timeout of 15000ms exceeded.
 
@@ -5834,7 +4122,7 @@
 
     Error Context: test-results/ui-split-direction-choisir-Horizontal-→-pane-2-visible/error-context.md
 
-  262) specs/e2e/ui/split-direction.spec.js:65:1 › split Horizontal → body#shell flex-direction = column 
+  159) specs/e2e/ui/split-direction.spec.js:65:1 › split Horizontal → body#shell flex-direction = column 
 
     Test timeout of 15000ms exceeded.
 
@@ -5854,7 +4142,7 @@
 
     Error Context: test-results/ui-split-direction-split-H-f6940-shell-flex-direction-column/error-context.md
 
-  263) specs/e2e/ui/split-direction.spec.js:77:1 › Alt+2 split actif → focus sur pane-2 ─
+  160) specs/e2e/ui/split-direction.spec.js:77:1 › Alt+2 split actif → focus sur pane-2 ─
 
     Test timeout of 15000ms exceeded.
 
@@ -5875,7 +4163,7 @@
 
     Error Context: test-results/ui-split-direction-Alt-2-split-actif-→-focus-sur-pane-2/error-context.md
 
-  264) specs/e2e/ui/split-focus-visible.spec.js:31:1 › Cmd+2 → pane-2 reçoit data-focused (auto-focus au chargement) 
+  161) specs/e2e/ui/split-focus-visible.spec.js:31:1 › Cmd+2 → pane-2 reçoit data-focused (auto-focus au chargement) 
 
     Test timeout of 15000ms exceeded.
 
@@ -5896,7 +4184,7 @@
 
     Error Context: test-results/ui-split-focus-visible-Cmd-a40b3-d-auto-focus-au-chargement-/error-context.md
 
-  265) specs/e2e/ui/split-focus-visible.spec.js:38:1 › Shift+Tab depuis pane-2 → pane-1 reçoit data-focused 
+  162) specs/e2e/ui/split-focus-visible.spec.js:38:1 › Shift+Tab depuis pane-2 → pane-1 reçoit data-focused 
 
     Test timeout of 15000ms exceeded.
 
@@ -5917,7 +4205,7 @@
 
     Error Context: test-results/ui-split-focus-visible-Shi-10b82--pane-1-reçoit-data-focused/error-context.md
 
-  266) specs/e2e/ui/split-focus-visible.spec.js:46:1 › Cmd+1 depuis pane-2 → pane-1 reçoit data-focused 
+  163) specs/e2e/ui/split-focus-visible.spec.js:46:1 › Cmd+1 depuis pane-2 → pane-1 reçoit data-focused 
 
     Test timeout of 15000ms exceeded.
 
@@ -5938,7 +4226,7 @@
 
     Error Context: test-results/ui-split-focus-visible-Cmd-ecbf6--pane-1-reçoit-data-focused/error-context.md
 
-  267) specs/e2e/ui/split-focus-visible.spec.js:54:1 › Cmd+0 ferme split → pane-1 reçoit data-focused 
+  164) specs/e2e/ui/split-focus-visible.spec.js:54:1 › Cmd+0 ferme split → pane-1 reçoit data-focused 
 
     Test timeout of 15000ms exceeded.
 
@@ -5959,7 +4247,7 @@
 
     Error Context: test-results/ui-split-focus-visible-Cmd-56aea--pane-1-reçoit-data-focused/error-context.md
 
-  268) specs/e2e/ui/split-open-target.spec.js:51:1 › split actif : popup affiche "Dans l'autre fenêtre" 
+  165) specs/e2e/ui/split-open-target.spec.js:51:1 › split actif : popup affiche "Dans l'autre fenêtre" 
 
     Test timeout of 15000ms exceeded.
 
@@ -5980,7 +4268,7 @@
 
     Error Context: test-results/ui-split-open-target-split-6d891-fiche-Dans-l-autre-fenêtre-/error-context.md
 
-  269) specs/e2e/ui/split-open-target.spec.js:58:1 › split inactif : popup affiche "Dans une autre fenêtre" 
+  166) specs/e2e/ui/split-open-target.spec.js:58:1 › split inactif : popup affiche "Dans une autre fenêtre" 
 
     Error: expect(locator).toHaveClass(expected) failed
 
@@ -6006,7 +4294,7 @@
 
     Error Context: test-results/ui-split-open-target-split-03cb8-che-Dans-une-autre-fenêtre-/error-context.md
 
-  270) specs/e2e/ui/split-open-target.spec.js:66:1 › touche a → pane-2 affiche e3 (Acte III) sélectionné 
+  167) specs/e2e/ui/split-open-target.spec.js:66:1 › touche a → pane-2 affiche e3 (Acte III) sélectionné 
 
     Test timeout of 15000ms exceeded.
 
@@ -6027,7 +4315,7 @@
 
     Error Context: test-results/ui-split-open-target-touch-de0fb-che-e3-Acte-III-sélectionné/error-context.md
 
-  271) specs/e2e/ui/split-open-target.spec.js:76:1 › touche a → focus passe sur pane-2 ──
+  168) specs/e2e/ui/split-open-target.spec.js:76:1 › touche a → focus passe sur pane-2 ──
 
     Test timeout of 15000ms exceeded.
 
@@ -6048,7 +4336,7 @@
 
     Error Context: test-results/ui-split-open-target-touche-a-→-focus-passe-sur-pane-2/error-context.md
 
-  272) specs/e2e/ui/split-open-target.spec.js:86:1 › sans split, touche a → popup direction apparaît 
+  169) specs/e2e/ui/split-open-target.spec.js:86:1 › sans split, touche a → popup direction apparaît 
 
     Error: expect(locator).toHaveClass(expected) failed
 
@@ -6074,7 +4362,7 @@
 
     Error Context: test-results/ui-split-open-target-sans--c0560--→-popup-direction-apparaît/error-context.md
 
-  273) specs/e2e/ui/split-open-target.spec.js:94:1 › sans split, touche a + Vertical → pane-2 affiche e3 sélectionné 
+  170) specs/e2e/ui/split-open-target.spec.js:94:1 › sans split, touche a + Vertical → pane-2 affiche e3 sélectionné 
 
     Error: expect(locator).toHaveClass(expected) failed
 
@@ -6100,7 +4388,7 @@
 
     Error Context: test-results/ui-split-open-target-sans--c40a0-ne-2-affiche-e3-sélectionné/error-context.md
 
-  274) specs/e2e/ui/split-open-target.spec.js:104:1 › sans split, touche a + Vertical → focus passe sur pane-2 
+  171) specs/e2e/ui/split-open-target.spec.js:104:1 › sans split, touche a + Vertical → focus passe sur pane-2 
 
     Error: expect(locator).toHaveClass(expected) failed
 
@@ -6126,7 +4414,7 @@
 
     Error Context: test-results/ui-split-open-target-sans--c1ddd-al-→-focus-passe-sur-pane-2/error-context.md
 
-  275) specs/e2e/ui/split-pane.spec.js:29:1 › Alt+2 + Vertical → second panneau visible ─
+  172) specs/e2e/ui/split-pane.spec.js:29:1 › Alt+2 + Vertical → second panneau visible ─
 
     Test timeout of 15000ms exceeded.
 
@@ -6147,7 +4435,7 @@
 
     Error Context: test-results/ui-split-pane-Alt-2-Vertical-→-second-panneau-visible/error-context.md
 
-  276) specs/e2e/ui/split-pane.spec.js:35:1 › Alt+2 + Vertical → l'iframe pane-2 charge la liste des projets 
+  173) specs/e2e/ui/split-pane.spec.js:35:1 › Alt+2 + Vertical → l'iframe pane-2 charge la liste des projets 
 
     Test timeout of 15000ms exceeded.
 
@@ -6168,7 +4456,7 @@
 
     Error Context: test-results/ui-split-pane-Alt-2-Vertic-6a82e-charge-la-liste-des-projets/error-context.md
 
-  277) specs/e2e/ui/split-pane.spec.js:41:1 › Alt+2 une deuxième fois → idempotent (pane-2 reste unique) 
+  174) specs/e2e/ui/split-pane.spec.js:41:1 › Alt+2 une deuxième fois → idempotent (pane-2 reste unique) 
 
     Test timeout of 15000ms exceeded.
 
@@ -6189,7 +4477,7 @@
 
     Error Context: test-results/ui-split-pane-Alt-2-une-de-b8f9b-potent-pane-2-reste-unique-/error-context.md
 
-  278) specs/e2e/ui/split-pane.spec.js:52:1 › Alt+0 après Alt+2 → second panneau masqué ─
+  175) specs/e2e/ui/split-pane.spec.js:52:1 › Alt+0 après Alt+2 → second panneau masqué ─
 
     Test timeout of 15000ms exceeded.
 
@@ -6210,7 +4498,7 @@
 
     Error Context: test-results/ui-split-pane-Alt-0-après-Alt-2-→-second-panneau-masqué/error-context.md
 
-  279) specs/e2e/ui/split-pane.spec.js:59:1 › Alt+0 sans split actif → notification erreur 6100 
+  176) specs/e2e/ui/split-pane.spec.js:59:1 › Alt+0 sans split actif → notification erreur 6100 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -6237,7 +4525,7 @@
 
     Error Context: test-results/ui-split-pane-Alt-0-sans-s-3f6d1--→-notification-erreur-6100/error-context.md
 
-  280) specs/e2e/ui/split-pane.spec.js:68:1 › Maj+Tab depuis pane 1 → focus passe dans pane 2 
+  177) specs/e2e/ui/split-pane.spec.js:68:1 › Maj+Tab depuis pane 1 → focus passe dans pane 2 
 
     Test timeout of 15000ms exceeded.
 
@@ -6258,7 +4546,7 @@
 
     Error Context: test-results/ui-split-pane-Maj-Tab-depu-1e30a-1-→-focus-passe-dans-pane-2/error-context.md
 
-  281) specs/e2e/ui/split-pane.spec.js:77:1 › Maj+Tab depuis pane 2 → focus revient dans pane 1 
+  178) specs/e2e/ui/split-pane.spec.js:77:1 › Maj+Tab depuis pane 2 → focus revient dans pane 1 
 
     Test timeout of 15000ms exceeded.
 
@@ -6279,7 +4567,7 @@
 
     Error Context: test-results/ui-split-pane-Maj-Tab-depu-c3621-→-focus-revient-dans-pane-1/error-context.md
 
-  282) specs/e2e/ui/split-pane.spec.js:89:1 › Alt+1 depuis pane 2 → focus revient dans pane 1 
+  179) specs/e2e/ui/split-pane.spec.js:89:1 › Alt+1 depuis pane 2 → focus revient dans pane 1 
 
     Test timeout of 15000ms exceeded.
 
@@ -6300,7 +4588,7 @@
 
     Error Context: test-results/ui-split-pane-Alt-1-depuis-14284-→-focus-revient-dans-pane-1/error-context.md
 
-  283) specs/e2e/ui/split-rotate.spec.js:17:1 › Alt+R sans split actif → notification 6100 
+  180) specs/e2e/ui/split-rotate.spec.js:17:1 › Alt+R sans split actif → notification 6100 
 
     Error: expect(locator).toBeVisible() failed
 
@@ -6327,7 +4615,7 @@
 
     Error Context: test-results/ui-split-rotate-Alt-R-sans-split-actif-→-notification-6100/error-context.md
 
-  284) specs/e2e/ui/split-rotate.spec.js:26:1 › Alt+R depuis vertical → bascule en horizontal 
+  181) specs/e2e/ui/split-rotate.spec.js:26:1 › Alt+R depuis vertical → bascule en horizontal 
 
     Test timeout of 15000ms exceeded.
 
@@ -6348,7 +4636,7 @@
 
     Error Context: test-results/ui-split-rotate-Alt-R-depu-dd881-cal-→-bascule-en-horizontal/error-context.md
 
-  285) specs/e2e/ui/split-rotate.spec.js:34:1 › Alt+R depuis horizontal → bascule en vertical 
+  182) specs/e2e/ui/split-rotate.spec.js:34:1 › Alt+R depuis horizontal → bascule en vertical 
 
     Test timeout of 15000ms exceeded.
 

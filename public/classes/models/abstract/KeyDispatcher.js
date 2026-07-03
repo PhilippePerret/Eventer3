@@ -22,6 +22,7 @@ export default class KeyDispatcher {
       if (maj  && (m = dm['maj+alt']))  return m
       if ((m = dm['alt'])) return m
     } else if (ctrl) {
+      if (maj  && (m = dm['ctrl+maj'])) return m
       if ((m = dm['ctrl'])) return m
     } else if ((m = dm['nokey'])) return m
     return null

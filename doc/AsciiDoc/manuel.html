@@ -440,6 +440,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
+<li><a href="#_présentation_de_lapplication">Présentation de l&#8217;application</a>
+<ul class="sectlevel2">
+<li><a href="#_but_de_lapplication">But de l&#8217;application</a></li>
+</ul>
+</li>
 <li><a href="#_procédures">Procédures</a></li>
 <li><a href="#_toutes_les_procédures">Toutes les procédures</a>
 <ul class="sectlevel2">
@@ -447,12 +452,30 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_event">Event</a></li>
 <li><a href="#_les_brins">Les Brins</a></li>
 <li><a href="#_personnage">Personnage</a></li>
+<li><a href="#_lapplication">L&#8217;application</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 <div id="content">
+<div class="sect1">
+<h2 id="_présentation_de_lapplication">Présentation de l&#8217;application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>EventerX est une application qui permet de gérer les <strong>évènemenciers</strong> de projets de film ou de roman.</p>
+</div>
+<div class="sect2">
+<h3 id="_but_de_lapplication">But de l&#8217;application</h3>
+<div class="paragraph">
+<p>Le but premier d’EventerX est de permettre à l’autrice ou l’auteur, la ou le scénariste, de développer en toute agilité <strong>la structure de son histoire</strong> et de mettre cette structure au cœur même de son processus d’écriture.</p>
+</div>
+<div class="paragraph">
+<p>Deux façons (au moins) de se servir de l’application : 1) on peut s’en servir uniquement pour construire l’histoire, donc définir la structure seulement ou 2) s’en servir d’un bout à l’autre, de la définition des actes jusqu’au texte final, roman ou scénario, ou tout autre document intermédiaire comme le synopsis complet.</p>
+</div>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="_procédures">Procédures</h2>
 <div class="sectionbody">
@@ -806,7 +829,7 @@ Son fond est vert (= édition)</p></td>
 <div class="sect3">
 <h4 id="_modifier_tous_les_projets_cochés">Modifier tous les projets cochés</h4>
 <div class="paragraph">
-<p><em>Note : Cette opération fonctionne même si l&#8217;event courant n&#8217;est pas coché, lui.</em></p>
+<p><em>Note : Cette opération fonctionne même si item courant n&#8217;est pas coché, lui.</em></p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -996,7 +1019,7 @@ Vous pouvez prendre connaissance du raccourci à utiliser.<br>
 <div class="sect3">
 <h4 id="_modifier_tous_les_évènements_cochés">Modifier tous les évènements cochés</h4>
 <div class="paragraph">
-<p><em>Note : Cette opération fonctionne même si l&#8217;event courant n&#8217;est pas coché, lui.</em></p>
+<p><em>Note : Cette opération fonctionne même si item courant n&#8217;est pas coché, lui.</em></p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1137,7 +1160,38 @@ Pour sortir, <kbd style="font-size:1.1em;">␛</kbd> comme d&#8217;habitude.</p>
 </div>
 <div class="sect3">
 <h4 id="_définir_le_style_dun_event">Définir le style d&#8217;un event</h4>
-
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Action</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Attendu</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">On se trouve sur l&#8217;évènemencier de l&#8217;event</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↑</kbd>/<kbd style="font-size:1.1em;">↓</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">L&#8217;event à styliser est sélectionné</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">s</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La fenêtre des styles est ouverte</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">…</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">s</kbd> | <kbd style="font-size:1.1em;">⌘</kbd>+<kbd style="font-size:1.1em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">la fenêtre des styles est fermée</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect3">
 <h4 id="_définir_laspect_dun_event">Définir l&#8217;aspect d&#8217;un event</h4>
@@ -1225,13 +1279,21 @@ Pour sortir, <kbd style="font-size:1.1em;">␛</kbd> comme d&#8217;habitude.</p>
 </tbody>
 </table>
 </div>
+<div class="sect3">
+<h4 id="_détruire_un_event">Détruire un event</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_détruire_tous_les_events_cochés">Détruire tous les events cochés</h4>
+
+</div>
 </div>
 <div class="sect2">
 <h3 id="_les_brins">Les Brins</h3>
 <div class="sect3">
 <h4 id="_modifier_tous_les_brins_cochés">Modifier tous les brins cochés</h4>
 <div class="paragraph">
-<p><em>Note : Cette opération fonctionne même si l&#8217;event courant n&#8217;est pas coché, lui.</em></p>
+<p><em>Note : Cette opération fonctionne même si item courant n&#8217;est pas coché, lui.</em></p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1275,6 +1337,14 @@ Pour sortir, <kbd style="font-size:1.1em;">␛</kbd> comme d&#8217;habitude.</p>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="sect3">
+<h4 id="_détruire_un_brin">Détruire un brin</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_détruire_tous_les_brins_cochés">Détruire tous les brins cochés</h4>
+
 </div>
 </div>
 <div class="sect2">
@@ -1310,7 +1380,7 @@ Un premier personnage est toujours créé s&#8217;il n&#8217;y en a pas encore</
 <div class="sect3">
 <h4 id="_modifier_tous_les_personnages_cochés">Modifier tous les personnages cochés</h4>
 <div class="paragraph">
-<p><em>Note : Cette opération fonctionne même si l&#8217;event courant n&#8217;est pas coché, lui.</em></p>
+<p><em>Note : Cette opération fonctionne même si item courant n&#8217;est pas coché, lui.</em></p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1355,13 +1425,36 @@ Pour sortir, <kbd style="font-size:1.1em;">␛</kbd> comme d&#8217;habitude.</p>
 </tbody>
 </table>
 </div>
+<div class="sect3">
+<h4 id="_détruire_un_personnage">Détruire un personnage</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_détruire_tous_les_personnages_cochés">Détruire tous les personnages cochés</h4>
+
+</div>
+</div>
+<div class="sect2">
+<h3 id="_lapplication">L&#8217;application</h3>
+<div class="sect3">
+<h4 id="_définir_une_constante">Définir une constante</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_redéfinir_une_constante">Redéfinir une constante</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_supprimer_une_constante">Supprimer une constante</h4>
+
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-07-01 10:22:04 +0200
+Last updated 2026-07-03 10:34:56 +0200
 </div>
 </div>
 </body>

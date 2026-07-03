@@ -1,4 +1,4 @@
-_Note : Cette opération fonctionne même si l'event courant n'est pas coché, lui._
+_Note : Cette opération fonctionne même si item courant n'est pas coché, lui._
 
 [cols="1,4"]
 |====

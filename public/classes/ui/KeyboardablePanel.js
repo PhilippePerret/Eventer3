@@ -1,4 +1,5 @@
 import { stopEvent } from '../utils/events.js'
+import { movePanel, movablePanelInner } from '../utils/panelMove.js'
 import LOG from '../../system/LOG.js'
 
 export default class KeyboardablePanel {
@@ -92,6 +93,12 @@ export default class KeyboardablePanel {
   // ── Clavier ──────────────────────────────────────────────────────────────────
 
   _handleKey(event) {
+    if (event.ctrlKey && event.shiftKey && !event.metaKey && !event.altKey &&
+        ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+      stopEvent(event)
+      movePanel(this._el, event.key)
+      return
+    }
     const keyAction = this._footerKeyMap?.[event.key]
     if (keyAction) { stopEvent(event); keyAction(); return }
     if (!KeyboardablePanel.HANDLED_KEYS[event.key]) return
