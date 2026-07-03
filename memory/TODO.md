@@ -23,9 +23,10 @@
   5. Passer au test suivant.
 8. Dire à l'user qu'on est prêt pour un ultime run de tous les tests pour s'assurer qu'ils passent tous au vert
 9. Supprimer de `memory/tests-a-faire-passer.txt` tous les résultats des tests qu'on vient de faire passer au vert
-10. Remettre les fichiers _tdd à leur emplacement canonique
-11. On ne pollue pas ce fichier ! On retire ce qui a été fait quand ça a été corrigé : On retire tout ce qui a été ajouté le cas échéant pour les tests courants
-12. On recommence à 1 ci-dessus.
+10. Renseigner le fichier memory/CHANGELOG.md
+11. Remettre les fichiers _tdd à leur emplacement canonique
+12. On ne pollue pas ce fichier ! On retire ce qui a été fait quand ça a été corrigé : On retire tout ce qui a été ajouté le cas échéant pour les tests courants
+13. On recommence à 1 ci-dessus.
 
 **[LIRE TOUJOURS AVANT TOUT TRAVAIL SUR LES TESTS]**
 - S'inspirer de `doc/xArchives/public-old` pour le fonctionnement anciennement implémenté (ne pas hésiter à reprendre du code, si valide, surtout s'il ne concerne pas la gestion des keyboard events, radicalement différente dans la nouvelle architecture).
@@ -49,8 +50,6 @@
 
 **IMPORTANT** : Ne pas oublier d'ajouter "//Origine: ..." en haut des fichiers de test qui n'ont pas cette marque
 
-PULL FilePicker
-- specs/e2e/filesystem/filepicker.spec.js
 PULL Filtre
 - specs/e2e/filter/filter-bar.spec.js
 - specs/e2e/filter/filter-brin.spec.js

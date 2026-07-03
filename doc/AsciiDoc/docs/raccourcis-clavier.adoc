@@ -60,6 +60,7 @@ _Cette section répertorie l'intégralité des raccourcis-clavier utilisés dans
 | combo:cmd+ffh[] | Styles  | Déplacer le style vers le haut (non prioritaire)    | ???
 
 4+| Panneaux
+
 | combo:cmd+enter[]   | Panneau | Ferme le panneau ouvert                       | Lister.closePanel
 | combo:ctrl+maj+fg[] | Normal  | Déplace le panneau vers la gauche             | ???
 | combo:ctrl+maj+fd[] | Normal  | Déplace le panneau vers la droite             | ???
@@ -67,9 +68,15 @@ _Cette section répertorie l'intégralité des raccourcis-clavier utilisés dans
 | combo:ctrl+maj+fb[] | Normal  | Déplace le panneau vers le bas                | ???
 
 4+| Filtres
+
 | combo:cmd+:[]       | Normal  | Active le filtrage des `Event`s                       | ???
 | combo:tab[]         | Filtre  | Passer de propriété de filtre en propriété de filtre  | ???
 | combo:maj+tab[]     | Filtre  | Comme combo:tab[] mais à l'envers                     | ???
+
+4+| Mode multifenêtres
+
+| combo:alt[] + combo:0/1/2/3[] | Display
+| Active la fenêtre voulu ou quitte le mode split de fenêtre {à détailler} | ???
 
 4+| Application
 | combo:cmd+m[]       | Display | Ouvre le panneau des modes d'affichage          | ???

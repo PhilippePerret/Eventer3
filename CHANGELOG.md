@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2026-07-03
+
+- Panneau styles : `s` ferme le panneau depuis n'importe quelle lettre sans item correspondant (fix ListerStyle.onkeydown)
+- Badge perso (RO) sur brin : fix ordre de chargement dans Project.enterInside (persos chargés avant build des brins)
+- Ctrl+Shift+Arrow : déplace le panneau actif (style, outils…) — KeyDispatcher + ListerLi + panelMove.js
+- Panneau outils : port depuis ancienne architecture, ouverture via ⌘+t (niveau application), déplacement Ctrl+Shift+Arrow
+- Suppression de `#shortcuts-panel` (remplacé par l'aide contextuelle)
+- panel-search.spec.js : tests skippés (fonctionnalité à fusionner avec filtre)
+
 ## 2026-07-02
 
 - Amélioration de l'affichage des propriétés d'events
