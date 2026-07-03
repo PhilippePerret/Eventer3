@@ -1,3 +1,4 @@
+// Origine : specs/e2e/filter/filter-ux.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect, pane1, press, getErr } from '../__setup__.js'
 

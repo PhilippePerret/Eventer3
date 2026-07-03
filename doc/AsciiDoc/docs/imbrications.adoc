@@ -1,0 +1,5 @@
+== Imbrications ==
+
+_Pour le moment, seul les `Event`(s) fonctionnent par imbrications mais potentiellement, tous les <<Listers>> peuvent potentiellement, le faire, les projets (pour gérer les sous-projets, etc.), les brins (pour gérer des grands groupes de brins) ou les personnages (pour grouper les personnages par exemple par antagonistes, protagonistes, etc.)_
+
+`lister_id` définit les `Event` enfant, dans l'ordre

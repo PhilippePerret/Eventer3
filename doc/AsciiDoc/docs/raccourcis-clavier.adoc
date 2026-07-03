@@ -19,6 +19,7 @@ _Cette section répertorie l'intégralité des raccourcis-clavier utilisés dans
 | combo:alt+fb[]  | Panel     | Sélectionne l'élément suivant sous le panneau     | ???
 | combo:alt+fh[]  | Panel     | Sélectionne l'élément précédent sous le panneau   | ???
 
+4+|
 4+| **Cibles/références**
 
 | combo:k[]       | Projects  | Ajouter le projet dans la liste des cibles    | TargetsManager.add
@@ -33,13 +34,15 @@ _Cette section répertorie l'intégralité des raccourcis-clavier utilisés dans
 | combo:o[]       | Lien cible  
 | Ouvre la boite pour choisir comment afficher la cible                       | ???
 
-4+| Regroupements
+4+|
+4+| **Regroupements**
 
 | combo:p[]       | Events | Ouvre le panneau des personnages pour les définir et les choisir pour l'`Event` sélectionné  | ???
 | combo:p[]       | Brins   | Ouvre le panneau des personnages pour les définir et les choisir pour le brin | ???
 | combo:b[]       | Events |` Ouvre le panneau des brins pour les définir et les choisir  | ???
 
-4+| Édition
+4+|
+4+| **Édition**
 
 | combo:n[]       | Normal  | Crée un nouvel Item (Project, Event, etc.)            | Lister.createItem
 | combo:alt+n[]   | Normal  | Crée un nouvel Item AVANT la sélection                | Lister.createItemBefore
@@ -59,7 +62,8 @@ _Cette section répertorie l'intégralité des raccourcis-clavier utilisés dans
 | combo:cmd+fb[]  | Styles  | Déplacer le style vers le bas (précédence)          | ???
 | combo:cmd+ffh[] | Styles  | Déplacer le style vers le haut (non prioritaire)    | ???
 
-4+| Panneaux
+4+|
+4+| **Panneaux**
 
 | combo:cmd+enter[]   | Panneau | Ferme le panneau ouvert                       | Lister.closePanel
 | combo:ctrl+maj+fg[] | Normal  | Déplace le panneau vers la gauche             | ???
@@ -67,18 +71,30 @@ _Cette section répertorie l'intégralité des raccourcis-clavier utilisés dans
 | combo:ctrl+maj+fh[] | Normal  | Déplace le panneau vers le haut               | ???
 | combo:ctrl+maj+fb[] | Normal  | Déplace le panneau vers le bas                | ???
 
-4+| Filtres
+4+|
+4+| **Cycle des tabulations** (Tab Cycle) +
+_Ce cycle est utilisé dans la plupart des panneaux flottants et suis un cycle toujours identique_
+|                   | Panneau | Le premier élément du panneau est sélectionné | 
+| combo:tab[]       | Panneau | Le premier bouton du pied de panneau est sélectionné |
+| SI combo:enter[]   | Panneau | Le bouton est activé |
+
+4+|
+4+| **Filtres**
 
 | combo:cmd+:[]       | Normal  | Active le filtrage des `Event`s                       | ???
 | combo:tab[]         | Filtre  | Passer de propriété de filtre en propriété de filtre  | ???
 | combo:maj+tab[]     | Filtre  | Comme combo:tab[] mais à l'envers                     | ???
 
-4+| Mode multifenêtres
+4+|
+4+| **Mode multi-fenêtres**
 
 | combo:alt[] + combo:0/1/2/3[] | Display
 | Active la fenêtre voulu ou quitte le mode split de fenêtre {à détailler} | ???
+| combo:cmd[] + combo:fg/fd[] | Display
+| Passe d'une fenêtre à l'autre                               | ???
 
-4+| Application
+4+|
+4+| **Application**
 | combo:cmd+m[]       | Display | Ouvre le panneau des modes d'affichage          | ???
 | combo:cmd+t[]       | Display | Le panneau des outils est ouvert                | ???
 | combo:q[]           | Display | Le panneau des constantes est ouvert            | ???

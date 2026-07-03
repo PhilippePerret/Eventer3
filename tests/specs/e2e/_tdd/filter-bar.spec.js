@@ -1,3 +1,4 @@
+// Origine : specs/e2e/filter/filter-bar.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
@@ -18,7 +19,8 @@ async function goToListerEvent(page, fixture = 'with-event-states') {
 }
 
 async function openWidgetPopup(page, field) {
-  await pane1(page).locator(`#events-panel .filter-widget[data-field="${field}"] .filter-widget__btn`).click()
+  await pane1(page).locator(`#events-panel .filter-widget[data-field="${field}"] .filter-widget__btn`).focus()
+  await press(page, 'ArrowDown')
   await expect(pane1(page).locator('.popup-select')).toBeVisible()
 }
 
@@ -88,9 +90,16 @@ test("TAB depuis météo : focus widget effet", async ({ page }) => {
   await expect(pane1(page).locator('#events-panel .filter-widget[data-field="effet"] .filter-widget__btn')).toBeFocused()
 })
 
-test("TAB depuis dernier widget : revient au champ titre", async ({ page }) => {
+test("TAB depuis effet : focus widget brins", async ({ page }) => {
   await goToListerEvent(page)
   await pane1(page).locator('#events-panel .filter-widget[data-field="effet"] .filter-widget__btn').focus()
+  await press(page, 'Tab')
+  await expect(pane1(page).locator('#events-panel .filter-widget[data-field="brins"] .filter-widget__btn')).toBeFocused()
+})
+
+test("TAB depuis dernier widget : revient au champ titre", async ({ page }) => {
+  await goToListerEvent(page)
+  await pane1(page).locator('#events-panel .filter-widget[data-field="brins"] .filter-widget__btn').focus()
   await press(page, 'Tab')
   await expect(pane1(page).locator('#events-panel .panel-search')).toBeFocused()
 })
@@ -121,7 +130,7 @@ test("TAB depuis popup ouvert : ferme popup et focus widget suivant", async ({ p
 
 // ─── Filtre état ──────────────────────────────────────────────────────────────
 
-test("état : cliquer le bouton ouvre le popup", async ({ page }) => {
+test("état : ArrowDown sur le bouton ouvre le popup", async ({ page }) => {
   await goToListerEvent(page)
   await openWidgetPopup(page, 'state')
   await expect(pane1(page).locator('.popup-select')).toBeVisible()

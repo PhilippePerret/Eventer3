@@ -465,8 +465,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#_fonctionnement_général">Fonctionnement général</a></li>
+<li><a href="#_les_listers">Les Listers</a></li>
 <li><a href="#_synopsis">Synopsis</a></li>
 <li><a href="#_combinaisons_clavier">Combinaisons clavier</a></li>
+<li><a href="#_le_type_de_litem">Le type de l&#8217;Item</a></li>
 <li><a href="#_action_suivant_les_modes">Action suivant les modes</a>
 <ul class="sectlevel2">
 <li><a href="#_tab_sur_item">TAB sur Item</a></li>
@@ -863,6 +865,53 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 </div>
 </div>
 <div class="sect1">
+<h2 id="_les_listers">Les Listers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Ces classes héritent toutes de la classe abstraite <code>Lister</code> qui définit la gestion des listes d&#8217;éléments (<code>Item</code> s).</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 40%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Lister</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Responsabilité</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerProject</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Liste unique des projets en activité</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Permet de gérer les projets</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerEvent</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Liste infinie des events du projet courant</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">gère les events en tant que liste.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerBrin</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Liste unique des Brins du projet courant</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">gère les brins en tant que liste.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerPerso</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Liste <em>unique</em> des Personnages du projet courant</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">gère les personnages en tant que liste.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerStyle</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Liste <em>unique</em> des styles du projet courant</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">gère les styles en tant que liste.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_synopsis">Synopsis</h2>
 <div class="sectionbody">
 
@@ -892,7 +941,7 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock"><strong>Sélection &amp; déplacements</strong></p></td>
+<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock"><strong>Navigation</strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↑</kbd></p></td>
@@ -917,6 +966,48 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 <td class="tableblock halign-left valign-top"><p class="tableblock">Normal</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Déplacement de l&#8217;Item vers le bas</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Lister.moveDown</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">␣</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Display</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Coche/décoche l'`Item` (sauf <code>Project</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">→</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Events</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Entre dans l&#8217;évènemencier de l&#8217;event</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Item.enterInside</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">→</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Projets</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Entre dans le projet (évènemencier de niveau 1)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Project.enterInside</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">←</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Eventer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Revenir à l&#8217;évènemencier parent ou la liste des projets</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lister.leaveToParent</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">⌥</kbd>+<kbd style="font-size:1.1em;">↓</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Panel</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sélectionne l&#8217;élément suivant sous le panneau</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">⌥</kbd>+<kbd style="font-size:1.1em;">↑</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Panel</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sélectionne l&#8217;élément précédent sous le panneau</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="4"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock"><strong>Cibles/références</strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">k</kbd></p></td>
@@ -949,34 +1040,40 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 <td class="tableblock halign-left valign-top"><p class="tableblock">TargetsPanel.open // peut être changé</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">␣</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">tab</kbd> *x</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Display</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Coche/décoche l'`Item` (sauf <code>Project</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sélection un lien insérer dans un texte</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock"><strong>Hiérarchie</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">c</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lien cible</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouvre la carte de la cible du lien</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">→</kbd></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Events</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Entre dans l&#8217;évènemencier de l&#8217;event</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Item.enterInside</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">g</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lien cible</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Rejoint la cible du lien (l&#8217;affiche)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">→</kbd></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Projets</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Entre dans le projet (évènemencier de niveau 1)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Project.enterInside</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">a</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lien cible</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Affiche la cible du lien dans autre fenêtre</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">←</kbd></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Eventer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Revenir à l&#8217;évènemencier parent ou la liste des projets</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Lister.leaveToParent</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">o</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lien cible</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouvre la boite pour choisir comment afficher la cible</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock"> Regroupements</p></td>
+<td class="tableblock halign-left valign-top" colspan="4"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock"> <strong>Regroupements</strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">p</kbd></p></td>
@@ -997,7 +1094,10 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 <td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock">Édition</p></td>
+<td class="tableblock halign-left valign-top" colspan="4"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock"><strong>Édition</strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">n</kbd></p></td>
@@ -1048,6 +1148,12 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 <td class="tableblock halign-left valign-top"><p class="tableblock">Lister.deleteSelected</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">⇧</kbd>+<kbd style="font-size:1.1em;">⌦</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Normal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Détruit tous les Item cochés (confirmat° si enfants)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lister.deleteSelected</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">⌘</kbd>+<kbd style="font-size:1.1em;">x</kbd></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Normal</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Couper l&#8217;Item sélectionné dans le presse-papier</p></td>
@@ -1064,6 +1170,12 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 <td class="tableblock halign-left valign-top"><p class="tableblock">Normal</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Coller l&#8217;Item du presse-papier</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Lister.pasteItem</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">⌘</kbd>+<kbd style="font-size:1.1em;">k</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Items</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le panneau des cibles est ouvert, pour en choisir</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">s</kbd></p></td>
@@ -1090,7 +1202,10 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 <td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock">Panneaux</p></td>
+<td class="tableblock halign-left valign-top" colspan="4"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock"><strong>Panneaux</strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">⌘</kbd>+<kbd style="font-size:1.1em;">↩︎</kbd></p></td>
@@ -1123,7 +1238,35 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 <td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock">Filtres</p></td>
+<td class="tableblock halign-left valign-top" colspan="4"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock"><strong>Cycle des tabulations</strong> (Tab Cycle)<br>
+<em>Ce cycle est utilisé dans la plupart des panneaux flottants et suis un cycle toujours identique</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Panneau</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le premier élément du panneau est sélectionné</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">tab</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Panneau</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le premier bouton du pied de panneau est sélectionné</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SI <kbd style="font-size:1.1em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Panneau</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le bouton est activé</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="4"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock"><strong>Filtres</strong></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">⌘</kbd>+<kbd style="font-size:1.1em;">:</kbd></p></td>
@@ -1134,7 +1277,7 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">tab</kbd></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Filtre</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Passer de propriété de filtre en propriété</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Passer de propriété de filtre en propriété de filtre</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
@@ -1144,19 +1287,102 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 <td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock">Application</p></td>
+<td class="tableblock halign-left valign-top" colspan="4"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock"><strong>Mode multi-fenêtres</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">⌥</kbd> + <kbd style="font-size:1.1em;">0</kbd>/<kbd style="font-size:1.1em;">1</kbd>/<kbd style="font-size:1.1em;">2</kbd>/<kbd style="font-size:1.1em;">3</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Display</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Active la fenêtre voulu ou quitte le mode split de fenêtre {à détailler}</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">⌘</kbd> + <kbd style="font-size:1.1em;">←</kbd>/<kbd style="font-size:1.1em;">→</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Display</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Passe d&#8217;une fenêtre à l&#8217;autre</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="4"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" colspan="4"><p class="tableblock"><strong>Application</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">⌘</kbd>+<kbd style="font-size:1.1em;">m</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Display</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ouvre le panneau des modes d&#8217;affichage</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">⌘</kbd>+<kbd style="font-size:1.1em;">t</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Display</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le panneau des outils est ouvert</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">q</kbd></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Display</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Ouvre le panneau pour définir les constantes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le panneau des constantes est ouvert</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">⌘</kbd>+<kbd style="font-size:1.1em;">o</kbd></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Display</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Ouvre le panneau des options pour les régler</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le panneau des options est ouvert</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">???</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_le_type_de_litem">Le type de l&#8217;Item</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Le <em>type</em> d&#8217;un <code>Item</code> est TOUJOURS un <em>type métier</em> et ne doit surtout pas être confont avec le <code>minClass</code> qui donne la classe minuscule de l&#8217;item.</p>
+</div>
+<div class="paragraph">
+<p>Les types-métier des <code>Item</code>(s) sont par exemple les suivants :</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 40%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Item</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description et valeurs</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constantes valeurs</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Project</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La nature du projet, roman, film, pièce de théâtre, etc.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">models/constants/Project.js <code>PROJECT_TYPES</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Event</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>Pas de type</em></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Brin</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La nature du brin, "intrigue" ou "accessoire", "thématique", c&#8217;est la nature de l&#8217;élément narratif que le brin permet de suivre.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">models/constants/Brin.js <code>BRIN_TYPE</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Perso</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La nature du personnage, entre "Antagoniste", "Protagoniste" et "Ambivalent"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">models/constants/Perso.js <code>PERSO_TYPES</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Style</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>Non utilisé</em></p></td>
+<td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
 </table>
@@ -2029,6 +2255,46 @@ Pour sortir, <kbd style="font-size:1.1em;">␛</kbd> comme d&#8217;habitude.</p>
 
 </div>
 <div class="sect3">
+<h4 id="_choisir_les_brins_de_tous_les_events_cochés">Choisir les brins de tous les events cochés</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Action</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Attendu</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un évènemencier est ouvert<br>
+Le projet possède plusieurs brins<br>
+Plusieurs évènements sont cochés</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">⇧</kbd>+<kbd style="font-size:1.1em;">b</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La fenêtre des brins est ouverte<br>
+<em>(tous les brins se sont mis en pseudo édition)</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↑</kbd>/<kbd style="font-size:1.1em;">↓</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sélectionne le brin voulu</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">␣</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Coche ou décoche le brin selon son état précédent<br>
+Le badge du brin s&#8217;ajoute ou se retire de l&#8217;event sélectionné (mais pas des autres)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">combo:cmd+enter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La fenêtre des brins est refermée<br>
+Les brins se sont ajoutés et retirés à tous les events cochés.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
 <h4 id="_choisir_les_personnages_de_levent">Choisir les personnages de l&#8217;event</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -2043,6 +2309,27 @@ Pour sortir, <kbd style="font-size:1.1em;">␛</kbd> comme d&#8217;habitude.</p>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Choisir un projet qui <a href="#procedure-creation-personnage">contient des personnages</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">p</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La fenêtre des personnages est ouverte</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">↑</kbd>/<kbd style="font-size:1.1em;">↓</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le personnage voulu est sélectionné</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">␣</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Le personnage est coché<br>
+Et son avatar ou son badge s&#8217;affiche sur la ligne de l&#8217;event.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">…</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><kbd style="font-size:1.1em;">p</kbd> | <kbd style="font-size:1.1em;">⌘</kbd>+<kbd style="font-size:1.1em;">↩︎</kbd></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La fenêtre des personnages est fermée</p></td>
 </tr>
 </tbody>
 </table>
@@ -2398,7 +2685,7 @@ Pour sortir, <kbd style="font-size:1.1em;">␛</kbd> comme d&#8217;habitude.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-07-03 10:35:05 +0200
+Last updated 2026-07-03 15:36:54 +0200
 </div>
 </div>
 </body>

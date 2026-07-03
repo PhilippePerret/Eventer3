@@ -1,6 +1,7 @@
 import KeyDispatcher from './KeyDispatcher.js'
 import LOG from '../../../system/LOG.js'
 import { raise, getErr } from '../../../system/Error.js'
+import { stopEvent } from '../../utils/events.js'
 import ListerDom from '../dom/Lister.js'
 import ListerRepo from '../repo/Lister.js'
 import { ListerLi } from '../listen/Lister.js'
@@ -8,6 +9,8 @@ import Notification from '../../ui/Notification.js'
 import ConfirmDialog from '../../ui/ConfirmDialog.js'
 import { Clipboard } from './Clipboard.js'
 import { movePanel, movablePanelInner } from '../../utils/panelMove.js'
+import PopupSelect from '../../ui/PopupSelect.js'
+import StatusBar from '../../ui/StatusBar.js'
 
 export default class Lister extends KeyDispatcher {
 
@@ -26,6 +29,107 @@ export default class Lister extends KeyDispatcher {
   get minClass() { return this._minClass || (this._minClass = this.constructor.ITEM_CLASS?.name.toLowerCase()) }
 
   static LISTENERS = { ...ListerLi }
+
+  _filterMenuWidgets() { return [] }
+
+  async openFilterBar() {
+    const existing = this.container?.querySelector('.filter-bar')
+    if (existing && !existing.classList.contains('hidden')) {
+      existing.classList.add('hidden')
+      this._activeFilters = {}
+      this._applyAllFilters()
+      StatusBar.setFilterState('none')
+      return
+    }
+    let bar = this.container?.querySelector('.filter-bar')
+    if (!bar) {
+      bar = document.createElement('div')
+      bar.className = 'filter-bar hidden'
+
+      const titleWidget = document.createElement('div')
+      titleWidget.className = 'filter-widget'
+      titleWidget.dataset.field = 'title'
+      const input = document.createElement('input')
+      input.type = 'text'
+      input.className = 'panel-search'
+      input.placeholder = 'Filtrer par titre…'
+      titleWidget.appendChild(input)
+      bar.appendChild(titleWidget)
+      input.addEventListener('input', () => this._applyTitleFilter(input.value.trim().toLowerCase()))
+
+      const widgets = await Promise.all(
+        this._filterMenuWidgets().map(async (w) => ({
+          ...w,
+          options: w.options ?? (w.loader ? await w.loader() : []),
+        }))
+      )
+
+      widgets.forEach(({ field, label, options, live }) => {
+        const w = document.createElement('div')
+        w.className = 'filter-widget'
+        w.dataset.field = field
+        const btn = document.createElement('button')
+        btn.className = 'filter-widget__btn'
+        btn.textContent = label
+        if (options?.length) {
+          const isLive = live !== false
+          new PopupSelect({
+            options, multi: true,
+            onSelect:  isLive ? () => btn.focus() : (vals) => { this._applyMenuFilter(field, vals); btn.focus() },
+            onCancel:  () => btn.focus(),
+            onChange:  isLive ? (vals) => this._applyMenuFilter(field, vals) : null,
+          }).attachAnchor(btn)
+        }
+        w.appendChild(btn)
+        bar.appendChild(w)
+      })
+
+      bar.addEventListener('keydown', (e) => {
+        if (e.key !== 'Tab') return
+        stopEvent(e)
+        const focusables = [...bar.querySelectorAll('.panel-search, .filter-widget__btn')]
+        const idx = focusables.indexOf(document.activeElement)
+        focusables[(idx + 1) % focusables.length]?.focus()
+      })
+
+      this.container?.querySelector('.lister-panel')?.prepend(bar)
+    }
+    bar.classList.remove('hidden')
+    bar.querySelector('.panel-search')?.focus()
+    StatusBar.setFilterState('mode')
+  }
+
+  _applyTitleFilter(query) {
+    if (!this._activeFilters) this._activeFilters = {}
+    this._activeFilters.title = query || null
+    this._applyAllFilters()
+  }
+
+  _applyMenuFilter(field, values) {
+    if (!this._activeFilters) this._activeFilters = {}
+    this._activeFilters[field] = values?.length ? values.map(String) : null
+    this._applyAllFilters()
+  }
+
+  _filterMatches(item, field, values) {
+    return values.includes(String(item[field]))
+  }
+
+  _applyAllFilters() {
+    const filters = this._activeFilters ?? {}
+    let anyHidden = false
+    this.items.forEach(item => {
+      const hidden = Object.entries(filters).some(([field, val]) => {
+        if (!val) return false
+        if (field === 'title') return !item.title?.toLowerCase().includes(val)
+        return !this._filterMatches(item, field, val)
+      })
+      item.filtered = hidden
+      item.el?.classList.toggle('hidden', hidden)
+      if (hidden) anyHidden = true
+    })
+    StatusBar.setFilterState(anyHidden ? 'active' : 'mode')
+  }
 
   movePanelDown()  { movePanel(movablePanelInner(this.container), 'ArrowDown')  }
   movePanelUp()    { movePanel(movablePanelInner(this.container), 'ArrowUp')    }

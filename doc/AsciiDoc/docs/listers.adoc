@@ -1,0 +1,13 @@
+== Les Listers ==
+
+Ces classes héritent toutes de la classe abstraite `Lister` qui définit la gestion des listes d'éléments (`Item` s).
+
+[cols="1,2,2"]
+|====
+| **Lister**        | **Description**                             | **Responsabilité**
+| `ListerProject`   | Liste unique des projets en activité        | Permet de gérer les projets
+| `ListerEvent`     | Liste infinie des events du projet courant  |gère les events en tant que liste.
+| `ListerBrin`      | Liste unique des Brins du projet courant    | gère les brins en tant que liste.
+| `ListerPerso`     | Liste _unique_ des Personnages du projet courant | gère les personnages en tant que liste.
+| `ListerStyle`     | Liste _unique_ des styles du projet courant | gère les styles en tant que liste.
+|====

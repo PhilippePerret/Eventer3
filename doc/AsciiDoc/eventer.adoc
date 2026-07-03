@@ -55,12 +55,18 @@ Un projet comprend :
 - une liste de personnages (`ListerPerso` contenant des `Perso`)
   Les personnages sont ordonnés dans la propriété persistante `perso_ids` dans la table meta_project du fichier `eventer.db` du projet.
 
+include::docs/listers.adoc[]
+
+include::docs/imbrications.adoc[]
+
 
 == Synopsis ==
 
 
 include::docs/raccourcis-clavier.adoc[]
 
+
+include::docs/types-items.adoc[]
 
 == Action suivant les modes ==
 

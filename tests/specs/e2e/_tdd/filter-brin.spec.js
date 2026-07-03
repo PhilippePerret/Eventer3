@@ -1,3 +1,4 @@
+// Origine : specs/e2e/filter/filter-brin.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
@@ -17,30 +18,38 @@ async function enterListerEvent(page) {
   await expect(pane1(page).locator('#events-panel')).toBeVisible()
 }
 
+async function openBrinSelector(page) {
+  await press(page, ':')
+  await expect(pane1(page).locator('#events-panel .filter-bar')).toBeVisible()
+  // Tab depuis panel-search : état → météo → effet → brins
+  await press(page, 'Tab')
+  await press(page, 'Tab')
+  await press(page, 'Tab')
+  await press(page, 'Tab')
+  await expect(pane1(page).locator('#events-panel .filter-widget[data-field="brins"] .filter-widget__btn')).toBeFocused()
+  await press(page, 'ArrowDown')
+  await expect(pane1(page).locator('.popup-select')).toBeVisible()
+}
+
 // ── Panneau ───────────────────────────────────────────────────────
 
-test('Cmd+: puis b ouvre le sélecteur de brins', async ({ page }) => {
+test(': puis Tab×4 puis ArrowDown ouvre le sélecteur de brins', async ({ page }) => {
   await enterListerEvent(page)
-  await press(page, 'Meta+:')
-  await press(page, 'b')
-  await expect(pane1(page).locator('#filter-selector-panel')).toBeVisible()
+  await openBrinSelector(page)
 })
 
 test('le sélecteur affiche les brins du projet', async ({ page }) => {
   await enterListerEvent(page)
-  await press(page, 'Meta+:')
-  await press(page, 'b')
-  await expect(pane1(page).locator('.filter-selector-row')).toHaveCount(2)
+  await openBrinSelector(page)
+  await expect(pane1(page).locator('.popup-select__option')).toHaveCount(2)
 })
 
 // ── Filtrage réel ─────────────────────────────────────────────────
 
 test('sélectionner b1 masque les events sans b1', async ({ page }) => {
   await enterListerEvent(page)
-  await press(page, 'Meta+:')
-  await press(page, 'b')
-  await expect(pane1(page).locator('#filter-selector-panel')).toBeVisible()
-  await press(page, ' ')      // coche b1 (premier brin)
+  await openBrinSelector(page)
+  await press(page, ' ')      // coche b1 (premier brin, déjà focusé)
   await press(page, 'Enter')  // applique
 
   const items = pane1(page).locator('.event-item')
@@ -52,9 +61,7 @@ test('sélectionner b1 masque les events sans b1', async ({ page }) => {
 
 test('Escape dans le sélecteur n\'applique pas le filtre', async ({ page }) => {
   await enterListerEvent(page)
-  await press(page, 'Meta+:')
-  await press(page, 'b')
-  await expect(pane1(page).locator('#filter-selector-panel')).toBeVisible()
+  await openBrinSelector(page)
   await press(page, ' ')      // coche b1
   await press(page, 'Escape') // annule
 
@@ -65,19 +72,16 @@ test('Escape dans le sélecteur n\'applique pas le filtre', async ({ page }) => 
   await expect(items.nth(3)).not.toHaveClass(/hidden/)
 })
 
-test('Cmd+:: efface le filtre brin et réaffiche tous les events', async ({ page }) => {
+test(': puis : efface le filtre brin et réaffiche tous les events', async ({ page }) => {
   await enterListerEvent(page)
-  await press(page, 'Meta+:')
-  await press(page, 'b')
-  await expect(pane1(page).locator('#filter-selector-panel')).toBeVisible()
+  await openBrinSelector(page)
   await press(page, ' ')
   await press(page, 'Enter')
 
   // filtre actif : e2 et e4 masqués
   await expect(pane1(page).locator('.event-item').nth(1)).toHaveClass(/hidden/)
 
-  // effacement
-  await press(page, 'Meta+:')
+  // effacement : `:` une seconde fois ferme la bar et efface les filtres
   await press(page, ':')
 
   const items = pane1(page).locator('.event-item')

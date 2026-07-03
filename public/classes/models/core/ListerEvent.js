@@ -4,6 +4,7 @@ import Event from './Event.js'
 import StatusBar from '../../ui/StatusBar.js'
 import NaturePanel from '../../ui/NaturePanel.js'
 import LOG from '../../../system/LOG.js'
+import { EVENT_STATE, EVENT_METEO, EVENT_EFFET } from '../constants/Event.js'
 
 export default class ListerEvent extends Lister {
   static ITEM_CLASS  = Event
@@ -57,6 +58,26 @@ export default class ListerEvent extends Lister {
   }
 
   openNaturePanel() { new NaturePanel({ target: this }).open() }
+
+  _filterMenuWidgets() {
+    return [
+      { field: 'state', label: 'État',  options: EVENT_STATE },
+      { field: 'meteo', label: 'Météo', options: Object.entries(EVENT_METEO).map(([value, label]) => ({ value, label })) },
+      { field: 'effet', label: 'Effet', options: Object.entries(EVENT_EFFET).map(([value, label]) => ({ value, label })) },
+      { field: 'brins', label: 'Brins', live: false, loader: async () => {
+          const { default: ListerBrin } = await import('./ListerBrin.js')
+          const lb = new ListerBrin({ project: this.project })
+          await lb.load()
+          return lb.items.map(b => ({ value: String(b.id), label: b.title, badge: b.badge, color: b.color }))
+        }
+      },
+    ]
+  }
+
+  _filterMatches(item, field, values) {
+    if (field === 'brins') return values.some(id => item.brin_ids?.includes(id) || item.brin_ids?.includes(Number(id)))
+    return super._filterMatches(item, field, values)
+  }
 
   getTools() {
     return [

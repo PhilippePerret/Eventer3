@@ -3,6 +3,7 @@ export const ListerLi = {
   , ArrowDown:  { nokey: 'selectNext'     , alt: 'backgroundNext' , meta: 'moveDown' , 'ctrl+maj': 'movePanelDown'  }
   , ArrowLeft:  { 'ctrl+maj': 'movePanelLeft'  }
   , ArrowRight: { 'ctrl+maj': 'movePanelRight' }
+  , ':':        { nokey: 'openFilterBar'                             }
   , n:          { nokey: 'createNew'      , alt: 'createNewBefore'  }
   , '˜':        { alt: 'createNewBefore'                            }
   , Delete:     { nokey: 'deleteSelected' , maj: 'deleteCheckeds'   }

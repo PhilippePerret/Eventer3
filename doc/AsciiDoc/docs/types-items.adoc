@@ -1,0 +1,19 @@
+== Le type de l'Item ==
+
+Le _type_ d'un `Item` est TOUJOURS un _type métier_ et ne doit surtout pas être confont avec le `minClass` qui donne la classe minuscule de l'item.
+
+
+Les types-métier des `Item`(s) sont par exemple les suivants : 
+
+[cols="1,2,2"]
+|====
+| **Item**  | **Description et valeurs**  | **Constantes valeurs** 
+| `Project`  | La nature du projet, roman, film, pièce de théâtre, etc. 
+| models/constants/Project.js `PROJECT_TYPES`
+| `Event`   | _Pas de type_ |
+| `Brin`    | La nature du brin, "intrigue" ou "accessoire", "thématique", c'est la nature de l'élément narratif que le brin permet de suivre.
+| models/constants/Brin.js `BRIN_TYPE`
+| `Perso`   | La nature du personnage, entre "Antagoniste", "Protagoniste" et "Ambivalent"
+| models/constants/Perso.js `PERSO_TYPES`
+| `Style`   | _Non utilisé_ |
+|====
