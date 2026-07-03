@@ -444,7 +444,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_spécifications">Spécifications</a></li>
 <li><a href="#_définitions">Définitions</a>
 <ul class="sectlevel2">
-<li><a href="#_classes_abstraites">Classes abstraites</a></li>
+<li><a href="#lister-item">Classes abstraites</a></li>
 </ul>
 </li>
 <li><a href="#_principes_fondateurs">Principes fondateurs</a>
@@ -571,16 +571,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Cette section définit de façon littéraire tous les termes propres à l&#8217;application.</p>
 </div>
 <div class="sect2">
-<h3 id="_classes_abstraites">Classes abstraites</h3>
+<h3 id="lister-item">Classes abstraites</h3>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">Lister</dt>
 <dd>
-<p>Une liste abstraite. Contient des <code>Item`s, affiche un `Panel</code></p>
+<p>Une liste abstraite. Contient des <code>Item(s)</code>, affiche un <code>Panel</code>.</p>
 </dd>
 <dt class="hdlist1">Item</dt>
 <dd>
-<p>Un  <code>item</code> quelconque qui peut être un <code>Event</code>, un <code>Project</code>, un <code>Brin</code> etc.</p>
+<p>Un  <code>item</code> quelconque qui peut être un <code><a href="#events">Event</a></code>, un <code><a href="#projects">Project</a></code>, un <code><a href="#brins">Brin</a></code> etc.</p>
 </dd>
 </dl>
 </div>
@@ -852,8 +852,8 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 <td class="tableblock halign-left valign-top"><p class="tableblock">Unique (propriétaire)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Project</code> &lt; <code>Item</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerProject</code> &lt; <code>Lister</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Project</code> &lt; <code><a href="#lister-item">Item</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerProject</code> &lt; <code><a href="#lister-item">Lister</a></code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Oui (Application)</p></td>
 </tr>
 </tbody>
@@ -877,8 +877,8 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 <td class="tableblock halign-left valign-top"><p class="tableblock">Unique</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Event</code> &lt; <code>Item</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerEvent</code> &lt; <code>Lister</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Event</code> &lt; <code><a href="#lister-item">Item</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerEvent</code> &lt; <code><a href="#lister-item">Lister</a></code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Non</p></td>
 </tr>
 </tbody>
@@ -902,8 +902,8 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 <td class="tableblock halign-left valign-top"><p class="tableblock">Unique (propriétaire)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Brin</code> &lt; <code>Item</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerBrin</code> &lt; <code>Lister</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Brin</code> &lt; <code><a href="#lister-item">Item</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerBrin</code> &lt; <code><a href="#lister-item">Lister</a></code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Oui (Project)</p></td>
 </tr>
 </tbody>
@@ -930,8 +930,8 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 <td class="tableblock halign-left valign-top"><p class="tableblock">Unique (propriétaire)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Perso</code> &lt; <code>Item</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerPerso</code> &lt; <code>Lister</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Perso</code> &lt; <code><a href="#lister-item">Item</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerPerso</code> &lt; <code><a href="#lister-item">Lister</a></code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Oui (Project)</p></td>
 </tr>
 <tr>
@@ -978,8 +978,8 @@ Attention, contrairement aux apparences, ça n&#8217;est pas toujours aussi évi
 <td class="tableblock halign-left valign-top"><p class="tableblock">Unique (propriétaire)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Style</code> &lt; <code>Item</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerStyle</code> &lt; <code>Lister</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Style</code> &lt; <code><a href="#lister-item">Item</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ListerStyle</code> &lt; <code><a href="#lister-item">Lister</a></code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Oui (Project)</p></td>
 </tr>
 <tr>

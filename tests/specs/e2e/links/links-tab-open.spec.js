@@ -1,3 +1,4 @@
+//Origine: specs/e2e/links/links-tab-open.spec.js
 import { test, expect, pane1, press, getErr } from '../__setup__.js'
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 
@@ -134,21 +135,21 @@ test('popup : 3 options présentes', async ({ page }) => {
   await press(page, 'ArrowDown') // → s2a1
   await press(page, 'Tab')
   await press(page, 'o')
-  const items = pane1(page).locator('.floating-panel__item')
+  const items = pane1(page).locator('.ftpanel__item')
   await expect(items).toHaveCount(3)
   await expect(items.nth(0)).toContainText('évènemencier')
   await expect(items.nth(1)).toContainText('carte')
   await expect(items.nth(2)).toContainText('fenêtre')
 })
 
-test('Escape ferme le popup, lien reste actif', async ({ page }) => {
+test('Meta+Enter ferme le popup, lien reste actif', async ({ page }) => {
   await gotoEventList(page)
   await enterSubLister(page)
   await press(page, 'ArrowDown') // → s2a1
   await press(page, 'Tab')
   await press(page, 'o')
   await expect(pane1(page).locator('.link-open-popup')).toBeVisible()
-  await press(page, 'Escape')
+  await press(page, 'Meta+Enter')
   await expect(pane1(page).locator('.link-open-popup')).not.toBeVisible()
   await expect(pane1(page).locator('.item-link--active')).toHaveCount(1)
 })

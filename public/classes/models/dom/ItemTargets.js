@@ -1,5 +1,6 @@
 import Notification from '../../ui/Notification.js'
 import { getErr } from '../../../system/Error.js'
+import LinkOpenPopup from '../../ui/LinkOpenPopup.js'
 
 export default {
 
@@ -41,47 +42,11 @@ export default {
   },
 
   openActiveLink() {
-    if (this.getActiveLinkId() == null) { Notification.show(getErr(5210)); return }
-
-    const popup = document.createElement('div')
-    popup.className = 'link-open-popup floating-panel'
-
-    const options = [
-      { key: 'g', label: "Dans l'évènemencier"  },
-      { key: 'c', label: 'Afficher sa carte'      },
-      { key: 'a', label: 'Dans une autre fenêtre' },
-    ]
-
-    options.forEach(({ key, label }) => {
-      const item = document.createElement('div')
-      item.className = 'floating-panel__item'
-      const keyEl = document.createElement('span')
-      keyEl.className = 'link-open-popup__key'
-      keyEl.textContent = key
-      item.appendChild(keyEl)
-      item.appendChild(document.createTextNode(' ' + label))
-      popup.appendChild(item)
-    })
-
-    document.body.appendChild(popup)
-
-    const close = () => {
-      popup.remove()
-      document.removeEventListener('keydown', onKey, true)
-      this.el?.focus()
-    }
-
-    const onKey = (ev) => {
-      if (!['g', 'c', 'a', 'Escape'].includes(ev.key)) return
-      ev.preventDefault()
-      ev.stopPropagation()
-      const key = ev.key
-      close()
-      if (key === 'g') this.goLink()
-      else if (key === 'a') this.splitLink()
-    }
-
-    document.addEventListener('keydown', onKey, true)
+    const linkId = this.getActiveLinkId()
+    if (linkId == null) { Notification.show(getErr(5210)); return }
+    const links = this._getLinkEls()
+    const targetTitle = links[this._activeLinkIdx]?.textContent ?? ''
+    LinkOpenPopup.open({ targetId: linkId, targetTitle, item: this })
   },
 
   goLink() {

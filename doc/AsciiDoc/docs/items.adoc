@@ -18,7 +18,7 @@ cf. <<listers>> pour voir ce que c'est.
 
 |====
 | Classe d'un élément   | Classe de la liste          | Unique (propriétaire)
-| `Project` < `Item`    | `ListerProject` < `Lister`  | Oui (Application)
+| `Project` < `<<lister-item,Item>>`    | `ListerProject` < `<<lister-item,Lister>>`  | Oui (Application)
 |====
 
 Projet en anglais. C'est le container de tous les autres éléments <<events>>, <<brins>>, <<Personnages>>, etc.
@@ -30,7 +30,7 @@ Projet en anglais. C'est le container de tous les autres éléments <<events>>, 
 
 |====
 | Classe d'un élément | Classe de la liste        | Unique 
-| `Event` < `Item`    | `ListerEvent` < `Lister`  | Non 
+| `Event` < `<<lister-item,Item>>`    | `ListerEvent` < `<<lister-item,Lister>>`  | Non 
 |====
 
 Diminutif pour “évènement”. C'est simplement “quelque chose qui se passe dans une histoire”. Ça peut aller d'une simple action (évènement atomique) à une guerre (évènement de grand échelle).
@@ -42,7 +42,7 @@ Diminutif pour “évènement”. C'est simplement “quelque chose qui se passe
 
 |====
 | Classe d'un élément | Classe de la liste        | Unique (propriétaire)
-| `Brin` < `Item`     | `ListerBrin` < `Lister`   | Oui (Project)
+| `Brin` < `<<lister-item,Item>>`     | `ListerBrin` < `<<lister-item,Lister>>`   | Oui (Project)
 |====
 
 Synonyme de “intrigue”, en sachant qu'une histoire est toujours composée de nombreuses intrigues plus ou moins longues, donc certaines s'étendent du début à la fin et d'autres sont plus localisées.
@@ -56,7 +56,7 @@ Mais la notion de **brin** couvre plus de choses et permet de suivre les évolut
 
 |====
 | Classe d'un élément | Classe de la liste        | Unique (propriétaire)
-| `Perso` < `Item`    | `ListerPerso` < `Lister`  | Oui (Project)
+| `Perso` < `<<lister-item,Item>>`    | `ListerPerso` < `<<lister-item,Lister>>`  | Oui (Project)
 3+|
 | Appartiennent à     | Par la propritété         | Persistance
 | `Brin`              | `perso_ids`               | Oui
@@ -71,7 +71,7 @@ Les personnages en tant qu'élément constitutionnel indispensable d'une histoir
 
 |====
 | Classe d'un élément   | Classe de la liste          | Unique (propriétaire)
-| `Style` < `Item`      | `ListerStyle` < `Lister`    | Oui (Project)
+| `Style` < `<<lister-item,Item>>`      | `ListerStyle` < `<<lister-item,Lister>>`    | Oui (Project)
 3+|
 | Appartiennent à…      | Par la proprité…            | Persistence
 | `Event`               | `css`                       | Oui

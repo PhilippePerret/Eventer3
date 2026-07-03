@@ -1,3 +1,4 @@
+//Origine: specs/e2e/links/link-open-shortcuts.spec.js
 import { test, expect, pane1, press, getErr } from '../__setup__.js'
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 
@@ -38,13 +39,13 @@ async function activateFirstLink(page) {
 test("popup : première option contient badge 'g'", async ({ page }) => {
   await activateFirstLink(page)
   await press(page, 'o')
-  await expect(pane1(page).locator('.floating-panel__item').nth(0).locator('.link-open-popup__key')).toHaveText('g')
+  await expect(pane1(page).locator('.ftpanel__item').nth(0).locator('.link-open-popup__key')).toHaveText('g')
 })
 
 test("popup : deuxième option contient badge 'c' et texte 'Afficher sa carte'", async ({ page }) => {
   await activateFirstLink(page)
   await press(page, 'o')
-  const second = pane1(page).locator('.floating-panel__item').nth(1)
+  const second = pane1(page).locator('.ftpanel__item').nth(1)
   await expect(second.locator('.link-open-popup__key')).toHaveText('c')
   await expect(second).toContainText('Afficher sa carte')
 })
@@ -52,7 +53,7 @@ test("popup : deuxième option contient badge 'c' et texte 'Afficher sa carte'",
 test("popup : troisième option contient badge 'a' et texte 'Dans une autre fenêtre'", async ({ page }) => {
   await activateFirstLink(page)
   await press(page, 'o')
-  const third = pane1(page).locator('.floating-panel__item').nth(2)
+  const third = pane1(page).locator('.ftpanel__item').nth(2)
   await expect(third.locator('.link-open-popup__key')).toHaveText('a')
   await expect(third).toContainText('Dans une autre fenêtre')
 })

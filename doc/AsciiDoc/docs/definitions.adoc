@@ -2,10 +2,11 @@
 
 Cette section définit de façon littéraire tous les termes propres à l'application.
 
+[[lister-item]]
 === Classes abstraites ===
 
-Lister:: Une liste abstraite. Contient des `Item`s, affiche un `Panel`
-Item:: Un  `item` quelconque qui peut être un `Event`, un `Project`, un `Brin` etc.
+Lister:: Une liste abstraite. Contient des `Item(s)`, affiche un `Panel`.
+Item:: Un  `item` quelconque qui peut être un `<<events,Event>>`, un `<<projects,Project>>`, un `<<brins,Brin>>` etc.
 
 [IMPORTANT]
 Toute classe d'élément, les projets, les évènements (events), les brins, les personnages (persos) héritent de ces deux classes abstraites.
