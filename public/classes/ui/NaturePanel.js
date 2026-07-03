@@ -160,6 +160,7 @@ export default class NaturePanel extends KeyboardablePanel {
         void Promise.all([lister.save(), lister.saveProjectMeta({ man_depth: lister.man_depth })])
         lister._propagateProjectMetaToAncestors?.()
       }
+      lister.focusSelected()
     }
   }
 

@@ -50,7 +50,9 @@ test.describe('Ouverture et navigation', () => {
     await expect(pane1(page).locator('#projects-panel')).toHaveClass(/project-list/)
     await press(page, 'n')
     await expect(pane1(page).locator('.file-picker')).toBeVisible()
-    await press(page, 'Enter')
+    const entry = pane1(page).locator('.file-picker__entry-name').first()
+    await entry.waitFor({ state: 'visible' })
+    await entry.press('Enter')
   }
 
   test('choisir un dossier avec eventer.db affiche une boîte de confirmation', async ({ page }) => {
@@ -190,7 +192,7 @@ test.describe('Projet seed', () => {
     await expect(pane1(page).locator('#events-panel')).toBeVisible()
     await press(page, 'p')
     await expect(pane1(page).locator('#persos-panel')).toBeVisible()
-    await expect(pane1(page).locator('.perso-item__title').first()).toContainText('Votre protagoniste')
+    await expect(pane1(page).locator('.perso-title').first()).toContainText('Votre protagoniste')
   })
 
 })
@@ -216,7 +218,7 @@ test.describe('Régression : project_id propagé', () => {
     await expect(pane1(page).locator('#events-panel')).toBeVisible()
 
     await press(page, 'n')
-    const input = pane1(page).locator('.event-item input[name="title"]')
+    const input = pane1(page).locator('.event-item [data-field="title"]')
     await expect(input).toBeFocused()
     await input.fill('Sous-event persistant')
     await press(page, 'Enter')
@@ -237,7 +239,7 @@ test.describe('Régression : project_id propagé', () => {
     await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 
     await press(page, 'n')
-    const input = pane1(page).locator('.brin-item input[name="title"]')
+    const input = pane1(page).locator('.brin-item [data-field="title"]')
     await expect(input).toBeFocused()
     await input.fill('Brin régression')
     await press(page, 'Enter')
@@ -259,7 +261,7 @@ test.describe('Régression : project_id propagé', () => {
     await expect(pane1(page).locator('#persos-panel')).toBeVisible()
 
     await press(page, 'n')
-    const input = pane1(page).locator('.perso-item input[name="title"]')
+    const input = pane1(page).locator('.perso-item [data-field="title"]')
     await expect(input).toBeFocused()
     await input.fill('Perso régression')
     await press(page, 'Enter')

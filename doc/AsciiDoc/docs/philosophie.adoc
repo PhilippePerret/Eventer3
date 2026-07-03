@@ -1,0 +1,9 @@
+== Philosophie ==
+
+- outil local (pour le moment)
+- entièrement pilotable au clavier, zéro souris
+- interface silencieuse
+- priorité absolue à la fluidité
+- zéro sensation « base de données »
+- développement en TDD
+- aucune complexité inutile (=> cf. « tout basé sur `Lister`  et `Item`)

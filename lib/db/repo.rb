@@ -238,11 +238,9 @@ module DB
         order_row = db.execute("SELECT value FROM app_settings WHERE key = 'project_order'").first
         all_ids   = db.execute("SELECT id FROM project_refs ORDER BY rowid").map { |r| r['id'] }
         item_ids  = if order_row
-          saved     = JSON.parse(order_row['value']) rescue []
-          saved_set = saved.to_set
-          all_set   = all_ids.to_set
-          saved.select { |id| all_set.include?(id) } +
-            all_ids.reject { |id| saved_set.include?(id) }
+          saved   = JSON.parse(order_row['value']) rescue []
+          all_set = all_ids.to_set
+          saved.select { |id| all_set.include?(id) }
         else
           all_ids
         end
@@ -294,11 +292,9 @@ module DB
         order_row = db.execute("SELECT value FROM app_settings WHERE key = 'project_order'").first
         all_ids   = db.execute("SELECT id FROM project_refs ORDER BY rowid").map { |r| r['id'] }
         item_ids  = if order_row
-          saved     = JSON.parse(order_row['value']) rescue []
-          saved_set = saved.to_set
-          all_set   = all_ids.to_set
-          saved.select { |id| all_set.include?(id) } +
-            all_ids.reject { |id| saved_set.include?(id) }
+          saved   = JSON.parse(order_row['value']) rescue []
+          all_set = all_ids.to_set
+          saved.select { |id| all_set.include?(id) }
         else
           all_ids
         end

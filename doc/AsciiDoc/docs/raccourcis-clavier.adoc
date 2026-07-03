@@ -63,5 +63,6 @@ _Cette section répertorie l'intégralité des raccourcis-clavier utilisés dans
 | combo:maj+tab[]     | Filtre  | Comme combo:tab[] mais à l'envers               | ???
 
 4+| Application
+| combo:q[]           | Display | Ouvre le panneau pour définir les constantes    | ???
 | combo:cmd+o[]       | Display | Ouvre le panneau des options pour les régler    | ???
 |====

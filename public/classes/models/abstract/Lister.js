@@ -245,7 +245,7 @@ export default class Lister extends KeyDispatcher {
     const Cls = this.constructor.ITEM_CLASS
     const ids = this.item_ids.length ? this.item_ids : Object.keys(data)
     return ids
-      .map((id, idx) => data[id] ? new Cls({ ...data[id], id, _index: idx, project: this.project }) : null)
+      .map((id, idx) => data[id] ? new Cls({ ...data[id], id, _index: idx, project: this.project, parentLister: this }) : null)
       .filter(Boolean)
   }
 

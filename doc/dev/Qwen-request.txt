@@ -1,8 +1,0 @@
-find . -type f \
-  ! -path "*/.git/*" \
-  ! -path "*/tests/*" \
-  | while read f; do
-      echo "\n===== FILE: $f ====="
-      cat "$f"
-    done \
-| ollama run qwen3-coder:30b

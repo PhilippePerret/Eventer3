@@ -12,6 +12,20 @@
 // Pour les includes \include::{publicdir}/to/file[tag="le-tag"]
 :publicdir: ../../../../public
 
+include::docs/philosophie.adoc[]
+
+== Spécifications
+
+* Application ruby Sinatra (cf. app.rb)
+* l’enregistrement est automatique, transparent
+* tout clavier, rien à la souris
+* ~~sauvegarde en JSON~~. SQLite maintenant.
+  * une base par projet (un fichier `eventer.db`)
+  * un main-db pour maintenir les références aux projets
+
+* produire du code verbeux (comme le mode verbose, `--verbose`, des commandes unix) pour pouvoir suivre le message. Mais désactivable facilement. Cf. `LOG` en backend (ruby) et en frontend (JavaScript).
+
+
 include::docs/definitions.adoc[]
 
 include::docs/principes-fondateurs.adoc[]

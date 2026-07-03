@@ -4,41 +4,6 @@
 
 ---
 
-## But
-
-Le but premier d’Eventer est de permettre à l’autrice ou l’auteur, la ou le scénariste, de développer en toute agilité **la structure de son histoire** et de mettre cette structure au cœur même de son processus d’écriture.
-
-Deux façons (au moins) de se servir de l’application : 1) on peut s’en servir uniquement pour construire l’histoire, donc définir la structure seulement ou 2) s’en servir d’un bout à l’autre, de la définition des actes jusqu’au texte final, roman ou scénario, ou tout autre document intermédiaire comme le synopsis complet.
-
----
-
-## Philosophie
-
-- outil local (pour le moment)
-- entièrement pilotable au clavier, zéro souris
-- interface silencieuse
-- priorité absolue à la fluidité
-- zéro sensation « base de données »
-- développement en TDD
-- aucune complexité inutile (=> cf. « tout basé sur `Lister`  et `Item`)
-
----
-
-## Spécifications
-
-* Application ruby Sinatra (cf. app.rb)
-* l’enregistrement est automatique, transparent
-* tout clavier, rien à la souris
-* ~~sauvegarde en JSON~~. SQLite maintenant.
-  * une base par projet (un fichier `eventer.db`)
-  * un main-db pour maintenir les références aux projets
-
-* produire du code verbeux (comme le mode verbose, `--verbose`, des commandes unix) pour pouvoir suivre le message. Mais désactivable facilement. Cf. `LOG` en backend (ruby) et en frontend (JavaScript).
-
-
-
----
-
 ## Architecture générale
 
 ```text

@@ -1,0 +1,7 @@
+=== L'application ===
+
+==== Définir une constante ====
+
+==== Redéfinir une constante ====
+
+==== Supprimer une constante ====

@@ -8,17 +8,7 @@
 
 
 
----
 
-## Description
-
-Eventer est une application qui permet de gérer les **évènemenciers** de projets de film ou de roman.
-
-### Qu’est-ce un « évènemencier » ?
-
-Un *évènemencier* est une suite d’évènements au sens anglo-saxon du terme, c’est-à-dire au sens de « quelque chose qui se passe » d’importance quelconque. Une action (*remplir un verre d’eau*) est un évènement, un dialogue est un évènement, un morceau de ce dialogue est un évènement, une séquence (*suivre une journée de cours*) est un évènement.
-
-Un évènement a une échelle déterminé (`scale`). Par exemple, l’échelle d’un évènemencier de premier niveau est l’acte. Donc **chaque acte est un évènement** (de longue durée).
 
 ---
 
