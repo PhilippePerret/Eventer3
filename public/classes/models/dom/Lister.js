@@ -86,6 +86,7 @@ export default {
   },
 
   applySelection(prevItem, nextItem) {
+    prevItem?.clearActiveLink?.()
     prevItem?.el?.classList.remove('selected')
     nextItem?.el?.classList.add('selected')
     nextItem?.el?.focus()

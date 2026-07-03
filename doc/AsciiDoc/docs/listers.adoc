@@ -1,6 +1,7 @@
-== Les Listers ==
+[[listers]]
+== Les **Listers** ==
 
-Ces classes héritent toutes de la classe abstraite `Lister` qui définit la gestion des listes d'éléments (`Item` s).
+Ces classes héritent toutes de la classe abstraite `Lister` qui définit la gestion des listes d'éléments (<<items>>).
 
 [cols="1,2,2"]
 |====

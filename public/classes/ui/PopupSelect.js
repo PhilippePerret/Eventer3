@@ -5,7 +5,7 @@ export default class PopupSelect {
   static HANDLEKEYS       = { ArrowDown: true, ArrowUp: true, Escape: true, Enter: true, Tab: true, ' ': true }
   static NOT_STOPPED_KEYS = { Tab: true, Enter: true, ' ': true }
 
-  constructor({ options, currentValue, multi = false, allowCustom = false, onSelect, onCancel, onChange = null, onTab = null, keyboardController = null, disabledValues = [], title = null, showSearch = true }) {
+  constructor({ options = [], currentValue, multi = false, allowCustom = false, onSelect, onCancel, onChange = null, onTab = null, keyboardController = null, disabledValues = [], title = null, showSearch = true, loadOptions = null, onEmpty = null }) {
     this.options = options
     this.multi = multi
     this.allowCustom = allowCustom
@@ -18,6 +18,8 @@ export default class PopupSelect {
     this.currentValue = currentValue
     this.title = title
     this.showSearch = showSearch
+    this.loadOptions = loadOptions
+    this.onEmpty = onEmpty
     this.selectedValues = multi ? (Array.isArray(currentValue) ? [...currentValue] : []) : []
     this.focusedIndex = 0
     this.filteredOptions = [...options]
@@ -32,7 +34,19 @@ export default class PopupSelect {
     el.addEventListener('keydown', ev => this.handleKeyDown(ev, null))
   }
 
-  open(anchorElement) {
+  async open(anchorElement) {
+    if (this.loadOptions && !this.options.length) {
+      try {
+        const opts = await this.loadOptions()
+        if (!opts.length) { this.onEmpty?.(); return }
+        this.options = opts
+        this.filteredOptions = [...opts]
+      } catch (err) {
+        console.error('PopupSelect loadOptions:', err)
+        this.onEmpty?.()
+        return
+      }
+    }
     this._render(anchorElement)
     if (this.keyboardController) {
       this.keyboardController.pushMode({

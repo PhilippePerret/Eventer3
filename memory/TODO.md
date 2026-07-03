@@ -50,11 +50,6 @@
 
 **IMPORTANT** : Ne pas oublier d'ajouter "//Origine: ..." en haut des fichiers de test qui n'ont pas cette marque
 
-PULL Filtre
-- specs/e2e/filter/filter-bar.spec.js
-- specs/e2e/filter/filter-brin.spec.js
-- specs/e2e/filter/filter-text.spec.js
-- specs/e2e/filter/filter-ux.spec.js
 PULL Targets
 - specs/e2e/links/broken-links.spec.js
 PULL Tools Panel

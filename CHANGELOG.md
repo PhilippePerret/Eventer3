@@ -2,6 +2,23 @@
 
 ## 2026-07-03
 
+### PULL Filtre (filter-bar, filter-text, filter-brin, filter-ux)
+
+- `:` ouvre/ferme la barre de filtre dans tout Lister (base class `openFilterBar()`)
+- Barre de filtre : widget titre (`.panel-search`, filtrage live) + widgets menu (état/météo/effet/brins)
+- Tab cycling dans la barre entre widgets, ArrowDown sur widget → ouvre PopupSelect
+- PopupSelect : `loadOptions` (chargement lazy) + `onEmpty` callback pour brins vides
+- Brins : chargement dynamique via `import('./ListerBrin.js')` (évite import circulaire), `live: false` → filtre sur Enter
+- `_filterMenuWidgets()` hook : override dans ListerEvent (état/météo/effet/brins)
+- `_filterMatches()` hook : override pour logique spéciale brins (brin_ids)
+- `StatusBar.setFilterState('mode'|'active'|'none')` : badge FILTRE vert/rouge/absent
+- `:` une 2e fois efface tous les filtres et ferme la barre
+- Navigation ↓/↑ saute les items masqués par le filtre
+- Suppression complète de `Meta+:` (Cmd+:) de tout le code et des tests
+- 42 tests verts (filter-bar 24, filter-brin 4, filter-text 4, filter-ux 10)
+
+## 2026-07-03
+
 - Panneau styles : `s` ferme le panneau depuis n'importe quelle lettre sans item correspondant (fix ListerStyle.onkeydown)
 - Badge perso (RO) sur brin : fix ordre de chargement dans Project.enterInside (persos chargés avant build des brins)
 - Ctrl+Shift+Arrow : déplace le panneau actif (style, outils…) — KeyDispatcher + ListerLi + panelMove.js

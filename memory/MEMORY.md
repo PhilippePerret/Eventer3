@@ -3,6 +3,8 @@
 - **[Ne pas presser vers le code](../../../.claude/projects/-Users-philippeperret-Programmes-Eventer3/memory/feedback_pas_presser_code.md)** — jamais "on code ?" en fin de réponse ; laisser l'utilisateur décider
 - **[CRITIQUE: render/activate/panels](../../../.claude/projects/-Users-philippeperret-Programmes-Eventer3/memory/architecture_render_activate_panels.md)** — render=DOM seul ; activate=focus ; attach une seule fois ; events-panel toujours visible ; closePanel dans Lister base ; onPanelClosed() hook
 - **IMPÉRATIF** : tout fichier `feedback_*.md` va dans `memory/feedback/` — jamais directement dans `memory/`
+- **[CRITIQUE: fichiers dans appli uniquement](feedback/fichiers_dans_appli_uniquement.md)** — AUCUN fichier/dossier Claude en dehors de `/Users/philippeperret/Programmes/Eventer3/`
+- **[CRITIQUE: Escape ne ferme jamais un panneau](feedback/escape_never_closes_panel.md)** — ni dans le code ni dans les tests — jamais
 - **LIRE EN PREMIER** : [TODO.md](TODO.md) pour connaitre :
   - [le travail en cours](TODO.md#current),
   - [les tâches qui seront à réaliser](TODO.md#todo).
@@ -36,6 +38,7 @@
 - [Édition item → Item.handleEditionKeyDown](feedback_item_edition_dans_item.md) — Raccourcis/comportements en mode édition → Item.js, jamais Lister.js
 - [Séparation des responsabilités](feedback_separation_responsabilites.md) — Créer une classe dédiée (ex. FooterHelp) plutôt qu'inliner du contenu dans une classe non responsable
 - [Fichier remboursements](reference_remboursement.md) — `/Users/philippeperret/Programmes/Eventer3/claude-remboursement.md` — ajouter entrée à la FIN sans relire
+- [Archives ancienne implémentation](reference_public_old.md) — `doc/xArchives/public-old/` — LIRE avant d'implémenter toute fonctionnalité
 - [Emplacement fichiers tests](feedback_test_file_location.md) — Toujours annoncer le chemin complet des fichiers de test créés/déplacés avant d'agir
 - [Nom défaut premier perso](feedback_default_perso_name.md) — Auto-créer "Votre protagoniste" si aucun perso (symétrique avec "Intrigue principale")
 - **[ARCHITECTURE DB FONDAMENTALE](project_db_architecture.md)** — CRITIQUE: main.db = registre global seulement (méta data de projects + app_settings) ; eventer.db = TOUT le reste

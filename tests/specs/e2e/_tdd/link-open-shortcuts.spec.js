@@ -109,19 +109,19 @@ test("'g' sans cible sélectionnée → notification 'Aucune cible'", async ({ p
   await gotoEventList(page)
   await press(page, 'g')
   await expect(pane1(page).locator('.notification')).toBeVisible()
-  await expect(pane1(page).locator('.notification')).toContainText('Aucune cible')
+  await expect(pane1(page).locator('.notification')).toContainText(getErr(5200))
 })
 
 test("'c' sans cible sélectionnée → notification 'Aucune cible'", async ({ page }) => {
   await gotoEventList(page)
   await press(page, 'c')
   await expect(pane1(page).locator('.notification')).toBeVisible()
-  await expect(pane1(page).locator('.notification')).toContainText('Aucune cible')
+  await expect(pane1(page).locator('.notification')).toContainText(getErr(5200))
 })
 
 test("'a' sans cible sélectionnée → notification 'Aucune cible'", async ({ page }) => {
   await gotoEventList(page)
   await press(page, 'a')
   await expect(pane1(page).locator('.notification')).toBeVisible()
-  await expect(pane1(page).locator('.notification')).toContainText('Aucune cible')
+  await expect(pane1(page).locator('.notification')).toContainText(getErr(5200))
 })

@@ -1,5 +1,35 @@
 == Imbrications ==
 
-_Pour le moment, seul les `Event`(s) fonctionnent par imbrications mais potentiellement, tous les <<Listers>> peuvent potentiellement, le faire, les projets (pour gérer les sous-projets, etc.), les brins (pour gérer des grands groupes de brins) ou les personnages (pour grouper les personnages par exemple par antagonistes, protagonistes, etc.)_
+_Pour le moment, seul les `Event`(s) fonctionnent par imbrications mais potentiellement, tous les <<listers,Listers>> peuvent potentiellement, le faire, les projets (pour gérer les sous-projets, etc.), les brins (pour gérer des grands groupes de brins) ou les personnages (pour grouper les personnages par exemple par antagonistes, protagonistes, etc.)_
 
 `lister_id` définit les `Event` enfant, dans l'ordre
+
+
+|====
+2+| **Avantages et inconvénient du travail par imbrication**
+
+| _Avantages_                     | _Inconvénients_
+
+| idéales pour se concentrer sur les parties de l'histoire. +
+On peut vraiment se focaliser sur un point en particulier, sans avoir tout le reste.
+
+| Plus on entre en profondeur, plus il est difficile d'avoir une vue d'ensemble de l'histoire.
+ Il est donc très difficile d'être dans le détail et de mesurer le global.
+|====
+
+Pour palier ces inconvénients : 
+
+- les brins
+- les modes d'affichage
+
+=== Modes d'affichage ===
+
+.Mode d’affichage
+[cols="1,4"]
+|====
+| **Mode** | **Description**
+|====
+
+=== Les brins ===
+
+cf. <<Les brins>>.

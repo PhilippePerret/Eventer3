@@ -32,7 +32,7 @@ export default class Lister extends KeyDispatcher {
 
   _filterMenuWidgets() { return [] }
 
-  async openFilterBar() {
+  openFilterBar() {
     const existing = this.container?.querySelector('.filter-bar')
     if (existing && !existing.classList.contains('hidden')) {
       existing.classList.add('hidden')
@@ -57,29 +57,23 @@ export default class Lister extends KeyDispatcher {
       bar.appendChild(titleWidget)
       input.addEventListener('input', () => this._applyTitleFilter(input.value.trim().toLowerCase()))
 
-      const widgets = await Promise.all(
-        this._filterMenuWidgets().map(async (w) => ({
-          ...w,
-          options: w.options ?? (w.loader ? await w.loader() : []),
-        }))
-      )
-
-      widgets.forEach(({ field, label, options, live }) => {
+      this._filterMenuWidgets().forEach(({ field, label, options, loader, live }) => {
         const w = document.createElement('div')
         w.className = 'filter-widget'
         w.dataset.field = field
         const btn = document.createElement('button')
         btn.className = 'filter-widget__btn'
         btn.textContent = label
-        if (options?.length) {
-          const isLive = live !== false
-          new PopupSelect({
-            options, multi: true,
-            onSelect:  isLive ? () => btn.focus() : (vals) => { this._applyMenuFilter(field, vals); btn.focus() },
-            onCancel:  () => btn.focus(),
-            onChange:  isLive ? (vals) => this._applyMenuFilter(field, vals) : null,
-          }).attachAnchor(btn)
-        }
+        const isLive = live !== false
+        new PopupSelect({
+          options:     options ?? [],
+          loadOptions: loader ?? null,
+          onEmpty:     loader ? () => Notification.show('Aucun brin à filtrer pour ce projet') : null,
+          multi: true,
+          onSelect: isLive ? () => btn.focus() : (vals) => { this._applyMenuFilter(field, vals); btn.focus() },
+          onCancel: () => btn.focus(),
+          onChange: isLive ? (vals) => this._applyMenuFilter(field, vals) : null,
+        }).attachAnchor(btn)
         w.appendChild(btn)
         bar.appendChild(w)
       })

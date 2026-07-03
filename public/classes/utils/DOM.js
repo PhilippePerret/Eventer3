@@ -7,7 +7,7 @@ export default class DOM {
   buildTextField(field, item) {
     const el  = this._fieldEl(field, item)
     const val = field.value ? item[field.value]?.() : item[field.name]
-    el.textContent = val ?? ''
+    el.innerHTML = Texte.renderMarkdown(val ?? '')
     return el
   }
 

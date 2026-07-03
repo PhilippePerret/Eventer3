@@ -22,12 +22,12 @@ async function enterSubLister(page) {
 
 // ─── TAB navigation ──────────────────────────────────────────────────────────
 
-test('TAB sur item sans lien → notification "aucun lien"', async ({ page }) => {
+test('TAB sur item sans lien → notification', async ({ page }) => {
   await gotoEventList(page)
   // a1 sélectionné : "Acte I", pas de lien
   await press(page, 'Tab')
   await expect(pane1(page).locator('.notification')).toBeVisible()
-  await expect(pane1(page).locator('.notification')).toContainText('aucun lien')
+  await expect(pane1(page).locator('.notification')).toContainText(getErr(5210))
 })
 
 test('TAB sur item avec lien → premier lien activé', async ({ page }) => {
@@ -101,7 +101,7 @@ test("'o' sans lien actif sur item sans liens → notification", async ({ page }
   await gotoEventList(page)
   await press(page, 'o')
   await expect(pane1(page).locator('.notification')).toBeVisible()
-  await expect(pane1(page).locator('.notification')).toContainText('aucun lien')
+  await expect(pane1(page).locator('.notification')).toContainText(getErr(5210))
 })
 
 test("'o' sans TAB sur item avec liens → notification", async ({ page }) => {
@@ -114,7 +114,7 @@ test("'o' sans TAB sur item avec liens → notification", async ({ page }) => {
   await press(page, 'ArrowDown') // → sc3s2a2
   await press(page, 'o')
   await expect(pane1(page).locator('.notification')).toBeVisible()
-  await expect(pane1(page).locator('.notification')).toContainText('lien')
+  await expect(pane1(page).locator('.notification')).toContainText(getErr(5210))
 })
 
 // ─── Popup 'o' ───────────────────────────────────────────────────────────────

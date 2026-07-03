@@ -1,5 +1,6 @@
 import KeyDispatcher from './KeyDispatcher.js'
 import ItemDom from '../dom/Item.js'
+import ItemTargets from '../dom/ItemTargets.js'
 import { raise, getErr } from '../../../system/Error.js'
 import ItemRepo from '../repo/Item.js'
 import { ItemLi } from '../listen/Item.js'
@@ -92,8 +93,12 @@ export default class Item extends KeyDispatcher {
   }
 
   onTab() {
-    if (!this.editing) return false
+    if (!this.editing) { this.cycleLink(); return }
     this.focusNextField()
+  }
+
+  onShiftTab() {
+    this.cycleLinkBack()
   }
 
   checkBadgeValue(el, field) {
@@ -207,3 +212,4 @@ export default class Item extends KeyDispatcher {
 
 Object.defineProperties(Item.prototype, Object.getOwnPropertyDescriptors(ItemDom))
 Object.assign(Item.prototype, ItemRepo)
+Object.assign(Item.prototype, ItemTargets)

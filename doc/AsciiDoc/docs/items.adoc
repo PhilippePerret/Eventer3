@@ -1,0 +1,78 @@
+[[items]]
+== Les **Items** ==
+
+La classe abstraite `Item` est la classe générale qui permet de mutualiser les comportements des éléments principaux de l'application : 
+
+[cols="1,3,1"]
+|====
+| **Élément** | **Description**                   | **Liste**
+| `Project`   | Un <<projets,projet>> de l'application       | `ListerProject`
+| `Event`     | Un <<events,évènement>> (du projet courant)  | `ListerEvent`
+| `Brin`      | Un <<brins,brin>> (du projet courant)        | `ListerBrin`
+|====
+
+cf. <<listers>> pour voir ce que c'est.
+
+[[projets]]
+=== Les projets ===
+
+|====
+| Classe d'un élément   | Classe de la liste          | Unique (propriétaire)
+| `Project` < `Item`    | `ListerProject` < `Lister`  | Oui (Application)
+|====
+
+Projet en anglais. C'est le container de tous les autres éléments <<events>>, <<brins>>, <<Personnages>>, etc.
+
+
+
+[[events]]
+=== Les évènements ===
+
+|====
+| Classe d'un élément | Classe de la liste        | Unique 
+| `Event` < `Item`    | `ListerEvent` < `Lister`  | Non 
+|====
+
+Diminutif pour “évènement”. C'est simplement “quelque chose qui se passe dans une histoire”. Ça peut aller d'une simple action (évènement atomique) à une guerre (évènement de grand échelle).
+
+
+
+[[brins]]
+=== Les brins ===
+
+|====
+| Classe d'un élément | Classe de la liste        | Unique (propriétaire)
+| `Brin` < `Item`     | `ListerBrin` < `Lister`   | Oui (Project)
+|====
+
+Synonyme de “intrigue”, en sachant qu'une histoire est toujours composée de nombreuses intrigues plus ou moins longues, donc certaines s'étendent du début à la fin et d'autres sont plus localisées.
+
+Mais la notion de **brin** couvre plus de choses et permet de suivre les évolutions dans l'histoire (l'évolution d'un thème, d'une relation entre personnages) ou l'utilisation d'un élément (utilisation d'un accessoire).
+
+
+[[persos]]
+=== Les personnages ===
+
+
+|====
+| Classe d'un élément | Classe de la liste        | Unique (propriétaire)
+| `Perso` < `Item`    | `ListerPerso` < `Lister`  | Oui (Project)
+3+|
+| Appartiennent à     | Par la propritété         | Persistance
+| `Brin`              | `perso_ids`               | Oui
+| `Event`             | `perso_ids`               | Oui
+| `Event`             | Par ses brins             | Non
+|====
+
+Les personnages en tant qu'élément constitutionnel indispensable d'une histoire, même lorsque c'est une théière ou un pneu.
+
+[[styles]]
+=== Les styles ===
+
+|====
+| Classe d'un élément   | Classe de la liste          | Unique (propriétaire)
+| `Style` < `Item`      | `ListerStyle` < `Lister`    | Oui (Project)
+3+|
+| Appartiennent à…      | Par la proprité…            | Persistence
+| `Event`               | `css`                       | Oui
+|====
