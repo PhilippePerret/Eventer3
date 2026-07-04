@@ -9,6 +9,7 @@ import TargetsManager from '../../ui/TargetsManager.js'
 import { PROJECT_STATES, PROJECT_TYPES, PROJECT_COLORS } from '../constants/Project.js'
 import { WORD_FORMS } from '../../../constants/constants.js'
 import LOG from '../../../system/LOG.js'
+import Texte from '../../../system/Texte.js'
 
 
 export default class Project extends Item {
@@ -37,12 +38,24 @@ export default class Project extends Item {
   async enterInside() {
     await this.listerBrins.load()
     try { await this.listerPersos.load() } catch(e) { LOG.m(1, 'ERREUR persos.load', e.message) }
+    await this._loadConstants()
     this.listerBrins.build()
     this.listerPersos.build()
     await this.listerStyle.load()
     this.listerStyle.build()
     await this._enterChildLister(ListerEvent, this.lister_id)
     await this.targetsManager.load()
+  }
+
+  async _loadConstants() {
+    try {
+      const resp = await fetch(`/api/constants?project_id=${this.id}`, { cache: 'no-store' })
+      const constants = resp.ok ? await resp.json() : []
+      const persos = this.listerPersos.items
+        .filter(p => p.badge && p.title)
+        .map(p => ({ badge: p.badge, title: p.title, patronyme: p.patronyme ?? null }))
+      Texte.setTokens({ constants, persos })
+    } catch { Texte.setTokens({}) }
   }
 
   async onChildListerCreated(child) {

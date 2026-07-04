@@ -8,7 +8,7 @@ export default class Texte {
     return this.normalize(value)
       .toLowerCase()
       .trim()
-      .replace(/[‘’]/g, '')
+      .replace(/['']/g, '')
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '')
   }
@@ -58,19 +58,25 @@ export default class Texte {
       const result = Texte.toggleMark(el.value, start, end, before, after)
       el.value = result.value
       el.setSelectionRange(result.selStart, result.selEnd)
-      el.dispatchEvent(new Event('input', { bubbles: true })) // project va sûrement manquer
+      el.dispatchEvent(new Event('input', { bubbles: true }))
     } else {
       const sel = window.getSelection()
       if (!sel || sel.isCollapsed) return
-      const range = sel.getRangeAt(0)
-      const text  = range.toString()
-      range.deleteContents()
-      const node = document.createTextNode(before + text + after)
-      range.insertNode(node)
-      range.setStartAfter(node)
-      range.collapse(true)
-      sel.removeAllRanges()
-      sel.addRange(range)
+      const range  = sel.getRangeAt(0)
+      const text   = el.textContent ?? ''
+      const start  = range.startOffset
+      const end    = range.endOffset
+      const result = Texte.toggleMark(text, start, end, before, after)
+      el.textContent = result.value
+      el.focus()
+      const textNode = el.firstChild
+      if (textNode) {
+        const r = document.createRange()
+        r.setStart(textNode, Math.min(result.selStart, textNode.length))
+        r.setEnd(textNode,   Math.min(result.selEnd,   textNode.length))
+        sel.removeAllRanges()
+        sel.addRange(r)
+      }
     }
   }
 
@@ -119,6 +125,10 @@ export default class Texte {
     return text
   }
 
+  static _tokens = {}
+
+  static setTokens(tokens) { Texte._tokens = tokens ?? {} }
+
   static renderMarkdown(text) {
     if (!text) return ''
     return String(text)
@@ -131,6 +141,10 @@ export default class Texte {
         if (/^https?:\/\//.test(url)) return `<a href="${url}" target="_blank" rel="noopener">${text}</a>`
         return `<span class="item-link" data-id="${url}">${text}</span>`
       })
+  }
+
+  static render(text) {
+    return Texte.renderMarkdown(Texte.replaceTokens(text ?? '', Texte._tokens))
   }
 
 }

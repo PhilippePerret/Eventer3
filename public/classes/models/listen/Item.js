@@ -9,4 +9,5 @@ export const ItemLi = {
   , o:          { nokey: 'openActiveLink'                      }
   , g:          { nokey: 'goLink'                              }
   , a:          { nokey: 'splitLink'                           }
+  , q:          { nokey: 'openConstantsPanel'                  }
 }

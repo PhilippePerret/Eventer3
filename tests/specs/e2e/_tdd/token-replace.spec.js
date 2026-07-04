@@ -1,3 +1,4 @@
+//Origine: tests/specs/e2e/texte/token-replace.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
@@ -19,19 +20,19 @@ test.describe('Token replacement dans les titres', () => {
   test('constante /VILLE/ remplacée dans le titre de l\'event', async ({ page }) => {
     await page.goto('/')
     await press(page, 'ArrowRight')
-    await expect(pane1(page).locator('.event-text').first()).toHaveText('Paris est belle')
+    await expect(pane1(page).locator('.event-title').first()).toHaveText('Paris est belle')
   })
 
   test('badge PP remplacé par le titre du personnage', async ({ page }) => {
     await page.goto('/')
     await press(page, 'ArrowRight')
-    await expect(pane1(page).locator('.event-text').nth(1)).toHaveText('Phil arrive à Paris')
+    await expect(pane1(page).locator('.event-title').nth(1)).toHaveText('Phil arrive à Paris')
   })
 
   test('badge PPpat remplacé par le patronyme du personnage', async ({ page }) => {
     await page.goto('/')
     await press(page, 'ArrowRight')
-    await expect(pane1(page).locator('.event-text').nth(2)).toHaveText('Philippe Perret arrive à Paris')
+    await expect(pane1(page).locator('.event-title').nth(2)).toHaveText('Philippe Perret arrive à Paris')
   })
 
   // ─── Brins ─────────────────────────────────────────────────────────────────
@@ -39,10 +40,10 @@ test.describe('Token replacement dans les titres', () => {
   test('constante /VILLE/ remplacée dans le titre du brin', async ({ page }) => {
     await page.goto('/')
     await press(page, 'ArrowRight')
-    await expect(pane1(page).locator('.event-text').first()).toBeVisible()
+    await expect(pane1(page).locator('.event-title').first()).toBeVisible()
     await press(page, 'b')
     await expect(pane1(page).locator('#brins-panel')).toBeVisible()
-    await expect(pane1(page).locator('.brin-item__title').first()).toHaveText('Le brin de Paris')
+    await expect(pane1(page).locator('.brin-title').first()).toHaveText('Le brin de Paris')
   })
 
   // ─── Persos ────────────────────────────────────────────────────────────────
@@ -50,10 +51,10 @@ test.describe('Token replacement dans les titres', () => {
   test('constante /VILLE/ remplacée dans le titre du perso', async ({ page }) => {
     await page.goto('/')
     await press(page, 'ArrowRight')
-    await expect(pane1(page).locator('.event-text').first()).toBeVisible()
+    await expect(pane1(page).locator('.event-title').first()).toBeVisible()
     await press(page, 'p')
     await expect(pane1(page).locator('#persos-panel')).toBeVisible()
-    await expect(pane1(page).locator('.perso-item__title').nth(1)).toHaveText('Héros de Paris')
+    await expect(pane1(page).locator('.perso-title').nth(1)).toHaveText('Héros de Paris')
   })
 
   // ─── Titre du panneau brins ─────────────────────────────────────────────────
@@ -61,7 +62,7 @@ test.describe('Token replacement dans les titres', () => {
   test('titre du panneau brins utilise le titre rendu (tokens remplacés)', async ({ page }) => {
     await page.goto('/')
     await press(page, 'ArrowRight')
-    await expect(pane1(page).locator('.event-text').first()).toBeVisible()
+    await expect(pane1(page).locator('.event-title').first()).toBeVisible()
     await press(page, 'b')
     await expect(pane1(page).locator('#brins-panel')).toBeVisible()
     await expect(pane1(page).locator('#brins-panel .panel-title')).toContainText('Paris est belle')
@@ -72,7 +73,7 @@ test.describe('Token replacement dans les titres', () => {
   test('nouvel event créé après définition constante : remplacement immédiat', async ({ page }) => {
     await page.goto('/')
     await press(page, 'ArrowRight')
-    await expect(pane1(page).locator('.event-text').first()).toBeVisible()
+    await expect(pane1(page).locator('.event-title').first()).toBeVisible()
     // Définir PAYS=France
     await press(page, 'q')
     await expect(pane1(page).locator('.constants-row').first()).toBeVisible()
@@ -85,10 +86,10 @@ test.describe('Token replacement dans les titres', () => {
     await expect(pane1(page).locator('#constants-panel')).not.toBeVisible()
     // Créer un nouvel event avec /PAYS/
     await press(page, 'n')
-    const titleInput = pane1(page).locator('.event-item.editing input[name="title"]')
+    const titleInput = pane1(page).locator('.event-item.editing [data-field="title"]')
     await titleInput.fill('/PAYS/ est grand')
     await press(page, 'Enter')
-    await expect(pane1(page).locator('.event-text').nth(1)).toHaveText('France est grand')
+    await expect(pane1(page).locator('.event-title').nth(1)).toHaveText('France est grand')
   })
 
 })

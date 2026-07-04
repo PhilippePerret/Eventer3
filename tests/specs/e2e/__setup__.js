@@ -5,7 +5,10 @@ export const test = base.extend({
     page.on('console', msg => console.log(msg.text()))
     const originalGoto = page.goto.bind(page)
     page.goto = async (url, options) => {
-      return await originalGoto(url, options)
+      const result = await originalGoto(url, options)
+      const appFrame = page.frames().find(f => f.url().includes('app-frame'))
+      if (appFrame) await appFrame.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {})
+      return result
     }
 
     const originalWaitForLoadState = page.waitForLoadState.bind(page)

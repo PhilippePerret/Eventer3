@@ -3,6 +3,7 @@ import LOG from '../../../system/LOG.js'
 import { raise, getErr } from '../../../system/Error.js'
 import { stopEvent } from '../../utils/events.js'
 import ListerDom from '../dom/Lister.js'
+import Texte from '../../../system/Texte.js'
 import ListerRepo from '../repo/Lister.js'
 import { ListerLi } from '../listen/Lister.js'
 import Notification from '../../ui/Notification.js'
@@ -319,7 +320,7 @@ export default class Lister extends KeyDispatcher {
     const t      = this._panelTitle()
     if (t == null) return
     const titleEl = this.container?.querySelector('.panel-title')
-    if (titleEl) titleEl.textContent = t
+    if (titleEl) titleEl.innerHTML = Texte.render(t)
   }
 
   closePanel() {

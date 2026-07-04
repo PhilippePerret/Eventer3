@@ -1,13 +1,14 @@
 import PopupSelect from '../ui/PopupSelect.js'
 import { stopEvent } from './events.js'
 import Texte from '../../system/Texte.js'
+import { attachTextEdit } from '../models/listen/TextEdit.js'
 
 export default class DOM {
 
   buildTextField(field, item) {
     const el  = this._fieldEl(field, item)
     const val = field.value ? item[field.value]?.() : item[field.name]
-    el.innerHTML = Texte.renderMarkdown(val ?? '')
+    el.innerHTML = Texte.render(val ?? '')
     return el
   }
 
@@ -22,22 +23,13 @@ export default class DOM {
     return el
   }
 
-  BLOCKED_KEYS_IN_CONTENTEDITABLE = {
-    ArrowUp:   true,
-    ArrowDown: true,
-  }
-
-  blockKeysFromContenteditable(e) {
-    if (this.BLOCKED_KEYS_IN_CONTENTEDITABLE[e.key]) return stopEvent(e)
-  }
-
   buildEditTextField(field, item) {
     const el = this._fieldEl(field, item)
     el.setAttribute('contenteditable', 'true')
     el.setAttribute('data-field', field.name)
     el.setAttribute('tabindex', '0')
     el.textContent = item[field.name] ?? ''
-    el.addEventListener('keydown', e => this.blockKeysFromContenteditable(e))
+    attachTextEdit(el)
     if (field.onchange)   el.addEventListener('input', () => item[field.onchange](el, field))
     if (field.oncreating) el.addEventListener('input', () => item[field.oncreating](el, field))
     return el

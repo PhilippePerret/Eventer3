@@ -1,5 +1,14 @@
 # CHANGELOG — Eventer3
 
+## 2026-07-04 — PULL TextEdit : text-edit.spec.js (8 tests)
+
+- **`TextEdit.js`** (`listen/TextEdit.js`) : nouveau module séparé pour tout ce qui relève de l'édition des champs contenteditable — bloque ArrowUp/ArrowDown, gère ⌘+i/g/b/u pour markdown wrapping via `Texte.wrapSelection`.
+- **`DOM.buildEditTextField`** : `blockKeysFromContenteditable` remplacé par `attachTextEdit(el)`.
+- **`Texte.wrapSelection`** : branche `else` (contenteditable) réécrite — utilise `toggleMark` + `range.startOffset/endOffset` directs (single text node) + `el.textContent` pour setter.
+- **`Texte.js`** : restauration complète après tentative ratée d'`Object.assign` dans une session précédente.
+- **`__setup__.js`** : `page.goto` override attend maintenant `appFrame.waitForLoadState('networkidle')` → résout race condition systématique (app frame pas initialisée quand `press('ArrowRight')` arrive dans les tests pairs).
+- **Tests** : `confirmEdit` helper avec `waitForLoadState('networkidle')` après Enter pour laisser le save se terminer avant `installFixtures`.
+
 ## 2026-07-01 — Tests 57-59 : edit-event-title
 
 - **Tests** : 2x ArrowRight → 1x (race condition même bug que delete-cascade) ; `input[name="title"]` → `[data-field="title"]` (contenteditable div) ; `toHaveValue` → `toHaveText` ; ajout `waitForLoadState('networkidle')` + attente `#projects-panel` avant ArrowRight après reload.

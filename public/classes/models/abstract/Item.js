@@ -3,6 +3,7 @@ import ItemDom from '../dom/Item.js'
 import ItemTargets from '../dom/ItemTargets.js'
 import { raise, getErr } from '../../../system/Error.js'
 import ItemRepo from '../repo/Item.js'
+import ConstantsPanel from '../../ui/ConstantsPanel.js'
 import { ItemLi } from '../listen/Item.js'
 import { stopEvent } from '../../utils/events.js'
 import Lister from './Lister.js'
@@ -11,8 +12,7 @@ import Notification from '../../ui/Notification.js'
 import { DEFAULT_COLOR } from '../constants/common.js'
 import ContextualHelp from '../../ui/ContextualHelp.js'
 import { Clipboard } from './Clipboard.js'
-
-const EDITION_HANDLED_KEYS = { Tab: true, Enter: true, Escape: true, ArrowLeft: true }
+import Texte from '../../../system/Texte.js'
 
 // tag::class-item[]
 export default class Item extends KeyDispatcher {
@@ -40,7 +40,13 @@ export default class Item extends KeyDispatcher {
   onkeydown(ev) {
     if (this.editing) {
       if (document.activeElement?.isContentEditable) {
-        if (!EDITION_HANDLED_KEYS[ev.key] && !ev.metaKey) { ev.stopPropagation(); return }
+        const noMod  = !ev.metaKey && !ev.shiftKey && !ev.altKey && !ev.ctrlKey
+        const isLeave = ev.key === 'ArrowLeft' && noMod && !document.activeElement.textContent
+        if (!isLeave) {
+          ev.stopPropagation()
+          super.onkeydown(ev)
+          return
+        }
       } else if (!this.constructor.LISTENERS[ev.key]) {
         return stopEvent(ev)
       }
@@ -206,6 +212,10 @@ export default class Item extends KeyDispatcher {
   openPersoPanel(){
     this.parentLister?.markForCheck?.(this)
     this.project.listerPersos.display(this)
+  }
+
+  openConstantsPanel(){
+    void ConstantsPanel.open(this.project, this /* focusedItem */)
   }
 
 }
