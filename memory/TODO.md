@@ -50,17 +50,10 @@
 
 **IMPORTANT** : Ne pas oublier d'ajouter "//Origine: ..." en haut des fichiers de test qui n'ont pas cette marque
 
-PULL Markdown 
-- specs/e2e/texte/markdown-editing.spec.js
-- specs/e2e/texte/token-replace.spec.js
-PULL Constants Panel
-- specs/e2e/texte/constants-panel.spec.js
-PULL Confirme dialogu
-- specs/e2e/ui/confirm-dialog-tab.spec.js
-PULL 20 (quand split fenêtre opérationnelle)
-- specs/e2e/event/link-go-navigate.spec.js
 PULL (affichage par niveau)
 - specs/e2e/eventer/level-mode-edit.spec.js
+PULL 20 (quand split fenêtre opérationnelle)
+- specs/e2e/event/link-go-navigate.spec.js
 PULL Double fenêtre
 (ici aussi : rassembler dans moins de fichiers)
 - specs/e2e/ui/split-rotate.spec.js

@@ -33,33 +33,38 @@ export default class ListerProject extends Lister {
     const { exists } = await existsResp.json()
 
     if (exists) {
-      const choice = await ConfirmDialog.open({
+      new ConfirmDialog({
         title:   'Projet existant',
         message: 'Ce dossier contient déjà un projet (eventer.db). Que faire ?',
         buttons: [
-          { label: 'Importer', type: '',       value: 'use'     },
-          { label: 'Détruire', type: 'danger', value: 'destroy' },
-          { label: 'Annuler',  type: 'cancel', value: false     },
+          { label: 'Importer', type: '',       action: () => void this._importProject(folderPath, prevIds, insertIdx) },
+          { label: 'Détruire', type: 'danger', action: () => void this._destroyAndCreate(folderPath, folderName, dbPath, prevIds, insertIdx) },
+          { label: 'Annuler',  type: 'cancel', action: () => this.focusSelected() },
         ],
-      })
-      if (!choice) { this.focusSelected(); return }
-
-      if (choice === 'use') {
-        const resp = await fetch('/api/projects/open', {
-          method:  'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify({ folder_path: folderPath }),
-        })
-        if (!resp.ok) return
-        const { id: newId } = await resp.json()
-        await this._appendToOrder(prevIds, newId, insertIdx)
-        return
-      }
-
-      // choice === 'destroy'
-      await fetch(`/api/fs?path=${encodeURIComponent(dbPath)}`, { method: 'DELETE' })
+      }).open()
+      return
     }
 
+    await this._createProject(folderName, folderPath, dbPath, prevIds, insertIdx)
+  }
+
+  async _importProject(folderPath, prevIds, insertIdx) {
+    const resp = await fetch('/api/projects/open', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ folder_path: folderPath }),
+    })
+    if (!resp.ok) return
+    const { id: newId } = await resp.json()
+    await this._appendToOrder(prevIds, newId, insertIdx)
+  }
+
+  async _destroyAndCreate(folderPath, folderName, dbPath, prevIds, insertIdx) {
+    await fetch(`/api/fs?path=${encodeURIComponent(dbPath)}`, { method: 'DELETE' })
+    await this._createProject(folderName, folderPath, dbPath, prevIds, insertIdx)
+  }
+
+  async _createProject(folderName, folderPath, dbPath, prevIds, insertIdx) {
     const resp = await fetch('/api/listers/1/items', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -75,7 +80,6 @@ export default class ListerProject extends Lister {
     })
 
     await this.constructor.ITEM_CLASS.onCreated?.({ id: newId })
-
     await this._appendToOrder(prevIds, newId, insertIdx)
   }
 

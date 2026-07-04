@@ -1,4 +1,4 @@
-import Texte from '../../system/Texte.js'
+import { stopEvent } from '../utils/events.js'
 
 const ROWS_PER_COLUMN = 10
 
@@ -94,7 +94,7 @@ export default class ConstantsPanel {
     valueInput.value     = value
 
     const arrowNav = (e, delta) => {
-      e.preventDefault(); e.stopPropagation()
+      stopEvent(e)
       e.target.blur()
       const next = Math.max(0, Math.min(this._rows.length - 1, index + delta))
       this._selectRow(next)
@@ -102,28 +102,26 @@ export default class ConstantsPanel {
     }
 
     nameInput.addEventListener('keydown', e => {
-      if (e.key === 'Enter' && e.metaKey)     { e.preventDefault(); e.stopPropagation(); void this._close() }
-      else if (e.key === 'Tab' && !e.shiftKey) { e.preventDefault(); e.stopPropagation(); valueInput.focus() }
+      if (e.key === 'Enter' && e.metaKey)     { stopEvent(e); void this._close() }
+      else if (e.key === 'Tab' && !e.shiftKey) { stopEvent(e); valueInput.focus() }
       else if (e.key === 'Tab' && e.shiftKey) {
-        e.preventDefault(); e.stopPropagation()
+        stopEvent(e)
         const prev = index - 1
         if (prev >= 0) { this._selectRow(prev); this._rows[prev].querySelector('.constants-row__value').focus() }
       }
-      else if (e.key === 'Escape')     { e.preventDefault(); e.stopPropagation(); void this._close() }
-      else if (e.key === 'ArrowDown')  arrowNav(e, +1)
-      else if (e.key === 'ArrowUp')    arrowNav(e, -1)
+      else if (e.key === 'ArrowDown') arrowNav(e, +1)
+      else if (e.key === 'ArrowUp')   arrowNav(e, -1)
       else e.stopPropagation()
     })
 
     valueInput.addEventListener('keydown', e => {
-      if (e.key === 'Enter' && e.metaKey) { e.preventDefault(); e.stopPropagation(); void this._close() }
+      if (e.key === 'Enter' && e.metaKey) { stopEvent(e); void this._close() }
       else if (e.key === 'Tab' && !e.shiftKey) {
-        e.preventDefault(); e.stopPropagation()
+        stopEvent(e)
         const next = index + 1
         if (next < this._rows.length) { this._selectRow(next); this._rows[next].querySelector('.constants-row__name').focus() }
       }
-      else if (e.key === 'Tab' && e.shiftKey) { e.preventDefault(); e.stopPropagation(); nameInput.focus() }
-      else if (e.key === 'Escape')            { e.preventDefault(); e.stopPropagation(); void this._close() }
+      else if (e.key === 'Tab' && e.shiftKey) { stopEvent(e); nameInput.focus() }
       else if (e.key === 'ArrowDown')         arrowNav(e, +1)
       else if (e.key === 'ArrowUp')           arrowNav(e, -1)
       else e.stopPropagation()
@@ -152,21 +150,18 @@ export default class ConstantsPanel {
 
     switch (e.key) {
       case 'Enter':
-        if (e.metaKey) { e.preventDefault(); e.stopPropagation(); void this._close() }
-        break
-      case 'Escape':
-        e.preventDefault(); e.stopPropagation(); void this._close()
+        if (e.metaKey) { stopEvent(e); void this._close() }
         break
       case 'ArrowDown':
-        e.preventDefault(); e.stopPropagation()
+        stopEvent(e)
         this._selectRow(Math.min(this._selectedIndex + 1, this._rows.length - 1))
         break
       case 'ArrowUp':
-        e.preventDefault(); e.stopPropagation()
+        stopEvent(e)
         this._selectRow(Math.max(this._selectedIndex - 1, 0))
         break
       case 'Tab':
-        e.preventDefault(); e.stopPropagation()
+        stopEvent(e)
         this._rows[this._selectedIndex]?.querySelector('.constants-row__name')?.focus()
         break
       default:
@@ -175,12 +170,12 @@ export default class ConstantsPanel {
   }
 
   async _close() {
-    await this._saveConstants()
-    await this._project._loadConstants()
     const el = document.getElementById('constants-panel')
     el.classList.add('hidden')
     el.innerHTML = ''
     this._focusedItem?.focus()
+    await this._saveConstants()
+    await this._project._loadConstants()
   }
 
   async _saveConstants() {

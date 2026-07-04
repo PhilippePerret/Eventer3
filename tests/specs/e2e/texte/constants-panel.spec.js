@@ -1,3 +1,4 @@
+//Origine: tests/specs/e2e/texte/constants-panel.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
@@ -23,11 +24,11 @@ test.describe('ConstantsPanel', () => {
     await expect(pane1(page).locator('#constants-panel')).toBeVisible()
   })
 
-  test('Escape ferme le panneau', async ({ page }) => {
+  test('⌘↩ ferme le panneau', async ({ page }) => {
     await page.goto('/')
     await press(page, 'q')
     await expect(pane1(page).locator('#constants-panel')).toBeVisible()
-    await press(page, 'Escape')
+    await press(page, 'Meta+Enter')
     await expect(pane1(page).locator('#constants-panel')).not.toBeVisible()
   })
 
@@ -130,7 +131,7 @@ test.describe('ConstantsPanel', () => {
     await pane1(page).locator('.constants-row__name').first().fill('VILLE')
     await press(page, 'Tab')
     await pane1(page).locator('.constants-row__value').first().fill('Paris')
-    await press(page, 'Escape')
+    await press(page, 'Meta+Enter')
     await expect(pane1(page).locator('#constants-panel')).not.toBeVisible()
     // Réouverture
     await press(page, 'q')
@@ -145,7 +146,7 @@ test.describe('ConstantsPanel', () => {
     await press(page, 'Tab')          // focus name (vide)
     await press(page, 'Tab')          // focus value
     await pane1(page).locator('.constants-row__value').first().fill('Paris')
-    await press(page, 'Escape')
+    await press(page, 'Meta+Enter')
     await press(page, 'q')
     await expect(pane1(page).locator('.constants-row__value').first()).toHaveValue('')
   })
@@ -155,7 +156,7 @@ test.describe('ConstantsPanel', () => {
     await press(page, 'q')
     await press(page, 'Tab')
     await pane1(page).locator('.constants-row__name').first().fill('VILLE')         // nom sans valeur
-    await press(page, 'Escape')
+    await press(page, 'Meta+Enter')
     await press(page, 'q')
     await expect(pane1(page).locator('.constants-row__name').first()).toHaveValue('')
   })
@@ -177,7 +178,7 @@ test.describe('ConstantsPanel', () => {
     await pane1(page).locator('.constants-row__name').nth(2).fill('HEROS')
     await press(page, 'Tab')
     await pane1(page).locator('.constants-row__value').nth(2).fill('Arthur')
-    await press(page, 'Escape')
+    await press(page, 'Meta+Enter')
     await expect(pane1(page).locator('#constants-panel')).not.toBeVisible()
     // Vérification
     await press(page, 'q')

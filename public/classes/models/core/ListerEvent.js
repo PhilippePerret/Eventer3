@@ -90,7 +90,7 @@ export default class ListerEvent extends Lister {
     if (!this.container) return
     this.container.classList.remove('roman-man', 'film-man')
     const projectNature = this.project?.nature ?? this.project_nature ?? null
-    if (this.nature === 'man' && projectNature)
+    if (this._isManLister() && projectNature)
       this.container.classList.add(`${projectNature}-man`)
   }
 
@@ -104,7 +104,8 @@ export default class ListerEvent extends Lister {
 
   _isManLister() {
     if (this.nature === 'man') return true
-    return this.man_depth != null && this.depth === this.man_depth
+    const manDepth = this.man_depth ?? this.project?.man_depth ?? null
+    return manDepth != null && this.depth === manDepth
   }
 
   _exitLevelMode() {

@@ -27,6 +27,7 @@ export default class KeyboardablePanel {
   // ── Ouverture / fermeture ────────────────────────────────────────────────────
 
   open() {
+    this._previousFocus  = document.activeElement
     this._selectedIndex  = 0
     this._footerFocusIdx = this._getItemCount() > 0 ? -1 : 0
     this._render()
@@ -41,6 +42,8 @@ export default class KeyboardablePanel {
     this._boundKeyDown = null
     this._el?.remove()
     this._el = null
+    this._previousFocus?.focus()
+    this._previousFocus = null
   }
 
   // ── Rendu ────────────────────────────────────────────────────────────────────

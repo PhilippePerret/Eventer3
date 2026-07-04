@@ -2,24 +2,15 @@ import KeyboardablePanel from './KeyboardablePanel.js'
 
 export default class ConfirmDialog extends KeyboardablePanel {
 
-  static open({ title = 'Confirmation', message, expectedValue, buttons = null } = {}) {
-    return new Promise((resolve) => {
-      const resolvedButtons = buttons ?? [
-        { label: 'Confirmer', type: '',       value: true  },
-        { label: 'Annuler',   type: 'cancel', value: false },
-      ]
-      const dialog = new ConfirmDialog({ title, message, expectedValue, buttons: resolvedButtons, onChoose: resolve })
-      dialog.open()
-    })
-  }
-
-  constructor({ title, message, expectedValue, buttons, onChoose }) {
+  constructor({ title = 'Confirmation', message, expectedValue, buttons } = {}) {
     super({ title, panelClass: 'confirm-dialog' })
     this._message       = message
     this._expectedValue = expectedValue ?? null
-    this._buttons       = buttons
-    this._onChoose      = onChoose
-    this._inputEl       = null
+    this._buttons       = buttons ?? [
+      { label: 'Confirmer', type: '',       action: null },
+      { label: 'Annuler',   type: 'cancel', action: null },
+    ]
+    this._inputEl = null
   }
 
   open() {
@@ -54,21 +45,17 @@ export default class ConfirmDialog extends KeyboardablePanel {
   }
 
   _getFooterButtons() {
-    return this._buttons.map(({ label, type, value }) => ({
+    return this._buttons.map(({ label, type, action }) => ({
       label,
       type,
       action: () => {
-        if (value === true && this._expectedValue != null) {
+        if (this._expectedValue != null) {
           if (this._inputEl?.value.trim() !== String(this._expectedValue)) return
         }
-        this._choose(value)
+        this.close()
+        action?.()
       },
     }))
-  }
-
-  _choose(value) {
-    this.close()
-    this._onChoose?.(value)
   }
 
 }

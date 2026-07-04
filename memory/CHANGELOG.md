@@ -1,5 +1,29 @@
 # CHANGELOG — Eventer3
 
+## 2026-07-04 — PULL ConstantsPanel : constants-panel.spec.js (16 tests)
+
+- **`ConstantsPanel.js`** : suppression totale de tout handler Escape → fermeture (INTERDICTION 13). Fermeture uniquement via `⌘↩` (`Meta+Enter`).
+- **`ConstantsPanel._close()`** : hide/innerHTML/focus exécutés synchronement AVANT les `await` (évite race condition quand `press(Escape)` → `press('q')` rapides).
+- **`ConstantsPanel._buildRow`** : `e.preventDefault(); e.stopPropagation()` → `stopEvent(e)` partout.
+- **Tests** : tous les `press(page, 'Escape')` pour fermer le panneau remplacés par `press(page, 'Meta+Enter')` ; test 3 renommé "⌘↩ ferme le panneau".
+
+## 2026-07-04 — PULL Constants Panel : token-replace.spec.js (13 tests) + implémentation ConstantsPanel
+
+- **`Project.enterInside()`** : `_loadConstants()` déplacé AVANT `listerBrins.build()` + `listerPersos.build()` → tokens disponibles lors du premier rendu.
+- **`Texte.js`** : `static _tokens`, `setTokens()`, `render()` = `renderMarkdown(replaceTokens())`, `renderMarkdown()` (markdown seul).
+- **`DOM.buildTextField`** : `el.innerHTML = Texte.render(val)` — opaque, ne connaît pas les tokens.
+- **`Project._loadConstants()`** : fetch `/api/constants` + collecte persos (badge/title/patronyme) → `Texte.setTokens()`.
+- **`abstract/Lister._updatePanelTitle()`** : `titleEl.innerHTML = Texte.render(t)` au lieu de `textContent = t`.
+- **`ConstantsPanel`** (`classes/ui/ConstantsPanel.js`) : nouveau module — ouvre `#constants-panel`, gère navigation clavier (Tab/ArrowUp/Down/Escape/⌘↩), sauvegarde via PUT `/api/constants`, puis `project._loadConstants()` + restaure focus sur `focusedItem`. `Meta+Enter` géré dans les handlers des inputs (sinon `stopPropagation` bloquait).
+- **`ItemLi`** : `q: { nokey: 'openConstantsPanel' }` — tout item sélectionné peut ouvrir le panneau.
+- **`Item.openConstantsPanel()`** : appelle `ConstantsPanel.open(this.project, this)` — passe l'item comme `focusedItem` pour restauration du focus.
+
+## 2026-07-04 — PULL Markdown : markdown-editing.spec.js (6 tests) + token-replace.spec.js (7/13 tests)
+
+- **`Texte.renderMarkdown`** : traitement markdown seul (** em s u sup liens items-links).
+- **`DOM.buildTextField`** : `el.innerHTML = Texte.render(val)` — remplace ancien `textContent`.
+- **`TextEdit.MARKDOWN_WRAP`** : map ⌘+i/g/b/u → marqueurs markdown (`*` `**` `~~` `__`).
+
 ## 2026-07-04 — PULL TextEdit : text-edit.spec.js (8 tests)
 
 - **`TextEdit.js`** (`listen/TextEdit.js`) : nouveau module séparé pour tout ce qui relève de l'édition des champs contenteditable — bloque ArrowUp/ArrowDown, gère ⌘+i/g/b/u pour markdown wrapping via `Texte.wrapSelection`.

@@ -8,18 +8,12 @@ const PROJECT_NATURE_OPTIONS = [...PROJECT_TYPES, { value: null, label: '—' }]
 export default class NaturePanel extends KeyboardablePanel {
 
   constructor({ target }) {
-    const isProject = target.constructor.name === 'Project'
-    const title     = isProject ? '' : (() => {
-      const raw   = target.parentItem?.title ?? 'l\'évènemencier'
-      const label = raw.length > 24 ? raw.slice(0, 24) + '…' : raw
-      return `Type de « ${label} » (niv. ${target.depth})`
-    })()
-    super({ title, panelClass: 'nature-panel' })
-    this._isProject     = isProject
-    this._target        = target
-    this._lister        = this._isProject ? null : target
-    this._projectNature = this._isProject ? (target.nature ?? null) : (target.project_nature ?? null)
-    const n             = this._isProject ? null : target.nature
+    const raw   = target.parentItem?.title ?? 'l\'évènemencier'
+    const label = raw.length > 24 ? raw.slice(0, 24) + '…' : raw
+    super({ title: `Type de « ${label} » (niv. ${target.depth})`, panelClass: 'nature-panel' })
+    this._lister        = target
+    this._projectNature = target.project_nature ?? null
+    const n             = target.nature
     this._listerNature  = (n == null || n === 'none') ? null : (n === 'no-man' ? 'eventer' : n)
     this._rows          = []
   }
@@ -27,11 +21,7 @@ export default class NaturePanel extends KeyboardablePanel {
   // ── open ──────────────────────────────────────────────────────────────────────
 
   open() {
-    if (this._isProject) {
-      this._openProjectNaturePopup(this._target.el)
-    } else {
-      super.open()
-    }
+    super.open()
   }
 
   // ── KeyboardablePanel overrides ───────────────────────────────────────────────
@@ -130,7 +120,7 @@ export default class NaturePanel extends KeyboardablePanel {
 
   // ── Apply ─────────────────────────────────────────────────────────────────────
 
-  async _apply() {
+  _apply() {
     const lister = this._lister
     lister.nature         = this._listerNature
     lister.project_nature = this._projectNature
@@ -147,19 +137,21 @@ export default class NaturePanel extends KeyboardablePanel {
     void Promise.all([lister.save(), lister.saveNature(), lister.saveProjectMeta({ nature: this._projectNature }), lister.project.save()])
 
     if (needsConfirm) {
-      const man       = PROJECT_TYPES.find(t => t.value === this._projectNature)?.man ?? 'manuscrit'
-      const confirmed = await ConfirmDialog.open({
+      const man = PROJECT_TYPES.find(t => t.value === this._projectNature)?.man ?? 'manuscrit'
+      new ConfirmDialog({
         message: `Est-ce le niveau par défaut des évènemenciers ${man}s ?`,
         buttons: [
-          { label: 'Non', type: 'cancel',  value: false },
-          { label: 'Oui', type: 'primary', value: true  },
+          { label: 'Oui', type: 'primary', action: () => {
+            lister.man_depth         = lister.depth
+            lister.project.man_depth = lister.man_depth
+            void Promise.all([lister.save(), lister.saveProjectMeta({ man_depth: lister.man_depth })])
+            lister._propagateProjectMetaToAncestors?.()
+            lister.focusSelected()
+          }},
+          { label: 'Non', type: 'cancel', action: () => { lister.focusSelected() } },
         ],
-      })
-      if (confirmed) {
-        lister.man_depth = lister.depth
-        void Promise.all([lister.save(), lister.saveProjectMeta({ man_depth: lister.man_depth })])
-        lister._propagateProjectMetaToAncestors?.()
-      }
+      }).open()
+    } else {
       lister.focusSelected()
     }
   }

@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 2026-07-04
+
+### PULL ConfirmDialog + NaturePanel man_depth (confirm-dialog-tab)
+
+- `ConfirmDialog` : suppression de `static open()` — instantiation directe avec boutons `{ label, type, action }` (callbacks)
+- `KeyboardablePanel` : `open()` sauvegarde le focus précédent, `close()` le restaure (fix ⌘↩ sans résolution de Promise)
+- `NaturePanel` : suppression du chemin `isProject` — panneau exclusivement pour ListerEvent ; boutons avec callbacks directs
+- `NaturePanel._apply()` : `lister.project.man_depth` propagé en mémoire (évite race condition API sur le sibling)
+- `ListerEvent._isManLister()` : fallback sur `project?.man_depth` (sibling visible immédiatement sans attendre la sauvegarde API)
+- `ListerEvent._updateMainPanelClass()` : suppression du `console.log` de debug
+- `ListerProject` : refactoring `createNew()` — logique extraite dans `_importProject`, `_destroyAndCreate`, `_createProject`
+- `Lister.deleteSelected()` : extraction dans `_doDeleteItem()` ; `Lister.checkDataConflicts()` : Promise locale avec callbacks
+- Fixture `depth-move` : `project_meta.nature = 'roman'` ; navigation `openManDepthConfirm` simplifiée (plus de navigation popup projet)
+- 7 tests verts (confirm-dialog-tab)
+
 ## 2026-07-03
 
 ### PULL Filtre (filter-bar, filter-text, filter-brin, filter-ux)

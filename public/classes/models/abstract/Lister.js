@@ -146,14 +146,22 @@ export default class Lister extends KeyDispatcher {
     const item         = this.items[idx]
     const cascadeCount = await this.countDescendants(item)
     if (cascadeCount > 0) {
-      const label     = cascadeCount === 1 ? 'évènement imbriqué' : 'évènements imbriqués'
-      const confirmed = await ConfirmDialog.open({
+      const label = cascadeCount === 1 ? 'évènement imbriqué' : 'évènements imbriqués'
+      new ConfirmDialog({
         title:         'Destruction de ' + item.title,
         message:       `Cette destruction entraînera la destruction en cascade de ${cascadeCount} ${label}. Tapez ${cascadeCount} pour confirmer.`,
         expectedValue: cascadeCount,
-      })
-      if (!confirmed) { this.focusSelected(); return }
+        buttons: [
+          { label: 'Confirmer', type: '', action: async () => { await this._doDeleteItem(item, idx) } },
+          { label: 'Annuler', type: 'cancel', action: () => { this.focusSelected() } },
+        ],
+      }).open()
+      return
     }
+    await this._doDeleteItem(item, idx)
+  }
+
+  async _doDeleteItem(item, idx) {
     const ok = await this.deleteItem(item)
     if (!ok) return
     const newIdx = Math.min(idx, this.items.length - 2)
@@ -239,18 +247,20 @@ export default class Lister extends KeyDispatcher {
     this.applySelection(null, this.items[newIdx])
   }
 
-  async checkDataConflicts(data) {
+  checkDataConflicts(data) {
     const resolved = { ...data }
     delete resolved.id
-    if (resolved.badge && this.existingBadges?.has(resolved.badge)) {
-      const confirmed = await ConfirmDialog.open({
+    if (!resolved.badge || !this.existingBadges?.has(resolved.badge)) return Promise.resolve(resolved)
+    return new Promise(resolve => {
+      new ConfirmDialog({
         title:   resolved.title,
         message: `Le badge "${resolved.badge}" existe déjà. Continuer en régénérant le badge ?`,
-      })
-      if (!confirmed) return null
-      delete resolved.badge
-    }
-    return resolved
+        buttons: [
+          { label: 'Confirmer', type: '', action: () => { delete resolved.badge; resolve(resolved) } },
+          { label: 'Annuler', type: 'cancel', action: () => resolve(null) },
+        ],
+      }).open()
+    })
   }
 
   async pasteItem() {

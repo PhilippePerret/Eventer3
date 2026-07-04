@@ -1,3 +1,4 @@
+//Origine: tests/specs/e2e/ui/confirm-dialog-tab.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
@@ -6,6 +7,7 @@ test.beforeEach(() => {
 })
 
 // Ouvre le ConfirmDialog man_depth (2 boutons : Non / Oui)
+// Fixture depth-move : project_nature déjà 'roman' dans project_meta
 async function openManDepthConfirm(page) {
   await page.goto('/')
   await press(page, 'ArrowRight')
@@ -13,17 +15,13 @@ async function openManDepthConfirm(page) {
   await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toHaveAttribute('data-depth', '2')
   await press(page, 't')
-  await press(page, 'Enter')
-  await press(page, 'ArrowUp')   // film/BD
-  await press(page, 'ArrowUp')   // roman
-  await press(page, 'Enter')
-  await press(page, 'ArrowDown')
-  await press(page, 'Enter')
-  await press(page, 'ArrowUp')   // manuscrit
-  await press(page, 'Enter')
-  await press(page, 'Tab')       // footer → Annuler
-  await press(page, 'Tab')       // footer → Appliquer
-  await press(page, 'Enter')     // appliquer
+  await press(page, 'ArrowDown') // → row 1 (nature évènemencier)
+  await press(page, 'Enter')     // → ouvre popup lister nature
+  await press(page, 'ArrowUp')  // manuscrit
+  await press(page, 'Enter')    // sélectionne manuscrit
+  await press(page, 'Tab')      // footer → Annuler
+  await press(page, 'Tab')      // footer → Appliquer
+  await press(page, 'Enter')    // appliquer
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
 }
 
@@ -31,10 +29,10 @@ async function openManDepthConfirm(page) {
 
 test("ConfirmDialog : bouton 'Oui' focused par défaut (dernier bouton = action principale)", async ({ page }) => {
   await openManDepthConfirm(page)
-  const btns = pane1(page).locator('.panel-btn')
+  const btns = pane1(page).locator('.ftpanel-btn')
   // Dernier bouton = Oui → doit avoir la classe focused
   const lastBtn = btns.last()
-  await expect(lastBtn).toHaveClass(/panel-btn--focused/)
+  await expect(lastBtn).toHaveClass(/ftpanel-btn--focused/)
   await expect(lastBtn).toContainText('Oui')
 })
 
@@ -43,20 +41,20 @@ test("ConfirmDialog : bouton 'Oui' focused par défaut (dernier bouton = action 
 test("Tab bascule le focus de Oui vers Non", async ({ page }) => {
   await openManDepthConfirm(page)
   // Par défaut : Oui focused
-  await expect(pane1(page).locator('.panel-btn--focused')).toContainText('Oui')
+  await expect(pane1(page).locator('.ftpanel-btn--focused')).toContainText('Oui')
   await press(page, 'Tab')
   // Après Tab : Non focused
-  await expect(pane1(page).locator('.panel-btn--focused')).toContainText('Non')
+  await expect(pane1(page).locator('.ftpanel-btn--focused')).toContainText('Non')
 })
 
 test("Tab cycle complet : Non → Oui → Non", async ({ page }) => {
   await openManDepthConfirm(page)
   await press(page, 'Tab')  // Non
-  await expect(pane1(page).locator('.panel-btn--focused')).toContainText('Non')
+  await expect(pane1(page).locator('.ftpanel-btn--focused')).toContainText('Non')
   await press(page, 'Tab')  // Oui
-  await expect(pane1(page).locator('.panel-btn--focused')).toContainText('Oui')
+  await expect(pane1(page).locator('.ftpanel-btn--focused')).toContainText('Oui')
   await press(page, 'Tab')  // Non
-  await expect(pane1(page).locator('.panel-btn--focused')).toContainText('Non')
+  await expect(pane1(page).locator('.ftpanel-btn--focused')).toContainText('Non')
 })
 
 // ─── Enter active le bouton focused ──────────────────────────────────────────
@@ -87,10 +85,10 @@ test("Tab→Non puis Enter → man_depth non sauvegardé", async ({ page }) => {
 
 // ─── Escape annule toujours ───────────────────────────────────────────────────
 
-test("Escape annule même si Oui est focused", async ({ page }) => {
+test("⌘↩ annule même si Oui est focused", async ({ page }) => {
   await openManDepthConfirm(page)
   // Oui est focused par défaut
-  await press(page, 'Escape')
+  await press(page, 'Meta+Enter')
   await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
   await press(page, 'ArrowLeft')
   await press(page, 'ArrowDown')
@@ -102,7 +100,7 @@ test("Escape annule même si Oui est focused", async ({ page }) => {
 
 test("bouton focused a une couleur verte (background non-transparent)", async ({ page }) => {
   await openManDepthConfirm(page)
-  const focusedBtn = pane1(page).locator('.panel-btn--focused')
+  const focusedBtn = pane1(page).locator('.ftpanel-btn--focused')
   const bg = await focusedBtn.evaluate(el => getComputedStyle(el).backgroundColor)
   // Vert : ne doit pas être transparent ni blanc
   expect(bg).not.toBe('rgba(0, 0, 0, 0)')
