@@ -1,3 +1,4 @@
+// Origine : tests/specs/unit/system/Texte.test.js
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import Texte from '../../../../public/system/Texte.js'

@@ -1,3 +1,4 @@
+//Origine: tests/specs/e2e/perso/perso-no-perso.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures'
 import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
@@ -23,7 +24,7 @@ async function openPersoPanel(page) {
 test("ouvrir le panneau sans perso existant → 'Votre protagoniste' créé automatiquement", async ({ page }) => {
   await openPersoPanel(page)
   await expect(pane1(page).locator('.perso-item')).toHaveCount(1)
-  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-item__title')).toHaveText('Votre protagoniste')
+  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-title')).toHaveText('Votre protagoniste')
 })
 
 test("le perso auto-créé est sélectionné", async ({ page }) => {
@@ -42,5 +43,5 @@ test("'Votre protagoniste' survit au rechargement", async ({ page }) => {
   await press(page, 'p')
   await expect(pane1(page).locator('#persos-panel')).toBeVisible()
   await expect(pane1(page).locator('.perso-item')).toHaveCount(1)
-  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-item__title')).toHaveText('Votre protagoniste')
+  await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-title')).toHaveText('Votre protagoniste')
 })

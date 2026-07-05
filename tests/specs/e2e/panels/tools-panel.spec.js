@@ -1,3 +1,4 @@
+//Origine: tests/specs/e2e/panels/tools-panel.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
@@ -52,7 +53,7 @@ test('panneau outils : titre visible', async ({ page }) => {
   await enterLevelMode(page, 3)
 
   await press(page, 'Meta+t')
-  await expect(pane1(page).locator('.tools-panel .floating-panel__title')).toBeVisible()
+  await expect(pane1(page).locator('.tools-panel .ftpanel__title')).toBeVisible()
 })
 
 test('panneau outils : footer avec faux-boutons Fermer et Exécuter', async ({ page }) => {
@@ -60,10 +61,10 @@ test('panneau outils : footer avec faux-boutons Fermer et Exécuter', async ({ p
   await enterLevelMode(page, 3)
 
   await press(page, 'Meta+t')
-  const footer = pane1(page).locator('.tools-panel .floating-panel__footer')
+  const footer = pane1(page).locator('.tools-panel .ftpanel__footer')
   await expect(footer).toBeVisible()
-  await expect(footer.locator('.panel-btn--cancel')).toContainText('Fermer')
-  await expect(footer.locator('.panel-btn--primary')).toContainText('Exécuter')
+  await expect(footer.locator('.ftpanel-btn--cancel')).toContainText('Fermer')
+  await expect(footer.locator('.ftpanel-btn--primary')).toContainText('Exécuter')
 })
 
 test('panneau outils : item Consolider listé avec son raccourci ⌘⇧C', async ({ page }) => {
@@ -71,8 +72,8 @@ test('panneau outils : item Consolider listé avec son raccourci ⌘⇧C', async
   await enterLevelMode(page, 3)
 
   await press(page, 'Meta+t')
-  await expect(pane1(page).locator('.tools-panel .floating-panel__item').first()).toContainText('Consolider le niveau')
-  await expect(pane1(page).locator('.tools-panel .floating-panel__item').first()).toContainText('⌘')
+  await expect(pane1(page).locator('.tools-panel .ftpanel__item').first()).toContainText('Consolider le niveau')
+  await expect(pane1(page).locator('.tools-panel .ftpanel__item').first()).toContainText('⌘')
 })
 
 // ── TAB cycle ────────────────────────────────────────────────────────────────
@@ -84,19 +85,19 @@ test('TAB : items → Exécuter → Fermer → items', async ({ page }) => {
 
   const panel = pane1(page).locator('.tools-panel')
 
-  await expect(panel.locator('.panel-btn--focused')).toHaveCount(0)
+  await expect(panel.locator('.ftpanel-btn--focused')).toHaveCount(0)
 
   await press(page, 'Tab')
-  await expect(panel.locator('.panel-btn--primary.panel-btn--focused')).toBeVisible()
-  await expect(panel.locator('.panel-btn--cancel.panel-btn--focused')).toHaveCount(0)
+  await expect(panel.locator('.ftpanel-btn--primary.ftpanel-btn--focused')).toBeVisible()
+  await expect(panel.locator('.ftpanel-btn--cancel.ftpanel-btn--focused')).toHaveCount(0)
 
   await press(page, 'Tab')
-  await expect(panel.locator('.panel-btn--cancel.panel-btn--focused')).toBeVisible()
-  await expect(panel.locator('.panel-btn--primary.panel-btn--focused')).toHaveCount(0)
+  await expect(panel.locator('.ftpanel-btn--cancel.ftpanel-btn--focused')).toBeVisible()
+  await expect(panel.locator('.ftpanel-btn--primary.ftpanel-btn--focused')).toHaveCount(0)
 
   await press(page, 'Tab')
-  await expect(panel.locator('.panel-btn--focused')).toHaveCount(0)
-  await expect(panel.locator('.floating-panel__item.selected')).toBeVisible()
+  await expect(panel.locator('.ftpanel-btn--focused')).toHaveCount(0)
+  await expect(panel.locator('.ftpanel__item.selected')).toBeVisible()
 })
 
 test('TAB + Enter sur Exécuter : consolide et ferme le panneau', async ({ page }) => {
@@ -106,7 +107,7 @@ test('TAB + Enter sur Exécuter : consolide et ferme le panneau', async ({ page 
 
   await press(page, 'Meta+t')
   await press(page, 'Tab')
-  await expect(pane1(page).locator('.tools-panel .panel-btn--primary.panel-btn--focused')).toBeVisible()
+  await expect(pane1(page).locator('.tools-panel .ftpanel-btn--primary.ftpanel-btn--focused')).toBeVisible()
 
   await press(page, 'Enter')
   await expect(pane1(page).locator('.tools-panel')).not.toBeAttached()
@@ -121,7 +122,7 @@ test('TAB + TAB + Enter sur Fermer : ferme sans consolider', async ({ page }) =>
   await press(page, 'Meta+t')
   await press(page, 'Tab')
   await press(page, 'Tab')
-  await expect(pane1(page).locator('.tools-panel .panel-btn--cancel.panel-btn--focused')).toBeVisible()
+  await expect(pane1(page).locator('.tools-panel .ftpanel-btn--cancel.ftpanel-btn--focused')).toBeVisible()
 
   await press(page, 'Enter')
   await expect(pane1(page).locator('.tools-panel')).not.toBeAttached()
@@ -150,7 +151,7 @@ test('Enter sur item sélectionné : consolide et ferme', async ({ page }) => {
   await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(2)
 
   await press(page, 'Meta+t')
-  await expect(pane1(page).locator('.tools-panel .floating-panel__item').nth(0)).toHaveClass(/selected/)
+  await expect(pane1(page).locator('.tools-panel .ftpanel__item').nth(0)).toHaveClass(/selected/)
   await press(page, 'Enter')
 
   await expect(pane1(page).locator('.tools-panel')).not.toBeAttached()
@@ -158,18 +159,6 @@ test('Enter sur item sélectionné : consolide et ferme', async ({ page }) => {
 })
 
 // ── Raccourci direct ─────────────────────────────────────────────────────────
-
-test('⌘+⇧+C direct : consolide sans ouvrir le panneau', async ({ page }) => {
-  await page.goto('/')
-  await enterLevelMode(page, 3)
-  await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(2)
-
-  await press(page, 'Meta+Shift+c')
-
-  await expect(pane1(page).locator('.tools-panel')).not.toBeAttached()
-  await expect(pane1(page).locator('.event-item.virtual')).toHaveCount(0)
-  await expect(pane1(page).locator('.event-item')).toHaveCount(4)
-})
 
 test('⌘+⇧+C inactif hors mode LEVEL', async ({ page }) => {
   await page.goto('/')

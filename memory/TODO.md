@@ -50,15 +50,30 @@
 
 **IMPORTANT** : Ne pas oublier d'ajouter "//Origine: ..." en haut des fichiers de test qui n'ont pas cette marque
 
-PULL Double fenêtre
-(ici aussi : rassembler dans moins de fichiers)
-- specs/e2e/ui/split-rotate.spec.js
-- specs/e2e/ui/split-pane.spec.js
-- specs/e2e/ui/split-open-target.spec.js
-- specs/e2e/ui/split-focus-visible.spec.js
-- specs/e2e/ui/split-direction.spec.js
-- specs/e2e/ui/split-close-focused.spec.js
-- specs/e2e/ui/split-arrow-nav.spec.js
+#### PULL en cours — perso-panel badges (4 tests : entrées 17-20)
+
+- Fichier : `tests/specs/e2e/_tdd/perso-panel.spec.js`
+- Origine : `tests/specs/e2e/perso/perso-panel.spec.js`
+- Tests 93, 310, 390 : **VERTS** ✅
+- Test 403 ("persistance : cochage direct survit au rechargement") : fix appliqué, **PAS ENCORE CONFIRMÉ**
+  - Fix : `dom/Item.js:132` `ctx.save()` au lieu de `ctx.scheduleSave()` (debounce 300ms → networkidle résolvait avant le PATCH)
+  - Aussi : `utils/DOM.js:11` `buildTextField` → `textContent` pour champs computed (badges ne passent plus par Texte.render)
+- **À FAIRE APRÈS CONFIRMATION** : ménage
+  1. mv `_tdd/perso-panel.spec.js` → `tests/specs/e2e/perso/perso-panel.spec.js`
+  2. Retirer les 4 `test.only` → `test`
+  3. Supprimer entrées 17-20 de `memory/tests-a-faire-passer.txt`
+  4. Mettre à jour CHANGELOG.md
+
+#### PULL SUIVANT — 26 tests, 8 fichiers
+
+- `specs/e2e/item/new-item-deselects-current.spec.js` (1 test : 82)
+- `specs/e2e/links/broken-links.spec.js` (4 tests : 83-86)
+- `specs/e2e/lister/enter-lister.spec.js` (1 test : 87)
+- `specs/e2e/panels/tools-panel.spec.js` (11 tests : 88-98)
+- `specs/e2e/perso/perso-no-perso.spec.js` (3 tests : 99-101)
+- `specs/e2e/project/new-sans-title-cancel-create.spec.js` (2 tests : 102-103)
+- `specs/e2e/project/project-listing.spec.js` (1 test : 104)
+- `specs/e2e/ui/popup-select-current-value.spec.js` (3 tests : 141-143)
 
 
 <a name="todo-after"></a>

@@ -22,13 +22,24 @@ export default class TargetsPanel extends KeyDispatcher {
     new TargetsPanel(manager, field).open()
   }
 
-  open() {
+  async open() {
+    await this._filterBrokenTargets()
     const sel = window.getSelection()
     this._savedRange = sel?.rangeCount ? sel.getRangeAt(0).cloneRange() : null
     this._el = this._build()
     document.body.appendChild(this._el)
     this.attach(this._el)
     this._items()[0]?.focus()
+  }
+
+  async _filterBrokenTargets() {
+    const projectId = this._manager._project.id
+    const valid = []
+    for (const t of this._manager.targets) {
+      const resp = await fetch(`/api/items/${t.id}/ancestors?project_id=${projectId}`, { cache: 'no-store' })
+      if (resp.ok) valid.push(t)
+    }
+    this._manager._targets = valid
   }
 
   close() {

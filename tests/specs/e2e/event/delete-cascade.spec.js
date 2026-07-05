@@ -1,3 +1,4 @@
+// Origine : tests/specs/e2e/event/delete-cascade.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect, pane1, press, getErr } from '../__setup__.js'
 

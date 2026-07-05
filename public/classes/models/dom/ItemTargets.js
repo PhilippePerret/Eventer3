@@ -1,6 +1,7 @@
 import Notification from '../../ui/Notification.js'
 import { getErr } from '../../../system/Error.js'
 import LinkOpenPopup from '../../ui/LinkOpenPopup.js'
+import Windows from '../../ui/Windows.js'
 
 export default {
 
@@ -41,22 +42,33 @@ export default {
     return links[idx]?.dataset.id ?? null
   },
 
-  openActiveLink() {
+  async _targetExists(targetId) {
+    const resp = await fetch(`/api/items/${targetId}/ancestors?project_id=${this.project.id}`, { cache: 'no-store' })
+    return resp.ok
+  },
+
+  async openActiveLink() {
     const linkId = this.getActiveLinkId()
     if (linkId == null) { Notification.show(getErr(5210)); return }
+    if (!await this._targetExists(linkId)) { Notification.show(getErr(5220)); return }
     const links = this._getLinkEls()
     const targetTitle = links[this._activeLinkIdx]?.textContent ?? ''
-    LinkOpenPopup.open({ targetId: linkId, targetTitle, item: this })
+    const hasSplit = Windows.isSplitActive()
+    LinkOpenPopup.open({ targetId: linkId, targetTitle, item: this, hasSplit })
   },
 
-  goLink() {
+  async goLink() {
     const targetId = this.getActiveLinkId()
     if (targetId == null) { Notification.show(getErr(5200)); return }
-    void this.parentLister.navigateToItem(targetId)
+    const ok = await this.parentLister.navigateToItem(targetId)
+    if (ok === false) Notification.show(getErr(5220))
   },
 
-  splitLink() {
-    if (this.getActiveLinkId() == null) { Notification.show(getErr(5200)); return }
+  async splitLink() {
+    const targetId = this.getActiveLinkId()
+    if (targetId == null) { Notification.show(getErr(5200)); return }
+    if (!await this._targetExists(targetId)) { Notification.show(getErr(5220)); return }
+    Windows.openInOtherPane(targetId, this.project.id)
   },
 
 }

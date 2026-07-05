@@ -1,5 +1,7 @@
 import ListerProject from './models/core/ListerProject.js'
+import ListerEvent from './models/core/ListerEvent.js'
 import ToolsPanel from './ui/ToolsPanel.js'
+import Windows from './ui/Windows.js'
 import LOG from '../system/LOG.js'
 
 
@@ -11,6 +13,8 @@ export default class App {
     LOG.m(1, 'Start application')
 
     const projectLister = await ListerProject.init()
+
+    Windows.init()
 
     document.addEventListener('keydown', (ev) => {
       if (ev.metaKey && !ev.ctrlKey && !ev.altKey && ev.key === 't') {
@@ -42,36 +46,24 @@ export default class App {
 
   }
 
-  //QU'EST-CE QUE ÇA FAIT LÀ, ÇA ???
   static async navigateToItem(projectLister, targetId, projectId) {
-    /**
-     * 
-     * 
-     * 
-     * CETTE MÉTHODE EST À REPENSER COMPLÈTEMENT EN FONCTION DE LA NOUVELLE ARCHITECTURE
-     * (ELLE SERT AUX IFRAMES — DOUBLE FENÊTRE — ET FONCTIONNAIT AVANT AVEC LE 
-     *  KEYBOARDCONTROLER DE L'ANCINNE ARCHITECTURE)
-    const kc = projectLister.keyboardController
     if (!projectId) {
-      // projectId null = revenir à la liste projets, sélectionner le projet targetId
+      const idx = projectLister.items.findIndex(p => p.id === targetId)
+      if (idx >= 0) projectLister.selectedIndex = idx
+      document.getElementById(ListerEvent.PANEL_ID)?.classList.add('hidden')
       projectLister.build()
-      const projectItem = projectLister.items.find(item => item.id === targetId)
-      if (projectItem) projectLister.selectItemAt(projectLister.items.indexOf(projectItem))
+      projectLister.display(null)
       return
     }
-    const lister = kc.activeLister
-    if (!lister) return
-    if (typeof lister.navigateToItem === 'function') {
-      await lister.navigateToItem(targetId)
-    } else {
-      // ListerProject : entrer d'abord dans le bon projet
-      const projectItem = lister.items.find(item => item.id === projectId)
-      if (!projectItem) return
-      lister.selectItemAt(lister.items.indexOf(projectItem))
-      await lister.enterSelectedItem()
-      await kc.activeLister.navigateToItem(targetId)
-    }
-    //*/
+    const projectIdx = projectLister.items.findIndex(p => p.id === projectId)
+    if (projectIdx < 0) return
+    projectLister.selectedIndex = projectIdx
+    const projectItem = projectLister.items[projectIdx]
+    projectLister.hideContainer()
+    const rootLister  = await projectItem._initNewLister(ListerEvent, projectItem.lister_id)
+    rootLister.build()
+    rootLister.display(projectItem)
+    await rootLister.navigateToItem(targetId)
   }
 
 }

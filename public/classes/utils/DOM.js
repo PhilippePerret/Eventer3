@@ -8,7 +8,8 @@ export default class DOM {
   buildTextField(field, item) {
     const el  = this._fieldEl(field, item)
     const val = field.value ? item[field.value]?.() : item[field.name]
-    el.innerHTML = Texte.render(val ?? '')
+    if (field.value) { el.textContent = val ?? '' }
+    else             { el.innerHTML = Texte.render(val ?? '') }
     return el
   }
 

@@ -1,5 +1,41 @@
 # CHANGELOG — Eventer3
 
+## 2026-07-05 — PULL Texte.slugify : 1 test unitaire
+
+- **`public/system/Texte.js`** : `slugify()` — regex `/['‘’]/g` au lieu de `['']/g` (deux U+0027 ASCII). L'apostrophe courbe U+2019 (`'`) n'était pas matchée → convertie en `-` au lieu d'être supprimée.
+
+## 2026-07-05 — PULL Dialog Annuler + delete-cascade : 19 tests (3 fichiers)
+
+- **`public/classes/ui/ConfirmDialog.js`** : `_getFooterButtons()` — guard `type !== 'cancel'` avant vérif `expectedValue`. Les boutons Annuler ne doivent pas être bloqués par la saisie attendue.
+- **Tests** : `project/keyboard-delete.spec.js` — test 62 : `>= 4` → `>= 3` (fixture `many-projects` a 3 projets visibles, pas 4 : `project_order` dans `app_settings` liste 3 IDs). Root cause du bug fixture : `project_order` créé avant l'ajout de "Projet caché" (project 4).
+- **Fichiers test remis en canonique** : `event/delete-cascade.spec.js`, `project/keyboard-delete.spec.js`.
+
+## 2026-07-05 — PULL Escape en édition + persistance titre : 33 tests (5 fichiers)
+
+- **`public/classes/models/abstract/Item.js`** : `onkeydown` — Escape géré inline avec guard `this.editing` (INTERDICTION 13 : jamais sur panel). Guard édition : contenteditable non-vide → `stopPropagation` ; `isLeave` = ArrowLeft + pas de modifiers + textContent vide → laisse buller vers lister.
+- **`public/classes/models/listen/Item.js`** : `Escape` retiré de `ItemLi` — ne doit intervenir qu'en mode édition, pas sur n'importe quel item.
+- **`public/classes/ui/KeyboardablePanel.js`** : `stopEvent(event)` ajouté dans `case 'Tab'` (déjà fait pull précédent, consolidé).
+- **Tests** : timing fix dans `edit-event-title` — après `networkidle`, attendre `expect('.event-item.editing').toHaveCount(0)` avant ArrowLeft : `networkidle` se déclenche avant que les microtasks JS (`await _afterCreate`) résolvent et que `_stopEditing()` + `this.el.focus()` s'exécutent.
+- **Fichiers test remis en canonique** : `event/edit-event-title.spec.js`, `event/edit-event-state.spec.js`, `event/new-event-titre-vide.spec.js`, `lister/cancel-accidental-enter.spec.js`, `project/edit-project.spec.js`.
+
+## 2026-07-05 — PULL Broken links, TargetsPanel, ToolsPanel, KeyboardablePanel, FilePicker, PopupSelect : 28 tests (8 fichiers)
+
+- **`public/locale/fr/ERRORS.js`** : ERRORS[5220] = "Cible supprimée ou introuvable."
+- **`public/classes/models/dom/ItemTargets.js`** : `_targetExists(targetId)` — fetch `/api/items/:id/ancestors` ; `openActiveLink/goLink/splitLink` async avec vérification existence cible avant action.
+- **`public/classes/models/core/ListerEvent.js`** : `navigateToItem()` retourne `false` sur 404 ; `getTools()` inclut Consolider en mode LEVEL ; `consolidateLevel()` + `_consolidateLevel()` + `_createEventsForGap()` implémentés.
+- **`public/classes/ui/TargetsPanel.js`** : `open()` async ; `_filterBrokenTargets()` filtre via API les cibles inexistantes à l'ouverture.
+- **`public/classes/ui/KeyboardablePanel.js`** : `stopEvent(event)` ajouté dans `case 'Tab'` — sans ça, le browser déplace le focus hors du panel et les Tab suivants n'atteignent plus `_handleKey`.
+- **Tests** : sélecteurs `input[name="title"]` → `[data-field="title"]` ; `.project-item__title` → `.project-title` ; `.perso-item__title` → `.perso-title` ; `floating-panel__*` → `ftpanel__*` ; `panel-btn--*` → `ftpanel-btn--*` ; navigation PopupSelect `ArrowUp×2` → `ArrowDown` (wraps depuis — vers roman) ; FilePicker Annuler via Tab+Tab+Enter ; test `⌘⇧C direct consolide` retiré (⌘⇧C = `copyCheckedItems` per Architecture-cible).
+
+## 2026-07-05 — PULL Double fenêtre (split pane) : 42 tests (split-pane, split-focus, split-close-focused, split-open-target)
+
+- **`public/classes/ui/Windows.js`** : nouvelle classe `extends KeyDispatcher`, attachée à `document.body`. Gère Alt+2/1/0/R, Ctrl+Tab, Meta+←/→. Méthodes statiques : `isSplitActive()`, `openSplitChoice()`, `openInOtherPane()`, `doRotate()`, `doCyclePanes()`, `_openPopup()`. Fusionne l'ancien `SplitManager.js`. Listener capture sur `ev.code` pour Numpad Alt+2/1/0 (NumLock off → `ev.key` change).
+- **`public/classes/App.js`** : `Windows.init()` au démarrage. `App.navigateToItem()` implémenté pour messages `app-action/navigate-to-item` depuis l'autre panneau.
+- **`public/classes/models/dom/ItemTargets.js`** : `splitLink()` — envoie l'item cible dans l'autre panneau via `Windows.openInOtherPane()`. `openActiveLink()` passe `hasSplit` à `LinkOpenPopup`.
+- **`public/classes/ui/LinkOpenPopup.js`** : label option 'a' dynamique — "Dans l'autre fenêtre" (split actif) ou "Dans une autre fenêtre" (pas de split).
+- **`public/classes/models/listen/Item.js`** : `Escape` retiré de `ItemLi` (ne sert à rien, conflit INTERDICTION 13).
+- **Tests** : `split-focus.spec.js` utilise Ctrl+Tab (pas Shift+Tab) pour cycler entre panneaux.
+
 ## 2026-07-05 — PULL link-go-navigate : link-go-navigate.spec.js (3 tests)
 
 - **`ListerEvent.navigateToItem(targetId)`** : nouvelle méthode — fetch ancêtres via `/api/items/:id/ancestors`, remonte au root lister, descend dans chaque ancêtre via `_initNewLister`, sélectionne la cible dans le lister final.

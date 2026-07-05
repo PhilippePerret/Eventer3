@@ -129,7 +129,7 @@ export default {
     if (this.checked) { if (!ids.includes(this.id)) ids.push(this.id) }
     else { const i = ids.indexOf(this.id); if (i >= 0) ids.splice(i, 1) }
     lister._afterToggle(this, ctx)
-    ctx.scheduleSave()
+    ctx.save()
   },
 
   // Marques persos partagées (Event + Brin) : ne diffèrent que par l'ensemble d'ids

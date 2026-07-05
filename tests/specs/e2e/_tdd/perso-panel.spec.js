@@ -90,7 +90,7 @@ test("les pseudos sont affichés", async ({ page }) => {
   await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-title')).toHaveText('Roxane')
 })
 
-test("les badges sont affichés (2 lettres)", async ({ page }) => {
+test.only("les badges sont affichés (2 lettres)", async ({ page }) => {
   await openPersoPanel(page)
   await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-badge')).toHaveText('CY')
   await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-badge')).toHaveText('RO')
@@ -307,7 +307,7 @@ test("éditer un perso et vider le badge → recalculé depuis le patronyme", as
   await expect(pane1(page).locator('.perso-item').nth(0).locator('.perso-badge')).toHaveText('DB')
 })
 
-test("modifier le badge d'un perso vers une valeur déjà prise → notification immédiate + badge non modifié", async ({ page }) => {
+test.only("modifier le badge d'un perso vers une valeur déjà prise → notification immédiate + badge non modifié", async ({ page }) => {
   await openPersoPanel(page)
   // c1 badge=CY, c2 badge=RO
   await press(page, 'Enter') // édite c1
@@ -387,7 +387,7 @@ test("édition : modifier le titre puis Enter met à jour l'affichage", async ({
 
 // ─── Persistance ─────────────────────────────────────────────────────────────
 
-test("persistance : perso créé survit au rechargement", async ({ page }) => {
+test.only("persistance : perso créé survit au rechargement", async ({ page }) => {
   await openPersoPanel(page)
   await press(page, 'n')
   await pane1(page).locator('.perso-item.selected [data-field="title"]').fill('Perso persisté')
@@ -400,7 +400,7 @@ test("persistance : perso créé survit au rechargement", async ({ page }) => {
   await expect(pane1(page).locator('.perso-item').nth(1).locator('.perso-title')).toHaveText('Perso persisté')
 })
 
-test("persistance : cochage direct survit au rechargement", async ({ page }) => {
+test.only("persistance : cochage direct survit au rechargement", async ({ page }) => {
   await openPersoPanel(page)
   await press(page, 'ArrowDown')
   await press(page, 'ArrowDown') // → c3

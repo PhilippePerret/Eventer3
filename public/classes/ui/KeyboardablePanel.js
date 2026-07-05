@@ -109,6 +109,7 @@ export default class KeyboardablePanel {
 
     switch (event.key) {
       case 'Tab':
+        stopEvent(event)
         this._footerFocusIdx++
         if (this._footerFocusIdx >= this._footerBtns.length) {
           this._footerFocusIdx = this._getItemCount() > 0 ? -1 : 0

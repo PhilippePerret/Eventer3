@@ -1,3 +1,4 @@
+//Origine: tests/specs/e2e/event/edit-event-title.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures'
 import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
@@ -98,6 +99,8 @@ test('titre persisté en mémoire : retour et re-entrée dans le projet', async 
   await expect(input).toBeVisible()
   await input.fill(EVENT_TITLE)
   await press(page, 'Enter')
+  await page.waitForLoadState('networkidle')
+  await expect(pane1(page).locator('.event-item.editing')).toHaveCount(0)
   await press(page, 'ArrowLeft')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
   await press(page, 'ArrowRight')

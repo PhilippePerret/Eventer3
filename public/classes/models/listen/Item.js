@@ -1,6 +1,5 @@
 export const ItemLi = {
     Enter:      { nokey: 'onEnter'                              }
-  , Escape:     { nokey: 'onEscape'                            }
   , Tab:        { nokey: 'onTab',   maj: 'onShiftTab'          }
   , ArrowRight: { nokey: 'enterInside'                         }
   , '?':        { meta:  'openContextualHelp'                  }

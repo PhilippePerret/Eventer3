@@ -1,3 +1,4 @@
+//Origine: tests/specs/e2e/event/edit-event-state.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures'
 import { test, expect, pane1, press, getErr } from '../__setup__.js'
 

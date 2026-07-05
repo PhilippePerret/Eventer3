@@ -2,20 +2,20 @@ import KeyboardablePanel from './KeyboardablePanel.js'
 
 export default class LinkOpenPopup extends KeyboardablePanel {
 
-  static open({ targetId, targetTitle, item }) {
-    const popup = new LinkOpenPopup({ targetId, targetTitle, item })
+  static open({ targetId, targetTitle, item, hasSplit = false }) {
+    const popup = new LinkOpenPopup({ targetId, targetTitle, item, hasSplit })
     popup.open()
     return popup
   }
 
-  constructor({ targetId, targetTitle, item }) {
+  constructor({ targetId, targetTitle, item, hasSplit = false }) {
     super({ title: targetTitle, panelClass: 'link-open-popup' })
     this._targetId = targetId
     this._item     = item
     this._options  = [
-      { key: 'g', label: "Dans son évènemencier", action: () => { this._doClose(); this._item.goLink()    } },
-      { key: 'c', label: 'Afficher sa carte',      action: () => { this._doClose()                         } },
-      { key: 'a', label: "Dans une autre fenêtre", action: () => { this._doClose(); this._item.splitLink() } },
+      { key: 'g', label: "Dans son évènemencier",                          action: () => { this._doClose(); this._item.goLink()    } },
+      { key: 'c', label: 'Afficher sa carte',                              action: () => { this._doClose()                         } },
+      { key: 'a', label: hasSplit ? "Dans l'autre fenêtre" : "Dans une autre fenêtre", action: () => { this._doClose(); this._item.splitLink() } },
     ]
     this._footerKeyMap = {
       g: () => { this._doClose(); this._item.goLink()    },

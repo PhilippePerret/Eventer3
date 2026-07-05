@@ -15,8 +15,7 @@ Pendant refactorisation de grande ampleur : tout fichier de test va dans `tests/
 
 **Quand les tests _tdd passent** : CLAUDE (pas l'utilisateur) :
 1. `mv` vers l'emplacement canonique
-2. Supprimer le commentaire `// Origine :` 
-3. Ajouter en tête : `// Refactorisé — nouvelle architecture (YYYY-MM-DD)`
+2. **GARDER** le commentaire `// Origine :` — NE PAS le supprimer, NE PAS le remplacer
 
 **Workflow TDD — ÉTAPES IMPÉRATIVES (dans cet ordre) :**
 

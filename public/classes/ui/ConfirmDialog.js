@@ -49,7 +49,7 @@ export default class ConfirmDialog extends KeyboardablePanel {
       label,
       type,
       action: () => {
-        if (this._expectedValue != null) {
+        if (type !== 'cancel' && this._expectedValue != null) {
           if (this._inputEl?.value.trim() !== String(this._expectedValue)) return
         }
         this.close()

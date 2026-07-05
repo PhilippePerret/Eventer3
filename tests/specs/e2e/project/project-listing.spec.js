@@ -1,3 +1,4 @@
+//Origine: tests/specs/e2e/project/project-listing.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures'
 installFixtures('many-projects')
 import { test, expect, pane1 } from '../__setup__.js'
@@ -9,7 +10,7 @@ test('la liste des projets possède les bonnes classes CSS', async ({ page }) =>
   const mainPanel = pane1(page).locator('#projects-panel')
   const listing = pane1(page).locator('#projects-panel').first()
   const item = pane1(page).locator('.project-item')
-  const title = pane1(page).locator('.project-item__title')
+  const title = pane1(page).locator('.project-title')
 
   await expect(mainPanel).toHaveClass(/project-list/)
 

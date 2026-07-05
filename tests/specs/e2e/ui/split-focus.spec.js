@@ -34,31 +34,31 @@ test('Alt+2 → pane-2 reçoit data-focused (auto-focus au chargement)', async (
   await expect(page.locator('#pane-1')).not.toHaveAttribute('data-focused', '')
 })
 
-// ─── Shift+Tab bascule entre panneaux ────────────────────────────────────────
+// ─── Ctrl+Tab bascule entre panneaux ─────────────────────────────────────────
 
-test('Shift+Tab depuis pane-1 → focus passe dans pane-2', async ({ page }) => {
+test('Ctrl+Tab depuis pane-1 → focus passe dans pane-2', async ({ page }) => {
   await gotoApp(page)
   await openSplit(page)
   await press(page, 'Alt+1')
   await expect(page.locator('#pane-1')).toHaveAttribute('data-focused', '')
-  await press(page, 'Shift+Tab')
+  await press(page, 'Control+Tab')
   await expect(page.locator('#pane-2')).toHaveAttribute('data-focused', '')
 })
 
-test('Shift+Tab depuis pane-2 → focus revient dans pane-1', async ({ page }) => {
+test('Ctrl+Tab depuis pane-2 → focus revient dans pane-1', async ({ page }) => {
   await gotoApp(page)
   await openSplit(page)
   await press(page, 'Alt+1')
   await expect(page.locator('#pane-1')).toHaveAttribute('data-focused', '')
-  await press(page, 'Shift+Tab') // → pane-2
-  await press(page, 'Shift+Tab') // → pane-1
+  await press(page, 'Control+Tab') // → pane-2
+  await press(page, 'Control+Tab') // → pane-1
   await expect(page.locator('#pane-1')).toHaveAttribute('data-focused', '')
 })
 
-test('Shift+Tab depuis pane-2 → pane-1 reçoit data-focused', async ({ page }) => {
+test('Ctrl+Tab depuis pane-2 → pane-1 reçoit data-focused', async ({ page }) => {
   await gotoApp(page)
   await openSplit(page)
-  await press(page, 'Shift+Tab')
+  await press(page, 'Control+Tab')
   await expect(page.locator('#pane-1')).toHaveAttribute('data-focused', '')
   await expect(page.locator('#pane-2')).not.toHaveAttribute('data-focused', '')
 })

@@ -1,3 +1,4 @@
+//Origine: tests/specs/e2e/links/broken-links.spec.js
 import { test, expect, pane1, press, getErr } from '../__setup__.js'
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 
@@ -33,9 +34,10 @@ test('TargetsPanel : cibles inexistantes filtrées à l\'ouverture', async ({ pa
   await expect(pane1(page).locator('.project-item').first()).toHaveClass(/selected/)
   await press(page, 'ArrowRight')
   await page.waitForLoadState('networkidle')
+  await expect(pane1(page).locator('.event-item').first()).toHaveClass(/selected/)
   // Entrer en édition sur le premier item
   await press(page, 'Enter')
-  await expect(pane1(page).locator('.event-item.editing input[name="title"]')).toBeFocused()
+  await expect(pane1(page).locator('.event-item.editing [data-field="title"]')).toBeVisible()
   // Ouvrir TargetsPanel — fixture a 2 cibles : e999 (inexistant) + e1 (existant)
   await press(page, 'Meta+k')
   await expect(pane1(page).locator('.targets-panel')).toBeVisible()

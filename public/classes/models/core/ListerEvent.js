@@ -80,10 +80,44 @@ export default class ListerEvent extends Lister {
   }
 
   getTools() {
-    return [
-      { key: 'e', label: 'Exporter…',  action: () => {} },
-      { key: 'i', label: 'Importer…',  action: () => {} },
-    ]
+    const tools = []
+    if (StatusBar.displayMode === 'LEVEL') {
+      tools.push({ key: 'c', label: 'Consolider le niveau (⌘ + ⇧ + c)', action: () => this.consolidateLevel() })
+    }
+    tools.push({ key: 'e', label: 'Exporter…',  action: () => {} })
+    tools.push({ key: 'i', label: 'Importer…',  action: () => {} })
+    return tools
+  }
+
+  consolidateLevel() {
+    if (StatusBar.displayMode !== 'LEVEL') return
+    void this._consolidateLevel()
+  }
+
+  async _consolidateLevel() {
+    this._levelRenderToken = {}
+    const root      = this._getRootEventLister()
+    const collected = await this._collectItemsAtDepth(root, this.depth, null, this._isManLister())
+    for (const entry of collected) {
+      if (entry.isVirtual) {
+        entry.item      = await this._createEventsForGap(entry.item, entry.gap, entry.parentLister)
+        entry.isVirtual = false
+      }
+    }
+    void this._renderLevelMode()
+  }
+
+  async _createEventsForGap(item, gap, parentLister) {
+    let currentItemId = item.id
+    let lastData      = null
+    for (let i = 1; i <= gap; i++) {
+      const listerData = await Lister.createLister({ type: 'events', itemId: currentItemId, project: this.project })
+      if (i === 1) item.lister_id = listerData.id
+      const tmpLister = new ListerEvent({ id: listerData.id, project: this.project })
+      lastData        = await tmpLister.createItem({ title: `${item.title} +${i}` })
+      currentItemId   = lastData.id
+    }
+    return new Event({ ...lastData, parentLister })
   }
 
   _updateMainPanelClass() {
@@ -134,7 +168,7 @@ export default class ListerEvent extends Lister {
   async navigateToItem(targetId) {
     const projectId = this.project.id
     const resp = await fetch(`/api/items/${targetId}/ancestors?project_id=${projectId}`, { cache: 'no-store' })
-    if (!resp.ok) return
+    if (!resp.ok) return false
     const { ancestors = [] } = await resp.json()
 
     let currentLister = this._getRootEventLister()

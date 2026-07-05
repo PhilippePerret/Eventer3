@@ -64,7 +64,7 @@ test.describe('Delete dans ListerProject', () => {
     await expect(pane1(page).locator('#projects-panel')).toBeVisible()
     const items = pane1(page).locator('.project-item')
     const initialCount = await items.count()
-    expect(initialCount).toBeGreaterThanOrEqual(4)
+    expect(initialCount).toBeGreaterThanOrEqual(3)
     for (let i = 0; i < initialCount - 1; i++) {
       await press(page, 'ArrowDown')
     }

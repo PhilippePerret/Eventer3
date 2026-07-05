@@ -38,6 +38,7 @@ export default class Item extends KeyDispatcher {
   }
 
   onkeydown(ev) {
+    if (ev.key === 'Escape' && this.editing) { stopEvent(ev); this.onEscape(ev); return }
     if (this.editing) {
       if (document.activeElement?.isContentEditable) {
         const noMod  = !ev.metaKey && !ev.shiftKey && !ev.altKey && !ev.ctrlKey

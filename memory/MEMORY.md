@@ -52,7 +52,7 @@
 - **[Réutiliser composants UI existants](feedback_utiliser_composants_existants.md)** — CRITIQUE: avant tout nouveau composant UI, chercher dans `public/classes/ui/`. PopupSelect = toujours utiliser pour menus/dropdowns.
 - **[ID projet = UUID obligatoire](feedback_project_id_uuid.md)** — CRITIQUE: jamais 'project-a', 'test-brins' etc. — UUID partout dans fixtures, scripts, data_ini_state
 - [Tests : ERRORS jamais en dur](feedback_errors_no_hardcode.md) — Importer ERRORS et utiliser ERRORS[N], jamais de texte litéral dans les tests
-- [Split-pane — architecture](project_split_pane_suite.md) — Alt+2/1/0/R, shell.js, SplitManager.js, currentState inline dans split-close
+- [Split-pane — architecture](project_split_pane_suite.md) — Alt+2/1/0/R, Ctrl+Tab, shell.js, Windows.js (SplitManager fusionné), currentState inline dans split-close
 - [Demander logs serveur](feedback_demander_logs_serveur.md) — Erreur réseau sans URL → demander le log serveur en premier, pas investiguer le code
 - **[Footer panels : classe commune](feedback_panel_footer_style.md)** — TOUJOURS `.floating-panel__footer` ; `var(--line)` pour filets ; `margin-top:12px` pour l'air ; hints = `.panel-footer-hint` (pas bouton)
 - **[Tests = héritages ancienne archi](feedback/tests_heritage_ancienne_archi.md)** — CRITIQUE: tests existants ≠ vérité absolue ; si test contredit nouvelle archi → corriger le test
