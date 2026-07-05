@@ -131,6 +131,27 @@ export default class ListerEvent extends Lister {
     return lister
   }
 
+  async navigateToItem(targetId) {
+    const projectId = this.project.id
+    const resp = await fetch(`/api/items/${targetId}/ancestors?project_id=${projectId}`, { cache: 'no-store' })
+    if (!resp.ok) return
+    const { ancestors = [] } = await resp.json()
+
+    let currentLister = this._getRootEventLister()
+    for (const ancestorId of ancestors) {
+      const idx = currentLister.items.findIndex(item => item.id === ancestorId)
+      if (idx < 0) return
+      currentLister.selectedIndex = idx
+      const ancestorItem = currentLister.items[idx]
+      currentLister = await ancestorItem._initNewLister(ListerEvent, ancestorItem.lister_id)
+    }
+
+    const targetIdx = currentLister.items.findIndex(item => item.id === targetId)
+    if (targetIdx >= 0) currentLister.selectedIndex = targetIdx
+    currentLister.build()
+    currentLister.display(null)
+  }
+
   async _collectItemsAtDepth(lister, targetDepth, currentDepth, isManMode) {
     const cd = currentDepth ?? lister.depth
     if (cd === targetDepth) {

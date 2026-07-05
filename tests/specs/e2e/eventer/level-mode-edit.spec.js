@@ -1,3 +1,4 @@
+//Origine: tests/specs/e2e/eventer/level-mode-edit.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures'
 import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
@@ -35,9 +36,9 @@ test("LEVEL mode : item réel après un virtuel est sélectionnable et éditable
   await expect(pane1(page).locator('.event-item[data-id="e31"]')).toHaveClass(/selected/)
 
   await press(page, 'Enter')
-  const input = pane1(page).locator('.event-item[data-id="e31"] input[name="title"]')
+  const input = pane1(page).locator('.event-item[data-id="e31"] [data-field="title"]')
   await expect(input).toBeVisible()
   await expect(input).toBeFocused()
-  await expect(input).toHaveValue('Séquence 1 de Acte III')
+  await expect(input).toHaveText('Séquence 1 de Acte III')
 
 })

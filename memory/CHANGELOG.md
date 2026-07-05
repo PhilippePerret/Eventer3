@@ -1,5 +1,14 @@
 # CHANGELOG — Eventer3
 
+## 2026-07-05 — PULL link-go-navigate : link-go-navigate.spec.js (3 tests)
+
+- **`ListerEvent.navigateToItem(targetId)`** : nouvelle méthode — fetch ancêtres via `/api/items/:id/ancestors`, remonte au root lister, descend dans chaque ancêtre via `_initNewLister`, sélectionne la cible dans le lister final.
+- **`ItemTargets.goLink()`** : implémenté — récupère `targetId` via `getActiveLinkId()`, délègue à `this.parentLister.navigateToItem(targetId)`.
+
+## 2026-07-05 — PULL level-mode-edit : level-mode-edit.spec.js (1 test)
+
+- **Test** : `input[name="title"]` → `[data-field="title"]` + `toHaveValue` → `toHaveText` (nouvelle archi contenteditable).
+
 ## 2026-07-04 — PULL ConstantsPanel : constants-panel.spec.js (16 tests)
 
 - **`ConstantsPanel.js`** : suppression totale de tout handler Escape → fermeture (INTERDICTION 13). Fermeture uniquement via `⌘↩` (`Meta+Enter`).

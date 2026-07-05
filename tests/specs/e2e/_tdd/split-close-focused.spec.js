@@ -1,3 +1,4 @@
+//Origine: tests/specs/e2e/ui/split-close-focused.spec.js
 import { test, expect, pane1, press, getErr } from '../__setup__.js'
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 

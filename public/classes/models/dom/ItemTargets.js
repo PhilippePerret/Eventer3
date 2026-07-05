@@ -50,7 +50,9 @@ export default {
   },
 
   goLink() {
-    if (this.getActiveLinkId() == null) { Notification.show(getErr(5200)); return }
+    const targetId = this.getActiveLinkId()
+    if (targetId == null) { Notification.show(getErr(5200)); return }
+    void this.parentLister.navigateToItem(targetId)
   },
 
   splitLink() {

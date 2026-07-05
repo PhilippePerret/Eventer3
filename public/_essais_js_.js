@@ -2,7 +2,6 @@ class Essai {
   static generateUniqueBadgeFromPatronyme(taken, base){
     let bg
     const words = base.split(/\s+/)
-    console.log("words", words)
     const word1 = words[0]
     const word2 = words[1]
     const len = base.length
@@ -10,7 +9,6 @@ class Essai {
       let root = word1[i1]
       for(var i2 = 0, len2 = word2.length; i2 < len2; ++i2){
         if (!taken.has(bg = root + word2[i2])) return bg
-        console.log('mauvais badge', bg)
       }
     }
     return this.badgePerDepit(word1[0], taken)
@@ -38,7 +36,5 @@ let taken = new Set(['MA', 'MR', 'MI', 'MM'])
 taken = new Set(['MR','MI', 'MM']) 
 for(var c= 65;c <90;++c){taken.add('M' + String.fromCharCode(c))}
 //*/
-console.log("taken = ", taken)
 const base = 'MARION MICHEL'
 const badge = Essai.generateUniqueBadgeFromPatronyme(taken, base)
-console.log("Valeur finale", badge)
