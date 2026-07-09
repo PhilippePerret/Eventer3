@@ -98,6 +98,36 @@ static generateUniqueBadge(brin) {
     }
   }
 
+  /**
+   * ================================================================
+   *        MÉTHODES POUR LA ***COULEUR*** DU BADGE
+   */
+
+  static normalizeColor(hex) {
+    if (!hex) return ''
+    const v = String(hex).trim()
+    if (/^#[0-9a-f]{6}$/i.test(v)) return v.toLowerCase()
+    if (/^#[0-9a-f]{3}$/i.test(v)) return '#' + v.slice(1).split('').map(c => c + c).join('').toLowerCase()
+    return ''
+  }
+
+  static textColorFor(hex) {
+    const color = Brin.normalizeColor(hex)
+    if (!color) return ''
+    const r = parseInt(color.slice(1, 3), 16)
+    const g = parseInt(color.slice(3, 5), 16)
+    const b = parseInt(color.slice(5, 7), 16)
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+    return luminance > 0.57 ? '#2f2d29' : '#fffaf3'
+  }
+
+  static applyBadgeColor(el, color) {
+    const c = Brin.normalizeColor(color)
+    if (!el || !c) return
+    el.style.backgroundColor = c
+    el.style.color = Brin.textColorFor(c)
+  }
+
 } // class Brin
 
 Object.assign(Brin.prototype, BrinDom)

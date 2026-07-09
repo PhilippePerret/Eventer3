@@ -263,7 +263,7 @@ body {
   gap: 6px;
 }
 
-.event-persos-marks, .persos-marks {
+.event-persos-marks, .persos-marks, .event-brins-marks, .brins-marks {
   display: flex;
   align-items: center;
   gap: 4px;

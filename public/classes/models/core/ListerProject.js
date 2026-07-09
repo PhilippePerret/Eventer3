@@ -10,6 +10,8 @@ export default class ListerProject extends Lister {
   static CHILD_CLASS = ListerEvent
   static PANEL_ID    = 'projects-panel'
 
+  _panelTitle() { return 'Projets' }
+
   static async init() {
     LOG.m(1, 'Init projects')
     const lister = new ListerProject({ project: 'none' })

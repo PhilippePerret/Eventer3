@@ -83,6 +83,7 @@ export default {
       this.el.classList.remove('editing')
       this.el.innerHTML = ''
       this._buildContent(this.el)
+      this._afterBuild?.()
       this.el.focus()
     } catch(e) {
       LOG.m(1, 'Item._stopEditing ERREUR', e.message, e.stack)
