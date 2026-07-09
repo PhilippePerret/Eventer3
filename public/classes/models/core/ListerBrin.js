@@ -19,8 +19,29 @@ export default class ListerBrin extends Lister {
 
   get contextItem() { return this._contextItem }
 
+  // events : un seul event sélectionné, ou tous les events cochés (Maj+b)
+  displayForEvents(events) {
+    const ctx = {
+      events,
+      get brin_ids() {
+        const ids = new Set()
+        events.forEach(ev => (ev.brin_ids ?? []).forEach(id => ids.add(id)))
+        return [...ids]
+      },
+      set brin_ids(_v) { /* mutation réelle faite événement par événement dans _afterToggle */ },
+      async save() { for (const ev of events) await ev.save() },
+    }
+    this.display(ctx)
+  }
+
+  _panelTitle() {
+    const events = this._contextItem?.events ?? []
+    if (events.length > 1) return 'Brins events des cochés'
+    return `Brins de ${events[0]?.title ?? ''}`
+  }
+
   _applyContext(contextItem) {
-    this._listerEvent   = contextItem.parentLister
+    this._listerEvent   = contextItem.events[0]?.parentLister
     this._modifiedBrins = {}
   }
 
@@ -44,12 +65,12 @@ export default class ListerBrin extends Lister {
   async _initDefault() { await this._initDefaultBrin() }
 
   async _initDefaultBrin() {
-    const result = await this.createItem({ title: 'Intrigue principale', badge: 'IP' })
+    const result = await this.createItem({ title: 'Intrigue principale', badge: 'INT' })
     LOG.m(1, 'ListerBrin._initDefaultBrin', { id: result?.id, title: result?.title, badge: result?.badge })
     if (!result?.id) return
     this.item_ids = [result.id]
     await this.save()
-    const brin = new Brin({ ...result, id: result.id, badge: result.badge ?? 'IP', _index: 0, project: this.project, parentLister: this })
+    const brin = new Brin({ ...result, id: result.id, badge: result.badge ?? 'INT', _index: 0, project: this.project, parentLister: this })
     this.items = [brin]
   }
 
@@ -63,8 +84,10 @@ export default class ListerBrin extends Lister {
     const ctx  = this.contextItem
     await super.deleteSelected()
     if (!brin || !ctx) return
-    ctx.brin_ids = (ctx.brin_ids ?? []).filter(id => id !== brin.id)
-    this._refreshEventMarks(ctx)
+    ctx.events.forEach(ev => {
+      ev.brin_ids = (ev.brin_ids ?? []).filter(id => id !== brin.id)
+      this._refreshEventMarks(ev)
+    })
     await ctx.save()
   }
 
@@ -75,14 +98,19 @@ export default class ListerBrin extends Lister {
     return resp.ok
   }
 
-  // Brins : rafraîchissement DIRECT au toggle sur l'event concerné uniquement (1 event = pas de goulot)
-  _afterToggle(brin, ev) {
-    if (brin.checked) {
-      const pids = brin.perso_ids ?? []
-      if (pids.length) ev.perso_ids = (ev.perso_ids ?? []).filter(id => !pids.includes(id))
-    }
-    this._refreshEventMarks(ev)
-    ev.refreshPersosMarks()
+  // Brins : rafraîchissement DIRECT sur chaque event concerné (1 seul en temps normal, plusieurs si Maj+b)
+  _afterToggle(brin, ctx) {
+    ctx.events.forEach(ev => {
+      const has = (ev.brin_ids ?? []).includes(brin.id)
+      if (brin.checked && !has) (ev.brin_ids ??= []).push(brin.id)
+      if (!brin.checked && has) ev.brin_ids = ev.brin_ids.filter(id => id !== brin.id)
+      if (brin.checked) {
+        const pids = brin.perso_ids ?? []
+        if (pids.length) ev.perso_ids = (ev.perso_ids ?? []).filter(id => !pids.includes(id))
+      }
+      this._refreshEventMarks(ev)
+      ev.refreshPersosMarks()
+    })
   }
 
   _refreshEventMarks(ev) {

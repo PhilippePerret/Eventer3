@@ -67,8 +67,13 @@ export default {
       old.replaceWith(editEl)
       this._editingFields.push(editEl)
     }
-    this._editingFields[0]?.focus()
+    this.focusTitleField()
     this._afterStartEditing?.()
+  },
+
+  focusTitleField() {
+    this._editingFieldIdx = 0
+    this._editingFields[0]?.focus()
   },
 
   revertValues() {

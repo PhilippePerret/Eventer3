@@ -70,8 +70,25 @@ export default class DOM {
     switch (field.type) {
       case 'select':  return this.buildEditSelectField(field, item)
       case 'no-edit': return this.buildNoEditField(field, item)
+      case 'color':   return this.buildColorField(field, item)
       default:        return this.buildEditTextField(field, item)
     }
+  }
+
+  buildColorField(field, item) {
+    const minClass = item.constructor.name.toLowerCase()
+    const el = document.createElement('input')
+    el.type = 'color'
+    el.className = field.cssClass ?? (field.warper ? `${minClass}-${field.name}` : `${minClass}-item__${field.name}`)
+    el.setAttribute('data-field', field.name)
+    el.value = item[field.name] || '#000000'
+    el.addEventListener('click', e => e.stopPropagation())
+    el.addEventListener('input', () => {
+      item[field.name] = el.value
+      item._afterBuild?.()
+      item.scheduleSave()
+    })
+    return el
   }
 
   buildNoEditField(field, item) {
@@ -85,6 +102,7 @@ export default class DOM {
       case 'text':    return this.buildTextField(field, item)
       case 'select':  return this.buildSelect(field, item)
       case 'no-edit': return this.buildNoEditField(field, item)
+      case 'color':   return this.buildColorField(field, item)
       default:        return this.buildTextField(field, item)
     }
   }

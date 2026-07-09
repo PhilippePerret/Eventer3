@@ -16,16 +16,39 @@ export default class ListerPerso extends Lister {
     this._contextItem = null // Brin ou Event
   }
 
-  _applyContext(contextItem) {
-    this._listerEvent  = contextItem.parentLister
-    this._directIds    = new Set(contextItem.perso_ids ?? [])
-    this._inheritedIds = new Set()
-    if (contextItem.minClass === 'event') {
-      const brins = this.project.itemsById['brins']
-      for (const bid of (contextItem.brin_ids ?? [])) {
-        brins[bid]?.perso_ids?.forEach(pid => this._inheritedIds.add(pid))
-      }
+  // items : un seul Event/Brin sélectionné, ou tous les items cochés (Maj+p)
+  displayForItems(items) {
+    const ctx = {
+      items,
+      get perso_ids() {
+        const ids = new Set()
+        items.forEach(it => (it.perso_ids ?? []).forEach(id => ids.add(id)))
+        return [...ids]
+      },
+      set perso_ids(_v) { /* mutation réelle faite item par item dans _afterToggle */ },
+      async save() { for (const it of items) await it.save() },
     }
+    this.display(ctx)
+  }
+
+  _panelTitle() {
+    const items = this._contextItem?.items ?? []
+    if (items.length > 1) return `Persos ${items[0]?.minClass === 'brin' ? 'brins' : 'events'} des cochés`
+    return `Persos de ${items[0]?.title ?? ''}`
+  }
+
+  _applyContext(contextItem) {
+    const items = contextItem.items
+    this._listerEvent  = items[0]?.parentLister
+    this._directIds    = new Set()
+    this._inheritedIds = new Set()
+    items.forEach(it => {
+      (it.perso_ids ?? []).forEach(id => this._directIds.add(id))
+      if (it.minClass === 'event') {
+        const brins = this.project.itemsById['brins']
+        ;(it.brin_ids ?? []).forEach(bid => brins[bid]?.perso_ids?.forEach(pid => this._inheritedIds.add(pid)))
+      }
+    })
   }
 
   async _initDefault() {
@@ -54,6 +77,6 @@ export default class ListerPerso extends Lister {
   _canToggle(item) { return !item.inherited }
 
   _afterToggle(_perso, ctx) {
-    ctx.refreshPersosMarks()
+    ctx.items.forEach(it => it.refreshPersosMarks())
   }
 }

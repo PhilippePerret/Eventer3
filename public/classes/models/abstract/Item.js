@@ -209,13 +209,21 @@ export default class Item extends KeyDispatcher {
 
   focus() { this.el.focus() }
 
-  openBrinPanel(){
-    this.project.listerBrins.display(this)
+  // Items concernés par une action clavier : le seul sélectionné, ou tous les cochés si Maj
+  _checkedSiblingsOrSelf(ev) {
+    if (!ev?.shiftKey) return [this]
+    const checked = this.parentLister?.items?.filter(i => i.checked) ?? []
+    return checked.length ? checked : [this]
   }
 
-  openPersoPanel(){
-    this.parentLister?.markForCheck?.(this)
-    this.project.listerPersos.display(this)
+  openBrinPanel(ev){
+    this.project.listerBrins.displayForEvents(this._checkedSiblingsOrSelf(ev))
+  }
+
+  openPersoPanel(ev){
+    const items = this._checkedSiblingsOrSelf(ev)
+    items.forEach(it => this.parentLister?.markForCheck?.(it))
+    this.project.listerPersos.displayForItems(items)
   }
 
   openConstantsPanel(){
