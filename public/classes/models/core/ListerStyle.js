@@ -53,7 +53,7 @@ export default class ListerStyle extends Lister {
     if (!ev) return
     ev.css = this.items.filter(s => s.checked).map(s => s.id)
     ListerStyle.applyToEvents(ev, this.items)
-    ev.scheduleSave()
+    await ev.save()
   }
 
   applyEventCss(ev) {

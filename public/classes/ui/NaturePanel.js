@@ -77,7 +77,8 @@ export default class NaturePanel extends KeyboardablePanel {
 
   _listerNatureLabel() {
     if (this._listerNature === 'eventer') return 'évènemencier'
-    const isAtManDepth   = this._lister?.man_depth != null && this._lister.depth === this._lister.man_depth
+    const manDepth       = this._lister?.man_depth ?? this._lister?.project?.man_depth ?? null
+    const isAtManDepth   = manDepth != null && this._lister.depth === manDepth
     const effectivelyMan = this._listerNature === 'man' || (this._listerNature == null && isAtManDepth)
     if (effectivelyMan) {
       const entry = PROJECT_TYPES.find(t => t.value === this._projectNature)
@@ -102,7 +103,8 @@ export default class NaturePanel extends KeyboardablePanel {
   }
 
   _openListerNaturePopup() {
-    const isAtManDepth = this._lister?.man_depth != null && this._lister.depth === this._lister.man_depth
+    const manDepth     = this._lister?.man_depth ?? this._lister?.project?.man_depth ?? null
+    const isAtManDepth = manDepth != null && this._lister.depth === manDepth
     const entry        = PROJECT_TYPES.find(t => t.value === this._projectNature)
     const options      = []
     if (entry?.man)                      options.push({ value: 'man',     label: entry.man        })

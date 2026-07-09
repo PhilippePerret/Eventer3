@@ -57,7 +57,9 @@ export default class ListerEvent extends Lister {
     }
   }
 
-  openNaturePanel() { new NaturePanel({ target: this }).open() }
+  openNaturePanel() {
+    new NaturePanel({ target: this }).open()
+  }
 
   _filterMenuWidgets() {
     return [

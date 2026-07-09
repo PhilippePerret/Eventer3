@@ -70,10 +70,15 @@ export default class Project extends Item {
     ])}
 
   static async onCreated(project) {
+    LOG.m(1, '[onCreated] START', { projectId: project?.id })
     const evtLister = await Lister.createLister({ type: 'events', itemId: project.id, project: project })
+    LOG.m(1, '[onCreated] evtLister', JSON.stringify(evtLister))
     if (evtLister?.id) await new Lister({ id: evtLister.id, project: project }).createItem({ title: 'Acte I' })
+    LOG.m(1, '[onCreated] after Acte I')
     await new ListerBrin({ project }).load()
+    LOG.m(1, '[onCreated] after ListerBrin.load')
     await new ListerPerso({ project }).load()
+    LOG.m(1, '[onCreated] DONE')
   }
 
 }

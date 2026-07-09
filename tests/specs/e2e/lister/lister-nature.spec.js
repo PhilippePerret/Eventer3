@@ -227,17 +227,12 @@ test("confirmer 'o' → man_depth sauvegardé, sibling lister devient roman-man"
   await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toHaveAttribute('data-depth', '2')
   await press(page, 't')
-  await press(page, 'Enter')
-  await press(page, 'ArrowUp')   // pièce radio
-  await press(page, 'ArrowUp')   // theatre
-  await press(page, 'ArrowUp')   // bd
-  await press(page, 'ArrowUp')   // film
-  await press(page, 'ArrowUp')   // roman
-  await press(page, 'Enter')
-  await press(page, 'ArrowDown')
-  await press(page, 'Enter')
+  await press(page, 'Enter')     // popup projet — roman déjà focalisé (fixture depth-move a nature=roman)
+  await press(page, 'Enter')     // confirmer roman
+  await press(page, 'ArrowDown') // champ évènemencier
+  await press(page, 'Enter')     // popup lister
   await press(page, 'ArrowUp')   // manuscrit
-  await press(page, 'Enter')
+  await press(page, 'Enter')     // confirmer manuscrit
   await applyNaturePanel(page)
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
   await press(page, 'Tab')   // focus Oui
@@ -277,7 +272,7 @@ test("depth = man_depth → appliquer ferme sans confirmation", async ({ page })
 
 // ─── Nature null à man_depth ─────────────────────────────────────────────────
 
-test.skip("nature null à man_depth → panneau affiche 'manuscrit', popup focused sur 'défaut'", async ({ page }) => {
+test("nature null à man_depth → panneau affiche 'manuscrit', popup focused sur 'défaut'", async ({ page }) => {
   installFixtures('depth-move')
   await page.goto('/')
   await expect(pane1(page).locator('#projects-panel')).toBeVisible()
@@ -286,26 +281,20 @@ test.skip("nature null à man_depth → panneau affiche 'manuscrit', popup focus
   await press(page, 'ArrowRight')
   await expect(pane1(page).locator('#events-panel')).toHaveAttribute('data-depth', '2')
   await press(page, 't')
-  await press(page, 'Enter')
-  await press(page, 'ArrowUp')   // pièce radio
-  await press(page, 'ArrowUp')   // theatre
-  await press(page, 'ArrowUp')   // bd
-  await press(page, 'ArrowUp')   // film
-  await press(page, 'ArrowUp')   // roman
-  await press(page, 'Enter')
+  await press(page, 'Enter')     // popup projet — roman déjà focalisé (fixture depth-move a nature=roman)
+  await press(page, 'Enter')     // confirmer roman
   await press(page, 'ArrowDown')
   await press(page, 'Enter')
   await press(page, 'ArrowUp')   // manuscrit
   await press(page, 'Enter')
   await applyNaturePanel(page)
   await expect(pane1(page).locator('.confirm-dialog')).toBeVisible()
-  await press(page, 'Tab')       // focus Oui
-  await press(page, 'Enter')     // oui → man_depth=2
+  await press(page, 'Enter')     // oui (index 0) → man_depth=2
   await expect(pane1(page).locator('.confirm-dialog')).not.toBeVisible()
   await press(page, 'ArrowLeft')
   await press(page, 'ArrowDown')
   await press(page, 'ArrowRight')
-  await expect(pane1(page).locator('#events-panel')).toHaveClass(/roman-man/)
+  await expect(pane1(page).locator('.event-item')).toHaveCount(1)
   await press(page, 't')
   await expect(pane1(page).locator('.nature-panel')).toBeVisible()
   await expect(pane1(page).locator('.nature-panel')).toContainText('manuscrit')

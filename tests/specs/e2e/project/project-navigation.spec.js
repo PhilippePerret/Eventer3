@@ -36,8 +36,10 @@ test.describe('Ouverture et navigation', () => {
     await page.goto('/')
     const { folderName, workDir } = await setupProjectFolder(page)
     await expect(pane1(page).locator('#projects-panel')).toHaveClass(/project-list/)
+    const countBefore = await pane1(page).locator('.project-item').count()
     await press(page, 'n')
     await createAndSelectFolderInPicker(page, expect, folderName)
+    await expect(pane1(page).locator('.project-item')).toHaveCount(countBefore + 1, { timeout: 8000 })
     await page.waitForLoadState('networkidle')
     return { folderName, workDir }
   }
@@ -52,7 +54,7 @@ test.describe('Ouverture et navigation', () => {
     await expect(pane1(page).locator('.file-picker')).toBeVisible()
     const entry = pane1(page).locator('.file-picker__entry-name').first()
     await entry.waitFor({ state: 'visible' })
-    await entry.press('Enter')
+    await press(page, 'Enter')
   }
 
   test('choisir un dossier avec eventer.db affiche une boîte de confirmation', async ({ page }) => {
@@ -79,7 +81,9 @@ test.describe('Ouverture et navigation', () => {
     await page.goto('/')
     await tryPickExistingFolder(page, expect, workDir)
     await expect(pane1(page).locator('.ftpanel.kpanel')).toBeVisible()
+    const countBefore = await pane1(page).locator('.project-item').count()
     await press(page, 'Enter')
+    await expect(pane1(page).locator('.project-item')).toHaveCount(countBefore + 1, { timeout: 8000 })
     await page.waitForLoadState('networkidle')
     await press(page, 'ArrowRight')
     await expect(pane1(page).locator('#events-panel')).toHaveClass(/event-list/)
@@ -112,6 +116,7 @@ test.describe('Ouverture et navigation', () => {
   })
 
   test('persistance : le projet survit au rechargement', async ({ page }) => {
+    installFixtures('many-projects-persistence')
     const { workDir } = await createProjectAndGetFolderInfo(page, expect)
     const countAfterFirst = await pane1(page).locator('.project-item').count()
     await page.goto('/')
@@ -215,13 +220,14 @@ test.describe('Régression : project_id propagé', () => {
     await enterProject(page)
 
     await press(page, 'ArrowRight')
-    await expect(pane1(page).locator('#events-panel')).toBeVisible()
+    await expect(pane1(page).locator('#events-panel')).toHaveAttribute('data-depth', '2')
 
     await press(page, 'n')
     const input = pane1(page).locator('.event-item [data-field="title"]')
     await expect(input).toBeFocused()
     await input.fill('Sous-event persistant')
     await press(page, 'Enter')
+    await expect(pane1(page).locator('.event-item.editing')).toHaveCount(0)
     await expect(pane1(page).locator('.event-item').first()).toContainText('Sous-event persistant')
     await page.waitForLoadState('networkidle')
 

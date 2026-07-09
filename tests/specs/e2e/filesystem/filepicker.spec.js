@@ -82,6 +82,8 @@ test('sélectionner un dossier crée le projet directement (sans éditeur)', asy
   await page.waitForLoadState('networkidle')
   await expect(pane1(page).locator('.project-item')).toHaveCount(countBefore + 1)
   await expect(pane1(page).locator('.project-item.selected input[name="title"]')).not.toBeVisible()
+  fs.rmSync(path.join(TEST_DIR, 'Roman-Alpha'), { recursive: true, force: true })
+  fs.mkdirSync(path.join(TEST_DIR, 'Roman-Alpha'))
 })
 
 // ── Navigation clavier ────────────────────────────────────────────────

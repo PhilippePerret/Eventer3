@@ -14,6 +14,8 @@ import ContextualHelp from '../../ui/ContextualHelp.js'
 import { Clipboard } from './Clipboard.js'
 import Texte from '../../../system/Texte.js'
 
+const CONTROL_KEYS = { Enter: true, Tab: true }
+
 // tag::class-item[]
 export default class Item extends KeyDispatcher {
 // end::class-item[]
@@ -43,9 +45,10 @@ export default class Item extends KeyDispatcher {
       if (document.activeElement?.isContentEditable) {
         const noMod  = !ev.metaKey && !ev.shiftKey && !ev.altKey && !ev.ctrlKey
         const isLeave = ev.key === 'ArrowLeft' && noMod && !document.activeElement.textContent
+        const isControlKey = CONTROL_KEYS[ev.key] || ev.metaKey
         if (!isLeave) {
           ev.stopPropagation()
-          super.onkeydown(ev)
+          if (isControlKey) super.onkeydown(ev)
           return
         }
       } else if (!this.constructor.LISTENERS[ev.key]) {

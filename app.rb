@@ -100,7 +100,6 @@ end
 
 patch '/api/items/:id' do
   payload = JSON.parse(request.body.read)
-  LOG.m(1, "[PATCH /api/items/#{params[:id]}] payload=#{payload.inspect}")
   if (db_path = payload['db_path']) && !db_path.strip.empty?
     Bootstrap.ensure_project_data!(db_path)
   end

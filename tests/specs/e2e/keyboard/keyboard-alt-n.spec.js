@@ -26,7 +26,7 @@ test.describe('Alt+n dans la liste des projets', () => {
 
     await press(page, 'Alt+n')
 
-    await expect(items).toHaveCount(5)
+    await expect(items).toHaveCount(4)
     await expect(items.nth(1)).toContainText('Projet A')
     await expect(items.nth(0)).toHaveClass(/selected/)
     await expect(items.nth(0).locator('[data-field="title"]')).toBeVisible()
@@ -41,7 +41,7 @@ test.describe('Alt+n dans la liste des projets', () => {
     await pressAltNMac(page)
 
     const items = pane1(page).locator('.project-item')
-    await expect(items).toHaveCount(5)
+    await expect(items).toHaveCount(4)
     await expect(items.nth(0)).toHaveClass(/selected/)
     await expect(items.nth(0).locator('[data-field="title"]')).toBeVisible()
   })

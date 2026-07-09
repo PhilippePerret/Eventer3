@@ -112,6 +112,7 @@ test('targets persistées : rechargement → cibles toujours présentes', async 
   const title = await pane1(page).locator('.event-item.selected .event-title').textContent()
   await press(page, 'k')
   await pane1(page).locator('.notification').waitFor({ state: 'hidden' })
+  await page.waitForLoadState('networkidle')
 
   await page.reload()
   await expect(pane1(page).locator('.project-item').first()).toHaveClass(/selected/)

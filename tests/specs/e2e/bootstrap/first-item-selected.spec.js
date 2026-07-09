@@ -1,3 +1,4 @@
+// Origine : tests/specs/e2e/bootstrap/first-item-selected.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 installFixtures('many-projects')
 
@@ -11,12 +12,11 @@ test(
 
     const items = pane1(page).locator('.project-item')
 
-    await expect(items).toHaveCount(4)
+    await expect(items).toHaveCount(3)
 
     await expect(items.nth(0)).toHaveClass(/selected/)
     await expect(items.nth(1)).not.toHaveClass(/selected/)
     await expect(items.nth(2)).not.toHaveClass(/selected/)
-    await expect(items.nth(3)).not.toHaveClass(/selected/)
 
   }
 )

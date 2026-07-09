@@ -59,7 +59,7 @@ test("brin créé a bien un badge affiché après rechargement", async ({ page }
   await press(page, 'b')
   await expect(pane1(page).locator('#brins-panel')).toBeVisible()
 
-  const newBrin = pane1(page).locator('.brin-item').nth(1)
+  const newBrin = pane1(page).locator('.brin-item').filter({ hasText: 'Nouveau Brin' })
   await expect(newBrin).toContainText('Nouveau Brin')
   await expect(newBrin.locator('.brin-badge')).not.toHaveText('')
 })

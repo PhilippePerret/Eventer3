@@ -263,7 +263,7 @@ body {
   gap: 6px;
 }
 
-.event-persos-marks {
+.event-persos-marks, .persos-marks {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -340,7 +340,7 @@ body {
 
 /* ─── Badges ──────────────────────────────────────────────────── */
 
-.badge {
+.badge, .brin-badge, .perso-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -355,12 +355,12 @@ body {
   color: var(--muted);
 }
 
-.badge.brin {
+.badge.brin, .brin-badge {
   background: var(--brin);
   padding: 0;
 }
 
-.badge.perso {
+.badge.perso, .perso-badge {
   background: var(--perso);
 }
 
@@ -610,7 +610,7 @@ body#shell:has(#pane-2[data-split-active]) .pane-wrapper:has(iframe[data-focused
   z-index: 9999;
 }
 
-.panel-header {
+.panel-header, .lister-panel__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -764,7 +764,7 @@ body#shell:has(#pane-2[data-split-active]) .pane-wrapper:has(iframe[data-focused
   box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .4);
 }
 
-.brin-item__title {
+.brin-item__title, .brin-title {
   font-size: var(--lisible);
 }
 
@@ -785,11 +785,11 @@ body#shell:has(#pane-2[data-split-active]) .pane-wrapper:has(iframe[data-focused
   grid-template-columns: 30px 50px minmax(120px, 1fr) minmax(100px, .7fr) 42px minmax(120px, .6fr);
 }
 
-.perso-item__badge {
+.perso-item__badge, .perso-badge {
   font-size: 12px;
 }
 
-.perso-item__title {
+.perso-item__title, .perso-title {
   font-size: 24px;
   font-weight: 600;
 }

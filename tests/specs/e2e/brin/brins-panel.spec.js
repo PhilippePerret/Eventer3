@@ -244,7 +244,7 @@ test("persistance : brin créé survit au rechargement", async ({ page }) => {
   await goToListerEvent(page)
   await press(page, 'b')
   await expect(pane1(page).locator('.brin-item')).toHaveCount(3)
-  await expect(pane1(page).locator('.brin-item').nth(1).locator('.brin-title')).toHaveText('Brin persisté')
+  await expect(pane1(page).locator('.brin-item').filter({ hasText: 'Brin persisté' }).locator('.brin-title')).toHaveText('Brin persisté')
 })
 
 test("persistance : brin édité survit au rechargement", async ({ page }) => {

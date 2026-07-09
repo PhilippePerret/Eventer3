@@ -53,9 +53,11 @@ test.describe("Données initiales d'un nouveau projet", () => {
     const { folderName } = await setupProjectFolder(page)
     await press(page, 'n')
     await createAndSelectFolderInPicker(page, expect, folderName)
+    await expect(pane1(page).locator('.project-item')).toHaveCount(4, { timeout: 8000 })
     await page.waitForLoadState('networkidle')
 
-    return await pane1(page).locator('.project-item').nth(1).getAttribute('data-id')
+    const projectId = await pane1(page).locator('.project-item').nth(1).getAttribute('data-id')
+    return projectId
   }
 
   test('un nouveau projet sauvegardé a un évènemencier avec un event "Acte I"', async ({ page }) => {

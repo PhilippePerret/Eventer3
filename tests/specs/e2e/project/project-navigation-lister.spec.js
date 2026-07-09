@@ -58,6 +58,7 @@ test('les events persistent après avoir navigué vers un autre projet et revenu
   await press(page, 'Enter')
   await page.waitForLoadState('networkidle')
   await expect(pane1(page).locator('.event-item')).toHaveCount(4)
+  await expect(pane1(page).locator('.event-item.editing')).toHaveCount(0)
 
   // Revenir à la liste des projets
   await press(page, 'ArrowLeft')

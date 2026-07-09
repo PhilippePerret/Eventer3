@@ -91,6 +91,7 @@ test("entrer dans un item en mode LEVEL rebascule en NESTING", async ({ page }) 
   await enterProject(page)
 
   await press(page, 'ArrowRight')
+  await expect(pane1(page).locator('#events-panel')).toHaveAttribute('data-depth', '2')
   await press(page, 'Meta+m')
   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
 

@@ -1,5 +1,99 @@
 # CHANGELOG — Eventer3
 
+## 2026-07-09 — Fix : lettres-raccourcis captées pendant édition du titre
+
+- **`Item.onkeydown` dispatchait TOUTES les touches vers `KeyDispatcher` pendant l'édition d'un contenteditable** (`Item.js:40-56`) : en édition, `super.onkeydown(ev)` était appelé pour n'importe quelle touche non-`ArrowLeft`-en-début-de-champ, y compris les lettres-raccourcis propres (`b`→`openBrinPanel` sur `Event`, `p`, `o`, `g`, `a`, `q`, `k`, `' '`→`toggleChecked`…) — `KeyDispatcher.onkeydown` trouvait une méthode correspondante et appelait `preventDefault()`, empêchant le caractère de s'insérer dans le champ tout en déclenchant le raccourci (ex. ouverture du panneau brins en tapant 'b' dans le titre).
+- Fix : ajout de `CONTROL_KEYS = { Enter: true, Tab: true }` ; pendant l'édition d'un contenteditable, seuls `Enter`, `Tab` et les combinaisons avec `metaKey` sont dispatchés vers `KeyDispatcher` — toute autre touche fait `stopPropagation()` (bloque la remontée vers les raccourcis du Lister) sans dispatch, laissant le caractère s'insérer normalement.
+- Test : `tests/specs/e2e/keyboard/keyboard-b-title-editing.spec.js`.
+
+## 2026-07-08 — Suite complète au vert (675 tests)
+
+- **`goToListerEvent` : 2e `ArrowRight` en trop** (`filter/panel-search.spec.js`) : même cause que le fix `keyboard-alt-arrows-panels` du 2026-07-07 — `_enterChildLister` async, 2e `ArrowRight` pressé avant résolution du 1er → double chaîne `_enterChildLister` concurrente sur le projet → celle en retard rappelle `ListerEvent.display()` après l'ouverture du panneau persos → `focusSelected()` reprend le focus DOM sur l'event → `:` capté par `ListerEvent` au lieu de `ListerPerso` → `.filter-bar` jamais créée dans `#persos-panel`. Bisection par fichiers remontant depuis `panel-search.spec.js` (ordre alphabétique déterministe, `workers:1`) : coupable isolé = `new-event-titre-vide.spec.js` test 2 combiné à `panel-search.spec.js`. Fix test : supprimer le 2e `ArrowRight` dans `goToListerEvent`.
+- **Fichiers remis en canonique** : `filter/panel-search.spec.js`, `event/new-event-titre-vide.spec.js`.
+- Suite intégrale : 675 passed, 0 failed.
+
+## 2026-07-07 — PULL tools-panel + perso-panel (2 tests)
+
+- **`press(page, 'Tab')` perd le focus iframe entre assertions** (`tools-panel:81`) : après Tab 1 + 3 assertions DOM, Playwright ne track plus le focus dans le contentFrame → Tab 2 va au document principal → `_handleKey` jamais déclenché → cancel jamais focusé. Test 117 (Tab+Tab back-to-back sans assertion) passait car pas de polling entre les deux. Fix test : `panel.press('Tab')` (locator-aware, cible directement `_el`).
+- **`nth(1)` unreliable après rechargement** (`perso-panel:390`) : même cause que `brin-persistence` — ordre DB ≠ ordre création. Fix test : `filter({ hasText: 'Perso persisté' })`.
+- **Fichiers remis en canonique** : `panels/tools-panel.spec.js`.
+
+## 2026-07-07 — PULL filepicker + keyboard-alt-arrows-panels + targets-link + project-navigation (4 tests)
+
+- **`goToListerEvent` : 2e `ArrowRight` en trop** (`keyboard-alt-arrows-panels`) : `_enterChildLister` async → complète après `press(page, 'p')` → depth-2 vole le focus → `Alt+ArrowDown` intercepté par depth-2 dont `_listerEvent` est null → `_switchBackground` sort sans rien faire → c1 reste coché. Fix test : supprimer le 2e `ArrowRight` dans `goToListerEvent`.
+- **Nettoyage Roman-Alpha après test 76** (`filepicker`) : test "sélectionner un dossier crée le projet directement" laissait des fichiers dans `Roman-Alpha/`. Fix test : `fs.rmSync` + `fs.mkdirSync` à la fin du test.
+- **`page.reload()` avant fin du PATCH targets** (`targets-link`) : seule la disparition de la notification était attendue, pas le réseau. Fix test : `waitForLoadState('networkidle')` avant `page.reload()`.
+- **`_enterChildLister` async + timing `press(page, 'n')`** (`project-navigation`) : `toBeVisible()` sur `#events-panel` résolvait avant que depth-2 soit prêt → `n` créait un event en depth-1. Fix test : attendre `toHaveAttribute('data-depth', '2')` avant `press(page, 'n')`.
+- **Fichiers remis en canonique** : `filesystem/filepicker.spec.js`, `keyboard/keyboard-alt-arrows-panels.spec.js`, `links/targets-link.spec.js`, `project/project-navigation.spec.js`.
+
+## 2026-07-07 — PULL brin-persistence + brins-panel + keyboard-delete + display-mode-level + tools-panel (5 tests)
+
+- **Timing `ArrowRight` → `Meta+m`** (`display-mode-level`) : `_enterChildLister` est async → `Meta+m` pressé avant que depth=2 soit prêt → LEVEL jamais atteint. Fix test : attendre `data-depth='2'` avant `Meta+m`.
+- **`nth(1)` après rechargement** (`brin-persistence`, `brins-panel`) : ordre DB ≠ ordre création → `nth(1)` pointait "Autre brin" au lieu du brin créé. Fix test : `locator('.brin-item').filter({ hasText: ... })`.
+- **Timing `Delete` → `waitForLoadState`** (`keyboard-delete`) : `deleteSelected()` async → `waitForLoadState('networkidle')` résolvait avant que la requête DELETE parte → reload sans persistance. Fix test : attendre `toHaveCount(1)` (disparition UI confirme DELETE ok) avant `waitForLoadState`.
+- **Fichiers remis en canonique** : `apparence/display-mode-level.spec.js`, `brin/brin-persistence.spec.js`, `brin/brins-panel.spec.js`, `brin/keyboard-delete.spec.js`, `panels/tools-panel.spec.js`.
+
+## 2026-07-07 — PULL panel-search (13 tests)
+
+- **`.brin-row` → `.brin-item`** : classe renommée dans la nouvelle archi.
+- **`.perso-row` → `.perso-item`** : idem.
+- **"liste projets" selector** : `revealFilter` utilisait `#events-panel` sur l'écran projets → `#projects-panel`.
+- **`fill('')` ne trigge pas `input`** : remplacement par triple-click + `Backspace` pour déclencher l'événement `input` et effacer le filtre.
+- **`_resetFilterBar()`** : nouvelle méthode dans `abstract/Lister.js`, appelée depuis `display()` pour réinitialiser la barre de filtre (masque + vide input + `_activeFilters = {}`) à chaque affichage d'un panneau.
+- **Fichier remis en canonique** : `filter/panel-search.spec.js`.
+
+## 2026-07-07 — PULL consolidate-level (6 tests)
+
+- Aucune modification de code requise — 6 tests passent sans fix (étaient en `test.skip`).
+- **Fichier remis en canonique** : `event/consolidate-level.spec.js`.
+
+## 2026-07-07 — PULL copy-cut-paste + lister-nature (entrées 11-13)
+
+- **Race condition tests 11+12** : `page.waitForLoadState` surchargé dans `__setup__.js` → appelle `pane1Frame.waitForLoadState('networkidle')`. Frame déjà en networkidle → résout immédiatement avant `_reloadAt`. Fix tests : `waitForLoadState` → `toHaveCount(countBefore+1)`.
+- **Test 13 — `_listerNatureLabel()` et `_openListerNaturePopup()` incohérentes** : seule `_isManLister()` avait le fallback `project?.man_depth`. Fix : ajouter `?? this._lister?.project?.man_depth` dans les deux méthodes de `NaturePanel.js`.
+- **Test 13 — ConfirmDialog Tab+Enter confirmait Non** : `_footerFocusIdx` démarre à 0 (= Oui). `Tab` déplace à 1 (= Non). Fix test : supprimer le `press(Tab)` — `Enter` seul confirme Oui.
+- **Test 13 — timing `expect(roman-man)` trop précoce** : `roman-man` posé par `_apply()` avant que lister5 soit buildé → `expect(roman-man)` résolvait immédiatement → `press('t')` tombait sur lister2 encore actif. Fix test : `toHaveCount(1)` (lister5 a 1 item = Séquence 3).
+- **Test 13 — navigation popup** : fixture `depth-move` a `nature=roman` → popup projet déjà focalisé sur roman → 5× ArrowUp incorrect. Fix : Enter direct.
+- **Fichiers remis en canonique** : `keyboard/keyboard-copy-cut-paste.spec.js`, `lister/lister-nature.spec.js`.
+
+## 2026-07-06 — PULL style-panel + style-panel-new-features (4 entrées : 2-5)
+
+- **`a` ne toggleait pas** : `ItemLi` a `a: { nokey: 'splitLink' }`. L'item Style consommait la touche (stopPropagation) avant qu'elle remonte à `ListerStyle.onkeydown`. Fix : `Style.LISTENERS = { ...ItemLi, a: null, g: null, k: null, o: null, q: null }` pour laisser ces touches buller vers le container.
+- **Persistance ordre inversé** : `ListerStyle.save()` appelait `ev.scheduleSave()` (300ms debounce). `waitForLoadState('networkidle')` revenait avant que le timer fire → reload annulait le PATCH → css non sauvegardé. Fix : `await ev.save()` direct.
+- **Fichiers remis en canonique** : `apparence/style-panel-new-features.spec.js`, `apparence/style-panel.spec.js`.
+
+## 2026-07-06 — PULL shell-smoke + first-item-selected + keyboard-alt-n (4 entrées : 1, 6, 9, 10)
+
+- **shell-smoke test supprimé** : testait un click souris — app zéro-souris, test sans objet.
+- **first-item-selected** : fixture `many-projects` a 3 projets actifs (pas 4 — "Projet caché" hors project_order). Fix : `toHaveCount(3)`, suppression assertion `nth(3)`.
+- **keyboard-alt-n** (2 tests) : Alt+n fonctionne, counts erronés (fixture 3 projets → 4 après Alt+n, pas 5). Fix : `toHaveCount(4)` dans les deux tests.
+- **Fichiers remis en canonique** : `app/shell-smoke.spec.js`, `bootstrap/first-item-selected.spec.js`, `keyboard/keyboard-alt-n.spec.js`.
+
+## 2026-07-06 — PULL project-create + project-navigation + project-navigation-lister (9 tests : entrées 21-23, 26-31)
+
+- **Race condition `waitForLoadState`** : `networkidle` se déclenchait AVANT la fin de `_createProject`/`_importProject` (gap réseau entre `_select` FilePicker et le POST suivant). Fix tests : attendre `toHaveCount(countBefore + 1)` après la création/import au lieu de `waitForLoadState` seul.
+- **Race condition mode édition** : après `press(page, 'Enter')` pour valider un titre, `_stopEditing()` n'était pas encore appelé (async). Fix : attendre `expect('.event-item.editing').toHaveCount(0)` avant tout `ArrowLeft`.
+- **`createProjectAndGetFolderInfo` dans project-navigation.spec.js** : même fix race condition pour que `eventer.db` existe bien avant que `tryPickExistingFolder` vérifie `exists`.
+- **ConfirmDialog après import** : `_importProject` lancé avec `void` (non-awaitable depuis la dialog) → même pattern `countBefore + 1` pour attendre l'insertion dans la liste avant d'appuyer `ArrowRight`.
+- **Fichiers remis en canonique** : `project/project-create.spec.js`, `project/project-navigation.spec.js`, `project/project-navigation-lister.spec.js`.
+
+## 2026-07-06 — PULL brins-panel + perso-from-brin (4 tests : entrées 7, 14-16)
+
+- Aucune modification de code requise — fix sessions précédentes ont résolu en cascade.
+- **Fichiers remis en canonique** : `brin/brins-panel.spec.js`, `perso/perso-from-brin.spec.js`.
+
+## 2026-07-06 — PULL 26 tests / 8 fichiers (new-item-deselects, broken-links, enter-lister, tools-panel, perso-no-perso, new-sans-title-cancel-create, project-listing, popup-select-current-value)
+
+- Aucune modification de code requise — 26 tests passent sans fix.
+- **Fichiers remis en canonique** : `item/new-item-deselects-current.spec.js`, `links/broken-links.spec.js`, `lister/enter-lister.spec.js`, `panels/tools-panel.spec.js`, `perso/perso-no-perso.spec.js`, `project/new-sans-title-cancel-create.spec.js`, `project/project-listing.spec.js`, `ui/popup-select-current-value.spec.js`.
+
+## 2026-07-06 — PULL perso-panel badges (4 tests : entrées 17-20)
+
+- **`public/classes/models/dom/Item.js:132`** : `ctx.save()` au lieu de `ctx.scheduleSave()` — debounce 300ms empêchait la persistance avant `networkidle` dans les tests.
+- **`public/utils/DOM.js:11`** : `buildTextField` → `textContent` pour champs computed (badges) — `Texte.render()` ne passe plus par les champs de type texte pour les badges.
+- **Tests** : `perso-panel.spec.js` — 4 tests (badges affichés, notification badge dupliqué, persistance perso créé, persistance cochage direct).
+- **Fichier remis en canonique** : `tests/specs/e2e/perso/perso-panel.spec.js`.
+
 ## 2026-07-05 — PULL Texte.slugify : 1 test unitaire
 
 - **`public/system/Texte.js`** : `slugify()` — regex `/['‘’]/g` au lieu de `['']/g` (deux U+0027 ASCII). L'apostrophe courbe U+2019 (`'`) n'était pas matchée → convertie en `-` au lieu d'être supprimée.

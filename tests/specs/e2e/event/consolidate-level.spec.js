@@ -1,3 +1,4 @@
+// Origine: tests/specs/e2e/event/consolidate-level.spec.js
 import { installFixtures } from '../../../helpers/install-fixtures.js'
 import { test, expect, pane1, press, getErr } from '../__setup__.js'
 
@@ -25,7 +26,7 @@ async function enterLevelMode(page, targetDepth) {
   await expect(pane1(page).locator('#status-bar')).toContainText('DISP MODE LEVEL')
 }
 
-test.skip("⌘+t ouvre le panneau d'outils en LEVEL mode", async ({ page }) => {
+test("⌘+t ouvre le panneau d'outils en LEVEL mode", async ({ page }) => {
   await page.goto('/')
   await enterLevelMode(page, 3)
 
@@ -33,7 +34,7 @@ test.skip("⌘+t ouvre le panneau d'outils en LEVEL mode", async ({ page }) => {
   await expect(pane1(page).locator('.tools-panel')).toBeVisible()
 })
 
-test.skip("hors LEVEL mode : panneau outils s'ouvre sans l'outil Consolider", async ({ page }) => {
+test("hors LEVEL mode : panneau outils s'ouvre sans l'outil Consolider", async ({ page }) => {
   await page.goto('/')
 
   await expect(pane1(page).locator('.project-item').nth(0)).toHaveClass(/selected/)
@@ -46,7 +47,7 @@ test.skip("hors LEVEL mode : panneau outils s'ouvre sans l'outil Consolider", as
   await expect(pane1(page).locator('.tools-panel')).not.toContainText('Consolider')
 })
 
-test.skip("panneau outils contient 'Consolider le niveau'", async ({ page }) => {
+test("panneau outils contient 'Consolider le niveau'", async ({ page }) => {
   await page.goto('/')
   await enterLevelMode(page, 3)
 
@@ -56,7 +57,7 @@ test.skip("panneau outils contient 'Consolider le niveau'", async ({ page }) => 
   await expect(pane1(page).locator('.tools-panel')).toContainText('Consolider le niveau')
 })
 
-test.skip("consolidation via lettre dans le panneau outils", async ({ page }) => {
+test("consolidation via lettre dans le panneau outils", async ({ page }) => {
   await page.goto('/')
   await enterLevelMode(page, 3)
 
@@ -72,7 +73,7 @@ test.skip("consolidation via lettre dans le panneau outils", async ({ page }) =>
   await expect(pane1(page).locator('.event-item')).toHaveCount(4)
 })
 
-test.skip("consolidation : titres des nouveaux events corrects", async ({ page }) => {
+test("consolidation : titres des nouveaux events corrects", async ({ page }) => {
   await page.goto('/')
   await enterLevelMode(page, 3)
 
@@ -95,7 +96,7 @@ test.describe("persistance consolidation — item virtuel au niveau root", () =>
     installFixtures('level-mode-mixed')
   })
 
-  test.skip("consolidation item root-level : reste réel après toggle NESTING → LEVEL", async ({ page }) => {
+  test("consolidation item root-level : reste réel après toggle NESTING → LEVEL", async ({ page }) => {
     page.on('console', msg => process.stdout.write(`[BROWSER] ${msg.text()}\n`))
 
     await page.goto('/')

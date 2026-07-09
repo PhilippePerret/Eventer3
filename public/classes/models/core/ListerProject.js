@@ -31,6 +31,7 @@ export default class ListerProject extends Lister {
 
     const existsResp = await fetch(`/api/fs/exists?path=${encodeURIComponent(dbPath)}`, { cache: 'no-store' })
     const { exists } = await existsResp.json()
+    LOG.m(1, '[createNew] exists check', { dbPath, exists })
 
     if (exists) {
       new ConfirmDialog({

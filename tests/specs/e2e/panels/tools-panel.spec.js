@@ -87,15 +87,15 @@ test('TAB : items → Exécuter → Fermer → items', async ({ page }) => {
 
   await expect(panel.locator('.ftpanel-btn--focused')).toHaveCount(0)
 
-  await press(page, 'Tab')
+  await panel.press('Tab')
   await expect(panel.locator('.ftpanel-btn--primary.ftpanel-btn--focused')).toBeVisible()
   await expect(panel.locator('.ftpanel-btn--cancel.ftpanel-btn--focused')).toHaveCount(0)
 
-  await press(page, 'Tab')
+  await panel.press('Tab')
   await expect(panel.locator('.ftpanel-btn--cancel.ftpanel-btn--focused')).toBeVisible()
   await expect(panel.locator('.ftpanel-btn--primary.ftpanel-btn--focused')).toHaveCount(0)
 
-  await press(page, 'Tab')
+  await panel.press('Tab')
   await expect(panel.locator('.ftpanel-btn--focused')).toHaveCount(0)
   await expect(panel.locator('.ftpanel__item.selected')).toBeVisible()
 })

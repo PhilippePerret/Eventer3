@@ -1,0 +1,3 @@
+BUG 1
+Les champs d'édition du titre continue de réagir aux raccourcis 't', 's' etc.
+Quand on est contenteditable, le onkeydown devrait être "isolé

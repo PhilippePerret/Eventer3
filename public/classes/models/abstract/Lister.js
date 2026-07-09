@@ -126,6 +126,16 @@ export default class Lister extends KeyDispatcher {
     StatusBar.setFilterState(anyHidden ? 'active' : 'mode')
   }
 
+  _resetFilterBar() {
+    const bar = this.container?.querySelector('.filter-bar')
+    if (!bar || bar.classList.contains('hidden')) return
+    bar.classList.add('hidden')
+    const search = bar.querySelector('.panel-search')
+    if (search) search.value = ''
+    this._activeFilters = {}
+    this._applyAllFilters()
+  }
+
   movePanelDown()  { movePanel(movablePanelInner(this.container), 'ArrowDown')  }
   movePanelUp()    { movePanel(movablePanelInner(this.container), 'ArrowUp')    }
   movePanelLeft()  { movePanel(movablePanelInner(this.container), 'ArrowLeft')  }
@@ -319,6 +329,7 @@ export default class Lister extends KeyDispatcher {
     this._applyContext(contextItem)
     this._updatePanelTitle()
     this._syncChecked()
+    this._resetFilterBar()
     this.activate()
   }
 

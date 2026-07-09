@@ -2,7 +2,7 @@ import { test as base, expect } from '@playwright/test'
 
 export const test = base.extend({
   page: async ({ page }, use) => {
-    page.on('console', msg => console.log(msg.text()))
+    page.on('console', msg => console.log('[CONSOLE]', msg.text()))
     const originalGoto = page.goto.bind(page)
     page.goto = async (url, options) => {
       const result = await originalGoto(url, options)
