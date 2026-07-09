@@ -201,13 +201,14 @@ body {
 
 .item-body {
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr auto auto auto;
   gap: 12px;
   align-items: center;
   min-height: 44px;
   padding: 4px 14px;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
+  font-size: 25px;
 }
 
 
