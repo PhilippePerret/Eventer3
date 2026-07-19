@@ -9,6 +9,7 @@ require_relative './lib/system/log'
 # LOG.on(1)
 
 set :public_folder, 'public'
+set :port, 46001
 
 DATA_DIR = ENV['EVENTER_DATA_DIR'] || File.expand_path('data', __dir__)
 

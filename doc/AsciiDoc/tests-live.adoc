@@ -1,12 +1,19 @@
 // Ce fichier contient tous les tests faits et à faire en live
 
 == Projets ==
+
+[cols="2,2,1"]
 |====
-| **Test** | **Description/Attendu**| **Bug** |
+| **Test** | **Description/Attendu**| **OK/Bug**
 
 | Ouverture de l'application
 | Elle doit afficher tous les projets courants
-| ---
+| OK
+
+| Création d'un nouveau projet (combo:n[])
+| En tapant, combo:n[], la fenêtre de sélection de dossier doit s'ouvrir.
+On peut créer le nouveau dossier avec combo:n[] et lui donner un nom qui se retrouve en édition dans l'interface. On peut changer ce nom en éditant le projet avec combo:Enter[]. On tape le nouveau nom, la touche combo:tab[] permet de rejoindre les deux autres menus pour choisir l'état et le genre du projet.
+| OK
 
 
 |====
