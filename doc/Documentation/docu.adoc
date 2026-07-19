@@ -1,0 +1,3 @@
+= Documentation =
+
+include::adocs/introduction.adoc[]

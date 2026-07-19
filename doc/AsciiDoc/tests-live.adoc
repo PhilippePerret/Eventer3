@@ -1,0 +1,12 @@
+// Ce fichier contient tous les tests faits et à faire en live
+
+== Projets ==
+|====
+| **Test** | **Description/Attendu**| **Bug** |
+
+| Ouverture de l'application
+| Elle doit afficher tous les projets courants
+| ---
+
+
+|====
